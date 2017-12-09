@@ -1,0 +1,294 @@
+{
+  "caption": "Decoder",
+  "gates": [
+    {
+      "x": "990",
+      "y": "270",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[true,true]"
+    },
+    {
+      "x": "990",
+      "y": "330",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,true]"
+    },
+    {
+      "x": "990",
+      "y": "390",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[true,false]"
+    },
+    {
+      "x": "990",
+      "y": "450",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "1110",
+      "y": "300",
+      "colr": "0",
+      "lbl": "0"
+    },
+    {
+      "x": "1110",
+      "y": "360",
+      "colr": "0",
+      "lbl": "1"
+    },
+    {
+      "x": "1110",
+      "y": "420",
+      "colr": "0",
+      "lbl": "2"
+    },
+    {
+      "x": "1110",
+      "y": "480",
+      "colr": "0",
+      "lbl": "3"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "915",
+      "y": "255",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "945",
+      "y": "255",
+      "framecount": "-1",
+      "clock": "false"
+    }
+  ],
+  "segments": [
+    {
+      "startX": "930",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "270",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "300",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "450",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "450",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "270",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "300",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "1050",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "1080",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "1050",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "1080",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "1050",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "1080",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "1050",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "1080",
+      "startY": "480",
+      "direction": "0"
+    }
+  ],
+  "conpoints": [
+    {
+      "x": "930",
+      "y": "450"
+    },
+    {
+      "x": "930",
+      "y": "390"
+    },
+    {
+      "x": "930",
+      "y": "330"
+    },
+    {
+      "x": "960",
+      "y": "300"
+    },
+    {
+      "x": "960",
+      "y": "360"
+    },
+    {
+      "x": "960",
+      "y": "420"
+    }
+  ],
+  "diodes": [],
+  "customs": []
+}

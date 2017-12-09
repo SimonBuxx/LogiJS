@@ -1,0 +1,160 @@
+{
+  "caption": "MUX",
+  "gates": [
+    {
+      "x": "870",
+      "y": "270",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[true,false]"
+    },
+    {
+      "x": "870",
+      "y": "330",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "990",
+      "y": "270",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"or\"",
+      "caption": "\"≥1\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "1080",
+      "y": "300",
+      "colr": "0"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "825",
+      "y": "255",
+      "framecount": "-1",
+      "clock": "false",
+      "istop": "true",
+      "lbl": "2º"
+    },
+    {
+      "x": "795",
+      "y": "315",
+      "framecount": "-1",
+      "clock": "false",
+      "lbl": "0"
+    },
+    {
+      "x": "795",
+      "y": "345",
+      "framecount": "-1",
+      "clock": "false",
+      "lbl": "1"
+    }
+  ],
+  "segments": [
+    {
+      "startX": "840",
+      "startY": "270",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "300",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "1050",
+      "startY": "300",
+      "direction": "0"
+    }
+  ],
+  "conpoints": [
+    {
+      "x": "840",
+      "y": "300",
+      "group": "0"
+    }
+  ],
+  "diodes": [],
+  "customs": []
+}

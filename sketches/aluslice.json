@@ -1,0 +1,1037 @@
+{
+  "caption": "aluslice",
+  "gates": [
+    {
+      "x": "690",
+      "y": "570",
+      "direction": "1",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "750",
+      "y": "570",
+      "direction": "1",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"or\"",
+      "caption": "\"≥1\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "540",
+      "y": "570",
+      "direction": "1",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"xor\"",
+      "caption": "\"=1\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "630",
+      "y": "420",
+      "direction": "1",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"xor\"",
+      "caption": "\"=1\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "900",
+      "y": "510",
+      "direction": "3",
+      "inputCount": "3",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,true,true]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "660",
+      "y": "960",
+      "colr": "0"
+    },
+    {
+      "x": "450",
+      "y": "660",
+      "colr": "0"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "555",
+      "y": "345",
+      "framecount": "-1",
+      "clock": "false",
+      "lbl": "A"
+    },
+    {
+      "x": "585",
+      "y": "345",
+      "framecount": "-1",
+      "clock": "false",
+      "lbl": "B"
+    },
+    {
+      "x": "1005",
+      "y": "645",
+      "framecount": "-1",
+      "clock": "false",
+      "lbl": "C"
+    },
+    {
+      "x": "915",
+      "y": "915",
+      "framecount": "-1",
+      "clock": "false",
+      "istop": "true",
+      "lbl": "2²"
+    },
+    {
+      "x": "945",
+      "y": "915",
+      "framecount": "-1",
+      "clock": "false",
+      "istop": "true",
+      "lbl": "2¹"
+    },
+    {
+      "x": "975",
+      "y": "915",
+      "framecount": "-1",
+      "clock": "false",
+      "istop": "true",
+      "lbl": "2º"
+    }
+  ],
+  "segments": [
+    {
+      "startX": "630",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "510",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "540",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "570",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "600",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "690",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "690",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "720",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "720",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "720",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "720",
+      "startY": "690",
+      "direction": "1"
+    },
+    {
+      "startX": "720",
+      "startY": "720",
+      "direction": "1"
+    },
+    {
+      "startX": "720",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "690",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "720",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "750",
+      "direction": "0"
+    },
+    {
+      "startX": "690",
+      "startY": "750",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "750",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "750",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "690",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "720",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "600",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "630",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "660",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "690",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "570",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "630",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "720",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "600",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "630",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "660",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "690",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "570",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "870",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "600",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "600",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "600",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "600",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "600",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "600",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "600",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "630",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "660",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "690",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "660",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "570",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "600",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "870",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "900",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "690",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "720",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "690",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "720",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "690",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "720",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "690",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "720",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "900",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "990",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "450",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "480",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "810",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "810",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "840",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "810",
+      "direction": "1"
+    },
+    {
+      "startX": "660",
+      "startY": "930",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "840",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "870",
+      "direction": "1"
+    },
+    {
+      "startX": "900",
+      "startY": "870",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "870",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "900",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "870",
+      "direction": "1"
+    },
+    {
+      "startX": "960",
+      "startY": "900",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "840",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "870",
+      "direction": "1"
+    },
+    {
+      "startX": "990",
+      "startY": "900",
+      "direction": "1"
+    },
+    {
+      "startX": "900",
+      "startY": "840",
+      "direction": "0"
+    },
+    {
+      "startX": "900",
+      "startY": "900",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "900",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "900",
+      "direction": "0"
+    }
+  ],
+  "conpoints": [
+    {
+      "x": "750",
+      "y": "750"
+    },
+    {
+      "x": "630",
+      "y": "540"
+    },
+    {
+      "x": "720",
+      "y": "540"
+    },
+    {
+      "x": "570",
+      "y": "540"
+    },
+    {
+      "x": "750",
+      "y": "390"
+    },
+    {
+      "x": "660",
+      "y": "390"
+    },
+    {
+      "x": "600",
+      "y": "390"
+    },
+    {
+      "x": "960",
+      "y": "870"
+    },
+    {
+      "x": "930",
+      "y": "840"
+    },
+    {
+      "x": "990",
+      "y": "900"
+    }
+  ],
+  "diodes": [],
+  "customs": [
+    {
+      "x": "600",
+      "y": "570",
+      "direction": "1",
+      "filename": "\"volladd.json\"",
+      "outputsInv": "[false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false]"
+    },
+    {
+      "x": "630",
+      "y": "810",
+      "direction": "1",
+      "filename": "\"3-mux.json\"",
+      "outputsInv": "[false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
+    }
+  ]
+}

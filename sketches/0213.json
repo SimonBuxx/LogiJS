@@ -1,0 +1,226 @@
+{
+  "caption": "0213",
+  "gates": [],
+  "outputs": [
+    {
+      "x": "750",
+      "y": "510",
+	  "colr": "0"
+    },
+    {
+      "x": "780",
+      "y": "510",
+	  "colr": "0"
+    },
+    {
+      "x": "810",
+      "y": "510",
+	  "colr": "0"
+    },
+    {
+      "x": "840",
+      "y": "510",
+	  "colr": "0"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "525",
+      "y": "285",
+      "framecount": "-1",
+      "clock": "false"
+    }
+  ],
+  "segments": [
+    {
+      "startX": "630",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "630",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "540",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "720",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "750",
+      "startY": "270",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "300",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "270",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "300",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "480",
+      "direction": "1"
+    }
+  ],
+  "conpoints": [],
+  "diodes": [
+    {
+      "x": "750",
+      "y": "330"
+    },
+    {
+      "x": "780",
+      "y": "360"
+    },
+    {
+      "x": "780",
+      "y": "390"
+    },
+    {
+      "x": "750",
+      "y": "390"
+    }
+  ],
+  "customs": [
+    {
+      "x": "570",
+      "y": "270",
+      "direction": "0",
+      "filename": "\"2BitCounter.json\"",
+      "outputsInv": "[false,false]",
+      "inputsInv": "[false]"
+    },
+    {
+      "x": "660",
+      "y": "270",
+      "direction": "0",
+      "filename": "\"2BitDec.json\"",
+      "outputsInv": "[false,false,false,false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "720",
+      "y": "420",
+      "direction": "1",
+      "filename": "\"2BitDec.json\"",
+      "outputsInv": "[false,false,false,false]",
+      "inputsInv": "[false,false]"
+    }
+  ]
+}

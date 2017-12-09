@@ -1,0 +1,149 @@
+{
+  "caption": "FA",
+  "gates": [
+    {
+      "x": "1080",
+      "y": "270",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"or\"",
+      "caption": "\"≥1\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "1170",
+      "y": "300",
+	  "colr": "0"
+    },
+    {
+      "x": "1170",
+      "y": "360",
+	  "colr": "0"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "855",
+      "y": "345"
+    },
+    {
+      "x": "855",
+      "y": "315"
+    },
+    {
+      "x": "855",
+      "y": "285"
+    }
+  ],
+  "segments": [
+    {
+      "startX": "1050",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "990",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "1020",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "1050",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "870",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "900",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "870",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "870",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "1050",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "1080",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "1110",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "1140",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "1140",
+      "startY": "300",
+      "direction": "0"
+    }
+  ],
+  "conpoints": [],
+  "diodes": [],
+  "customs": [
+    {
+      "x": "900",
+      "y": "270",
+      "direction": "0",
+      "filename": "\"halbadd.json\"",
+      "outputsInv": "[false,false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "990",
+      "y": "300",
+      "direction": "0",
+      "filename": "\"halbadd.json\"",
+      "outputsInv": "[false,false]",
+      "inputsInv": "[false,false]"
+    }
+  ]
+}

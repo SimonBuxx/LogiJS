@@ -1,0 +1,385 @@
+{
+  "caption": "Adder",
+  "gates": [],
+  "outputs": [
+    {
+      "x": "990",
+      "y": "270",
+	  "colr": "0"
+    },
+    {
+      "x": "990",
+      "y": "300",
+	  "colr": "0"
+    },
+    {
+      "x": "990",
+      "y": "420",
+	  "colr": "0"
+    },
+    {
+      "x": "990",
+      "y": "540",
+	  "colr": "0"
+    },
+    {
+      "x": "990",
+      "y": "660",
+	  "colr": "0"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "795",
+      "y": "255",
+      "framecount": "-1",
+      "isClock": "false"
+    },
+    {
+      "x": "795",
+      "y": "285",
+      "framecount": "-1",
+      "isClock": "false"
+    },
+    {
+      "x": "795",
+      "y": "375",
+      "framecount": "-1",
+      "isClock": "false"
+    },
+    {
+      "x": "795",
+      "y": "405",
+      "framecount": "-1",
+      "isClock": "false"
+    },
+    {
+      "x": "795",
+      "y": "495",
+      "framecount": "-1",
+      "isClock": "false"
+    },
+    {
+      "x": "795",
+      "y": "525",
+      "framecount": "-1",
+      "isClock": "false"
+    },
+    {
+      "x": "795",
+      "y": "615",
+      "framecount": "-1",
+      "isClock": "false"
+    },
+    {
+      "x": "795",
+      "y": "645",
+      "framecount": "-1",
+      "isClock": "false"
+    },
+    {
+      "x": "795",
+      "y": "675",
+      "framecount": "-1",
+      "isClock": "false"
+    }
+  ],
+  "segments": [
+    {
+      "startX": "930",
+      "startY": "630",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "600",
+      "direction": "0"
+    },
+    {
+      "startX": "870",
+      "startY": "600",
+      "direction": "0"
+    },
+    {
+      "startX": "900",
+      "startY": "600",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "600",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "570",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "870",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "900",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "450",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "870",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "900",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "270",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "270",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "390",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "510",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "630",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "630",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "270",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "270",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "690",
+      "direction": "0"
+    }
+  ],
+  "conpoints": [],
+  "diodes": [],
+  "customs": [
+    {
+      "x": "870",
+      "y": "240",
+      "direction": "0",
+      "filename": "\"volladd.json\"",
+      "outputsInv": "[false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false]"
+    },
+    {
+      "x": "870",
+      "y": "360",
+      "direction": "0",
+      "filename": "\"volladd.json\"",
+      "outputsInv": "[false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false]"
+    },
+    {
+      "x": "870",
+      "y": "480",
+      "direction": "0",
+      "filename": "\"volladd.json\"",
+      "outputsInv": "[false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false]"
+    },
+    {
+      "x": "870",
+      "y": "600",
+      "direction": "0",
+      "filename": "\"volladd.json\"",
+      "outputsInv": "[false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false]"
+    }
+  ]
+}
