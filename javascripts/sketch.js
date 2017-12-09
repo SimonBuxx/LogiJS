@@ -6,8 +6,6 @@
 // TODO: Delete element in front of Gate
 // TODO: Fully implement selecting
 // TODO: Redo GUI (without dom elements, better design!)
-// TODO: Zooming into specific points (if doable in adequate time)
-// TODO: Fix objects vanishing behind the left edge when zooming out
 
 p5.disableFriendlyErrors = true;
 
@@ -268,12 +266,14 @@ function setup() {
     mux3Button.position(5, 466);
     mux3Button.mousePressed(function () { return customClicked('3-mux.json') });
     mux3Button.elt.style.width = "140px";
-
+	
+	// Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.position(5, 490);
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json') });
     halfaddButton.elt.style.width = "140px";
-
+	
+	// Adds a Full Adder
     fulladdButton = createButton('Full Adder');
     fulladdButton.position(5, 514);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json') });
@@ -821,15 +821,15 @@ function updateTick() {
 
 function reDraw() {
     //console.log('----------------------NEW FRAME-------------------------');
-    var t0 = performance.now();
+    //var t0 = performance.now();
     background(150);
     scale(transform.zoom);
-    drawGrid(); // Draw the grid
+    drawGrid();
     translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
-    var t1 = performance.now();
+    //var t1 = performance.now();
     //console.log("Drawing the grid and scaling/translating took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     if (simRunning) {
         for (const elem of groups) {
             elem.show();
@@ -839,10 +839,10 @@ function reDraw() {
             elem.show();
         }
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of gates) {
         elem.show();
     }
@@ -852,38 +852,38 @@ function reDraw() {
             elem.show();
         }
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing gates and customs took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of conpoints) {
         elem.show();
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing conpoints took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of outputs) {
         elem.show();
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing outputs took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of inputs) {
         elem.show();
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing inputs took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of diodes) {
         elem.show();
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing diodes took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     // Draw the GUI at the end
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Handle the offset from dragging and zooming
@@ -934,6 +934,17 @@ function wirePoints(x, y, j) {
     return indexList;
 }
 
+function keyReleased(){
+	if (textInput.elt != document.activeElement) {
+		switch (keyCode) {
+			case 17: //ctrl	
+				ctrlMode = 'none'
+				break;
+			default:
+			
+		}
+	}
+}
 /*
     Check if a key was pressed and act accordingly
 */
@@ -943,6 +954,9 @@ function keyPressed() {
             case ESCAPE:
                 ctrlMode = 'none';
                 break;
+			case 17: //ctrl	
+				startSelect();
+				break;
             case 49: // 1
                 gateInputCount = 1;
                 break;
@@ -985,8 +999,7 @@ function keyPressed() {
             case UP_ARROW:
                 gateDirection = 3;
                 break;
-            case 85: // u
-
+            
             default:
         }
     }
