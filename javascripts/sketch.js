@@ -6,8 +6,6 @@
 // TODO: Delete element in front of Gate
 // TODO: Fully implement selecting
 // TODO: Redo GUI (without dom elements, better design!)
-// TODO: Zooming into specific points (if doable in adequate time)
-// TODO: Fix objects vanishing behind the left edge when zooming out
 
 p5.disableFriendlyErrors = true;
 
@@ -268,12 +266,14 @@ function setup() {
     mux3Button.position(5, 466);
     mux3Button.mousePressed(function () { return customClicked('3-mux.json') });
     mux3Button.elt.style.width = "140px";
-
+	
+	// Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.position(5, 490);
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json') });
     halfaddButton.elt.style.width = "140px";
-
+	
+	// Adds a Full Adder
     fulladdButton = createButton('Full Adder');
     fulladdButton.position(5, 514);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json') });
@@ -824,7 +824,7 @@ function reDraw() {
     var t0 = performance.now();
     background(150);
     scale(transform.zoom);
-    drawGrid(); // Draw the grid
+    drawGrid();
     translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
     var t1 = performance.now();
     //console.log("Drawing the grid and scaling/translating took " + (t1 - t0) + " milliseconds.")
