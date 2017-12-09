@@ -934,6 +934,17 @@ function wirePoints(x, y, j) {
     return indexList;
 }
 
+function keyReleased(){
+	if (textInput.elt != document.activeElement) {
+		switch (keyCode) {
+			case 17: //ctrl	
+				ctrlMode = 'none'
+				break;
+			default:
+			
+		}
+	}
+}
 /*
     Check if a key was pressed and act accordingly
 */
@@ -943,6 +954,9 @@ function keyPressed() {
             case ESCAPE:
                 ctrlMode = 'none';
                 break;
+			case 17: //ctrl	
+				startSelect();
+				break;
             case 49: // 1
                 gateInputCount = 1;
                 break;
@@ -985,8 +999,7 @@ function keyPressed() {
             case UP_ARROW:
                 gateDirection = 3;
                 break;
-            case 85: // u
-
+            
             default:
         }
     }
