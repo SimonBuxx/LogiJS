@@ -821,15 +821,15 @@ function updateTick() {
 
 function reDraw() {
     //console.log('----------------------NEW FRAME-------------------------');
-    var t0 = performance.now();
+    //var t0 = performance.now();
     background(150);
     scale(transform.zoom);
     drawGrid();
     translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
-    var t1 = performance.now();
+    //var t1 = performance.now();
     //console.log("Drawing the grid and scaling/translating took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     if (simRunning) {
         for (const elem of groups) {
             elem.show();
@@ -839,10 +839,10 @@ function reDraw() {
             elem.show();
         }
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of gates) {
         elem.show();
     }
@@ -852,38 +852,38 @@ function reDraw() {
             elem.show();
         }
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing gates and customs took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of conpoints) {
         elem.show();
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing conpoints took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of outputs) {
         elem.show();
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing outputs took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of inputs) {
         elem.show();
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing inputs took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     for (const elem of diodes) {
         elem.show();
     }
-    t1 = performance.now();
+    //t1 = performance.now();
     //console.log("Drawing diodes took " + (t1 - t0) + " milliseconds.")
 
-    t0 = performance.now();
+    //t0 = performance.now();
     // Draw the GUI at the end
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Handle the offset from dragging and zooming
