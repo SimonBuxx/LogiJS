@@ -649,7 +649,7 @@ CustomSketch.prototype.pointInOutput = function (n, px, py) {
 CustomSketch.prototype.show = function () {
     var x1, x2, y1, y2;
     stroke(0);
-    strokeWeight(1);
+    strokeWeight(3);
     fill(255);
 
     // Draw the body
@@ -676,10 +676,10 @@ CustomSketch.prototype.show = function () {
         // Draw inputs
         if (this.inputs[i - 1] == true) {
             stroke(this.highColor);
-            strokeWeight(3);
+            strokeWeight(4);
         } else {
             stroke(this.lowColor);
-            strokeWeight(1);
+            strokeWeight(3);
         }
 
         if (!this.objects[INPNUM][i - 1].isTop) {
@@ -745,7 +745,7 @@ CustomSketch.prototype.show = function () {
         line(x1, y1, x2, y2);
 
         fill(255);
-        strokeWeight(1);
+        strokeWeight(3);
 
         if (this.inputsInv[i - 1]) {
             if (!this.objects[INPNUM][i - 1].isTop) {
@@ -834,10 +834,10 @@ CustomSketch.prototype.show = function () {
         // Draw outputs
         if (this.outputs[i - 1] == true) {
             stroke(this.highColor);
-            strokeWeight(3);
+            strokeWeight(4);
         } else {
             stroke(this.lowColor);
-            strokeWeight(1);
+            strokeWeight(3);
         }
 
         switch (this.direction) {
