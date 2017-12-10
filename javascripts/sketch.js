@@ -89,11 +89,8 @@ function setup() {
     // Creates the canvas in full window size
     cnv = createCanvas(windowWidth, windowHeight);
 
-    // Input field for the file name
-    textInput = createInput('New Sketch');
-    textInput.size(300, 15);
-    textInput.position(window.width - textInput.width - 161, 4);
-
+    
+	
     // Prevents the input field from being focused during clicking in the canvas
     document.addEventListener('mousedown', function (event) {
         if (event.detail > 1) {
@@ -101,64 +98,13 @@ function setup() {
         }
     }, false);
 
-    crText = createP('Clock rate: ');
-    crText.elt.style.color = 'white';
-    crText.elt.style.fontFamily = 'Arial';
-    crText.position(260, -11);
-
-    sfcheckbox = createCheckbox('Sync FPS', true);
-    sfcheckbox.changed(function () {
-        syncFramerate = !syncFramerate;
-        if (simRunning) {
-            if (!syncFramerate) {
-                frameRate(60 - clockspeedSlider.value() / 2);
-                updater = setInterval(updateTick, 2);
-            } else {
-                clearInterval(updater);
-                frameRate(60);
-            }
-        }
-    });
-    sfcheckbox.elt.style.color = 'white';
-    sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(590, 4);
-
-    // Button to save the sketch
-    saveButton = createButton('Save');
-    saveButton.position(window.width - 157, 4);
-    saveButton.mousePressed(saveClicked);
-
-    // Button to load a sketch
-    loadButton = createButton('Load');
-    loadButton.position(window.width - 107, 4);
-    loadButton.mousePressed(loadClicked);
-
-    // Button to import as custom
-    ascustomButton = createButton('Import');
-    ascustomButton.position(window.width - 57, 4);
-    ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json') });
-
-    // Clears the canvas and resets the view
-    newButton = createButton('New');
-    newButton.position(window.width - textInput.width - 208, 4);
-    newButton.mousePressed(newClicked);
-
-    // Activates the wiring mode
+	// Left Side Buttons
+	// Activates the wiring mode
     wireButton = createButton('Wiring');
     wireButton.position(5, 4);
     wireButton.mousePressed(wiringClicked);
     wireButton.elt.style.width = "140px";
-
-    // Activates the delete mode (objects and wires)
-    deleteButton = createButton('Delete');
-    deleteButton.position(150, 4);
-    deleteButton.mousePressed(deleteClicked);
-
-    // Starts and stops the simulation
-    simButton = createButton('Start');
-    simButton.position(210, 4);
-    simButton.mousePressed(simClicked);
-
+	
     // Adds and-gates
     andButton = createButton('And-Gate');
     andButton.position(5, 34);
@@ -200,7 +146,13 @@ function setup() {
     outputButton.position(5, 178);
     outputButton.mousePressed(outputClicked);
     outputButton.elt.style.width = "140px";
-
+	
+	 // Adds diodes (barricade in one direction); Under development
+    diodeButton = createButton('Toggle Diodes');
+    diodeButton.position(5, 202);
+    diodeButton.mousePressed(diodeClicked);
+    diodeButton.elt.style.width = "140px";
+	
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
     counter2Button.position(5, 226);
@@ -279,6 +231,27 @@ function setup() {
     fulladdButton.mousePressed(function () { return customClicked('volladd.json') });
     fulladdButton.elt.style.width = "140px";
 
+	
+	
+	
+	
+	//Upper left
+	// Activates the delete mode (objects and wires)
+    deleteButton = createButton('Delete');
+    deleteButton.position(150, 4);
+    deleteButton.mousePressed(deleteClicked);
+
+    // Starts and stops the simulation
+    simButton = createButton('Start');
+    simButton.position(210, 4);
+    simButton.mousePressed(simClicked);
+	
+	// Adds text before the Clockrate slider
+	crText = createP('Clock rate: ');
+    crText.elt.style.color = 'white';
+    crText.elt.style.fontFamily = 'Arial';
+    crText.position(260, -11);
+	
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(2, 60, 30, 1);
     clockspeedSlider.position(340, 2);
@@ -312,15 +285,53 @@ function setup() {
     selectButton = createButton('Select');
     selectButton.position(536, 4);
     selectButton.mousePressed(startSelect);
+	
+	sfcheckbox = createCheckbox('Sync FPS', true);
+    sfcheckbox.changed(function () {
+        syncFramerate = !syncFramerate;
+        if (simRunning) {
+            if (!syncFramerate) {
+                frameRate(60 - clockspeedSlider.value() / 2);
+                updater = setInterval(updateTick, 2);
+            } else {
+                clearInterval(updater);
+                frameRate(60);
+            }
+        }
+    });
+    sfcheckbox.elt.style.color = 'white';
+    sfcheckbox.elt.style.fontFamily = 'Arial';
+    sfcheckbox.position(590, 4);
+	
+	
+	// Upper right
+	// Input field for the file name
+    textInput = createInput('New Sketch');
+    textInput.size(300, 15);
+    textInput.position(window.width - textInput.width - 161, 4);
 
-    // Adds diodes (barricade in one direction); Under development
-    diodeButton = createButton('Toggle Diodes');
-    diodeButton.position(5, 202);
-    diodeButton.mousePressed(diodeClicked);
-    diodeButton.elt.style.width = "140px";
+	// Clears the canvas and resets the view
+    newButton = createButton('New');
+    newButton.position(window.width - textInput.width - 208, 4);
+    newButton.mousePressed(newClicked);
+	
+	 // Button to save the sketch
+    saveButton = createButton('Save');
+    saveButton.position(window.width - 157, 4);
+    saveButton.mousePressed(saveClicked);
 
+    // Button to load a sketch
+    loadButton = createButton('Load');
+    loadButton.position(window.width - 107, 4);
+    loadButton.mousePressed(loadClicked);
+
+    // Button to import as custom
+    ascustomButton = createButton('Import');
+    ascustomButton.position(window.width - 57, 4);
+    ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json') });
+	
     frameRate(60); // Caps the framerate at 60 FPS
-
+	
     var loadfile = urlParam('sketch');
     if (loadfile != "") {
         console.log(`Loading ${loadfile}`);
