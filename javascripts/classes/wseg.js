@@ -82,14 +82,14 @@ WSeg.prototype.show = function (del) {
     if (!del) {
         if (this.state) {
             stroke(this.highColor);
-            strokeWeight(3);
+            strokeWeight(5);
         } else {
             stroke(this.lowColor);
-            strokeWeight(1);
+            strokeWeight(3);
         }
     } else {
         stroke(this.deleteColor);
-        strokeWeight(3);
+        strokeWeight(5);
     }
 
     line(this.startX, this.startY, this.endX, this.endY);
