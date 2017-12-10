@@ -250,11 +250,11 @@ function setup() {
 	crText = createP('Clock rate: ');
     crText.elt.style.color = 'white';
     crText.elt.style.fontFamily = 'Arial';
-    crText.position(260, -16);
+    crText.position(260, -11);
 	
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(2, 60, 30, 1);
-    clockspeedSlider.position(360, 2);
+    clockspeedSlider.position(340, 2);
     clockspeedSlider.style('width', '80px');
     // Alters the max fps based on the clock speed => Genius
     clockspeedSlider.changed(function () {
@@ -267,7 +267,7 @@ function setup() {
 
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(450, 4);
+    undoButton.position(430, 4);
     undoButton.mousePressed(() => { // ES6-Standard
         undo();
     })
@@ -275,7 +275,7 @@ function setup() {
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(503, 4);
+    redoButton.position(483, 4);
     redoButton.mousePressed(() => {
         redo();
     })
@@ -283,7 +283,7 @@ function setup() {
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(556, 4);
+    selectButton.position(536, 4);
     selectButton.mousePressed(startSelect);
 	
 	sfcheckbox = createCheckbox('Sync FPS', true);
@@ -301,7 +301,7 @@ function setup() {
     });
     sfcheckbox.elt.style.color = 'white';
     sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(610, 4);
+    sfcheckbox.position(590, 4);
 	
 	
 	// Upper right
