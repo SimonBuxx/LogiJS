@@ -27,9 +27,8 @@ ConPoint.prototype.show = function () {
     strokeWeight(0);
     if (this.state) {
         fill(this.highColor);
-        rect(this.x - 3, this.y - 3, 6, 6);
     } else {
         fill(this.lowColor);
-        rect(this.x - 3, this.y - 3, 6, 6);
     }
+    rect(this.x - 3, this.y - 3, 6, 6);
 };
