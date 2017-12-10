@@ -745,7 +745,7 @@ CustomSketch.prototype.show = function () {
         line(x1, y1, x2, y2);
 
         fill(255);
-        strokeWeight(3);
+        strokeWeight(2);
 
         if (this.inputsInv[i - 1]) {
             if (!this.objects[INPNUM][i - 1].isTop) {
@@ -871,7 +871,7 @@ CustomSketch.prototype.show = function () {
         line(x1, y1, x2, y2);
 
         fill(255);
-        strokeWeight(1);
+        strokeWeight(2);
 
         if (this.outputsInv[i - 1]) {
             switch (this.direction) {
