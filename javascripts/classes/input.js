@@ -105,16 +105,13 @@ Input.prototype.pointInOutput = function (dummy, px, py) {
     Displays the input on the screen
 */
 Input.prototype.show = function () {
+    stroke(0);
+    strokeWeight(3);
     if (this.state) {
         fill(this.highColor);
-        stroke(0);
-        strokeWeight(3);
     } else {
         fill(this.lowColor);
-        stroke(0);
-        strokeWeight(1);
     }
-
     // Draw the rectangle that represents the input
     rect(this.x, this.y, this.w, this.h);
 
