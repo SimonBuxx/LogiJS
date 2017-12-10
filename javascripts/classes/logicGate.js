@@ -241,8 +241,7 @@ LogicGate.prototype.mouseOver = function () {
 };
 
 /*
-    Checks if the mouse is over input n
-*/
+    Checks if the mouse is over input n*/
 LogicGate.prototype.mouseOverInput = function (n) {
     return this.inputClickBoxes[n].mouseOver();
 };
@@ -267,7 +266,7 @@ LogicGate.prototype.pointInOutput = function (n, px, py) {
 */
 LogicGate.prototype.show = function () {
     stroke(0);
-    strokeWeight(1);
+    strokeWeight(3);
     fill(255);
 
     if (this.direction % 2 == 0) {
@@ -287,10 +286,10 @@ LogicGate.prototype.show = function () {
         // Draw inputs
         if (this.inputs[i - 1] == true) {
             stroke(this.highColor);
-            strokeWeight(3);
+            strokeWeight(4);
         } else {
             stroke(this.lowColor);
-            strokeWeight(1);
+            strokeWeight(3);
         }
 
         switch (this.direction) {
@@ -324,7 +323,7 @@ LogicGate.prototype.show = function () {
         line(this.x1, this.y1, this.x2, this.y2);
 
         fill(255);
-        strokeWeight(1);
+        strokeWeight(2);
         //stroke(0);
 
         if (this.inputsInv[i - 1]) {
@@ -342,10 +341,10 @@ LogicGate.prototype.show = function () {
         // Draw outputs
         if (this.outputs[i - 1] == true) {
             stroke(this.highColor);
-            strokeWeight(3);
+            strokeWeight(4);
         } else {
             stroke(this.lowColor);
-            strokeWeight(1);
+            strokeWeight(3);
         }
 
         switch (this.direction) {
@@ -379,7 +378,7 @@ LogicGate.prototype.show = function () {
         line(this.x1, this.y1, this.x2, this.y2);
 
         fill(255);
-        strokeWeight(1);
+        strokeWeight(2);
         //stroke(0);
 
         if (this.outputsInv[i - 1]) {
