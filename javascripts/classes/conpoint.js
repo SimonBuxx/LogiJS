@@ -24,13 +24,12 @@ ConPoint.prototype.setGroup = function (ng) {
 };
 
 ConPoint.prototype.show = function () {
+    strokeWeight(0);
     if (this.state) {
-        strokeWeight(0);
         fill(this.highColor);
         rect(this.x - 3, this.y - 3, 6, 6);
     } else {
-        strokeWeight(0);
         fill(this.lowColor);
-        rect(this.x - 2, this.y - 2, 4, 4);
+        rect(this.x - 3, this.y - 3, 6, 6);
     }
 };
