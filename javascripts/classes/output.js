@@ -84,15 +84,13 @@ class Output {
         Displays the output on the screen
     */
     show() {
+        stroke(0);
+        strokeWeight(3);
         if (this.state) {
             fill(this.highColor);
-            stroke(0);
-            strokeWeight(3);
         }
         else {
             fill(this.lowColor);
-            stroke(0);
-            strokeWeight(1);
         }
         // Draw the circle that represents the output
         ellipse(this.x, this.y, this.w, this.h);
