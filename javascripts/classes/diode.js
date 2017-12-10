@@ -71,11 +71,11 @@ function Diode(x, y, state, transform) {
         if (this.state) {
             strokeWeight(0);
             fill(this.highColor);
-            triangle(this.x, this.y + 10, this.x - 10, this.y, this.x + 10, this.y);
+            triangle(this.x, this.y + 10, this.x - 10, this.y - 1, this.x + 10, this.y - 1);
         } else {
             strokeWeight(0);
             fill(this.lowColor);
-            triangle(this.x, this.y + 10, this.x - 10, this.y, this.x + 10, this.y);
+            triangle(this.x, this.y + 10, this.x - 10, this.y - 1, this.x + 10, this.y - 1);
         }
         //this.clickBox.markClickBox();
     }
