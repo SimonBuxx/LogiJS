@@ -152,6 +152,18 @@ function mouseClicked() {
                             }
                         }
                     }
+                    for (var i = 0; i < outputs.length; i++) {
+                        if (Boolean(outputs[i].mouseOver()) && exportMode) {
+                            if (exportOutput !== i) {
+                                if (exportOutput >= 0) {
+                                    outputs[exportOutput].mark(false);
+                                }
+                                outputs[i].mark(true);
+                                exportOutput = i;
+                                showOutputExportMenu();
+                            }
+                        }
+                    }
                 }
                 break;
             default:

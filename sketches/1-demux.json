@@ -46,6 +46,8 @@
     {
       "x": "915",
       "y": "345",
+      "istop": "true",
+      "lbl": "2º",
       "framecount": "-1",
       "clock": "false"
     }

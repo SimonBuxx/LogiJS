@@ -12,28 +12,15 @@ class Output {
         this.transform = transform;
         this.lbl = '';
         this.colr = colr; // 0 = red, 1 = yellow, 2 = green, 3 = blue
-        this.highColor = color(HRED, HGREEN, HBLUE); // Color for high in-/outputs (red)
-        this.lowColor = color(50, 50, 50); // Color for low in-/outputs (dark grey)
+        this.marked = false;
+        this.highColor = color(HRED, HGREEN, HBLUE); // Color for high outputs (red)
+        this.lowColor = color(50, 50, 50); // Color for low outputs (dark grey)
+        this.markColor = color(50, 100, 50);   // Color for marked inputs
+
         // ClickBox is used for input and global
         this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
-        switch (this.colr) {
-            case 0:
-                this.highColor = color(HRED, HGREEN, HBLUE);
-                break;
-            case 1:
-                this.highColor = color(YRED, YGREEN, YBLUE);
-                break;
-            case 2:
-                this.highColor = color(GRED, GGREEN, GBLUE);
-                break;
-            case 3:
-                this.highColor = color(BRED, BGREEN, BBLUE);
-                break;
-            default:
-                this.highColor = color(HRED, HGREEN, HBLUE);
-                console.log('Notice: Output color is invalid, setting to red');
-                break;
-        }
+
+        this.updateColor();
         this.updateClickBox();
     }
     /*
@@ -48,6 +35,10 @@ class Output {
         data.x = JSON.stringify(this.x);
         data.y = JSON.stringify(this.y);
         data.colr = JSON.stringify(this.colr);
+        if (this.lbl !== '') {
+            console.log('adding label');
+            data.lbl = this.lbl;
+        }
         return data;
     }
 
@@ -80,6 +71,31 @@ class Output {
         return this.clickBox.checkPoint(px, py);
     }
 
+    mark(b) {
+        this.marked = b;
+    }
+
+    updateColor() {
+        switch (this.colr) {
+            case 0:
+                this.highColor = color(HRED, HGREEN, HBLUE);
+                break;
+            case 1:
+                this.highColor = color(YRED, YGREEN, YBLUE);
+                break;
+            case 2:
+                this.highColor = color(GRED, GGREEN, GBLUE);
+                break;
+            case 3:
+                this.highColor = color(BRED, BGREEN, BBLUE);
+                break;
+            default:
+                this.highColor = color(HRED, HGREEN, HBLUE);
+                console.log('Notice: Output color is invalid, setting to red');
+                break;
+        }
+    }
+
     /*
         Displays the output on the screen
     */
@@ -90,7 +106,11 @@ class Output {
             fill(this.highColor);
         }
         else {
-            fill(this.lowColor);
+            if (this.marked) {
+                fill(this.markColor);
+            } else {
+                fill(this.lowColor);
+            }
         }
         // Draw the circle that represents the output
         ellipse(this.x, this.y, this.w, this.h);

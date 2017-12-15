@@ -73,7 +73,9 @@ let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopBut
     add4BitButton, mux1Button, mux2Button, mux3Button, halfaddButton, fulladdbutton, ascustomButton;
 let updater, sfcheckbox;
 let inputIsTopBox, inputCaptionBox;
+let outputCaptionBox, outputColorBox;
 let exportInput = -1;
+let exportOutput = -1;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
@@ -84,8 +86,6 @@ let cnv; // Canvas variable
 function setup() {
     // Creates the canvas in full window size
     cnv = createCanvas(windowWidth, windowHeight);
-
-
 
     // Prevents the input field from being focused during clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -342,6 +342,20 @@ function setup() {
     inputCaptionBox.position(window.width - 75, 60);
     inputCaptionBox.input(newInputCaption);
 
+    outputCaptionBox = createInput('');
+    outputCaptionBox.hide();
+    outputCaptionBox.size(50, 15);
+    outputCaptionBox.position(window.width - 75, 60);
+    outputCaptionBox.input(newOutputCaption);
+
+    outputColorBox = createSelect();
+    outputColorBox.hide();
+    outputColorBox.position(window.width - 83, 35);
+    outputColorBox.option('red');
+    outputColorBox.option('yellow');
+    outputColorBox.option('green');
+    outputColorBox.option('blue');
+    outputColorBox.changed(newOutputColor);
 
     frameRate(60); // Caps the framerate at 60 FPS
 
@@ -962,10 +976,16 @@ function prepareExport() {
         exportModeButton.elt.innerHTML = 'Export Mode OFF';
         inputIsTopBox.hide();
         inputCaptionBox.hide();
+        outputCaptionBox.hide();
+        outputColorBox.hide();
         for (const elem of inputs) {
             elem.mark(false);
         }
+        for (const elem of outputs) {
+            elem.mark(false);
+        }
         exportInput = -1;
+        exportOutput = -1;
     } else {
         ctrlMode = 'none';
         exportModeButton.elt.innerHTML = 'Export Mode ON';
@@ -973,10 +993,43 @@ function prepareExport() {
 }
 
 function showInputExportMenu() {
+    outputCaptionBox.hide();
+    outputColorBox.hide();
     inputIsTopBox.show();
     inputCaptionBox.show();
     inputIsTopBox.checked(inputs[exportInput].isTop);
     inputCaptionBox.value(inputs[exportInput].lbl);
+    exportOutput = -1;
+    for (const elem of outputs) {
+        elem.mark(false);
+    }
+}
+
+function showOutputExportMenu() {
+    inputIsTopBox.hide();
+    inputCaptionBox.hide();
+    outputCaptionBox.show();
+    outputColorBox.show();
+    switch (outputs[exportOutput].colr) {
+        case 0:
+            outputColorBox.value('red');
+            break;
+        case 1:
+            outputColorBox.value('yellow');
+            break;
+        case 2:
+            outputColorBox.value('green');
+            break;
+        case 3:
+            outputColorBox.value('blue');
+            break;
+        default:
+    }
+    outputCaptionBox.value(outputs[exportOutput].lbl);
+    exportInput = -1;
+    for (const elem of inputs) {
+        elem.mark(false);
+    }
 }
 
 function newIsTopState() {
@@ -985,7 +1038,29 @@ function newIsTopState() {
 
 function newInputCaption() {
     inputs[exportInput].lbl = inputCaptionBox.value();
-    console.log(inputs[exportInput].lbl);
+}
+
+function newOutputCaption() {
+    outputs[exportOutput].lbl = outputCaptionBox.value();
+}
+
+function newOutputColor() {
+    switch (outputColorBox.value()) {
+        case 'red':
+            outputs[exportOutput].colr = 0;
+            break;
+        case 'yellow':
+            outputs[exportOutput].colr = 1;
+            break;
+        case 'green':
+            outputs[exportOutput].colr = 2;
+            break;
+        case 'blue':
+            outputs[exportOutput].colr = 3;
+            break;
+        default:
+    }
+    outputs[exportOutput].updateColor();
 }
 
 function keyReleased() {

@@ -67,6 +67,9 @@ function load(loadData) {
     }
     for (var i = 0; i < loadData.outputs.length; i++) {
         outputs[i] = new Output(JSON.parse(loadData.outputs[i].x), JSON.parse(loadData.outputs[i].y), transform, JSON.parse(loadData.outputs[i].colr));
+        if (loadData.outputs[i].hasOwnProperty("lbl")) {
+            outputs[i].lbl = loadData.outputs[i].lbl;
+        }
         outputs[i].setCoordinates(JSON.parse(loadData.outputs[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.outputs[i].y) / transform.zoom - transform.dy);
         outputs[i].updateClickBox();
     }
@@ -74,6 +77,12 @@ function load(loadData) {
         inputs[i] = new Input(JSON.parse(loadData.inputs[i].x), JSON.parse(loadData.inputs[i].y), transform);
         inputs[i].setClock(loadData.inputs[i].clock === "true");
         inputs[i].framecount = parseInt(loadData.inputs[i].framecount);
+        if (loadData.inputs[i].hasOwnProperty("istop")) {
+            inputs[i].isTop = true;
+        }
+        if (loadData.inputs[i].hasOwnProperty("lbl")) {
+            inputs[i].lbl = loadData.inputs[i].lbl;
+        }
         inputs[i].setCoordinates(JSON.parse(loadData.inputs[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.inputs[i].y) / transform.zoom - transform.dy);
         inputs[i].updateClickBox();
     }

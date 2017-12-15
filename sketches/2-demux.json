@@ -1,0 +1,526 @@
+{
+  "caption": "DEMUX",
+  "gates": [
+    {
+      "x": "870",
+      "y": "270",
+      "direction": "0",
+      "inputCount": "3",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[true,true,false]"
+    },
+    {
+      "x": "870",
+      "y": "390",
+      "direction": "0",
+      "inputCount": "3",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,true,false]"
+    },
+    {
+      "x": "870",
+      "y": "510",
+      "direction": "0",
+      "inputCount": "3",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[true,false,false]"
+    },
+    {
+      "x": "870",
+      "y": "630",
+      "direction": "0",
+      "inputCount": "3",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "990",
+      "y": "300",
+      "colr": "0",
+      "lbl": "0"
+    },
+    {
+      "x": "990",
+      "y": "420",
+      "colr": "0",
+      "lbl": "1"
+    },
+    {
+      "x": "990",
+      "y": "540",
+      "colr": "0",
+      "lbl": "2"
+    },
+    {
+      "x": "990",
+      "y": "660",
+      "colr": "0",
+      "lbl": "3"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "795",
+      "y": "225",
+      "istop": "true",
+      "lbl": "2¹",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "825",
+      "y": "225",
+      "istop": "true",
+      "lbl": "2º",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "765",
+      "y": "225",
+      "framecount": "-1",
+      "clock": "false"
+    }
+  ],
+  "segments": [
+    {
+      "startX": "840",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "240",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "270",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "300",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "840",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "690",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "240",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "270",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "300",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "810",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "450",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "450",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "570",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "570",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "480",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "600",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "600",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "600",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "720",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "720",
+      "direction": "0"
+    },
+    {
+      "startX": "840",
+      "startY": "720",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "300",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "420",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "930",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "660",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "240",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "270",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "300",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "360",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "390",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "420",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "450",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "480",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "510",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "780",
+      "startY": "690",
+      "direction": "1"
+    }
+  ],
+  "conpoints": [
+    {
+      "x": "840",
+      "y": "300"
+    },
+    {
+      "x": "840",
+      "y": "420"
+    },
+    {
+      "x": "840",
+      "y": "540"
+    },
+    {
+      "x": "810",
+      "y": "330"
+    },
+    {
+      "x": "810",
+      "y": "450"
+    },
+    {
+      "x": "810",
+      "y": "570"
+    },
+    {
+      "x": "780",
+      "y": "360"
+    },
+    {
+      "x": "780",
+      "y": "480"
+    },
+    {
+      "x": "780",
+      "y": "600"
+    }
+  ],
+  "diodes": [],
+  "customs": []
+}

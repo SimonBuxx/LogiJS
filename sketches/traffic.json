@@ -5,33 +5,34 @@
     {
       "x": "1050",
       "y": "270",
-	  "colr": "0"
+      "colr": "0"
     },
     {
       "x": "1050",
       "y": "300",
-	  "colr": "1"
+      "colr": "1"
     },
     {
       "x": "1050",
       "y": "330",
-	  "colr": "2"
+      "colr": "2"
     },
     {
       "x": "1050",
       "y": "450",
-	  "colr": "0"
+      "colr": "0"
     },
     {
       "x": "1050",
       "y": "480",
-	  "colr": "2"
+      "colr": "2"
     }
   ],
   "inputs": [
     {
       "x": "225",
       "y": "285",
+      "istop": "true",
       "framecount": "0",
       "clock": "true"
     }
@@ -983,16 +984,16 @@
       "y": "270",
       "direction": "0",
       "filename": "\"2BitDec.json\"",
-      "outputsInv": "[false,false,false,false]",
-      "inputsInv": "[false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false]"
     },
     {
       "x": "300",
       "y": "270",
       "direction": "0",
       "filename": "\"2BitCounter.json\"",
-      "outputsInv": "[false,false]",
-      "inputsInv": "[false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false]"
     }
   ]
 }
