@@ -118,7 +118,7 @@ Input.prototype.show = function () {
     if (this.framecount >= 0 && !this.clock) {
         fill(0);
         if (this.state) {
-            strokeWidth(7);   
+            strokeWeight(7);   
         }
         rect(this.x + 10, this.y + 10, this.w / 3, this.h / 3);
     }
