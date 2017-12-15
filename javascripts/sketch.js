@@ -1,11 +1,6 @@
 // File: sketch.js
 // Name: Simon Buchholz
-// Date: 28/10/17
-
-// LESS IMPORTANT TODO POINTS:
-// TODO: Delete element in front of Gate
-// TODO: Fully implement selecting
-// TODO: Redo GUI (without dom elements, better design!)
+// Date: 15/12/17
 
 p5.disableFriendlyErrors = true;
 
@@ -630,49 +625,32 @@ function deleteDiode(diodeNumber) {
     - simRunning is set so that the sketch can't be altered
 */
 function startSimulation() {
-    simButton.elt.innerHTML = 'Stop';
-    undoButton.elt.disabled = true;
-    redoButton.elt.disabled = true;
-    andButton.elt.disabled = true;
-    orButton.elt.disabled = true;
-    xorButton.elt.disabled = true;
-    wireButton.elt.disabled = true;
-    inputButton.elt.disabled = true;
-    outputButton.elt.disabled = true;
-    buttonButton.elt.disabled = true;
-    clockButton.elt.disabled = true;
-    deleteButton.elt.disabled = true;
-    selectButton.elt.disabled = true;
-    diodeButton.elt.disabled = true;
-    reg4Button.elt.disabled = true;
-    decoder4Button.elt.disabled = true;
-    decoder2Button.elt.disabled = true;
-    counter2Button.elt.disabled = true;
-    counter4Button.elt.disabled = true;
-    mux1Button.elt.disabled = true;
-    mux2Button.elt.disabled = true;
-    mux3Button.elt.disabled = true;
-    dFlipFlopButton.elt.disabled = true;
-    rsFlipFlopButton.elt.disabled = true;
-    add4BitButton.elt.disabled = true;
-    halfaddButton.elt.disabled = true;
-    fulladdButton.elt.disabled = true;
-    ascustomButton.elt.disabled = true;
+    simButton.elt.innerHTML = 'Stop'; // Alter the caption of the Start/Stop buttons
+    disableButtons(true);
+
+    // Tell all customs that the simulation started
     for (let i = 0; i < customs.length; i++) {
         customs[i].setSimRunning(true);
     }
+
+    // Parse all groups, integrate all elements and parse again (required for some reason)
     parseGroups();
     integrateElement();
     parseGroups();
+
+    // Reduce the displayed wires for performance
     let counter = 0;
     for (let i = 0; i < groups.length; i++) {
         groups[i].findLines();
         counter += groups[i].segments.length;
     }
+    // Display the wire counts in the debug menu
     console.log('Before: ' + segments.length + ' segments displayed');
     console.log('Now: ' + counter + ' segments displayed');
 
     simRunning = true;
+    // If the update cycle shouldn't be synced with the framerate,
+    // update every 10ms (may be too fast for slower machines, not a great solution)
     if (!syncFramerate) {
         updater = setInterval(updateTick, 10);
     }
@@ -686,33 +664,11 @@ function startSimulation() {
 */
 function endSimulation() {
     simButton.elt.innerHTML = 'Start';
+    disableButtons(false);
+    // Enable the Undo/Redo buttons depending on if there
+    // are steps to be undone or redone
     redoButton.elt.disabled = (actionRedo.length === 0);
     undoButton.elt.disabled = (actionUndo.length === 0);
-    andButton.elt.disabled = false;
-    orButton.elt.disabled = false;
-    xorButton.elt.disabled = false;
-    wireButton.elt.disabled = false;
-    inputButton.elt.disabled = false;
-    outputButton.elt.disabled = false;
-    buttonButton.elt.disabled = false;
-    clockButton.elt.disabled = false;
-    deleteButton.elt.disabled = false;
-    selectButton.elt.disabled = false;
-    diodeButton.elt.disabled = false;
-    reg4Button.elt.disabled = false;
-    decoder4Button.elt.disabled = false;
-    decoder2Button.elt.disabled = false;
-    counter2Button.elt.disabled = false;
-    counter4Button.elt.disabled = false;
-    mux1Button.elt.disabled = false;
-    mux2Button.elt.disabled = false;
-    mux3Button.elt.disabled = false;
-    dFlipFlopButton.elt.disabled = false;
-    rsFlipFlopButton.elt.disabled = false;
-    add4BitButton.elt.disabled = false;
-    halfaddButton.elt.disabled = false;
-    fulladdButton.elt.disabled = false;
-    ascustomButton.elt.disabled = false;
     groups = [];
     for (let i = 0; i < gates.length; i++) {
         gates[i].shutdown();
@@ -741,6 +697,36 @@ function endSimulation() {
         clearInterval(updater);
     }
     reDraw();
+}
+
+function disableButtons(status) {
+    undoButton.elt.disabled = status;
+    redoButton.elt.disabled = status;
+    andButton.elt.disabled = status;
+    orButton.elt.disabled = status;
+    xorButton.elt.disabled = status;
+    wireButton.elt.disabled = status;
+    inputButton.elt.disabled = status;
+    outputButton.elt.disabled = status;
+    buttonButton.elt.disabled = status;
+    clockButton.elt.disabled = status;
+    deleteButton.elt.disabled = status;
+    selectButton.elt.disabled = status;
+    diodeButton.elt.disabled = status;
+    reg4Button.elt.disabled = status;
+    decoder4Button.elt.disabled = status;
+    decoder2Button.elt.disabled = status;
+    counter2Button.elt.disabled = status;
+    counter4Button.elt.disabled = status;
+    mux1Button.elt.disabled = status;
+    mux2Button.elt.disabled = status;
+    mux3Button.elt.disabled = status;
+    dFlipFlopButton.elt.disabled = status;
+    rsFlipFlopButton.elt.disabled = status;
+    add4BitButton.elt.disabled = status;
+    halfaddButton.elt.disabled = status;
+    fulladdButton.elt.disabled = status;
+    ascustomButton.elt.disabled = status;
 }
 
 /*
