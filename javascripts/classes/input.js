@@ -17,11 +17,13 @@ function Input(x, y, transform) {
 
     this.transform = transform;
 
-    this.highColor = color(HRED, HGREEN, HBLUE); // Color for high in-/outputs (red)
-    this.lowColor = color(50, 50, 50);   // Color for low in-/outputs (dark grey)
+    this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs (red)
+    this.lowColor = color(50, 50, 50);   // Color for low inputs (dark grey)
+    this.markColor = color(50, 100, 50);   // Color for marked inputs (dark grey)
 
     this.isTop = false;
     this.lbl = '';
+    this.marked = false;
 
     // ClickBox is used for output and global
     this.clickBox = new ClickBox(this.x - GRIDSIZE / 2, this.y - GRIDSIZE / 2, this.w, this.h, this.transform);
@@ -34,6 +36,9 @@ Input.prototype.getData = function () {
     data.y = JSON.stringify(this.y);
     if (this.isTop) {
         data.istop = JSON.stringify(true);
+    }
+    if (this.lbl !== '') {
+        data.lbl = this.lbl;
     }
     if (this.framecount == -1) {
         data.framecount = JSON.stringify(-1);
@@ -60,6 +65,10 @@ Input.prototype.setState = function (s) {
     this.outputs = s;
 };
 
+Input.prototype.setIsTop = function (b) {
+    this.isTop = b;
+};
+
 /*
     Toggles the state
 */
@@ -70,6 +79,10 @@ Input.prototype.toggle = function () {
 Input.prototype.getOutput = function () {
     return this.state;
 };
+
+Input.prototype.mark = function (b) {
+    this.marked = b;
+}
 
 /*
     Sets the coordinates of the output, rounded to grid size
@@ -110,7 +123,11 @@ Input.prototype.show = function () {
     if (this.state) {
         fill(this.highColor);
     } else {
-        fill(this.lowColor);
+        if (this.marked) {
+            fill(this.markColor);
+        } else {
+            fill(this.lowColor);
+        }
     }
     // Draw the rectangle that represents the input
     rect(this.x, this.y, this.w, this.h);
@@ -118,7 +135,7 @@ Input.prototype.show = function () {
     if (this.framecount >= 0 && !this.clock) {
         fill(0);
         if (this.state) {
-            strokeWeight(7);   
+            strokeWeight(7);
         }
         rect(this.x + 10, this.y + 10, this.w / 3, this.h / 3);
     }

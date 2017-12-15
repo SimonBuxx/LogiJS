@@ -60,19 +60,20 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
 // accidentally deleting other elements
 
 let simRunning = false;
+let exportMode = false;
 
 let syncFramerate = true;
-
-let redrawCounter = 0;
 
 // GUI Elements
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let wireButton, deleteButton, simButton, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText;
+    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, exportModeButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, halfaddButton, fulladdbutton, ascustomButton;
 let updater, sfcheckbox;
+let inputIsTopBox, inputCaptionBox;
+let exportInput = -1;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
@@ -84,8 +85,8 @@ function setup() {
     // Creates the canvas in full window size
     cnv = createCanvas(windowWidth, windowHeight);
 
-    
-	
+
+
     // Prevents the input field from being focused during clicking in the canvas
     document.addEventListener('mousedown', function (event) {
         if (event.detail > 1) {
@@ -93,13 +94,13 @@ function setup() {
         }
     }, false);
 
-	// Left Side Buttons
-	// Activates the wiring mode
+    // Left Side Buttons
+    // Activates the wiring mode
     wireButton = createButton('Wiring');
     wireButton.position(5, 4);
     wireButton.mousePressed(wiringClicked);
     wireButton.elt.style.width = "140px";
-	
+
     // Adds and-gates
     andButton = createButton('And-Gate');
     andButton.position(5, 34);
@@ -141,13 +142,13 @@ function setup() {
     outputButton.position(5, 178);
     outputButton.mousePressed(outputClicked);
     outputButton.elt.style.width = "140px";
-	
-	 // Adds diodes (barricade in one direction); Under development
+
+    // Adds diodes (barricade in one direction); Under development
     diodeButton = createButton('Toggle Diodes');
     diodeButton.position(5, 202);
     diodeButton.mousePressed(diodeClicked);
     diodeButton.elt.style.width = "140px";
-	
+
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
     counter2Button.position(5, 226);
@@ -213,25 +214,21 @@ function setup() {
     mux3Button.position(5, 466);
     mux3Button.mousePressed(function () { return customClicked('3-mux.json') });
     mux3Button.elt.style.width = "140px";
-	
-	// Adds a Half Adder
+
+    // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.position(5, 490);
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json') });
     halfaddButton.elt.style.width = "140px";
-	
-	// Adds a Full Adder
+
+    // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
     fulladdButton.position(5, 514);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json') });
     fulladdButton.elt.style.width = "140px";
 
-	
-	
-	
-	
-	//Upper left
-	// Activates the delete mode (objects and wires)
+    //Upper left
+    // Activates the delete mode (objects and wires)
     deleteButton = createButton('Delete');
     deleteButton.position(150, 4);
     deleteButton.mousePressed(deleteClicked);
@@ -240,13 +237,13 @@ function setup() {
     simButton = createButton('Start');
     simButton.position(210, 4);
     simButton.mousePressed(simClicked);
-	
-	// Adds text before the Clockrate slider
-	crText = createP('Clock rate: ');
+
+    // Adds text before the Clockrate slider
+    crText = createP('Clock rate: ');
     crText.elt.style.color = 'white';
     crText.elt.style.fontFamily = 'Arial';
     crText.position(260, -11);
-	
+
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(2, 60, 30, 1);
     clockspeedSlider.position(340, 2);
@@ -280,8 +277,8 @@ function setup() {
     selectButton = createButton('Select');
     selectButton.position(536, 4);
     selectButton.mousePressed(startSelect);
-	
-	sfcheckbox = createCheckbox('Sync FPS', true);
+
+    sfcheckbox = createCheckbox('Sync FPS', true);
     sfcheckbox.changed(function () {
         syncFramerate = !syncFramerate;
         if (simRunning) {
@@ -297,20 +294,24 @@ function setup() {
     sfcheckbox.elt.style.color = 'white';
     sfcheckbox.elt.style.fontFamily = 'Arial';
     sfcheckbox.position(590, 4);
-	
-	
-	// Upper right
-	// Input field for the file name
+
+    // Toggles the export preparation mode
+    exportModeButton = createButton('Export Mode OFF');
+    exportModeButton.position(690, 4);
+    exportModeButton.mousePressed(prepareExport);
+
+    // Upper right
+    // Input field for the file name
     textInput = createInput('New Sketch');
     textInput.size(300, 15);
     textInput.position(window.width - textInput.width - 161, 4);
 
-	// Clears the canvas and resets the view
+    // Clears the canvas and resets the view
     newButton = createButton('New');
     newButton.position(window.width - textInput.width - 208, 4);
     newButton.mousePressed(newClicked);
-	
-	 // Button to save the sketch
+
+    // Button to save the sketch
     saveButton = createButton('Save');
     saveButton.position(window.width - 157, 4);
     saveButton.mousePressed(saveClicked);
@@ -324,9 +325,26 @@ function setup() {
     ascustomButton = createButton('Import');
     ascustomButton.position(window.width - 57, 4);
     ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json') });
-	
+
+    /*
+        Elements for the export mode
+    */
+    inputIsTopBox = createCheckbox('Set to top', false);
+    inputIsTopBox.hide();
+    inputIsTopBox.position(window.width - 110, 35);
+    inputIsTopBox.changed(newIsTopState);
+    inputIsTopBox.elt.style.color = 'black';
+    inputIsTopBox.elt.style.fontFamily = 'Arial';
+
+    inputCaptionBox = createInput('');
+    inputCaptionBox.hide();
+    inputCaptionBox.size(50, 15);
+    inputCaptionBox.position(window.width - 75, 60);
+    inputCaptionBox.input(newInputCaption);
+
+
     frameRate(60); // Caps the framerate at 60 FPS
-	
+
     var loadfile = urlParam('sketch');
     if (loadfile != "") {
         console.log(`Loading ${loadfile}`);
@@ -627,6 +645,9 @@ function deleteDiode(diodeNumber) {
 function startSimulation() {
     simButton.elt.innerHTML = 'Stop'; // Alter the caption of the Start/Stop buttons
     disableButtons(true);
+    if (exportMode) {
+        prepareExport();
+    }
 
     // Tell all customs that the simulation started
     for (let i = 0; i < customs.length; i++) {
@@ -649,6 +670,7 @@ function startSimulation() {
     console.log('Now: ' + counter + ' segments displayed');
 
     simRunning = true;
+    exportMode = false;
     // If the update cycle shouldn't be synced with the framerate,
     // update every 10ms (may be too fast for slower machines, not a great solution)
     if (!syncFramerate) {
@@ -665,6 +687,9 @@ function startSimulation() {
 function endSimulation() {
     simButton.elt.innerHTML = 'Start';
     disableButtons(false);
+    if (exportMode) {
+        prepareExport();
+    }
     // Enable the Undo/Redo buttons depending on if there
     // are steps to be undone or redone
     redoButton.elt.disabled = (actionRedo.length === 0);
@@ -727,13 +752,13 @@ function disableButtons(status) {
     halfaddButton.elt.disabled = status;
     fulladdButton.elt.disabled = status;
     ascustomButton.elt.disabled = status;
+    exportModeButton.elt.disabled = status;
 }
 
 /*
     Executes in every frame, draws objects and stuff
 */
 function draw() {
-    redrawCounter++;
     if (simRunning) {
         if (syncFramerate) {
             updateTick();
@@ -743,7 +768,7 @@ function draw() {
 
     // If wire preview is active, generate a segment set and display the preview segments
     // When the mode is delete, mark the wire by drawing it in blue
-    if (wireMode == 'preview' || wireMode == 'delete') {
+    if (wireMode === 'preview' || wireMode === 'delete') {
         reDraw();
         scale(transform.zoom);
         translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
@@ -751,9 +776,9 @@ function draw() {
             generateSegmentSet(pwstartX, pwstartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, 0);
             // Display preview segments
-            _.forEach(pwSegments, function (value) {
-                value.show(wireMode === 'delete');
-            });
+            for (const elem of pwSegments) {
+                elem.show(wireMode === 'delete');
+            }
         }
         scale(1 / transform.zoom);
         translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
@@ -931,16 +956,48 @@ function wirePoints(x, y, j) {
     return indexList;
 }
 
-function keyReleased(){
-	if (textInput.elt != document.activeElement) {
-		switch (keyCode) {
-			case 17: //ctrl	
-				ctrlMode = 'none'
-				break;
-			default:
-			
-		}
-	}
+function prepareExport() {
+    exportMode = !exportMode; // Toggle
+    if (!exportMode) {
+        exportModeButton.elt.innerHTML = 'Export Mode OFF';
+        inputIsTopBox.hide();
+        inputCaptionBox.hide();
+        for (const elem of inputs) {
+            elem.mark(false);
+        }
+        exportInput = -1;
+    } else {
+        ctrlMode = 'none';
+        exportModeButton.elt.innerHTML = 'Export Mode ON';
+    }
+}
+
+function showInputExportMenu() {
+    inputIsTopBox.show();
+    inputCaptionBox.show();
+    inputIsTopBox.checked(inputs[exportInput].isTop);
+    inputCaptionBox.value(inputs[exportInput].lbl);
+}
+
+function newIsTopState() {
+    inputs[exportInput].setIsTop(inputIsTopBox.checked());
+}
+
+function newInputCaption() {
+    inputs[exportInput].lbl = inputCaptionBox.value();
+    console.log(inputs[exportInput].lbl);
+}
+
+function keyReleased() {
+    if (textInput.elt != document.activeElement) {
+        switch (keyCode) {
+            case 17: //ctrl	
+                ctrlMode = 'none'
+                break;
+            default:
+
+        }
+    }
 }
 /*
     Check if a key was pressed and act accordingly
@@ -951,9 +1008,9 @@ function keyPressed() {
             case ESCAPE:
                 ctrlMode = 'none';
                 break;
-			case 17: //ctrl	
-				startSelect();
-				break;
+            case 17: //ctrl	
+                startSelect();
+                break;
             case 49: // 1
                 gateInputCount = 1;
                 break;
@@ -996,7 +1053,7 @@ function keyPressed() {
             case UP_ARROW:
                 gateDirection = 3;
                 break;
-            
+
             default:
         }
     }

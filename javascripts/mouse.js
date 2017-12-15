@@ -103,7 +103,7 @@ function mouseClicked() {
                 }
                 break;
             case 'none':
-                if (mouseButton == LEFT) {
+                if (mouseButton === LEFT) {
                     // Invert In-/Outputs
                     for (var i = 0; i < gates.length; i++) {
                         for (var j = 0; j < gates[i].inputCount; j++) {
@@ -139,6 +139,19 @@ function mouseClicked() {
                             }
                         }
                     }
+                    for (var i = 0; i < inputs.length; i++) {
+                        if (Boolean(inputs[i].mouseOver()) && exportMode) {
+                            // If the exportMode is active, give options to name and make top
+                            if (exportInput !== i) {
+                                if (exportInput >= 0) {
+                                    inputs[exportInput].mark(false);
+                                }
+                                inputs[i].mark(true);
+                                exportInput = i;
+                                showInputExportMenu();
+                            }
+                        }
+                    }
                 }
                 break;
             default:
@@ -147,8 +160,8 @@ function mouseClicked() {
         redoButton.elt.disabled = (actionRedo.length == 0);
         undoButton.elt.disabled = (actionUndo.length == 0);
     } else {
-        // Buttons should be operateable during simulation // BUGGY SHIT, FIX! EDIT: NEVERMIND, FIXED WITH BLACK MAGIC (DON'T TOUCH!)
-        if (mouseButton == LEFT) {
+        // Buttons should be operateable during simulation
+        if (mouseButton === LEFT) {
             for (var i = 0; i < inputs.length; i++) {
                 if (Boolean(inputs[i].mouseOver()) && !inputs[i].getIsClock()) {
                     inputs[i].toggle();

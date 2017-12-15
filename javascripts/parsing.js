@@ -228,7 +228,7 @@ function integrateElement() {
                 }
             }
             for (var j = 0; j < customs.length; j++) {
-                if (customs[j].visible) { // IMPORTANT, SHITTY BUGS CAN HAPPEN IF NOT PUT
+                if (customs[j].visible) {
                     for (var k = 0; k < customs[j].outputCount; k++) {
                         if (customs[j].pointInOutput(k, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
                             groups[h].segments[i].setStart(1, customs[j], k);
