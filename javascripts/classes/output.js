@@ -104,13 +104,10 @@ class Output {
         strokeWeight(3);
         if (this.state) {
             fill(this.highColor);
-        }
-        else {
-            if (this.marked) {
-                fill(this.markColor);
-            } else {
-                fill(this.lowColor);
-            }
+        } else if (this.marked) {
+            fill(this.markColor);
+        } else {
+            fill(this.lowColor);
         }
         // Draw the circle that represents the output
         ellipse(this.x, this.y, this.w, this.h);

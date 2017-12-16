@@ -122,12 +122,10 @@ Input.prototype.show = function () {
     strokeWeight(3);
     if (this.state) {
         fill(this.highColor);
+    } else if (this.marked) {
+        fill(this.markColor);
     } else {
-        if (this.marked) {
-            fill(this.markColor);
-        } else {
-            fill(this.lowColor);
-        }
+        fill(this.lowColor);
     }
     // Draw the rectangle that represents the input
     rect(this.x, this.y, this.w, this.h);
