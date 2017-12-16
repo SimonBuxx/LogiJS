@@ -88,7 +88,7 @@ function setup() {
     // Creates the canvas in full window size
     cnv = createCanvas(windowWidth, windowHeight);
 
-    // Prevents the input field from being focused during clicking in the canvas
+    // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
         if (event.detail > 1) {
             event.preventDefault();
@@ -100,156 +100,183 @@ function setup() {
     wireButton = createButton('Wiring');
     wireButton.position(5, 4);
     wireButton.mousePressed(wiringClicked);
-    wireButton.elt.style.width = "140px";
+    wireButton.elt.style.width = "117px";
+    wireButton.elt.className = "button";
 
     // Adds and-gates
     andButton = createButton('And-Gate');
     andButton.position(5, 34);
     andButton.mousePressed(andClicked);
-    andButton.elt.style.width = "140px";
+    andButton.elt.style.width = "117px";
+    andButton.elt.className = "button";
 
     // Adds or-gates
     orButton = createButton('Or-Gate');
     orButton.position(5, 58);
     orButton.mousePressed(orClicked);
-    orButton.elt.style.width = "140px";
+    orButton.elt.style.width = "117px";
+    orButton.elt.className = "button";
 
     // Adds xor-gates
     xorButton = createButton('Xor-Gate');
     xorButton.position(5, 82);
     xorButton.mousePressed(xorClicked);
-    xorButton.elt.style.width = "140px";
+    xorButton.elt.style.width = "117px";
+    xorButton.elt.className = "button";
 
     // Adds switches
     inputButton = createButton('Switch');
     inputButton.position(5, 106);
     inputButton.mousePressed(inputClicked);
-    inputButton.elt.style.width = "140px";
+    inputButton.elt.style.width = "117px";
+    inputButton.elt.className = "button";
 
     // Adds buttons (short impulse)
     buttonButton = createButton('Button');
     buttonButton.position(5, 130);
     buttonButton.mousePressed(buttonClicked);
-    buttonButton.elt.style.width = "140px";
+    buttonButton.elt.style.width = "117px";
+    buttonButton.elt.className = "button";
 
     // Adds clocks (variable impulse)
     clockButton = createButton('Clock');
     clockButton.position(5, 154);
     clockButton.mousePressed(clockClicked);
-    clockButton.elt.style.width = "140px";
+    clockButton.elt.style.width = "117px";
+    clockButton.elt.className = "button";
 
     // Adds outputs (lamps)
     outputButton = createButton('Lamp');
     outputButton.position(5, 178);
     outputButton.mousePressed(outputClicked);
-    outputButton.elt.style.width = "140px";
+    outputButton.elt.style.width = "117px";
+    outputButton.elt.className = "button";
 
-    // Adds diodes (barricade in one direction); Under development
+    // Adds diodes (barricade in one direction)
     diodeButton = createButton('Toggle Diodes');
     diodeButton.position(5, 202);
     diodeButton.mousePressed(diodeClicked);
-    diodeButton.elt.style.width = "140px";
+    diodeButton.elt.style.width = "117px";
+    diodeButton.elt.className = "button";
 
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
     counter2Button.position(5, 226);
     counter2Button.mousePressed(function () { return customClicked('2BitCounter.json') });
-    counter2Button.elt.style.width = "140px";
+    counter2Button.elt.style.width = "117px";
+    counter2Button.elt.className = "button";
 
     // Adds a counter (4Bit)
     counter4Button = createButton('4Bit-Counter');
     counter4Button.position(5, 250);
     counter4Button.mousePressed(function () { return customClicked('4BitCounter.json') });
-    counter4Button.elt.style.width = "140px";
+    counter4Button.elt.style.width = "117px";
+    counter4Button.elt.className = "button";
 
     // Adds a decoder (2Bit)
     decoder2Button = createButton('2Bit-Decoder');
     decoder2Button.position(5, 274);
     decoder2Button.mousePressed(function () { return customClicked('2BitDec.json') });
-    decoder2Button.elt.style.width = "140px";
+    decoder2Button.elt.style.width = "117px";
+    decoder2Button.elt.className = "button";
 
     // Adds a decoder (4Bit)
     decoder4Button = createButton('4Bit-Decoder');
     decoder4Button.position(5, 298);
     decoder4Button.mousePressed(function () { return customClicked('4BitDec.json') });
-    decoder4Button.elt.style.width = "140px";
+    decoder4Button.elt.style.width = "117px";
+    decoder4Button.elt.className = "button";
 
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
     add4BitButton.position(5, 322);
     add4BitButton.mousePressed(function () { return customClicked('4BitNeu.json') });
-    add4BitButton.elt.style.width = "140px";
+    add4BitButton.elt.style.width = "117px";
+    add4BitButton.elt.className = "button";
 
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
     dFlipFlopButton.position(5, 346);
     dFlipFlopButton.mousePressed(function () { return customClicked('d-flipflop.json') });
-    dFlipFlopButton.elt.style.width = "140px";
+    dFlipFlopButton.elt.style.width = "117px";
+    dFlipFlopButton.elt.className = "button";
 
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
     rsFlipFlopButton.position(5, 370);
     rsFlipFlopButton.mousePressed(function () { return customClicked('rsNoWhobble.json') });
-    rsFlipFlopButton.elt.style.width = "140px";
+    rsFlipFlopButton.elt.style.width = "117px";
+    rsFlipFlopButton.elt.className = "button";
 
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
     reg4Button.position(5, 394);
     reg4Button.mousePressed(function () { return customClicked('4BitReg.json') });
-    reg4Button.elt.style.width = "140px";
+    reg4Button.elt.style.width = "117px";
+    reg4Button.elt.className = "button";
 
     // Adds a 1-multiplexer
     mux1Button = createButton('1-Multiplexer');
     mux1Button.position(5, 418);
     mux1Button.mousePressed(function () { return customClicked('1-mux.json') });
-    mux1Button.elt.style.width = "140px";
+    mux1Button.elt.style.width = "117px";
+    mux1Button.elt.className = "button";
 
     // Adds a 2-multiplexer
     mux2Button = createButton('2-Multiplexer');
     mux2Button.position(5, 442);
     mux2Button.mousePressed(function () { return customClicked('2-mux.json') });
-    mux2Button.elt.style.width = "140px";
+    mux2Button.elt.style.width = "117px";
+    mux2Button.elt.className = "button";
 
     // Adds a 3-multiplexer
     mux3Button = createButton('3-Multiplexer');
     mux3Button.position(5, 466);
     mux3Button.mousePressed(function () { return customClicked('3-mux.json') });
-    mux3Button.elt.style.width = "140px";
+    mux3Button.elt.style.width = "117px";
+    mux3Button.elt.className = "button";
 
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.position(5, 490);
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json') });
-    halfaddButton.elt.style.width = "140px";
+    halfaddButton.elt.style.width = "117px";
+    halfaddButton.elt.className = "button";
 
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
     fulladdButton.position(5, 514);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json') });
-    fulladdButton.elt.style.width = "140px";
+    fulladdButton.elt.style.width = "117px";
+    fulladdButton.elt.className = "button";
 
     //Upper left
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('Delete');
-    deleteButton.position(150, 4);
+    deleteButton.position(153, 4);
     deleteButton.mousePressed(deleteClicked);
+    deleteButton.elt.className = "button";
 
     // Starts and stops the simulation
     simButton = createButton('Start');
-    simButton.position(210, 4);
+    simButton.position(227, 4);
     simButton.mousePressed(simClicked);
+    simButton.elt.className = "button";
 
     // Adds text before the Clockrate slider
     crText = createP('Clock rate: ');
     crText.elt.style.color = 'white';
     crText.elt.style.fontFamily = 'Arial';
-    crText.position(260, -11);
+    crText.elt.style.margin = 0;
+    crText.position(290, 5);
 
     // A slider for adjusting the clock speed
-    clockspeedSlider = createSlider(2, 60, 30, 1);
-    clockspeedSlider.position(340, 2);
+    clockspeedSlider = createSlider(1, 90, 45, 1);
+    clockspeedSlider.position(374, 4);
     clockspeedSlider.style('width', '80px');
-    // Alters the max fps based on the clock speed => Genius
+    clockspeedSlider.style('margin', '0px');
+    clockspeedSlider.elt.className = 'slider';
+    // Alters the max fps based on the clock speed to save computing power
     clockspeedSlider.changed(function () {
         if (simRunning && !syncFramerate) {
             frameRate(60 - clockspeedSlider.value() / 2);
@@ -260,24 +287,36 @@ function setup() {
 
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(430, 4);
+    undoButton.position(460, 4);
     undoButton.mousePressed(() => { // ES6-Standard
         undo();
     })
     undoButton.elt.disabled = true;
+    undoButton.elt.className = "button";
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(483, 4);
+    redoButton.position(526, 4);
     redoButton.mousePressed(() => {
         redo();
     })
     redoButton.elt.disabled = true;
+    redoButton.elt.className = "button";
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(536, 4);
+    selectButton.position(592, 4);
     selectButton.mousePressed(startSelect);
+    selectButton.elt.className = "button";
+
+    // Toggles the properties mode
+    propertiesButton = createButton('Properties');
+    propertiesButton.position(664, 4);
+    propertiesButton.mousePressed(function () {
+        ctrlMode = 'none';
+        startPropMode();
+    });
+    propertiesButton.elt.className = "button";
 
     sfcheckbox = createCheckbox('Sync FPS', true);
     sfcheckbox.changed(function () {
@@ -294,41 +333,37 @@ function setup() {
     });
     sfcheckbox.elt.style.color = 'white';
     sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(590, 4);
-
-    // Toggles the export preparation mode
-    propertiesButton = createButton('Properties');
-    propertiesButton.position(690, 4);
-    propertiesButton.mousePressed(function() {
-        ctrlMode = 'none';
-        startPropMode();
-    });
+    sfcheckbox.position(762, 4);
 
     // Upper right
     // Input field for the file name
     textInput = createInput('New Sketch');
-    textInput.size(300, 15);
-    textInput.position(window.width - textInput.width - 161, 4);
+    textInput.size(200, 15);
+    textInput.position(window.width - textInput.width - 203, 4);
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(window.width - textInput.width - 208, 4);
+    newButton.position(window.width - textInput.width - 262, 4);
     newButton.mousePressed(newClicked);
+    newButton.elt.className = "button";
 
     // Button to save the sketch
     saveButton = createButton('Save');
-    saveButton.position(window.width - 157, 4);
+    saveButton.position(window.width - 198, 4);
     saveButton.mousePressed(saveClicked);
+    saveButton.elt.className = "button";
 
     // Button to load a sketch
     loadButton = createButton('Load');
-    loadButton.position(window.width - 107, 4);
+    loadButton.position(window.width - 134, 4);
     loadButton.mousePressed(loadClicked);
+    loadButton.elt.className = "button";
 
     // Button to import as custom
     ascustomButton = createButton('Import');
-    ascustomButton.position(window.width - 57, 4);
+    ascustomButton.position(window.width - 70, 4);
     ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json') });
+    ascustomButton.elt.className = "button";
 
     /*
         Elements for the export mode
@@ -857,16 +892,11 @@ function updateTick() {
 }
 
 function reDraw() {
-    //console.log('----------------------NEW FRAME-------------------------');
-    //var t0 = performance.now();
     background(150);
     scale(transform.zoom);
     drawGrid();
     translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
-    //var t1 = performance.now();
-    //console.log("Drawing the grid and scaling/translating took " + (t1 - t0) + " milliseconds.")
-
-    //t0 = performance.now();
+    //var t0 = performance.now();
     if (simRunning) {
         for (const elem of groups) {
             elem.show();
@@ -876,9 +906,8 @@ function reDraw() {
             elem.show();
         }
     }
-    //t1 = performance.now();
+    //var t1 = performance.now();
     //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
-
     //t0 = performance.now();
     for (const elem of gates) {
         elem.show();
@@ -891,36 +920,19 @@ function reDraw() {
     }
     //t1 = performance.now();
     //console.log("Drawing gates and customs took " + (t1 - t0) + " milliseconds.")
-
-    //t0 = performance.now();
     for (const elem of conpoints) {
         elem.show();
     }
-    //t1 = performance.now();
-    //console.log("Drawing conpoints took " + (t1 - t0) + " milliseconds.")
-
-    //t0 = performance.now();
     for (const elem of outputs) {
         elem.show();
     }
-    //t1 = performance.now();
-    //console.log("Drawing outputs took " + (t1 - t0) + " milliseconds.")
-
-    //t0 = performance.now();
     for (const elem of inputs) {
         elem.show();
     }
-    //t1 = performance.now();
-    //console.log("Drawing inputs took " + (t1 - t0) + " milliseconds.")
-
-    //t0 = performance.now();
     for (const elem of diodes) {
         elem.show();
     }
-    //t1 = performance.now();
-    //console.log("Drawing diodes took " + (t1 - t0) + " milliseconds.")
 
-    //t0 = performance.now();
     // Draw the GUI at the end
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Handle the offset from dragging and zooming
@@ -932,11 +944,11 @@ function reDraw() {
 
     // GUI Area
     text('Zoom: ' + Math.round(transform.zoom * 100) + '%', 160, 40); // Show zoom label
-    text('mouseX: ' + mouseX, 160, 60);
-    text('mouseY: ' + mouseY, 160, 80);
-    text('mouseX trans.: ' + Math.round((mouseX / transform.zoom - transform.dx)), 160, 100);
-    text('mouseY trans.: ' + Math.round((mouseY / transform.zoom - transform.dy)), 160, 120);
-    text('Framerate: ' + frameRate().toFixed(2), 160, 140);
+    //text('mouseX: ' + mouseX, 160, 60);
+    //text('mouseY: ' + mouseY, 160, 80);
+    //text('mouseX trans.: ' + Math.round((mouseX / transform.zoom - transform.dx)), 160, 100);
+    //text('mouseY trans.: ' + Math.round((mouseY / transform.zoom - transform.dy)), 160, 120);
+    text('FPS: ' + Math.round(frameRate()), 160, 60);
 
     strokeWeight(0);
     rect(0, 0, windowWidth, 30);
@@ -944,8 +956,6 @@ function reDraw() {
     if (propMode && propInput + propOutput >= -1) {
         rect(window.width - 130, 30, 130, 60);
     }
-    //t1 = performance.now();
-    //console.log("Drawing the GUI took " + (t1 - t0) + " milliseconds.");
 }
 
 function updateGroups() {
