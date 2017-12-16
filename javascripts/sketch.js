@@ -60,7 +60,7 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
 // accidentally deleting other elements
 
 let simRunning = false;
-let exportMode = false;
+let propMode = false;
 
 let syncFramerate = true;
 
@@ -68,14 +68,15 @@ let syncFramerate = true;
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let wireButton, deleteButton, simButton, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, exportModeButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, halfaddButton, fulladdbutton, ascustomButton;
 let updater, sfcheckbox;
+// Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
-let exportInput = -1;
-let exportOutput = -1;
+let propInput = -1;
+let propOutput = -1;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
@@ -296,9 +297,12 @@ function setup() {
     sfcheckbox.position(590, 4);
 
     // Toggles the export preparation mode
-    exportModeButton = createButton('Export Mode OFF');
-    exportModeButton.position(690, 4);
-    exportModeButton.mousePressed(prepareExport);
+    propertiesButton = createButton('Properties');
+    propertiesButton.position(690, 4);
+    propertiesButton.mousePressed(function() {
+        ctrlMode = 'none';
+        startPropMode();
+    });
 
     // Upper right
     // Input field for the file name
@@ -333,7 +337,7 @@ function setup() {
     inputIsTopBox.hide();
     inputIsTopBox.position(window.width - 110, 35);
     inputIsTopBox.changed(newIsTopState);
-    inputIsTopBox.elt.style.color = 'black';
+    inputIsTopBox.elt.style.color = 'white';
     inputIsTopBox.elt.style.fontFamily = 'Arial';
 
     inputCaptionBox = createInput('');
@@ -659,9 +663,7 @@ function deleteDiode(diodeNumber) {
 function startSimulation() {
     simButton.elt.innerHTML = 'Stop'; // Alter the caption of the Start/Stop buttons
     disableButtons(true);
-    if (exportMode) {
-        prepareExport();
-    }
+    stopPropMode();
 
     // Tell all customs that the simulation started
     for (let i = 0; i < customs.length; i++) {
@@ -684,7 +686,7 @@ function startSimulation() {
     console.log('Now: ' + counter + ' segments displayed');
 
     simRunning = true;
-    exportMode = false;
+    propMode = false;
     // If the update cycle shouldn't be synced with the framerate,
     // update every 10ms (may be too fast for slower machines, not a great solution)
     if (!syncFramerate) {
@@ -701,9 +703,6 @@ function startSimulation() {
 function endSimulation() {
     simButton.elt.innerHTML = 'Start';
     disableButtons(false);
-    if (exportMode) {
-        prepareExport();
-    }
     // Enable the Undo/Redo buttons depending on if there
     // are steps to be undone or redone
     redoButton.elt.disabled = (actionRedo.length === 0);
@@ -766,7 +765,7 @@ function disableButtons(status) {
     halfaddButton.elt.disabled = status;
     fulladdButton.elt.disabled = status;
     ascustomButton.elt.disabled = status;
-    exportModeButton.elt.disabled = status;
+    propertiesButton.elt.disabled = status;
 }
 
 /*
@@ -940,7 +939,10 @@ function reDraw() {
     strokeWeight(0);
     rect(0, 0, windowWidth, 30);
     rect(0, 30, 150, windowHeight);
-    t1 = performance.now();
+    if (propMode && propInput + propOutput >= -1) {
+        rect(window.width - 130, 30, 130, 60);
+    }
+    //t1 = performance.now();
     //console.log("Drawing the GUI took " + (t1 - t0) + " milliseconds.");
 }
 
@@ -970,47 +972,59 @@ function wirePoints(x, y, j) {
     return indexList;
 }
 
-function prepareExport() {
-    exportMode = !exportMode; // Toggle
-    if (!exportMode) {
-        exportModeButton.elt.innerHTML = 'Export Mode OFF';
-        inputIsTopBox.hide();
-        inputCaptionBox.hide();
-        outputCaptionBox.hide();
-        outputColorBox.hide();
-        for (const elem of inputs) {
-            elem.mark(false);
-        }
-        for (const elem of outputs) {
-            elem.mark(false);
-        }
-        exportInput = -1;
-        exportOutput = -1;
-    } else {
-        ctrlMode = 'none';
-        exportModeButton.elt.innerHTML = 'Export Mode ON';
-    }
+function startPropMode() {
+    propMode = true;
+    ctrlMode = 'none';
 }
 
-function showInputExportMenu() {
+function stopPropMode() {
+    propMode = false;
+    inputIsTopBox.hide();
+    inputCaptionBox.hide();
+    outputCaptionBox.hide();
+    outputColorBox.hide();
+    unmarkAllTargets();
+}
+
+// Hides the PropMenu without quitting the PropMode
+// Used, when the user clickes outside a valid target for PropMode
+function hidePropMenu() {
+    inputIsTopBox.hide();
+    inputCaptionBox.hide();
+    outputCaptionBox.hide();
+    outputColorBox.hide();
+}
+
+function unmarkAllTargets() {
+    for (const elem of inputs) {
+        elem.mark(false);
+    }
+    for (const elem of outputs) {
+        elem.mark(false);
+    }
+    propInput = -1;
+    propOutput = -1;
+}
+
+function showInputPropMenu() {
     outputCaptionBox.hide();
     outputColorBox.hide();
     inputIsTopBox.show();
     inputCaptionBox.show();
-    inputIsTopBox.checked(inputs[exportInput].isTop);
-    inputCaptionBox.value(inputs[exportInput].lbl);
-    exportOutput = -1;
+    inputIsTopBox.checked(inputs[propInput].isTop);
+    inputCaptionBox.value(inputs[propInput].lbl);
+    propOutput = -1;
     for (const elem of outputs) {
         elem.mark(false);
     }
 }
 
-function showOutputExportMenu() {
+function showOutputPropMenu() {
     inputIsTopBox.hide();
     inputCaptionBox.hide();
     outputCaptionBox.show();
     outputColorBox.show();
-    switch (outputs[exportOutput].colr) {
+    switch (outputs[propOutput].colr) {
         case 0:
             outputColorBox.value('red');
             break;
@@ -1025,42 +1039,42 @@ function showOutputExportMenu() {
             break;
         default:
     }
-    outputCaptionBox.value(outputs[exportOutput].lbl);
-    exportInput = -1;
+    outputCaptionBox.value(outputs[propOutput].lbl);
+    propInput = -1;
     for (const elem of inputs) {
         elem.mark(false);
     }
 }
 
 function newIsTopState() {
-    inputs[exportInput].setIsTop(inputIsTopBox.checked());
+    inputs[propInput].setIsTop(inputIsTopBox.checked());
 }
 
 function newInputCaption() {
-    inputs[exportInput].lbl = inputCaptionBox.value();
+    inputs[propInput].lbl = inputCaptionBox.value();
 }
 
 function newOutputCaption() {
-    outputs[exportOutput].lbl = outputCaptionBox.value();
+    outputs[propOutput].lbl = outputCaptionBox.value();
 }
 
 function newOutputColor() {
     switch (outputColorBox.value()) {
         case 'red':
-            outputs[exportOutput].colr = 0;
+            outputs[propOutput].colr = 0;
             break;
         case 'yellow':
-            outputs[exportOutput].colr = 1;
+            outputs[propOutput].colr = 1;
             break;
         case 'green':
-            outputs[exportOutput].colr = 2;
+            outputs[propOutput].colr = 2;
             break;
         case 'blue':
-            outputs[exportOutput].colr = 3;
+            outputs[propOutput].colr = 3;
             break;
         default:
     }
-    outputs[exportOutput].updateColor();
+    outputs[propOutput].updateColor();
 }
 
 function keyReleased() {
@@ -1082,6 +1096,7 @@ function keyPressed() {
         switch (keyCode) {
             case ESCAPE:
                 ctrlMode = 'none';
+                startPropMode();
                 break;
             case 17: //ctrl	
                 startSelect();

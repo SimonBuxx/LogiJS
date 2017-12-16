@@ -68,6 +68,9 @@ function mousePressed() {
 
 function mouseClicked() {
     reDraw();
+    if (ctrlMode !== 'none') {
+        stopPropMode();
+    }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
@@ -139,30 +142,37 @@ function mouseClicked() {
                             }
                         }
                     }
+                    let noValidTarget = true;
                     for (var i = 0; i < inputs.length; i++) {
-                        if (Boolean(inputs[i].mouseOver()) && exportMode) {
-                            // If the exportMode is active, give options to name and make top
-                            if (exportInput !== i) {
-                                if (exportInput >= 0) {
-                                    inputs[exportInput].mark(false);
+                        if (Boolean(inputs[i].mouseOver()) && propMode) {
+                            noValidTarget = false;
+                            // If the propMode is active, give options to name and make top
+                            if (propInput !== i) {
+                                if (propInput >= 0) {
+                                    inputs[propInput].mark(false);
                                 }
                                 inputs[i].mark(true);
-                                exportInput = i;
-                                showInputExportMenu();
+                                propInput = i;
+                                showInputPropMenu();
                             }
                         }
                     }
                     for (var i = 0; i < outputs.length; i++) {
-                        if (Boolean(outputs[i].mouseOver()) && exportMode) {
-                            if (exportOutput !== i) {
-                                if (exportOutput >= 0) {
-                                    outputs[exportOutput].mark(false);
+                        if (Boolean(outputs[i].mouseOver()) && propMode) {
+                            noValidTarget = false;
+                            if (propOutput !== i) {
+                                if (propOutput >= 0) {
+                                    outputs[propOutput].mark(false);
                                 }
                                 outputs[i].mark(true);
-                                exportOutput = i;
-                                showOutputExportMenu();
+                                propOutput = i;
+                                showOutputPropMenu();
                             }
                         }
+                    }
+                    if (noValidTarget && propMode) {
+                        hidePropMenu();
+                        unmarkAllTargets();
                     }
                 }
                 break;
@@ -336,5 +346,9 @@ function mouseOverDiode() {
 }
 
 function mouseOverGUI() {
-    return (mouseY < 30) || (mouseX < 150);
+    if (propInput + propOutput < -1) {
+        return (mouseY < 30) || (mouseX < 150);
+    } else {
+        return (mouseY < 30) || (mouseX < 150) || (mouseY < 90 && mouseX > window.width - 130);
+    }
 }
