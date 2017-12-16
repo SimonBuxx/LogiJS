@@ -70,7 +70,7 @@ let wireButton, deleteButton, simButton, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
-    add4BitButton, mux1Button, mux2Button, mux3Button, halfaddButton, fulladdbutton, ascustomButton;
+    add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdbutton, ascustomButton;
 let updater, sfcheckbox;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
@@ -236,16 +236,37 @@ function setup() {
     mux3Button.elt.style.width = "117px";
     mux3Button.elt.className = "button";
 
+    // Adds a 1-demultiplexer
+    demux1Button = createButton('1-Demultiplexer');
+    demux1Button.position(5, 490);
+    demux1Button.mousePressed(function () { return customClicked('1-demux.json') });
+    demux1Button.elt.style.width = "117px";
+    demux1Button.elt.className = "button";
+
+    // Adds a 2-demultiplexer
+    demux2Button = createButton('2-Demultiplexer');
+    demux2Button.position(5, 514);
+    demux2Button.mousePressed(function () { return customClicked('2-demux.json') });
+    demux2Button.elt.style.width = "117px";
+    demux2Button.elt.className = "button";
+
+    // Adds a 3-demultiplexer
+    demux3Button = createButton('3-Demultiplexer');
+    demux3Button.position(5, 538);
+    demux3Button.mousePressed(function () { return customClicked('3-demux.json') });
+    demux3Button.elt.style.width = "117px";
+    demux3Button.elt.className = "button";
+
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.position(5, 490);
+    halfaddButton.position(5, 562);
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json') });
     halfaddButton.elt.style.width = "117px";
     halfaddButton.elt.className = "button";
 
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.position(5, 514);
+    fulladdButton.position(5, 586);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json') });
     fulladdButton.elt.style.width = "117px";
     fulladdButton.elt.className = "button";
