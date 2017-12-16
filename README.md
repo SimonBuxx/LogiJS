@@ -71,7 +71,7 @@ programming of whole CPUs to implement complex algorithms.
 ### Loading and saving sketches
 You can save your sketch at any time by entering a name for it in the edit box and clicking the "Save" button. This will open a save
 dialog. In this, select the "sketches" folder inside your LogiJS folder. Unfortunately, it is not yet possible to load own sketches
-on the https://logijs.bitballoon.com website but you can load them when you have a copy on your own computer.
+on the https://logijs.netlify.com website but you can load them when you have a copy on your own computer.
 
 To load a sketch, enter its name into the edit box and click on "Load". The sketch will appear, deleting your current sketch canvas. 
 Please notice that most browsers, including Google Chrome and Mozilla Firefox, don't allow you to load local files. You can either
