@@ -1,4 +1,6 @@
 ## Welcome to LogiJS!
+**https://logijs.netlify.com/**
+
 This is a project that I'm working on in my spare time. It is a logic circuit editor written in JavaScript that focuses on 
 ease of use and a streamlined design. Please notice that, although this project has become far more than I've imagined,
 this is not a professionally developed piece of software. I've crushed a lot of bugs by now, but there might be some left.
