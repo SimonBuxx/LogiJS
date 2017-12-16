@@ -702,6 +702,8 @@ function startSimulation() {
 */
 function endSimulation() {
     simButton.elt.innerHTML = 'Start';
+    ctrlMode = 'none';
+    startPropMode();
     disableButtons(false);
     // Enable the Undo/Redo buttons depending on if there
     // are steps to be undone or redone
