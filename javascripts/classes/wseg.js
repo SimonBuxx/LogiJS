@@ -79,18 +79,15 @@ WSeg.prototype.getOutput = function () {
 };
 
 WSeg.prototype.show = function (del) {
-    if (!del) {
-        if (this.state) {
-            stroke(this.highColor);
-            strokeWeight(4);
-        } else {
-            stroke(this.lowColor);
-            strokeWeight(3);
-        }
-    } else {
-        stroke(this.deleteColor);
+    strokeWeight(3);
+    if (this.state) {
         strokeWeight(4);
+        stroke(this.highColor);
+    } else if (del) {
+        strokeWeight(4);
+        stroke(this.deleteColor);
+    } else {
+        stroke(this.lowColor);
     }
-
     line(this.startX, this.startY, this.endX, this.endY);
 };
