@@ -291,7 +291,7 @@ function setup() {
     crText.position(290, 5);
 
     // A slider for adjusting the clock speed
-    clockspeedSlider = createSlider(1, 90, 45, 1);
+    clockspeedSlider = createSlider(1, 60, 30, 1);
     clockspeedSlider.position(374, 4);
     clockspeedSlider.style('width', '80px');
     clockspeedSlider.style('margin', '0px');
