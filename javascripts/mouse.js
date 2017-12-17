@@ -20,15 +20,22 @@ function mouseWheel(event) {
 function mouseMoved() {
     let hand = false;
     if (simRunning || propMode) {
-        for (const elem of inputs) {
-            if (elem.mouseOver()) {
-                hand = true;
-                cursor(HAND);
-            }
-        }
         if (!simRunning) {
             for (const elem of outputs) {
                 if (elem.mouseOver()) {
+                    hand = true;
+                    cursor(HAND);
+                }
+            }
+            for (const elem of inputs) {
+                if (elem.mouseOver()) {
+                    hand = true;
+                    cursor(HAND);
+                }
+            }
+        } else {
+            for (const elem of inputs) {
+                if (elem.mouseOver() && !elem.getIsClock()) {
                     hand = true;
                     cursor(HAND);
                 }
