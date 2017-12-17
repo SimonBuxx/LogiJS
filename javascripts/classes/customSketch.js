@@ -1,6 +1,4 @@
 // File: customSketch.js
-// Name: Simon Buchholz
-// Date: 27/10/17
 
 function CustomSketch(x, y, transform, direction, file) {
     this.x = x; // X-Position of the Custom object

@@ -1,6 +1,4 @@
 // File: output.js
-// Name: Simon Buchholz
-// Date: 28/10/17
 
 class Output {
     constructor(x, y, transform, colr) {

@@ -1,6 +1,4 @@
 // File: diode.js
-// Name: Simon Buchholz
-// Date: 21/10/17
 
 function Diode(x, y, state, transform) {
     this.x = x; // X position

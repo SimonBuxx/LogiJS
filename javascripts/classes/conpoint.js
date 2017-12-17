@@ -1,6 +1,4 @@
 // File: conpoints.js
-// Name: Simon Buchholz
-// Date: 24/8/17
 
 function ConPoint(x, y, state, g) {
     this.x = x;

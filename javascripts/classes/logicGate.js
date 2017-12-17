@@ -1,6 +1,4 @@
 // File: logicGate.js
-// Name: Simon Buchholz
-// Date: 25/8/17
 
 function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFunction, caption) {
     this.x = x; // X-Position of the Gate (translated)

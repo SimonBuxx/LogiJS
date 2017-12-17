@@ -1,6 +1,4 @@
 // File: clickBox.js
-// Name: Simon Buchholz
-// Date: 6/6/17
 
 function ClickBox(x, y, w, h, transform) {
     this.x = x;

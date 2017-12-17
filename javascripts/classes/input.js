@@ -1,6 +1,4 @@
 // File: input.js
-// Name: Simon Buchholz
-// Date: 27/10/17
 
 function Input(x, y, transform) {
     this.x = x; // X-Position

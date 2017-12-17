@@ -1,6 +1,4 @@
 // File: wseg.js
-// Name: Simon Buchholz
-// Date: 21/10/17
 
 function WSeg(dir, startX, startY, state, transform) {
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high

@@ -1,6 +1,4 @@
 // File: sketch.js
-// Name: Simon Buchholz
-// Date: 15/12/17
 
 p5.disableFriendlyErrors = true;
 

@@ -1,6 +1,4 @@
 // File: cpdiodes.js
-// Name: Simon Buchholz
-// Date: 13/9/17
 
 /*
     Deletes all diodes that are not connected to two or more segments

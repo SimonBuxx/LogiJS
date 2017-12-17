@@ -1,10 +1,7 @@
 // File: mouse.js
-// Name: Simon Buchholz
-// Date: 21/10/17
 
 /*
     Triggers when the mouse wheel is used
-    --> Zoom
 */
 function mouseWheel(event) {
     // -1 for zoom in, +1 for zoom out

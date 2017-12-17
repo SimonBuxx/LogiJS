@@ -1,6 +1,4 @@
 // File: group.js
-// Name: Simon Buchholz
-// Date: 21/10/17
 
 function Group() {
     this.inputGates = [];

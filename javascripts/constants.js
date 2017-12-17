@@ -1,7 +1,4 @@
 // File: constants.js
-// Name: Simon Buchholz
-// Date: 24/8/17
-// Description: Contains important constants
 
 const GRIDSIZE = 30;   // Standard grid size (plz don't change)
 const WIRECBSIZE = 20; // Size of the wire ClickBoxes

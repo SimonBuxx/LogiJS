@@ -1,6 +1,4 @@
 // File: undoredo.js
-// Name: Simon Buchholz
-// Date: 13/9/17
 
 function undo() {
     var act = actionUndo.pop();

@@ -1,6 +1,4 @@
 // File: loadsave.js
-// Name: Simon Buchholz
-// Date: 27/10/17
 
 function saveSketch(filename) {
     // Create a new json object to store all elements in

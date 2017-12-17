@@ -1,6 +1,4 @@
 // File: parsing.js
-// Name: Simon Buchholz
-// Date: 21/10/17
 
 /*
     Finds connected wires and orders them in groups of segments
