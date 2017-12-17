@@ -17,6 +17,29 @@ function mouseWheel(event) {
     }
 }
 
+function mouseMoved() {
+    let hand = false;
+    if (simRunning || propMode) {
+        for (const elem of inputs) {
+            if (elem.mouseOver()) {
+                hand = true;
+                cursor(HAND);
+            }
+        }
+        if (!simRunning) {
+            for (const elem of outputs) {
+                if (elem.mouseOver()) {
+                    hand = true;
+                    cursor(HAND);
+                }
+            }
+        }
+    }
+    if (!hand) {
+        cursor(ARROW);
+    }
+}
+
 /*
     Executed when a mouse button is pressed down
 */
@@ -344,8 +367,8 @@ function mouseOverDiode() {
 
 function mouseOverGUI() {
     if (propInput + propOutput < -1) {
-        return (mouseY < 30) || (mouseX < 150);
+        return (mouseY < 0) || (mouseX < 0);
     } else {
-        return (mouseY < 30) || (mouseX < 150) || (mouseY < 90 && mouseX > window.width - 130);
+        return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 130);
     }
 }

@@ -189,7 +189,7 @@ function generateSegmentSet(startX, startY, endX, endY, wstate) {
         }
     }
     // Set the mode according to the first segment from the preview
-    if (pwSegments[0] != null) {
+    if (pwSegments[0] != null && !lockElements) {
         lockElements = true;
         startDirection = pwSegments[0].direction;
     }

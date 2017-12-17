@@ -89,8 +89,8 @@ Input.prototype.setCoordinates = function (nx, ny) {
     this.x = Math.round(nx / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
     this.y = Math.round(ny / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
     // Check bounds
-    if (this.x < 0) this.x = 0;
-    if (this.y < 0) this.y = 0;
+    if (this.x < 15) this.x = 15;
+    if (this.y < 15) this.y = 15;
 };
 
 Input.prototype.updateClickBox = function () {
