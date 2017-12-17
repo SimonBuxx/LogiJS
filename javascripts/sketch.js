@@ -817,6 +817,9 @@ function disableButtons(status) {
     mux1Button.elt.disabled = status;
     mux2Button.elt.disabled = status;
     mux3Button.elt.disabled = status;
+    demux1Button.elt.disabled = status;
+    demux2Button.elt.disabled = status;
+    demux3Button.elt.disabled = status;
     dFlipFlopButton.elt.disabled = status;
     rsFlipFlopButton.elt.disabled = status;
     add4BitButton.elt.disabled = status;
