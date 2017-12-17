@@ -235,6 +235,7 @@ function mouseReleased() {
                                 segments.push(pwSegments[i]);
                             }
                         }
+                        lockElements = false;
                         pwSegments = []; // delete the preview segments
                         wireMode = 'none'; // wiring done, reset wireMode
                         doConpoints(); // Update all conpoints and diodes
