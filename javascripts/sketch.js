@@ -467,6 +467,8 @@ function newClicked() {
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
     endSimulation(); // End the simulation, if started
+    stopPropMode(); // Restarting PropMode so that the menu hides
+    startPropMode(); // when new is clicked while it's open
     ctrlMode = 'none'; // Clear the control mode
     wireMode = 'none';
     reDraw();
