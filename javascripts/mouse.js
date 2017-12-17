@@ -14,7 +14,7 @@ function mouseWheel(event) {
     }
     if (gridSize == maxZoom * GRIDSIZE) gridSize--;
     if (gridSize == minZoom * GRIDSIZE) gridSize++;
-    transform.zoom = Math.round((gridSize / GRIDSIZE) * 300) / 300;
+    transform.zoom = (gridSize / GRIDSIZE);
     if (!simRunning) {
         reDraw();
     }

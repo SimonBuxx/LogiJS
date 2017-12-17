@@ -86,7 +86,8 @@ let cnv; // Canvas variable
 */
 function setup() {
     // Creates the canvas in full window size
-    cnv = createCanvas(windowWidth, windowHeight);
+    cnv = createCanvas(windowWidth - 150, windowHeight - 30);
+    cnv.position(150, 30);
 
     // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -360,38 +361,38 @@ function setup() {
     // Input field for the file name
     textInput = createInput('New Sketch');
     textInput.size(200, 15);
-    textInput.position(window.width - textInput.width - 203, 4);
+    textInput.position(windowWidth - textInput.width - 203, 4);
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(window.width - textInput.width - 262, 4);
+    newButton.position(windowWidth - textInput.width - 262, 4);
     newButton.mousePressed(newClicked);
     newButton.elt.className = "button";
 
     // Button to save the sketch
     saveButton = createButton('Save');
-    saveButton.position(window.width - 198, 4);
+    saveButton.position(windowWidth - 198, 4);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = "button";
 
     // Button to load a sketch
     loadButton = createButton('Load');
-    loadButton.position(window.width - 134, 4);
+    loadButton.position(windowWidth - 134, 4);
     loadButton.mousePressed(loadClicked);
     loadButton.elt.className = "button";
 
     // Button to import as custom
     ascustomButton = createButton('Import');
-    ascustomButton.position(window.width - 70, 4);
+    ascustomButton.position(windowWidth - 70, 4);
     ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json') });
     ascustomButton.elt.className = "button";
 
     /*
-        Elements for the export mode
+        Elements for the properties mode
     */
     inputIsTopBox = createCheckbox('Set to top', false);
     inputIsTopBox.hide();
-    inputIsTopBox.position(window.width - 110, 35);
+    inputIsTopBox.position(windowWidth - 110, 35);
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.style.color = 'white';
     inputIsTopBox.elt.style.fontFamily = 'Arial';
@@ -399,18 +400,18 @@ function setup() {
     inputCaptionBox = createInput('');
     inputCaptionBox.hide();
     inputCaptionBox.size(50, 15);
-    inputCaptionBox.position(window.width - 75, 60);
+    inputCaptionBox.position(windowWidth - 75, 60);
     inputCaptionBox.input(newInputCaption);
 
     outputCaptionBox = createInput('');
     outputCaptionBox.hide();
     outputCaptionBox.size(50, 15);
-    outputCaptionBox.position(window.width - 75, 60);
+    outputCaptionBox.position(windowWidth - 75, 60);
     outputCaptionBox.input(newOutputCaption);
 
     outputColorBox = createSelect();
     outputColorBox.hide();
-    outputColorBox.position(window.width - 83, 35);
+    outputColorBox.position(windowWidth - 80, 35);
     outputColorBox.option('red');
     outputColorBox.option('yellow');
     outputColorBox.option('green');
@@ -967,18 +968,18 @@ function reDraw() {
     strokeWeight(1);
 
     // GUI Area
-    text('Zoom: ' + Math.round(transform.zoom * 100) + '%', 160, 40); // Show zoom label
+    text('Zoom: ' + Math.round(transform.zoom * 100) + '%', 10, 15); // Show zoom label
     //text('mouseX: ' + mouseX, 160, 60);
     //text('mouseY: ' + mouseY, 160, 80);
     //text('mouseX trans.: ' + Math.round((mouseX / transform.zoom - transform.dx)), 160, 100);
     //text('mouseY trans.: ' + Math.round((mouseY / transform.zoom - transform.dy)), 160, 120);
-    text('FPS: ' + Math.round(frameRate()), 160, 60);
+    text('FPS: ' + Math.round(frameRate()), 10, 35);
 
     strokeWeight(0);
-    rect(0, 0, windowWidth, 30);
-    rect(0, 30, 150, windowHeight);
+    //rect(0, 0, windowWidth, 30);
+    //rect(0, 30, 150, windowHeight);
     if (propMode && propInput + propOutput >= -1) {
-        rect(window.width - 130, 30, 130, 60);
+        rect(window.width - 130, 0, 130, 60);
     }
 }
 

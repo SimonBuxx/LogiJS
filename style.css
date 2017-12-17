@@ -1,3 +1,7 @@
+body {
+    background-color: black;
+}
+
 .button {
     display: inline-block;
     -webkit-box-sizing: content-box;
