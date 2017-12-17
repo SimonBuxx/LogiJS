@@ -1,6 +1,18 @@
 {
-  "caption": "Arithmetic-Logical-Unit",
-  "gates": [],
+  "caption": "4-Bit ALU",
+  "gates": [
+    {
+      "x": "1650",
+      "y": "120",
+      "direction": "0",
+      "inputCount": "4",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[true,true,true,true]"
+    }
+  ],
   "outputs": [
     {
       "x": "930",
@@ -31,6 +43,12 @@
       "y": "480",
       "colr": "0",
       "lbl": "C"
+    },
+    {
+      "x": "1770",
+      "y": "150",
+      "colr": "0",
+	  "lbl": "Z"
     }
   ],
   "inputs": [
@@ -1117,6 +1135,336 @@
       "startX": "1560",
       "startY": "360",
       "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "150",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "180",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "210",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "240",
+      "direction": "1"
+    },
+    {
+      "startX": "930",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "960",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "990",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1020",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1050",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1080",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1110",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1140",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1170",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1200",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1230",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1260",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1290",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1320",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1350",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1380",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1410",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1440",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1470",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1500",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1530",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1560",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1590",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1620",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1140",
+      "startY": "180",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "210",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "240",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1170",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1200",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1230",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1260",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1290",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1320",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1350",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1380",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1410",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1440",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1470",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1500",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1530",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1560",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1590",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1620",
+      "startY": "180",
+      "direction": "0"
+    },
+    {
+      "startX": "1350",
+      "startY": "210",
+      "direction": "1"
+    },
+    {
+      "startX": "1350",
+      "startY": "240",
+      "direction": "1"
+    },
+    {
+      "startX": "1350",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1380",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1410",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1440",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1470",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1500",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1530",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1560",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1590",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1620",
+      "startY": "210",
+      "direction": "0"
+    },
+    {
+      "startX": "1560",
+      "startY": "240",
+      "direction": "1"
+    },
+    {
+      "startX": "1560",
+      "startY": "240",
+      "direction": "0"
+    },
+    {
+      "startX": "1590",
+      "startY": "240",
+      "direction": "0"
+    },
+    {
+      "startX": "1620",
+      "startY": "240",
+      "direction": "0"
+    },
+    {
+      "startX": "1710",
+      "startY": "150",
+      "direction": "0"
+    },
+    {
+      "startX": "1740",
+      "startY": "150",
+      "direction": "0"
     }
   ],
   "conpoints": [
@@ -1164,32 +1512,32 @@
       "y": "420",
       "direction": "0",
       "filename": "\"aluslice.json\"",
-      "outputsInv": "[false,false,false,false,false,false]",
-      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
     },
     {
       "x": "990",
       "y": "420",
       "direction": "0",
       "filename": "\"aluslice.json\"",
-      "outputsInv": "[false,false,false,false,false,false]",
-      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
     },
     {
       "x": "1200",
       "y": "420",
       "direction": "0",
       "filename": "\"aluslice.json\"",
-      "outputsInv": "[false,false,false,false,false,false]",
-      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
     },
     {
       "x": "1410",
       "y": "420",
       "direction": "0",
       "filename": "\"aluslice.json\"",
-      "outputsInv": "[false,false,false,false,false,false]",
-      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
     }
   ]
 }
