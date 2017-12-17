@@ -443,11 +443,13 @@ function customClicked(filename) {
 // Triggered when a sketch should be saved
 function saveClicked() {
     saveSketch(textInput.value() + '.json');
+    document.title = textInput.value() + ' - LogiJS';
 }
 
 // Triggered when a sketch should be loaded
 function loadClicked() {
     loadSketch(textInput.value() + '.json');
+    document.title = textInput.value() + ' - LogiJS';
     reDraw();
 }
 

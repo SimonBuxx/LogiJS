@@ -73,14 +73,14 @@ body {
     width: 10px;
     height: 20px;
     background: #292929;
-    cursor: default;
+    cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
     width: 10px;
     height: 20px;
     background: #292929;
-    cursor: default;
+    cursor: pointer;
 }
 
 input[type=text] {
@@ -89,4 +89,10 @@ input[type=text] {
     padding-left: 7px;
     padding-top: 3px;
     padding-bottom: 3px;
+}
+
+#github {
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
 }
