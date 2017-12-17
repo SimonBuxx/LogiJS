@@ -43,4 +43,4 @@ const INPNUM = 2; // Index of the inputs
 const OUTPNUM = 1; // Index of the outputs
 const DINUM = 6; // Index of the diodes
 
-const BUTCOUNT = 2; // Number of frames the button should be high
+const BUTCOUNT = 10; // Number of frames the button should be high
