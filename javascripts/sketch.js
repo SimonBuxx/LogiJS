@@ -474,6 +474,8 @@ function newClicked() {
     startPropMode(); // when new is clicked while it's open
     ctrlMode = 'none'; // Clear the control mode
     wireMode = 'none';
+    document.title = 'New Sketch - LogiJS';
+    textInput.value('New Sketch');
     reDraw();
 }
 
