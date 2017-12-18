@@ -422,7 +422,7 @@ function setup() {
     if (loadfile != "") {
         console.log(`Loading ${loadfile}`);
         loadSketch(loadfile + '.json');
-        document.title = textInput.value() + ' - LogiJS';
+        document.title = loadfile + ' - LogiJS';
     }
     reDraw();
 }
