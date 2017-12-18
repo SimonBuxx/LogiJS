@@ -38,7 +38,7 @@ Input.prototype.getData = function () {
     if (this.lbl !== '') {
         data.lbl = this.lbl;
     }
-    if (this.framecount == -1) {
+    if (this.framecount === -1) {
         data.framecount = JSON.stringify(-1);
     } else {
         data.framecount = JSON.stringify(0);
@@ -80,7 +80,7 @@ Input.prototype.getOutput = function () {
 
 Input.prototype.mark = function (b) {
     this.marked = b;
-}
+};
 
 /*
     Sets the coordinates of the output, rounded to grid size
@@ -89,8 +89,12 @@ Input.prototype.setCoordinates = function (nx, ny) {
     this.x = Math.round(nx / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
     this.y = Math.round(ny / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
     // Check bounds
-    if (this.x < 15) this.x = 15;
-    if (this.y < 15) this.y = 15;
+    if (this.x < 15) {
+        this.x = 15;
+    }
+    if (this.y < 15) {
+        this.y = 15;
+    }
 };
 
 Input.prototype.updateClickBox = function () {

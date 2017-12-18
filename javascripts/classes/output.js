@@ -1,6 +1,6 @@
 // File: output.js
 
-class Output {
+class Output { // jshint ignore:line
     constructor(x, y, transform, colr) {
         this.x = x; // X-Position
         this.y = y; // Y-Position
@@ -47,8 +47,12 @@ class Output {
         this.x = Math.round(nx / GRIDSIZE) * GRIDSIZE;
         this.y = Math.round(ny / GRIDSIZE) * GRIDSIZE;
         // Check bounds
-        if (this.x < 30) this.x = 30;
-        if (this.y < 30) this.y = 30;
+        if (this.x < 30) {
+            this.x = 30;
+        }
+        if (this.y < 30) {
+            this.y = 30;
+        }
     }
 
     updateClickBox() {

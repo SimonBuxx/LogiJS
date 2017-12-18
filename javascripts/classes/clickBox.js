@@ -49,10 +49,10 @@ function ClickBox(x, y, w, h, transform) {
 
     // Returns if the mouse is in a gridSize sized area around x, y
     this.mouseOver = function () {
-        this.result = (((mouseX / this.transform.zoom - this.transform.dx) >= (this.x - this.w / 2))
-            && ((mouseX / this.transform.zoom - this.transform.dx) <= (this.x + this.w / 2))
-            && ((mouseY / this.transform.zoom - this.transform.dy) >= (this.y - this.h / 2))
-            && ((mouseY / this.transform.zoom - this.transform.dy) <= (this.y + this.h / 2)));
+        this.result = (((mouseX / this.transform.zoom - this.transform.dx) >= (this.x - this.w / 2)) &&
+             ((mouseX / this.transform.zoom - this.transform.dx) <= (this.x + this.w / 2)) &&
+             ((mouseY / this.transform.zoom - this.transform.dy) >= (this.y - this.h / 2)) &&
+             ((mouseY / this.transform.zoom - this.transform.dy) <= (this.y + this.h / 2)));
         return this.result;
     };
 
@@ -60,10 +60,10 @@ function ClickBox(x, y, w, h, transform) {
         Checks if one point (possibly != mouseX/Y) is inside the ClickBox
     */
     this.checkPoint = function(px, py) {
-        this.result = ((px >= (this.x - this.w / 2))
-            && (px <= (this.x + this.w / 2))
-            && (py >= (this.y - this.h / 2))
-            && (py <= (this.y + this.h / 2)));
+        this.result = ((px >= (this.x - this.w / 2)) &&
+             (px <= (this.x + this.w / 2)) &&
+             (py >= (this.y - this.h / 2)) &&
+             (py <= (this.y + this.h / 2)));
         return this.result;
-    }
+    };
 }

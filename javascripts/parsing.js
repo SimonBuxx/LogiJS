@@ -1,12 +1,15 @@
 // File: parsing.js
 
+let startDirection = 0;
+let traced = [];
+
 /*
     Finds connected wires and orders them in groups of segments
 */
 function parseGroups() {
     traced = [];
     groups = [];
-    for (var i = 0; i < segments.length; i++) {
+    for (let i = 0; i < segments.length; i++) {
         if (traced.indexOf(i) < 0) {
             exploreGroup(i);
         }
@@ -51,28 +54,28 @@ function exGroup(j, g) {
         }
     }
 
-    var wp1 = wirePoints(segments[j].startX, segments[j].startY, j);
-    var wp2 = wirePoints(segments[j].endX, segments[j].endY, j);
+    let wp1 = wirePoints(segments[j].startX, segments[j].startY, j);
+    let wp2 = wirePoints(segments[j].endX, segments[j].endY, j);
 
     // If there are 3 segments connecting
-    if (wp1.length == 2) {
+    if (wp1.length === 2) {
         if (isConPoint(segments[j].startX, segments[j].startY) >= 0) {
             conpoints[isConPoint(segments[j].startX, segments[j].startY)].setGroup(g);
         } else {
             // This is to stop group linking when diodes are placed (or in general no conpoint set)
-            for (var k = 0; k < wp1.length; k++) {
-                if (segments[wp1[k]].direction == segments[j].direction) { // If they have the same direction
-                    var s = wp1[k];
+            for (let k = 0; k < wp1.length; k++) {
+                if (segments[wp1[k]].direction === segments[j].direction) { // If they have the same direction
+                    let s = wp1[k];
                     wp1 = []; // Only explore in this segment
                     wp1.push(s);
                 }
             }
         }
-    } else if (wp1.length == 3) {
+    } else if (wp1.length === 3) {
         if (isConPoint(segments[j].startX, segments[j].startY) < 0) {
-            for (var k = 0; k < wp1.length; k++) {
-                if (segments[wp1[k]].direction == segments[j].direction) { // If they have the same direction
-                    var s = wp1[k];
+            for (let k = 0; k < wp1.length; k++) {
+                if (segments[wp1[k]].direction === segments[j].direction) { // If they have the same direction
+                    let s = wp1[k];
                     wp1 = []; // Only explore in this segment
                     wp1.push(s);
                 }
@@ -82,23 +85,23 @@ function exGroup(j, g) {
         }
     }
     // Same thing for the other direction
-    if (wp2.length == 2) {
+    if (wp2.length === 2) {
         if (isConPoint(segments[j].endX, segments[j].endY) >= 0) {
             conpoints[isConPoint(segments[j].endX, segments[j].endY)].setGroup(g);
         } else {
-            for (var k = 0; k < wp2.length; k++) {
-                if (segments[wp2[k]].direction == segments[j].direction) { // If they have the same direction
-                    var s = wp2[k];
+            for (let k = 0; k < wp2.length; k++) {
+                if (segments[wp2[k]].direction === segments[j].direction) { // If they have the same direction
+                    let s = wp2[k];
                     wp2 = []; // Only explore in this segment
                     wp2.push(s);
                 }
             }
         }
-    } else if (wp2.length == 3) {
+    } else if (wp2.length === 3) {
         if (isConPoint(segments[j].endX, segments[j].endY) < 0) {
-            for (var k = 0; k < wp2.length; k++) {
-                if (segments[wp2[k]].direction == segments[j].direction) { // If they have the same direction
-                    var s = wp2[k];
+            for (let k = 0; k < wp2.length; k++) {
+                if (segments[wp2[k]].direction === segments[j].direction) { // If they have the same direction
+                    let s = wp2[k];
                     wp2 = []; // Only explore in this segment
                     wp2.push(s);
                 }
@@ -108,13 +111,13 @@ function exGroup(j, g) {
         }
     }
     // Trace the remaining segments recursivly
-    for (var i = 0; i < wp1.length; i++) {
+    for (let i = 0; i < wp1.length; i++) {
         if (traced.indexOf(wp1[i]) < 0) {
             exGroup(wp1[i], g);
         }
     }
 
-    for (var i = 0; i < wp2.length; i++) {
+    for (let i = 0; i < wp2.length; i++) {
         if (traced.indexOf(wp2[i]) < 0) {
             exGroup(wp2[i], g);
         }
@@ -126,19 +129,19 @@ function exGroup(j, g) {
 */
 function generateSegmentSet(startX, startY, endX, endY, wstate) {
     pwSegments = [];
-    var togo = 0;
-    if (startDirection == 0) {
+    let togo = 0;
+    if (startDirection === 0) {
         // Horizontal first
         togo = Math.abs(endX - startX);
         if (startX < endX) {
             while (togo >= GRIDSIZE) {
-                var seg = new WSeg(0, endX - togo, startY, wstate, transform);
+                let seg = new WSeg(0, endX - togo, startY, wstate, transform);
                 pwSegments.push(seg);
                 togo -= GRIDSIZE;
             }
         } else if (startX > endX) {
             while (togo >= GRIDSIZE) {
-                var seg = new WSeg(0, startX - togo, startY, wstate, transform);
+                let seg = new WSeg(0, startX - togo, startY, wstate, transform);
                 pwSegments.push(seg);
                 togo -= GRIDSIZE;
             }
@@ -146,13 +149,13 @@ function generateSegmentSet(startX, startY, endX, endY, wstate) {
         togo = Math.abs(endY - startY);
         if (startY < endY) {
             while (togo >= GRIDSIZE) {
-                var seg = new WSeg(1, endX, endY - togo, wstate, transform);
+                let seg = new WSeg(1, endX, endY - togo, wstate, transform);
                 pwSegments.push(seg);
                 togo -= GRIDSIZE;
             }
         } else if (startY > endY) {
             while (togo >= GRIDSIZE) {
-                var seg = new WSeg(1, endX, startY - togo, wstate, transform);
+                let seg = new WSeg(1, endX, startY - togo, wstate, transform);
                 pwSegments.push(seg);
                 togo -= GRIDSIZE;
             }
@@ -162,13 +165,13 @@ function generateSegmentSet(startX, startY, endX, endY, wstate) {
         togo = Math.abs(endY - startY);
         if (startY < endY) {
             while (togo >= GRIDSIZE) {
-                var seg = new WSeg(1, startX, endY - togo, wstate, transform);
+                let seg = new WSeg(1, startX, endY - togo, wstate, transform);
                 pwSegments.push(seg);
                 togo -= GRIDSIZE;
             }
         } else if (startY > endY) {
             while (togo >= GRIDSIZE) {
-                var seg = new WSeg(1, startX, startY - togo, wstate, transform);
+                let seg = new WSeg(1, startX, startY - togo, wstate, transform);
                 pwSegments.push(seg);
                 togo -= GRIDSIZE;
             }
@@ -176,28 +179,28 @@ function generateSegmentSet(startX, startY, endX, endY, wstate) {
         togo = Math.abs(endX - startX);
         if (startX < endX) {
             while (togo >= GRIDSIZE) {
-                var seg = new WSeg(0, endX - togo, endY, wstate, transform);
+                let seg = new WSeg(0, endX - togo, endY, wstate, transform);
                 pwSegments.push(seg);
                 togo -= GRIDSIZE;
             }
         } else if (startX > endX) {
             while (togo >= GRIDSIZE) {
-                var seg = new WSeg(0, startX - togo, endY, wstate, transform);
+                let seg = new WSeg(0, startX - togo, endY, wstate, transform);
                 pwSegments.push(seg);
                 togo -= GRIDSIZE;
             }
         }
     }
     // Set the mode according to the first segment from the preview
-    if (pwSegments[0] != null && !lockElements) {
+    if (pwSegments[0] !== null && !lockElements) {
         lockElements = true;
         startDirection = pwSegments[0].direction;
     }
 }
 
 function segmentExists(startX, startY, endX, endY) {
-    for (var i = 0; i < segments.length; i++) {
-        if ((segments[i].startX == startX) && (segments[i].startY == startY) && (segments[i].endX == endX) && (segments[i].endY == endY)) {
+    for (let i = 0; i < segments.length; i++) {
+        if ((segments[i].startX === startX) && (segments[i].startY === startY) && (segments[i].endX === endX) && (segments[i].endY === endY)) {
             return i;
         }
     }
@@ -205,10 +208,10 @@ function segmentExists(startX, startY, endX, endY) {
 }
 
 function integrateElement() {
-    for (var h = 0; h < groups.length; h++) {
-        for (var i = 0; i < groups[h].segments.length; i++) {
-            for (var j = 0; j < gates.length; j++) {
-                for (var k = 0; k < gates[j].outputCount; k++) {
+    for (let h = 0; h < groups.length; h++) {
+        for (let i = 0; i < groups[h].segments.length; i++) {
+            for (let j = 0; j < gates.length; j++) {
+                for (let k = 0; k < gates[j].outputCount; k++) {
                     if (gates[j].pointInOutput(k, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
                         groups[h].segments[i].setStart(1, gates[j], k);
                     }
@@ -216,7 +219,7 @@ function integrateElement() {
                         groups[h].segments[i].setEnd(1, gates[j], k);
                     }
                 }
-                for (var k = 0; k < gates[j].inputCount; k++) {
+                for (let k = 0; k < gates[j].inputCount; k++) {
                     if (gates[j].pointInInput(k, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
                         groups[h].segments[i].setStart(0, gates[j], k);
                     }
@@ -225,9 +228,9 @@ function integrateElement() {
                     }
                 }
             }
-            for (var j = 0; j < customs.length; j++) {
+            for (let j = 0; j < customs.length; j++) {
                 if (customs[j].visible) {
-                    for (var k = 0; k < customs[j].outputCount; k++) {
+                    for (let k = 0; k < customs[j].outputCount; k++) {
                         if (customs[j].pointInOutput(k, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
                             groups[h].segments[i].setStart(1, customs[j], k);
                         }
@@ -235,7 +238,7 @@ function integrateElement() {
                             groups[h].segments[i].setEnd(1, customs[j], k);
                         }
                     }
-                    for (var k = 0; k < customs[j].inputCount; k++) {
+                    for (let k = 0; k < customs[j].inputCount; k++) {
                         if (customs[j].pointInInput(k, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
                             groups[h].segments[i].setStart(0, customs[j], k);
                         }
@@ -245,7 +248,7 @@ function integrateElement() {
                     }
                 }
             }
-            for (var j = 0; j < inputs.length; j++) {
+            for (let j = 0; j < inputs.length; j++) {
                 if (inputs[j].pointInOutput(null, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
                     groups[h].segments[i].setStart(1, inputs[j], 0);
                 }
@@ -253,7 +256,7 @@ function integrateElement() {
                     groups[h].segments[i].setEnd(1, inputs[j], 0);
                 }
             }
-            for (var j = 0; j < outputs.length; j++) {
+            for (let j = 0; j < outputs.length; j++) {
                 if (outputs[j].pointInInput(null, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
                     groups[h].segments[i].setStart(0, outputs[j], 0);
                 }
@@ -261,57 +264,57 @@ function integrateElement() {
                     groups[h].segments[i].setEnd(0, outputs[j], 0);
                 }
             }
-            for (var j = 0; j < diodes.length; j++) { // For all diodes
-                if ((groups[h].segments[i].startX == diodes[j].x) && (groups[h].segments[i].startY == diodes[j].y)) { // If there's a diode in the segment start
-                    if (groups[h].segments[i].startX == groups[h].segments[i].endX) { // if the segment is vertical
-                        var s = segmentStartsIn(groups[h].segments[i].startX, groups[h].segments[i].startY); // Get the segment that starts in x,y or -1
-                        var t = segmentEndsIn(groups[h].segments[i].startX, groups[h].segments[i].startY); // Get the segment that ends in x,y or -1
+            for (let j = 0; j < diodes.length; j++) { // For all diodes
+                if ((groups[h].segments[i].startX === diodes[j].x) && (groups[h].segments[i].startY === diodes[j].y)) { // If there's a diode in the segment start
+                    if (groups[h].segments[i].startX === groups[h].segments[i].endX) { // if the segment is vertical
+                        let s = segmentStartsIn(groups[h].segments[i].startX, groups[h].segments[i].startY); // Get the segment that starts in x,y or -1
+                        let t = segmentEndsIn(groups[h].segments[i].startX, groups[h].segments[i].startY); // Get the segment that ends in x,y or -1
                         if (s >= 0) { // if a horizontal segment exists
-                            if (segments[s].startY == segments[s].endY) { // If the segment is horizontal
+                            if (segments[s].startY === segments[s].endY) { // If the segment is horizontal
                                 diodes[j].setGroups(getGroup(segments[s]), h); // Set the diode groups
                             }
                         } else if (t >= 0) {
-                            if (segments[t].startY == segments[t].endY) { // If the segment is horizontal
+                            if (segments[t].startY === segments[t].endY) { // If the segment is horizontal
                                 diodes[j].setGroups(getGroup(segments[t]), h); // Set the diode groups
                             }
                         }
 
-                    } else if (groups[h].segments[i].startY == groups[h].segments[i].endY) { // if the segment is horizontal
-                        var s = segmentStartsIn(groups[h].segments[i].startX, groups[h].segments[i].startY); // Get the segment that starts in x,y or -1
-                        var t = segmentEndsIn(groups[h].segments[i].startX, groups[h].segments[i].startY); // Get the segment that ends in x,y or -1
+                    } else if (groups[h].segments[i].startY === groups[h].segments[i].endY) { // if the segment is horizontal
+                        let s = segmentStartsIn(groups[h].segments[i].startX, groups[h].segments[i].startY); // Get the segment that starts in x,y or -1
+                        let t = segmentEndsIn(groups[h].segments[i].startX, groups[h].segments[i].startY); // Get the segment that ends in x,y or -1
                         if (s >= 0) {
-                            if (segments[s].startX == segments[s].endX) { // If the segment is vertical
+                            if (segments[s].startX === segments[s].endX) { // If the segment is vertical
                                 diodes[j].setGroups(h, getGroup(segments[s])); // Set the diode groups
                             }
                         } else if (t >= 0) {
-                            if (segments[t].startX == segments[t].endX) { // If the segment is vertical
+                            if (segments[t].startX === segments[t].endX) { // If the segment is vertical
                                 diodes[j].setGroups(h, getGroup(segments[t])); // Set the diode groups
                             }
                         }
                     }
                 }
-                if ((groups[h].segments[i].endX == diodes[j].x) && (groups[h].segments[i].endY == diodes[j].y)) { // If there's a diode in the segment end
-                    if (groups[h].segments[i].startX == groups[h].segments[i].endX) { // if it's vertical
-                        var s = segmentStartsIn(groups[h].segments[i].endX, groups[h].segments[i].endY); // Get the segment that starts in x,y or -1
-                        var t = segmentEndsIn(groups[h].segments[i].endX, groups[h].segments[i].endY); // Get the segment that ends in x,y or -1
+                if ((groups[h].segments[i].endX === diodes[j].x) && (groups[h].segments[i].endY === diodes[j].y)) { // If there's a diode in the segment end
+                    if (groups[h].segments[i].startX === groups[h].segments[i].endX) { // if it's vertical
+                        let s = segmentStartsIn(groups[h].segments[i].endX, groups[h].segments[i].endY); // Get the segment that starts in x,y or -1
+                        let t = segmentEndsIn(groups[h].segments[i].endX, groups[h].segments[i].endY); // Get the segment that ends in x,y or -1
                         if (s >= 0) { // if a horizontal segment exists
-                            if (segments[s].startY == segments[s].endY) { // If the segment is horizontal
+                            if (segments[s].startY === segments[s].endY) { // If the segment is horizontal
                                 diodes[j].setGroups(getGroup(segments[s]), h); // Set the diode groups
                             }
                         } else if (t >= 0) {
-                            if (segments[t].startY == segments[t].endY) { // If the segment is horizontal
+                            if (segments[t].startY === segments[t].endY) { // If the segment is horizontal
                                 diodes[j].setGroups(getGroup(segments[t]), h); // Set the diode groups
                             }
                         }
-                    } else if (groups[h].segments[i].startY == groups[h].segments[i].endY) { // if the segment is horizontal
-                        var s = segmentStartsIn(groups[h].segments[i].endX, groups[h].segments[i].endY); // Get the segment that starts in x,y or -1
-                        var t = segmentEndsIn(groups[h].segments[i].endX, groups[h].segments[i].endY); // Get the segment that ends in x,y or -1
+                    } else if (groups[h].segments[i].startY === groups[h].segments[i].endY) { // if the segment is horizontal
+                        let s = segmentStartsIn(groups[h].segments[i].endX, groups[h].segments[i].endY); // Get the segment that starts in x,y or -1
+                        let t = segmentEndsIn(groups[h].segments[i].endX, groups[h].segments[i].endY); // Get the segment that ends in x,y or -1
                         if (s >= 0) {
-                            if (segments[s].startX == segments[s].endX) { // If the segment is vertical
+                            if (segments[s].startX === segments[s].endX) { // If the segment is vertical
                                 diodes[j].setGroups(h, getGroup(segments[s])); // Set the diode groups
                             }
                         } else if (t >= 0) {
-                            if (segments[t].startX == segments[t].endX) { // If the segment is vertical
+                            if (segments[t].startX === segments[t].endX) { // If the segment is vertical
                                 diodes[j].setGroups(h, getGroup(segments[t])); // Set the diode groups
                             }
                         }

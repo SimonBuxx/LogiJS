@@ -1,6 +1,6 @@
 // File: sketch.js
 
-p5.disableFriendlyErrors = true;
+p5.disableFriendlyErrors = true; // jshint ignore:line
 
 let gates = []; // All normal gates (no inputs, outputs, etc.)
 let outputs = []; // All outputs
@@ -11,15 +11,12 @@ let conpoints = [];
 let diodes = [];
 let customs = [];
 
-let startDirection = 0;
 let pwstartX = 0;
 let pwstartY = 0;
 
-// Variables for wire tracing
-let traced = [];
 let groups = [];
 
-let caption = []; // Name of the sketch, displayed on customs
+//let caption = []; // Name of the sketch, displayed on customs
 
 let gridSize = GRIDSIZE; // Size of the grid
 
@@ -48,14 +45,7 @@ let selectEndY = 0;
 let lastX = 0; var lastY = 0; // last mouse position
 let dragSpeed = 1.5;
 
-// Variables for zooming
-let maxZoom = 2.0;
-let minZoom = 0.2;
-
 let transform = new Transformation(0, 0, 1);
-
-let lockElements = false; // For delete mode, ensures that wires can be deleted without
-// accidentally deleting other elements
 
 let simRunning = false;
 let propMode = false;
@@ -68,7 +58,7 @@ let wireButton, deleteButton, simButton, labelBasic, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
-    add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdbutton, ascustomButton;
+    add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
 let updater, sfcheckbox;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
@@ -82,7 +72,7 @@ let cnv; // Canvas variable
 /*
     Sets up the canvas and caps the framerate
 */
-function setup() {
+function setup() { // jshint ignore:line
     // Creates the canvas in full window size
     cnv = createCanvas(windowWidth - 150, windowHeight - 30);
     cnv.position(150, 30);
@@ -161,112 +151,112 @@ function setup() {
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
     counter2Button.position(5, 250);
-    counter2Button.mousePressed(function () { return customClicked('2BitCounter.json') });
+    counter2Button.mousePressed(function () { return customClicked('2BitCounter.json'); });
     counter2Button.elt.style.width = "117px";
     counter2Button.elt.className = "button";
 
     // Adds a counter (4Bit)
     counter4Button = createButton('4Bit-Counter');
     counter4Button.position(5, 274);
-    counter4Button.mousePressed(function () { return customClicked('4BitCounter.json') });
+    counter4Button.mousePressed(function () { return customClicked('4BitCounter.json'); });
     counter4Button.elt.style.width = "117px";
     counter4Button.elt.className = "button";
 
     // Adds a decoder (2Bit)
     decoder2Button = createButton('2Bit-Decoder');
     decoder2Button.position(5, 298);
-    decoder2Button.mousePressed(function () { return customClicked('2BitDec.json') });
+    decoder2Button.mousePressed(function () { return customClicked('2BitDec.json'); });
     decoder2Button.elt.style.width = "117px";
     decoder2Button.elt.className = "button";
 
     // Adds a decoder (4Bit)
     decoder4Button = createButton('4Bit-Decoder');
     decoder4Button.position(5, 322);
-    decoder4Button.mousePressed(function () { return customClicked('4BitDec.json') });
+    decoder4Button.mousePressed(function () { return customClicked('4BitDec.json'); });
     decoder4Button.elt.style.width = "117px";
     decoder4Button.elt.className = "button";
 
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
     add4BitButton.position(5, 346);
-    add4BitButton.mousePressed(function () { return customClicked('4BitNeu.json') });
+    add4BitButton.mousePressed(function () { return customClicked('4BitNeu.json'); });
     add4BitButton.elt.style.width = "117px";
     add4BitButton.elt.className = "button";
 
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
     dFlipFlopButton.position(5, 370);
-    dFlipFlopButton.mousePressed(function () { return customClicked('d-flipflop.json') });
+    dFlipFlopButton.mousePressed(function () { return customClicked('d-flipflop.json'); });
     dFlipFlopButton.elt.style.width = "117px";
     dFlipFlopButton.elt.className = "button";
 
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
     rsFlipFlopButton.position(5, 394);
-    rsFlipFlopButton.mousePressed(function () { return customClicked('rsNoWhobble.json') });
+    rsFlipFlopButton.mousePressed(function () { return customClicked('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.style.width = "117px";
     rsFlipFlopButton.elt.className = "button";
 
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
     reg4Button.position(5, 418);
-    reg4Button.mousePressed(function () { return customClicked('4BitReg.json') });
+    reg4Button.mousePressed(function () { return customClicked('4BitReg.json'); });
     reg4Button.elt.style.width = "117px";
     reg4Button.elt.className = "button";
 
     // Adds a 1-multiplexer
     mux1Button = createButton('1-Multiplexer');
     mux1Button.position(5, 442);
-    mux1Button.mousePressed(function () { return customClicked('1-mux.json') });
+    mux1Button.mousePressed(function () { return customClicked('1-mux.json'); });
     mux1Button.elt.style.width = "117px";
     mux1Button.elt.className = "button";
 
     // Adds a 2-multiplexer
     mux2Button = createButton('2-Multiplexer');
     mux2Button.position(5, 466);
-    mux2Button.mousePressed(function () { return customClicked('2-mux.json') });
+    mux2Button.mousePressed(function () { return customClicked('2-mux.json'); });
     mux2Button.elt.style.width = "117px";
     mux2Button.elt.className = "button";
 
     // Adds a 3-multiplexer
     mux3Button = createButton('3-Multiplexer');
     mux3Button.position(5, 490);
-    mux3Button.mousePressed(function () { return customClicked('3-mux.json') });
+    mux3Button.mousePressed(function () { return customClicked('3-mux.json'); });
     mux3Button.elt.style.width = "117px";
     mux3Button.elt.className = "button";
 
     // Adds a 1-demultiplexer
     demux1Button = createButton('1-Demultiplexer');
     demux1Button.position(5, 514);
-    demux1Button.mousePressed(function () { return customClicked('1-demux.json') });
+    demux1Button.mousePressed(function () { return customClicked('1-demux.json'); });
     demux1Button.elt.style.width = "117px";
     demux1Button.elt.className = "button";
 
     // Adds a 2-demultiplexer
     demux2Button = createButton('2-Demultiplexer');
     demux2Button.position(5, 538);
-    demux2Button.mousePressed(function () { return customClicked('2-demux.json') });
+    demux2Button.mousePressed(function () { return customClicked('2-demux.json'); });
     demux2Button.elt.style.width = "117px";
     demux2Button.elt.className = "button";
 
     // Adds a 3-demultiplexer
     demux3Button = createButton('3-Demultiplexer');
     demux3Button.position(5, 562);
-    demux3Button.mousePressed(function () { return customClicked('3-demux.json') });
+    demux3Button.mousePressed(function () { return customClicked('3-demux.json'); });
     demux3Button.elt.style.width = "117px";
     demux3Button.elt.className = "button";
 
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.position(5, 586);
-    halfaddButton.mousePressed(function () { return customClicked('halbadd.json') });
+    halfaddButton.mousePressed(function () { return customClicked('halbadd.json'); });
     halfaddButton.elt.style.width = "117px";
     halfaddButton.elt.className = "button";
 
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
     fulladdButton.position(5, 610);
-    fulladdButton.mousePressed(function () { return customClicked('volladd.json') });
+    fulladdButton.mousePressed(function () { return customClicked('volladd.json'); });
     fulladdButton.elt.style.width = "117px";
     fulladdButton.elt.className = "button";
 
@@ -319,7 +309,7 @@ function setup() {
     undoButton.position(460, 4);
     undoButton.mousePressed(() => { // ES6-Standard
         undo();
-    })
+    });
     undoButton.elt.disabled = true;
     undoButton.elt.className = "button";
 
@@ -328,7 +318,7 @@ function setup() {
     redoButton.position(526, 4);
     redoButton.mousePressed(() => {
         redo();
-    })
+    });
     redoButton.elt.disabled = true;
     redoButton.elt.className = "button";
 
@@ -392,7 +382,7 @@ function setup() {
     // Button to import as custom
     ascustomButton = createButton('Import');
     ascustomButton.position(windowWidth - 70, 4);
-    ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json') });
+    ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json'); });
     ascustomButton.elt.className = "button";
 
     /*
@@ -429,7 +419,7 @@ function setup() {
     frameRate(60); // Caps the framerate at 60 FPS
 
     var loadfile = urlParam('sketch');
-    if (loadfile != "") {
+    if (loadfile !== "") {
         console.log(`Loading ${loadfile}`);
         loadSketch(loadfile + '.json');
         document.title = loadfile + ' - LogiJS';
@@ -569,29 +559,30 @@ function startSelect() {
     Adds a new gate with given type, input count and direction
 */
 function addGate(type, inputs, direction) {
-    for (var i = 0; i < gates.length; i++) {
-        if ((gates[i].x == Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)
-            && (gates[i].y == Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+    for (let i = 0; i < gates.length; i++) {
+        if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
             return;
         }
     }
+    let newGate = null;
     switch (type) {
         case 'and':
-            var newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and', '&');
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and', '&');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
         case 'or':
-            var newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or', '≥1');
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or', '≥1');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
         case 'xor':
-            var newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor', '=1');
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor', '=1');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
@@ -609,8 +600,8 @@ function addGate(type, inputs, direction) {
 function addCustom(file, direction) {
     for (var i = 0; i < customs.length; i++) {
         if (customs[i].visible) {
-            if ((customs[i].x == Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)
-                && (customs[i].y == Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            if ((customs[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+                (customs[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
                 return;
             }
         }
@@ -627,8 +618,8 @@ function addCustom(file, direction) {
 */
 function addOutput() {
     for (var i = 0; i < outputs.length; i++) {
-        if ((outputs[i].x == Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)
-            && (outputs[i].y == Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+        if ((outputs[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (outputs[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
             return;
         }
     }
@@ -645,8 +636,8 @@ function addOutput() {
 */
 function addInput() {
     for (var i = 0; i < inputs.length; i++) {
-        if ((inputs[i].x == (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)
-            && (inputs[i].y == (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)) {
+        if ((inputs[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2) &&
+             (inputs[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)) {
             return;
         }
     }
@@ -672,8 +663,8 @@ function addInput() {
 */
 function toggleDiode() {
     for (var i = 0; i < diodes.length; i++) {
-        if ((diodes[i].x == Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)
-            && (diodes[i].y == Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+        if ((diodes[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+             (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
             deleteDiode(i);
             return;
         }
@@ -697,7 +688,9 @@ function deleteGate(gateNumber) {
 */
 function deleteCustom(customNumber) {
     console.log(customs);
-    _.forEach(customs[customNumber].responsibles, function (value) { customs.splice(customs.indexOf(value), 1) });
+    for (const elem of customs[customNumber].responsibles) {
+        customs.splice(customs.indexOf(elem), 1);
+    }
     pushUndoAction('delCust', [], customs.splice(customNumber, 1));
     console.log(customs);
     reDraw();
@@ -875,13 +868,13 @@ function draw() {
     }
 
     // If an area should be selected, get the new end point and draw the transparent rectangle
-    if (ctrlMode == 'select') {
+    if (ctrlMode === 'select') {
         reDraw();
         scale(transform.zoom);
         translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
         fill(0, 0, 0, 100);
         strokeWeight(0);
-        if (selectMode == 'start') {
+        if (selectMode === 'start') {
             selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
             selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
             rect(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
@@ -1010,13 +1003,13 @@ function updateGroups() {
 function wirePoints(x, y, j) {
     var indexList = [];
     for (var i = 0; i < segments.length; i++) {
-        if (segments[i].endX == x && segments[i].endY == y) {
-            if (i != j) {
+        if (segments[i].endX === x && segments[i].endY === y) {
+            if (i !== j) {
                 indexList.push(i);
             }
         }
-        if (segments[i].startX == x && segments[i].startY == y) {
-            if (i != j) {
+        if (segments[i].startX === x && segments[i].startY === y) {
+            if (i !== j) {
                 indexList.push(i);
             }
         }
@@ -1130,10 +1123,10 @@ function newOutputColor() {
 }
 
 function keyReleased() {
-    if (textInput.elt != document.activeElement) {
+    if (textInput.elt !== document.activeElement) {
         switch (keyCode) {
             case 17: //ctrl	
-                ctrlMode = 'none'
+                ctrlMode = 'none';
                 break;
             default:
 
@@ -1144,7 +1137,7 @@ function keyReleased() {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
-    if (textInput.elt != document.activeElement) {
+    if (textInput.elt !== document.activeElement) {
         switch (keyCode) {
             case ESCAPE:
                 ctrlMode = 'none';
@@ -1200,26 +1193,31 @@ function keyPressed() {
         }
     }
 }
-
+/*
 function handleSelection(x1, y1, x2, y2) {
     // TODO: Implement selecting all elements in the given rectangle
     //       Giving options to delete or reposition the elements
 }
+*/
 
 /*
     Handles the dragging of the canvas
     by calculating dx and dy
 */
 function handleDragging() {
-    if (mouseIsPressed && mouseButton == RIGHT) {
+    if (mouseIsPressed && mouseButton === RIGHT) {
         frameRate(60);
-        if (lastX != 0) {
+        if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);
-            if (transform.dx > 0) transform.dx = 0;
+            if (transform.dx > 0) {
+                transform.dx = 0;
+            }
         }
-        if (lastY != 0) {
+        if (lastY !== 0) {
             transform.dy += Math.round((mouseY - lastY) * dragSpeed);
-            if (transform.dy > 0) transform.dy = 0;
+            if (transform.dy > 0) {
+                transform.dy = 0;
+            }
         }
         lastX = mouseX;
         lastY = mouseY;
@@ -1227,7 +1225,7 @@ function handleDragging() {
             reDraw();
         }
     } else {
-        if (simRunning & !syncFramerate) {
+        if (simRunning && !syncFramerate) {
             frameRate(60 - clockspeedSlider.value() / 2);
         }
         lastX = 0;

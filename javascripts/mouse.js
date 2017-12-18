@@ -1,5 +1,12 @@
 // File: mouse.js
 
+// Variables for zooming
+let maxZoom = 2.0;
+let minZoom = 0.2;
+
+let lockElements = false; // For delete mode, ensures that wires can be deleted without
+// accidentally deleting other elements
+
 /*
     Triggers when the mouse wheel is used
 */
@@ -9,8 +16,12 @@ function mouseWheel(event) {
     if (gridSize < maxZoom * GRIDSIZE && gridSize > minZoom * GRIDSIZE) {
         gridSize -= wheel;
     }
-    if (gridSize == maxZoom * GRIDSIZE) gridSize--;
-    if (gridSize == minZoom * GRIDSIZE) gridSize++;
+    if (gridSize === maxZoom * GRIDSIZE) {
+        gridSize--;
+    }
+    if (gridSize === minZoom * GRIDSIZE) {
+        gridSize++;
+    }
     transform.zoom = (gridSize / GRIDSIZE);
     if (!simRunning) {
         reDraw();
@@ -78,7 +89,7 @@ function mouseMoved() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
-    if (!simRunning && !mouseOverGUI() && (mouseButton == LEFT)) {
+    if (!simRunning && !mouseOverGUI() && (mouseButton === LEFT)) {
         switch (ctrlMode) {
             case 'addWire':
                 switch (wireMode) {
@@ -130,29 +141,30 @@ function mouseClicked() {
             case 'addObject':
                 switch (addType) { // Handle object adding
                     case 'gate':
-                        if (mouseButton == LEFT) {
+                        if (mouseButton === LEFT) {
                             addGate(gateType, gateInputCount, gateDirection);
                         }
                         break;
                     case 'custom':
-                        if (mouseButton == LEFT) {
+                        if (mouseButton === LEFT) {
                             addCustom(custFile, gateDirection);
                         }
                         break;
                     case 'output':
-                        if (mouseButton == LEFT) {
+                        if (mouseButton === LEFT) {
                             addOutput();
                         }
                         break;
                     case 'input':
-                        if (mouseButton == LEFT) {
+                        if (mouseButton === LEFT) {
                             addInput();
                         }
                         break;
                     case 'diode':
-                        if (mouseButton == LEFT) {
+                        if (mouseButton === LEFT) {
                             toggleDiode();
                         }
+                        break;
                     case 'none':
                         break;
                     default:
@@ -162,42 +174,42 @@ function mouseClicked() {
             case 'none':
                 if (mouseButton === LEFT) {
                     // Invert In-/Outputs
-                    for (var i = 0; i < gates.length; i++) {
-                        for (var j = 0; j < gates[i].inputCount; j++) {
+                    for (let i = 0; i < gates.length; i++) {
+                        for (let j = 0; j < gates[i].inputCount; j++) {
                             if (gates[i].mouseOverInput(j)) {
                                 gates[i].invertInput(j);
-                                var act = new Action('invGIP', [i, j], null);
+                                let act = new Action('invGIP', [i, j], null);
                                 actionUndo.push(act);
                             }
                         }
-                        for (var j = 0; j < gates[i].outputCount; j++) {
+                        for (let j = 0; j < gates[i].outputCount; j++) {
                             if (gates[i].mouseOverOutput(j)) {
                                 gates[i].invertOutput(j);
-                                var act = new Action('invGOP', [i, j], null);
+                                let act = new Action('invGOP', [i, j], null);
                                 actionUndo.push(act);
                             }
                         }
                     }
-                    for (var i = 0; i < customs.length; i++) {
+                    for (let i = 0; i < customs.length; i++) {
                         if (customs[i].visible) {
-                            for (var j = 0; j < customs[i].inputCount; j++) {
+                            for (let j = 0; j < customs[i].inputCount; j++) {
                                 if (customs[i].mouseOverInput(j)) {
                                     customs[i].invertInput(j);
-                                    var act = new Action('invCIP', [i, j], null);
+                                    let act = new Action('invCIP', [i, j], null);
                                     actionUndo.push(act);
                                 }
                             }
-                            for (var j = 0; j < customs[i].outputCount; j++) {
+                            for (let j = 0; j < customs[i].outputCount; j++) {
                                 if (customs[i].mouseOverOutput(j)) {
                                     customs[i].invertOutput(j);
-                                    var act = new Action('invCOP', [i, j], null);
+                                    let act = new Action('invCOP', [i, j], null);
                                     actionUndo.push(act);
                                 }
                             }
                         }
                     }
                     let noValidTarget = true;
-                    for (var i = 0; i < inputs.length; i++) {
+                    for (let i = 0; i < inputs.length; i++) {
                         if (Boolean(inputs[i].mouseOver()) && propMode) {
                             noValidTarget = false;
                             // If the propMode is active, give options to name and make top
@@ -211,7 +223,7 @@ function mouseClicked() {
                             }
                         }
                     }
-                    for (var i = 0; i < outputs.length; i++) {
+                    for (let i = 0; i < outputs.length; i++) {
                         if (Boolean(outputs[i].mouseOver()) && propMode) {
                             noValidTarget = false;
                             if (propOutput !== i) {
@@ -233,8 +245,8 @@ function mouseClicked() {
             default:
                 break;
         }
-        redoButton.elt.disabled = (actionRedo.length == 0);
-        undoButton.elt.disabled = (actionUndo.length == 0);
+        redoButton.elt.disabled = (actionRedo.length === 0);
+        undoButton.elt.disabled = (actionUndo.length === 0);
     } else {
         // Buttons should be operateable during simulation
         if (mouseButton === LEFT) {
@@ -255,12 +267,12 @@ function mouseClicked() {
 */
 function mouseReleased() {
     if (!simRunning && !mouseOverGUI()) {
-        if (mouseButton == LEFT) {
+        if (mouseButton === LEFT) {
             switch (ctrlMode) {
                 case 'addObject':
                     break;
                 case 'addWire':
-                    if (wireMode == 'preview') { // If the preview wire mode is active
+                    if (wireMode === 'preview') { // If the preview wire mode is active
                         if (pwSegments.length > 0) { // If a wire was drawn (not 0 segments)
                             pushUndoAction('reWire', 0, [segments.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
@@ -299,10 +311,10 @@ function mouseReleased() {
                             deleteDiode(diodeNumber);
                         }
                     }
-                    if (wireMode == 'delete') { // A wire should be deleted
+                    if (wireMode === 'delete') { // A wire should be deleted
                         var oldSegments = segments.slice(0);
                         var existing = false;
-                        for (var i = pwSegments.length - 1; i >= 0; i--) {
+                        for (let i = pwSegments.length - 1; i >= 0; i--) {
                             var exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
                             if (exists >= 0) {
                                 existing = true;
@@ -330,8 +342,8 @@ function mouseReleased() {
             }
         }
         // Enable or disable the Undo-Redo buttons
-        redoButton.elt.disabled = (actionRedo.length == 0);
-        undoButton.elt.disabled = (actionUndo.length == 0);
+        redoButton.elt.disabled = (actionRedo.length === 0);
+        undoButton.elt.disabled = (actionUndo.length === 0);
     } else {
         pwSegments = []; // Not shure if this else branch has any purpose...
         wireMode = 'none';

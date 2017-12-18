@@ -33,14 +33,14 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.inputClickBoxes = [];
     this.outputClickBoxes = [];
 
-    if (this.direction % 2 == 0) {
+    if (this.direction % 2 === 0) {
         this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, this.transform);
     } else {
         this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, this.transform);
     }
 
     // Initialize the inputs
-    for (var i = 0; i < this.inputCount; i++) {
+    for (let i = 0; i < this.inputCount; i++) {
         this.inputs.push(false); // Set all inputs to low
         this.ipset.push(false);
         this.inputsInv.push(false); // Set all inputs to not inverted
@@ -48,7 +48,7 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     }
 
     // Initialize the outputs
-    for (var i = 0; i < this.outputCount; i++) {
+    for (let i = 0; i < this.outputCount; i++) {
         this.outputs.push(false); // Set all outputs to low
         this.outputsInv.push(false); // Set all outputs to not inverted
         this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every output
@@ -65,7 +65,7 @@ LogicGate.prototype.setInvertions = function (ipinv, opinv) {
 };
 
 LogicGate.prototype.getData = function () {
-    var data = {};
+    let data = {};
     data.x = JSON.stringify(this.x);
     data.y = JSON.stringify(this.y);
     data.direction = JSON.stringify(this.direction);
@@ -85,8 +85,12 @@ LogicGate.prototype.setCoordinates = function (nx, ny) {
     this.x = Math.round((nx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
     this.y = Math.round((ny - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
     // Check bounds
-    if (this.x < 0) this.x = 0;
-    if (this.y < 0) this.y = 0;
+    if (this.x < 0) {
+        this.x = 0;
+    }
+    if (this.y < 0) {
+        this.y = 0;
+    }
 };
 
 /*
@@ -104,13 +108,13 @@ LogicGate.prototype.turn = function () {
 LogicGate.prototype.setDirection = function (dir) {
     this.dir = dir;
     // Turn the brick if dir is 1 or 3
-    if (this.dir % 2 != 0) {
+    if (this.dir % 2 !== 0) {
         this.turn();
         // Turn the clickBoxes
-        for (var i = 0; i < this.inputClickBoxes.length; i++) {
+        for (let i = 0; i < this.inputClickBoxes.length; i++) {
             this.inputClickBoxes[i].turn();
         }
-        for (var i = 0; i < this.outputClickBoxes.length; i++) {
+        for (let i = 0; i < this.outputClickBoxes.length; i++) {
             this.outputClickBoxes[i].turn();
         }
         this.gClickBox.turn();
@@ -139,9 +143,9 @@ LogicGate.prototype.setInput = function (i, s) {
     Gives the output vector of the logic function
 */
 LogicGate.prototype.update = function () {
-    for (var i = 0; i < this.inputCount; i++) {
+    for (let i = 0; i < this.inputCount; i++) {
         if (!this.ipset[i]) {
-            this.inputs[i] = this.inputsInv[i]
+            this.inputs[i] = this.inputsInv[i];
         }
     }
     switch (this.logicFunction) {
@@ -157,7 +161,7 @@ LogicGate.prototype.update = function () {
         default:
             console.log('Invalid logic function!');
     }
-    for (var i = 0; i < this.outputCount; i++) {
+    for (let i = 0; i < this.outputCount; i++) {
         if (this.outputsInv[i]) {
             this.outputs[i] = !this.outputs[i];
         }
@@ -165,10 +169,10 @@ LogicGate.prototype.update = function () {
 };
 
 LogicGate.prototype.shutdown = function () {
-    for (var i = 0; i < this.outputCount; i++) {
+    for (let i = 0; i < this.outputCount; i++) {
         this.outputs[i] = false;
     }
-    for (var i = 0; i < this.inputCount; i++) {
+    for (let i = 0; i < this.inputCount; i++) {
         this.inputs[i] = false;
         this.ipset[i] = false;
     }
@@ -200,7 +204,7 @@ LogicGate.prototype.invertOutput = function (output) {
 */
 LogicGate.prototype.updateClickBoxes = function () {
     // Update input clickBoxes
-    for (var i = 0; i < this.inputClickBoxes.length; i++) {
+    for (let i = 0; i < this.inputClickBoxes.length; i++) {
         switch (this.direction) {
             case 0: this.inputClickBoxes[i].updatePosition(this.x, this.y + (this.h * (i + 1)) / this.height); break;
             case 1: this.inputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.height, this.y); break;
@@ -212,7 +216,7 @@ LogicGate.prototype.updateClickBoxes = function () {
     }
 
     // Update output clickBoxes
-    for (var i = 0; i < this.outputClickBoxes.length; i++) {
+    for (let i = 0; i < this.outputClickBoxes.length; i++) {
         switch (this.direction) {
             case 0: this.outputClickBoxes[i].updatePosition(this.x + this.w, this.y + (this.h * (i + 1)) / this.height); break;
             case 1: this.outputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.height, this.y + this.h); break;
@@ -267,7 +271,7 @@ LogicGate.prototype.show = function () {
     strokeWeight(3);
     fill(255);
 
-    if (this.direction % 2 == 0) {
+    if (this.direction % 2 === 0) {
         rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); //  Draw body
     } else {
         rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h);
@@ -280,9 +284,9 @@ LogicGate.prototype.show = function () {
     text(this.caption, this.x + this.w / 2, this.y + this.h / 2); // Draw text
 
     // Draw inputs
-    for (var i = 1; i <= this.inputCount; i++) {
+    for (let i = 1; i <= this.inputCount; i++) {
         // Draw inputs
-        if (this.inputs[i - 1] == true) {
+        if (this.inputs[i - 1] === true) {
             stroke(this.highColor);
             strokeWeight(4);
         } else {
@@ -335,9 +339,9 @@ LogicGate.prototype.show = function () {
     }
 
     // Draw outputs
-    for (var i = 1; i <= this.outputCount; i++) {
+    for (let i = 1; i <= this.outputCount; i++) {
         // Draw outputs
-        if (this.outputs[i - 1] == true) {
+        if (this.outputs[i - 1] === true) {
             stroke(this.highColor);
             strokeWeight(4);
         } else {
@@ -390,10 +394,10 @@ LogicGate.prototype.show = function () {
     }
 
     // TEMP: Show clickboxes of in- and outputs
-    /*for (var i = 0; i < this.inputClickBoxes.length; i++) {
+    /*for (let i = 0; i < this.inputClickBoxes.length; i++) {
         this.inputClickBoxes[i].markClickBox();
     }
-    for (var i = 0; i < this.outputClickBoxes.length; i++) {
+    for (let i = 0; i < this.outputClickBoxes.length; i++) {
         this.outputClickBoxes[i].markClickBox();
     }*/
     //this.gClickBox.markClickBox();
@@ -414,8 +418,8 @@ LogicGate.prototype.or = function (inputs) {
 LogicGate.prototype.xor = function (inputs) {
     let result = [];
     let counter = 0;
-    for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i] == true) {
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i] === true) {
             counter++;
         }
     }

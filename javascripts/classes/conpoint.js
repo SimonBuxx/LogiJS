@@ -11,7 +11,7 @@ function ConPoint(x, y, state, g) {
 }
 
 ConPoint.prototype.getData = function () {
-    var data = {};
+    let data = {};
     data.x = JSON.stringify(this.x);
     data.y = JSON.stringify(this.y);
     return data;

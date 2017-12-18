@@ -30,25 +30,25 @@ Group.prototype.addOutput = function (gate, port) {
 };
 
 Group.prototype.deleteGate = function (gate) {
-    for (var i = 0; i < this.outputGates.length; i++) {
+    for (let i = 0; i < this.outputGates.length; i++) {
         console.log(this.outputGates[i].x + ' ' + gate.x + ' ' + this.outputGates[i].y + ' ' + gate.y);
-        if (this.outputGates[i].x == gate.x && this.outputGates[i].y == gate.y) {
+        if (this.outputGates[i].x === gate.x && this.outputGates[i].y === gate.y) {
             this.outputGates.splice(i, 1);
             this.outputPorts.splice(i, 1);
             this.outputStates.splice(i, 1);
         }
     }
-    for (var i = 0; i < this.inputGates.length; i++) {
-        if (this.inputGates[i].x == gate.x && this.inputGates[i].y == gate.y) {
+    for (let i = 0; i < this.inputGates.length; i++) {
+        if (this.inputGates[i].x === gate.x && this.inputGates[i].y === gate.y) {
             this.inputGates.splice(i, 1);
             this.inputPorts.splice(i, 1);
         }
     }
-    for (var i = 0; i < this.segments.length; i++) {
-        if (this.segments[i].parentStart == gate) {
+    for (let i = 0; i < this.segments.length; i++) {
+        if (this.segments[i].parentStart === gate) {
             this.segments[i].parentStart = null;
         }
-        if (this.segments[i].parentEnd == gate) {
+        if (this.segments[i].parentEnd === gate) {
             this.segments[i].parentEnd = null;
         }
 
@@ -61,14 +61,14 @@ Group.prototype.diodeHigh = function () {
 };
 
 Group.prototype.updateAll = function () {
-    for (var j = 0; j < this.outputGates.length; j++) {
+    for (let j = 0; j < this.outputGates.length; j++) {
         this.outputStates[j] = this.outputGates[j].getOutput(this.outputPorts[j]);
     }
 
     this.state = false;
-    for (var i = 0; i < this.outputStates.length; i++) {
+    for (let i = 0; i < this.outputStates.length; i++) {
         if (this.outputStates[i]) {
-            for (var j = 0; j < this.outputGates.length; j++) {
+            for (let j = 0; j < this.outputGates.length; j++) {
                 this.outputGates[j].outputs[this.outputPorts[j]] = true;
             }
             this.state = true;
@@ -82,7 +82,7 @@ Group.prototype.updateAll = function () {
         this.diodeState = false;
     }
 
-    for (var j = 0; j < this.inputGates.length; j++) {
+    for (let j = 0; j < this.inputGates.length; j++) {
         this.inputGates[j].setInput(this.inputPorts[j], this.state);
     }
 
@@ -96,7 +96,7 @@ Group.prototype.show = function () {
 };
 
 Group.prototype.propagateState = function () {
-    for (var i = 0; i < this.segments.length; i++) {
+    for (let i = 0; i < this.segments.length; i++) {
         this.segments[i].state = this.state;
     }
 };
@@ -106,8 +106,8 @@ Group.prototype.propagateState = function () {
 */
 Group.prototype.findLines = function () {
     let seg = this.segments.slice(0);
-    for (var i = 0; i < seg.length; i++) {
-        for (var j = 0; j < seg.length; j++) {
+    for (let i = 0; i < seg.length; i++) {
+        for (let j = 0; j < seg.length; j++) {
             if (i !== j  && seg[i] !== null && seg[j] !== null) {
                 if (seg[i].direction === seg[j].direction) {
                     if (seg[i].endX === seg[j].startX && seg[i].endY === seg[j].startY) {
