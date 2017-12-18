@@ -289,6 +289,7 @@ function setup() {
     crText.elt.style.fontFamily = 'Arial';
     crText.elt.style.margin = 0;
     crText.position(290, 5);
+    crText.elt.className = 'label';
 
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
@@ -354,6 +355,7 @@ function setup() {
     sfcheckbox.elt.style.color = 'white';
     sfcheckbox.elt.style.fontFamily = 'Arial';
     sfcheckbox.position(762, 4);
+    sfcheckbox.elt.className = 'checkbox';
 
     // Upper right
     // Input field for the file name
