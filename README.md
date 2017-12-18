@@ -6,7 +6,7 @@ ease of use and a streamlined design. Please notice that, although this project 
 this is not a professionally developed piece of software. I've crushed a lot of bugs by now, but there might be some left.
 Also, the performance can be bad when handling larger files or using slower machines.
 #### If you find any bugs or have ideas for improvement, please let me know!
-This project is still in active development, therefore th GUI is very rudimentary and some options,
+This project is still in active development, therefore the GUI is very rudimentary and some options,
 like the number of inputs on gates and the direction of gates, are only editable with the keyboard. This will be changed in the
 future, so that every action can be done with the mouse.
 
