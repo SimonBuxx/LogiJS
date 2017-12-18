@@ -1,4 +1,6 @@
 linters:
+    jshint:
+        config: './.jshintrc'
   csslint: {  }
 files:
   ignore:
