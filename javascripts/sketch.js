@@ -54,7 +54,7 @@ let syncFramerate = true;
 
 // GUI Elements
 let textInput, saveButton, loadButton, newButton; // Right hand side
-let wireButton, deleteButton, simButton, labelBasic, // Left hand side
+let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
@@ -85,191 +85,184 @@ function setup() { // jshint ignore:line
     }, false);
 
     // Left Side Buttons
-    // Activates the wiring mode
-    wireButton = createButton('Wiring');
-    wireButton.position(5, 4);
-    wireButton.mousePressed(wiringClicked);
-    wireButton.elt.style.width = "117px";
-    wireButton.elt.className = "button";
-
     // Adds and-gates
     andButton = createButton('And-Gate');
-    andButton.position(5, 58);
+    andButton.position(5, 80);
     andButton.mousePressed(andClicked);
     andButton.elt.style.width = "117px";
     andButton.elt.className = "button";
 
     // Adds or-gates
     orButton = createButton('Or-Gate');
-    orButton.position(5, 82);
+    orButton.position(5, 104);
     orButton.mousePressed(orClicked);
     orButton.elt.style.width = "117px";
     orButton.elt.className = "button";
 
     // Adds xor-gates
     xorButton = createButton('Xor-Gate');
-    xorButton.position(5, 106);
+    xorButton.position(5, 128);
     xorButton.mousePressed(xorClicked);
     xorButton.elt.style.width = "117px";
     xorButton.elt.className = "button";
 
     // Adds switches
     inputButton = createButton('Switch');
-    inputButton.position(5, 130);
+    inputButton.position(5, 152);
     inputButton.mousePressed(inputClicked);
     inputButton.elt.style.width = "117px";
     inputButton.elt.className = "button";
 
     // Adds buttons (short impulse)
     buttonButton = createButton('Button');
-    buttonButton.position(5, 154);
+    buttonButton.position(5, 176);
     buttonButton.mousePressed(buttonClicked);
     buttonButton.elt.style.width = "117px";
     buttonButton.elt.className = "button";
 
     // Adds clocks (variable impulse)
     clockButton = createButton('Clock');
-    clockButton.position(5, 178);
+    clockButton.position(5, 200);
     clockButton.mousePressed(clockClicked);
     clockButton.elt.style.width = "117px";
     clockButton.elt.className = "button";
 
     // Adds outputs (lamps)
     outputButton = createButton('Lamp');
-    outputButton.position(5, 202);
+    outputButton.position(5, 224);
     outputButton.mousePressed(outputClicked);
     outputButton.elt.style.width = "117px";
     outputButton.elt.className = "button";
 
-    // Adds diodes (barricade in one direction)
-    diodeButton = createButton('Toggle Diodes');
-    diodeButton.position(5, 226);
-    diodeButton.mousePressed(diodeClicked);
-    diodeButton.elt.style.width = "117px";
-    diodeButton.elt.className = "button";
-
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
-    counter2Button.position(5, 250);
+    counter2Button.position(5, 270);
     counter2Button.mousePressed(function () { return customClicked('2BitCounter.json'); });
     counter2Button.elt.style.width = "117px";
     counter2Button.elt.className = "button";
 
     // Adds a counter (4Bit)
     counter4Button = createButton('4Bit-Counter');
-    counter4Button.position(5, 274);
+    counter4Button.position(5, 294);
     counter4Button.mousePressed(function () { return customClicked('4BitCounter.json'); });
     counter4Button.elt.style.width = "117px";
     counter4Button.elt.className = "button";
 
     // Adds a decoder (2Bit)
     decoder2Button = createButton('2Bit-Decoder');
-    decoder2Button.position(5, 298);
+    decoder2Button.position(5, 318);
     decoder2Button.mousePressed(function () { return customClicked('2BitDec.json'); });
     decoder2Button.elt.style.width = "117px";
     decoder2Button.elt.className = "button";
 
     // Adds a decoder (4Bit)
     decoder4Button = createButton('4Bit-Decoder');
-    decoder4Button.position(5, 322);
+    decoder4Button.position(5, 342);
     decoder4Button.mousePressed(function () { return customClicked('4BitDec.json'); });
     decoder4Button.elt.style.width = "117px";
     decoder4Button.elt.className = "button";
 
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
-    add4BitButton.position(5, 346);
+    add4BitButton.position(5, 366);
     add4BitButton.mousePressed(function () { return customClicked('4BitNeu.json'); });
     add4BitButton.elt.style.width = "117px";
     add4BitButton.elt.className = "button";
 
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
-    dFlipFlopButton.position(5, 370);
+    dFlipFlopButton.position(5, 390);
     dFlipFlopButton.mousePressed(function () { return customClicked('d-flipflop.json'); });
     dFlipFlopButton.elt.style.width = "117px";
     dFlipFlopButton.elt.className = "button";
 
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
-    rsFlipFlopButton.position(5, 394);
+    rsFlipFlopButton.position(5, 414);
     rsFlipFlopButton.mousePressed(function () { return customClicked('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.style.width = "117px";
     rsFlipFlopButton.elt.className = "button";
 
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
-    reg4Button.position(5, 418);
+    reg4Button.position(5, 438);
     reg4Button.mousePressed(function () { return customClicked('4BitReg.json'); });
     reg4Button.elt.style.width = "117px";
     reg4Button.elt.className = "button";
 
     // Adds a 1-multiplexer
     mux1Button = createButton('1-Multiplexer');
-    mux1Button.position(5, 442);
+    mux1Button.position(5, 462);
     mux1Button.mousePressed(function () { return customClicked('1-mux.json'); });
     mux1Button.elt.style.width = "117px";
     mux1Button.elt.className = "button";
 
     // Adds a 2-multiplexer
     mux2Button = createButton('2-Multiplexer');
-    mux2Button.position(5, 466);
+    mux2Button.position(5, 486);
     mux2Button.mousePressed(function () { return customClicked('2-mux.json'); });
     mux2Button.elt.style.width = "117px";
     mux2Button.elt.className = "button";
 
     // Adds a 3-multiplexer
     mux3Button = createButton('3-Multiplexer');
-    mux3Button.position(5, 490);
+    mux3Button.position(5, 510);
     mux3Button.mousePressed(function () { return customClicked('3-mux.json'); });
     mux3Button.elt.style.width = "117px";
     mux3Button.elt.className = "button";
 
     // Adds a 1-demultiplexer
     demux1Button = createButton('1-Demultiplexer');
-    demux1Button.position(5, 514);
+    demux1Button.position(5, 534);
     demux1Button.mousePressed(function () { return customClicked('1-demux.json'); });
     demux1Button.elt.style.width = "117px";
     demux1Button.elt.className = "button";
 
     // Adds a 2-demultiplexer
     demux2Button = createButton('2-Demultiplexer');
-    demux2Button.position(5, 538);
+    demux2Button.position(5, 558);
     demux2Button.mousePressed(function () { return customClicked('2-demux.json'); });
     demux2Button.elt.style.width = "117px";
     demux2Button.elt.className = "button";
 
     // Adds a 3-demultiplexer
     demux3Button = createButton('3-Demultiplexer');
-    demux3Button.position(5, 562);
+    demux3Button.position(5, 582);
     demux3Button.mousePressed(function () { return customClicked('3-demux.json'); });
     demux3Button.elt.style.width = "117px";
     demux3Button.elt.className = "button";
 
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.position(5, 586);
+    halfaddButton.position(5, 606);
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json'); });
     halfaddButton.elt.style.width = "117px";
     halfaddButton.elt.className = "button";
 
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.position(5, 610);
+    fulladdButton.position(5, 630);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json'); });
     fulladdButton.elt.style.width = "117px";
     fulladdButton.elt.className = "button";
 
     //Upper left
+    // Activates the wiring mode
+    wireButton = createButton('Wiring');
+    wireButton.position(153, 4);
+    wireButton.mousePressed(wiringClicked);
+    //wireButton.elt.style.width = "117px";
+    wireButton.elt.className = "button";
+
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('Delete');
-    deleteButton.position(153, 4);
+    deleteButton.position(226, 4);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
 
     // Starts and stops the simulation
     simButton = createButton('Start');
-    simButton.position(227, 4);
+    simButton.position(299, 4);
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
 
@@ -278,20 +271,12 @@ function setup() { // jshint ignore:line
     crText.elt.style.color = 'white';
     crText.elt.style.fontFamily = 'Arial';
     crText.elt.style.margin = 0;
-    crText.position(290, 5);
+    crText.position(362, 5);
     crText.elt.className = 'label';
-
-    // Adds text 'Basic' under the 'Wiring' button
-    labelBasic = createP('Basic');
-    labelBasic.elt.style.color = 'white';
-    labelBasic.elt.style.fontFamily = 'Arial';
-    labelBasic.elt.style.margin = 0;
-    labelBasic.position(55, 34);
-    labelBasic.elt.className = 'label';
 
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
-    clockspeedSlider.position(374, 4);
+    clockspeedSlider.position(446, 4);
     clockspeedSlider.style('width', '80px');
     clockspeedSlider.style('margin', '0px');
     clockspeedSlider.elt.className = 'slider';
@@ -306,7 +291,7 @@ function setup() { // jshint ignore:line
 
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(460, 4);
+    undoButton.position(532, 4);
     undoButton.mousePressed(() => { // ES6-Standard
         undo();
     });
@@ -315,7 +300,7 @@ function setup() { // jshint ignore:line
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(526, 4);
+    redoButton.position(598, 4);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -324,13 +309,20 @@ function setup() { // jshint ignore:line
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(592, 4);
+    selectButton.position(664, 4);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
+    // Adds diodes (barricade in one direction)
+    diodeButton = createButton('Toggle Diodes');
+    diodeButton.position(736, 4);
+    diodeButton.mousePressed(diodeClicked);
+    //diodeButton.elt.style.width = "117px";
+    diodeButton.elt.className = "button";
+
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(664, 4);
+    propertiesButton.position(863, 4);
     propertiesButton.mousePressed(function () {
         ctrlMode = 'none';
         startPropMode();
@@ -352,7 +344,7 @@ function setup() { // jshint ignore:line
     });
     sfcheckbox.elt.style.color = 'white';
     sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(762, 4);
+    sfcheckbox.position(958, 4);
     sfcheckbox.elt.className = 'checkbox';
 
     // Upper right
@@ -415,6 +407,22 @@ function setup() { // jshint ignore:line
     outputColorBox.option('green');
     outputColorBox.option('blue');
     outputColorBox.changed(newOutputColor);
+
+    // Adds text 'Basic' under the 'Wiring' button
+    labelBasic = createP('Basic');
+    labelBasic.elt.style.color = 'white';
+    labelBasic.elt.style.fontFamily = 'Arial';
+    labelBasic.elt.style.margin = 0;
+    labelBasic.position(57, 59);
+    labelBasic.elt.className = 'label';
+
+    // Adds text 'Basic' under the 'Wiring' button
+    labelAdvanced = createP('Advanced');
+    labelAdvanced.elt.style.color = 'white';
+    labelAdvanced.elt.style.fontFamily = 'Arial';
+    labelAdvanced.elt.style.margin = 0;
+    labelAdvanced.position(39, 250);
+    labelAdvanced.elt.className = 'label';
 
     frameRate(60); // Caps the framerate at 60 FPS
 
@@ -636,7 +644,7 @@ function addOutput() {
 function addInput() {
     for (var i = 0; i < inputs.length; i++) {
         if ((inputs[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2) &&
-             (inputs[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)) {
+            (inputs[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)) {
             return;
         }
     }
@@ -663,7 +671,7 @@ function addInput() {
 function toggleDiode() {
     for (var i = 0; i < diodes.length; i++) {
         if ((diodes[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-             (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
             deleteDiode(i);
             return;
         }
@@ -833,6 +841,14 @@ function disableButtons(status) {
     fulladdButton.elt.disabled = status;
     ascustomButton.elt.disabled = status;
     propertiesButton.elt.disabled = status;
+
+    if (status) {
+        labelBasic.elt.style.color = '#969696';
+        labelAdvanced.elt.style.color = '#969696';
+    } else {
+        labelBasic.elt.style.color = 'white';
+        labelAdvanced.elt.style.color = 'white';
+    }
 }
 
 /*

@@ -1,5 +1,13 @@
+html {
+    height: 100%;
+}
+
 body {
-    background-color: black;
+    margin: 0; 
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #323232, black);
+    background-attachment: fixed;
 }
 
 .button {
@@ -113,4 +121,13 @@ input[type=text] {
     position: fixed;
     left: 10px;
     bottom: 10px;
+}
+
+#logo {
+    position: fixed;
+    left: 1px;
+    top: -5px;
+    width: 150px;
+    margin: 0;
+    padding: 0;
 }
