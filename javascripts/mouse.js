@@ -3,6 +3,8 @@
 // Variables for zooming
 let maxZoom = 2.0;
 let minZoom = 0.2;
+let origX = 0;
+let origY = 0;
 
 let lockElements = false; // For delete mode, ensures that wires can be deleted without
 // accidentally deleting other elements
@@ -12,15 +14,22 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
 */
 function mouseWheel(event) {
     // -1 for zoom in, +1 for zoom out
-    this.wheel = Math.sign(event.deltaY);
-    if (gridSize < maxZoom * GRIDSIZE && gridSize > minZoom * GRIDSIZE) {
+    this.wheel = Math.sign(event.deltaY) * 1.5;
+    if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
+        origX = mouseX * (transform.zoom);
+        origY = mouseY * (transform.zoom);
+        console.log((origX - (mouseX * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel)));
+        transform.dx += (origX - (mouseX * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
+        transform.dy += (origY - (mouseY * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
+        if (transform.dx > 0) {
+            transform.dx = 0;
+        }
+        if (transform.dy > 0) {
+            transform.dy = 0;
+        }
+
         gridSize -= wheel;
-    }
-    if (gridSize === maxZoom * GRIDSIZE) {
-        gridSize--;
-    }
-    if (gridSize === minZoom * GRIDSIZE) {
-        gridSize++;
+
     }
     transform.zoom = (gridSize / GRIDSIZE);
     if (!simRunning) {
@@ -412,10 +421,12 @@ function mouseOverDiode() {
     return -1;
 }
 
+//Checks if the mouse hovers over the GUI(true) or the grid(false)
 function mouseOverGUI() {
     if (propInput + propOutput < -1) {
         return (mouseY < 0) || (mouseX < 0);
     } else {
-        return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 130);
+        return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 180);
+
     }
 }
