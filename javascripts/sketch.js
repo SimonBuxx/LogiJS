@@ -420,7 +420,6 @@ function setup() { // jshint ignore:line
 
     var loadfile = urlParam('sketch');
     if (loadfile !== "") {
-        console.log(`Loading ${loadfile}`);
         loadSketch(loadfile + '.json');
         document.title = loadfile + ' - LogiJS';
     }
@@ -687,12 +686,10 @@ function deleteGate(gateNumber) {
     Deletes the given custom
 */
 function deleteCustom(customNumber) {
-    console.log(customs);
     for (const elem of customs[customNumber].responsibles) {
         customs.splice(customs.indexOf(elem), 1);
     }
     pushUndoAction('delCust', [], customs.splice(customNumber, 1));
-    console.log(customs);
     reDraw();
 }
 
@@ -747,8 +744,8 @@ function startSimulation() {
         counter += groups[i].segments.length;
     }
     // Display the wire counts in the debug menu
-    console.log('Before: ' + segments.length + ' segments displayed');
-    console.log('Now: ' + counter + ' segments displayed');
+    //console.log('Before: ' + segments.length + ' segments displayed');
+    //console.log('Now: ' + counter + ' segments displayed');
 
     simRunning = true;
     propMode = false;
