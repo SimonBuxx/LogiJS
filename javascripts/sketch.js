@@ -92,6 +92,14 @@ function setup() { // jshint ignore:line
     wireButton.elt.style.width = "117px";
     wireButton.elt.className = "button";
 
+    // Adds text 'Basic' under the 'Wiring' button
+    labelBasic = createP('Basic');
+    labelBasic.elt.style.color = 'white';
+    labelBasic.elt.style.fontFamily = 'Arial';
+    labelBasic.elt.style.margin = 0;
+    labelBasic.position(55, 34);
+    labelBasic.elt.className = 'label';
+
     // Adds and-gates
     andButton = createButton('And-Gate');
     andButton.position(5, 58);
@@ -148,114 +156,122 @@ function setup() { // jshint ignore:line
     diodeButton.elt.style.width = "117px";
     diodeButton.elt.className = "button";
 
+    // Adds text 'Custom' under the 'Toggle Diodes' button
+    labelBasic = createP('Custom');
+    labelBasic.elt.style.color = 'white';
+    labelBasic.elt.style.fontFamily = 'Arial';
+    labelBasic.elt.style.margin = 0;
+    labelBasic.position(47, 253);
+    labelBasic.elt.className = 'label';
+
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
-    counter2Button.position(5, 250);
+    counter2Button.position(5, 274);
     counter2Button.mousePressed(function () { return customClicked('2BitCounter.json'); });
     counter2Button.elt.style.width = "117px";
     counter2Button.elt.className = "button";
 
     // Adds a counter (4Bit)
     counter4Button = createButton('4Bit-Counter');
-    counter4Button.position(5, 274);
+    counter4Button.position(5, 298);
     counter4Button.mousePressed(function () { return customClicked('4BitCounter.json'); });
     counter4Button.elt.style.width = "117px";
     counter4Button.elt.className = "button";
 
     // Adds a decoder (2Bit)
     decoder2Button = createButton('2Bit-Decoder');
-    decoder2Button.position(5, 298);
+    decoder2Button.position(5, 322);
     decoder2Button.mousePressed(function () { return customClicked('2BitDec.json'); });
     decoder2Button.elt.style.width = "117px";
     decoder2Button.elt.className = "button";
 
     // Adds a decoder (4Bit)
     decoder4Button = createButton('4Bit-Decoder');
-    decoder4Button.position(5, 322);
+    decoder4Button.position(5, 346);
     decoder4Button.mousePressed(function () { return customClicked('4BitDec.json'); });
     decoder4Button.elt.style.width = "117px";
     decoder4Button.elt.className = "button";
 
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
-    add4BitButton.position(5, 346);
+    add4BitButton.position(5, 370);
     add4BitButton.mousePressed(function () { return customClicked('4BitNeu.json'); });
     add4BitButton.elt.style.width = "117px";
     add4BitButton.elt.className = "button";
 
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
-    dFlipFlopButton.position(5, 370);
+    dFlipFlopButton.position(5, 394);
     dFlipFlopButton.mousePressed(function () { return customClicked('d-flipflop.json'); });
     dFlipFlopButton.elt.style.width = "117px";
     dFlipFlopButton.elt.className = "button";
 
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
-    rsFlipFlopButton.position(5, 394);
+    rsFlipFlopButton.position(5, 418);
     rsFlipFlopButton.mousePressed(function () { return customClicked('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.style.width = "117px";
     rsFlipFlopButton.elt.className = "button";
 
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
-    reg4Button.position(5, 418);
+    reg4Button.position(5, 442);
     reg4Button.mousePressed(function () { return customClicked('4BitReg.json'); });
     reg4Button.elt.style.width = "117px";
     reg4Button.elt.className = "button";
 
     // Adds a 1-multiplexer
     mux1Button = createButton('1-Multiplexer');
-    mux1Button.position(5, 442);
+    mux1Button.position(5, 466);
     mux1Button.mousePressed(function () { return customClicked('1-mux.json'); });
     mux1Button.elt.style.width = "117px";
     mux1Button.elt.className = "button";
 
     // Adds a 2-multiplexer
     mux2Button = createButton('2-Multiplexer');
-    mux2Button.position(5, 466);
+    mux2Button.position(5, 490);
     mux2Button.mousePressed(function () { return customClicked('2-mux.json'); });
     mux2Button.elt.style.width = "117px";
     mux2Button.elt.className = "button";
 
     // Adds a 3-multiplexer
     mux3Button = createButton('3-Multiplexer');
-    mux3Button.position(5, 490);
+    mux3Button.position(5, 514);
     mux3Button.mousePressed(function () { return customClicked('3-mux.json'); });
     mux3Button.elt.style.width = "117px";
     mux3Button.elt.className = "button";
 
     // Adds a 1-demultiplexer
     demux1Button = createButton('1-Demultiplexer');
-    demux1Button.position(5, 514);
+    demux1Button.position(5, 538);
     demux1Button.mousePressed(function () { return customClicked('1-demux.json'); });
     demux1Button.elt.style.width = "117px";
     demux1Button.elt.className = "button";
 
     // Adds a 2-demultiplexer
     demux2Button = createButton('2-Demultiplexer');
-    demux2Button.position(5, 538);
+    demux2Button.position(5, 562);
     demux2Button.mousePressed(function () { return customClicked('2-demux.json'); });
     demux2Button.elt.style.width = "117px";
     demux2Button.elt.className = "button";
 
     // Adds a 3-demultiplexer
     demux3Button = createButton('3-Demultiplexer');
-    demux3Button.position(5, 562);
+    demux3Button.position(5, 586);
     demux3Button.mousePressed(function () { return customClicked('3-demux.json'); });
     demux3Button.elt.style.width = "117px";
     demux3Button.elt.className = "button";
 
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.position(5, 586);
+    halfaddButton.position(5, 610);
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json'); });
     halfaddButton.elt.style.width = "117px";
     halfaddButton.elt.className = "button";
 
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.position(5, 610);
+    fulladdButton.position(5, 634);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json'); });
     fulladdButton.elt.style.width = "117px";
     fulladdButton.elt.className = "button";
@@ -281,15 +297,7 @@ function setup() { // jshint ignore:line
     crText.position(290, 5);
     crText.elt.className = 'label';
 
-    // Adds text 'Basic' under the 'Wiring' button
-    labelBasic = createP('Basic');
-    labelBasic.elt.style.color = 'white';
-    labelBasic.elt.style.fontFamily = 'Arial';
-    labelBasic.elt.style.margin = 0;
-    labelBasic.position(55, 34);
-    labelBasic.elt.className = 'label';
-
-    // A slider for adjusting the clock speed
+    // A slider to adjust the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
     clockspeedSlider.position(374, 4);
     clockspeedSlider.style('width', '80px');
@@ -304,7 +312,7 @@ function setup() { // jshint ignore:line
         }
     });
 
-    // Undos the last action
+    // Undo the last action
     undoButton = createButton('Undo');
     undoButton.position(460, 4);
     undoButton.mousePressed(() => { // ES6-Standard
@@ -313,7 +321,7 @@ function setup() { // jshint ignore:line
     undoButton.elt.disabled = true;
     undoButton.elt.className = "button";
 
-    // Redos the last action
+    // Redo the last action
     redoButton = createButton('Redo');
     redoButton.position(526, 4);
     redoButton.mousePressed(() => {
