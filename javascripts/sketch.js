@@ -1195,6 +1195,8 @@ function keyPressed() {
 
             default:
         }
+    } else if (keyCode === RETURN) {
+        loadClicked();
     }
 }
 /*
