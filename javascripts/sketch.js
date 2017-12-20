@@ -59,7 +59,7 @@ let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand
     outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
-let updater, sfcheckbox;
+let updater1, updater2, sfcheckbox;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
@@ -310,19 +310,11 @@ function setup() { // jshint ignore:line
     clockspeedSlider.style('width', '80px');
     clockspeedSlider.style('margin', '0px');
     clockspeedSlider.elt.className = 'slider';
-    // Alters the max fps based on the clock speed to save computing power
-    clockspeedSlider.changed(function () {
-        if (simRunning && !syncFramerate) {
-            frameRate(60 - clockspeedSlider.value() / 2);
-        } else {
-            frameRate(60);
-        }
-    });
 
     // Undo the last action
     undoButton = createButton('Undo');
     undoButton.position(532, 4);
-    undoButton.mousePressed(() => { // ES6-Standard
+    undoButton.mousePressed(() => {
         undo();
     });
     undoButton.elt.disabled = true;
@@ -361,15 +353,13 @@ function setup() { // jshint ignore:line
 
     sfcheckbox = createCheckbox('Sync FPS', true);
     sfcheckbox.changed(function () {
-        syncFramerate = !syncFramerate;
-        if (simRunning) {
-            if (!syncFramerate) {
-                frameRate(60 - clockspeedSlider.value() / 2);
-                updater = setInterval(updateTick, 2);
-            } else {
-                clearInterval(updater);
-                frameRate(60);
-            }
+        syncFramerate = sfcheckbox.checked();
+        if (!sfcheckbox.checked() && simRunning) {
+            updater1 = setInterval(updateTick, 10);
+            updater2 = setInterval(updateTick, 10);
+        } else {
+            clearInterval(updater1);
+            clearInterval(updater2);
         }
     });
     sfcheckbox.elt.style.color = 'white';
@@ -789,8 +779,9 @@ function startSimulation() {
     propMode = false;
     // If the update cycle shouldn't be synced with the framerate,
     // update every 10ms (may be too fast for slower machines, not a great solution)
-    if (!syncFramerate) {
-        updater = setInterval(updateTick, 10);
+    if (!sfcheckbox.checked()) {
+        updater1 = setInterval(updateTick, 10);
+        updater2 = setInterval(updateTick, 10);
     }
 }
 
@@ -833,9 +824,8 @@ function endSimulation() {
         value.state = false;
     });
     simRunning = false;
-    if (!syncFramerate) {
-        clearInterval(updater);
-    }
+    clearInterval(updater1);
+    clearInterval(updater2);
     reDraw();
 }
 
@@ -886,7 +876,7 @@ function disableButtons(status) {
 */
 function draw() {
     if (simRunning) {
-        if (syncFramerate) {
+        if (sfcheckbox.checked()) {
             updateTick();
         }
         reDraw();
@@ -1268,9 +1258,6 @@ function handleDragging() {
             reDraw();
         }
     } else {
-        if (simRunning && !syncFramerate) {
-            frameRate(60 - clockspeedSlider.value() / 2);
-        }
         lastX = 0;
         lastY = 0;
     }
