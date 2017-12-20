@@ -645,7 +645,7 @@ function addInput() {
     if (newIsButton) {
         newInput.framecount = BUTCOUNT;
     } else if (newIsClock) {
-        newInput.framecount = clockspeedSlider.value();
+        newInput.framecount = 60 - clockspeedSlider.value();
     } else {
         newInput.framecount = -1;
     }
@@ -910,7 +910,7 @@ function updateTick() {
         if (value.framecount === 0) {
             if (value.getIsClock()) {
                 value.toggle();
-                value.framecount = clockspeedSlider.value();
+                value.framecount = 60 - clockspeedSlider.value();
             } else {
                 value.setState(false);
                 value.framecount = BUTCOUNT;
