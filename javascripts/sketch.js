@@ -92,14 +92,6 @@ function setup() { // jshint ignore:line
     wireButton.elt.style.width = "117px";
     wireButton.elt.className = "button";
 
-    // Adds text 'Basic' under the 'Wiring' button
-    labelBasic = createP('Basic');
-    labelBasic.elt.style.color = 'white';
-    labelBasic.elt.style.fontFamily = 'Arial';
-    labelBasic.elt.style.margin = 0;
-    labelBasic.position(55, 34);
-    labelBasic.elt.className = 'label';
-
     // Adds and-gates
     andButton = createButton('And-Gate');
     andButton.position(5, 80);
@@ -156,14 +148,14 @@ function setup() { // jshint ignore:line
     diodeButton.elt.style.width = "117px";
     diodeButton.elt.className = "button";
 
-    // Adds text 'Custom' under the 'Toggle Diodes' button
+/*    // Adds text 'Custom' under the 'Toggle Diodes' button
     labelBasic = createP('Custom');
     labelBasic.elt.style.color = 'white';
     labelBasic.elt.style.fontFamily = 'Arial';
     labelBasic.elt.style.margin = 0;
     labelBasic.position(47, 253);
     labelBasic.elt.className = 'label';
-
+*/
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
     counter2Button.position(5, 274);
@@ -441,7 +433,7 @@ function setup() { // jshint ignore:line
     labelAdvanced.elt.style.color = 'white';
     labelAdvanced.elt.style.fontFamily = 'Arial';
     labelAdvanced.elt.style.margin = 0;
-    labelAdvanced.position(39, 250);
+    labelAdvanced.position(39, 253);
     labelAdvanced.elt.className = 'label';
 
     frameRate(60); // Caps the framerate at 60 FPS
