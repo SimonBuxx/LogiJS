@@ -939,7 +939,7 @@ function updateTick() {
         if (value.framecount === 0) {
             if (value.getIsClock()) {
                 value.toggle();
-                value.framecount = clockspeedSlider.value();
+                value.framecount = 60 - clockspeedSlider.value();
             } else {
                 value.setState(false);
                 value.framecount = BUTCOUNT;
