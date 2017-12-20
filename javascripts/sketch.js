@@ -262,6 +262,7 @@ function setup() { // jshint ignore:line
 
     // Starts and stops the simulation
     simButton = createButton('Start');
+    simButton.elt.style.width = '34px';
     simButton.position(299, 4);
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
