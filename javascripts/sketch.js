@@ -1213,11 +1213,19 @@ function keyPressed() {
             case UP_ARROW:
                 gateDirection = 3;
                 break;
-
-            default:
+                
+            default: 
         }
     }
 }
+
+// Load the spcified circuit by hitting ENTER key
+function keyPressed(){
+    if(textInput.value() !== "" && keyCode === ENTER){
+        loadClicked();
+    }
+}
+
 /*
 function handleSelection(x1, y1, x2, y2) {
     // TODO: Implement selecting all elements in the given rectangle
