@@ -2435,131 +2435,6 @@
       "direction": "0"
     },
     {
-      "startX": "1350",
-      "startY": "780",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "810",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "840",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "870",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "900",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "930",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "960",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "990",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "1020",
-      "direction": "1"
-    },
-    {
-      "startX": "1350",
-      "startY": "780",
-      "direction": "0"
-    },
-    {
-      "startX": "1380",
-      "startY": "780",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "780",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "780",
-      "direction": "0"
-    },
-    {
-      "startX": "1470",
-      "startY": "690",
-      "direction": "1"
-    },
-    {
-      "startX": "1470",
-      "startY": "720",
-      "direction": "1"
-    },
-    {
-      "startX": "1470",
-      "startY": "750",
-      "direction": "1"
-    },
-    {
-      "startX": "1470",
-      "startY": "540",
-      "direction": "1"
-    },
-    {
-      "startX": "1470",
-      "startY": "570",
-      "direction": "1"
-    },
-    {
-      "startX": "1470",
-      "startY": "600",
-      "direction": "1"
-    },
-    {
-      "startX": "1470",
-      "startY": "630",
-      "direction": "1"
-    },
-    {
-      "startX": "1470",
-      "startY": "660",
-      "direction": "1"
-    },
-    {
-      "startX": "1470",
-      "startY": "540",
-      "direction": "0"
-    },
-    {
-      "startX": "1500",
-      "startY": "540",
-      "direction": "0"
-    },
-    {
-      "startX": "1530",
-      "startY": "540",
-      "direction": "0"
-    },
-    {
-      "startX": "1560",
-      "startY": "540",
-      "direction": "0"
-    },
-    {
       "startX": "1590",
       "startY": "540",
       "direction": "0"
@@ -5415,21 +5290,6 @@
       "direction": "1"
     },
     {
-      "startX": "1260",
-      "startY": "1050",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1050",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1050",
-      "direction": "0"
-    },
-    {
       "startX": "1350",
       "startY": "1110",
       "direction": "0"
@@ -6413,6 +6273,186 @@
       "startX": "1020",
       "startY": "690",
       "direction": "1"
+    },
+    {
+      "startX": "1260",
+      "startY": "1020",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "1020",
+      "direction": "0"
+    },
+    {
+      "startX": "1170",
+      "startY": "1020",
+      "direction": "0"
+    },
+    {
+      "startX": "1200",
+      "startY": "1020",
+      "direction": "0"
+    },
+    {
+      "startX": "1230",
+      "startY": "1020",
+      "direction": "0"
+    },
+    {
+      "startX": "1140",
+      "startY": "540",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "570",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "600",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "630",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "660",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "690",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "720",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "750",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "780",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "810",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "840",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "870",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "900",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "930",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "960",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "990",
+      "direction": "1"
+    },
+    {
+      "startX": "1140",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1170",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1200",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1230",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1260",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1290",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1320",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1350",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1380",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1410",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1440",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1470",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1500",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1530",
+      "startY": "540",
+      "direction": "0"
+    },
+    {
+      "startX": "1560",
+      "startY": "540",
+      "direction": "0"
     }
   ],
   "conpoints": [
@@ -6487,12 +6527,20 @@
   ],
   "diodes": [
     {
-      "x": "810",
-      "y": "270"
+      "x": "870",
+      "y": "300"
     },
     {
       "x": "840",
-      "y": "270"
+      "y": "300"
+    },
+    {
+      "x": "870",
+      "y": "360"
+    },
+    {
+      "x": "840",
+      "y": "360"
     },
     {
       "x": "870",
@@ -6503,20 +6551,12 @@
       "y": "270"
     },
     {
-      "x": "870",
-      "y": "300"
+      "x": "810",
+      "y": "270"
     },
     {
       "x": "840",
-      "y": "300"
-    },
-    {
-      "x": "870",
-      "y": "360"
-    },
-    {
-      "x": "840",
-      "y": "360"
+      "y": "270"
     }
   ],
   "customs": [
@@ -6525,48 +6565,48 @@
       "y": "1140",
       "direction": "1",
       "filename": "\"4BitDec.json\"",
-      "outputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]",
-      "inputsInv": "[false,false,false,false,false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false]"
     },
     {
       "x": "630",
       "y": "240",
       "direction": "0",
       "filename": "\"2BitCounter.json\"",
-      "outputsInv": "[false,false,false,false]",
-      "inputsInv": "[false,false]"
+      "outputsInv": "[false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false]"
     },
     {
       "x": "720",
       "y": "240",
       "direction": "0",
       "filename": "\"2BitDec.json\"",
-      "outputsInv": "[false,false,false,false,false,false,false,false]",
-      "inputsInv": "[false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false]"
     },
     {
       "x": "1560",
       "y": "690",
       "direction": "1",
       "filename": "\"4BitReg.json\"",
-      "outputsInv": "[false,false,false,false]",
-      "inputsInv": "[false,false,false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false]"
     },
     {
       "x": "1200",
       "y": "690",
       "direction": "1",
       "filename": "\"4BitReg.json\"",
-      "outputsInv": "[false,false,false,false]",
-      "inputsInv": "[false,false,false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false]"
     },
     {
       "x": "1320",
       "y": "1260",
       "direction": "1",
       "filename": "\"4BitAlu.json\"",
-      "outputsInv": "[false,false,false,false,false]",
-      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false]"
+      "outputsInv": "[false,false,false,false,false,false,false,false,false,false,false]",
+      "inputsInv": "[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"
     }
   ]
 }
