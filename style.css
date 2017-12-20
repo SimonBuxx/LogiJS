@@ -120,14 +120,6 @@ input[type=text] {
 #github {
     position: fixed;
     left: 10px;
-    bottom: 10px;
-}
-
-#logo {
-    position: fixed;
-    left: 1px;
-    top: -5px;
-    width: 150px;
-    margin: 0;
-    padding: 0;
+    bottom: 6px;
+    width: 19px;
 }
