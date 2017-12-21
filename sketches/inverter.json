@@ -1,0 +1,98 @@
+{
+  "caption": "inverter",
+  "gates": [
+    {
+      "x": "690",
+      "y": "300",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[true]",
+      "inputsInv": "[false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "840",
+      "y": "330",
+      "colr": "0",
+      "lbl": "Out"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "525",
+      "y": "315",
+      "lbl": "In",
+      "framecount": "-1",
+      "clock": "false"
+    }
+  ],
+  "segments": [
+    {
+      "startX": "540",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "570",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "600",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "630",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "660",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "630",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "660",
+      "startY": "360",
+      "direction": "0"
+    },
+    {
+      "startX": "630",
+      "startY": "330",
+      "direction": "1"
+    },
+    {
+      "startX": "750",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "780",
+      "startY": "330",
+      "direction": "0"
+    },
+    {
+      "startX": "810",
+      "startY": "330",
+      "direction": "0"
+    }
+  ],
+  "conpoints": [
+    {
+      "x": "630",
+      "y": "330"
+    }
+  ],
+  "diodes": [],
+  "customs": []
+}
