@@ -1,5 +1,5 @@
 {
-  "caption": "inverter",
+  "caption": "Inverter",
   "gates": [
     {
       "x": "690",
@@ -17,15 +17,13 @@
     {
       "x": "840",
       "y": "330",
-      "colr": "0",
-      "lbl": "Out"
+      "colr": "0"
     }
   ],
   "inputs": [
     {
       "x": "525",
       "y": "315",
-      "lbl": "In",
       "framecount": "-1",
       "clock": "false"
     }
