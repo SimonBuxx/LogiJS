@@ -418,7 +418,6 @@ function setup() { // jshint ignore:line
     var loadfile = urlParam('sketch');
     if (loadfile !== "") {
         loadSketch(loadfile + '.json');
-        document.title = loadfile + ' - LogiJS';
     }
     reDraw();
 }
