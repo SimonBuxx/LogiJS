@@ -445,7 +445,6 @@ function saveClicked() {
 
 // Triggered when a sketch should be loaded
 function loadClicked() {
-    document.title = textInput.value() + ' - LogiJS';
     loadSketch(textInput.value() + '.json');
     reDraw();
 }
