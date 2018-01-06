@@ -39,7 +39,12 @@ function saveSketch(filename) {
 }
 
 function loadSketch(file) {
-    loadJSON('sketches/' + file, load);
+    loadJSON('sketches/' + file, load, fileNotFoundError);
+}
+
+function fileNotFoundError() {
+    // Change the site's title to the error message
+    document.title = "Sketch not found! - LogiJS";
 }
 
 function load(loadData) {
