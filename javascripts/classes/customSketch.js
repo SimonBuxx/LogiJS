@@ -123,6 +123,8 @@ CustomSketch.prototype.setSketchParams = function (params) {
     this.objects = params;
     this.inputCount = this.objects[INPNUM].length;
     this.outputCount = this.objects[OUTPNUM].length;
+    this.inputsInv = [];
+    this.outputsInv = [];
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 
     for (let i = 0; i < this.inputCount; i++) {
