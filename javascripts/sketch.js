@@ -1194,12 +1194,12 @@ function keyPressed() {
         loadClicked();
     }
 }
-/*
+
 function handleSelection(x1, y1, x2, y2) {
     // TODO: Implement selecting all elements in the given rectangle
     //       Giving options to delete or reposition the elements
 }
-*/
+
 
 /*
     Handles the dragging of the canvas
