@@ -113,7 +113,7 @@ new gate to this value (0 for 10). Rotating gates and custom elements can be don
 As with the input number, this affects all new gates and custom elements.
 ### Warning
 This software is under development and not thought to be used for any real life scenarios. For education purposes, it should be stable
-enough, but I can't guarantee for anything. LogiJS is not professionally built, therefore not using a linter or any testing procedure.
+enough, but I can't guarantee for anything. LogiJS is not professionally built and not tested in a structured manner.
 
 ## Closing word
 If you've read this tutorial, thank you so much. It means a lot to me when people are actually using and testing the software.
