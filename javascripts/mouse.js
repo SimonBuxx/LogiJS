@@ -281,10 +281,16 @@ function mouseReleased() {
                     break;
                 case 'addWire':
                     if (wireMode === 'preview') { // If the preview wire mode is active
-                        if (pwSegments.length > 0) { // If a wire was drawn (not 0 segments)
+                        let pushed = false;
+                        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
+                            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
+                                pushed = true;
+                            }
+                        }
+                        if (pushed) {
                             pushUndoAction('reWire', 0, [segments.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
-                        for (var i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
+                        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
                             if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
                                 segments.push(pwSegments[i]);
                             }
@@ -298,7 +304,7 @@ function mouseReleased() {
                 case 'delete': // If the delete mode is active
                     if (!lockElements) {
                         // Delete elements with mouseOver
-                        var gateNumber = mouseOverGate();
+                        let gateNumber = mouseOverGate();
                         if (gateNumber >= 0) {
                             deleteGate(gateNumber);
                         }
