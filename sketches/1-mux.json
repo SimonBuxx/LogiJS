@@ -46,113 +46,93 @@
     {
       "x": "825",
       "y": "255",
-      "framecount": "-1",
-      "clock": "false",
       "istop": "true",
-      "lbl": "2º"
+      "lbl": "2º",
+      "framecount": "-1",
+      "clock": "false"
     },
     {
       "x": "795",
       "y": "315",
+      "lbl": "0",
       "framecount": "-1",
-      "clock": "false",
-      "lbl": "0"
+      "clock": "false"
     },
     {
       "x": "795",
       "y": "345",
+      "lbl": "1",
       "framecount": "-1",
-      "clock": "false",
-      "lbl": "1"
+      "clock": "false"
     }
   ],
-  "segments": [
+  "segments": [],
+  "wires": [
     {
-      "startX": "840",
-      "startY": "270",
-      "direction": "1"
+      "x1": "840",
+      "y1": "300",
+      "x2": "870",
+      "y2": "300"
     },
     {
-      "startX": "840",
-      "startY": "300",
-      "direction": "0"
+      "x1": "840",
+      "y1": "390",
+      "x2": "870",
+      "y2": "390"
     },
     {
-      "startX": "810",
-      "startY": "330",
-      "direction": "0"
+      "x1": "930",
+      "y1": "360",
+      "x2": "960",
+      "y2": "360"
     },
     {
-      "startX": "840",
-      "startY": "330",
-      "direction": "0"
+      "x1": "960",
+      "y1": "330",
+      "x2": "960",
+      "y2": "360"
     },
     {
-      "startX": "810",
-      "startY": "360",
-      "direction": "0"
+      "x1": "960",
+      "y1": "330",
+      "x2": "990",
+      "y2": "330"
     },
     {
-      "startX": "840",
-      "startY": "360",
-      "direction": "0"
+      "x1": "1050",
+      "y1": "300",
+      "x2": "1080",
+      "y2": "300"
     },
     {
-      "startX": "840",
-      "startY": "300",
-      "direction": "1"
+      "x1": "810",
+      "y1": "330",
+      "x2": "870",
+      "y2": "330"
     },
     {
-      "startX": "840",
-      "startY": "330",
-      "direction": "1"
+      "x1": "810",
+      "y1": "360",
+      "x2": "870",
+      "y2": "360"
     },
     {
-      "startX": "840",
-      "startY": "360",
-      "direction": "1"
+      "x1": "930",
+      "y1": "300",
+      "x2": "990",
+      "y2": "300"
     },
     {
-      "startX": "840",
-      "startY": "390",
-      "direction": "0"
-    },
-    {
-      "startX": "930",
-      "startY": "300",
-      "direction": "0"
-    },
-    {
-      "startX": "960",
-      "startY": "300",
-      "direction": "0"
-    },
-    {
-      "startX": "930",
-      "startY": "360",
-      "direction": "0"
-    },
-    {
-      "startX": "960",
-      "startY": "330",
-      "direction": "1"
-    },
-    {
-      "startX": "960",
-      "startY": "330",
-      "direction": "0"
-    },
-    {
-      "startX": "1050",
-      "startY": "300",
-      "direction": "0"
+      "x1": "840",
+      "y1": "270",
+      "x2": "840",
+      "y2": "390"
     }
   ],
   "conpoints": [
     {
       "x": "840",
-      "y": "300",
-      "group": "0"
+      "y": "300"
     }
   ],
   "diodes": [],

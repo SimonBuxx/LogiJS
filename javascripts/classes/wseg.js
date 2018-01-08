@@ -35,6 +35,15 @@ WSeg.prototype.getData = function () {
     return data;
 };
 
+WSeg.prototype.getWireData = function () {
+    var data = {};
+    data.x1 = JSON.stringify(this.startX);
+    data.y1 = JSON.stringify(this.startY);
+    data.x2 = JSON.stringify(this.endX);
+    data.y2 = JSON.stringify(this.endY);
+    return data;
+};
+
 WSeg.prototype.getEndPoint = function () {
     switch (this.direction) {
         case 0:

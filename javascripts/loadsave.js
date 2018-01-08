@@ -9,6 +9,7 @@ function saveSketch(filename) {
     json.outputs = [];
     json.inputs = [];
     json.segments = [];
+    json.wires = [];
     json.conpoints = [];
     json.diodes = [];
     json.customs = [];
@@ -21,8 +22,11 @@ function saveSketch(filename) {
     for (let i = 0; i < inputs.length; i++) {
         json.inputs.push(inputs[i].getData());
     }
-    for (let i = 0; i < segments.length; i++) {
+    /*for (let i = 0; i < segments.length; i++) {
         json.segments.push(segments[i].getData());
+    }*/
+    for (let i = 0; i < wires.length; i++) {
+        json.wires.push(wires[i].getWireData());
     }
     for (let i = 0; i < conpoints.length; i++) {
         json.conpoints.push(conpoints[i].getData());
@@ -171,6 +175,23 @@ function loadCustom(loadData, num) {
     for (let i = 0; i < loadData.segments.length; i++) {
         params[SEGNUM][i] = new WSeg(JSON.parse(loadData.segments[i].direction), JSON.parse(loadData.segments[i].startX), JSON.parse(loadData.segments[i].startY),
             false, trans);
+    }
+    if (loadData.hasOwnProperty("wires")) {
+        for (let i = 0; i < loadData.wires.length; i++) {
+            if (JSON.parse(loadData.wires[i].x1) === JSON.parse(loadData.wires[i].x2)) {
+                // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+                for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
+                    params[SEGNUM].push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
+                        false, transform));
+                }
+            } else if (JSON.parse(loadData.wires[i].y1) === JSON.parse(loadData.wires[i].y2)) {
+                // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+                for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
+                    params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
+                        false, transform));
+                }
+            }
+        }
     }
     for (let i = 0; i < loadData.conpoints.length; i++) {
         params[CPNUM][i] = new ConPoint(JSON.parse(loadData.conpoints[i].x), JSON.parse(loadData.conpoints[i].y), false, -1);

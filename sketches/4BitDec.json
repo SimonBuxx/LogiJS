@@ -302,2261 +302,517 @@
       "clock": "false"
     }
   ],
-  "segments": [
+  "segments": [],
+  "wires": [
     {
-      "startX": "1320",
-      "startY": "270",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "360",
+      "x2": "1350",
+      "y2": "360"
     },
     {
-      "startX": "1320",
-      "startY": "300",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "480",
+      "x2": "1350",
+      "y2": "480"
     },
     {
-      "startX": "1320",
-      "startY": "330",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "600",
+      "x2": "1350",
+      "y2": "600"
     },
     {
-      "startX": "1320",
-      "startY": "360",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "720",
+      "x2": "1350",
+      "y2": "720"
     },
     {
-      "startX": "1320",
-      "startY": "390",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "840",
+      "x2": "1350",
+      "y2": "840"
     },
     {
-      "startX": "1320",
-      "startY": "420",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "960",
+      "x2": "1350",
+      "y2": "960"
     },
     {
-      "startX": "1320",
-      "startY": "450",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "1080",
+      "x2": "1350",
+      "y2": "1080"
     },
     {
-      "startX": "1320",
-      "startY": "480",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "1200",
+      "x2": "1350",
+      "y2": "1200"
     },
     {
-      "startX": "1320",
-      "startY": "510",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "1320",
+      "x2": "1350",
+      "y2": "1320"
     },
     {
-      "startX": "1320",
-      "startY": "540",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "1440",
+      "x2": "1350",
+      "y2": "1440"
     },
     {
-      "startX": "1320",
-      "startY": "570",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "1560",
+      "x2": "1350",
+      "y2": "1560"
     },
     {
-      "startX": "1320",
-      "startY": "600",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "1680",
+      "x2": "1350",
+      "y2": "1680"
     },
     {
-      "startX": "1320",
-      "startY": "630",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "1800",
+      "x2": "1350",
+      "y2": "1800"
     },
     {
-      "startX": "1320",
-      "startY": "660",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "1920",
+      "x2": "1350",
+      "y2": "1920"
     },
     {
-      "startX": "1320",
-      "startY": "690",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "2040",
+      "x2": "1350",
+      "y2": "2040"
     },
     {
-      "startX": "1320",
-      "startY": "720",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "2160",
+      "x2": "1350",
+      "y2": "2160"
     },
     {
-      "startX": "1320",
-      "startY": "750",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1650",
+      "x2": "1410",
+      "y2": "1680"
     },
     {
-      "startX": "1320",
-      "startY": "780",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "390",
+      "x2": "1350",
+      "y2": "390"
     },
     {
-      "startX": "1320",
-      "startY": "810",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "510",
+      "x2": "1350",
+      "y2": "510"
     },
     {
-      "startX": "1320",
-      "startY": "840",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "630",
+      "x2": "1350",
+      "y2": "630"
     },
     {
-      "startX": "1320",
-      "startY": "870",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "750",
+      "x2": "1350",
+      "y2": "750"
     },
     {
-      "startX": "1320",
-      "startY": "900",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "870",
+      "x2": "1350",
+      "y2": "870"
     },
     {
-      "startX": "1320",
-      "startY": "930",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "990",
+      "x2": "1350",
+      "y2": "990"
     },
     {
-      "startX": "1320",
-      "startY": "960",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "1110",
+      "x2": "1350",
+      "y2": "1110"
     },
     {
-      "startX": "1320",
-      "startY": "990",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "1230",
+      "x2": "1350",
+      "y2": "1230"
     },
     {
-      "startX": "1320",
-      "startY": "1020",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "1350",
+      "x2": "1350",
+      "y2": "1350"
     },
     {
-      "startX": "1320",
-      "startY": "1050",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "1470",
+      "x2": "1350",
+      "y2": "1470"
     },
     {
-      "startX": "1320",
-      "startY": "1080",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "1590",
+      "x2": "1350",
+      "y2": "1590"
     },
     {
-      "startX": "1320",
-      "startY": "1110",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "1710",
+      "x2": "1350",
+      "y2": "1710"
     },
     {
-      "startX": "1320",
-      "startY": "1140",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "1830",
+      "x2": "1350",
+      "y2": "1830"
     },
     {
-      "startX": "1320",
-      "startY": "1170",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "1950",
+      "x2": "1350",
+      "y2": "1950"
     },
     {
-      "startX": "1320",
-      "startY": "1200",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "2070",
+      "x2": "1350",
+      "y2": "2070"
     },
     {
-      "startX": "1320",
-      "startY": "1230",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "2190",
+      "x2": "1350",
+      "y2": "2190"
     },
     {
-      "startX": "1320",
-      "startY": "1260",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "360",
+      "x2": "1470",
+      "y2": "360"
     },
     {
-      "startX": "1320",
-      "startY": "1290",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "480",
+      "x2": "1470",
+      "y2": "480"
     },
     {
-      "startX": "1320",
-      "startY": "1320",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "600",
+      "x2": "1470",
+      "y2": "600"
     },
     {
-      "startX": "1320",
-      "startY": "1350",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "720",
+      "x2": "1470",
+      "y2": "720"
     },
     {
-      "startX": "1320",
-      "startY": "1380",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "840",
+      "x2": "1470",
+      "y2": "840"
     },
     {
-      "startX": "1320",
-      "startY": "1410",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "960",
+      "x2": "1470",
+      "y2": "960"
     },
     {
-      "startX": "1320",
-      "startY": "1440",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1080",
+      "x2": "1470",
+      "y2": "1080"
     },
     {
-      "startX": "1320",
-      "startY": "1470",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1200",
+      "x2": "1470",
+      "y2": "1200"
     },
     {
-      "startX": "1320",
-      "startY": "1500",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1320",
+      "x2": "1470",
+      "y2": "1320"
     },
     {
-      "startX": "1320",
-      "startY": "1530",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1440",
+      "x2": "1470",
+      "y2": "1440"
     },
     {
-      "startX": "1320",
-      "startY": "1560",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1560",
+      "x2": "1470",
+      "y2": "1560"
     },
     {
-      "startX": "1320",
-      "startY": "1590",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1680",
+      "x2": "1470",
+      "y2": "1680"
     },
     {
-      "startX": "1320",
-      "startY": "1620",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1800",
+      "x2": "1470",
+      "y2": "1800"
     },
     {
-      "startX": "1320",
-      "startY": "1650",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "1920",
+      "x2": "1470",
+      "y2": "1920"
     },
     {
-      "startX": "1320",
-      "startY": "1680",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "2040",
+      "x2": "1470",
+      "y2": "2040"
     },
     {
-      "startX": "1320",
-      "startY": "1710",
-      "direction": "1"
+      "x1": "1410",
+      "y1": "2160",
+      "x2": "1470",
+      "y2": "2160"
     },
     {
-      "startX": "1320",
-      "startY": "1740",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "420",
+      "x2": "1350",
+      "y2": "420"
     },
     {
-      "startX": "1320",
-      "startY": "1770",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "450",
+      "x2": "1350",
+      "y2": "450"
     },
     {
-      "startX": "1320",
-      "startY": "1800",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "540",
+      "x2": "1350",
+      "y2": "540"
     },
     {
-      "startX": "1320",
-      "startY": "1830",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "570",
+      "x2": "1350",
+      "y2": "570"
     },
     {
-      "startX": "1320",
-      "startY": "1860",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "660",
+      "x2": "1350",
+      "y2": "660"
     },
     {
-      "startX": "1320",
-      "startY": "1890",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "690",
+      "x2": "1350",
+      "y2": "690"
     },
     {
-      "startX": "1320",
-      "startY": "1920",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "780",
+      "x2": "1350",
+      "y2": "780"
     },
     {
-      "startX": "1320",
-      "startY": "1950",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "810",
+      "x2": "1350",
+      "y2": "810"
     },
     {
-      "startX": "1320",
-      "startY": "1980",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "900",
+      "x2": "1350",
+      "y2": "900"
     },
     {
-      "startX": "1320",
-      "startY": "2010",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "930",
+      "x2": "1350",
+      "y2": "930"
     },
     {
-      "startX": "1320",
-      "startY": "2040",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1020",
+      "x2": "1350",
+      "y2": "1020"
     },
     {
-      "startX": "1320",
-      "startY": "2070",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "1050",
+      "x2": "1350",
+      "y2": "1050"
     },
     {
-      "startX": "1320",
-      "startY": "2100",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1140",
+      "x2": "1350",
+      "y2": "1140"
     },
     {
-      "startX": "1320",
-      "startY": "2130",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "1170",
+      "x2": "1350",
+      "y2": "1170"
     },
     {
-      "startX": "1290",
-      "startY": "840",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1260",
+      "x2": "1350",
+      "y2": "1260"
     },
     {
-      "startX": "1290",
-      "startY": "870",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "1290",
+      "x2": "1350",
+      "y2": "1290"
     },
     {
-      "startX": "1290",
-      "startY": "900",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1380",
+      "x2": "1350",
+      "y2": "1380"
     },
     {
-      "startX": "1290",
-      "startY": "930",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "1410",
+      "x2": "1350",
+      "y2": "1410"
     },
     {
-      "startX": "1290",
-      "startY": "960",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1500",
+      "x2": "1350",
+      "y2": "1500"
     },
     {
-      "startX": "1290",
-      "startY": "990",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "1530",
+      "x2": "1350",
+      "y2": "1530"
     },
     {
-      "startX": "1290",
-      "startY": "1020",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1620",
+      "x2": "1350",
+      "y2": "1620"
     },
     {
-      "startX": "1290",
-      "startY": "1050",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "1650",
+      "x2": "1350",
+      "y2": "1650"
     },
     {
-      "startX": "1290",
-      "startY": "1080",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1740",
+      "x2": "1350",
+      "y2": "1740"
     },
     {
-      "startX": "1290",
-      "startY": "1110",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "1770",
+      "x2": "1350",
+      "y2": "1770"
     },
     {
-      "startX": "1290",
-      "startY": "1140",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1860",
+      "x2": "1350",
+      "y2": "1860"
     },
     {
-      "startX": "1290",
-      "startY": "1170",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "1890",
+      "x2": "1350",
+      "y2": "1890"
     },
     {
-      "startX": "1290",
-      "startY": "1200",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "1980",
+      "x2": "1350",
+      "y2": "1980"
     },
     {
-      "startX": "1290",
-      "startY": "1230",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "2010",
+      "x2": "1350",
+      "y2": "2010"
     },
     {
-      "startX": "1290",
-      "startY": "1260",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "2100",
+      "x2": "1350",
+      "y2": "2100"
     },
     {
-      "startX": "1290",
-      "startY": "1290",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "2130",
+      "x2": "1350",
+      "y2": "2130"
     },
     {
-      "startX": "1290",
-      "startY": "1320",
-      "direction": "1"
+      "x1": "1260",
+      "y1": "2220",
+      "x2": "1350",
+      "y2": "2220"
     },
     {
-      "startX": "1290",
-      "startY": "1350",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "2250",
+      "x2": "1350",
+      "y2": "2250"
     },
     {
-      "startX": "1290",
-      "startY": "1380",
-      "direction": "1"
+      "x1": "1320",
+      "y1": "270",
+      "x2": "1320",
+      "y2": "2160"
     },
     {
-      "startX": "1290",
-      "startY": "1410",
-      "direction": "1"
+      "x1": "1290",
+      "y1": "270",
+      "x2": "1290",
+      "y2": "2190"
     },
     {
-      "startX": "1290",
-      "startY": "1440",
-      "direction": "1"
+      "x1": "1230",
+      "y1": "270",
+      "x2": "1230",
+      "y2": "2250"
     },
     {
-      "startX": "1290",
-      "startY": "1470",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1500",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1530",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1560",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1590",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1620",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1650",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1680",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1710",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1740",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1770",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1800",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1830",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1860",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1890",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1920",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1950",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "1980",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "2010",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "2040",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "2070",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "2100",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "2130",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "2160",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "270",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "300",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "330",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "360",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "390",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "420",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "450",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "480",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "510",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "540",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "570",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "600",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "630",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "660",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "690",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "720",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "750",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "780",
-      "direction": "1"
-    },
-    {
-      "startX": "1290",
-      "startY": "810",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "270",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "300",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "330",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "360",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "390",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "420",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "450",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "480",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "510",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "540",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "570",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "600",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "630",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "660",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "690",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "720",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "750",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "780",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "810",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "840",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "870",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "900",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "930",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "960",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "990",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1020",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1050",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1080",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1110",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1140",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1170",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1200",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1230",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1260",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1290",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1320",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1350",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1380",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1410",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1440",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1470",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1500",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1530",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1560",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1590",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1620",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1650",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1680",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1710",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1740",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1770",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1800",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1830",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1860",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1890",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1920",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1950",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "1980",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "2010",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "2040",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "2070",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "2100",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "2130",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "2160",
-      "direction": "1"
-    },
-    {
-      "startX": "1260",
-      "startY": "2190",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "720",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "750",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "780",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "810",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "840",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "870",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "900",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "930",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "960",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "990",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1020",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1050",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1080",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1110",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1140",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1170",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1200",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1230",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1260",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1290",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1320",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1350",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1380",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1410",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1440",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1470",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1500",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1530",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1560",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1590",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1620",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1650",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1680",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1710",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1740",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1770",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1800",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1830",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1860",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1890",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1920",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1950",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "1980",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "2010",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "2040",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "2070",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "2100",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "2130",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "2160",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "2190",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "2220",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "270",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "300",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "330",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "360",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "390",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "420",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "450",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "480",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "510",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "540",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "570",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "600",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "630",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "660",
-      "direction": "1"
-    },
-    {
-      "startX": "1230",
-      "startY": "690",
-      "direction": "1"
-    },
-    {
-      "startX": "1320",
-      "startY": "360",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "390",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "390",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "420",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "420",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "420",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "450",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "450",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "450",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "450",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "480",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "510",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "510",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "540",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "540",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "540",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "570",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "570",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "570",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "570",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "600",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "630",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "630",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "660",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "660",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "660",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "690",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "690",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "690",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "690",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "720",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "750",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "750",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "780",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "780",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "780",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "810",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "810",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "810",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "810",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "840",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "870",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "870",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "900",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "900",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "900",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "930",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "930",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "930",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "930",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "960",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "990",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "990",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1020",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1020",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1020",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "1050",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1050",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1050",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1050",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1080",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1110",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1110",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1140",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1140",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1140",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "1170",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1170",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1170",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1170",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1200",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1230",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1230",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1260",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1260",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1260",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "1290",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1290",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1290",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1290",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1320",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1350",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1350",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1380",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1380",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1380",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "1410",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1410",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1410",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1410",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1440",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1470",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1470",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1500",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1500",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1500",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "1530",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1530",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1530",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1530",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1560",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1590",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1590",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1620",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1620",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1620",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "1650",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1650",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1650",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1650",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1680",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1710",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1710",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1740",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1740",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1740",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "1770",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1770",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1770",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1770",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1800",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1830",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1830",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1860",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1860",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1860",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "1890",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1890",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1890",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1890",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1920",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1950",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1950",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "1980",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "1980",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "1980",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "2010",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "2010",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "2010",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2010",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2040",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "2070",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2070",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "2100",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "2100",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2100",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "2130",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "2130",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "2130",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2130",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2160",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "2190",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2190",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "2220",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "2220",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2220",
-      "direction": "0"
-    },
-    {
-      "startX": "1230",
-      "startY": "2250",
-      "direction": "0"
-    },
-    {
-      "startX": "1260",
-      "startY": "2250",
-      "direction": "0"
-    },
-    {
-      "startX": "1290",
-      "startY": "2250",
-      "direction": "0"
-    },
-    {
-      "startX": "1320",
-      "startY": "2250",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "360",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "360",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "480",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "480",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "600",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "600",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "720",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "720",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "840",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "840",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "960",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "960",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "1080",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "1080",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "1200",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "1200",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "1320",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "1320",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "1440",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "1440",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "1560",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "1560",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "1650",
-      "direction": "1"
-    },
-    {
-      "startX": "1410",
-      "startY": "1680",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "1680",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "1800",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "1800",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "1920",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "1920",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "2040",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "2040",
-      "direction": "0"
-    },
-    {
-      "startX": "1410",
-      "startY": "2160",
-      "direction": "0"
-    },
-    {
-      "startX": "1440",
-      "startY": "2160",
-      "direction": "0"
+      "x1": "1260",
+      "y1": "270",
+      "x2": "1260",
+      "y2": "2220"
     }
   ],
   "conpoints": [

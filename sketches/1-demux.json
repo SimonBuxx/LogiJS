@@ -54,101 +54,55 @@
       "clock": "false"
     }
   ],
-  "segments": [
+  "segments": [],
+  "wires": [
     {
-      "startX": "900",
-      "startY": "390",
-      "direction": "0"
+      "x1": "960",
+      "y1": "480",
+      "x2": "990",
+      "y2": "480"
     },
     {
-      "startX": "930",
-      "startY": "390",
-      "direction": "0"
+      "x1": "1050",
+      "y1": "390",
+      "x2": "1080",
+      "y2": "390"
     },
     {
-      "startX": "960",
-      "startY": "390",
-      "direction": "0"
+      "x1": "1050",
+      "y1": "480",
+      "x2": "1080",
+      "y2": "480"
     },
     {
-      "startX": "960",
-      "startY": "480",
-      "direction": "0"
+      "x1": "930",
+      "y1": "420",
+      "x2": "990",
+      "y2": "420"
     },
     {
-      "startX": "960",
-      "startY": "390",
-      "direction": "1"
+      "x1": "930",
+      "y1": "510",
+      "x2": "990",
+      "y2": "510"
     },
     {
-      "startX": "960",
-      "startY": "420",
-      "direction": "1"
+      "x1": "960",
+      "y1": "390",
+      "x2": "960",
+      "y2": "480"
     },
     {
-      "startX": "960",
-      "startY": "450",
-      "direction": "1"
+      "x1": "870",
+      "y1": "390",
+      "x2": "990",
+      "y2": "390"
     },
     {
-      "startX": "930",
-      "startY": "420",
-      "direction": "0"
-    },
-    {
-      "startX": "960",
-      "startY": "420",
-      "direction": "0"
-    },
-    {
-      "startX": "930",
-      "startY": "360",
-      "direction": "1"
-    },
-    {
-      "startX": "930",
-      "startY": "390",
-      "direction": "1"
-    },
-    {
-      "startX": "870",
-      "startY": "390",
-      "direction": "0"
-    },
-    {
-      "startX": "1050",
-      "startY": "390",
-      "direction": "0"
-    },
-    {
-      "startX": "1050",
-      "startY": "480",
-      "direction": "0"
-    },
-    {
-      "startX": "930",
-      "startY": "420",
-      "direction": "1"
-    },
-    {
-      "startX": "930",
-      "startY": "450",
-      "direction": "1"
-    },
-    {
-      "startX": "930",
-      "startY": "480",
-      "direction": "1"
-    },
-    {
-      "startX": "930",
-      "startY": "510",
-      "direction": "0"
-    },
-    {
-      "startX": "960",
-      "startY": "510",
-      "direction": "0"
+      "x1": "930",
+      "y1": "360",
+      "x2": "930",
+      "y2": "510"
     }
   ],
   "conpoints": [
