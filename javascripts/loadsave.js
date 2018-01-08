@@ -93,6 +93,23 @@ function load(loadData) {
         segments[i] = new WSeg(JSON.parse(loadData.segments[i].direction), JSON.parse(loadData.segments[i].startX), JSON.parse(loadData.segments[i].startY),
             false, transform);
     }
+    if (loadData.hasOwnProperty("wires")) {
+        for (let i = 0; i < loadData.wires.length; i++) {
+            if (JSON.parse(loadData.wires[i].x1) === JSON.parse(loadData.wires[i].x2)) {
+                // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+                for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
+                    segments.push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
+                        false, transform));
+                }
+            } else if (JSON.parse(loadData.wires[i].y1) === JSON.parse(loadData.wires[i].y2)) {
+                // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+                for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
+                    segments.push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
+                        false, transform));
+                }
+            }
+        }
+    }
     for (let i = 0; i < loadData.conpoints.length; i++) {
         conpoints[i] = new ConPoint(JSON.parse(loadData.conpoints[i].x), JSON.parse(loadData.conpoints[i].y), false, -1);
     }
@@ -106,6 +123,7 @@ function load(loadData) {
     }
     loadCustomSketches(); // Load all custom sketches from file
     document.title = textInput.value() + ' - LogiJS';
+    reDraw();
 }
 
 /*
