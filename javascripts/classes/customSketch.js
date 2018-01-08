@@ -123,21 +123,17 @@ CustomSketch.prototype.setSketchParams = function (params) {
     this.objects = params;
     this.inputCount = this.objects[INPNUM].length;
     this.outputCount = this.objects[OUTPNUM].length;
-    this.inputsInv = [];
-    this.outputsInv = [];
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 
     for (let i = 0; i < this.inputCount; i++) {
         this.inputs.push(false); // Set all inputs to low
         this.ipset.push(false);
-        this.inputsInv.push(false); // Set all inputs to not inverted
         this.inputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every input
     }
 
     // Initialize the outputs
     for (let i = 0; i < this.outputCount; i++) {
         this.outputs.push(false); // Set all outputs to low
-        this.outputsInv.push(false); // Set all outputs to not inverted
         this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every output
     }
 
