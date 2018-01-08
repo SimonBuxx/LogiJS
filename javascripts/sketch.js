@@ -10,6 +10,7 @@ let pwSegments = [];
 let conpoints = [];
 let diodes = [];
 let customs = [];
+let wires = [];
 
 let pwstartX = 0;
 let pwstartY = 0;
@@ -468,6 +469,7 @@ function newClicked() {
     wireMode = 'none';
     document.title = 'New Sketch - LogiJS';
     textInput.value('New Sketch');
+    findLines();
     reDraw();
 }
 
@@ -933,7 +935,7 @@ function reDraw() {
             elem.show();
         }
     } else {
-        for (const elem of segments) {
+        for (const elem of wires) {
             elem.show();
         }
     }

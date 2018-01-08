@@ -123,6 +123,7 @@ function load(loadData) {
     }
     loadCustomSketches(); // Load all custom sketches from file
     document.title = textInput.value() + ' - LogiJS';
+    findLines();
     reDraw();
 }
 

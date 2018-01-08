@@ -1,8 +1,8 @@
 // File: undoredo.js
 
 function undo() {
-    var act = actionUndo.pop();
-    if (act != null) {
+    let act = actionUndo.pop();
+    if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
                 gates.pop();
@@ -52,7 +52,7 @@ function undo() {
                 break;
             case 'delCust':
                 customs.push(act.actionObject[0]);
-                for (var i = 0; i < act.actionObject[0].responsibles.length; i++) {
+                for (let i = 0; i < act.actionObject[0].responsibles.length; i++) {
                     customs.push(act.actionObject[0].responsibles[i]);
                 }
                 actionRedo.push(act);
@@ -75,6 +75,7 @@ function undo() {
                 conpoints = act.actionObject[1];
                 segments = act.actionObject[0].slice(0);
                 doConpoints();
+                findLines();
                 break;
             default:
                 break;
@@ -87,7 +88,7 @@ function undo() {
 
 function redo() {
     var act = actionRedo.pop();
-    if (act != null) {
+    if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
                 gates.push(act.actionObject);
@@ -119,7 +120,7 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'delCust':
-                for (var i = customs.length - 1; i >= 0; i--) {
+                for (let i = customs.length - 1; i >= 0; i--) {
                     if (customs[i].visible) {
                         customs.splice(i);
                         break;
@@ -160,6 +161,7 @@ function redo() {
                 actionUndo.push(new Action('reWire', 0, [segments.slice(0), conpoints.slice(0)]));
                 segments = act.actionObject[0].slice(0);
                 doConpoints();
+                findLines();
                 break;
             default:
                 break;

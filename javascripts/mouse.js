@@ -295,6 +295,7 @@ function mouseReleased() {
                                 segments.push(pwSegments[i]);
                             }
                         }
+                        findLines();
                         lockElements = false;
                         pwSegments = []; // delete the preview segments
                         wireMode = 'none'; // wiring done, reset wireMode
@@ -337,6 +338,7 @@ function mouseReleased() {
                         }
                         if (existing) {
                             pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
+                            findLines();
                         }
                         pwSegments = [];
                         wireMode = 'none';

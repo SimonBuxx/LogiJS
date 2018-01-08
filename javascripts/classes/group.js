@@ -101,9 +101,6 @@ Group.prototype.propagateState = function () {
     }
 };
 
-/*
-    Best function in existance, boosts performance by 1000000%
-*/
 Group.prototype.findLines = function () {
     let seg = this.segments.slice(0);
     for (let i = 0; i < seg.length; i++) {
