@@ -1,0 +1,200 @@
+/* 
+
+Urbanic Template 
+
+http://www.templatemo.com/tm-395-urbanic
+
+*/
+
+body, html { overflow-x:hidden;  box-sizing: border-box;}
+
+body {
+    background-color: rgb(50, 50, 50);
+    font-family:  'Open Sans', Arial, Helvetice Neue, sans-serif;
+    font-size: 12px;
+	
+	font-weight: 300; 
+	font-style: normal; 
+	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
+	-webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neue, sans-serif; }
+
+* {
+  -webkit-border-radius: 0 !important;
+     -moz-border-radius: 0 !important;
+          border-radius: 0 !important;
+}
+
+.templatemo_clear {
+	clear: both;
+}
+
+.height30 {
+	height: 30px;
+}
+
+.templatemo-top-bar {
+    min-height: 40px;
+    background-color:#ffffff;
+}
+
+.templatemo-top-menu {
+    min-height:110px;
+    background-color: rgb(50, 50, 50);
+    z-index: 5000;
+    width:100%;
+}
+
+.templatemo-top-menu .navbar-toggle {
+    margin-top: 38px;
+}
+
+.templatemo-top-menu .navbar-brand {
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+#blur {
+	background: url('../images/background.png') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+	background-size: cover;
+  display: block;
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
+  height: 100%;
+  left: 0;
+  position: fixed;
+  right: 0;
+  z-index: -10;
+  overflow-x: hidden;
+  margin: 0;
+}
+#templatemo-carousel {
+	height: 600px;
+  }
+
+#templatemo-carousel .carousel-caption {
+    z-index: 10;
+}
+
+#templatemo-carousel .item {
+    height: 600px;
+}
+@media (min-width: 768px) {
+    #templatemo-carousel .carousel-caption p {
+        margin-bottom: 20px;
+        line-height: 1.4;
+        font-size: 21px;
+    }
+
+    #templatemo-carousel .carousel-caption {
+        padding-bottom: 140px;
+        right: 20%;
+        left: 20%;
+    }
+}
+
+.subheader {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: normal;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #ffffff;
+}
+
+
+.btn-orange {
+    background-color: rgb(200, 50, 50);
+    border-bottom:2px solid black;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    color:#ffffff;
+}
+
+.btn-orange:hover, .btn-orange:focus, .btn-orange:active, .btn-orange.active, .open .dropdown-toggle.btn-orange {
+    background-color: rgb(210, 60, 60);
+    color:#ffffff;
+}
+
+.nav > li > a {
+    padding: 10px 20px;
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+    background-color: rgb(200, 50, 50);
+    color:#fff;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    background-color: rgb(200, 50, 50);
+    color:#fff;
+}
+
+
+.nav > li > a {
+    color: #ffffff;
+}
+.navbar-default {
+    background-color:#fff;
+    border:none;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    background-color: rgb(200, 50, 50);
+    color:#fff;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+
+.project-overlay {
+    background : rgba(0,0,0,.75);
+    border : 2px solid #ff7600;
+    visibility: hidden;
+    position: absolute;
+    text-align:center;
+    padding-top:40px;
+    color: #ffffff;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+
+.footer_bottom {
+	background: rgb(50, 50, 50);
+	position: absolute;
+	width: 100%;
+	margin: auto;
+	z-index: 20;
+	display: block;
+	bottom: 0px;
+}
+.footer_bottom_content {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 14px;
+	color:#ffffff;
+}
+.footer_bottom_content a {
+	font-size: 14px;
+	color:#ffffff;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav > li > a {
+    padding-top: 9px;
+    padding-bottom: 9px;
+  } 
+}
