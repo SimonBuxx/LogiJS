@@ -1,12 +1,4 @@
-/* 
-
-Urbanic Template 
-
-http://www.templatemo.com/tm-395-urbanic
-
-*/
-
-body, html { overflow-x:hidden;  box-sizing: border-box;}
+body, html { overflow:hidden;  box-sizing: border-box;}
 
 body {
     background-color: rgb(50, 50, 50);
@@ -16,7 +8,7 @@ body {
 	font-weight: 300; 
 	font-style: normal; 
 	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
-	-webkit-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
 }
 
 h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neue, sans-serif; }
@@ -27,7 +19,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
           border-radius: 0 !important;
 }
 
-.templatemo_clear {
+.clear {
 	clear: both;
 }
 
@@ -35,23 +27,18 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
 	height: 30px;
 }
 
-.templatemo-top-bar {
-    min-height: 40px;
-    background-color:#ffffff;
-}
-
-.templatemo-top-menu {
+.top-menu {
     min-height:110px;
     background-color: rgb(50, 50, 50);
     z-index: 5000;
     width:100%;
 }
 
-.templatemo-top-menu .navbar-toggle {
+.top-menu .navbar-toggle {
     margin-top: 38px;
 }
 
-.templatemo-top-menu .navbar-brand {
+.top-menu .navbar-brand {
     padding: 0;
     margin: 10px 0 0 0;
 }
@@ -73,25 +60,25 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
   overflow-x: hidden;
   margin: 0;
 }
-#templatemo-carousel {
+#carousel {
 	height: 600px;
-  }
+}
 
-#templatemo-carousel .carousel-caption {
+#carousel .carousel-caption {
     z-index: 10;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-#templatemo-carousel .item {
-    height: 600px;
-}
 @media (min-width: 768px) {
-    #templatemo-carousel .carousel-caption p {
+    #carousel .carousel-caption p {
         margin-bottom: 20px;
         line-height: 1.4;
         font-size: 21px;
     }
 
-    #templatemo-carousel .carousel-caption {
+    #carousel .carousel-caption {
         padding-bottom: 140px;
         right: 20%;
         left: 20%;
@@ -155,21 +142,6 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
 
 .navbar {
     margin-bottom: 0px;
-}
-
-.project-overlay {
-    background : rgba(0,0,0,.75);
-    border : 2px solid #ff7600;
-    visibility: hidden;
-    position: absolute;
-    text-align:center;
-    padding-top:40px;
-    color: #ffffff;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    right: 0;
-    top: 0;
 }
 
 .footer_bottom {
