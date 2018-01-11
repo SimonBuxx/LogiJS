@@ -85,6 +85,8 @@ function setup() { // jshint ignore:line
         }
     }, false);
 
+    document.title = 'New Sketch - LogiJS';
+
     // Left Side Buttons
     // Adds and-gates
     andButton = createButton('And-Gate');
@@ -416,8 +418,9 @@ function setup() { // jshint ignore:line
 
     frameRate(60); // Caps the framerate at 60 FPS
 
-    var loadfile = urlParam('sketch');
+    let loadfile = urlParam('sketch');
     if (loadfile !== "") {
+        document.title = String(loadfile + ' - LogiJS');
         loadSketch(loadfile + '.json');
     }
     reDraw();
