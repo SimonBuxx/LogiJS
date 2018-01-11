@@ -44,21 +44,20 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
 }
 
 #blur {
-	background: url('../images/background.png') no-repeat center center fixed; 
+    background: url('../images/background.png') no-repeat center center; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-	background-size: cover;
-  display: block;
-  filter: blur(5px);
-  -webkit-filter: blur(5px);
-  height: 100%;
-  left: 0;
-  position: fixed;
-  right: 0;
-  z-index: -10;
-  overflow-x: hidden;
-  margin: 0;
+    background-size: cover;
+    display: block;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: -10;
+    height: 100%;
+     overflow-x: hidden;
 }
 #carousel {
 	height: 600px;
@@ -69,6 +68,8 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    margin: 0;
+    padding: 0;
 }
 
 @media (min-width: 768px) {
@@ -79,7 +80,8 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
     }
 
     #carousel .carousel-caption {
-        padding-bottom: 140px;
+        padding: 0;
+        margin: 0;
         right: 20%;
         left: 20%;
     }

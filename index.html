@@ -71,6 +71,27 @@
         <script src="javascripts/libraries/jquery.min.js" type="text/javascript"></script>
         <script src="javascripts/libraries/bootstrap.min.js" type="text/javascript"></script>
         <script src="javascripts/libraries/stickUp.min.js" type="text/javascript"></script>
+        <script type='text/javascript'>
+            $(document).ready(function () {
+                var movementStrength = 140;
+                var height = movementStrength / $(window).height();
+                var width = movementStrength / $(window).width();
+                $("#blur").mousemove(function (e) {
+                    var pageX = e.pageX - ($(window).width() / 2);
+                    var pageY = e.pageY - ($(window).height() / 2);
+                    var newvalueX = width * pageX * -1 - 300;
+                    var newvalueY = height * pageY * -1 - 50;
+                    $('#blur').css("background-position", newvalueX + "px     " + newvalueY + "px");
+                });
+                $("#carousel").mousemove(function (e) {
+                    var pageX = e.pageX - ($(window).width() / 2);
+                    var pageY = e.pageY - ($(window).height() / 2);
+                    var newvalueX = width * pageX * -1 - 300;
+                    var newvalueY = height * pageY * -1 - 50;
+                    $('#blur').css("background-position", newvalueX + "px     " + newvalueY + "px");
+                });
+            });
+        </script>
 </body>
 
 </html>
