@@ -50,8 +50,8 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
     -o-background-size: cover;
 	background-size: cover;
   display: block;
-  filter: blur(3px);
-  -webkit-filter: blur(3px);
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
   height: 100%;
   left: 0;
   position: fixed;
