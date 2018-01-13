@@ -13,6 +13,7 @@ function saveSketch(filename) {
     json.conpoints = [];
     json.diodes = [];
     json.customs = [];
+    json.labels = [];
     for (let i = 0; i < gates.length; i++) {
         json.gates.push(gates[i].getData());
     }
@@ -33,6 +34,9 @@ function saveSketch(filename) {
     }
     for (let i = 0; i < diodes.length; i++) {
         json.diodes.push(diodes[i].getData());
+    }
+    for (let i = 0; i < labels.length; i++) {
+        json.labels.push(labels[i].getData());
     }
     for (let i = 0; i < customs.length; i++) {
         if (customs[i].visible) {
@@ -59,6 +63,7 @@ function load(loadData) {
     conpoints = [];
     customs = [];
     diodes = [];
+    labels = [];
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
@@ -119,6 +124,12 @@ function load(loadData) {
     }
     for (let i = 0; i < loadData.diodes.length; i++) {
         diodes[i] = new Diode(JSON.parse(loadData.diodes[i].x), JSON.parse(loadData.diodes[i].y), false, transform);
+    }
+    if (loadData.hasOwnProperty("labels")) {
+        for (let i = 0; i < loadData.labels.length; i++) {
+            labels[i] = new Label(JSON.parse(loadData.labels[i].x), JSON.parse(loadData.labels[i].y), loadData.labels[i].txt, transform);
+            console.log('Loading label #' + i + ' with text ' + loadData.labels[i].txt);
+        }
     }
     for (let i = 0; i < loadData.customs.length; i++) {
         customs[i] = new CustomSketch(JSON.parse(loadData.customs[i].x), JSON.parse(loadData.customs[i].y), transform, JSON.parse(loadData.customs[i].direction), JSON.parse(loadData.customs[i].filename));

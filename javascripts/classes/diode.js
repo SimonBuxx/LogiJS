@@ -34,7 +34,7 @@ function Diode(x, y, state, transform) {
     };
 
     /*
-        Sets the coordinates of the output, rounded to grid size
+        Sets the coordinates of the diode, rounded to grid size
     */
     this.setCoordinates = function (nx, ny) {
         this.x = Math.round(nx / GRIDSIZE) * GRIDSIZE;

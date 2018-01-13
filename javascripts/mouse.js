@@ -79,6 +79,12 @@ function mouseMoved() {
                     cursor(HAND);
                 }
             }
+            for (const elem of labels) {
+                if (elem.mouseOver()) {
+                    hand = true;
+                    cursor(HAND);
+                }
+            }
         } else {
             for (const elem of inputs) {
                 if (elem.mouseOver() && !elem.getIsClock()) {
@@ -173,6 +179,9 @@ function mouseClicked() {
                             toggleDiode();
                         }
                         break;
+                    case 'label':
+                        addLabel();
+                        break;
                     case 'none':
                         break;
                     default:
@@ -241,6 +250,19 @@ function mouseClicked() {
                                 outputs[i].mark(true);
                                 propOutput = i;
                                 showOutputPropMenu();
+                            }
+                        }
+                    }
+                    for (let i = 0; i < labels.length; i++) {
+                        if (Boolean(labels[i].mouseOver()) && propMode) {
+                            noValidTarget = false;
+                            if (propLabel !== i) {
+                                if (propLabel >= 0) {
+                                    labels[propLabel].mark(false);
+                                }
+                                labels[i].mark(true);
+                                propLabel = i;
+                                showLabelPropMenu();
                             }
                         }
                     }
@@ -324,6 +346,10 @@ function mouseReleased() {
                         var diodeNumber = mouseOverDiode();
                         if (diodeNumber >= 0) {
                             deleteDiode(diodeNumber);
+                        }
+                        var labelNumber = mouseOverLabel();
+                        if (labelNumber >= 0) {
+                            deleteLabel(labelNumber);
                         }
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
@@ -428,9 +454,18 @@ function mouseOverDiode() {
     return -1;
 }
 
+function mouseOverLabel() {
+    for (var i = labels.length - 1; i >= 0; i--) {
+        if (labels[i].mouseOver()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 //Checks if the mouse hovers over the GUI(true) or the grid(false)
 function mouseOverGUI() {
-    if (propInput + propOutput < -1) {
+    if (propInput + propOutput + propLabel < -2) {
         return (mouseY < 0) || (mouseX < 0);
     } else {
         return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 180);

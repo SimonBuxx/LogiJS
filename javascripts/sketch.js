@@ -11,6 +11,7 @@ let conpoints = [];
 let diodes = [];
 let customs = [];
 let wires = [];
+let labels = [];
 
 let pwstartX = 0;
 let pwstartY = 0;
@@ -57,7 +58,7 @@ let syncFramerate = true;
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton, labelButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
 let updater, sfcheckbox;
@@ -66,6 +67,7 @@ let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
 let propInput = -1;
 let propOutput = -1;
+let propLabel = -1;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
@@ -316,9 +318,15 @@ function setup() { // jshint ignore:line
     //diodeButton.elt.style.width = "117px";
     diodeButton.elt.className = "button";
 
+    // Adds labels
+    labelButton = createButton('Label');
+    labelButton.position(863, 4);
+    labelButton.mousePressed(labelButtonClicked);
+    labelButton.elt.className = "button";
+
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(863, 4);
+    propertiesButton.position(930, 4);
     propertiesButton.mousePressed(function () {
         ctrlMode = 'none';
         startPropMode();
@@ -336,7 +344,7 @@ function setup() { // jshint ignore:line
     });
     sfcheckbox.elt.style.color = 'white';
     sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(958, 4);
+    sfcheckbox.position(1026, 4);
     sfcheckbox.elt.className = 'checkbox';
 
     // Upper right
@@ -416,6 +424,12 @@ function setup() { // jshint ignore:line
     labelAdvanced.position(39, 250);
     labelAdvanced.elt.className = 'label';
 
+    labelTextBox = createInput('');
+    labelTextBox.hide();
+    labelTextBox.size(115, 20);
+    labelTextBox.position(windowWidth - 125, 60);
+    labelTextBox.input(labelChanged);
+
     frameRate(60); // Caps the framerate at 60 FPS
 
     let loadfile = urlParam('sketch');
@@ -461,6 +475,7 @@ function newClicked() {
     conpoints = [];
     customs = [];
     diodes = [];
+    labels = [];
     actionUndo = [];
     actionRedo = [];
     transform = new Transformation(0, 0, 1);
@@ -483,6 +498,10 @@ function wiringClicked() {
 
 function deleteClicked() {
     ctrlMode = 'delete';
+}
+
+function labelChanged() {
+    labels[propLabel].alterText(labelTextBox.value());
 }
 
 // Toggles the simulation
@@ -552,6 +571,11 @@ function diodeClicked() {
 function startSelect() {
     ctrlMode = 'select';
     selectMode = 'none';
+}
+
+function labelButtonClicked() {
+    ctrlMode = 'addObject';
+    addType = 'label';
 }
 
 /*
@@ -656,6 +680,21 @@ function addInput() {
     reDraw();
 }
 
+function addLabel() {
+    for (var i = 0; i < labels.length; i++) {
+        if ((labels[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2) &&
+            (labels[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)) {
+            return;
+        }
+    }
+    var newLabel = new Label(mouseX, mouseY, 'New label', transform);
+    newLabel.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    newLabel.updateClickBox();
+    labels.push(newLabel);
+    pushUndoAction('addLabel', [], newLabel);
+    reDraw();
+}
+
 /*
     Adds a diode as a special type of ConPoints in the diodes array
     Caution: Also deletes diodes if existing => More like toggleDiode()
@@ -710,10 +749,18 @@ function deleteInput(inputNumber) {
 }
 
 /*
-    Deletes the given diode (under development)
+    Deletes the given diode
 */
 function deleteDiode(diodeNumber) {
     pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+    reDraw();
+}
+
+/*
+    Deletes the given label
+*/
+function deleteLabel(labelNumber) {
+    pushUndoAction('delLabel', [], labels.splice(labelNumber, 1));
     reDraw();
 }
 
@@ -831,7 +878,7 @@ function disableButtons(status) {
     fulladdButton.elt.disabled = status;
     ascustomButton.elt.disabled = status;
     propertiesButton.elt.disabled = status;
-
+    labelButton.elt.disabled = status;
     if (status) {
         labelBasic.elt.style.color = '#969696';
         labelAdvanced.elt.style.color = '#969696';
@@ -968,6 +1015,9 @@ function reDraw() {
     for (const elem of diodes) {
         elem.show();
     }
+    for (const elem of labels) {
+        elem.show();
+    }
 
     // Draw the GUI at the end
     scale(1 / transform.zoom);
@@ -989,7 +1039,7 @@ function reDraw() {
     strokeWeight(0);
     //rect(0, 0, windowWidth, 30);
     //rect(0, 30, 150, windowHeight);
-    if (propMode && propInput + propOutput >= -1) {
+    if (propMode && propInput + propOutput + propLabel >= -2) {
         rect(window.width - 130, 0, 130, 60);
     }
 }
@@ -1027,10 +1077,7 @@ function startPropMode() {
 
 function stopPropMode() {
     propMode = false;
-    inputIsTopBox.hide();
-    inputCaptionBox.hide();
-    outputCaptionBox.hide();
-    outputColorBox.hide();
+    hidePropMenu();
     unmarkAllTargets();
 }
 
@@ -1041,6 +1088,7 @@ function hidePropMenu() {
     inputCaptionBox.hide();
     outputCaptionBox.hide();
     outputColorBox.hide();
+    labelTextBox.hide();
 }
 
 function unmarkAllTargets() {
@@ -1050,19 +1098,45 @@ function unmarkAllTargets() {
     for (const elem of outputs) {
         elem.mark(false);
     }
+    for (const elem of labels) {
+        elem.mark(false);
+    }
     propInput = -1;
     propOutput = -1;
+    propLabel = -1;
 }
 
 function showInputPropMenu() {
     outputCaptionBox.hide();
     outputColorBox.hide();
+    labelTextBox.hide();
     inputIsTopBox.show();
     inputCaptionBox.show();
     inputIsTopBox.checked(inputs[propInput].isTop);
     inputCaptionBox.value(inputs[propInput].lbl);
     propOutput = -1;
+    propLabel = -1;
     for (const elem of outputs) {
+        elem.mark(false);
+    }
+    for (const elem of labels) {
+        elem.mark(false);
+    }
+}
+
+function showLabelPropMenu() {
+    outputCaptionBox.hide();
+    outputColorBox.hide();
+    inputIsTopBox.hide();
+    inputCaptionBox.hide();
+    labelTextBox.show();
+    labelTextBox.value(labels[propLabel].txt);
+    propOutput = -1;
+    propInput = -1;
+    for (const elem of outputs) {
+        elem.mark(false);
+    }
+    for (const elem of inputs) {
         elem.mark(false);
     }
 }
@@ -1070,6 +1144,7 @@ function showInputPropMenu() {
 function showOutputPropMenu() {
     inputIsTopBox.hide();
     inputCaptionBox.hide();
+    labelTextBox.hide();
     outputCaptionBox.show();
     outputColorBox.show();
     switch (outputs[propOutput].colr) {
@@ -1089,7 +1164,11 @@ function showOutputPropMenu() {
     }
     outputCaptionBox.value(outputs[propOutput].lbl);
     propInput = -1;
+    propLabel = -1;
     for (const elem of inputs) {
+        elem.mark(false);
+    }
+    for (const elem of labels) {
         elem.mark(false);
     }
 }

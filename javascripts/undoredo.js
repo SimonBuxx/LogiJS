@@ -30,6 +30,10 @@ function undo() {
                 diodes.pop();
                 doConpoints();
                 break;
+            case 'addLabel':
+                actionRedo.push(act);
+                labels.pop();
+                break;
             case 'invGIP':
                 gates[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
                 actionRedo.push(act);
@@ -69,6 +73,10 @@ function undo() {
                 diodes.push(act.actionObject[0]);
                 actionRedo.push(act);
                 doConpoints();
+                break;
+            case 'delLabel':
+                labels.push(act.actionObject[0]);
+                actionRedo.push(act);
                 break;
             case 'reWire':
                 actionRedo.push(new Action('reWire', 0, [segments.slice(0), conpoints.slice(0)]));
@@ -115,6 +123,10 @@ function redo() {
                 actionUndo.push(act);
                 doConpoints();
                 break;
+            case 'addLabel':
+                labels.push(act.actionObject);
+                actionUndo.push(act);
+                break;
             case 'delGate':
                 gates.pop();
                 actionUndo.push(act);
@@ -140,6 +152,10 @@ function redo() {
                 diodes.pop();
                 actionUndo.push(act[0]);
                 doConpoints();
+                break;
+            case 'delLabel':
+                labels.pop();
+                actionUndo.push(act[0]);
                 break;
             case 'invGIP':
                 gates[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);

@@ -1,5 +1,5 @@
 {
-  "caption": "DEMUX",
+  "caption": "1-demux",
   "gates": [
     {
       "x": "990",
@@ -116,5 +116,6 @@
     }
   ],
   "diodes": [],
-  "customs": []
+  "customs": [],
+  "labels": []
 }

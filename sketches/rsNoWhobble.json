@@ -1,5 +1,5 @@
 {
-  "caption": "RS-FF",
+  "caption": "rsNoWhobble",
   "gates": [
     {
       "x": "690",
@@ -313,5 +313,47 @@
     }
   ],
   "diodes": [],
-  "customs": []
+  "customs": [],
+  "labels": [
+    {
+      "x": "1080",
+      "y": "150",
+      "txt": "Q"
+    },
+    {
+      "x": "1080",
+      "y": "480",
+      "txt": "not Q"
+    },
+    {
+      "x": "480",
+      "y": "270",
+      "txt": "S"
+    },
+    {
+      "x": "480",
+      "y": "420",
+      "txt": "R"
+    },
+    {
+      "x": "240",
+      "y": "90",
+      "txt": "This is an RS-Flipflop"
+    },
+    {
+      "x": "240",
+      "y": "120",
+      "txt": "with extra logic to prevent"
+    },
+    {
+      "x": "240",
+      "y": "150",
+      "txt": "unstable states"
+    },
+    {
+      "x": "1290",
+      "y": "750",
+      "txt": "© 2018 Simon Buchholz"
+    }
+  ]
 }
