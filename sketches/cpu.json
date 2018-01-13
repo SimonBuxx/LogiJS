@@ -827,7 +827,7 @@
       "direction": "1",
       "filename": "\"4BitDec.json\"",
       "outputsInv": "[]",
-      "inputsInv": "[]"
+      "inputsInv": "[null,null,false]"
     },
     {
       "x": "720",
@@ -844,6 +844,63 @@
       "filename": "\"2BitCounter.json\"",
       "outputsInv": "[]",
       "inputsInv": "[]"
+    }
+  ],
+  "labels": [
+    {
+      "x": "510",
+      "y": "840",
+      "txt": "This is a little CPU"
+    },
+    {
+      "x": "510",
+      "y": "870",
+      "txt": "with two 4-bit registers,"
+    },
+    {
+      "x": "510",
+      "y": "930",
+      "txt": "The commands are:"
+    },
+    {
+      "x": "510",
+      "y": "960",
+      "txt": "000 - NOP"
+    },
+    {
+      "x": "510",
+      "y": "990",
+      "txt": "001 - OR"
+    },
+    {
+      "x": "510",
+      "y": "1020",
+      "txt": "010 - AND"
+    },
+    {
+      "x": "510",
+      "y": "1050",
+      "txt": "011 - ADD"
+    },
+    {
+      "x": "510",
+      "y": "1080",
+      "txt": "100 - SUB"
+    },
+    {
+      "x": "510",
+      "y": "1110",
+      "txt": "101 - XOR"
+    },
+    {
+      "x": "510",
+      "y": "1140",
+      "txt": "110 - LDI A"
+    },
+    {
+      "x": "510",
+      "y": "1170",
+      "txt": "111 - LDI B"
     }
   ]
 }

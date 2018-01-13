@@ -66,9 +66,7 @@ function Label(x, y, txt, transform) {
     this.show = function () {
         noStroke();
         fill(130);
-        rect(this.x - 15, this.y - 15, this.w, this.h + 10);
-        fill(0, 0, 0, 100);
-        //rect(this.x - 15, this.y - 15, this.w, this.h + 10);
+        rect(this.x - 15, this.y - 14, this.w, this.h + 12);
         fill(0);
         rect(this.x - 5, this.y - 5, 10, 10);
         textSize(20);
