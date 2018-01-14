@@ -45,11 +45,19 @@ let selectStartY = 0;
 let selectEndX = 0;
 let selectEndY = 0;
 
+let sDragX1 = 0; // Variables for
+let sDragX2 = 0; // selection dragging
+let sDragY1 = 0;
+let sDragY2 = 0;
+
 // Variables for dragging
 let lastX = 0; var lastY = 0; // last mouse position
 let dragSpeed = 1.5;
 
 let transform = new Transformation(0, 0, 1);
+
+let sClickBox = new ClickBox(0, 0, 0, 0, transform);
+let showSClickBox = false;
 
 let simRunning = false;
 let propMode = false;
@@ -775,6 +783,7 @@ function startSimulation() {
     simButton.elt.innerHTML = 'Stop'; // Alter the caption of the Start/Stop buttons
     disableButtons(true);
     stopPropMode();
+    showSClickBox = false;
 
     // Tell all customs that the simulation started
     for (let i = 0; i < customs.length; i++) {
@@ -1018,6 +1027,10 @@ function reDraw() {
         elem.show();
     }
 
+    if (showSClickBox) {
+        sClickBox.markClickBox();
+    }
+
     // Draw the GUI at the end
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Handle the offset from dragging and zooming
@@ -1103,6 +1116,33 @@ function unmarkAllTargets() {
     propInput = -1;
     propOutput = -1;
     propLabel = -1;
+}
+
+function unmarkAll() {
+    for (const elem of inputs) {
+        elem.mark(false);
+    }
+    for (const elem of outputs) {
+        elem.mark(false);
+    }
+    for (const elem of labels) {
+        elem.mark(false);
+    }
+    for (const elem of gates) {
+        elem.marked = false;
+    }
+    for (const elem of customs) {
+        elem.marked = false;
+    }
+    for (const elem of conpoints) {
+        elem.marked = false;
+    }
+    for (const elem of diodes) {
+        elem.marked = false;
+    }
+    for (const elem of wires) {
+        elem.marked = false;
+    }
 }
 
 function showInputPropMenu() {
@@ -1278,6 +1318,10 @@ function keyPressed() {
 }
 
 function handleSelection(x1, y1, x2, y2) {
+    sClickBox.updatePosition(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+    sClickBox.updateSize(x2 - x1, y2 - y1);
+    sClickBox.setTransform(transform);
+    showSClickBox = true;
     selection = [];
     for (let i = 0; i < gates.length; i++) {
         if (gates[i].x >= x1 && gates[i].x <= x2 && gates[i].y >= y1 && gates[i].y <= y2) {
@@ -1330,9 +1374,6 @@ function handleSelection(x1, y1, x2, y2) {
             selection.push(wires[i]);
         }
     }
-    for (let i = 0; i < selection.length; i++) {
-        selection[i].alterPosition(30, 30);
-    }
     segments = [];
     for (let i = 0; i < wires.length; i++) {
         if (wires[i].startX === wires[i].endX) {
@@ -1350,6 +1391,14 @@ function handleSelection(x1, y1, x2, y2) {
     //findLines();
 }
 
+function moveSelection() {
+    let deltaX = sDragX2 - sDragX1;
+    let deltaY = sDragY2 - sDragY1;
+    sClickBox.updatePosition(sClickBox.x + deltaX, sClickBox.y + deltaY);
+    for (let i = 0; i < selection.length; i++) {
+        selection[i].alterPosition(deltaX, deltaY);
+    }
+}
 
 /*
     Handles the dragging of the canvas

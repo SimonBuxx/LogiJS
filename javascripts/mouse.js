@@ -58,6 +58,10 @@ function mouseWheel(event) {
             }
         }
     }
+    if (ctrlMode === 'select' && sClickBox.mouseOver()) {
+        hand = true;
+        cursor(MOVE);
+    }
     if (!hand) {
         cursor(ARROW);
     }
@@ -94,6 +98,10 @@ function mouseMoved() {
             }
         }
     }
+    if (ctrlMode === 'select' && sClickBox.mouseOver()) {
+        hand = true;
+        cursor(MOVE);
+    }
     if (!hand) {
         cursor(ARROW);
     }
@@ -103,6 +111,9 @@ function mouseMoved() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
+    if (ctrlMode !== 'select') {
+        showSClickBox = false;
+    }
     if (!simRunning && !mouseOverGUI() && (mouseButton === LEFT)) {
         switch (ctrlMode) {
             case 'addWire':
@@ -128,6 +139,7 @@ function mousePressed() {
                         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectMode = 'start';
+                        reDraw();
                         break;
                     case 'end':
                         selectStartX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
@@ -135,6 +147,15 @@ function mousePressed() {
                         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectMode = 'start';
+                        if (sClickBox.mouseOver()) {
+                            // Start dragging
+                            selectMode = 'startDrag';
+                            sDragX1 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
+                            sDragY1 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+                        } else {
+                            showSClickBox = false;
+                            unmarkAll();
+                        }
                         break;
                     default:
                         break;
@@ -375,10 +396,21 @@ function mouseReleased() {
                 case 'none':
                     break;
                 case 'select':
-                    // Selection done, give the rectangle coordinates and dimensions to the handling function
-                    handleSelection(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
-                    Math.max(selectStartX, selectEndX), Math.max(selectStartY, selectEndY));
-                    selectMode = 'end';
+                    switch (selectMode) {
+                        case 'start':
+                            // Selection done, give the rectangle coordinates and dimensions to the handling function
+                            handleSelection(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
+                                Math.max(selectStartX, selectEndX), Math.max(selectStartY, selectEndY));
+                            selectMode = 'end';
+                            break;
+                        case 'startDrag':
+                            sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
+                            sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+                            moveSelection();
+                            selectMode = 'end';
+                            break;
+                        default:
+                    }
                     break;
                 default:
                     console.log('Control Mode not supported!');
