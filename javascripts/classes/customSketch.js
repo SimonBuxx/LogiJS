@@ -38,6 +38,9 @@ function CustomSketch(x, y, transform, direction, file) {
     this.inputClickBoxes = [];
     this.outputClickBoxes = [];
 
+    this.marked = false;
+    this.markColor = color(50, 100, 50);
+
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 
     this.loaded = false; // True, if the sketch has been loaded from file
@@ -645,7 +648,11 @@ CustomSketch.prototype.show = function () {
     let x1, x2, y1, y2;
     stroke(0);
     strokeWeight(3);
-    fill(255);
+    if (this.marked) {
+        fill(this.markColor);
+    } else {
+        fill(255);
+    }
 
     // Draw the body
     if (this.tops === 0) {

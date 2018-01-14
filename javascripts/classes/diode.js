@@ -14,6 +14,9 @@ function Diode(x, y, state, transform) {
 
     this.clickBox = new ClickBox(this.x, this.y, 20, 20, this.transform);
 
+    this.marked = false;
+    this.markColor = color(50, 100, 50);
+
     this.getData = function () {
         var data = {};
         data.x = JSON.stringify(this.x);
@@ -70,15 +73,15 @@ function Diode(x, y, state, transform) {
     };
 
     this.show = function () {
-        if (this.state) {
-            strokeWeight(0);
+        strokeWeight(0);
+        if (this.marked) {
+            fill(this.markColor);
+        } else if (this.state) {
             fill(this.highColor);
-            triangle(this.x, this.y + 10, this.x - 10, this.y - 1, this.x + 10, this.y - 1);
         } else {
-            strokeWeight(0);
             fill(this.lowColor);
-            triangle(this.x, this.y + 10, this.x - 10, this.y - 1, this.x + 10, this.y - 1);
         }
+        triangle(this.x, this.y + 10, this.x - 10, this.y - 1, this.x + 10, this.y - 1);
         //this.clickBox.markClickBox();
     };
 }

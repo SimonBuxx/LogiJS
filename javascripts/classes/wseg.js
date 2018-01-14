@@ -23,6 +23,9 @@ function WSeg(dir, startX, startY, state, transform) {
     this.start = null; // In-/Output number
     this.end = null;  // One segment can have at max two Outputs or two Inputs connected
 
+    this.marked = false;
+    this.markColor = color(50, 100, 50);
+
     this.changePosition(startX, startY); // Initialize the start point
     //this.getEndPoint(); // Initialize the end point, depending on direction // Put in again if bugs occur (should be fine)
 }
@@ -95,6 +98,9 @@ WSeg.prototype.show = function (del) {
         stroke(this.deleteColor);
     } else {
         stroke(this.lowColor);
+    }
+    if (this.marked) {
+        stroke(this.markColor);
     }
     line(this.startX, this.startY, this.endX, this.endY);
 };

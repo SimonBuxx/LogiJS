@@ -23,9 +23,6 @@ function saveSketch(filename) {
     for (let i = 0; i < inputs.length; i++) {
         json.inputs.push(inputs[i].getData());
     }
-    /*for (let i = 0; i < segments.length; i++) {
-        json.segments.push(segments[i].getData());
-    }*/
     for (let i = 0; i < wires.length; i++) {
         json.wires.push(wires[i].getWireData());
     }

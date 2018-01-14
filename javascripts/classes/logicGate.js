@@ -33,6 +33,9 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.inputClickBoxes = [];
     this.outputClickBoxes = [];
 
+    this.marked = false;
+    this.markColor = color(50, 100, 50);   // Color for marked gates
+
     if (this.direction % 2 === 0) {
         this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, this.transform);
     } else {
@@ -268,8 +271,13 @@ LogicGate.prototype.pointInOutput = function (n, px, py) {
 */
 LogicGate.prototype.show = function () {
     stroke(0);
+    if (this.marked) {
+        fill(this.markColor);
+    } else {
+        fill(255);
+    }
     strokeWeight(3);
-    fill(255);
+    //fill(255);
 
     if (this.direction % 2 === 0) {
         rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); //  Draw body

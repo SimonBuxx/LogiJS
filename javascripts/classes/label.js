@@ -8,6 +8,7 @@ function Label(x, y, txt, transform) {
     this.transform = transform;
     this.txt = txt; // Label text
     this.marked = false;
+    this.markColor = color(50, 100, 50);
 
     this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 
@@ -36,7 +37,7 @@ function Label(x, y, txt, transform) {
 
     this.setCoordinates(x, y);
 
-    this.mark = function(marked) {
+    this.mark = function (marked) {
         this.marked = marked;
     };
 
@@ -46,7 +47,7 @@ function Label(x, y, txt, transform) {
         this.clickBox.setTransform(this.transform);
     };
 
-    this.alterText = function(txt) {
+    this.alterText = function (txt) {
         this.txt = txt;
         textSize(20);
         this.w = Math.ceil((textWidth(this.txt) + 10) / 30 + 1) * 30;
@@ -65,7 +66,11 @@ function Label(x, y, txt, transform) {
 
     this.show = function () {
         noStroke();
-        fill(130);
+        if (this.marked) {
+            fill(this.markColor);
+        } else {
+            fill(130);
+        }
         rect(this.x - 15, this.y - 14, this.w, this.h + 12);
         fill(0);
         rect(this.x - 5, this.y - 5, 10, 10);

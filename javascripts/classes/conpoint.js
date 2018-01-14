@@ -8,6 +8,9 @@ function ConPoint(x, y, state, g) {
 
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
+
+    this.marked = false;
+    this.markColor = color(50, 100, 50);
 }
 
 ConPoint.prototype.getData = function () {
@@ -23,7 +26,9 @@ ConPoint.prototype.setGroup = function (ng) {
 
 ConPoint.prototype.show = function () {
     strokeWeight(0);
-    if (this.state) {
+    if (this.marked) {
+        fill(this.markColor);
+    } else if (this.state) {
         fill(this.highColor);
     } else {
         fill(this.lowColor);

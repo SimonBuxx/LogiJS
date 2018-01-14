@@ -13,6 +13,9 @@ function Group() {
     this.state = false;
     this.diodeState = false;
     this.dstateset = false;
+
+    this.marked = false;
+    this.markColor = color(50, 100, 50);
 }
 
 Group.prototype.addSegment = function (s) {
@@ -91,6 +94,7 @@ Group.prototype.updateAll = function () {
 
 Group.prototype.show = function () {
     for (let i = 0; i < this.segments.length; i++) {
+        this.segments.marked = this.marked;
         this.segments[i].show(false);
     }
 };
