@@ -1326,17 +1326,21 @@ function handleSelection(x1, y1, x2, y2) {
             selection.push(labels[i]);
         }
     }
-    for (let i = 0; i < segments.length; i++) {
-        if (segments[i].startX >= x1 && segments[i].endX <= x2 && segments[i].startY >= y1 && segments[i].endY <= y2) {
-            segments[i].marked = true;
-            selection.push(segments[i]);
+    for (let i = 0; i < wires.length; i++) {
+        console.log(wires[i].startX, wires[i].endX, wires[i].startY, wires[i].endY);
+        console.log(x1, x2, y1, y2);
+        if ((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) && (wires[i].startX <= x2 || x2 >= wires[i].endX)) && (wires[i].startY >= y1 && wires[i].endY <= y2)) {
+            wires[i].marked = true;
+            selection.push(wires[i]);
+        } else if ((wires[i].direction === 1) && ((wires[i].startY >= y1 || y1 <= wires[i].endY) && (wires[i].startY <= y2 || y2 >= wires[i].endY)) && (wires[i].startX >= x1 && wires[i].endX <= x2)) {
+            wires[i].marked = true;
+            selection.push(wires[i]);
         }
     }
-    findLines();
-    for (let i = 0; i < selection.length; i++) {
+    /*for (let i = 0; i < selection.length; i++) {
         selection[i].alterPosition(30, 30);
-    }
-    findLines();
+    }*/
+    //findLines();
 }
 
 
