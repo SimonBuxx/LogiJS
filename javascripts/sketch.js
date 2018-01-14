@@ -1347,7 +1347,7 @@ function handleSelection(x1, y1, x2, y2) {
             }
         }
     }
-    findLines();
+    //findLines();
 }
 
 
