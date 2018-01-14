@@ -27,7 +27,6 @@ function WSeg(dir, startX, startY, state, transform) {
     this.markColor = color(50, 100, 50);
 
     this.changePosition(startX, startY); // Initialize the start point
-    //this.getEndPoint(); // Initialize the end point, depending on direction // Put in again if bugs occur (should be fine)
 }
 
 WSeg.prototype.getData = function () {
@@ -47,7 +46,16 @@ WSeg.prototype.getWireData = function () {
     return data;
 };
 
-WSeg.prototype.getEndPoint = function () {
+WSeg.prototype.alterPosition = function (x1, y1) {
+    this.endX +=  x1;
+    this.endY +=  y1;
+    this.startX += x1;
+    this.startY += y1;
+};
+
+WSeg.prototype.changePosition = function (newX, newY) {
+    this.startX = Math.round(newX / GRIDSIZE) * GRIDSIZE;
+    this.startY = Math.round(newY / GRIDSIZE) * GRIDSIZE;
     switch (this.direction) {
         case 0:
             this.endX = this.startX + GRIDSIZE;
@@ -60,12 +68,6 @@ WSeg.prototype.getEndPoint = function () {
         default:
             console.log('No valid direction given!');
     }
-};
-
-WSeg.prototype.changePosition = function (newX, newY) {
-    this.startX = Math.round(newX / GRIDSIZE) * GRIDSIZE;
-    this.startY = Math.round(newY / GRIDSIZE) * GRIDSIZE;
-    this.getEndPoint();
 };
 
 WSeg.prototype.setState = function (s) {

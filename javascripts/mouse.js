@@ -147,7 +147,7 @@ function mousePressed() {
 
 function mouseClicked() {
     reDraw();
-    if (ctrlMode !== 'none') {
+    if (ctrlMode !== 'none' && selectMode === 'none') {
         stopPropMode();
     }
     if (!simRunning && !mouseOverGUI()) {
@@ -376,7 +376,8 @@ function mouseReleased() {
                     break;
                 case 'select':
                     // Selection done, give the rectangle coordinates and dimensions to the handling function
-                    handleSelection(selectStartX, selectStartY, mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+                    handleSelection(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
+                    Math.max(selectStartX, selectEndX), Math.max(selectStartY, selectEndY));
                     selectMode = 'end';
                     break;
                 default:

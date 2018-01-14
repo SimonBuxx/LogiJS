@@ -332,7 +332,9 @@ function findLines() {
             if (i !== j  && seg[i] !== null && seg[j] !== null) {
                 if (seg[i].direction === seg[j].direction) {
                     if (seg[i].endX === seg[j].startX && seg[i].endY === seg[j].startY) {
+                        let marked = (seg[i].marked || seg[j].marked);
                         let w = new WSeg(seg[i].direction, seg[i].startX, seg[i].startY, false, seg[i].transform);
+                        w.marked = marked;
                         if (seg[i].parentStart !== null) {
                             w.setStart(seg[i].startIO, seg[i].parentStart, seg[i].start);
                         }

@@ -125,7 +125,6 @@ function load(loadData) {
     if (loadData.hasOwnProperty("labels")) {
         for (let i = 0; i < loadData.labels.length; i++) {
             labels[i] = new Label(JSON.parse(loadData.labels[i].x), JSON.parse(loadData.labels[i].y), loadData.labels[i].txt, transform);
-            console.log('Loading label #' + i + ' with text ' + loadData.labels[i].txt);
         }
     }
     for (let i = 0; i < loadData.customs.length; i++) {

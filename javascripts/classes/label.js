@@ -41,6 +41,11 @@ function Label(x, y, txt, transform) {
         this.marked = marked;
     };
 
+    this.alterPosition = function (x1, y1) {
+        this.x += x1;
+        this.y += y1;
+    };
+
     this.updateClickBox = function () {
         this.clickBox.updatePosition(this.x + this.w / 2 - 15, this.y + this.h / 2 - 10);
         this.clickBox.updateSize(this.w, this.h + 10);
@@ -51,7 +56,6 @@ function Label(x, y, txt, transform) {
         this.txt = txt;
         textSize(20);
         this.w = Math.ceil((textWidth(this.txt) + 10) / 30 + 1) * 30;
-        console.log(textWidth(this.txt));
         this.updateClickBox();
     };
 

@@ -56,7 +56,7 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
         this.outputsInv.push(false); // Set all outputs to not inverted
         this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every output
     }
-    
+
     this.setCoordinates(this.x, this.y);
     this.setDirection(direction); // Set the direction at the beginning
     this.updateClickBoxes();
@@ -124,6 +124,11 @@ LogicGate.prototype.setDirection = function (dir) {
         this.gClickBox.updatePosition(this.x + GRIDSIZE / 2, this.y);
         this.gClickBox.updateSize(this.w - GRIDSIZE, this.h - GRIDSIZE);
     }
+};
+
+LogicGate.prototype.alterPosition = function (x1, y1) {
+    this.x += x1;
+    this.y += y1;
 };
 
 /*
@@ -294,7 +299,10 @@ LogicGate.prototype.show = function () {
     // Draw inputs
     for (let i = 1; i <= this.inputCount; i++) {
         // Draw inputs
-        if (this.inputs[i - 1] === true) {
+        if (this.marked) {
+            stroke(this.markColor);
+            strokeWeight(3);
+        } else if (this.inputs[i - 1] === true) {
             stroke(this.highColor);
             strokeWeight(4);
         } else {
@@ -349,7 +357,10 @@ LogicGate.prototype.show = function () {
     // Draw outputs
     for (let i = 1; i <= this.outputCount; i++) {
         // Draw outputs
-        if (this.outputs[i - 1] === true) {
+        if (this.marked) {
+            stroke(this.markColor);
+            strokeWeight(3);
+        } else if (this.outputs[i - 1] === true) {
             stroke(this.highColor);
             strokeWeight(4);
         } else {

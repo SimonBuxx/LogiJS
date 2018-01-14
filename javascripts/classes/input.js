@@ -28,6 +28,11 @@ function Input(x, y, transform) {
     this.updateClickBox();
 }
 
+Input.prototype.alterPosition = function (x1, y1) {
+    this.x += x1;
+    this.y += y1;
+};
+
 Input.prototype.getData = function () {
     var data = {};
     data.x = JSON.stringify(this.x);

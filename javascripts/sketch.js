@@ -13,6 +13,8 @@ let customs = [];
 let wires = [];
 let labels = [];
 
+let selection = [];
+
 let pwstartX = 0;
 let pwstartY = 0;
 
@@ -1281,8 +1283,60 @@ function keyPressed() {
 }
 
 function handleSelection(x1, y1, x2, y2) {
-    // TODO: Implement selecting all elements in the given rectangle
-    //       Giving options to delete or reposition the elements
+    selection = [];
+    for (let i = 0; i < gates.length; i++) {
+        if (gates[i].x >= x1 && gates[i].x <= x2 && gates[i].y >= y1 && gates[i].y <= y2) {
+            gates[i].marked = true;
+            selection.push(gates[i]);
+        }
+    }
+    for (let i = 0; i < customs.length; i++) {
+        if (customs[i].x >= x1 && customs[i].x <= x2 && customs[i].y >= y1 && customs[i].y <= y2) {
+            customs[i].marked = true;
+            selection.push(customs[i]);
+        }
+    }
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].x >= x1 && inputs[i].x <= x2 && inputs[i].y >= y1 && inputs[i].y <= y2) {
+            inputs[i].marked = true;
+            selection.push(inputs[i]);
+        }
+    }
+    for (let i = 0; i < outputs.length; i++) {
+        if (outputs[i].x >= x1 && outputs[i].x <= x2 && outputs[i].y >= y1 && outputs[i].y <= y2) {
+            outputs[i].marked = true;
+            selection.push(outputs[i]);
+        }
+    }
+    for (let i = 0; i < conpoints.length; i++) {
+        if (conpoints[i].x >= x1 && conpoints[i].x <= x2 && conpoints[i].y >= y1 && conpoints[i].y <= y2) {
+            conpoints[i].marked = true;
+            selection.push(conpoints[i]);
+        }
+    }
+    for (let i = 0; i < diodes.length; i++) {
+        if (diodes[i].x >= x1 && diodes[i].x <= x2 && diodes[i].y >= y1 && diodes[i].y <= y2) {
+            diodes[i].marked = true;
+            selection.push(diodes[i]);
+        }
+    }
+    for (let i = 0; i < labels.length; i++) {
+        if (labels[i].x >= x1 && labels[i].x <= x2 && labels[i].y >= y1 && labels[i].y <= y2) {
+            labels[i].marked = true;
+            selection.push(labels[i]);
+        }
+    }
+    for (let i = 0; i < segments.length; i++) {
+        if (segments[i].startX >= x1 && segments[i].endX <= x2 && segments[i].startY >= y1 && segments[i].endY <= y2) {
+            segments[i].marked = true;
+            selection.push(segments[i]);
+        }
+    }
+    findLines();
+    for (let i = 0; i < selection.length; i++) {
+        selection[i].alterPosition(30, 30);
+    }
+    findLines();
 }
 
 

@@ -13,9 +13,6 @@ function Group() {
     this.state = false;
     this.diodeState = false;
     this.dstateset = false;
-
-    this.marked = false;
-    this.markColor = color(50, 100, 50);
 }
 
 Group.prototype.addSegment = function (s) {
@@ -94,7 +91,6 @@ Group.prototype.updateAll = function () {
 
 Group.prototype.show = function () {
     for (let i = 0; i < this.segments.length; i++) {
-        this.segments.marked = this.marked;
         this.segments[i].show(false);
     }
 };
@@ -109,7 +105,7 @@ Group.prototype.findLines = function () {
     let seg = this.segments.slice(0);
     for (let i = 0; i < seg.length; i++) {
         for (let j = 0; j < seg.length; j++) {
-            if (i !== j  && seg[i] !== null && seg[j] !== null) {
+            if (i !== j && seg[i] !== null && seg[j] !== null) {
                 if (seg[i].direction === seg[j].direction) {
                     if (seg[i].endX === seg[j].startX && seg[i].endY === seg[j].startY) {
                         let w = new WSeg(seg[i].direction, seg[i].startX, seg[i].startY, false, seg[i].transform);

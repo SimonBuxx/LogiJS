@@ -20,6 +20,11 @@ ConPoint.prototype.getData = function () {
     return data;
 };
 
+ConPoint.prototype.alterPosition = function (x1, y1) {
+    this.x += x1;
+    this.y += y1;
+};
+
 ConPoint.prototype.setGroup = function (ng) {
     this.group = ng;
 };

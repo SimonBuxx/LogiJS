@@ -24,6 +24,11 @@ function Diode(x, y, state, transform) {
         return data;
     };
 
+    this.alterPosition = function (x1, y1) {
+        this.x += x1;
+        this.y += y1;
+    };
+
     /*
         Sets the state of the diode
     */

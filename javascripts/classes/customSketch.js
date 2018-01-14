@@ -55,7 +55,6 @@ CustomSketch.prototype.setInvertions = function (ipinv, opinv) {
     this.outputsInv = opinv;
 };
 
-// TODO: Fit getData() for custom objects
 CustomSketch.prototype.getData = function () {
     let data = {};
     data.x = JSON.stringify(this.x);
@@ -116,6 +115,11 @@ CustomSketch.prototype.setInput = function (i, s) {
         // Error
         console.log('Input ' + i + ' doesn\'t exist!');
     }
+};
+
+CustomSketch.prototype.alterPosition = function (x1, y1) {
+    this.x += x1;
+    this.y += y1;
 };
 
 /*
@@ -676,7 +680,10 @@ CustomSketch.prototype.show = function () {
     // Draw inputs
     for (let i = 1; i <= this.inputCount; i++) {
         // Draw inputs
-        if (this.inputs[i - 1] === true) {
+        if (this.marked) {
+            stroke(this.markColor);
+            strokeWeight(3);
+        } else if (this.inputs[i - 1] === true) {
             stroke(this.highColor);
             strokeWeight(4);
         } else {
@@ -834,7 +841,10 @@ CustomSketch.prototype.show = function () {
     // Draw outputs
     for (let i = 1; i <= this.outputCount; i++) {
         // Draw outputs
-        if (this.outputs[i - 1] === true) {
+        if (this.marked) {
+            stroke(this.markColor);
+            strokeWeight(3);
+        } else if (this.outputs[i - 1] === true) {
             stroke(this.highColor);
             strokeWeight(4);
         } else {
