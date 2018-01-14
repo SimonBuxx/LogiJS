@@ -64,13 +64,10 @@ function Label(x, y, txt, transform) {
     };
 
     this.show = function () {
-        noStroke();
         fill(130);
         rect(this.x - 15, this.y - 14, this.w, this.h + 12);
         fill(0);
         rect(this.x - 5, this.y - 5, 10, 10);
-        textSize(20);
-        textAlign(LEFT, TOP);
         text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
         //this.clickBox.markClickBox();
     };

@@ -1015,6 +1015,8 @@ function reDraw() {
     for (const elem of diodes) {
         elem.show();
     }
+    textSize(20);
+    textAlign(LEFT, TOP);
     for (const elem of labels) {
         elem.show();
     }
@@ -1024,17 +1026,17 @@ function reDraw() {
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Handle the offset from dragging and zooming
     fill(0);
     textSize(15); // Set text size to 15
-    textAlign(LEFT, CENTER); // Align left for zoom label etc.
+    //textAlign(LEFT, TOP); // Align left for zoom label etc.
     stroke(0); // Set font parameters for zoom label etc.
     strokeWeight(1);
 
     // GUI Area
-    text('Zoom: ' + Math.round(transform.zoom * 100) + '%', 10, 15); // Show zoom label
+    text('Zoom: ' + Math.round(transform.zoom * 100) + '%', 10, 5); // Show zoom label
     //text('mouseX: ' + mouseX, 160, 60);
     //text('mouseY: ' + mouseY, 160, 80);
     //text('mouseX trans.: ' + Math.round((mouseX / transform.zoom - transform.dx)), 160, 100);
     //text('mouseY trans.: ' + Math.round((mouseY / transform.zoom - transform.dy)), 160, 120);
-    text('FPS: ' + Math.round(frameRate()), 10, 35);
+    text('FPS: ' + Math.round(frameRate()), 10, 25);
 
     strokeWeight(0);
     //rect(0, 0, windowWidth, 30);
