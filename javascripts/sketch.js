@@ -1286,7 +1286,7 @@ function handleSelection(x1, y1, x2, y2) {
         }
     }
     for (let i = 0; i < customs.length; i++) {
-        if (customs[i].x >= x1 && customs[i].x <= x2 && customs[i].y >= y1 && customs[i].y <= y2) {
+        if (customs[i].visible && (customs[i].x >= x1 && customs[i].x <= x2 && customs[i].y >= y1 && customs[i].y <= y2)) {
             customs[i].marked = true;
             selection.push(customs[i]);
         }
@@ -1330,9 +1330,9 @@ function handleSelection(x1, y1, x2, y2) {
             selection.push(wires[i]);
         }
     }
-    /*for (let i = 0; i < selection.length; i++) {
+    for (let i = 0; i < selection.length; i++) {
         selection[i].alterPosition(30, 30);
-    }*/
+    }
     segments = [];
     for (let i = 0; i < wires.length; i++) {
         if (wires[i].startX === wires[i].endX) {
