@@ -120,6 +120,9 @@ CustomSketch.prototype.setInput = function (i, s) {
 CustomSketch.prototype.alterPosition = function (x1, y1) {
     this.x += x1;
     this.y += y1;
+    this.reSize();
+    this.setCoordinates(this.x, this.y);
+    this.reSize();
 };
 
 /*

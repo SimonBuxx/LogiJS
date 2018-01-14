@@ -31,6 +31,7 @@ function Input(x, y, transform) {
 Input.prototype.alterPosition = function (x1, y1) {
     this.x += x1;
     this.y += y1;
+    this.updateClickBox();
 };
 
 Input.prototype.getData = function () {

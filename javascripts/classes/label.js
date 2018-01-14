@@ -44,6 +44,7 @@ function Label(x, y, txt, transform) {
     this.alterPosition = function (x1, y1) {
         this.x += x1;
         this.y += y1;
+        this.updateClickBox();
     };
 
     this.updateClickBox = function () {

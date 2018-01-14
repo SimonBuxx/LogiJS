@@ -787,14 +787,9 @@ function startSimulation() {
     parseGroups();
 
     // Reduce the displayed wires for performance
-    let counter = 0;
     for (let i = 0; i < groups.length; i++) {
         groups[i].findLines();
-        counter += groups[i].segments.length;
     }
-    // Display the wire counts in the debug menu
-    //console.log('Before: ' + segments.length + ' segments displayed');
-    //console.log('Now: ' + counter + ' segments displayed');
 
     simRunning = true;
     propMode = false;
@@ -1327,8 +1322,6 @@ function handleSelection(x1, y1, x2, y2) {
         }
     }
     for (let i = 0; i < wires.length; i++) {
-        console.log(wires[i].startX, wires[i].endX, wires[i].startY, wires[i].endY);
-        console.log(x1, x2, y1, y2);
         if ((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) && (wires[i].startX <= x2 || x2 >= wires[i].endX)) && (wires[i].startY >= y1 && wires[i].endY <= y2)) {
             wires[i].marked = true;
             selection.push(wires[i]);
@@ -1340,7 +1333,21 @@ function handleSelection(x1, y1, x2, y2) {
     /*for (let i = 0; i < selection.length; i++) {
         selection[i].alterPosition(30, 30);
     }*/
-    //findLines();
+    segments = [];
+    for (let i = 0; i < wires.length; i++) {
+        if (wires[i].startX === wires[i].endX) {
+            // Vertical wire, split in n vertical segments
+            for (let j = 0; j < (wires[i].endY - wires[i].startY) / GRIDSIZE; j++) {
+                segments.push(new WSeg(1, wires[i].startX, (wires[i].startY + j * GRIDSIZE), false, transform));
+            }
+        } else if (wires[i].startY === wires[i].endY) {
+            // Horizontal wire, split in n horizontal segments
+            for (let j = 0; j < (wires[i].endX - wires[i].startX) / GRIDSIZE; j++) {
+                segments.push(new WSeg(0, wires[i].startX + j * GRIDSIZE, wires[i].startY, false, transform));
+            }
+        }
+    }
+    findLines();
 }
 
 
