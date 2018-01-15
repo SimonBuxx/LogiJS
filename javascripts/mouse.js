@@ -149,9 +149,9 @@ function mousePressed() {
                         selectMode = 'start';
                         if (sClickBox.mouseOver()) {
                             // Start dragging
-                            selectMode = 'startDrag';
                             sDragX1 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
                             sDragY1 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+                            selectMode = 'startDrag';
                         } else {
                             showSClickBox = false;
                             unmarkAll();
@@ -167,7 +167,6 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    reDraw();
     if (ctrlMode !== 'none' && selectMode === 'none') {
         stopPropMode();
     }

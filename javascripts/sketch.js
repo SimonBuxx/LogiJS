@@ -495,6 +495,8 @@ function newClicked() {
     startPropMode(); // when new is clicked while it's open
     ctrlMode = 'none'; // Clear the control mode
     wireMode = 'none';
+    selectMode = 'none';
+    showSClickBox = false;
     document.title = 'New Sketch - LogiJS';
     textInput.value('New Sketch');
     findLines();
