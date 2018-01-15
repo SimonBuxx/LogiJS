@@ -1393,13 +1393,17 @@ function handleSelection(x1, y1, x2, y2) {
     //findLines();
 }
 
-function moveSelection() {
-    let deltaX = sDragX2 - sDragX1;
-    let deltaY = sDragY2 - sDragY1;
-    sClickBox.updatePosition(sClickBox.x + deltaX, sClickBox.y + deltaY);
+function moveSelection(dx, dy) {
+    //let deltaX = sDragX2 - sDragX1;
+    //let deltaY = sDragY2 - sDragY1;
+    //sClickBox.updatePosition(sClickBox.x + deltaX, sClickBox.y + deltaY);
+    sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
     for (let i = 0; i < selection.length; i++) {
-        selection[i].alterPosition(deltaX, deltaY);
+        selection[i].alterPosition(dx, dy);
     }
+}
+
+function finishSelection() {
     segments = [];
     for (let i = 0; i < wires.length; i++) {
         if (wires[i].startX === wires[i].endX) {
