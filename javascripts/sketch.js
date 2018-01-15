@@ -466,12 +466,16 @@ function customClicked(filename) {
 
 // Triggered when a sketch should be saved
 function saveClicked() {
+    selectMode = 'none';
+    showSClickBox = false;
     saveSketch(textInput.value() + '.json');
     document.title = textInput.value() + ' - LogiJS';
 }
 
 // Triggered when a sketch should be loaded
 function loadClicked() {
+    selectMode = 'none';
+    showSClickBox = false;
     loadSketch(textInput.value() + '.json');
     reDraw();
 }
@@ -1398,9 +1402,11 @@ function moveSelection(dx, dy) {
     //let deltaX = sDragX2 - sDragX1;
     //let deltaY = sDragY2 - sDragY1;
     //sClickBox.updatePosition(sClickBox.x + deltaX, sClickBox.y + deltaY);
-    sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
-    for (let i = 0; i < selection.length; i++) {
-        selection[i].alterPosition(dx, dy);
+    if ((sClickBox.x - sClickBox.w / 2 > GRIDSIZE  || dx >= 0) && (sClickBox.y - sClickBox.h / 2 > GRIDSIZE || dy >= 0)) {
+        sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
+        for (let i = 0; i < selection.length; i++) {
+            selection[i].alterPosition(dx, dy);
+        }
     }
 }
 
