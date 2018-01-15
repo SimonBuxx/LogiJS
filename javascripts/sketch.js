@@ -1394,6 +1394,7 @@ function handleSelection(x1, y1, x2, y2) {
 }
 
 function moveSelection(dx, dy) {
+    console.log('move selection');
     //let deltaX = sDragX2 - sDragX1;
     //let deltaY = sDragY2 - sDragY1;
     //sClickBox.updatePosition(sClickBox.x + deltaX, sClickBox.y + deltaY);
