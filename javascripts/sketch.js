@@ -24,7 +24,7 @@ let groups = [];
 
 let gridSize = GRIDSIZE; // Size of the grid
 
-let ctrlMode = 'none'; // Possible modes: none, delete, addObject, addWire, drag, select ...
+let ctrlMode = 'none'; // Possible modes: none, delete, addObject, addWire, select ...
 let addType = 'none'; // Possilbe modes: none, gate, output, input, ...
 let gateType = 'none'; // Possible modes: and, or, xor, ...
 let wireMode = 'none'; // Possible modes: none, preview, delete ...
@@ -338,7 +338,7 @@ function setup() { // jshint ignore:line
     propertiesButton = createButton('Properties');
     propertiesButton.position(930, 4);
     propertiesButton.mousePressed(function () {
-        ctrlMode = 'none';
+        setControlMode('none');
         startPropMode();
     });
     propertiesButton.elt.className = "button";
@@ -459,7 +459,7 @@ function urlParam(name, w) {
 }
 
 function customClicked(filename) {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'custom';
     custFile = filename;
 }
@@ -497,7 +497,7 @@ function newClicked() {
     endSimulation(); // End the simulation, if started
     stopPropMode(); // Restarting PropMode so that the menu hides
     startPropMode(); // when new is clicked while it's open
-    ctrlMode = 'none'; // Clear the control mode
+    setControlMode('none'); // Clear the control mode
     wireMode = 'none';
     selectMode = 'none';
     showSClickBox = false;
@@ -508,12 +508,54 @@ function newClicked() {
 }
 
 function wiringClicked() {
-    ctrlMode = 'addWire';
+    setControlMode('addWire');
     wireMode = 'none';
 }
 
 function deleteClicked() {
-    ctrlMode = 'delete';
+    // TODO: Implement deleting of the selection (with one undo/redo event)
+    //if (ctrlMode === 'select' && selectMode === 'end') {
+        /*for (let i = 0; i < selection.length; i++) {
+            for (let j = gates.length - 1; j >= 0; j--) {
+                if (JSON.stringify(gates[j]) === JSON.stringify(selection[i])) {
+                    deleteGate(j);
+                }
+            }
+            for (let j = customs.length - 1; j >= 0; j--) {
+                if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
+                    deleteCustom(j);
+                }
+            }
+            for (let j = diodes.length - 1; j >= 0; j--) {
+                if (JSON.stringify(diodes[j]) === JSON.stringify(selection[i])) {
+                    deleteDiode(j);
+                }
+            }
+            for (let j = inputs.length - 1; j >= 0; j--) {
+                if (JSON.stringify(inputs[j]) === JSON.stringify(selection[i])) {
+                    inputs.splice(j, 1);
+                }
+            }
+            for (let j = labels.length - 1; j >= 0; j--) {
+                if (JSON.stringify(labels[j]) === JSON.stringify(selection[i])) {
+                    labels.splice(j, 1);
+                }
+            }
+            for (let j = outputs.length - 1; j >= 0; j--) {
+                if (JSON.stringify(outputs[j]) === JSON.stringify(selection[i])) {
+                    outputs.splice(j, 1);
+                }
+            }
+            for (let j = wires.length - 1; j >= 0; j--) {
+                if (JSON.stringify(wires[j]) === JSON.stringify(selection[i])) {
+                    wires.splice(j, 1);
+                }
+            }
+            finishSelection();*/
+    //    }
+    //} else {
+        setControlMode('delete');
+    //}
 }
 
 function labelChanged() {
@@ -535,19 +577,19 @@ function simClicked() {
 */
 
 function andClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'gate';
     gateType = 'and';
 }
 
 function orClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'gate';
     gateType = 'or';
 }
 
 function xorClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'gate';
     gateType = 'xor';
 }
@@ -555,43 +597,56 @@ function xorClicked() {
 function inputClicked() {
     newIsButton = false;
     newIsClock = false;
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'input';
 }
 
 function buttonClicked() {
     newIsButton = true;
     newIsClock = false;
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'input';
 }
 
 function clockClicked() {
     newIsButton = false;
     newIsClock = true;
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'input';
 }
 
 function outputClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'output';
 }
 
 function diodeClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'diode';
 }
 
 // Starts the selection process
 function startSelect() {
-    ctrlMode = 'select';
+    setControlMode('select');
     selectMode = 'none';
 }
 
 function labelButtonClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'label';
+}
+
+function setControlMode(mode) {
+    if (ctrlMode === 'select') {
+        selectMode = 'start';
+        unmarkAll();
+        showSClickBox = false;
+    }
+    if (mode === 'addObject' || mode === 'addWire' || mode === 'select' || mode === 'delete' || mode === 'none') {
+        ctrlMode = mode;
+    } else {
+        console.log('Control mode not supported!');
+    }
 }
 
 /*
@@ -823,7 +878,7 @@ function startSimulation() {
 */
 function endSimulation() {
     simButton.elt.innerHTML = 'Start';
-    ctrlMode = 'none';
+    setControlMode('none');
     startPropMode();
     disableButtons(false);
     // Enable the Undo/Redo buttons depending on if there
@@ -1090,7 +1145,7 @@ function wirePoints(x, y, j) {
 
 function startPropMode() {
     propMode = true;
-    ctrlMode = 'none';
+    setControlMode('none');
 }
 
 function stopPropMode() {
@@ -1253,7 +1308,7 @@ function keyReleased() {
     if (textInput.elt !== document.activeElement) {
         switch (keyCode) {
             case 17: //ctrl	
-                ctrlMode = 'none';
+                setControlMode('none');
                 break;
             default:
 
@@ -1267,7 +1322,7 @@ function keyPressed() {
     if (textInput.elt !== document.activeElement) {
         switch (keyCode) {
             case ESCAPE:
-                ctrlMode = 'none';
+                setControlMode('none');
                 startPropMode();
                 break;
             case 17: //ctrl	
@@ -1398,11 +1453,7 @@ function handleSelection(x1, y1, x2, y2) {
 }
 
 function moveSelection(dx, dy) {
-    console.log('move selection');
-    //let deltaX = sDragX2 - sDragX1;
-    //let deltaY = sDragY2 - sDragY1;
-    //sClickBox.updatePosition(sClickBox.x + deltaX, sClickBox.y + deltaY);
-    if ((sClickBox.x - sClickBox.w / 2 > GRIDSIZE  || dx >= 0) && (sClickBox.y - sClickBox.h / 2 > GRIDSIZE || dy >= 0)) {
+    if ((sClickBox.x - sClickBox.w / 2 > GRIDSIZE || dx >= 0) && (sClickBox.y - sClickBox.h / 2 > GRIDSIZE || dy >= 0)) {
         sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
         for (let i = 0; i < selection.length; i++) {
             selection[i].alterPosition(dx, dy);

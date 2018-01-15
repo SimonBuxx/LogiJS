@@ -58,7 +58,7 @@ function mouseWheel(event) {
             }
         }
     }
-    if (ctrlMode === 'select' && sClickBox.mouseOver()) {
+    if (ctrlMode === 'select' && sClickBox.mouseOver() && showSClickBox) {
         hand = true;
         cursor(MOVE);
     }
@@ -98,7 +98,7 @@ function mouseMoved() {
             }
         }
     }
-    if (ctrlMode === 'select' && sClickBox.mouseOver()) {
+    if (ctrlMode === 'select' && sClickBox.mouseOver() && showSClickBox) {
         hand = true;
         cursor(MOVE);
     }
@@ -167,10 +167,7 @@ function mousePressed() {
                             sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
                             selectMode = 'drag';
                         } else {
-                            showSClickBox = false;
-                            unmarkAll();
-                            ctrlMode = 'none';
-                            selectMode = 'start';
+                            setControlMode('none');
                         }
                         break;
                     default:
