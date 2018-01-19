@@ -359,7 +359,8 @@ function setup() { // jshint ignore:line
 
     // Upper right
     // Input field for the file name
-    textInput = createInput('New Sketch');
+    textInput = createInput('');
+    textInput.attribute('placeholder','New Sketch');
     textInput.size(200, 15);
     textInput.position(windowWidth - textInput.width - 203, 4);
 
