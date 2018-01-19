@@ -87,8 +87,10 @@ let cnv; // Canvas variable
 */
 function setup() { // jshint ignore:line
     // Creates the canvas in full window size
-    cnv = createCanvas(windowWidth - 150, windowHeight - 30);
-    cnv.position(150, 30);
+    cnv = createCanvas(windowWidth - 150, windowHeight - 60);
+    //cnv.position(250, 150);
+    cnv.style('margin-top','3.5em');
+    cnv.style('margin-left','9.5em');
 
     // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -263,7 +265,12 @@ function setup() { // jshint ignore:line
 
     //Upper left
     // Activates the wiring mode
-    wireButton = createButton('Wiring');
+    wireButton = createButton('');
+    wireButton.style('background-image','url(Wiring.svg)');
+    wireButton.style('background-size','3em');
+    wireButton.style('background-repeat','no-repeat');
+    wireButton.style('height','3em');
+    wireButton.style('width','2em');
     wireButton.position(153, 4);
     wireButton.mousePressed(wiringClicked);
     //wireButton.elt.style.width = "117px";
@@ -361,7 +368,7 @@ function setup() { // jshint ignore:line
     // Input field for the file name
     textInput = createInput('');
     textInput.attribute('placeholder','New Sketch');
-    textInput.size(200, 15);
+    textInput.size(150, 15);
     textInput.position(windowWidth - textInput.width - 203, 4);
 
     // Clears the canvas and resets the view
