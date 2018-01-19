@@ -269,11 +269,13 @@ function setup() { // jshint ignore:line
     wireButton.style('background-image','url(Wiring.svg)');
     wireButton.style('background-size','3em');
     wireButton.style('background-repeat','no-repeat');
+    wireButton.style('background-position','center');
     wireButton.style('height','3em');
     wireButton.style('width','2em');
-    wireButton.position(153, 4);
+    wireButton.position(0, 0);
+    wireButton.style('margin-left','10.15em');
+    wireButton.style('margin-top','0.45em');
     wireButton.mousePressed(wiringClicked);
-    //wireButton.elt.style.width = "117px";
     wireButton.elt.className = "button";
 
     // Activates the delete mode (objects and wires)
