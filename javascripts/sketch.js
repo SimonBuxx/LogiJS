@@ -279,8 +279,12 @@ function setup() { // jshint ignore:line
     wireButton.elt.className = "button";
     wireButton.mouseOver(() => {
         wiringLabel = createP('Wiring');
-        wiringLabel.style('position','absolute');
         wiringLabel.position(mouseX,mouseY);
+        wiringLabel.style('margin-left','7em');
+        wiringLabel.style('margin-top','3.9em');
+        wiringLabel.style('color','white');
+        wiringLabel.style('');
+        wiringLabel.style('background-color','black');
     });
     wireButton.mouseOut(() => {
         wiringLabel.remove();
@@ -311,23 +315,37 @@ function setup() { // jshint ignore:line
     // Starts and stops the simulation
     simButton = createButton('Start');
     simButton.elt.style.width = '34px';
-    simButton.position(299, 4);
+    simButton.position(0, 0);
+    simButton.style('margin-left','17.5em');
+    simButton.style('margin-top','0.45em');
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
+    simButton.mouseOver(() => {
+        simHoverLabel = createP('Start');
+        simHoverLabel.style('color','blue');
+        simHoverLabel.position(mouseX,mouseY);
+    });
+    simButton.mouseOut(() => {
+        simHoverLabel.remove();
+    });
 
     // Adds text before the Clockrate slider
     crText = createP('Clock rate: ');
     crText.elt.style.color = 'white';
     crText.elt.style.fontFamily = 'Arial';
     crText.elt.style.margin = 0;
-    crText.position(362, 5);
+    crText.position(0, 0);
+    crText.style('margin-left','17em');
+    crText.style('margin-top','2em');
     crText.elt.className = 'label';
 
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
-    clockspeedSlider.position(446, 4);
+    clockspeedSlider.position(0, 0);
     clockspeedSlider.style('width', '80px');
     clockspeedSlider.style('margin', '0px');
+    clockspeedSlider.style('margin-left','22.5em');
+    clockspeedSlider.style('margin-top','1.9em');
     clockspeedSlider.elt.className = 'slider';
 
     // Undos the last action
