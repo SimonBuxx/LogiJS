@@ -283,8 +283,11 @@ function setup() { // jshint ignore:line
         wiringLabel.style('margin-left','7em');
         wiringLabel.style('margin-top','3.9em');
         wiringLabel.style('color','white');
-        wiringLabel.style('');
-        wiringLabel.style('background-color','black');
+        wiringLabel.style('padding-top','0.2em');
+        wiringLabel.style('padding-right','0.5em');
+        wiringLabel.style('padding-bottom','0.2em');
+        wiringLabel.style('padding-left','0.5em');
+        wiringLabel.style('background-color','#71777c');
     });
     wireButton.mouseOut(() => {
         wiringLabel.remove();
