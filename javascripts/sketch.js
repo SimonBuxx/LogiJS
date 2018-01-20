@@ -274,7 +274,7 @@ function setup() { // jshint ignore:line
     wireButton.style('width','2em');
     wireButton.position(0, 0);
     wireButton.style('margin-left','10.17em');
-    wireButton.style('margin-top','0.45em');
+    wireButton.style('margin-top','0.35em');
     wireButton.mousePressed(wiringClicked);
     wireButton.elt.className = "button";
     wireButton.mouseOver(() => {
@@ -303,7 +303,7 @@ function setup() { // jshint ignore:line
     deleteButton.style('width','2em');
     deleteButton.position(0, 0);
     deleteButton.style('margin-left','13.8em');
-    deleteButton.style('margin-top','0.45em');
+    deleteButton.style('margin-top','0.35em');
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
     deleteButton.mouseOver(() => {
@@ -320,7 +320,7 @@ function setup() { // jshint ignore:line
     simButton.elt.style.width = '34px';
     simButton.position(0, 0);
     simButton.style('margin-left','17.5em');
-    simButton.style('margin-top','0.45em');
+    simButton.style('margin-top','0.35em');
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
     simButton.mouseOver(() => {
