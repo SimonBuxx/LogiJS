@@ -503,7 +503,8 @@ function newClicked() {
     selectMode = 'none';
     showSClickBox = false;
     document.title = 'New Sketch - LogiJS';
-    textInput.value('New Sketch');
+    textInput.value('');
+    textInput.attribute('placeholder','New Sketch');
     findLines();
     reDraw();
 }
