@@ -278,19 +278,11 @@ function setup() { // jshint ignore:line
     wireButton.mousePressed(wiringClicked);
     wireButton.elt.className = "button";
     wireButton.mouseOver(() => {
-        wiringLabel = createP('Wiring');
-        wiringLabel.position(mouseX,mouseY);
-        wiringLabel.style('margin-left','7em');
-        wiringLabel.style('margin-top','3.9em');
-        wiringLabel.style('color','white');
-        wiringLabel.style('padding-top','0.2em');
-        wiringLabel.style('padding-right','0.5em');
-        wiringLabel.style('padding-bottom','0.2em');
-        wiringLabel.style('padding-left','0.5em');
-        wiringLabel.style('background-color','#71777c');
-    });
+        wiringLabel = rect(mouseX,mouseY,mouseX+15,mouseY+15);
+        });
     wireButton.mouseOut(() => {
-        wiringLabel.remove();
+        ctrlMode = 'delete';
+        mouseClicked();
     });
 
     // Activates the delete mode (objects and wires)
