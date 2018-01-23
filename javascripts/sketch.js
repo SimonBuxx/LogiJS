@@ -1211,7 +1211,7 @@ function startPropMode() {
 function stopPropMode() {
     propMode = false;
     hidePropMenu();
-    unmarkAllTargets();
+    unmarkPropTargets();
 }
 
 // Hides the PropMenu without quitting the PropMode
@@ -1224,7 +1224,7 @@ function hidePropMenu() {
     labelTextBox.hide();
 }
 
-function unmarkAllTargets() {
+function unmarkPropTargets() {
     for (const elem of inputs) {
         elem.mark(false);
     }

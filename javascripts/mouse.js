@@ -301,7 +301,7 @@ function mouseClicked() {
                     }
                     if (noValidTarget && propMode) {
                         hidePropMenu();
-                        unmarkAllTargets();
+                        unmarkPropTargets();
                     }
                 }
                 break;
