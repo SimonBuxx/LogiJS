@@ -88,28 +88,6 @@
       "caption": "\"&\"",
       "outputsInv": "[false]",
       "inputsInv": "[true,false]"
-    },
-    {
-      "x": "960",
-      "y": "840",
-      "direction": "2",
-      "inputCount": "1",
-      "outputCount": "1",
-      "logicFunction": "\"and\"",
-      "caption": "\"&\"",
-      "outputsInv": "[false]",
-      "inputsInv": "[false]"
-    },
-    {
-      "x": "960",
-      "y": "780",
-      "direction": "0",
-      "inputCount": "1",
-      "outputCount": "1",
-      "logicFunction": "\"and\"",
-      "caption": "\"&\"",
-      "outputsInv": "[false]",
-      "inputsInv": "[false]"
     }
   ],
   "outputs": [
@@ -474,32 +452,8 @@
       "y2": "930"
     },
     {
-      "x1": "930",
-      "y1": "870",
-      "x2": "960",
-      "y2": "870"
-    },
-    {
-      "x1": "930",
-      "y1": "810",
-      "x2": "960",
-      "y2": "810"
-    },
-    {
-      "x1": "1020",
-      "y1": "870",
-      "x2": "1050",
-      "y2": "870"
-    },
-    {
       "x1": "1050",
       "y1": "780",
-      "x2": "1050",
-      "y2": "810"
-    },
-    {
-      "x1": "1020",
-      "y1": "810",
       "x2": "1050",
       "y2": "810"
     },
@@ -706,12 +660,6 @@
       "y1": "930",
       "x2": "810",
       "y2": "930"
-    },
-    {
-      "x1": "930",
-      "y1": "810",
-      "x2": "930",
-      "y2": "870"
     },
     {
       "x1": "1740",
@@ -1999,6 +1947,14 @@
       "y": "960",
       "direction": "0",
       "filename": "\"rsNoWhobble.json\"",
+      "outputsInv": "[]",
+      "inputsInv": "[]"
+    },
+    {
+      "x": "1020",
+      "y": "810",
+      "direction": "3",
+      "filename": "\"delay.json\"",
       "outputsInv": "[]",
       "inputsInv": "[]"
     }
