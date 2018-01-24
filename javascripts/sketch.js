@@ -277,6 +277,8 @@ function setup() { // jshint ignore:line
     wireButton.style('margin-top','0.35em');
     wireButton.mousePressed(wiringClicked);
     wireButton.elt.className = "button";
+    //  Mouse hover (code below) commented out for now 
+    /*
     wireButton.mouseOver(() => {
         wiringLabel = rect(mouseX,mouseY,mouseX+15,mouseY+15);
         });
@@ -284,6 +286,7 @@ function setup() { // jshint ignore:line
         ctrlMode = 'delete';
         mouseClicked();
     });
+    */
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('');
@@ -298,7 +301,8 @@ function setup() { // jshint ignore:line
     deleteButton.style('margin-top','0.35em');
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
-    deleteButton.mouseOver(() => {
+    // Mouse hover (code below) commented out for now
+    /*deleteButton.mouseOver(() => {
         deleteHoverLabel = createP('Delete');
         deleteHoverLabel.style('position','absolute');
         deleteHoverLabel.position(mouseX,mouseY);
@@ -306,6 +310,7 @@ function setup() { // jshint ignore:line
     deleteButton.mouseOut(() => {
         deleteHoverLabel.remove();
     });
+    */
 
     // Starts and stops the simulation
     simButton = createButton('Start');
