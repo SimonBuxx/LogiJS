@@ -39,7 +39,7 @@ function CustomSketch(x, y, transform, direction, file) {
     this.outputClickBoxes = [];
 
     this.marked = false;
-    this.markColor = color(50, 100, 50);
+    this.markColor = color(180, 200, 50);
 
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 

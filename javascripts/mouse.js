@@ -511,7 +511,7 @@ function mouseOverGUI() {
     if (propInput + propOutput + propLabel < -2) {
         return (mouseY < 0) || (mouseX < 0);
     } else {
-        return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 180);
+        return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 200);
 
     }
 }

@@ -24,7 +24,7 @@ function WSeg(dir, startX, startY, state, transform) {
     this.end = null;  // One segment can have at max two Outputs or two Inputs connected
 
     this.marked = false;
-    this.markColor = color(50, 100, 50);
+    this.markColor = color(180, 200, 50);
 
     this.changePosition(startX, startY); // Initialize the start point
 }

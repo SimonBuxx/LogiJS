@@ -393,26 +393,27 @@ function setup() { // jshint ignore:line
     */
     inputIsTopBox = createCheckbox('Set to top', false);
     inputIsTopBox.hide();
-    inputIsTopBox.position(windowWidth - 110, 35);
+    inputIsTopBox.position(windowWidth - 180, 35);
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.style.color = 'white';
     inputIsTopBox.elt.style.fontFamily = 'Arial';
 
     inputCaptionBox = createInput('');
     inputCaptionBox.hide();
-    inputCaptionBox.size(50, 15);
-    inputCaptionBox.position(windowWidth - 75, 60);
+    inputCaptionBox.size(160, 15);
+    inputCaptionBox.position(windowWidth - 180, 60);
     inputCaptionBox.input(newInputCaption);
 
     outputCaptionBox = createInput('');
     outputCaptionBox.hide();
-    outputCaptionBox.size(50, 15);
-    outputCaptionBox.position(windowWidth - 75, 60);
+    outputCaptionBox.size(160, 15);
+    outputCaptionBox.position(windowWidth - 180, 60);
     outputCaptionBox.input(newOutputCaption);
 
     outputColorBox = createSelect();
     outputColorBox.hide();
-    outputColorBox.position(windowWidth - 80, 35);
+    outputColorBox.position(windowWidth - 180, 35);
+    outputColorBox.size(168, 20);
     outputColorBox.option('red');
     outputColorBox.option('yellow');
     outputColorBox.option('green');
@@ -437,8 +438,8 @@ function setup() { // jshint ignore:line
 
     labelTextBox = createInput('');
     labelTextBox.hide();
-    labelTextBox.size(115, 20);
-    labelTextBox.position(windowWidth - 125, 60);
+    labelTextBox.size(185, 20);
+    labelTextBox.position(windowWidth - 195, 45);
     labelTextBox.input(labelChanged);
 
     frameRate(60); // Caps the framerate at 60 FPS
@@ -1102,7 +1103,7 @@ function updateTick() {
     Redraws all items on the screen, translated and scaled
 */
 function reDraw() {
-    background(150);
+    background(130, 140, 150);
     scale(transform.zoom);
     drawGrid();
     translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
@@ -1163,17 +1164,13 @@ function reDraw() {
 
     // GUI Area
     text('Zoom: ' + Math.round(transform.zoom * 100) + '%', 10, 5); // Show zoom label
-    //text('mouseX: ' + mouseX, 160, 60);
-    //text('mouseY: ' + mouseY, 160, 80);
-    //text('mouseX trans.: ' + Math.round((mouseX / transform.zoom - transform.dx)), 160, 100);
-    //text('mouseY trans.: ' + Math.round((mouseY / transform.zoom - transform.dy)), 160, 120);
-    text('FPS: ' + Math.round(frameRate()), 10, 25);
+    textSize(12);
+    text(Math.round(frameRate()), window.width - 20, window.height - 20);
 
-    strokeWeight(0);
-    //rect(0, 0, windowWidth, 30);
-    //rect(0, 30, 150, windowHeight);
     if (propMode && propInput + propOutput + propLabel >= -2) {
-        rect(window.width - 130, 0, 130, 60);
+        strokeWeight(0);
+        fill(50);
+        rect(window.width - 200, -5, 205, 65, 5);
     }
 }
 
@@ -1530,7 +1527,7 @@ function handleDragging() {
     Draws the underlying grid on the canvas
 */
 function drawGrid() {
-    stroke(100);
+    stroke(115,125,135);
     strokeWeight(1);
     for (let i = Math.round(transform.dx); i < width / transform.zoom; i += GRIDSIZE) {
         line(i, 0, i, height / transform.zoom);
