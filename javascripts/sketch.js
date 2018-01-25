@@ -488,6 +488,8 @@ function newClicked() {
     clearActionStacks();
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
+    gateInputCount = 2;
+    gateDirection = 0;
     endSimulation(); // End the simulation, if started
     stopPropMode(); // Restarting PropMode so that the menu hides
     startPropMode(); // when new is clicked while it's open
