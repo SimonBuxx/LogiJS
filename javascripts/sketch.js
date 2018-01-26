@@ -313,8 +313,13 @@ function setup() { // jshint ignore:line
     */
 
     // Starts and stops the simulation
-    simButton = createButton('Start');
-    simButton.elt.style.width = '34px';
+    simButton = createButton('');
+    simButton.style('background-image','url(Start.svg)');
+    simButton.style('background-size','0.8em');
+    simButton.style('background-repeat','no-repeat');
+    simButton.style('background-position','center');
+    simButton.style('height','1.5em');
+    simButton.style('width','1em');
     simButton.position(0, 0);
     simButton.style('margin-left','17.5em');
     simButton.style('margin-top','0.35em');
