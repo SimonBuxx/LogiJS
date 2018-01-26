@@ -301,16 +301,25 @@ function setup() { // jshint ignore:line
     deleteButton.style('margin-top','0.35em');
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
-    // Mouse hover (code below) commented out for now
-    /*deleteButton.mouseOver(() => {
+    deleteButton.mouseOver(() => {
+        deleteButton.style('background-image','url(Delete_hover.svg)');
+        deleteButton.style('background-size','3em');
+        deleteButton.style('background-repeat','no-repeat');
+        deleteButton.style('background-position','center');
+        /*
         deleteHoverLabel = createP('Delete');
         deleteHoverLabel.style('position','absolute');
         deleteHoverLabel.position(mouseX,mouseY);
+        */
     });
     deleteButton.mouseOut(() => {
-        deleteHoverLabel.remove();
+        deleteButton.style('background-image','url(Delete.svg)');
+    deleteButton.style('background-size','3em');
+    deleteButton.style('background-repeat','no-repeat');
+    deleteButton.style('background-position','center');
+        //deleteHoverLabel.remove();
     });
-    */
+    
 
     // Starts and stops the simulation
     simButton = createButton('');
@@ -356,8 +365,16 @@ function setup() { // jshint ignore:line
     clockspeedSlider.elt.className = 'slider';
 
     // Undos the last action
-    undoButton = createButton('Undo');
-    undoButton.position(532, 4);
+    undoButton = createButton('');
+    undoButton.style('background-image','url(Undo_red.svg)');
+    undoButton.style('background-size','0.8em');
+    undoButton.style('background-repeat','no-repeat');
+    undoButton.style('background-position','center');
+    undoButton.style('height','1.5em');
+    undoButton.style('width','1em');
+    undoButton.position(0, 0);
+    undoButton.style('margin-left','20.5em');
+    undoButton.style('margin-top','0.35em');
     undoButton.mousePressed(() => {
         undo();
     });
