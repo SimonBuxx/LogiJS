@@ -53,8 +53,8 @@ body {
 }
 
 .button:hover {
-    border: 1px solid #c83232;
-    background: #c83232;
+    border: 1px solid #812525;
+    background: #721a1a;
     -webkit-box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3);
     box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3);
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
