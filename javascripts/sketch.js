@@ -325,7 +325,8 @@ function setup() { // jshint ignore:line
     simButton.style('margin-top','0.35em');
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
-    simButton.mouseOver(() => {
+    // Mouse hover (code below) commented out for now
+    /*simButton.mouseOver(() => {
         simHoverLabel = createP('Start');
         simHoverLabel.style('color','blue');
         simHoverLabel.position(mouseX,mouseY);
@@ -333,7 +334,8 @@ function setup() { // jshint ignore:line
     simButton.mouseOut(() => {
         simHoverLabel.remove();
     });
-
+    */
+    
     // Adds text before the Clockrate slider
     crText = createP('Clock rate: ');
     crText.elt.style.color = 'white';
