@@ -49,7 +49,8 @@ let sDragX1 = 0; // Variables for
 let sDragX2 = 0; // selection dragging
 let sDragY1 = 0;
 let sDragY2 = 0;
-let initX, initY;
+let initX = -1;
+let initY = -1;
 
 // Variables for dragging
 let lastX = 0; var lastY = 0; // last mouse position

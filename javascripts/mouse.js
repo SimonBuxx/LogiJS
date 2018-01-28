@@ -165,12 +165,17 @@ function mousePressed() {
                             sDragY1 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
                             sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
                             sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
-                            initX = sDragX1;
-                            initY = sDragY1;
+                            if (initX === -1 || initY === -1) {
+                                initX = sDragX1;
+                                initY = sDragY1;
+                            }
+                            console.log(initX, initY);
                             selectMode = 'drag';
                         } else {
                             setControlMode('none');
-                            pushSelectAction(sDragX2 - sDragX1, sDragY2 - sDragY1);
+                            pushSelectAction(sDragX2 - initX, sDragY2 - initY);
+                            initX = -1;
+                            initY = -1;
                         }
                         break;
                     default:
