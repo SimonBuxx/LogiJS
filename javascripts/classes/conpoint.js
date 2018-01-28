@@ -38,5 +38,5 @@ ConPoint.prototype.show = function () {
     } else {
         fill(this.lowColor);
     }
-    rect(this.x - 3, this.y - 3, 6, 6);
+    rect(this.x - 3, this.y - 3, 7, 7);
 };
