@@ -274,7 +274,7 @@ function setup() { // jshint ignore:line
     wireButton.style('width','2em');
     wireButton.position(0, 0);
     wireButton.style('margin-left','10.17em');
-    wireButton.style('margin-top','0.35em');
+    wireButton.style('margin-top','0.25em');
     wireButton.mousePressed(wiringClicked);
     wireButton.elt.className = "button";
     //  Mouse hover (code below) commented out for now 
@@ -298,7 +298,7 @@ function setup() { // jshint ignore:line
     deleteButton.style('width','2em');
     deleteButton.position(0, 0);
     deleteButton.style('margin-left','13.8em');
-    deleteButton.style('margin-top','0.35em');
+    deleteButton.style('margin-top','0.25em');
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
     deleteButton.mouseOver(() => {
@@ -330,8 +330,8 @@ function setup() { // jshint ignore:line
     simButton.style('height','1.5em');
     simButton.style('width','1em');
     simButton.position(0, 0);
-    simButton.style('margin-left','17.5em');
-    simButton.style('margin-top','0.35em');
+    simButton.style('margin-left','17.7em');
+    simButton.style('margin-top','0.25em');
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
     // Mouse hover (code below) commented out for now
@@ -358,32 +358,52 @@ function setup() { // jshint ignore:line
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
     clockspeedSlider.position(0, 0);
-    clockspeedSlider.style('width', '80px');
+    clockspeedSlider.style('width', '6em');
     clockspeedSlider.style('margin', '0px');
     clockspeedSlider.style('margin-left','22.5em');
-    clockspeedSlider.style('margin-top','1.9em');
+    clockspeedSlider.style('margin-top','2.1em');
     clockspeedSlider.elt.className = 'slider';
 
     // Undos the last action
     undoButton = createButton('');
     undoButton.style('background-image','url(Undo_red.svg)');
-    undoButton.style('background-size','0.8em');
+    undoButton.style('background-size','1em');
     undoButton.style('background-repeat','no-repeat');
     undoButton.style('background-position','center');
     undoButton.style('height','1.5em');
     undoButton.style('width','1em');
     undoButton.position(0, 0);
-    undoButton.style('margin-left','20.5em');
-    undoButton.style('margin-top','0.35em');
+    undoButton.style('margin-left','20.7em');
+    undoButton.style('margin-top','0.25em');
+    undoButton.mouseOver(() => {
+        undoButton.style('background-image','url(Undo_black.svg)');
+        undoButton.style('background-size','1em');
+        undoButton.style('background-repeat','no-repeat');
+        undoButton.style('background-position','center');
+    });
+    undoButton.mouseOut(() => {
+        undoButton.style('background-image','url(Undo_red.svg)');
+        undoButton.style('background-size','1em');
+        undoButton.style('background-repeat','no-repeat');
+        undoButton.style('background-position','center');
+    });
     undoButton.mousePressed(() => {
         undo();
     });
     undoButton.elt.disabled = true;
-    undoButton.elt.className = "button";
 
+    undoButton.elt.className = "button";
     // Redos the last action
-    redoButton = createButton('Redo');
-    redoButton.position(598, 4);
+    redoButton = createButton('');
+    redoButton.style('background-image','url(Redo_red.svg)');
+    redoButton.style('background-size','1em');
+    redoButton.style('background-repeat','no-repeat');
+    redoButton.style('background-position','center');
+    redoButton.style('height','1.5em');
+    redoButton.style('width','1em');
+    redoButton.position(0, 0);
+    redoButton.style('margin-left','23.25em');
+    redoButton.style('margin-top','0.25em');
     redoButton.mousePressed(() => {
         redo();
     });
