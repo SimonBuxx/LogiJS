@@ -10,7 +10,7 @@ function ConPoint(x, y, state, g) {
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
 
     this.marked = false;
-    this.markColor = color(180, 200, 50);
+    this.markColor = color(0, 100, 50);
 }
 
 ConPoint.prototype.getData = function () {

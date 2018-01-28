@@ -17,7 +17,7 @@ function Input(x, y, transform) {
 
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs (red)
     this.lowColor = color(50, 50, 50);   // Color for low inputs (dark grey)
-    this.markColor = color(180, 200, 50);   // Color for marked inputs
+    this.markColor = color(0, 100, 50);   // Color for marked inputs
 
     this.isTop = false;
     this.lbl = '';

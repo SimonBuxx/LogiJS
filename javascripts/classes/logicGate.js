@@ -34,7 +34,7 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.outputClickBoxes = [];
 
     this.marked = false;
-    this.markColor = color(180, 200, 50);   // Color for marked gates
+    this.markColor = color(0, 100, 50);   // Color for marked gates
 
     if (this.direction % 2 === 0) {
         this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, this.transform);

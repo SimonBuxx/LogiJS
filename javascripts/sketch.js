@@ -1105,7 +1105,7 @@ function updateTick() {
     Redraws all items on the screen, translated and scaled
 */
 function reDraw() {
-    background(130, 140, 150);
+    background(150);
     scale(transform.zoom);
     drawGrid();
     translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
@@ -1529,10 +1529,10 @@ function handleDragging() {
     Draws the underlying grid on the canvas
 */
 function drawGrid() {
-    stroke(115,125,135);
+    stroke(130);
     strokeWeight(1);
     for (let i = Math.round(transform.dx); i < width / transform.zoom; i += GRIDSIZE) {
-        line(i, 0, i, height / transform.zoom);
+        line(i, transform.dy, i, height / transform.zoom);
     }
     for (let j = Math.round(transform.dy); j < height / transform.zoom; j += GRIDSIZE) {
         line(0, j, width / transform.zoom, j);

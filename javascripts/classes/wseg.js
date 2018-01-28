@@ -3,7 +3,6 @@
 function WSeg(dir, startX, startY, state, transform) {
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
-    this.deleteColor = color(DRED, DGREEN, DBLUE);  // Color for delete
 
     this.state = state; // Wire state (0 low, 1 high);
 
@@ -24,7 +23,7 @@ function WSeg(dir, startX, startY, state, transform) {
     this.end = null;  // One segment can have at max two Outputs or two Inputs connected
 
     this.marked = false;
-    this.markColor = color(180, 200, 50);
+    this.markColor = color(0, 100, 50); // Color for marking and deleting
 
     this.changePosition(startX, startY); // Initialize the start point
 }
@@ -91,18 +90,17 @@ WSeg.prototype.getOutput = function () {
 };
 
 WSeg.prototype.show = function (del) {
-    strokeWeight(3);
+    if (this.state || del) {
+        strokeWeight(5);
+    } else {
+        strokeWeight(3);
+    }
     if (this.state) {
-        strokeWeight(4);
         stroke(this.highColor);
-    } else if (del) {
-        strokeWeight(4);
-        stroke(this.deleteColor);
+    } else if (this.marked || del) {
+        stroke(this.markColor);
     } else {
         stroke(this.lowColor);
-    }
-    if (this.marked) {
-        stroke(this.markColor);
     }
     line(this.startX, this.startY, this.endX, this.endY);
 };
