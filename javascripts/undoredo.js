@@ -78,6 +78,12 @@ function undo() {
                 labels.push(act.actionObject[0]);
                 actionRedo.push(act);
                 break;
+            case 'moveSel':
+                selection = act.actionObject;
+                moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
+                finishSelection();
+                actionRedo.push(act);
+                break;
             case 'reWire':
                 actionRedo.push(new Action('reWire', 0, [segments.slice(0), conpoints.slice(0)]));
                 conpoints = act.actionObject[1];
@@ -171,6 +177,12 @@ function redo() {
                 break;
             case 'invCOP':
                 customs[act.actionIndizes[0]].invertOutput(act.actionIndizes[1]);
+                actionUndo.push(act);
+                break;
+            case 'moveSel':
+                selection = act.actionObject;
+                moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
+                finishSelection();
                 actionUndo.push(act);
                 break;
             case 'reWire':

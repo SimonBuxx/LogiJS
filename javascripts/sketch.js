@@ -49,6 +49,7 @@ let sDragX1 = 0; // Variables for
 let sDragX2 = 0; // selection dragging
 let sDragY1 = 0;
 let sDragY2 = 0;
+let initX, initY;
 
 // Variables for dragging
 let lastX = 0; var lastY = 0; // last mouse position
@@ -527,6 +528,10 @@ function clearItems() {
 function clearActionStacks() {
     actionUndo = [];
     actionRedo = [];
+}
+
+function pushSelectAction(dx, dy) {
+    pushUndoAction('moveSel', [dx, dy], selection);
 }
 
 /*
