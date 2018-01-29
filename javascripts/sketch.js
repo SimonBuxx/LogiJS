@@ -341,7 +341,7 @@ function setup() { // jshint ignore:line
     propertiesButton.position(930, 4);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
-        startPropMode();
+        setPropMode(true);
     });
     propertiesButton.elt.className = "button";
 
@@ -493,8 +493,8 @@ function newClicked() {
     gateInputCount = 2;
     gateDirection = 0;
     endSimulation(); // End the simulation, if started
-    stopPropMode(); // Restarting PropMode so that the menu hides
-    startPropMode(); // when new is clicked while it's open
+    setPropMode(false); // Restarting PropMode so that the menu hides
+    setPropMode(true); // when new is clicked while it's open
     setControlMode('none'); // Clears the control mode
     wireMode = 'none';
     selectMode = 'none';
@@ -894,7 +894,7 @@ function startSimulation() {
     }
     setSimButtonText('Stop'); // Alter the caption of the Start/Stop button
     disableButtons(true);
-    stopPropMode();
+    setPropMode(false);
     showSClickBox = false; // Hide the selection click box
 
     // Tell all customs that the simulation started
@@ -927,7 +927,7 @@ function endSimulation() {
     clearInterval(updater); // Stop the unsynced simulation updater
     setSimButtonText('Start'); // Set the button caption to 'Start'
     setControlMode('none');
-    startPropMode();
+    setPropMode(true);
     disableButtons(false); // Enable all buttons
     updateUndoButtons();
 
@@ -1108,13 +1108,34 @@ function updateTick() {
 }
 
 /*
-    Redraws all items on the screen, translated and scaled
+    Redraws all items on the screen, partly translated and scaled
 */
 function reDraw() {
-    background(150);
-    scale(transform.zoom);
-    drawGrid();
-    translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
+    background(150); // Sets the background to light grey
+    scale(transform.zoom); // Scales the canvas to the current zoom factor
+    drawGrid(); // Draws the grid, a bit darker than the background
+    translate(transform.dx, transform.dy); // Handles the offset from dragging and zooming
+
+    showElements(); // Draws all sketch elements on screen
+
+    scale(1 / transform.zoom);
+    translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Reverses the offset from dragging and zooming
+    // Here, all GUI objects are drawn, that are not sensitive to zoom and/or offset
+    textSize(12); // Set text size and color for the zoom and fps labels
+    fill(0);
+    strokeWeight(0);
+    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Show zoom label
+    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Show fps label
+
+    // If the prop mode is active and an object was selected, show the menu background in the top right corner
+    if (propMode && propInput + propOutput + propLabel >= -2) {
+        strokeWeight(0); // The prop menu background is dark grey without border
+        fill(50); // DOM elements are shown seperatly
+        rect(window.width - 200, -5, 205, 65, 5);
+    }
+}
+
+function showElements() {
     //var t0 = performance.now();
     if (simRunning) {
         for (const elem of groups) {
@@ -1127,7 +1148,6 @@ function reDraw() {
     }
     //var t1 = performance.now();
     //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
-    //t0 = performance.now();
     for (const elem of gates) {
         elem.show();
     }
@@ -1137,8 +1157,6 @@ function reDraw() {
             elem.show();
         }
     }
-    //t1 = performance.now();
-    //console.log("Drawing gates and customs took " + (t1 - t0) + " milliseconds.")
     for (const elem of conpoints) {
         elem.show();
     }
@@ -1160,25 +1178,11 @@ function reDraw() {
     if (showSClickBox) {
         sClickBox.markClickBox();
     }
-
-    // Draw the GUI at the end
-    scale(1 / transform.zoom);
-    translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Handle the offset from dragging and zooming
-
-    // GUI Area
-    textSize(12);
-    fill(0);
-    strokeWeight(0);
-    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Show zoom label
-    text(Math.round(frameRate()), window.width - 20, window.height - 20);
-
-    if (propMode && propInput + propOutput + propLabel >= -2) {
-        strokeWeight(0);
-        fill(50);
-        rect(window.width - 200, -5, 205, 65, 5);
-    }
 }
 
+/*
+    Updates all group states
+*/
 function updateGroups() {
     for (var i = 0; i < groups.length; i++) {
         groups[i].updateAll();
@@ -1205,15 +1209,17 @@ function wirePoints(x, y, j) {
     return indexList;
 }
 
-function startPropMode() {
-    propMode = true;
-    setControlMode('none');
-}
-
-function stopPropMode() {
-    propMode = false;
-    hidePropMenu();
-    unmarkPropTargets();
+/*
+    Starts or stops the properties mode
+*/
+function setPropMode(active) {
+    propMode = active;
+    if (!active) {
+        hidePropMenu();
+        unmarkPropTargets();
+    } else {
+        setControlMode('none');
+    }
 }
 
 // Hides the PropMenu without quitting the PropMode
@@ -1226,6 +1232,9 @@ function hidePropMenu() {
     labelTextBox.hide();
 }
 
+/*
+    Unmarks all objects that can be marked in the properties mode
+*/
 function unmarkPropTargets() {
     for (const elem of inputs) {
         elem.mark(false);
@@ -1241,6 +1250,9 @@ function unmarkPropTargets() {
     propLabel = -1;
 }
 
+/*
+    Unmarks all markable objects, for example after dragging a selection
+*/
 function unmarkAll() {
     for (const elem of inputs) {
         elem.mark(false);
@@ -1268,6 +1280,10 @@ function unmarkAll() {
     }
 }
 
+/*
+    Shows the DOM elements for the input options and unmarks all other
+    objects that can be marked in properties mode
+*/
 function showInputPropMenu() {
     outputCaptionBox.hide();
     outputColorBox.hide();
@@ -1286,6 +1302,10 @@ function showInputPropMenu() {
     }
 }
 
+/*
+    Shows the DOM elements for the label options and unmarks all other
+    objects that can be marked in properties mode
+*/
 function showLabelPropMenu() {
     outputCaptionBox.hide();
     outputColorBox.hide();
@@ -1303,6 +1323,10 @@ function showLabelPropMenu() {
     }
 }
 
+/*
+    Shows the DOM elements for the output options and unmarks all other
+    objects that can be marked in properties mode
+*/
 function showOutputPropMenu() {
     inputIsTopBox.hide();
     inputCaptionBox.hide();
@@ -1347,6 +1371,10 @@ function newOutputCaption() {
     outputs[propOutput].lbl = outputCaptionBox.value();
 }
 
+/*
+    Updates the color of the marked output according to the
+    selected color in the select box
+*/
 function newOutputColor() {
     switch (outputColorBox.value()) {
         case 'red':
@@ -1380,7 +1408,7 @@ function keyPressed() {
         switch (keyCode) {
             case ESCAPE:
                 setControlMode('none');
-                startPropMode();
+                setPropMode(true);
                 break;
             case RIGHT_ARROW:
                 gateDirection = 0;
@@ -1551,12 +1579,12 @@ function handleDragging() {
     Draws the underlying grid on the canvas
 */
 function drawGrid() {
-    stroke(130);
-    strokeWeight(1);
-    for (let i = Math.round(transform.dx); i < width / transform.zoom; i += GRIDSIZE) {
+    stroke(140); // Grid lines are a bit darker than the background
+    strokeWeight(3); // Grid lines are three pixels wide
+    for (let i = Math.round(transform.dx); i < width / transform.zoom; i += GRIDSIZE) { // Vertical lines
         line(i, transform.dy, i, height / transform.zoom);
     }
-    for (let j = Math.round(transform.dy); j < height / transform.zoom; j += GRIDSIZE) {
+    for (let j = Math.round(transform.dy); j < height / transform.zoom; j += GRIDSIZE) { // Horizontal lines
         line(0, j, width / transform.zoom, j);
     }
 }

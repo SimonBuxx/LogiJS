@@ -188,7 +188,7 @@ function mousePressed() {
 
 function mouseClicked() {
     if (ctrlMode !== 'none' && selectMode === 'none') {
-        stopPropMode();
+        setPropMode(false);
     }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {

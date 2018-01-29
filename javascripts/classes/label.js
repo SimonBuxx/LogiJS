@@ -70,12 +70,12 @@ function Label(x, y, txt, transform) {
     };
 
     this.show = function () {
-        strokeWeight(1);
-        stroke(130);
+        strokeWeight(3);
+        stroke(140);
         if (this.marked) {
             fill(this.markColor);
         } else {
-            fill(150);
+            fill(150, 200);
         }
         rect(this.x - 15, this.y - 15, this.w, this.h + 10);
         noStroke();
