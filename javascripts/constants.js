@@ -15,10 +15,6 @@ const LRED = 0;
 const LGREEN = 0;
 const LBLUE = 0;
 
-const DRED = 0;
-const DGREEN = 51;
-const DBLUE = 153;
-
 const YRED = 240;
 const YGREEN = 240;
 const YBLUE = 50;

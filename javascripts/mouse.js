@@ -58,7 +58,7 @@ function mouseWheel(event) {
             }
         }
     }
-    if (ctrlMode === 'select' && sClickBox.mouseOver()) {
+    if (ctrlMode === 'select' && sClickBox.mouseOver() && showSClickBox) {
         hand = true;
         cursor(MOVE);
     }
@@ -98,12 +98,24 @@ function mouseMoved() {
             }
         }
     }
-    if (ctrlMode === 'select' && sClickBox.mouseOver()) {
+    if (ctrlMode === 'select' && sClickBox.mouseOver() && showSClickBox) {
         hand = true;
         cursor(MOVE);
     }
     if (!hand) {
         cursor(ARROW);
+    }
+}
+
+function mouseDragged() {
+    if (ctrlMode === 'select' && selectMode === 'drag') {
+        if (sDragX2 !== Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE ||
+            sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
+            moveSelection(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE - sDragX2,
+                Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE - sDragY2);
+            sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
+            sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+        }
     }
 }
 
@@ -149,12 +161,20 @@ function mousePressed() {
                         selectMode = 'start';
                         if (sClickBox.mouseOver()) {
                             // Start dragging
-                            selectMode = 'startDrag';
                             sDragX1 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
                             sDragY1 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+                            sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
+                            sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+                            if (initX === -1 || initY === -1) {
+                                initX = sDragX1;
+                                initY = sDragY1;
+                            }
+                            selectMode = 'drag';
                         } else {
-                            showSClickBox = false;
-                            unmarkAll();
+                            setControlMode('none');
+                            pushSelectAction(sDragX2 - initX, sDragY2 - initY);
+                            initX = -1;
+                            initY = -1;
                         }
                         break;
                     default:
@@ -167,7 +187,6 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    reDraw();
     if (ctrlMode !== 'none' && selectMode === 'none') {
         stopPropMode();
     }
@@ -289,7 +308,7 @@ function mouseClicked() {
                     }
                     if (noValidTarget && propMode) {
                         hidePropMenu();
-                        unmarkAllTargets();
+                        unmarkPropTargets();
                     }
                 }
                 break;
@@ -403,10 +422,8 @@ function mouseReleased() {
                                 Math.max(selectStartX, selectEndX), Math.max(selectStartY, selectEndY));
                             selectMode = 'end';
                             break;
-                        case 'startDrag':
-                            sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
-                            sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
-                            moveSelection();
+                        case 'drag':
+                            finishSelection();
                             selectMode = 'end';
                             break;
                         default:
@@ -501,7 +518,7 @@ function mouseOverGUI() {
     if (propInput + propOutput + propLabel < -2) {
         return (mouseY < 0) || (mouseX < 0);
     } else {
-        return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 180);
+        return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 200);
 
     }
 }

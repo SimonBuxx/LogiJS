@@ -8,7 +8,7 @@ function Label(x, y, txt, transform) {
     this.transform = transform;
     this.txt = txt; // Label text
     this.marked = false;
-    this.markColor = color(50, 100, 50);
+    this.markColor = color(0, 100, 50);
 
     this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 
@@ -70,13 +70,15 @@ function Label(x, y, txt, transform) {
     };
 
     this.show = function () {
-        noStroke();
+        strokeWeight(1);
+        stroke(130);
         if (this.marked) {
             fill(this.markColor);
         } else {
-            fill(130);
+            fill(150);
         }
-        rect(this.x - 15, this.y - 14, this.w, this.h + 12);
+        rect(this.x - 15, this.y - 15, this.w, this.h + 10);
+        noStroke();
         fill(0);
         rect(this.x - 5, this.y - 5, 10, 10);
         text(this.txt, this.x + 15, this.y - 11, this.w, this.h);

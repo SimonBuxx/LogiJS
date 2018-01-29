@@ -24,7 +24,7 @@ let groups = [];
 
 let gridSize = GRIDSIZE; // Size of the grid
 
-let ctrlMode = 'none'; // Possible modes: none, delete, addObject, addWire, drag, select ...
+let ctrlMode = 'none'; // Possible modes: none, delete, addObject, addWire, select ...
 let addType = 'none'; // Possilbe modes: none, gate, output, input, ...
 let gateType = 'none'; // Possible modes: and, or, xor, ...
 let wireMode = 'none'; // Possible modes: none, preview, delete ...
@@ -49,6 +49,8 @@ let sDragX1 = 0; // Variables for
 let sDragX2 = 0; // selection dragging
 let sDragY1 = 0;
 let sDragY2 = 0;
+let initX = -1;
+let initY = -1;
 
 // Variables for dragging
 let lastX = 0; var lastY = 0; // last mouse position
@@ -433,7 +435,7 @@ function setup() { // jshint ignore:line
     propertiesButton = createButton('Properties');
     propertiesButton.position(930, 4);
     propertiesButton.mousePressed(function () {
-        ctrlMode = 'none';
+        setControlMode('none');
         startPropMode();
     });
     propertiesButton.elt.className = "button";
@@ -488,26 +490,27 @@ function setup() { // jshint ignore:line
     */
     inputIsTopBox = createCheckbox('Set to top', false);
     inputIsTopBox.hide();
-    inputIsTopBox.position(windowWidth - 110, 35);
+    inputIsTopBox.position(windowWidth - 180, 35);
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.style.color = 'white';
     inputIsTopBox.elt.style.fontFamily = 'Arial';
 
     inputCaptionBox = createInput('');
     inputCaptionBox.hide();
-    inputCaptionBox.size(50, 15);
-    inputCaptionBox.position(windowWidth - 75, 60);
+    inputCaptionBox.size(160, 15);
+    inputCaptionBox.position(windowWidth - 180, 60);
     inputCaptionBox.input(newInputCaption);
 
     outputCaptionBox = createInput('');
     outputCaptionBox.hide();
-    outputCaptionBox.size(50, 15);
-    outputCaptionBox.position(windowWidth - 75, 60);
+    outputCaptionBox.size(160, 15);
+    outputCaptionBox.position(windowWidth - 180, 60);
     outputCaptionBox.input(newOutputCaption);
 
     outputColorBox = createSelect();
     outputColorBox.hide();
-    outputColorBox.position(windowWidth - 80, 35);
+    outputColorBox.position(windowWidth - 180, 35);
+    outputColorBox.size(168, 20);
     outputColorBox.option('red');
     outputColorBox.option('yellow');
     outputColorBox.option('green');
@@ -532,8 +535,8 @@ function setup() { // jshint ignore:line
 
     labelTextBox = createInput('');
     labelTextBox.hide();
-    labelTextBox.size(115, 20);
-    labelTextBox.position(windowWidth - 125, 60);
+    labelTextBox.size(185, 20);
+    labelTextBox.position(windowWidth - 195, 45);
     labelTextBox.input(labelChanged);
 
     frameRate(60); // Caps the framerate at 60 FPS
@@ -555,25 +558,55 @@ function urlParam(name, w) {
 }
 
 function customClicked(filename) {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'custom';
     custFile = filename;
 }
 
 // Triggered when a sketch should be saved
 function saveClicked() {
+    selectMode = 'none';
+    showSClickBox = false;
     saveSketch(textInput.value() + '.json');
     document.title = textInput.value() + ' - LogiJS';
 }
 
 // Triggered when a sketch should be loaded
 function loadClicked() {
+    selectMode = 'none';
+    showSClickBox = false;
     loadSketch(textInput.value() + '.json');
     reDraw();
 }
 
 // Resets the canvas and the view / transformation
 function newClicked() {
+    clearItems();
+    clearActionStacks();
+    transform = new Transformation(0, 0, 1);
+    gridSize = GRIDSIZE;
+    gateInputCount = 2;
+    gateDirection = 0;
+    endSimulation(); // End the simulation, if started
+    stopPropMode(); // Restarting PropMode so that the menu hides
+    startPropMode(); // when new is clicked while it's open
+    setControlMode('none'); // Clears the control mode
+    wireMode = 'none';
+    selectMode = 'none';
+    showSClickBox = false;
+    document.title = 'New Sketch - LogiJS';
+    textInput.value('');
+    textInput.attribute('placeholder','New Sketch');
+    findLines();
+    reDraw();
+}
+
+/*
+    Deletes all items that are drawn on screen
+    and also the wire segments that are no longer
+    drawn individually
+*/
+function clearItems() {
     gates = [];
     outputs = [];
     inputs = [];
@@ -582,36 +615,86 @@ function newClicked() {
     customs = [];
     diodes = [];
     labels = [];
-    actionUndo = [];
-    actionRedo = [];
-    transform = new Transformation(0, 0, 1);
-    gridSize = GRIDSIZE;
-    endSimulation(); // End the simulation, if started
-    stopPropMode(); // Restarting PropMode so that the menu hides
-    startPropMode(); // when new is clicked while it's open
-    ctrlMode = 'none'; // Clear the control mode
-    wireMode = 'none';
-    document.title = 'New Sketch - LogiJS';
-    textInput.value('New Sketch');
-    findLines();
-    reDraw();
+    wires = [];
 }
 
+/*
+    This clears the undo and redo stacks
+*/
+function clearActionStacks() {
+    actionUndo = [];
+    actionRedo = [];
+}
+
+function pushSelectAction(dx, dy) {
+    pushUndoAction('moveSel', [dx, dy], selection);
+}
+
+/*
+    Triggered when the wiring button is clicked
+*/
 function wiringClicked() {
-    ctrlMode = 'addWire';
-    wireMode = 'none';
+    setControlMode('addWire'); // Activates wire adding, leaving all other modes
+    wireMode = 'none'; // Resets the wiring mode
 }
 
 function deleteClicked() {
-    ctrlMode = 'delete';
+    // TODO: Implement deleting of the selection (with one undo/redo event)
+    //if (ctrlMode === 'select' && selectMode === 'end') {
+        /*for (let i = 0; i < selection.length; i++) {
+            for (let j = gates.length - 1; j >= 0; j--) {
+                if (JSON.stringify(gates[j]) === JSON.stringify(selection[i])) {
+                    deleteGate(j);
+                }
+            }
+            for (let j = customs.length - 1; j >= 0; j--) {
+                if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
+                    deleteCustom(j);
+                }
+            }
+            for (let j = diodes.length - 1; j >= 0; j--) {
+                if (JSON.stringify(diodes[j]) === JSON.stringify(selection[i])) {
+                    deleteDiode(j);
+                }
+            }
+            for (let j = inputs.length - 1; j >= 0; j--) {
+                if (JSON.stringify(inputs[j]) === JSON.stringify(selection[i])) {
+                    inputs.splice(j, 1);
+                }
+            }
+            for (let j = labels.length - 1; j >= 0; j--) {
+                if (JSON.stringify(labels[j]) === JSON.stringify(selection[i])) {
+                    labels.splice(j, 1);
+                }
+            }
+            for (let j = outputs.length - 1; j >= 0; j--) {
+                if (JSON.stringify(outputs[j]) === JSON.stringify(selection[i])) {
+                    outputs.splice(j, 1);
+                }
+            }
+            for (let j = wires.length - 1; j >= 0; j--) {
+                if (JSON.stringify(wires[j]) === JSON.stringify(selection[i])) {
+                    wires.splice(j, 1);
+                }
+            }
+            finishSelection();*/
+    //    }
+    //} else {
+        setControlMode('delete');
+    //}
 }
 
+/*
+    This triggeres when a label text was altered
+*/
 function labelChanged() {
-    labels[propLabel].alterText(labelTextBox.value());
+    labels[propLabel].alterText(labelTextBox.value()); // Alter the text of the selected label
 }
 
-// Toggles the simulation
-// Button label updated in functions
+/* 
+    Toggles the simulation
+    Button label updated in the functions
+*/
 function simClicked() {
     if (!simRunning) {
         startSimulation();
@@ -623,21 +706,20 @@ function simClicked() {
 /*
     Adding modes for gates, in/out, customs, etc.
 */
-
 function andClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'gate';
     gateType = 'and';
 }
 
 function orClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'gate';
     gateType = 'or';
 }
 
 function xorClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'gate';
     gateType = 'xor';
 }
@@ -645,43 +727,64 @@ function xorClicked() {
 function inputClicked() {
     newIsButton = false;
     newIsClock = false;
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'input';
 }
 
 function buttonClicked() {
     newIsButton = true;
     newIsClock = false;
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'input';
 }
 
 function clockClicked() {
     newIsButton = false;
     newIsClock = true;
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'input';
 }
 
 function outputClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'output';
 }
 
+// diodeClick is toggling the diodes,
+// not only adding them
 function diodeClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'diode';
 }
 
 // Starts the selection process
 function startSelect() {
-    ctrlMode = 'select';
+    setControlMode('select');
     selectMode = 'none';
 }
 
+// Triggered when a label should be added
 function labelButtonClicked() {
-    ctrlMode = 'addObject';
+    setControlMode('addObject');
     addType = 'label';
+}
+
+/*
+    Sets the control mode, performing
+    extra preparations for selecting
+    when it's set to 'select'
+*/
+function setControlMode(mode) {
+    if (ctrlMode === 'select') {
+        selectMode = 'start';
+        unmarkAll();
+        showSClickBox = false;
+    }
+    if (mode === 'addObject' || mode === 'addWire' || mode === 'select' || mode === 'delete' || mode === 'none') {
+        ctrlMode = mode;
+    } else {
+        console.log('Control mode not supported!');
+    }
 }
 
 /*
@@ -761,7 +864,7 @@ function addOutput() {
 }
 
 /*
-    Adds a new input (switch)
+    Adds a new input (switch, button or clock)
 */
 function addInput() {
     for (var i = 0; i < inputs.length; i++) {
@@ -786,6 +889,9 @@ function addInput() {
     reDraw();
 }
 
+/*
+    Adds a new label
+*/
 function addLabel() {
     for (var i = 0; i < labels.length; i++) {
         if ((labels[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)) &&
@@ -876,33 +982,34 @@ function deleteLabel(labelNumber) {
     - simRunning is set so that the sketch can't be altered
 */
 function startSimulation() {
-    simButton.elt.innerHTML = 'Stop'; // Alter the caption of the Start/Stop buttons
-    disableButtons(true);
-    stopPropMode();
-    showSClickBox = false;
-
-    // Tell all customs that the simulation started
-    for (let i = 0; i < customs.length; i++) {
-        customs[i].setSimRunning(true);
-    }
-
-    // Parse all groups, integrate all elements and parse again (required for some reason)
-    parseGroups();
-    integrateElement();
-    parseGroups();
-
-    // Reduce the displayed wires for performance
-    for (let i = 0; i < groups.length; i++) {
-        groups[i].findLines();
-    }
-
-    simRunning = true;
-    propMode = false;
     // If the update cycle shouldn't be synced with the framerate,
     // update every 10ms (may be too fast for slower machines, not a great solution)
     if (!sfcheckbox.checked()) {
         updater = setInterval(updateTick, 1);
     }
+    setSimButtonText('Stop'); // Alter the caption of the Start/Stop button
+    disableButtons(true);
+    stopPropMode();
+    showSClickBox = false; // Hide the selection click box
+
+    // Tell all customs that the simulation started
+    for (const elem of customs) {
+        elem.setSimRunning(true);
+    }
+
+    // Parse all groups, integrate all elements and parse again (this is required)
+    parseGroups();
+    integrateElement();
+    parseGroups();
+
+    // Reduce the displayed wires for performance
+    for (const elem of groups) {
+        elem.findLines();
+    }
+
+    // Start the simulation and exit the properties mode
+    simRunning = true;
+    propMode = false;
 }
 
 /*
@@ -912,42 +1019,59 @@ function startSimulation() {
     - simRunning is cleared so that the sketch can be altered
 */
 function endSimulation() {
-    simButton.elt.innerHTML = 'Start';
-    ctrlMode = 'none';
+    clearInterval(updater); // Stop the unsynced simulation updater
+    setSimButtonText('Start'); // Set the button caption to 'Start'
+    setControlMode('none');
     startPropMode();
-    disableButtons(false);
-    // Enable the Undo/Redo buttons depending on if there
-    // are steps to be undone or redone
-    redoButton.elt.disabled = (actionRedo.length === 0);
-    undoButton.elt.disabled = (actionUndo.length === 0);
-    groups = [];
-    for (let i = 0; i < gates.length; i++) {
-        gates[i].shutdown();
+    disableButtons(false); // Enable all buttons
+    updateUndoButtons();
+
+    groups = []; // Reset the groups, as they are regenerated when starting again
+    for (const elem of gates) {
+        elem.shutdown(); // Tell all the gates to leave the simulation mode
     }
-    for (let i = 0; i < customs.length; i++) {
-        customs[i].setSimRunning(false);
-        customs[i].shutdown();
+    for (const elem of customs) {
+        elem.setSimRunning(false); // Shutdown all custom elements
+        elem.shutdown();
     }
-    for (let i = 0; i < conpoints.length; i++) {
-        conpoints[i].state = false;
+    // Set all item states to zero
+    for (const elem of conpoints) {
+        elem.state = false;
     }
-    for (let i = 0; i < outputs.length; i++) {
-        outputs[i].state = false;
+    for (const elem of outputs) {
+        elem.state = false;
     }
-    for (let i = 0; i < inputs.length; i++) {
-        inputs[i].setState(false);
+    for (const elem of inputs) {
+        elem.setState(false);
     }
-    for (let i = 0; i < diodes.length; i++) {
-        diodes[i].setState(false);
+    for (const elem of diodes) {
+        elem.setState(false);
     }
-    _.forEach(segments, function (value) {
-        value.state = false;
-    });
+    for (const elem of segments) {
+        elem.state = false;
+    }
     simRunning = false;
-    clearInterval(updater);
     reDraw();
 }
 
+function setSimButtonText(text) {
+    simButton.elt.innerHTML = text;
+}
+
+/*
+    Enables/Disables the undo and redo buttons
+    depending on the state of the stack
+*/
+function updateUndoButtons() {
+    redoButton.elt.disabled = (actionRedo.length === 0);
+    undoButton.elt.disabled = (actionUndo.length === 0);
+}
+
+/*
+    Enables or disables all buttons that should not be
+    clickable during simulation
+    Also alters the color of the labels on the left
+*/
 function disableButtons(status) {
     undoButton.elt.disabled = status;
     redoButton.elt.disabled = status;
@@ -981,6 +1105,7 @@ function disableButtons(status) {
     ascustomButton.elt.disabled = status;
     propertiesButton.elt.disabled = status;
     labelButton.elt.disabled = status;
+    // Sets the colors of the labels
     if (status) {
         labelBasic.elt.style.color = '#969696';
         labelAdvanced.elt.style.color = '#969696';
@@ -995,10 +1120,11 @@ function disableButtons(status) {
 */
 function draw() {
     if (simRunning) {
+        // Update the simulation logic if it's synced to the framerate
         if (sfcheckbox.checked()) {
             updateTick();
         }
-        reDraw();
+        reDraw(); // Redraw the canvas in every frame when the simulation runs
     }
 
     // If wire preview is active, generate a segment set and display the preview segments
@@ -1076,6 +1202,9 @@ function updateTick() {
     }
 }
 
+/*
+    Redraws all items on the screen, translated and scaled
+*/
 function reDraw() {
     background(150);
     scale(transform.zoom);
@@ -1130,25 +1259,18 @@ function reDraw() {
     // Draw the GUI at the end
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Handle the offset from dragging and zooming
-    fill(0);
-    textSize(15); // Set text size to 15
-    //textAlign(LEFT, TOP); // Align left for zoom label etc.
-    stroke(0); // Set font parameters for zoom label etc.
-    strokeWeight(1);
 
     // GUI Area
-    text('Zoom: ' + Math.round(transform.zoom * 100) + '%', 10, 5); // Show zoom label
-    //text('mouseX: ' + mouseX, 160, 60);
-    //text('mouseY: ' + mouseY, 160, 80);
-    //text('mouseX trans.: ' + Math.round((mouseX / transform.zoom - transform.dx)), 160, 100);
-    //text('mouseY trans.: ' + Math.round((mouseY / transform.zoom - transform.dy)), 160, 120);
-    text('FPS: ' + Math.round(frameRate()), 10, 25);
-
+    textSize(12);
+    fill(0);
     strokeWeight(0);
-    //rect(0, 0, windowWidth, 30);
-    //rect(0, 30, 150, windowHeight);
+    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Show zoom label
+    text(Math.round(frameRate()), window.width - 20, window.height - 20);
+
     if (propMode && propInput + propOutput + propLabel >= -2) {
-        rect(window.width - 130, 0, 130, 60);
+        strokeWeight(0);
+        fill(50);
+        rect(window.width - 200, -5, 205, 65, 5);
     }
 }
 
@@ -1180,13 +1302,13 @@ function wirePoints(x, y, j) {
 
 function startPropMode() {
     propMode = true;
-    ctrlMode = 'none';
+    setControlMode('none');
 }
 
 function stopPropMode() {
     propMode = false;
     hidePropMenu();
-    unmarkAllTargets();
+    unmarkPropTargets();
 }
 
 // Hides the PropMenu without quitting the PropMode
@@ -1199,7 +1321,7 @@ function hidePropMenu() {
     labelTextBox.hide();
 }
 
-function unmarkAllTargets() {
+function unmarkPropTargets() {
     for (const elem of inputs) {
         elem.mark(false);
     }
@@ -1339,59 +1461,21 @@ function newOutputColor() {
     outputs[propOutput].updateColor();
 }
 
-function keyReleased() {
-    if (textInput.elt !== document.activeElement) {
-        switch (keyCode) {
-            case 17: //ctrl	
-                ctrlMode = 'none';
-                break;
-            default:
-
-        }
-    }
-}
 /*
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
     if (textInput.elt !== document.activeElement) {
+        // Set the gate input count according to the keyCodes
+        if (keyCode >= 49 && keyCode <= 57) {
+            gateInputCount = keyCode - 48;
+        } else if (keyCode === 48) {
+            gateInputCount = 10;
+        }
         switch (keyCode) {
             case ESCAPE:
-                ctrlMode = 'none';
+                setControlMode('none');
                 startPropMode();
-                break;
-            case 17: //ctrl	
-                startSelect();
-                break;
-            case 49: // 1
-                gateInputCount = 1;
-                break;
-            case 50: // 2
-                gateInputCount = 2;
-                break;
-            case 51: // 3
-                gateInputCount = 3;
-                break;
-            case 52: // 4
-                gateInputCount = 4;
-                break;
-            case 53: // 5
-                gateInputCount = 5;
-                break;
-            case 54: // 6
-                gateInputCount = 6;
-                break;
-            case 55: // 7
-                gateInputCount = 7;
-                break;
-            case 56: // 8
-                gateInputCount = 8;
-                break;
-            case 57: // 9
-                gateInputCount = 9;
-                break;
-            case 48: // 0
-                gateInputCount = 10;
                 break;
             case RIGHT_ARROW:
                 gateDirection = 0;
@@ -1408,11 +1492,15 @@ function keyPressed() {
 
             default:
         }
-    } else if (keyCode === RETURN) {
+    } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
         loadClicked();
     }
 }
 
+/*
+    This is invoked when the selection area is drawn
+    It selects all underlying items 
+*/
 function handleSelection(x1, y1, x2, y2) {
     sClickBox.updatePosition(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
     sClickBox.updateSize(x2 - x1, y2 - y1);
@@ -1461,39 +1549,52 @@ function handleSelection(x1, y1, x2, y2) {
             selection.push(labels[i]);
         }
     }
+    let wireSelection = [];
     for (let i = 0; i < wires.length; i++) {
         if ((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) && (wires[i].startX <= x2 || x2 >= wires[i].endX)) && (wires[i].startY >= y1 && wires[i].endY <= y2)) {
             wires[i].marked = true;
-            selection.push(wires[i]);
+            wireSelection.push(wires[i]);
         } else if ((wires[i].direction === 1) && ((wires[i].startY >= y1 || y1 <= wires[i].endY) && (wires[i].startY <= y2 || y2 >= wires[i].endY)) && (wires[i].startX >= x1 && wires[i].endX <= x2)) {
             wires[i].marked = true;
-            selection.push(wires[i]);
+            wireSelection.push(wires[i]);
         }
     }
-    segments = [];
-    for (let i = 0; i < wires.length; i++) {
-        if (wires[i].startX === wires[i].endX) {
-            // Vertical wire, split in n vertical segments
-            for (let j = 0; j < (wires[i].endY - wires[i].startY) / GRIDSIZE; j++) {
-                segments.push(new WSeg(1, wires[i].startX, (wires[i].startY + j * GRIDSIZE), false, transform));
+    let segSelection = [];
+    for (let i = 0; i < wireSelection.length; i++) {
+        if (wireSelection[i].x1 === wireSelection[i].x2) {
+            // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+            for (let j = 0; j < (wireSelection[i].y2 - wireSelection[i].y1) / GRIDSIZE; j++) {
+                segSelection.push(new WSeg(1, wireSelection[i].x1, wireSelection[i].y1 + j * GRIDSIZE,
+                    false, transform));
             }
-        } else if (wires[i].startY === wires[i].endY) {
-            // Horizontal wire, split in n horizontal segments
-            for (let j = 0; j < (wires[i].endX - wires[i].startX) / GRIDSIZE; j++) {
-                segments.push(new WSeg(0, wires[i].startX + j * GRIDSIZE, wires[i].startY, false, transform));
+        } else if (wireSelection[i].y1 === wireSelection[i].y2) {
+            // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+            for (let j = 0; j < (wireSelection[i].x2 - wireSelection[i].x1) / GRIDSIZE; j++) {
+                segSelection.push(new WSeg(0, wireSelection[i].x1 + j * GRIDSIZE, wireSelection[i].y1,
+                    false, transform));
             }
         }
     }
-    //findLines();
+    selection = selection.concat(wireSelection);
+    selection = selection.concat(segSelection);
 }
 
-function moveSelection() {
-    let deltaX = sDragX2 - sDragX1;
-    let deltaY = sDragY2 - sDragY1;
-    sClickBox.updatePosition(sClickBox.x + deltaX, sClickBox.y + deltaY);
-    for (let i = 0; i < selection.length; i++) {
-        selection[i].alterPosition(deltaX, deltaY);
+/*
+    Moves the selected items by dx, dy
+*/
+function moveSelection(dx, dy) {
+    if ((sClickBox.x - sClickBox.w / 2 > GRIDSIZE || dx >= 0) && (sClickBox.y - sClickBox.h / 2 > GRIDSIZE || dy >= 0)) {
+        sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
+        for (let i = 0; i < selection.length; i++) {
+            selection[i].alterPosition(dx, dy);
+        }
     }
+}
+
+/*
+    Recalculates all wire segments and redoes the connection points
+*/
+function finishSelection() {
     segments = [];
     for (let i = 0; i < wires.length; i++) {
         if (wires[i].startX === wires[i].endX) {
@@ -1545,18 +1646,12 @@ function handleDragging() {
     Draws the underlying grid on the canvas
 */
 function drawGrid() {
-    var i = Math.round(transform.dx);
-    var j = Math.round(transform.dy);
-    stroke(100);
+    stroke(130);
     strokeWeight(1);
-
-    while (i < width / transform.zoom) {
-        line(i, 0, i, height / transform.zoom);
-        i += GRIDSIZE;
+    for (let i = Math.round(transform.dx); i < width / transform.zoom; i += GRIDSIZE) {
+        line(i, transform.dy, i, height / transform.zoom);
     }
-
-    while (j < height / transform.zoom) {
+    for (let j = Math.round(transform.dy); j < height / transform.zoom; j += GRIDSIZE) {
         line(0, j, width / transform.zoom, j);
-        j += GRIDSIZE;
     }
 }

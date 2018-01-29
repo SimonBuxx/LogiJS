@@ -42,8 +42,8 @@ function ClickBox(x, y, w, h, transform) {
     */
     this.markClickBox = function () {
         stroke(0);
-        strokeWeight(1);
-        fill(150, 128);
+        strokeWeight(2);
+        fill(0, 128);
         rect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
     };
 

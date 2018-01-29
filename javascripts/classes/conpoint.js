@@ -10,7 +10,7 @@ function ConPoint(x, y, state, g) {
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
 
     this.marked = false;
-    this.markColor = color(50, 100, 50);
+    this.markColor = color(0, 100, 50);
 }
 
 ConPoint.prototype.getData = function () {
@@ -38,5 +38,5 @@ ConPoint.prototype.show = function () {
     } else {
         fill(this.lowColor);
     }
-    rect(this.x - 3, this.y - 3, 6, 6);
+    rect(this.x - 3, this.y - 3, 7, 7);
 };
