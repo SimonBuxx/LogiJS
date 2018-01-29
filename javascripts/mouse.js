@@ -169,7 +169,6 @@ function mousePressed() {
                                 initX = sDragX1;
                                 initY = sDragY1;
                             }
-                            console.log(initX, initY);
                             selectMode = 'drag';
                         } else {
                             setControlMode('none');

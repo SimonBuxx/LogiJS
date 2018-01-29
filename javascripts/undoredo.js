@@ -86,7 +86,7 @@ function undo() {
                 break;
             case 'reWire':
                 actionRedo.push(new Action('reWire', 0, [segments.slice(0), conpoints.slice(0)]));
-                conpoints = act.actionObject[1];
+                conpoints = act.actionObject[1].slice(0);
                 segments = act.actionObject[0].slice(0);
                 doConpoints();
                 findLines();

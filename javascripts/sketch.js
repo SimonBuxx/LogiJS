@@ -1164,15 +1164,12 @@ function reDraw() {
     // Draw the GUI at the end
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Handle the offset from dragging and zooming
-    fill(0);
-    textSize(15); // Set text size to 15
-    //textAlign(LEFT, TOP); // Align left for zoom label etc.
-    stroke(0); // Set font parameters for zoom label etc.
-    strokeWeight(1);
 
     // GUI Area
-    text('Zoom: ' + Math.round(transform.zoom * 100) + '%', 10, 5); // Show zoom label
     textSize(12);
+    fill(0);
+    strokeWeight(0);
+    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Show zoom label
     text(Math.round(frameRate()), window.width - 20, window.height - 20);
 
     if (propMode && propInput + propOutput + propLabel >= -2) {
@@ -1457,15 +1454,34 @@ function handleSelection(x1, y1, x2, y2) {
             selection.push(labels[i]);
         }
     }
+    let wireSelection = [];
     for (let i = 0; i < wires.length; i++) {
         if ((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) && (wires[i].startX <= x2 || x2 >= wires[i].endX)) && (wires[i].startY >= y1 && wires[i].endY <= y2)) {
             wires[i].marked = true;
-            selection.push(wires[i]);
+            wireSelection.push(wires[i]);
         } else if ((wires[i].direction === 1) && ((wires[i].startY >= y1 || y1 <= wires[i].endY) && (wires[i].startY <= y2 || y2 >= wires[i].endY)) && (wires[i].startX >= x1 && wires[i].endX <= x2)) {
             wires[i].marked = true;
-            selection.push(wires[i]);
+            wireSelection.push(wires[i]);
         }
     }
+    let segSelection = [];
+    for (let i = 0; i < wireSelection.length; i++) {
+        if (wireSelection[i].x1 === wireSelection[i].x2) {
+            // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+            for (let j = 0; j < (wireSelection[i].y2 - wireSelection[i].y1) / GRIDSIZE; j++) {
+                segSelection.push(new WSeg(1, wireSelection[i].x1, wireSelection[i].y1 + j * GRIDSIZE,
+                    false, transform));
+            }
+        } else if (wireSelection[i].y1 === wireSelection[i].y2) {
+            // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+            for (let j = 0; j < (wireSelection[i].x2 - wireSelection[i].x1) / GRIDSIZE; j++) {
+                segSelection.push(new WSeg(0, wireSelection[i].x1 + j * GRIDSIZE, wireSelection[i].y1,
+                    false, transform));
+            }
+        }
+    }
+    selection = selection.concat(wireSelection);
+    selection = selection.concat(segSelection);
 }
 
 /*
