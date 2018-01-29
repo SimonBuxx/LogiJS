@@ -912,6 +912,13 @@ function startSimulation() {
         elem.findLines();
     }
 
+    // Reset all clocks
+    for (const elem of inputs) {
+        if (elem.getIsClock()) {
+            elem.framecount = 60 - clockspeedSlider.value();
+        }
+    }
+
     // Start the simulation and exit the properties mode
     simRunning = true;
     propMode = false;
