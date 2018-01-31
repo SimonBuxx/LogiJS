@@ -146,5 +146,11 @@ Input.prototype.show = function () {
         rect(this.x + 10, this.y + 10, this.w / 3, this.h / 3);
     }
 
+    if (this.clock) {
+        fill(0);
+        noStroke();
+        ellipse(this.x + 15, this.y + 15, this.w / 2, this.h / 2);
+    }
+
     //this.clickBox.markClickBox();
 };
