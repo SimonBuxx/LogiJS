@@ -86,8 +86,8 @@ body {
 .slider {
     -webkit-appearance: none;
     width: 100%;
-    height: 20px;
-    border-radius: 3px;
+    height: 15px;
+    border-radius: 5px;
     background: #969696;
     outline: none;
     -webkit-transition: .2s;
@@ -98,7 +98,7 @@ body {
     -webkit-appearance: none;
     width: 10px;
     height: 20px;
-    background: #292929;
+    background: rgb(105, 1, 1);
     cursor: pointer;
 }
 

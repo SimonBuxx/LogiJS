@@ -363,7 +363,7 @@ function setup() { // jshint ignore:line
     clockspeedSlider.style('width', '6em');
     clockspeedSlider.style('margin', '0px');
     clockspeedSlider.style('margin-left','22.5em');
-    clockspeedSlider.style('margin-top','2.1em');
+    clockspeedSlider.style('margin-top','2.2em');
     clockspeedSlider.elt.className = 'slider';
 
     // Undos the last action
