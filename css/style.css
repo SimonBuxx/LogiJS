@@ -105,7 +105,7 @@ body {
 .slider::-moz-range-thumb {
     width: 10px;
     height: 20px;
-    background: #292929;
+    background: rgb(105, 1, 1);
     cursor: pointer;
 }
 
@@ -129,8 +129,8 @@ input[type=text] {
 
 #logo {
     position: fixed;
-    left: 1px;
-    top: -5px;
+    left: 0.1em;
+    top: 0em;
     width: 150px;
     margin: 0;
     padding: 0;
