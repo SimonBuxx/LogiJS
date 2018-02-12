@@ -9,7 +9,16 @@ Also, the performance can be bad when handling larger files or using slower mach
 This project is still in active development, therefore the GUI is very rudimentary and some options,
 like the number of inputs on gates and the direction of gates, are only editable with the keyboard. This will be changed in the
 future, so that every action can be done with the mouse.
+#### Interesting Sketches:
+* **https://logijs.netlify.com/logijs.html?sketch=4BitFromScratch**
 
+* **https://logijs.netlify.com/logijs.html?sketch=traffic**
+
+* **https://logijs.netlify.com/logijs.html?sketch=cpunew**
+
+* **https://logijs.netlify.com/logijs.html?sketch=multiplication**
+
+For an overview of all existing sketches, please see our Wiki here on GitHub.
 ## Tutorial
 ### The Basics
 If you want to use LogiJS for the first time, please let me tell you the basics on how to use it. We start simple.
