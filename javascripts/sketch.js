@@ -295,7 +295,7 @@ function setup() { // jshint ignore:line
     commandDiv.style('width','80em');
     commandDiv.style('background-color','blue');
     commandDiv.style('height','5em');
-    commandDiv.style('margin-left','15em');
+    commandDiv.style('margin-left','4em');
     commandDiv.style('margin-top','5em');
     commandDiv.mouseOver(() => {
         commandDiv.style('background-color','red');
@@ -318,18 +318,12 @@ function setup() { // jshint ignore:line
         deleteButton.style('background-size','3em');
         deleteButton.style('background-repeat','no-repeat');
         deleteButton.style('background-position','center');
-        /*
-        deleteHoverLabel = createP('Delete');
-        deleteHoverLabel.style('position','absolute');
-        deleteHoverLabel.position(mouseX,mouseY);
-        */
     });
     deleteButton.mouseOut(() => {
         deleteButton.style('background-image','url(Delete.svg)');
     deleteButton.style('background-size','3em');
     deleteButton.style('background-repeat','no-repeat');
     deleteButton.style('background-position','center');
-        //deleteHoverLabel.remove();
     });
     
 
@@ -348,12 +342,8 @@ function setup() { // jshint ignore:line
     simButton.elt.className = "button";
     // Mouse hover (code below) commented out for now
     /*simButton.mouseOver(() => {
-        simHoverLabel = createP('Start');
-        simHoverLabel.style('color','blue');
-        simHoverLabel.position(mouseX,mouseY);
     });
     simButton.mouseOut(() => {
-        simHoverLabel.remove();
     });
     */
     
@@ -394,14 +384,13 @@ function setup() { // jshint ignore:line
         undoButton.style('background-position','center');
     });
     undoButton.mouseOut(() => {
-        
     });
     undoButton.mousePressed(() => {
         undo();
     });
     undoButton.elt.disabled = true;
-
     undoButton.elt.className = "button";
+
     // Redos the last action
     redoButton = createButton('');
     redoButton.style('background-image','url(Redo_red.svg)');
