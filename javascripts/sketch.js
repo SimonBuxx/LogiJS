@@ -333,6 +333,7 @@ function setup() { // jshint ignore:line
     deleteText = createDiv('Delete');
     deleteText.parent(deleteContainer);
     deleteText.style('position','relative');
+    deleteText.style('font','normal medium/normal Arial, Helvetica, sans-serif');
     deleteText.style('bottom','0em');
     deleteText.style('text-align','center');
     deleteText.style('width','100%');
