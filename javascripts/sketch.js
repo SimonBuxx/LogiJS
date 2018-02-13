@@ -89,10 +89,11 @@ let cnv; // Canvas variable
 */
 function setup() { // jshint ignore:line
     // Creates the canvas in full window size
-    cnv = createCanvas(windowWidth - 150, windowHeight - 60);
+    cnv = createCanvas(windowWidth, windowHeight);
     //cnv.position(250, 150);
-    cnv.style('margin-top','3.5em');
-    cnv.style('margin-left','9.5em');
+    //cnv.style('margin-top','3.5em');
+    //cnv.style('margin-left','9.5em');
+    cnv.style('position','relative');
 
     // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -267,18 +268,12 @@ function setup() { // jshint ignore:line
     
     //Toolbar container
     commandDiv = createDiv('');
-    commandDiv.position(0,0);
-    commandDiv.style('width','80em');
+    commandDiv.style('position','relative');
+    commandDiv.style('margin-top','5em');
+    commandDiv.style('margin-left','10em');
+    commandDiv.style('width','70em');
     commandDiv.style('background-color','blue');
     commandDiv.style('height','5em');
-    commandDiv.style('margin-left','4em');
-    commandDiv.style('margin-top','5em');
-    commandDiv.mouseOver(() => {
-        commandDiv.style('background-color','red');
-    });
-    commandDiv.mouseOut(() => {
-        commandDiv.style('background-color','blue');
-    });
     
     // Activates the wiring mode
     wireButton = createButton('');
@@ -304,24 +299,45 @@ function setup() { // jshint ignore:line
     });
     */
 
+    // Delete container, contains delete div + delete text
+    deleteContainer = createDiv('');
+    deleteContainer.parent(commandDiv);
+    deleteContainer.style('width','5em');
+    deleteContainer.style('height','5em');
+    deleteContainer.style('background-color','green');
+    deleteContainer.style('position','relative');
+    deleteContainer.style('margin-left','0em');
+    deleteContainer.style('margin-top','0em');
+    deleteContainer.mouseOver(() => {
+        deleteButton.style('background-color','blue');
+    });
 
     // Activates the delete mode (objects and wires)
-    deleteButton = createButton('');
+    deleteButton = createDiv('');
     deleteButton.style('background-image','url(Delete.svg)');
-    deleteButton.style('background-size','3em');
+    deleteButton.style('background-size','4em');
     deleteButton.style('background-repeat','no-repeat');
     deleteButton.style('background-position','center');
-    deleteButton.style('height','4em');
-    deleteButton.style('width','4em');
-    deleteButton.parent(commandDiv);
-    deleteButton.position(0, 0);
+    deleteButton.style('height','75%');
+    deleteButton.style('width','100%');
+    deleteButton.style('background-color','yellow');
+    deleteButton.parent(deleteContainer);
+    deleteButton.style('position','relative');
     deleteButton.mousePressed(deleteClicked);
-    deleteButton.elt.className = "button";
     deleteButton.mouseOver(() => {
     });
     deleteButton.mouseOut(() => {
     });
-    
+
+    //Delete text in delete div
+    deleteText = createDiv('Delete');
+    deleteText.parent(deleteContainer);
+    deleteText.style('position','relative');
+    deleteText.style('background-position','bottom');
+    deleteText.style('text-align','center');
+    deleteText.style('width','80%');
+    deleteText.style('height','25%');
+    deleteText.style('background-color','brown');
 
     // Starts and stops the simulation
     simButton = createButton('');
