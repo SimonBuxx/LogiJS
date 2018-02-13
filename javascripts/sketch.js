@@ -297,6 +297,9 @@ function setup() { // jshint ignore:line
     commandDiv.style('height','5em');
     commandDiv.style('margin-left','15em');
     commandDiv.style('margin-top','5em');
+    commandDiv.mouseOver(() => {
+        commandDiv.style('background-color','red');
+    });
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('');
@@ -375,7 +378,7 @@ function setup() { // jshint ignore:line
 
     // Undos the last action
     undoButton = createButton('');
-    undoButton.style('background-image','url(Undo_red.svg)');
+    undoButton.style('background-image','url(Undo_black.svg)');
     undoButton.style('background-size','1em');
     undoButton.style('background-repeat','no-repeat');
     undoButton.style('background-position','center');
@@ -391,10 +394,7 @@ function setup() { // jshint ignore:line
         undoButton.style('background-position','center');
     });
     undoButton.mouseOut(() => {
-        undoButton.style('background-image','url(Undo_red.svg)');
-        undoButton.style('background-size','1em');
-        undoButton.style('background-repeat','no-repeat');
-        undoButton.style('background-position','center');
+        
     });
     undoButton.mousePressed(() => {
         undo();
