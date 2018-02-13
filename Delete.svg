@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="Delete_hover - Kopie.svg">
+   sodipodi:docname="Delete.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -90,7 +90,7 @@
        rx="10.771461"
        ry="8.6411724" />
     <rect
-       style="opacity:1;fill:#fe0000;fill-opacity:1;stroke:#000000;stroke-width:0.41551405;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.41551405;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect815-9-8-4"
        width="6.6034799"
        height="72.014435"
@@ -98,7 +98,7 @@
        y="135.847"
        transform="matrix(0.66110612,-0.75029241,0.66110612,0.75029241,0,0)" />
     <rect
-       style="opacity:1;fill:#f80000;fill-opacity:1;stroke:#000000;stroke-width:0.41551405;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.41551405;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect815-9-8-4-8"
        width="6.6034799"
        height="72.014435"
@@ -106,7 +106,7 @@
        y="-66.854271"
        transform="matrix(-0.66110613,-0.7502924,-0.66110613,0.7502924,0,0)" />
     <rect
-       style="opacity:1;fill:#fa0000;fill-opacity:1;stroke:#fb0000;stroke-width:0.75561893;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.75561893;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect883"
        width="5.5307689"
        height="7.2978811"

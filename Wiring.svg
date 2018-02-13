@@ -25,17 +25,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="306.46904"
-     inkscape:cy="86.68516"
+     inkscape:zoom="2.8"
+     inkscape:cx="244.21776"
+     inkscape:cy="155.44449"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1001"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="2160"
+     inkscape:window-height="1330"
+     inkscape:window-x="-12"
+     inkscape:window-y="-12"
+     inkscape:window-maximized="1"
+     inkscape:snap-grids="false"
+     inkscape:snap-object-midpoints="true"
+     showguides="false" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -73,21 +76,21 @@
        id="rect815-9-8"
        width="4.4207468"
        height="48.210583"
-       x="85.068459"
-       y="57.812031" />
+       x="85.729919"
+       y="57.717537" />
     <ellipse
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.72374195;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.68364662;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path847"
-       cx="87.289581"
-       cy="106.23273"
-       rx="10.771461"
-       ry="8.6411724" />
+       cx="87.957756"
+       cy="105.69819"
+       rx="9.5887957"
+       ry="8.6612196" />
     <ellipse
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.72374195;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.68364662;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path847-7"
-       cx="141.75787"
-       cy="106.2269"
-       rx="10.771461"
-       ry="8.6411724" />
+       cx="142.15877"
+       cy="105.69236"
+       rx="9.5887957"
+       ry="8.6612196" />
   </g>
 </svg>

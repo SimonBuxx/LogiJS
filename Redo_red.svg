@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="Undo_red - Kopie.svg">
+   sodipodi:docname="Redo_red.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -54,7 +54,7 @@
      id="layer1"
      transform="translate(-78.329615,-55.369321)">
     <path
-       style="fill:#ff0000;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
        d="M 103.26696,97.678519 C 65.849228,71.21884 79.385478,59.13012 88.739908,58.862851 c 9.354436,-0.267272 16.570712,4.543581 16.570712,4.543581 l 1.87089,-7.750815 12.2944,14.699824 -16.43314,2.956175 1.59018,-5.707153 c 0,0 -10.482802,-3.774198 -13.549682,-3.666273 0,0 -22.56135,-1.539246 12.183692,33.740329 z"
        id="path14"
        inkscape:connector-curvature="0"
