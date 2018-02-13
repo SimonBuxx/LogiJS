@@ -68,7 +68,7 @@ let syncFramerate = true;
 
 // GUI Elements
 let textInput, saveButton, loadButton, newButton; // Right hand side
-let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
+let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, commandDiv, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton, labelButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
@@ -290,17 +290,24 @@ function setup() { // jshint ignore:line
     });
     */
 
+    commandDiv = createDiv('');
+    commandDiv.position(0,0);
+    commandDiv.style('width','80em');
+    commandDiv.style('background-color','blue');
+    commandDiv.style('height','5em');
+    commandDiv.style('margin-left','15em');
+    commandDiv.style('margin-top','5em');
+
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('');
     deleteButton.style('background-image','url(Delete.svg)');
     deleteButton.style('background-size','3em');
     deleteButton.style('background-repeat','no-repeat');
     deleteButton.style('background-position','center');
-    deleteButton.style('height','3em');
-    deleteButton.style('width','2em');
+    deleteButton.style('height','4em');
+    deleteButton.style('width','4em');
+    deleteButton.parent(commandDiv);
     deleteButton.position(0, 0);
-    deleteButton.style('margin-left','13.8em');
-    deleteButton.style('margin-top','0.25em');
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
     deleteButton.mouseOver(() => {
