@@ -257,15 +257,26 @@ function setup() { // jshint ignore:line
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json'); });
     halfaddButton.elt.style.width = "117px";
     halfaddButton.elt.className = "button";
-
+    
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
     fulladdButton.position(5, 630);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json'); });
     fulladdButton.elt.style.width = "117px";
     fulladdButton.elt.className = "button";
-
-    //Upper left
+    
+    //Toolbar container
+    commandDiv = createDiv('');
+    commandDiv.position(0,0);
+    commandDiv.style('width','80em');
+    commandDiv.style('background-color','blue');
+    commandDiv.style('height','5em');
+    commandDiv.style('margin-left','4em');
+    commandDiv.style('margin-top','5em');
+    commandDiv.mouseOver(() => {
+        commandDiv.style('background-color','red');
+    });
+    
     // Activates the wiring mode
     wireButton = createButton('');
     wireButton.style('background-image','url(Wiring.svg)');
@@ -290,16 +301,6 @@ function setup() { // jshint ignore:line
     });
     */
 
-    commandDiv = createDiv('');
-    commandDiv.position(0,0);
-    commandDiv.style('width','80em');
-    commandDiv.style('background-color','blue');
-    commandDiv.style('height','5em');
-    commandDiv.style('margin-left','4em');
-    commandDiv.style('margin-top','5em');
-    commandDiv.mouseOver(() => {
-        commandDiv.style('background-color','red');
-    });
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('');
