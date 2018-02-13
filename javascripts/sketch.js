@@ -276,6 +276,9 @@ function setup() { // jshint ignore:line
     commandDiv.mouseOver(() => {
         commandDiv.style('background-color','red');
     });
+    commandDiv.mouseOut(() => {
+        commandDiv.style('background-color','blue');
+    });
     
     // Activates the wiring mode
     wireButton = createButton('');
