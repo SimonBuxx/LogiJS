@@ -314,16 +314,8 @@ function setup() { // jshint ignore:line
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
     deleteButton.mouseOver(() => {
-        deleteButton.style('background-image','url(Delete_hover.svg)');
-        deleteButton.style('background-size','3em');
-        deleteButton.style('background-repeat','no-repeat');
-        deleteButton.style('background-position','center');
     });
     deleteButton.mouseOut(() => {
-        deleteButton.style('background-image','url(Delete.svg)');
-    deleteButton.style('background-size','3em');
-    deleteButton.style('background-repeat','no-repeat');
-    deleteButton.style('background-position','center');
     });
     
 
