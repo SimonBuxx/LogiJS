@@ -273,21 +273,33 @@ function setup() { // jshint ignore:line
     commandDiv.style('margin-left','10em');
     commandDiv.style('width','70em');
     commandDiv.style('background-color','blue');
-    commandDiv.style('height','5em');
+    commandDiv.style('height','4em');
+
+    // Wiring container, contains wiring div + wiring text
+    wiringContainer = createDiv('');
+    wiringContainer.parent(commandDiv);
+    wiringContainer.style('width','4em');
+    wiringContainer.style('height','4em');
+    wiringContainer.style('background-color','orange');
+    wiringContainer.style('position','relative');
+    wiringContainer.style('margin-left','4em');
+    wiringContainer.style('margin-top','0em');
+    wiringContainer.mouseOver(() => {
+        wireButton.style('background-color','orange');
+    });
     
     // Activates the wiring mode
-    wireButton = createButton('');
+    wireButton = createDiv('');
     wireButton.style('background-image','url(Wiring.svg)');
     wireButton.style('background-size','3em');
     wireButton.style('background-repeat','no-repeat');
     wireButton.style('background-position','center');
-    wireButton.style('height','3em');
-    wireButton.style('width','2em');
-    wireButton.position(0, 0);
-    wireButton.style('margin-left','10.17em');
-    wireButton.style('margin-top','0.25em');
+    wireButton.style('height','4em');
+    wireButton.style('width','4em');
+    wireButton.style('background-color','red');
+    wireButton.style('position','relative');
+    wireButton.parent(wiringContainer);
     wireButton.mousePressed(wiringClicked);
-    wireButton.elt.className = "button";
     //  Mouse hover (code below) commented out for now 
     /*
     wireButton.mouseOver(() => {
@@ -302,8 +314,8 @@ function setup() { // jshint ignore:line
     // Delete container, contains delete div + delete text
     deleteContainer = createDiv('');
     deleteContainer.parent(commandDiv);
-    deleteContainer.style('width','5em');
-    deleteContainer.style('height','5em');
+    deleteContainer.style('width','4em');
+    deleteContainer.style('height','4em');
     deleteContainer.style('background-color','green');
     deleteContainer.style('position','relative');
     deleteContainer.style('margin-left','0em');
@@ -315,10 +327,10 @@ function setup() { // jshint ignore:line
     // Activates the delete mode (objects and wires)
     deleteButton = createDiv('');
     deleteButton.style('background-image','url(Delete.svg)');
-    deleteButton.style('background-size','4em');
+    deleteButton.style('background-size','3.5em');
     deleteButton.style('background-repeat','no-repeat');
     deleteButton.style('background-position','center');
-    deleteButton.style('height','75%');
+    deleteButton.style('height','70%');
     deleteButton.style('width','100%');
     deleteButton.style('background-color','yellow');
     deleteButton.parent(deleteContainer);
@@ -337,7 +349,7 @@ function setup() { // jshint ignore:line
     deleteText.style('bottom','0em');
     deleteText.style('text-align','center');
     deleteText.style('width','100%');
-    deleteText.style('height','25%');
+    deleteText.style('height','30%');
     deleteText.style('background-color','brown');
 
     // Starts and stops the simulation
