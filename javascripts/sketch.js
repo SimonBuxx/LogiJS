@@ -88,12 +88,14 @@ let cnv; // Canvas variable
     Sets up the canvas and caps the framerate
 */
 function setup() { // jshint ignore:line
+    // Create container (as parent) for whole GUI
+    guiContainer = createDiv('');
+    guiContainer.addClass('guiContainer');
+
     // Creates the canvas in full window size
     cnv = createCanvas(windowWidth, windowHeight);
-    //cnv.position(250, 150);
-    //cnv.style('margin-top','3.5em');
-    //cnv.style('margin-left','9.5em');
-    cnv.style('position','relative');
+    cnv.parent(guiContainer);
+    cnv.addClass('guiContainer canvas');
 
     // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -268,38 +270,19 @@ function setup() { // jshint ignore:line
     
     //Toolbar container
     commandDiv = createDiv('');
-    commandDiv.style('position','relative');
-    commandDiv.style('margin-top','5em');
-    commandDiv.style('margin-left','10em');
+    commandDiv.parent(guiContainer);
     commandDiv.style('width','70em');
-    commandDiv.style('background-color','blue');
+    commandDiv.addClass('guiContainer toolbar-flexbox');
     commandDiv.addClass('toolbar-flexbox');
-    commandDiv.style('height','4em');
-
-    // Wiring container, contains wiring div + wiring text
-    wiringContainer = createDiv('');
-    wiringContainer.parent(commandDiv);
-    wiringContainer.style('width','4em');
-    wiringContainer.style('height','4em');
-    wiringContainer.style('background-color','orange');
-    wiringContainer.style('position','relative');
-    wiringContainer.style('margin-left','4em');
-    wiringContainer.style('margin-top','0em');
-    wiringContainer.mouseOver(() => {
-        wireButton.style('background-color','orange');
-    });
     
-    // Activates the wiring mode
-    wireButton = createDiv('');
+    // Activates the wiring mode   
+    wireButton = createDiv('Wiring');
+    wireButton.parent(commandDiv);
     wireButton.style('background-image','url(Wiring.svg)');
-    wireButton.style('background-size','3em');
-    wireButton.style('background-repeat','no-repeat');
-    wireButton.style('background-position','center');
-    wireButton.style('height','4em');
-    wireButton.style('width','4em');
-    wireButton.style('background-color','red');
-    wireButton.style('position','relative');
-    wireButton.parent(wiringContainer);
+    wireButton.addClass('toolbar-button');
+    wireButton.mouseOver(() => {
+        wireButton.style('background-color','blue');
+    });
     wireButton.mousePressed(wiringClicked);
     //  Mouse hover (code below) commented out for now 
     /*
@@ -312,24 +295,15 @@ function setup() { // jshint ignore:line
     });
     */
    
-   // Delete container, contains delete div + delete text
+   // Delete button
    deleteDiv = createDiv('Delete');
    deleteDiv.parent(commandDiv);
-   deleteDiv.style('width','4em');
-   deleteDiv.style('height','4em');
    deleteDiv.style('background-image','url(Delete.svg)');
-   deleteDiv.style('background-size','3.5em');
-   deleteDiv.style('background-repeat','no-repeat');
-   deleteDiv.style('background-position','50% 30%');
-   deleteDiv.style('background-color','green');
-   deleteDiv.style('font','normal medium/normal Arial, Helvetica, sans-serif');
-   deleteDiv.style('line-height','6.8em');
-   deleteDiv.style('text-align','center');
-   deleteDiv.style('color','white');
-   deleteDiv.style('position','relative');
+   deleteDiv.addClass('toolbar-button');
    deleteDiv.mouseOver(() => {
-       deleteDiv.style('background-color','blue');
+        deleteDiv.style('background-color','blue');
    });
+   
 
     // Starts and stops the simulation
     simButton = createButton('');
