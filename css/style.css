@@ -11,16 +11,19 @@ body {
     background-attachment: fixed;
 }
 
+/* Wraps canvas and toolbar(s) */
 .guiContainer{
     position: relative;
     height: 100%;
     width: 100%;
 }
 
+/* Purpose: canvas shall work as a background under the toolbar(s) */
 .guiContainer canvas{
     position: fixed;
 }
 
+/* Purpose: "Floating" toolbar over the canvas */
 .guiContainer .toolbar-flexbox{
     position: relative;
 }
@@ -151,6 +154,7 @@ input[type=text] {
     padding: 0;
 }
 
+/* toolbar settings for flexbox */
 .toolbar-flexbox{
     display: flex;
     display: -webkit-flex;
@@ -158,22 +162,32 @@ input[type=text] {
     background-color: blue;
     position: relative;
     height: 4em;
-    margin: 0 auto;
     top: 1em;
-
+    left: 0.5em;
 }
 
 .toolbar-button{
-    display: flex;
     width: 4em;
     height: 100%;
     background-size: 3.5em;
     background-repeat: no-repeat;
+    background-position: 50% 20%;
+    background-color: green;
+    font: normal medium/normal Arial, Helvetica, sans-serif;
+    line-height: 6.6em;
+    color: white;
+    text-align: center;
+}
+
+.toolbar-startButton{
+    width: 4em;
+    height: 100%;
+    background-size: 1.5em;
+    background-repeat: no-repeat;
     background-position: 50% 30%;
     background-color: green;
     font: normal medium/normal Arial, Helvetica, sans-serif;
-    line-height: 6.8em;
-    text-align: center;
+    line-height: 6.6em;
     color: white;
-
+    text-align: center;
 }
