@@ -285,23 +285,23 @@ function setup() { // jshint ignore:line
     simButton.elt.className = "button";
 
     // Adds text before the Clockrate slider
-    crText = createP('Clock rate: ');
+    crText = createP('Clock: ');
     crText.elt.style.color = 'white';
     crText.elt.style.fontFamily = 'Arial';
     crText.elt.style.margin = 0;
-    crText.position(362, 5);
+    crText.position(364, 5);
     crText.elt.className = 'label';
 
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
-    clockspeedSlider.position(446, 4);
+    clockspeedSlider.position(416, 4);
     clockspeedSlider.style('width', '80px');
     clockspeedSlider.style('margin', '0px');
     clockspeedSlider.elt.className = 'slider';
 
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(532, 4);
+    undoButton.position(502, 4);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -310,7 +310,7 @@ function setup() { // jshint ignore:line
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(598, 4);
+    redoButton.position(568, 4);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -319,33 +319,33 @@ function setup() { // jshint ignore:line
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(664, 4);
+    selectButton.position(634, 4);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
     // Adds diodes (barricade in one direction)
-    diodeButton = createButton('Toggle Diodes');
-    diodeButton.position(736, 4);
+    diodeButton = createButton('Diodes');
+    diodeButton.position(706, 4);
     diodeButton.mousePressed(diodeClicked);
     //diodeButton.elt.style.width = "117px";
     diodeButton.elt.className = "button";
 
     // Adds labels
     labelButton = createButton('Label');
-    labelButton.position(863, 4);
+    labelButton.position(783, 4);
     labelButton.mousePressed(labelButtonClicked);
     labelButton.elt.className = "button";
 
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(930, 4);
+    propertiesButton.position(850, 4);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
         setPropMode(true);
     });
     propertiesButton.elt.className = "button";
 
-    sfcheckbox = createCheckbox('Sync FPS', true);
+    sfcheckbox = createCheckbox('Sync Ticks', true);
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
         if (!sfcheckbox.checked() && simRunning) {
@@ -356,7 +356,7 @@ function setup() { // jshint ignore:line
     });
     sfcheckbox.elt.style.color = 'white';
     sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(1026, 4);
+    sfcheckbox.position(946, 4);
     sfcheckbox.elt.className = 'checkbox';
 
     // Upper right

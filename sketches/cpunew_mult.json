@@ -1,5 +1,5 @@
 {
-  "caption": "cpunew",
+  "caption": "cpunew_mult",
   "gates": [
     {
       "x": "1170",
@@ -252,7 +252,7 @@
       "logicFunction": "\"and\"",
       "caption": "\"&\"",
       "outputsInv": "[false]",
-      "inputsInv": "[false,false]"
+      "inputsInv": "[true,false]"
     },
     {
       "x": "720",
@@ -2929,7 +2929,7 @@
       "x": "780",
       "y": "720",
       "direction": "0",
-      "filename": "\"cn_ctrl2.json\"",
+      "filename": "\"cn_ctrl3.json\"",
       "outputsInv": "[]",
       "inputsInv": "[]"
     }
