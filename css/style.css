@@ -177,11 +177,13 @@ input[type=text] {
     line-height: 6.6em;
     color: white;
     text-align: center;
+    cursor: pointer;
 }
 
 .toolbar-startButton{
     width: 4em;
     height: 100%;
+    border: 0px solid black;
     background-size: 1.5em;
     background-repeat: no-repeat;
     background-position: 50% 30%;
@@ -190,4 +192,5 @@ input[type=text] {
     line-height: 6.6em;
     color: white;
     text-align: center;
+    cursor: pointer;
 }

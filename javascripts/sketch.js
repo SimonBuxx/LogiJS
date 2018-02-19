@@ -304,6 +304,19 @@ function setup() { // jshint ignore:line
         deleteDiv.style('background-color','blue');
    });
    
+   // Undos the last action
+   undoButton = createDiv('Undo');
+   undoButton.parent(commandDiv);
+   undoButton.style('background-image','url(Undo_black.svg)');
+   undoButton.addClass('toolbar-startButton');
+   undoButton.mouseOver(() => {
+       
+    });
+   undoButton.mouseOut(() => {
+   });
+   undoButton.mousePressed(() => {
+       undo();
+   });
 
     // Starts and stops the simulation
     simButton = createButton('');
@@ -344,30 +357,6 @@ function setup() { // jshint ignore:line
     clockspeedSlider.style('margin-top','2.2em');
     clockspeedSlider.elt.className = 'slider';
 
-    // Undos the last action
-    undoButton = createButton('');
-    undoButton.style('background-image','url(Undo_black.svg)');
-    undoButton.style('background-size','1em');
-    undoButton.style('background-repeat','no-repeat');
-    undoButton.style('background-position','center');
-    undoButton.style('height','1.5em');
-    undoButton.style('width','1em');
-    undoButton.position(0, 0);
-    undoButton.style('margin-left','20.7em');
-    undoButton.style('margin-top','0.25em');
-    undoButton.mouseOver(() => {
-        undoButton.style('background-image','url(Undo_black.svg)');
-        undoButton.style('background-size','1em');
-        undoButton.style('background-repeat','no-repeat');
-        undoButton.style('background-position','center');
-    });
-    undoButton.mouseOut(() => {
-    });
-    undoButton.mousePressed(() => {
-        undo();
-    });
-    undoButton.elt.disabled = true;
-    undoButton.elt.className = "button";
 
     // Redos the last action
     redoButton = createButton('');
