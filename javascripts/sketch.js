@@ -273,6 +273,7 @@ function setup() { // jshint ignore:line
     commandDiv.style('margin-left','10em');
     commandDiv.style('width','70em');
     commandDiv.style('background-color','blue');
+    commandDiv.addClass('toolbar-flexbox');
     commandDiv.style('height','4em');
 
     // Wiring container, contains wiring div + wiring text
