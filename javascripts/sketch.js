@@ -313,22 +313,22 @@ function setup() { // jshint ignore:line
     */
    
    // Delete container, contains delete div + delete text
-   deleteContainer = createDiv('Delete');
-   deleteContainer.parent(commandDiv);
-   deleteContainer.style('width','4em');
-   deleteContainer.style('height','4em');
-   deleteContainer.style('background-image','url(Delete.svg)');
-   deleteContainer.style('background-size','3.5em');
-   deleteContainer.style('background-repeat','no-repeat');
-   deleteContainer.style('background-position','50% 30%');
-   deleteContainer.style('background-color','green');
-   deleteContainer.style('font','normal medium/normal Arial, Helvetica, sans-serif');
-   deleteContainer.style('line-height','6.8em');
-   deleteContainer.style('text-align','center');
-   deleteContainer.style('color','white');
-   deleteContainer.style('position','relative');
-   deleteContainer.mouseOver(() => {
-       deleteButton.style('background-color','blue');
+   deleteDiv = createDiv('Delete');
+   deleteDiv.parent(commandDiv);
+   deleteDiv.style('width','4em');
+   deleteDiv.style('height','4em');
+   deleteDiv.style('background-image','url(Delete.svg)');
+   deleteDiv.style('background-size','3.5em');
+   deleteDiv.style('background-repeat','no-repeat');
+   deleteDiv.style('background-position','50% 30%');
+   deleteDiv.style('background-color','green');
+   deleteDiv.style('font','normal medium/normal Arial, Helvetica, sans-serif');
+   deleteDiv.style('line-height','6.8em');
+   deleteDiv.style('text-align','center');
+   deleteDiv.style('color','white');
+   deleteDiv.style('position','relative');
+   deleteDiv.mouseOver(() => {
+       deleteDiv.style('background-color','blue');
    });
 
     // Starts and stops the simulation
