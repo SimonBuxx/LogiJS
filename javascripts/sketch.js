@@ -311,47 +311,25 @@ function setup() { // jshint ignore:line
         mouseClicked();
     });
     */
-
-    // Delete container, contains delete div + delete text
-    deleteContainer = createDiv('');
-    deleteContainer.parent(commandDiv);
-    deleteContainer.style('width','4em');
-    deleteContainer.style('height','4em');
-    deleteContainer.style('background-color','green');
-    deleteContainer.style('position','relative');
-    deleteContainer.style('margin-left','0em');
-    deleteContainer.style('margin-top','0em');
-    deleteContainer.mouseOver(() => {
-        deleteButton.style('background-color','blue');
-    });
-
-    // Activates the delete mode (objects and wires)
-    deleteButton = createDiv('');
-    deleteButton.style('background-image','url(Delete.svg)');
-    deleteButton.style('background-size','3.5em');
-    deleteButton.style('background-repeat','no-repeat');
-    deleteButton.style('background-position','center');
-    deleteButton.style('height','70%');
-    deleteButton.style('width','100%');
-    deleteButton.style('background-color','yellow');
-    deleteButton.parent(deleteContainer);
-    deleteButton.style('position','relative');
-    deleteButton.mousePressed(deleteClicked);
-    deleteButton.mouseOver(() => {
-    });
-    deleteButton.mouseOut(() => {
-    });
-
-    //Delete text in delete div
-    deleteText = createDiv('Delete');
-    deleteText.parent(deleteContainer);
-    deleteText.style('position','relative');
-    deleteText.style('font','normal medium/normal Arial, Helvetica, sans-serif');
-    deleteText.style('bottom','0em');
-    deleteText.style('text-align','center');
-    deleteText.style('width','100%');
-    deleteText.style('height','30%');
-    deleteText.style('background-color','brown');
+   
+   // Delete container, contains delete div + delete text
+   deleteContainer = createDiv('Delete');
+   deleteContainer.parent(commandDiv);
+   deleteContainer.style('width','4em');
+   deleteContainer.style('height','4em');
+   deleteContainer.style('background-image','url(Delete.svg)');
+   deleteContainer.style('background-size','3.5em');
+   deleteContainer.style('background-repeat','no-repeat');
+   deleteContainer.style('background-position','50% 30%');
+   deleteContainer.style('background-color','green');
+   deleteContainer.style('font','normal medium/normal Arial, Helvetica, sans-serif');
+   deleteContainer.style('line-height','6.8em');
+   deleteContainer.style('text-align','center');
+   deleteContainer.style('color','white');
+   deleteContainer.style('position','relative');
+   deleteContainer.mouseOver(() => {
+       deleteButton.style('background-color','blue');
+   });
 
     // Starts and stops the simulation
     simButton = createButton('');
