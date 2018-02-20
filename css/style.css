@@ -213,8 +213,25 @@ input[type=text] {
 /* Basic settings for simulation container */
 .simContainer{
     position: relative;
-    background-color: blue;
-    height: 4em;
-    top: 1em;
-    left: 0.5em;
+    background-color: darkgreen;
+    height: 100%;
+    width: 10em;
+}
+
+/* Upper container in simulation container */
+.upperSimContainer{
+    position: relative;
+    width: 100;
+    height: 55%;
+    background-color: darkgray;
+}
+
+.simContainer-startButton{
+    width: 25%;
+    height: 100%;
+    background-size: 1.5em;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-color: darkblue;
+    cursor: pointer;
 }

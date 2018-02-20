@@ -274,6 +274,29 @@ function setup() { // jshint ignore:line
     commandDiv.style('width','70em');
     commandDiv.addClass('guiContainer toolbar-flexbox');
 
+    // Simulation container in toolbar
+    simContainer = createDiv('');
+    simContainer.parent(commandDiv);
+    simContainer.addClass('simContainer');
+
+    // Upper container in simulation container
+    upperSimContainer = createDiv('');
+    upperSimContainer.parent(simContainer);
+    upperSimContainer.addClass('upperSimContainer');
+
+    // Starts and stops the simulation
+    simButton = createDiv('');
+    simButton.parent(upperSimContainer);
+    simButton.style('background-image','url(Start.svg)');
+    simButton.addClass('simContainer-startButton');
+    simButton.mousePressed(simClicked);
+    // Mouse hover (code below) commented out for now
+    /*simButton.mouseOver(() => {
+    });
+    simButton.mouseOut(() => {
+    });
+    */
+
     // Activates the wiring mode   
     wireButton = createDiv('Wiring');
     wireButton.parent(commandDiv);
@@ -341,25 +364,6 @@ function setup() { // jshint ignore:line
    diodeButton.mousePressed(diodeClicked);
    diodeButton.addClass('toolbar-toggleButton');
 
-    // Starts and stops the simulation
-    simButton = createButton('');
-    simButton.style('background-image','url(Start.svg)');
-    simButton.style('background-size','0.8em');
-    simButton.style('background-repeat','no-repeat');
-    simButton.style('background-position','center');
-    simButton.style('height','1.5em');
-    simButton.style('width','1em');
-    simButton.position(0, 0);
-    simButton.style('margin-left','17.7em');
-    simButton.style('margin-top','0.25em');
-    simButton.mousePressed(simClicked);
-    simButton.elt.className = "button";
-    // Mouse hover (code below) commented out for now
-    /*simButton.mouseOver(() => {
-    });
-    simButton.mouseOut(() => {
-    });
-    */
    
     
     // Adds text before the Clockrate slider
