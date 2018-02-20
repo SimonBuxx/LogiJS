@@ -252,7 +252,7 @@
       "logicFunction": "\"and\"",
       "caption": "\"&\"",
       "outputsInv": "[false]",
-      "inputsInv": "[false,false]"
+      "inputsInv": "[true,false]"
     },
     {
       "x": "720",
