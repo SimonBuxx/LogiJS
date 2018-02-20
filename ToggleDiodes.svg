@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="41.733326mm"
-   height="39.602856mm"
-   viewBox="0 0 41.733326 39.602856"
+   width="62.22366mm"
+   height="25.496811mm"
+   viewBox="0 0 62.22366 25.496811"
    version="1.1"
    id="svg859"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="ToogleDiodes.svg">
+   sodipodi:docname="ToggleDiodes.svg">
   <defs
      id="defs853" />
   <sodipodi:namedview
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="0.59206591"
-     inkscape:cy="70.744067"
+     inkscape:zoom="22.4"
+     inkscape:cx="128.75126"
+     inkscape:cy="48.226409"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -54,22 +54,22 @@
      inkscape:label="Ebene 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-82.900729,-86.167676)">
+     transform="translate(-82.900726,-94.259784)">
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.18844435;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.16583531;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1423"
-       width="39.41441"
-       height="1.6625917"
-       x="-125.67631"
-       y="103.77132"
+       width="25.344706"
+       height="2.0023556"
+       x="-119.68054"
+       y="114.02117"
        transform="rotate(-90)" />
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#090000;stroke-width:0.28099999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#090000;stroke-width:0.33893198;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1423-1"
-       width="41.452328"
-       height="1.3143425"
-       x="83.041229"
-       y="105.77965" />
+       width="61.708477"
+       height="1.2844735"
+       x="83.05616"
+       y="105.79458" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#ffffff;fill-opacity:0.94984801;stroke:#ffffff;stroke-width:0.23014456;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -85,8 +85,8 @@
        inkscape:rounded="0"
        inkscape:randomized="0"
        d="m 107.44236,105.70184 -3.30635,5.38342 -3.00901,-5.55509 z"
-       inkscape:transform-center-x="0.23260318"
+       inkscape:transform-center-x="0.27649099"
        inkscape:transform-center-y="-4.1011945"
-       transform="matrix(1.3963883,-0.02448012,0.034194,0.99970032,-44.713103,2.7701214)" />
+       transform="matrix(1.65988,-0.02448012,0.04064624,0.99970032,-62.4685,2.7326716)" />
   </g>
 </svg>
