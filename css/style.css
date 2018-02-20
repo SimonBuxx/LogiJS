@@ -194,3 +194,18 @@ input[type=text] {
     text-align: center;
     cursor: pointer;
 }
+
+.toolbar-toggleButton{
+    width: 8em;
+    height: 100%;
+    border: 0px solid black;
+    background-size: 2.5em;
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+    background-color: green;
+    font: normal medium/normal Arial, Helvetica, sans-serif;
+    line-height: 6.3em;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}

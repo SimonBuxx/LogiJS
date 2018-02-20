@@ -326,6 +326,21 @@ function setup() { // jshint ignore:line
    redoButton.mousePressed(() => {
        redo();
    });
+   
+   // Activates the mode for area selecting
+   selectButton = createDiv('Select');
+   selectButton.parent(commandDiv);
+   selectButton.style('background-image','url(Select.svg)');
+   selectButton.mousePressed(startSelect);
+   selectButton.addClass('toolbar-startButton');
+   selectButton.style('background-size','2.5em');
+
+   // Adds diodes (barricade in one direction)
+   diodeButton = createButton('Toggle Diodes');
+   diodeButton.parent(commandDiv);
+   diodeButton.style('background-image','url(ToggleDiodes.svg)');
+   diodeButton.mousePressed(diodeClicked);
+   diodeButton.addClass('toolbar-toggleButton');
 
     // Starts and stops the simulation
     simButton = createButton('');
@@ -346,6 +361,7 @@ function setup() { // jshint ignore:line
     simButton.mouseOut(() => {
     });
     */
+   
     
     // Adds text before the Clockrate slider
     crText = createP('Clock rate: ');
@@ -368,18 +384,7 @@ function setup() { // jshint ignore:line
 
 
 
-    // Activates the mode for area selecting
-    selectButton = createButton('Select');
-    selectButton.position(664, 4);
-    selectButton.mousePressed(startSelect);
-    selectButton.elt.className = "button";
 
-    // Adds diodes (barricade in one direction)
-    diodeButton = createButton('Toggle Diodes');
-    diodeButton.position(736, 4);
-    diodeButton.mousePressed(diodeClicked);
-    //diodeButton.elt.style.width = "117px";
-    diodeButton.elt.className = "button";
 
     // Adds labels
     labelButton = createButton('Label');
