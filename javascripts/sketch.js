@@ -307,7 +307,7 @@ function setup() { // jshint ignore:line
    // Undos the last action
    undoButton = createDiv('Undo');
    undoButton.parent(commandDiv);
-   undoButton.style('background-image','url(Undo_black.svg)');
+   undoButton.style('background-image','url(Undo.svg)');
    undoButton.addClass('toolbar-startButton');
    undoButton.mouseOver(() => {
        
@@ -316,6 +316,15 @@ function setup() { // jshint ignore:line
    });
    undoButton.mousePressed(() => {
        undo();
+   });
+
+   // Redos the last action
+   redoButton = createDiv('Redo');
+   redoButton.parent(commandDiv);
+   redoButton.style('background-image','url(Redo.svg)');
+   redoButton.addClass('toolbar-startButton');
+   redoButton.mousePressed(() => {
+       redo();
    });
 
     // Starts and stops the simulation
@@ -358,22 +367,6 @@ function setup() { // jshint ignore:line
     clockspeedSlider.elt.className = 'slider';
 
 
-    // Redos the last action
-    redoButton = createButton('');
-    redoButton.style('background-image','url(Redo_red.svg)');
-    redoButton.style('background-size','1em');
-    redoButton.style('background-repeat','no-repeat');
-    redoButton.style('background-position','center');
-    redoButton.style('height','1.5em');
-    redoButton.style('width','1em');
-    redoButton.position(0, 0);
-    redoButton.style('margin-left','23.25em');
-    redoButton.style('margin-top','0.25em');
-    redoButton.mousePressed(() => {
-        redo();
-    });
-    redoButton.elt.disabled = true;
-    redoButton.elt.className = "button";
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
