@@ -180,6 +180,7 @@ input[type=text] {
     cursor: pointer;
 }
 
+/* Derivations of toolbar-button */
 .toolbar-startButton{
     width: 4em;
     height: 100%;
@@ -207,4 +208,13 @@ input[type=text] {
     color: white;
     text-align: center;
     cursor: pointer;
+}
+
+/* Basic settings for simulation container */
+.simContainer{
+    position: relative;
+    background-color: blue;
+    height: 4em;
+    top: 1em;
+    left: 0.5em;
 }
