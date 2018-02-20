@@ -274,14 +274,6 @@ function setup() { // jshint ignore:line
     commandDiv.style('width','70em');
     commandDiv.addClass('guiContainer toolbar-flexbox');
 
-    // Simulation container for start/clockspeed/... elements
-    simulationDiv = createDiv('');
-    simulationDiv.parent(guiContainer);
-    simulationDiv.style('width','10em');
-    simulationDiv.addClass('simContainer');
-    simulationDiv.style('top','1.5em');
-    simulationDiv.style('left','10em');
-
     // Activates the wiring mode   
     wireButton = createDiv('Wiring');
     wireButton.parent(commandDiv);
