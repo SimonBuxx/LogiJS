@@ -367,7 +367,7 @@ function setup() { // jshint ignore:line
    
     
     // Adds text before the Clockrate slider
-    crText = createP('Clock rate: ');
+    crText = createP('Clock: ');
     crText.elt.style.color = 'white';
     crText.elt.style.fontFamily = 'Arial';
     crText.elt.style.margin = 0;
@@ -391,20 +391,20 @@ function setup() { // jshint ignore:line
 
     // Adds labels
     labelButton = createButton('Label');
-    labelButton.position(863, 4);
+    labelButton.position(783, 4);
     labelButton.mousePressed(labelButtonClicked);
     labelButton.elt.className = "button";
 
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(930, 4);
+    propertiesButton.position(850, 4);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
         setPropMode(true);
     });
     propertiesButton.elt.className = "button";
 
-    sfcheckbox = createCheckbox('Sync FPS', true);
+    sfcheckbox = createCheckbox('Sync Ticks', true);
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
         if (!sfcheckbox.checked() && simRunning) {
@@ -415,7 +415,7 @@ function setup() { // jshint ignore:line
     });
     sfcheckbox.elt.style.color = 'white';
     sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(1026, 4);
+    sfcheckbox.position(946, 4);
     sfcheckbox.elt.className = 'checkbox';
 
     // Upper right

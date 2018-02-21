@@ -283,7 +283,6 @@ LogicGate.prototype.show = function () {
         fill(255);
     }
     strokeWeight(3);
-    //fill(255);
 
     if (this.direction % 2 === 0) {
         rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); //  Draw body
@@ -305,7 +304,7 @@ LogicGate.prototype.show = function () {
             strokeWeight(3);
         } else if (this.inputs[i - 1] === true) {
             stroke(this.highColor);
-            strokeWeight(4);
+            strokeWeight(5);
         } else {
             stroke(this.lowColor);
             strokeWeight(3);
@@ -343,7 +342,6 @@ LogicGate.prototype.show = function () {
 
         fill(255);
         strokeWeight(2);
-        //stroke(0);
 
         if (this.inputsInv[i - 1]) {
             switch (this.direction) {
@@ -363,7 +361,7 @@ LogicGate.prototype.show = function () {
             strokeWeight(3);
         } else if (this.outputs[i - 1] === true) {
             stroke(this.highColor);
-            strokeWeight(4);
+            strokeWeight(5);
         } else {
             stroke(this.lowColor);
             strokeWeight(3);
@@ -401,7 +399,6 @@ LogicGate.prototype.show = function () {
 
         fill(255);
         strokeWeight(2);
-        //stroke(0);
 
         if (this.outputsInv[i - 1]) {
             switch (this.direction) {
