@@ -211,6 +211,8 @@ input[type=text] {
     background-color: darkgreen;
     height: 100%;
     width: 10em;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Upper container in simulation container */
