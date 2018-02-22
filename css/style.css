@@ -241,6 +241,7 @@ input[type=text] {
     height: 50%;
     font: normal medium/normal Arial, Helvetica, sans-serif;
     padding: 0.5em;
+    cursor: pointer;
 }
 
 
