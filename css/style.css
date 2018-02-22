@@ -180,7 +180,9 @@ input[type=text] {
     cursor: pointer;
 }
 
-/* Derivations of toolbar-button */
+/* Derivations of toolbar-button
+    Doesn't have to do with start button, 
+    just a name for a different size of background image */
 .toolbar-startButton{
     width: 4em;
     height: 100%;
