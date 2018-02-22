@@ -358,14 +358,12 @@ function setup() { // jshint ignore:line
    selectButton.style('background-size','2.5em');
 
    // Adds diodes (barricade in one direction)
-   diodeButton = createButton('Toggle Diodes');
+   diodeButton = createDiv('Toggle Diodes');
    diodeButton.parent(commandDiv);
    diodeButton.style('background-image','url(ToggleDiodes.svg)');
    diodeButton.mousePressed(diodeClicked);
    diodeButton.addClass('toolbar-toggleButton');
 
-   
-    
     // Adds text before the Clockrate slider
     crText = createP('Clock: ');
     crText.elt.style.color = 'white';
@@ -384,10 +382,6 @@ function setup() { // jshint ignore:line
     clockspeedSlider.style('margin-left','22.5em');
     clockspeedSlider.style('margin-top','2.2em');
     clockspeedSlider.elt.className = 'slider';
-
-
-
-
 
     // Adds labels
     labelButton = createButton('Label');
