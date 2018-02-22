@@ -222,6 +222,14 @@ input[type=text] {
     background-color: darkgray;
 }
 
+/* Lower container in simulation container */
+.lowerSimContainer{
+    position: relative;
+    width: 100%;
+    height: 45%;
+    background-color: darkolivegreen;
+}
+
 .simContainer-startButton{
     width: 25%;
     height: 100%;
@@ -232,6 +240,7 @@ input[type=text] {
     cursor: pointer;
 }
 
+/* Checkbox */
 .sfCheckBox{
     -ms-user-select: none;
     -webkit-user-select: none;

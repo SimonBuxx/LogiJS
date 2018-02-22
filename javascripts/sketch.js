@@ -284,6 +284,11 @@ function setup() { // jshint ignore:line
     upperSimContainer.parent(simContainer);
     upperSimContainer.addClass('upperSimContainer');
 
+    // Lower container in simulation container
+    lowerSimContainer = createDiv('');
+    lowerSimContainer.parent(simContainer);
+    lowerSimContainer.addClass('lowerSimContainer');
+
     // Starts and stops the simulation
     simButton = createDiv('');
     simButton.parent(upperSimContainer);
@@ -310,6 +315,23 @@ function setup() { // jshint ignore:line
        }
    });
    sfcheckbox.addClass('sfCheckBox');
+
+   // Adds text before the Clockrate slider
+   crText = createDiv('Clock:');
+   crText.elt.style.margin = 0;
+   crText.position(0, 0);
+   crText.style('margin-left','17em');
+   crText.style('margin-top','2em');
+   crText.addClass('clockSpeedText');
+
+   // A slider for adjusting the clock speed
+   clockspeedSlider = createSlider(1, 60, 30, 1);
+   clockspeedSlider.position(0, 0);
+   clockspeedSlider.style('width', '6em');
+   clockspeedSlider.style('margin', '0px');
+   clockspeedSlider.style('margin-left','22.5em');
+   clockspeedSlider.style('margin-top','2.2em');
+   clockspeedSlider.elt.className = 'slider';
 
    // Section of all the buttons next to the 
    // simulation container starts here 
@@ -381,24 +403,6 @@ function setup() { // jshint ignore:line
    diodeButton.mousePressed(diodeClicked);
    diodeButton.addClass('toolbar-toggleButton');
 
-    // Adds text before the Clockrate slider
-    crText = createP('Clock: ');
-    crText.elt.style.color = 'white';
-    crText.elt.style.fontFamily = 'Arial';
-    crText.elt.style.margin = 0;
-    crText.position(0, 0);
-    crText.style('margin-left','17em');
-    crText.style('margin-top','2em');
-    crText.elt.className = 'label';
-
-    // A slider for adjusting the clock speed
-    clockspeedSlider = createSlider(1, 60, 30, 1);
-    clockspeedSlider.position(0, 0);
-    clockspeedSlider.style('width', '6em');
-    clockspeedSlider.style('margin', '0px');
-    clockspeedSlider.style('margin-left','22.5em');
-    clockspeedSlider.style('margin-top','2.2em');
-    clockspeedSlider.elt.className = 'slider';
 
     // Adds labels
     labelButton = createButton('Label');
