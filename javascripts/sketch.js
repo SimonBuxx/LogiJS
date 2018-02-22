@@ -268,7 +268,7 @@ function setup() { // jshint ignore:line
     fulladdButton.elt.style.width = "117px";
     fulladdButton.elt.className = "button";
     
-    //Toolbar container
+    //Toolbar container (root)
     commandDiv = createDiv('');
     commandDiv.parent(guiContainer);
     commandDiv.style('width','70em');
@@ -297,6 +297,8 @@ function setup() { // jshint ignore:line
     });
     */
 
+    // Checkbox next to start button to sync 
+    // clock rate
    sfcheckbox = createCheckbox('Sync Ticks', true);
    sfcheckbox.parent(upperSimContainer);
    sfcheckbox.changed(function () {
@@ -308,6 +310,9 @@ function setup() { // jshint ignore:line
        }
    });
    sfcheckbox.addClass('sfCheckBox');
+
+   // Section of all the buttons next to the 
+   // simulation container starts here 
 
     // Activates the wiring mode   
     wireButton = createDiv('Wiring');
