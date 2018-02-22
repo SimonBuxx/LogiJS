@@ -63,13 +63,6 @@ body {
     user-select: none;
 }
 
-.checkbox {
-    -ms-user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-}
-
 .button:hover {
     border: 1px solid #812525;
     background: #721a1a;
@@ -223,6 +216,7 @@ input[type=text] {
 /* Upper container in simulation container */
 .upperSimContainer{
     position: relative;
+    display: flex;
     width: 100;
     height: 55%;
     background-color: darkgray;
@@ -237,3 +231,17 @@ input[type=text] {
     background-color: darkblue;
     cursor: pointer;
 }
+
+.sfCheckBox{
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    position: relative;
+    height: 50%;
+    font: normal medium/normal Arial, Helvetica, sans-serif;
+    padding: 0.5em;
+}
+
+
+

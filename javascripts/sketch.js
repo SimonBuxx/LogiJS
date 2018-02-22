@@ -297,6 +297,18 @@ function setup() { // jshint ignore:line
     });
     */
 
+   sfcheckbox = createCheckbox('Sync Ticks', true);
+   sfcheckbox.parent(upperSimContainer);
+   sfcheckbox.changed(function () {
+       syncFramerate = sfcheckbox.checked();
+       if (!sfcheckbox.checked() && simRunning) {
+           updater = setInterval(updateTick, 1);
+       } else {
+           clearInterval(updater);
+       }
+   });
+   sfcheckbox.addClass('sfCheckBox');
+
     // Activates the wiring mode   
     wireButton = createDiv('Wiring');
     wireButton.parent(commandDiv);
@@ -397,20 +409,6 @@ function setup() { // jshint ignore:line
         setPropMode(true);
     });
     propertiesButton.elt.className = "button";
-
-    sfcheckbox = createCheckbox('Sync Ticks', true);
-    sfcheckbox.changed(function () {
-        syncFramerate = sfcheckbox.checked();
-        if (!sfcheckbox.checked() && simRunning) {
-            updater = setInterval(updateTick, 1);
-        } else {
-            clearInterval(updater);
-        }
-    });
-    sfcheckbox.elt.style.color = 'white';
-    sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(946, 4);
-    sfcheckbox.elt.className = 'checkbox';
 
     // Upper right
     // Input field for the file name
