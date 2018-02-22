@@ -318,19 +318,14 @@ function setup() { // jshint ignore:line
 
    // Adds text before the Clockrate slider
    crText = createDiv('Clock:');
-   crText.elt.style.margin = 0;
-   crText.position(0, 0);
-   crText.style('margin-left','17em');
-   crText.style('margin-top','2em');
+   crText.parent(lowerSimContainer);
    crText.addClass('clockSpeedText');
+   crText.style('line-height','1.8em');
+   crText.style('padding-left','0.2em');
 
    // A slider for adjusting the clock speed
    clockspeedSlider = createSlider(1, 60, 30, 1);
-   clockspeedSlider.position(0, 0);
-   clockspeedSlider.style('width', '6em');
-   clockspeedSlider.style('margin', '0px');
-   clockspeedSlider.style('margin-left','22.5em');
-   clockspeedSlider.style('margin-top','2.2em');
+   clockspeedSlider.parent(lowerSimContainer);
    clockspeedSlider.elt.className = 'slider';
 
    // Section of all the buttons next to the 
