@@ -947,7 +947,7 @@ function startSimulation() {
     if (!sfcheckbox.checked()) {
         updater = setInterval(updateTick, 1);
     }
-    simButton.style('background-image','url(Pause.svg)'); // Alter the caption of the Start/Stop button
+    simButton.style('background-image','url(Pause.svg)'); // Alter the icon of the Start/Stop button
     disableButtons(true);
     setPropMode(false);
     showSClickBox = false; // Hide the selection click box
