@@ -352,12 +352,12 @@ function setup() { // jshint ignore:line
     */
    
    // Delete button
-   deleteDiv = createDiv('Delete');
-   deleteDiv.parent(commandDiv);
-   deleteDiv.style('background-image','url(Delete.svg)');
-   deleteDiv.addClass('toolbar-button');
-   deleteDiv.mouseOver(() => {
-        deleteDiv.style('background-color','blue');
+   deleteButton = createDiv('Delete');
+   deleteButton.parent(commandDiv);
+   deleteButton.style('background-image','url(Delete.svg)');
+   deleteButton.addClass('toolbar-button');
+   deleteButton.mouseOver(() => {
+        deleteButton.style('background-color','blue');
    });
    
    // Undos the last action
