@@ -104,7 +104,7 @@ body {
     outline: none;
     -webkit-transition: .2s;
     transition: opacity .2s;
-    top: 0.25em;
+    top: 0.3em;
 }
 
 .slider::-webkit-slider-thumb {
