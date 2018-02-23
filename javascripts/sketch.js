@@ -947,7 +947,7 @@ function startSimulation() {
     if (!sfcheckbox.checked()) {
         updater = setInterval(updateTick, 1);
     }
-    setSimButtonText('Stop'); // Alter the caption of the Start/Stop button
+    simButton.style('background-image','url(Pause.svg)'); // Alter the caption of the Start/Stop button
     disableButtons(true);
     setPropMode(false);
     showSClickBox = false; // Hide the selection click box
@@ -987,7 +987,7 @@ function startSimulation() {
 */
 function endSimulation() {
     clearInterval(updater); // Stop the unsynced simulation updater
-    setSimButtonText('Start'); // Set the button caption to 'Start'
+    simButton.style('background-image','url(Start.svg)'); // Set the button caption to 'Start'
     setControlMode('none');
     setPropMode(true);
     disableButtons(false); // Enable all buttons
@@ -1021,9 +1021,11 @@ function endSimulation() {
     reDraw();
 }
 
+/*
 function setSimButtonText(text) {
     simButton.elt.innerHTML = text;
 }
+*/
 
 /*
     Enables/Disables the undo and redo buttons
