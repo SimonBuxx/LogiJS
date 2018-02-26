@@ -398,9 +398,8 @@ function setup() { // jshint ignore:line
    diodeButton.mousePressed(diodeClicked);
    diodeButton.addClass('toolbar-toggleButton');
 
-
     // Adds labels
-    labelButton = createButton('Label');
+    labelButton = createDiv('Label');
     labelButton.parent(commandDiv);
     labelButton.style('background-image','url(Label.svg)');
     labelButton.mousePressed(labelButtonClicked);
@@ -409,7 +408,7 @@ function setup() { // jshint ignore:line
 
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(850, 4);
+    propertiesButton.position(850, 104);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
         setPropMode(true);
@@ -424,10 +423,12 @@ function setup() { // jshint ignore:line
     textInput.position(windowWidth - textInput.width - 203, 4);
 
     // Clears the canvas and resets the view
-    newButton = createButton('New');
-    newButton.position(windowWidth - textInput.width - 262, 4);
+    newButton = createDiv('New');
+    newButton.parent(commandDiv);
+    newButton.style('background-image','url(New.svg)');
     newButton.mousePressed(newClicked);
-    newButton.elt.className = "button";
+    newButton.addClass('toolbar-button');
+    newButton.style('background-size','1.5em');
 
     // Button to save the sketch
     saveButton = createButton('Save');
