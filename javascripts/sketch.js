@@ -407,18 +407,20 @@ function setup() { // jshint ignore:line
     labelButton.style('background-size','2em');
 
     // Toggles the properties mode
-    propertiesButton = createButton('Properties');
-    propertiesButton.position(850, 104);
+    propertiesButton = createDiv('Properties');
+    propertiesButton.parent(commandDiv);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
         setPropMode(true);
     });
-    propertiesButton.elt.className = "button";
+    propertiesButton.style('background-image','url(Properties.svg)');
+    propertiesButton.addClass('toolbar-button');
+    propertiesButton.style('width','4.6em');
 
     // Upper right
     // Input field for the file name
     textInput = createInput('');
-    textInput.attribute('placeholder','New Sketch');
+    textInput.attribute('placeholder','Circuit name');
     textInput.size(150, 15);
     textInput.position(windowWidth - textInput.width - 203, 4);
 

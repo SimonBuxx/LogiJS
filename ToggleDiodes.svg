@@ -46,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -64,12 +64,12 @@
        y="114.02117"
        transform="rotate(-90)" />
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#090000;stroke-width:0.33893198;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#090000;stroke-width:0.4263781;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1423-1"
-       width="61.708477"
-       height="1.2844735"
-       x="83.05616"
-       y="105.79458" />
+       width="61.621033"
+       height="2.0356622"
+       x="83.099884"
+       y="105.8383" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#ffffff;fill-opacity:0.94984801;stroke:#ffffff;stroke-width:0.23014456;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
