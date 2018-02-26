@@ -401,9 +401,11 @@ function setup() { // jshint ignore:line
 
     // Adds labels
     labelButton = createButton('Label');
-    labelButton.position(783, 4);
+    labelButton.parent(commandDiv);
+    labelButton.style('background-image','url(Label.svg)');
     labelButton.mousePressed(labelButtonClicked);
-    labelButton.elt.className = "button";
+    labelButton.addClass('toolbar-button');
+    labelButton.style('background-size','2em');
 
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
