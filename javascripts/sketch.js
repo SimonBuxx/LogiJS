@@ -417,13 +417,7 @@ function setup() { // jshint ignore:line
     propertiesButton.addClass('toolbar-button');
     propertiesButton.style('width','4.6em');
 
-    // Upper right
-    // Input field for the file name
-    textInput = createInput('');
-    textInput.attribute('placeholder','Circuit name');
-    textInput.size(150, 15);
-    textInput.position(windowWidth - textInput.width - 203, 4);
-
+    
     // Clears the canvas and resets the view
     newButton = createDiv('New');
     newButton.parent(commandDiv);
@@ -431,6 +425,22 @@ function setup() { // jshint ignore:line
     newButton.mousePressed(newClicked);
     newButton.addClass('toolbar-button');
     newButton.style('background-size','1.5em');
+    
+    // Contains search bar, load and save button
+    searchSaveLoadContainer = createDiv('');
+    searchSaveLoadContainer.parent(commandDiv);
+    searchSaveLoadContainer.addClass('searchSaveLoadContainer');
+
+    // Container to wrap input field
+    inputContainer = createDiv('');
+    inputContainer.parent(searchSaveLoadContainer);
+    inputContainer.addClass('inputContainer');
+    
+    // Upper right
+    // Input field for the file name
+    textInput = createInput('');
+    textInput.parent(inputContainer);
+    textInput.attribute('placeholder','Circuit name');
 
     // Button to save the sketch
     saveButton = createButton('Save');

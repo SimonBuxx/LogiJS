@@ -134,6 +134,8 @@ input[type=text] {
     padding-left: 7px;
     padding-top: 3px;
     padding-bottom: 3px;
+    width: 95%;
+    height: 100%;   
 }
 
 #github {
@@ -265,5 +267,17 @@ input[type=text] {
     cursor: pointer;
 }
 
+.searchSaveLoadContainer{
+    width: 9em;
+    height: 100%;
+    background-color: purple;
+    display: inline-block;
+}
 
-
+.inputContainer{
+    position: relative;
+    width: 90%;
+    height: 1em;
+    margin: 0.5em auto 0em auto;
+    background-color: peru;
+}
