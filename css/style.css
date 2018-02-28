@@ -267,6 +267,7 @@ input[type=text] {
     cursor: pointer;
 }
 
+/* Container for input field, search and save button */
 .searchSaveLoadContainer{
     width: 9em;
     height: 100%;
@@ -274,6 +275,7 @@ input[type=text] {
     display: inline-block;
 }
 
+/* Contains search bar, child of searchSaveLoadContainer */
 .inputContainer{
     position: relative;
     width: 90%;
