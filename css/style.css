@@ -260,6 +260,8 @@ input[type=text]:hover {
 
 .simContainer-startButton{
     width: 25%;
+    color: white;
+    border: 0px solid black;
     height: 100%;
     background-size: 1.5em;
     background-repeat: no-repeat;

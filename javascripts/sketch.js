@@ -454,16 +454,23 @@ function setup() { // jshint ignore:line
     saveLoadContainer.addClass('lowerSimContainer');
 
     // Button to save the sketch
-    saveButton = createButton('Save');
-    saveButton.position(windowWidth - 198, 4);
+    saveButton = createDiv('Save');
+    saveButton.parent(saveLoadContainer);
     saveButton.mousePressed(saveClicked);
-    saveButton.elt.className = "button";
+    saveButton.addClass('simContainer-startButton');
+    saveButton.style('width','50%');
+    saveButton.style('text-align','center');
+    saveButton.style('line-height','1.8em');
 
     // Button to load a sketch
     loadButton = createButton('Load');
-    loadButton.position(windowWidth - 134, 4);
+    loadButton.parent(saveLoadContainer);
     loadButton.mousePressed(loadClicked);
-    loadButton.elt.className = "button";
+    loadButton.addClass('simContainer-startButton');
+    loadButton.style('width','50%');
+    loadButton.style('font-size','1em');
+    loadButton.style('text-align','center');
+    loadButton.style('line-height','1.8em');
 
     // Button to import as custom
     ascustomButton = createButton('Import');
