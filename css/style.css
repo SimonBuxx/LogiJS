@@ -26,6 +26,7 @@ body {
 /* Purpose: "Floating" toolbar over the canvas */
 .guiContainer .toolbar-flexbox{
     position: relative;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
 }
 
 .button {
@@ -170,11 +171,11 @@ input[type=text]:hover, input[type=text]:focus {
     display: flex;
     display: -webkit-flex;
     justify-content: center;
-    background-color: blue;
+    background-color: #221b1b;
     position: relative;
     height: 4em;
     top: 1em;
-    left: 1em;
+    left: 7em;
 }
 
 .toolbar-button{
@@ -184,7 +185,7 @@ input[type=text]:hover, input[type=text]:focus {
     border: 0px solid black;
     background-repeat: no-repeat;
     background-position: 50% 20%;
-    background-color: green;
+    background-color: #221b1b;
     font: normal medium/normal Arial, Helvetica, sans-serif;
     line-height: 6.6em;
     color: white;
@@ -202,7 +203,7 @@ input[type=text]:hover, input[type=text]:focus {
     border: 0px solid black;
     background-repeat: no-repeat;
     background-position: 50% 30%;
-    background-color: green;
+    background-color: #221b1b;
     font: normal medium/normal Arial, Helvetica, sans-serif;
     line-height: 6.6em;
     color: white;
@@ -217,7 +218,7 @@ input[type=text]:hover, input[type=text]:focus {
     background-size: 5em;
     background-repeat: no-repeat;
     background-position: 50% 20%;
-    background-color: green;
+    background-color: #221b1b;
     font: normal medium/normal Arial, Helvetica, sans-serif;
     line-height: 6.3em;
     color: white;
@@ -228,7 +229,7 @@ input[type=text]:hover, input[type=text]:focus {
 /* Basic settings for simulation container */
 .simContainer{
     position: relative;
-    background-color: darkgreen;
+    background-color: #221b1b;
     height: 100%;
     width: 10em;
     display: flex;
@@ -241,7 +242,7 @@ input[type=text]:hover, input[type=text]:focus {
     display: flex;
     width: 100;
     height: 55%;
-    background-color: darkgray;
+    background-color: #221b1b;
     transition: background-image 0.3s linear;
 }
 
@@ -251,7 +252,7 @@ input[type=text]:hover, input[type=text]:focus {
     display: flex;
     width: 100%;
     height: 45%;
-    background-color: darkolivegreen;
+    background-color: #221b1b;
     font: normal medium/normal Arial, Helvetica, sans-serif;
     color: white;
 }
@@ -264,7 +265,7 @@ input[type=text]:hover, input[type=text]:focus {
     background-size: 1.5em;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-color: darkblue;
+    background-color: #221b1b;
     cursor: pointer;
 }
 
@@ -279,6 +280,7 @@ input[type=text]:hover, input[type=text]:focus {
     font: normal medium/normal Arial, Helvetica, sans-serif;
     padding: 0.5em;
     cursor: pointer;
+    color: white;
 }
 
 /* Container for input field, search and save button */
@@ -286,7 +288,7 @@ input[type=text]:hover, input[type=text]:focus {
     position: relative;
     width: 9em;
     height: 100%;
-    background-color: purple;
+    background-color: #221b1b;
 }
 
 /* Contains search bar, child of searchSaveLoadContainer */
@@ -295,5 +297,5 @@ input[type=text]:hover, input[type=text]:focus {
     width: 100%;
     height: 100%;
     margin: 0em auto 0em auto;
-    background-color: peru;
+    background-color: #221b1b;
 }
