@@ -130,22 +130,20 @@ input[type=range]::-ms-tooltip {
 
 input[type=text] {
     border: none;
-    border-radius: 3px;
-    padding-left: 7px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-left: 0.4em;
+    padding-right: 0.05em;
     width: 95%;
     height: 100%;  
     font-size: 1.1em; 
     background-color: darkgray;
+    transition: background-color 0.3s;
 }
 
-input[type=text]:hover {
+/* Switch input field to white while focused or on mouse hover */
+input[type=text]:hover, input[type=text]:focus {
     border: none;
-    border-radius: 3px;
-    padding-left: 7px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-left: 0.4em;
+    padding-right: 0.05em;
     width: 95%;
     height: 100%;  
     font-size: 1.1em; 
