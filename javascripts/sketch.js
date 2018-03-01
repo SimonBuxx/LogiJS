@@ -463,7 +463,7 @@ function setup() { // jshint ignore:line
     saveButton.style('line-height','1.8em');
 
     // Button to load a sketch
-    loadButton = createButton('Load');
+    loadButton = createDiv('Load');
     loadButton.parent(saveLoadContainer);
     loadButton.mousePressed(loadClicked);
     loadButton.addClass('simContainer-startButton');
