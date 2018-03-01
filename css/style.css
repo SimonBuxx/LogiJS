@@ -135,7 +135,21 @@ input[type=text] {
     padding-top: 3px;
     padding-bottom: 3px;
     width: 95%;
-    height: 100%;   
+    height: 100%;  
+    font-size: 1.1em; 
+    background-color: darkgray;
+}
+
+input[type=text]:hover {
+    border: none;
+    border-radius: 3px;
+    padding-left: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 95%;
+    height: 100%;  
+    font-size: 1.1em; 
+    background-color: white;
 }
 
 #github {
@@ -269,17 +283,17 @@ input[type=text] {
 
 /* Container for input field, search and save button */
 .searchSaveLoadContainer{
+    position: relative;
     width: 9em;
     height: 100%;
     background-color: purple;
-    display: inline-block;
 }
 
 /* Contains search bar, child of searchSaveLoadContainer */
 .inputContainer{
     position: relative;
-    width: 90%;
-    height: 1em;
-    margin: 0.5em auto 0em auto;
+    width: 100%;
+    height: 100%;
+    margin: 0em auto 0em auto;
     background-color: peru;
 }

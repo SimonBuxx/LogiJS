@@ -426,14 +426,20 @@ function setup() { // jshint ignore:line
     newButton.addClass('toolbar-button');
     newButton.style('background-size','1.5em');
     
-    // Contains search bar, load and save button
+    // Contains search bar, load and save button as their parent
     searchSaveLoadContainer = createDiv('');
     searchSaveLoadContainer.parent(commandDiv);
-    searchSaveLoadContainer.addClass('searchSaveLoadContainer');
+    searchSaveLoadContainer.addClass('simContainer');
 
-    // Container to wrap input field
+    // Container for upper input field
+    upperInputSaveLoadContainer = createDiv('');
+    upperInputSaveLoadContainer.parent(searchSaveLoadContainer);
+    upperInputSaveLoadContainer.addClass('upperSimContainer');
+
+    // Container to wrap input field, so input field positioning
+    // is controllable via this parent
     inputContainer = createDiv('');
-    inputContainer.parent(searchSaveLoadContainer);
+    inputContainer.parent(upperInputSaveLoadContainer);
     inputContainer.addClass('inputContainer');
     
     // Upper right
@@ -441,6 +447,11 @@ function setup() { // jshint ignore:line
     textInput = createInput('');
     textInput.parent(inputContainer);
     textInput.attribute('placeholder','Circuit name');
+
+    // Container for save and load button
+    saveLoadContainer = createDiv('');
+    saveLoadContainer.parent(searchSaveLoadContainer);
+    saveLoadContainer.addClass('lowerSimContainer');
 
     // Button to save the sketch
     saveButton = createButton('Save');
