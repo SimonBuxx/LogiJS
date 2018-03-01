@@ -174,7 +174,7 @@ input[type=text]:hover, input[type=text]:focus {
     position: relative;
     height: 4em;
     top: 1em;
-    left: 0.5em;
+    left: 1em;
 }
 
 .toolbar-button{

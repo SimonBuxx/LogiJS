@@ -271,7 +271,7 @@ function setup() { // jshint ignore:line
     //Toolbar container (root)
     commandDiv = createDiv('');
     commandDiv.parent(guiContainer);
-    commandDiv.style('width','70em');
+    commandDiv.style('width','63em');
     commandDiv.addClass('guiContainer toolbar-flexbox');
 
     // Simulation container in toolbar
@@ -473,10 +473,14 @@ function setup() { // jshint ignore:line
     loadButton.style('line-height','1.8em');
 
     // Button to import as custom
-    ascustomButton = createButton('Import');
-    ascustomButton.position(windowWidth - 70, 4);
-    ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json'); });
-    ascustomButton.elt.className = "button";
+    ascustomButton = createDiv('Import');
+    ascustomButton.parent(commandDiv);
+    ascustomButton.mousePressed(function () { 
+        return customClicked(textInput.value() + '.json'); 
+    });
+    ascustomButton.addClass('toolbar-startButton');
+    ascustomButton.style('background-image','url(Import.svg)');
+    ascustomButton.style('background-size','1.8em');
 
     /*
         Elements for the properties mode
