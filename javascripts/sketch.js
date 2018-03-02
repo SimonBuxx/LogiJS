@@ -278,7 +278,6 @@ function setup() { // jshint ignore:line
     simContainer = createDiv('');
     simContainer.parent(commandDiv);
     simContainer.addClass('simContainer');
-    simContainer.style('padding','0em 0.5em 0em 0.4em');
 
     // Upper container in simulation container
     upperSimContainer = createDiv('');
@@ -323,7 +322,7 @@ function setup() { // jshint ignore:line
    crText.parent(lowerSimContainer);
    crText.addClass('clockSpeedText');
    crText.style('line-height','1.8em');
-   crText.style('padding-left','0.2em');
+   crText.style('padding-left','0.5em');
 
    // A slider for adjusting the clock speed
    clockspeedSlider = createSlider(1, 60, 30, 1);
@@ -423,7 +422,6 @@ function setup() { // jshint ignore:line
     propertiesButton.style('padding-right','0.5em');
     propertiesButton.style('border-right','1px solid darkgrey');
 
-    
     // Clears the canvas and resets the view
     newButton = createDiv('New');
     newButton.parent(commandDiv);
@@ -436,6 +434,7 @@ function setup() { // jshint ignore:line
     searchSaveLoadContainer = createDiv('');
     searchSaveLoadContainer.parent(commandDiv);
     searchSaveLoadContainer.addClass('simContainer');
+    searchSaveLoadContainer.style('width','10em');
 
     // Container for upper input field
     upperInputSaveLoadContainer = createDiv('');
