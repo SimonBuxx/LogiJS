@@ -278,6 +278,7 @@ function setup() { // jshint ignore:line
     simContainer = createDiv('');
     simContainer.parent(commandDiv);
     simContainer.addClass('simContainer');
+    simContainer.style('padding','0em 0.5em 0em 0.4em');
 
     // Upper container in simulation container
     upperSimContainer = createDiv('');
@@ -293,6 +294,7 @@ function setup() { // jshint ignore:line
     simButton = createDiv('');
     simButton.parent(upperSimContainer);
     simButton.style('background-image','url(Start.svg)');
+    simButton.style('background-size','1.3em');
     simButton.addClass('simContainer-startButton');
     simButton.mousePressed(simClicked);
     // Mouse hover (code below) commented out for now
@@ -335,6 +337,8 @@ function setup() { // jshint ignore:line
     wireButton = createDiv('Wiring');
     wireButton.parent(commandDiv);
     wireButton.style('background-image','url(Wiring.svg)');
+    wireButton.style('border-left','1px solid darkgrey');
+    wireButton.style('padding-left','0.5em');
     wireButton.addClass('toolbar-button');
     wireButton.mouseOver(() => {
         wireButton.style('background-color','blue');
@@ -415,7 +419,9 @@ function setup() { // jshint ignore:line
     });
     propertiesButton.style('background-image','url(Properties.svg)');
     propertiesButton.addClass('toolbar-button');
-    propertiesButton.style('width','4.6em');
+    propertiesButton.style('width','5em');
+    propertiesButton.style('padding-right','0.5em');
+    propertiesButton.style('border-right','1px solid darkgrey');
 
     
     // Clears the canvas and resets the view
