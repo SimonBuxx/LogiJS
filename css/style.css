@@ -132,7 +132,7 @@ input[type=range]::-ms-tooltip {
 input[type=text] {
     border: none;
     padding-left: 0.4em;
-    padding-right: 0.05em;
+    padding-right: 0.04em;
     width: 95%;
     height: 100%;  
     font-size: 1.1em; 
@@ -144,7 +144,7 @@ input[type=text] {
 input[type=text]:hover, input[type=text]:focus {
     border: none;
     padding-left: 0.4em;
-    padding-right: 0.05em;
+    padding-right: 0.04em;
     width: 95%;
     height: 100%;  
     font-size: 1.1em; 
