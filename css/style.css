@@ -191,6 +191,10 @@ input[type=text]:hover, input[type=text]:focus {
     color: white;
     text-align: center;
     cursor: pointer;
+    -webkit-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 /* Derivations of toolbar-button
@@ -209,6 +213,10 @@ input[type=text]:hover, input[type=text]:focus {
     color: white;
     text-align: center;
     cursor: pointer;
+    -webkit-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .toolbar-toggleButton{
@@ -224,6 +232,10 @@ input[type=text]:hover, input[type=text]:focus {
     color: white;
     text-align: center;
     cursor: pointer;
+    -webkit-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 /* Basic settings for simulation container */
@@ -267,6 +279,10 @@ input[type=text]:hover, input[type=text]:focus {
     background-position: 50% 50%;
     background-color: #333333;
     cursor: pointer;
+    -webkit-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 /* Checkbox */
@@ -281,6 +297,10 @@ input[type=text]:hover, input[type=text]:focus {
     padding: 0.5em;
     cursor: pointer;
     color: white;
+    -webkit-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 /* Container for input field, search and save button */
@@ -298,4 +318,11 @@ input[type=text]:hover, input[type=text]:focus {
     height: 100%;
     margin: 0em auto 0em auto;
     background-color: #333333;
+}
+
+/* Hover effects */
+.toolbar-button:hover, .toolbar-startButton:hover, 
+.toolbar-toggleButton:hover, .simContainer-startButton:hover,
+.sfCheckBox:hover{
+    background-color: #721a1a;
 }

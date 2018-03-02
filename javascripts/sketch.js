@@ -341,7 +341,7 @@ function setup() { // jshint ignore:line
     wireButton.style('padding-left','0.5em');
     wireButton.addClass('toolbar-button');
     wireButton.mouseOver(() => {
-        wireButton.style('background-color','blue');
+        
     });
     wireButton.mousePressed(wiringClicked);
     //  Mouse hover (code below) commented out for now 
@@ -361,7 +361,7 @@ function setup() { // jshint ignore:line
    deleteButton.style('background-image','url(Delete.svg)');
    deleteButton.addClass('toolbar-button');
    deleteButton.mouseOver(() => {
-        deleteButton.style('background-color','blue');
+        
    });
    
    // Undos the last action
