@@ -98,21 +98,21 @@ body {
 .slider {
     -webkit-appearance: none;
     position: relative;
-    width: 7em;
-    height: 1em;
+    width: 7rem;
+    height: 1rem;
     border-radius: 10px;
     background: #969696;
     outline: none;
     -webkit-transition: .2s;
     transition: opacity .2s;
-    top: 0.3em;
-    left: 0.1em;
+    top: 0.3rem;
+    left: 0.1rem;
 }
 
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 15px;
-    height: 0.9em;
+    height: 0.9rem;
     border-radius: 75%;
     background: rgb(105, 1, 1);
     cursor: pointer;
@@ -120,7 +120,7 @@ body {
 
 .slider::-moz-range-thumb {
     width: 15px;
-    height: 0.9em;
+    height: 0.9rem;
     border-radius: 75%;
     background: rgb(105, 1, 1);
     cursor: pointer;
@@ -132,11 +132,11 @@ input[type=range]::-ms-tooltip {
 
 input[type=text] {
     border: none;
-    padding-left: 0.4em;
-    padding-right: 0.04em;
+    padding-left: 0.4rem;
+    padding-right: 0.04rem;
     width: 95%;
     height: 100%;  
-    font-size: 1.1em; 
+    font-size: 1.1rem; 
     background-color: darkgray;
     transition: background-color 0.3s;
 }
@@ -144,11 +144,11 @@ input[type=text] {
 /* Switch input field to white while focused or on mouse hover */
 input[type=text]:hover, input[type=text]:focus {
     border: none;
-    padding-left: 0.4em;
-    padding-right: 0.04em;
+    padding-left: 0.4rem;
+    padding-right: 0.04rem;
     width: 95%;
     height: 100%;  
-    font-size: 1.1em; 
+    font-size: 1.1rem; 
     background-color: white;
 }
 
@@ -160,8 +160,8 @@ input[type=text]:hover, input[type=text]:focus {
 
 #logo {
     position: fixed;
-    left: 0.1em;
-    top: 0em;
+    left: 0.1rem;
+    top: 0rem;
     width: 150px;
     margin: 0;
     padding: 0;
@@ -174,21 +174,21 @@ input[type=text]:hover, input[type=text]:focus {
     justify-content: center;
     background-color: #333333;
     position: relative;
-    height: 4em;
-    top: 1em;
-    left: 7em;
+    height: 4rem;
+    top: 1rem;
+    left: 7rem;
 }
 
 .toolbar-button{
-    width: 4em;
+    width: 4rem;
     height: 100%;
-    background-size: 3.5em;
+    background-size: 3.5rem;
     border: 0px solid black;
     background-repeat: no-repeat;
     background-position: 50% 20%;
     background-color: #333333;
     font: normal medium/normal Arial, Helvetica, sans-serif;
-    line-height: 6.6em;
+    line-height: 6.6rem;
     color: white;
     text-align: center;
     cursor: pointer;
@@ -202,15 +202,15 @@ input[type=text]:hover, input[type=text]:focus {
     Doesn't have to do with start button, 
     just a name for a different size of background image */
 .toolbar-startButton{
-    width: 4em;
+    width: 4rem;
     height: 100%;
-    background-size: 1.5em;
+    background-size: 1.5rem;
     border: 0px solid black;
     background-repeat: no-repeat;
     background-position: 50% 30%;
     background-color: #333333;
     font: normal medium/normal Arial, Helvetica, sans-serif;
-    line-height: 6.6em;
+    line-height: 6.6rem;
     color: white;
     text-align: center;
     cursor: pointer;
@@ -221,15 +221,15 @@ input[type=text]:hover, input[type=text]:focus {
 }
 
 .toolbar-toggleButton{
-    width: 7.5em;
+    width: 7.5rem;
     height: 100%;
     border: 0px solid black;
-    background-size: 5em;
+    background-size: 5rem;
     background-repeat: no-repeat;
     background-position: 50% 20%;
     background-color: #333333;
     font: normal medium/normal Arial, Helvetica, sans-serif;
-    line-height: 6.3em;
+    line-height: 6.3rem;
     color: white;
     text-align: center;
     cursor: pointer;
@@ -244,7 +244,7 @@ input[type=text]:hover, input[type=text]:focus {
     position: relative;
     background-color: #333333;
     height: 100%;
-    width: 12em;
+    width: 12rem;
     display: flex;
     flex-direction: column;
 }
@@ -275,7 +275,7 @@ input[type=text]:hover, input[type=text]:focus {
     color: white;
     border: 0px solid black;
     height: 100%;
-    background-size: 1.5em;
+    background-size: 1.5rem;
     background-repeat: no-repeat;
     background-position: 50% 50%;
     background-color: #333333;
@@ -296,7 +296,7 @@ input[type=text]:hover, input[type=text]:focus {
     height: 50%;
     width: 70%;
     font: normal medium/normal Arial, Helvetica, sans-serif;
-    padding: 0.5em 1em 0.5em 1em;
+    padding: 0.5rem 1rem 0.5rem 1rem;
     cursor: pointer;
     color: white;
     -webkit-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -308,7 +308,7 @@ input[type=text]:hover, input[type=text]:focus {
 /* Container for input field, search and save button */
 .searchSaveLoadContainer{
     position: relative;
-    width: 9em;
+    width: 9rem;
     height: 100%;
     background-color: #333333;
 }
@@ -318,7 +318,7 @@ input[type=text]:hover, input[type=text]:focus {
     position: relative;
     width: 100%;
     height: 100%;
-    margin: 0em auto 0em auto;
+    margin: 0rem auto 0rem auto;
     background-color: #333333;
 }
 

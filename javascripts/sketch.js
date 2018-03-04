@@ -271,7 +271,7 @@ function setup() { // jshint ignore:line
     //Toolbar container (root)
     commandDiv = createDiv('');
     commandDiv.parent(guiContainer);
-    commandDiv.style('width','63em');
+    commandDiv.style('width','63rem');
     commandDiv.addClass('guiContainer toolbar-flexbox');
 
     // Simulation container in toolbar
@@ -293,7 +293,7 @@ function setup() { // jshint ignore:line
     simButton = createDiv('');
     simButton.parent(upperSimContainer);
     simButton.style('background-image','url(Start.svg)');
-    simButton.style('background-size','1.3em');
+    simButton.style('background-size','1.3rem');
     simButton.addClass('simContainer-startButton');
     simButton.mousePressed(simClicked);
     // Mouse hover (code below) commented out for now
@@ -321,8 +321,8 @@ function setup() { // jshint ignore:line
    crText = createDiv('Clock:');
    crText.parent(lowerSimContainer);
    crText.addClass('clockSpeedText');
-   crText.style('line-height','1.8em');
-   crText.style('padding-left','0.5em');
+   crText.style('line-height','1.8rem');
+   crText.style('padding-left','0.5rem');
 
    // A slider for adjusting the clock speed
    clockspeedSlider = createSlider(1, 60, 30, 1);
@@ -337,7 +337,7 @@ function setup() { // jshint ignore:line
     wireButton.parent(commandDiv);
     wireButton.style('background-image','url(Wiring.svg)');
     wireButton.style('border-left','1px solid darkgrey');
-    wireButton.style('padding-left','0.5em');
+    wireButton.style('padding-left','0.5rem');
     wireButton.addClass('toolbar-button');
     wireButton.mouseOver(() => {
         
@@ -392,7 +392,7 @@ function setup() { // jshint ignore:line
    selectButton.style('background-image','url(Select.svg)');
    selectButton.mousePressed(startSelect);
    selectButton.addClass('toolbar-startButton');
-   selectButton.style('background-size','2.5em');
+   selectButton.style('background-size','2.5rem');
 
    // Adds diodes (barricade in one direction)
    diodeButton = createDiv('Toggle Diodes');
@@ -407,7 +407,7 @@ function setup() { // jshint ignore:line
     labelButton.style('background-image','url(Label.svg)');
     labelButton.mousePressed(labelButtonClicked);
     labelButton.addClass('toolbar-button');
-    labelButton.style('background-size','2em');
+    labelButton.style('background-size','2rem');
 
     // Toggles the properties mode
     propertiesButton = createDiv('Properties');
@@ -418,8 +418,8 @@ function setup() { // jshint ignore:line
     });
     propertiesButton.style('background-image','url(Properties.svg)');
     propertiesButton.addClass('toolbar-button');
-    propertiesButton.style('width','5em');
-    propertiesButton.style('padding-right','0.5em');
+    propertiesButton.style('width','5rem');
+    propertiesButton.style('padding-right','0.5rem');
     propertiesButton.style('border-right','1px solid darkgrey');
 
     // Clears the canvas and resets the view
@@ -428,13 +428,13 @@ function setup() { // jshint ignore:line
     newButton.style('background-image','url(New.svg)');
     newButton.mousePressed(newClicked);
     newButton.addClass('toolbar-button');
-    newButton.style('background-size','1.5em');
+    newButton.style('background-size','1.5rem');
     
     // Contains search bar, load and save button as their parent
     searchSaveLoadContainer = createDiv('');
     searchSaveLoadContainer.parent(commandDiv);
     searchSaveLoadContainer.addClass('simContainer');
-    searchSaveLoadContainer.style('width','10em');
+    searchSaveLoadContainer.style('width','10rem');
 
     // Container for upper input field
     upperInputSaveLoadContainer = createDiv('');
@@ -465,7 +465,7 @@ function setup() { // jshint ignore:line
     saveButton.addClass('simContainer-startButton');
     saveButton.style('width','50%');
     saveButton.style('text-align','center');
-    saveButton.style('line-height','1.8em');
+    saveButton.style('line-height','1.8rem');
 
     // Button to load a sketch
     loadButton = createDiv('Load');
@@ -473,9 +473,9 @@ function setup() { // jshint ignore:line
     loadButton.mousePressed(loadClicked);
     loadButton.addClass('simContainer-startButton');
     loadButton.style('width','50%');
-    loadButton.style('font-size','1em');
+    loadButton.style('font-size','1rem');
     loadButton.style('text-align','center');
-    loadButton.style('line-height','1.8em');
+    loadButton.style('line-height','1.8rem');
 
     // Button to import as custom
     ascustomButton = createDiv('Import');
@@ -485,7 +485,7 @@ function setup() { // jshint ignore:line
     });
     ascustomButton.addClass('toolbar-startButton');
     ascustomButton.style('background-image','url(Import.svg)');
-    ascustomButton.style('background-size','1.8em');
+    ascustomButton.style('background-size','1.8rem');
 
     /*
         Elements for the properties mode
