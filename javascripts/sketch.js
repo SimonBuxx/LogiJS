@@ -488,6 +488,11 @@ function setup() { // jshint ignore:line
     ascustomButton.style('background-image','url(Import.svg)');
     ascustomButton.style('background-size','1.8rem');
 
+    // Basic buttons container
+    basicButtonsContainer = createDiv('Basic');
+    basicButtonsContainer.parent(guiContainer);
+    basicButtonsContainer.addClass('guiContainer basicButtonContainer');
+
     /*
         Elements for the properties mode
     */
