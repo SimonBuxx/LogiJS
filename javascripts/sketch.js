@@ -268,6 +268,7 @@ function setup() { // jshint ignore:line
     fulladdButton.elt.style.width = "117px";
     fulladdButton.elt.className = "button";
     
+    // Here the upper toolbar begins
     //Toolbar container (root)
     commandDiv = createDiv('');
     commandDiv.parent(guiContainer);
