@@ -175,8 +175,8 @@ input[type=text]:hover, input[type=text]:focus {
     background-color: #333333;
     position: relative;
     height: 4rem;
-    top: 1rem;
-    left: 7rem;
+    top: 0.5rem;
+    left: 0.5rem;
 }
 
 .toolbar-button{
@@ -271,7 +271,7 @@ input[type=text]:hover, input[type=text]:focus {
 }
 
 .simContainer-startButton{
-    width: 30%;
+    width: 40%;
     color: white;
     border: 0px solid black;
     height: 100%;
@@ -294,10 +294,10 @@ input[type=text]:hover, input[type=text]:focus {
     user-select: none;
     position: relative;
     height: 50%;
-    width: 70%;
+    width: 60%;
     font: normal medium/normal Arial, Helvetica, sans-serif;
+    font-size: 0.88rem;
     padding: 0.5rem 1rem 0.5rem 1rem;
-    cursor: pointer;
     color: white;
     -webkit-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: background-color 300ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -324,7 +324,6 @@ input[type=text]:hover, input[type=text]:focus {
 
 /* Hover effects */
 .toolbar-button:hover, .toolbar-startButton:hover, 
-.toolbar-toggleButton:hover, .simContainer-startButton:hover,
-.sfCheckBox:hover{
+.toolbar-toggleButton:hover, .simContainer-startButton:hover{
     background-color: #721a1a;
 }
