@@ -167,19 +167,6 @@ input[type=text]:hover, input[type=text]:focus {
     padding: 0;
 }
 
-/* Basic buttons container */
-.guiContainer .basicButtonContainer{
-    position: relative;
-    width: 10rem;
-    height: 3rem;
-    background-color: #333333;
-    color: white;
-    text-align: center;
-    font: normal medium/normal Arial, Helvetica, sans-serif;
-    top: 10rem;
-    left: 20rem;
-}
-
 /* toolbar settings for flexbox */
 .toolbar-flexbox{
     display: flex;
