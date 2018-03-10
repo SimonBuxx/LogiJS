@@ -967,6 +967,7 @@ function deleteInput(inputNumber) {
 */
 function deleteDiode(diodeNumber) {
     pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+    doConpoints(); // Conpoints under diodes should appear again
     reDraw();
 }
 
