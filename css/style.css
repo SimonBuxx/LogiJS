@@ -327,3 +327,37 @@ input[type=text]:hover, input[type=text]:focus {
 .toolbar-toggleButton:hover, .simContainer-startButton:hover{
     background-color: #721a1a;
 }
+
+/* Container to hold (as parent) description 'Basic' 
+    and scrollable container with basic components */
+.guiContainer .basicContainer{
+    position: relative;
+    top: 15rem;
+    left: 15rem;
+    width: 10rem;
+    height: 10rem;
+    background-color: #333333;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Child of basicContainer, styles the description 'Basic' */
+.basicContainerText{
+    position: relative;
+    text-align: center;
+    margin: 0;
+    padding: 0.25rem 0 0 0;
+    font: normal medium/normal Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+/* Scrollable container to hold basic components in basicContainer */
+.basicButtonContainer{
+    width: 95%;
+    margin: auto;
+    height: 8rem;
+    background-color: #721a1a;
+    display: flex;
+    flex-flow: wrap;
+    overflow-y: scroll;
+}

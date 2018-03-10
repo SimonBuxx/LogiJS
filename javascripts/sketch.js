@@ -487,6 +487,74 @@ function setup() { // jshint ignore:line
     ascustomButton.style('background-image','url(Import.svg)');
     ascustomButton.style('background-size','1.8rem');
 
+    // Parent container for basic components (child of guiContainer)
+    // shall contain description 'Basic' and a scrollable
+    // set of basic components like button, lamp, switch, etc...
+    basicContainer = createDiv('');
+    basicContainer.parent(guiContainer);
+    basicContainer.addClass('guiContainer basicContainer');
+
+    // Description 'Basic' in basicContainer
+    basicContainerText = createP('Basic');
+    basicContainerText.parent(basicContainer);
+    basicContainerText.addClass('basicContainerText');
+
+    // Container to hold the basic components like button, lamp and so on
+    basicButtonContainer = createDiv('');
+    basicButtonContainer.parent(basicContainer);
+    basicButtonContainer.addClass('basicButtonContainer');
+
+
+
+
+
+
+    
+    labelButton2 = createDiv('Label1');
+    labelButton2.parent(basicButtonContainer);
+    labelButton2.style('background-image','url(Label.svg)');
+    labelButton2.mousePressed(labelButtonClicked);
+    labelButton2.addClass('toolbar-button');
+    labelButton2.style('height','4rem');
+    labelButton2.style('background-size','2rem');
+
+    labelButton3 = createDiv('Label2');
+    labelButton3.parent(basicButtonContainer);
+    labelButton3.style('background-image','url(Label.svg)');
+    labelButton3.mousePressed(labelButtonClicked);
+    labelButton3.addClass('toolbar-button');
+    labelButton3.style('height','4rem');
+    labelButton3.style('background-size','2rem');
+
+    labelButton4 = createDiv('Label3');
+    labelButton4.parent(basicButtonContainer);
+    labelButton4.style('background-image','url(Label.svg)');
+    labelButton4.mousePressed(labelButtonClicked);
+    labelButton4.addClass('toolbar-button');
+    labelButton4.style('height','4rem');
+    labelButton4.style('background-size','2rem');
+
+    labelButton5 = createDiv('Label4');
+    labelButton5.parent(basicButtonContainer);
+    labelButton5.style('background-image','url(Label.svg)');
+    labelButton5.mousePressed(labelButtonClicked);
+    labelButton5.addClass('toolbar-button');
+    labelButton5.style('height','4rem');
+    labelButton5.style('background-size','2rem');
+
+    labelButton6 = createDiv('Label5');
+    labelButton6.parent(basicButtonContainer);
+    labelButton6.style('background-image','url(Label.svg)');
+    labelButton6.mousePressed(labelButtonClicked);
+    labelButton6.addClass('toolbar-button');
+    labelButton6.style('height','4rem');
+    labelButton6.style('background-size','2rem');
+
+
+
+
+
+
     /*
         Elements for the properties mode
     */
