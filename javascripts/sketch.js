@@ -446,7 +446,14 @@ function setup() { // jshint ignore:line
 	
 	
     frameRate(60); // Caps the framerate at 60 FPS
-
+	
+	//sets font-size for all label elements
+	var labels  = document.getElementsByClassName('label');
+	for (i = 0; i < ps.length; i++) {
+		
+		ps[i].style.fontSize  = "16px";
+	}	
+	
     let loadfile = urlParam('sketch');
     if (loadfile !== "") {
         document.title = String(loadfile + ' - LogiJS');
