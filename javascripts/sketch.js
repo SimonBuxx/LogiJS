@@ -430,7 +430,7 @@ function setup() { // jshint ignore:line
     labelBasic.position(57, 59);
     labelBasic.elt.className = 'label';
 
-    // Adds text 'Basic' under the 'Wiring' button
+    // Adds text 'Advanced' under the 'Wiring' button
     labelAdvanced = createP('Advanced');
     labelAdvanced.elt.style.color = 'white';
     labelAdvanced.elt.style.fontFamily = 'Arial';
@@ -443,7 +443,8 @@ function setup() { // jshint ignore:line
     labelTextBox.size(185, 20);
     labelTextBox.position(windowWidth - 195, 45);
     labelTextBox.input(labelChanged);
-
+	
+	
     frameRate(60); // Caps the framerate at 60 FPS
 
     let loadfile = urlParam('sketch');
