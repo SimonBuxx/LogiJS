@@ -515,13 +515,14 @@ function setup() { // jshint ignore:line
     andGate.style('background-size','3rem');
     andGate.style('background-position','center');
 
-    labelButton3 = createDiv('Label2');
-    labelButton3.parent(basicButtonContainer);
-    labelButton3.style('background-image','url(Label.svg)');
-    labelButton3.mousePressed(labelButtonClicked);
-    labelButton3.addClass('toolbar-button');
-    labelButton3.style('height','4rem');
-    labelButton3.style('background-size','2rem');
+    orGate = createDiv('');
+    orGate.parent(basicButtonContainer);
+    orGate.style('background-image','url(Or-Gate.svg)');
+    orGate.mousePressed(labelButtonClicked);
+    orGate.addClass('toolbar-button');
+    orGate.style('height','4rem');
+    orGate.style('background-size','3rem');
+    orGate.style('background-position','center');
 
     labelButton4 = createDiv('Label3');
     labelButton4.parent(basicButtonContainer);
