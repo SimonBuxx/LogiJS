@@ -449,9 +449,9 @@ function setup() { // jshint ignore:line
 	
 	//sets font-size for all label elements
 	var labels  = document.getElementsByClassName('label');
-	for (i = 0; i < ps.length; i++) {
+	for (i = 0; i < labels.length; i++) {
 		
-		ps[i].style.fontSize  = "16px";
+		labels[i].style.fontSize  = "16px";
 	}	
 	
     let loadfile = urlParam('sketch');
