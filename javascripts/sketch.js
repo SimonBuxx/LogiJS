@@ -506,14 +506,14 @@ function setup() { // jshint ignore:line
 
     // <Test buttons in basicButtonContainer>
     
-    labelButton2 = createDiv('');
-    labelButton2.parent(basicButtonContainer);
-    labelButton2.style('background-image','url(And-Gate.svg)');
-    labelButton2.mousePressed(labelButtonClicked);
-    labelButton2.addClass('toolbar-button');
-    labelButton2.style('height','4rem');
-    labelButton2.style('background-size','3rem');
-    labelButton2.style('background-position','center');
+    andGate = createDiv('');
+    andGate.parent(basicButtonContainer);
+    andGate.style('background-image','url(And-Gate.svg)');
+    andGate.mousePressed(labelButtonClicked);
+    andGate.addClass('toolbar-button');
+    andGate.style('height','4rem');
+    andGate.style('background-size','3rem');
+    andGate.style('background-position','center');
 
     labelButton3 = createDiv('Label2');
     labelButton3.parent(basicButtonContainer);
