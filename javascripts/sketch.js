@@ -504,11 +504,7 @@ function setup() { // jshint ignore:line
     basicButtonContainer.parent(basicContainer);
     basicButtonContainer.addClass('basicButtonContainer');
 
-
-
-
-
-
+    // <Test buttons in basicButtonContainer>
     
     labelButton2 = createDiv('Label1');
     labelButton2.parent(basicButtonContainer);
@@ -550,7 +546,7 @@ function setup() { // jshint ignore:line
     labelButton6.style('height','4rem');
     labelButton6.style('background-size','2rem');
 
-
+    // </Test buttons in basicButtonContainer>
 
 
 
