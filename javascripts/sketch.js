@@ -100,168 +100,158 @@ function setup() { // jshint ignore:line
     }, false);
 
     document.title = 'New Sketch - LogiJS';
-
+	console.log(windowWidth);
+	console.log(windowHeight);
+	
+	
+	//Div for the Left Side Buttons
+	let leftSideButtons = createDiv(" ");
+	leftSideButtons.elt.className = "scrollBoxLeft";
+	let height = (windowHeight-74-32-15);
+    leftSideButtons.elt.style.height = height.toString()+"px";
+    leftSideButtons.elt.style.margin = '55px 0px';
+    
+	// Adds text 'Basic'
+    labelBasic = createP('Basic');
+    labelBasic.elt.style.color = 'white';
+    labelBasic.elt.style.fontFamily = 'Arial';
+    labelBasic.elt.className = 'label';
+    labelBasic.elt.style.textAlign = 'center';
+    labelBasic.elt.style.margin = '3px 0px 0px 0px';
+	labelBasic.parent(leftSideButtons);
+	
     // Left Side Buttons
     // Adds and-gates
     andButton = createButton('And-Gate');
-    andButton.position(5, 80);
     andButton.mousePressed(andClicked);
-    andButton.elt.style.width = "117px";
-    andButton.elt.className = "button";
-
+    andButton.elt.className = "buttonLeft";
+	andButton.parent(leftSideButtons);
+	
     // Adds or-gates
     orButton = createButton('Or-Gate');
-    orButton.position(5, 104);
     orButton.mousePressed(orClicked);
-    orButton.elt.style.width = "117px";
-    orButton.elt.className = "button";
-
+    orButton.elt.className = "buttonLeft";
+	orButton.parent(leftSideButtons);
+	
     // Adds xor-gates
     xorButton = createButton('Xor-Gate');
-    xorButton.position(5, 128);
     xorButton.mousePressed(xorClicked);
-    xorButton.elt.style.width = "117px";
-    xorButton.elt.className = "button";
-
+    xorButton.elt.className = "buttonLeft";
+	xorButton.parent(leftSideButtons);
+	
     // Adds switches
     inputButton = createButton('Switch');
-    inputButton.position(5, 152);
     inputButton.mousePressed(inputClicked);
-    inputButton.elt.style.width = "117px";
-    inputButton.elt.className = "button";
-
+    inputButton.elt.className = "buttonLeft";
+	inputButton.parent(leftSideButtons);
+	
     // Adds buttons (short impulse)
     buttonButton = createButton('Button');
-    buttonButton.position(5, 176);
     buttonButton.mousePressed(buttonClicked);
-    buttonButton.elt.style.width = "117px";
-    buttonButton.elt.className = "button";
-
+    buttonButton.elt.className = "buttonLeft";
+	buttonButton.parent(leftSideButtons);
+	
     // Adds clocks (variable impulse)
     clockButton = createButton('Clock');
-    clockButton.position(5, 200);
     clockButton.mousePressed(clockClicked);
-    clockButton.elt.style.width = "117px";
-    clockButton.elt.className = "button";
-
+    clockButton.elt.className = "buttonLeft";
+	clockButton.parent(leftSideButtons);
+	
     // Adds outputs (lamps)
     outputButton = createButton('Lamp');
-    outputButton.position(5, 224);
     outputButton.mousePressed(outputClicked);
-    outputButton.elt.style.width = "117px";
-    outputButton.elt.className = "button";
-
+    outputButton.elt.className = "buttonLeft";
+	outputButton.parent(leftSideButtons);
+	
+	// Adds text 'Advanced'
+    labelAdvanced = createP('Advanced');
+    labelAdvanced.elt.style.color = 'white';
+    labelAdvanced.elt.style.fontFamily = 'Arial';
+    labelAdvanced.elt.style.textAlign = 'center';
+    labelAdvanced.elt.style.margin = '3px 0px 0px 0px';
+    labelAdvanced.elt.className = 'label';
+	labelAdvanced.parent(leftSideButtons);
+	
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
-    counter2Button.position(5, 270);
     counter2Button.mousePressed(function () { return customClicked('2BitCounter.json'); });
-    counter2Button.elt.style.width = "117px";
-    counter2Button.elt.className = "button";
-
+    counter2Button.elt.className = "buttonLeft";
+	counter2Button.parent(leftSideButtons);
     // Adds a counter (4Bit)
     counter4Button = createButton('4Bit-Counter');
-    counter4Button.position(5, 294);
     counter4Button.mousePressed(function () { return customClicked('4BitCounter.json'); });
-    counter4Button.elt.style.width = "117px";
-    counter4Button.elt.className = "button";
-
+    counter4Button.elt.className = "buttonLeft";
+	counter4Button.parent(leftSideButtons);	
     // Adds a decoder (2Bit)
     decoder2Button = createButton('2Bit-Decoder');
-    decoder2Button.position(5, 318);
     decoder2Button.mousePressed(function () { return customClicked('2BitDec.json'); });
-    decoder2Button.elt.style.width = "117px";
-    decoder2Button.elt.className = "button";
-
+    decoder2Button.elt.className = "buttonLeft";
+	decoder2Button.parent(leftSideButtons);
     // Adds a decoder (4Bit)
     decoder4Button = createButton('4Bit-Decoder');
-    decoder4Button.position(5, 342);
     decoder4Button.mousePressed(function () { return customClicked('4BitDec.json'); });
-    decoder4Button.elt.style.width = "117px";
-    decoder4Button.elt.className = "button";
-
+    decoder4Button.elt.className = "buttonLeft";
+	decoder4Button.parent(leftSideButtons);
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
-    add4BitButton.position(5, 366);
     add4BitButton.mousePressed(function () { return customClicked('4BitNeu.json'); });
-    add4BitButton.elt.style.width = "117px";
-    add4BitButton.elt.className = "button";
-
+    add4BitButton.elt.className = "buttonLeft";
+	add4BitButton.parent(leftSideButtons);
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
-    dFlipFlopButton.position(5, 390);
     dFlipFlopButton.mousePressed(function () { return customClicked('d-flipflop.json'); });
-    dFlipFlopButton.elt.style.width = "117px";
-    dFlipFlopButton.elt.className = "button";
-
+    dFlipFlopButton.elt.className = "buttonLeft";
+	dFlipFlopButton.parent(leftSideButtons);
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
-    rsFlipFlopButton.position(5, 414);
     rsFlipFlopButton.mousePressed(function () { return customClicked('rsNoWhobble.json'); });
-    rsFlipFlopButton.elt.style.width = "117px";
-    rsFlipFlopButton.elt.className = "button";
-
+    rsFlipFlopButton.elt.className = "buttonLeft";
+	rsFlipFlopButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
-    reg4Button.position(5, 438);
     reg4Button.mousePressed(function () { return customClicked('4BitReg.json'); });
-    reg4Button.elt.style.width = "117px";
-    reg4Button.elt.className = "button";
-
+    reg4Button.elt.className = "buttonLeft";
+	reg4Button.parent(leftSideButtons);
     // Adds a 1-multiplexer
     mux1Button = createButton('1-Multiplexer');
-    mux1Button.position(5, 462);
     mux1Button.mousePressed(function () { return customClicked('1-mux.json'); });
-    mux1Button.elt.style.width = "117px";
-    mux1Button.elt.className = "button";
-
+    mux1Button.elt.className = "buttonLeft";
+	mux1Button.parent(leftSideButtons);
     // Adds a 2-multiplexer
     mux2Button = createButton('2-Multiplexer');
-    mux2Button.position(5, 486);
     mux2Button.mousePressed(function () { return customClicked('2-mux.json'); });
-    mux2Button.elt.style.width = "117px";
-    mux2Button.elt.className = "button";
-
+    mux2Button.elt.className = "buttonLeft";
+	mux2Button.parent(leftSideButtons);
     // Adds a 3-multiplexer
     mux3Button = createButton('3-Multiplexer');
-    mux3Button.position(5, 510);
     mux3Button.mousePressed(function () { return customClicked('3-mux.json'); });
-    mux3Button.elt.style.width = "117px";
-    mux3Button.elt.className = "button";
-
+    mux3Button.elt.className = "buttonLeft";
+	mux3Button.parent(leftSideButtons);
     // Adds a 1-demultiplexer
     demux1Button = createButton('1-Demultiplexer');
-    demux1Button.position(5, 534);
     demux1Button.mousePressed(function () { return customClicked('1-demux.json'); });
-    demux1Button.elt.style.width = "117px";
-    demux1Button.elt.className = "button";
-
+    demux1Button.elt.className = "buttonLeft";
+	demux1Button.parent(leftSideButtons);
     // Adds a 2-demultiplexer
     demux2Button = createButton('2-Demultiplexer');
-    demux2Button.position(5, 558);
     demux2Button.mousePressed(function () { return customClicked('2-demux.json'); });
-    demux2Button.elt.style.width = "117px";
-    demux2Button.elt.className = "button";
-
+    demux2Button.elt.className = "buttonLeft";
+	demux2Button.parent(leftSideButtons);
     // Adds a 3-demultiplexer
     demux3Button = createButton('3-Demultiplexer');
-    demux3Button.position(5, 582);
     demux3Button.mousePressed(function () { return customClicked('3-demux.json'); });
-    demux3Button.elt.style.width = "117px";
-    demux3Button.elt.className = "button";
-
+    demux3Button.elt.className = "buttonLeft";
+	demux3Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.position(5, 606);
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json'); });
-    halfaddButton.elt.style.width = "117px";
-    halfaddButton.elt.className = "button";
-
+    halfaddButton.elt.className = "buttonLeft";
+	halfaddButton.parent(leftSideButtons);
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.position(5, 630);
     fulladdButton.mousePressed(function () { return customClicked('volladd.json'); });
-    fulladdButton.elt.style.width = "117px";
-    fulladdButton.elt.className = "button";
+    fulladdButton.elt.className = "buttonLeft";
+	fulladdButton.parent(leftSideButtons);
 
     //Upper left
     // Activates the wiring mode
@@ -420,23 +410,7 @@ function setup() { // jshint ignore:line
     outputColorBox.option('yellow');
     outputColorBox.option('green');
     outputColorBox.option('blue');
-    outputColorBox.changed(newOutputColor);
-
-    // Adds text 'Basic' under the 'Wiring' button
-    labelBasic = createP('Basic');
-    labelBasic.elt.style.color = 'white';
-    labelBasic.elt.style.fontFamily = 'Arial';
-    labelBasic.elt.style.margin = 0;
-    labelBasic.position(57, 59);
-    labelBasic.elt.className = 'label';
-
-    // Adds text 'Advanced' under the 'Wiring' button
-    labelAdvanced = createP('Advanced');
-    labelAdvanced.elt.style.color = 'white';
-    labelAdvanced.elt.style.fontFamily = 'Arial';
-    labelAdvanced.elt.style.margin = 0;
-    labelAdvanced.position(39, 250);
-    labelAdvanced.elt.className = 'label';
+    outputColorBox.changed(newOutputColor);   
 
     labelTextBox = createInput('');
     labelTextBox.hide();
