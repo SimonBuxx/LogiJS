@@ -51,6 +51,7 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    cursor: pointer;
 }
 
 .button:hover {
@@ -232,7 +233,6 @@ input[type=text] {
 
 body{
 	overflow:hidden;
-	user-drag: none;
 	user-select: none;
 	-webkit-user-drag: none;
 	-webkit-user-select: none;

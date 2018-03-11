@@ -301,6 +301,24 @@ function setup() { // jshint ignore:line
     directionSelect.parent(leftSideButtons);
     directionSelect.value('Right');
 
+    sfcheckbox = createCheckbox('Sync Ticks', true);
+    sfcheckbox.hide();
+    sfcheckbox.changed(function () {
+        syncFramerate = sfcheckbox.checked();
+        if (!sfcheckbox.checked() && simRunning) {
+            updater = setInterval(updateTick, 1);
+        } else {
+            clearInterval(updater);
+        }
+    });
+    sfcheckbox.elt.style.color = 'white';
+    sfcheckbox.elt.style.fontFamily = 'Arial';
+    sfcheckbox.elt.style.textAlign = 'center';
+    sfcheckbox.elt.style.margin = '10px 0 0 0';
+    //sfcheckbox.position(946, 4);
+    sfcheckbox.elt.className = 'checkbox';
+    sfcheckbox.parent(leftSideButtons);
+
     //Upper left
     // Activates the wiring mode
     wireButton = createButton('Wiring');
@@ -382,20 +400,6 @@ function setup() { // jshint ignore:line
         setPropMode(true);
     });
     propertiesButton.elt.className = "button";
-
-    sfcheckbox = createCheckbox('Sync Ticks', true);
-    sfcheckbox.changed(function () {
-        syncFramerate = sfcheckbox.checked();
-        if (!sfcheckbox.checked() && simRunning) {
-            updater = setInterval(updateTick, 1);
-        } else {
-            clearInterval(updater);
-        }
-    });
-    sfcheckbox.elt.style.color = 'white';
-    sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(946, 4);
-    sfcheckbox.elt.className = 'checkbox';
 
     // Upper right
     // Input field for the file name
@@ -980,6 +984,8 @@ function startSimulation() {
         }
     }
 
+    sfcheckbox.show();
+
     // Start the simulation and exit the properties mode
     simRunning = true;
     propMode = false;
@@ -998,6 +1004,7 @@ function endSimulation() {
     setPropMode(true);
     disableButtons(false); // Enable all buttons
     updateUndoButtons();
+    sfcheckbox.hide();
 
     groups = []; // Reset the groups, as they are regenerated when starting again
     for (const elem of gates) {
