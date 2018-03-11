@@ -192,6 +192,14 @@ function mouseClicked() {
     if (ctrlMode !== 'none' && selectMode === 'none') {
         setPropMode(false);
     }
+    if (ctrlMode !== 'addObject' || addType !== 'gate') {
+        gateInputSelect.hide();
+        labelGateInputs.hide();
+    }
+    if (ctrlMode !== 'addObject' || (addType !== 'gate' && addType !== 'custom')) {
+        directionSelect.hide();
+        labelDirection.hide();
+    }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
