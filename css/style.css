@@ -112,8 +112,8 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-  }
 }
+
 .buttonLeft:hover {
     border: 1px solid #c83232;
     background: #c83232;
