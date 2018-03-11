@@ -108,13 +108,16 @@ function setup() { // jshint ignore:line
 	let leftSideButtons = createDiv(" ");
 	leftSideButtons.elt.className = "scrollBoxLeft";
 	let height = (windowHeight-74-32-15);
-	leftSideButtons.elt.style.height= height.toString()+"px";
-	// Adds text 'Basic' under the 'Wiring' button
+    leftSideButtons.elt.style.height = height.toString()+"px";
+    leftSideButtons.elt.style.margin = '55px 0px';
+    
+	// Adds text 'Basic'
     labelBasic = createP('Basic');
     labelBasic.elt.style.color = 'white';
     labelBasic.elt.style.fontFamily = 'Arial';
     labelBasic.elt.className = 'label';
-	labelBasic.elt.style.textAlign = "center";
+    labelBasic.elt.style.textAlign = 'center';
+    labelBasic.elt.style.margin = '3px 0px 0px 0px';
 	labelBasic.parent(leftSideButtons);
 	
     // Left Side Buttons
@@ -160,11 +163,12 @@ function setup() { // jshint ignore:line
     outputButton.elt.className = "buttonLeft";
 	outputButton.parent(leftSideButtons);
 	
-	// Adds text 'Advanced' under the 'Wiring' button
+	// Adds text 'Advanced'
     labelAdvanced = createP('Advanced');
     labelAdvanced.elt.style.color = 'white';
     labelAdvanced.elt.style.fontFamily = 'Arial';
-    labelAdvanced.elt.style.textAlign = "center";
+    labelAdvanced.elt.style.textAlign = 'center';
+    labelAdvanced.elt.style.margin = '3px 0px 0px 0px';
     labelAdvanced.elt.className = 'label';
 	labelAdvanced.parent(leftSideButtons);
 	
@@ -248,17 +252,7 @@ function setup() { // jshint ignore:line
     fulladdButton.mousePressed(function () { return customClicked('volladd.json'); });
     fulladdButton.elt.className = "buttonLeft";
 	fulladdButton.parent(leftSideButtons);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
     //Upper left
     // Activates the wiring mode
     wireButton = createButton('Wiring');
