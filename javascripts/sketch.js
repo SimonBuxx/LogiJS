@@ -278,6 +278,7 @@ function setup() { // jshint ignore:line
     gateInputSelect.changed(newGateInputNumber);
     gateInputSelect.elt.className = "selectLeft";
     gateInputSelect.parent(leftSideButtons);
+    gateInputSelect.value('2');
 
     // Adds text 'Direction'
     labelDirection = createP('Direction');
@@ -298,6 +299,7 @@ function setup() { // jshint ignore:line
     directionSelect.changed(newDirection);
     directionSelect.elt.className = "selectLeft";
     directionSelect.parent(leftSideButtons);
+    directionSelect.value('Right');
 
     //Upper left
     // Activates the wiring mode
