@@ -73,7 +73,7 @@ let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand
     outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton, labelButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
-let updater, sfcheckbox;
+let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, labelDirection;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
@@ -100,158 +100,206 @@ function setup() { // jshint ignore:line
     }, false);
 
     document.title = 'New Sketch - LogiJS';
-	console.log(windowWidth);
-	console.log(windowHeight);
-	
-	
-	//Div for the Left Side Buttons
-	let leftSideButtons = createDiv(" ");
-	leftSideButtons.elt.className = "scrollBoxLeft";
-	let height = (windowHeight-74-32-15);
-    leftSideButtons.elt.style.height = height.toString()+"px";
+    console.log(windowWidth);
+    console.log(windowHeight);
+
+
+    //Div for the Left Side Buttons
+    let leftSideButtons = createDiv(" ");
+    leftSideButtons.elt.className = "scrollBoxLeft";
+    let height = (windowHeight - 74 - 32 - 15);
+    leftSideButtons.elt.style.height = height.toString() + "px";
     leftSideButtons.elt.style.margin = '55px 0px';
-    
-	// Adds text 'Basic'
+
+    // Adds text 'Basic'
     labelBasic = createP('Basic');
     labelBasic.elt.style.color = 'white';
     labelBasic.elt.style.fontFamily = 'Arial';
     labelBasic.elt.className = 'label';
     labelBasic.elt.style.textAlign = 'center';
     labelBasic.elt.style.margin = '3px 0px 0px 0px';
-	labelBasic.parent(leftSideButtons);
-	
+    labelBasic.parent(leftSideButtons);
+
     // Left Side Buttons
     // Adds and-gates
     andButton = createButton('And-Gate');
     andButton.mousePressed(andClicked);
     andButton.elt.className = "buttonLeft";
-	andButton.parent(leftSideButtons);
-	
+    andButton.parent(leftSideButtons);
+
     // Adds or-gates
     orButton = createButton('Or-Gate');
     orButton.mousePressed(orClicked);
     orButton.elt.className = "buttonLeft";
-	orButton.parent(leftSideButtons);
-	
+    orButton.parent(leftSideButtons);
+
     // Adds xor-gates
     xorButton = createButton('Xor-Gate');
     xorButton.mousePressed(xorClicked);
     xorButton.elt.className = "buttonLeft";
-	xorButton.parent(leftSideButtons);
-	
+    xorButton.parent(leftSideButtons);
+
     // Adds switches
     inputButton = createButton('Switch');
     inputButton.mousePressed(inputClicked);
     inputButton.elt.className = "buttonLeft";
-	inputButton.parent(leftSideButtons);
-	
+    inputButton.parent(leftSideButtons);
+
     // Adds buttons (short impulse)
     buttonButton = createButton('Button');
     buttonButton.mousePressed(buttonClicked);
     buttonButton.elt.className = "buttonLeft";
-	buttonButton.parent(leftSideButtons);
-	
+    buttonButton.parent(leftSideButtons);
+
     // Adds clocks (variable impulse)
     clockButton = createButton('Clock');
     clockButton.mousePressed(clockClicked);
     clockButton.elt.className = "buttonLeft";
-	clockButton.parent(leftSideButtons);
-	
+    clockButton.parent(leftSideButtons);
+
     // Adds outputs (lamps)
     outputButton = createButton('Lamp');
     outputButton.mousePressed(outputClicked);
     outputButton.elt.className = "buttonLeft";
-	outputButton.parent(leftSideButtons);
-	
-	// Adds text 'Advanced'
+    outputButton.parent(leftSideButtons);
+
+    // Adds text 'Advanced'
     labelAdvanced = createP('Advanced');
     labelAdvanced.elt.style.color = 'white';
     labelAdvanced.elt.style.fontFamily = 'Arial';
     labelAdvanced.elt.style.textAlign = 'center';
     labelAdvanced.elt.style.margin = '3px 0px 0px 0px';
     labelAdvanced.elt.className = 'label';
-	labelAdvanced.parent(leftSideButtons);
-	
+    labelAdvanced.parent(leftSideButtons);
+
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
     counter2Button.mousePressed(function () { return customClicked('2BitCounter.json'); });
     counter2Button.elt.className = "buttonLeft";
-	counter2Button.parent(leftSideButtons);
+    counter2Button.parent(leftSideButtons);
     // Adds a counter (4Bit)
     counter4Button = createButton('4Bit-Counter');
     counter4Button.mousePressed(function () { return customClicked('4BitCounter.json'); });
     counter4Button.elt.className = "buttonLeft";
-	counter4Button.parent(leftSideButtons);	
+    counter4Button.parent(leftSideButtons);
     // Adds a decoder (2Bit)
     decoder2Button = createButton('2Bit-Decoder');
     decoder2Button.mousePressed(function () { return customClicked('2BitDec.json'); });
     decoder2Button.elt.className = "buttonLeft";
-	decoder2Button.parent(leftSideButtons);
+    decoder2Button.parent(leftSideButtons);
     // Adds a decoder (4Bit)
     decoder4Button = createButton('4Bit-Decoder');
     decoder4Button.mousePressed(function () { return customClicked('4BitDec.json'); });
     decoder4Button.elt.className = "buttonLeft";
-	decoder4Button.parent(leftSideButtons);
+    decoder4Button.parent(leftSideButtons);
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
     add4BitButton.mousePressed(function () { return customClicked('4BitNeu.json'); });
     add4BitButton.elt.className = "buttonLeft";
-	add4BitButton.parent(leftSideButtons);
+    add4BitButton.parent(leftSideButtons);
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
     dFlipFlopButton.mousePressed(function () { return customClicked('d-flipflop.json'); });
     dFlipFlopButton.elt.className = "buttonLeft";
-	dFlipFlopButton.parent(leftSideButtons);
+    dFlipFlopButton.parent(leftSideButtons);
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
     rsFlipFlopButton.mousePressed(function () { return customClicked('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.className = "buttonLeft";
-	rsFlipFlopButton.parent(leftSideButtons);
+    rsFlipFlopButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
     reg4Button.mousePressed(function () { return customClicked('4BitReg.json'); });
     reg4Button.elt.className = "buttonLeft";
-	reg4Button.parent(leftSideButtons);
+    reg4Button.parent(leftSideButtons);
     // Adds a 1-multiplexer
     mux1Button = createButton('1-Multiplexer');
     mux1Button.mousePressed(function () { return customClicked('1-mux.json'); });
     mux1Button.elt.className = "buttonLeft";
-	mux1Button.parent(leftSideButtons);
+    mux1Button.parent(leftSideButtons);
     // Adds a 2-multiplexer
     mux2Button = createButton('2-Multiplexer');
     mux2Button.mousePressed(function () { return customClicked('2-mux.json'); });
     mux2Button.elt.className = "buttonLeft";
-	mux2Button.parent(leftSideButtons);
+    mux2Button.parent(leftSideButtons);
     // Adds a 3-multiplexer
     mux3Button = createButton('3-Multiplexer');
     mux3Button.mousePressed(function () { return customClicked('3-mux.json'); });
     mux3Button.elt.className = "buttonLeft";
-	mux3Button.parent(leftSideButtons);
+    mux3Button.parent(leftSideButtons);
     // Adds a 1-demultiplexer
     demux1Button = createButton('1-Demultiplexer');
     demux1Button.mousePressed(function () { return customClicked('1-demux.json'); });
     demux1Button.elt.className = "buttonLeft";
-	demux1Button.parent(leftSideButtons);
+    demux1Button.parent(leftSideButtons);
     // Adds a 2-demultiplexer
     demux2Button = createButton('2-Demultiplexer');
     demux2Button.mousePressed(function () { return customClicked('2-demux.json'); });
     demux2Button.elt.className = "buttonLeft";
-	demux2Button.parent(leftSideButtons);
+    demux2Button.parent(leftSideButtons);
     // Adds a 3-demultiplexer
     demux3Button = createButton('3-Demultiplexer');
     demux3Button.mousePressed(function () { return customClicked('3-demux.json'); });
     demux3Button.elt.className = "buttonLeft";
-	demux3Button.parent(leftSideButtons);
+    demux3Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.mousePressed(function () { return customClicked('halbadd.json'); });
     halfaddButton.elt.className = "buttonLeft";
-	halfaddButton.parent(leftSideButtons);
+    halfaddButton.parent(leftSideButtons);
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
     fulladdButton.mousePressed(function () { return customClicked('volladd.json'); });
     fulladdButton.elt.className = "buttonLeft";
-	fulladdButton.parent(leftSideButtons);
+    fulladdButton.parent(leftSideButtons);
+
+    // Adds text 'Gate inputs'
+    labelGateInputs = createP('Gate inputs');
+    labelGateInputs.hide();
+    labelGateInputs.elt.style.color = 'white';
+    labelGateInputs.elt.style.fontFamily = 'Arial';
+    labelGateInputs.elt.style.textAlign = 'center';
+    labelGateInputs.elt.style.margin = '3px 0px 0px 0px';
+    labelGateInputs.elt.className = 'label';
+    labelGateInputs.parent(leftSideButtons);
+
+    gateInputSelect = createSelect();
+    gateInputSelect.hide();
+    gateInputSelect.option('1');
+    gateInputSelect.option('2');
+    gateInputSelect.option('3');
+    gateInputSelect.option('4');
+    gateInputSelect.option('5');
+    gateInputSelect.option('6');
+    gateInputSelect.option('7');
+    gateInputSelect.option('8');
+    gateInputSelect.option('9');
+    gateInputSelect.option('10');
+    gateInputSelect.changed(newGateInputNumber);
+    gateInputSelect.elt.className = "selectLeft";
+    gateInputSelect.parent(leftSideButtons);
+    gateInputSelect.value('2');
+
+    // Adds text 'Direction'
+    labelDirection = createP('Direction');
+    labelDirection.hide();
+    labelDirection.elt.style.color = 'white';
+    labelDirection.elt.style.fontFamily = 'Arial';
+    labelDirection.elt.style.textAlign = 'center';
+    labelDirection.elt.style.margin = '3px 0px 0px 0px';
+    labelDirection.elt.className = 'label';
+    labelDirection.parent(leftSideButtons);
+
+    directionSelect = createSelect();
+    directionSelect.hide();
+    directionSelect.option('Right');
+    directionSelect.option('Top');
+    directionSelect.option('Left');
+    directionSelect.option('Bottom');
+    directionSelect.changed(newDirection);
+    directionSelect.elt.className = "selectLeft";
+    directionSelect.parent(leftSideButtons);
+    directionSelect.value('Right');
 
     //Upper left
     // Activates the wiring mode
@@ -352,7 +400,7 @@ function setup() { // jshint ignore:line
     // Upper right
     // Input field for the file name
     textInput = createInput('');
-    textInput.attribute('placeholder','New Sketch');
+    textInput.attribute('placeholder', 'New Sketch');
     textInput.size(200, 15);
     textInput.position(windowWidth - textInput.width - 203, 4);
 
@@ -410,24 +458,24 @@ function setup() { // jshint ignore:line
     outputColorBox.option('yellow');
     outputColorBox.option('green');
     outputColorBox.option('blue');
-    outputColorBox.changed(newOutputColor);   
+    outputColorBox.changed(newOutputColor);
 
     labelTextBox = createInput('');
     labelTextBox.hide();
     labelTextBox.size(185, 20);
     labelTextBox.position(windowWidth - 195, 45);
     labelTextBox.input(labelChanged);
-	
-	
+
+
     frameRate(60); // Caps the framerate at 60 FPS
-	
-	//sets font-size for all label elements
-	var labels  = document.getElementsByClassName('label');
-	for (i = 0; i < labels.length; i++) {
-		
-		labels[i].style.fontSize  = "16px";
-	}	
-	
+
+    //sets font-size for all label elements
+    var labels = document.getElementsByClassName('label');
+    for (i = 0; i < labels.length; i++) {
+
+        labels[i].style.fontSize = "16px";
+    }
+
     let loadfile = urlParam('sketch');
     if (loadfile !== "") {
         document.title = String(loadfile + ' - LogiJS');
@@ -447,6 +495,8 @@ function urlParam(name, w) {
 function customClicked(filename) {
     setControlMode('addObject');
     addType = 'custom';
+    directionSelect.show();
+    labelDirection.show();
     custFile = filename;
 }
 
@@ -473,7 +523,9 @@ function newClicked() {
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
     gateInputCount = 2;
+    gateInputSelect.value('2');
     gateDirection = 0;
+    directionSelect.value('Right');
     endSimulation(); // End the simulation, if started
     setPropMode(false); // Restarting PropMode so that the menu hides
     setPropMode(true); // when new is clicked while it's open
@@ -483,7 +535,7 @@ function newClicked() {
     showSClickBox = false;
     document.title = 'New Sketch - LogiJS';
     textInput.value('');
-    textInput.attribute('placeholder','New Sketch');
+    textInput.attribute('placeholder', 'New Sketch');
     findLines();
     reDraw();
 }
@@ -528,46 +580,46 @@ function wiringClicked() {
 function deleteClicked() {
     // TODO: Implement deleting of the selection (with one undo/redo event)
     //if (ctrlMode === 'select' && selectMode === 'end') {
-        /*for (let i = 0; i < selection.length; i++) {
-            for (let j = gates.length - 1; j >= 0; j--) {
-                if (JSON.stringify(gates[j]) === JSON.stringify(selection[i])) {
-                    deleteGate(j);
-                }
+    /*for (let i = 0; i < selection.length; i++) {
+        for (let j = gates.length - 1; j >= 0; j--) {
+            if (JSON.stringify(gates[j]) === JSON.stringify(selection[i])) {
+                deleteGate(j);
             }
-            for (let j = customs.length - 1; j >= 0; j--) {
-                if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
-                    deleteCustom(j);
-                }
+        }
+        for (let j = customs.length - 1; j >= 0; j--) {
+            if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
+                deleteCustom(j);
             }
-            for (let j = diodes.length - 1; j >= 0; j--) {
-                if (JSON.stringify(diodes[j]) === JSON.stringify(selection[i])) {
-                    deleteDiode(j);
-                }
+        }
+        for (let j = diodes.length - 1; j >= 0; j--) {
+            if (JSON.stringify(diodes[j]) === JSON.stringify(selection[i])) {
+                deleteDiode(j);
             }
-            for (let j = inputs.length - 1; j >= 0; j--) {
-                if (JSON.stringify(inputs[j]) === JSON.stringify(selection[i])) {
-                    inputs.splice(j, 1);
-                }
+        }
+        for (let j = inputs.length - 1; j >= 0; j--) {
+            if (JSON.stringify(inputs[j]) === JSON.stringify(selection[i])) {
+                inputs.splice(j, 1);
             }
-            for (let j = labels.length - 1; j >= 0; j--) {
-                if (JSON.stringify(labels[j]) === JSON.stringify(selection[i])) {
-                    labels.splice(j, 1);
-                }
+        }
+        for (let j = labels.length - 1; j >= 0; j--) {
+            if (JSON.stringify(labels[j]) === JSON.stringify(selection[i])) {
+                labels.splice(j, 1);
             }
-            for (let j = outputs.length - 1; j >= 0; j--) {
-                if (JSON.stringify(outputs[j]) === JSON.stringify(selection[i])) {
-                    outputs.splice(j, 1);
-                }
+        }
+        for (let j = outputs.length - 1; j >= 0; j--) {
+            if (JSON.stringify(outputs[j]) === JSON.stringify(selection[i])) {
+                outputs.splice(j, 1);
             }
-            for (let j = wires.length - 1; j >= 0; j--) {
-                if (JSON.stringify(wires[j]) === JSON.stringify(selection[i])) {
-                    wires.splice(j, 1);
-                }
+        }
+        for (let j = wires.length - 1; j >= 0; j--) {
+            if (JSON.stringify(wires[j]) === JSON.stringify(selection[i])) {
+                wires.splice(j, 1);
             }
-            finishSelection();*/
+        }
+        finishSelection();*/
     //    }
     //} else {
-        setControlMode('delete');
+    setControlMode('delete');
     //}
 }
 
@@ -576,6 +628,19 @@ function deleteClicked() {
 */
 function labelChanged() {
     labels[propLabel].alterText(labelTextBox.value()); // Alter the text of the selected label
+}
+
+function newGateInputNumber() {
+    gateInputCount = parseInt(gateInputSelect.value());
+}
+
+function newDirection() {
+    switch(directionSelect.value()) {
+        case 'Right': gateDirection = 0; break;
+        case 'Top': gateDirection = 3; break;
+        case 'Left': gateDirection = 2; break;
+        case 'Bottom': gateDirection = 1; break;
+    }
 }
 
 /* 
@@ -597,18 +662,30 @@ function andClicked() {
     setControlMode('addObject');
     addType = 'gate';
     gateType = 'and';
+    gateInputSelect.show();
+    labelGateInputs.show();
+    directionSelect.show();
+    labelDirection.show();
 }
 
 function orClicked() {
     setControlMode('addObject');
     addType = 'gate';
     gateType = 'or';
+    gateInputSelect.show();
+    labelGateInputs.show();
+    directionSelect.show();
+    labelDirection.show();
 }
 
 function xorClicked() {
     setControlMode('addObject');
     addType = 'gate';
     gateType = 'xor';
+    gateInputSelect.show();
+    labelGateInputs.show();
+    directionSelect.show();
+    labelDirection.show();
 }
 
 function inputClicked() {
@@ -876,6 +953,7 @@ function startSimulation() {
         updater = setInterval(updateTick, 1);
     }
     setSimButtonText('Stop'); // Alter the caption of the Start/Stop button
+    setControlMode('none');
     disableButtons(true);
     setPropMode(false);
     showSClickBox = false; // Hide the selection click box
@@ -1389,30 +1467,11 @@ function newOutputColor() {
 */
 function keyPressed() {
     if (textInput.elt !== document.activeElement) {
-        // Set the gate input count according to the keyCodes
-        if (keyCode >= 49 && keyCode <= 57) {
-            gateInputCount = keyCode - 48;
-        } else if (keyCode === 48) {
-            gateInputCount = 10;
-        }
         switch (keyCode) {
             case ESCAPE:
                 setControlMode('none');
                 setPropMode(true);
                 break;
-            case RIGHT_ARROW:
-                gateDirection = 0;
-                break;
-            case DOWN_ARROW:
-                gateDirection = 1;
-                break;
-            case LEFT_ARROW:
-                gateDirection = 2;
-                break;
-            case UP_ARROW:
-                gateDirection = 3;
-                break;
-
             default:
         }
     } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
