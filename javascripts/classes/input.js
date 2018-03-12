@@ -12,6 +12,7 @@ function Input(x, y, transform) {
 
     this.framecount = -1;
     this.clock = false;
+    this.speed = 30;
 
     this.transform = transform;
 
@@ -50,6 +51,9 @@ Input.prototype.getData = function () {
         data.framecount = JSON.stringify(0);
     }
     data.clock = JSON.stringify(this.clock);
+    if (this.clock) {
+        data.speed = JSON.stringify(this.speed);
+    }
     return data;
 };
 
@@ -71,6 +75,14 @@ Input.prototype.setState = function (s) {
 
 Input.prototype.setIsTop = function (b) {
     this.isTop = b;
+};
+
+Input.prototype.setSpeed = function (s) {
+    this.speed = s;
+};
+
+Input.prototype.resetFramecount = function () {
+    this.framecount = this.speed;
 };
 
 /*
