@@ -89,6 +89,9 @@ function load(loadData) {
         if (loadData.inputs[i].hasOwnProperty("istop")) {
             inputs[i].isTop = true;
         }
+        if (loadData.inputs[i].hasOwnProperty("speed")) {
+            inputs[i].speed = JSON.parse(loadData.inputs[i].speed);
+        }
         if (loadData.inputs[i].hasOwnProperty("lbl")) {
             inputs[i].lbl = loadData.inputs[i].lbl;
         }
@@ -177,6 +180,9 @@ function loadCustom(loadData, num) {
         params[INPNUM][i].framecount = loadData.inputs[i].framecount;
         if (loadData.inputs[i].hasOwnProperty("istop")) {
             params[INPNUM][i].isTop = true;
+        }
+        if (loadData.inputs[i].hasOwnProperty("speed")) {
+            params[INPNUM][i].speed = JSON.parse(loadData.inputs[i].speed);
         }
         params[INPNUM][i].setCoordinates(JSON.parse(loadData.inputs[i].x) / trans.zoom - trans.dx, JSON.parse(loadData.inputs[i].y) / trans.zoom - trans.dy);
         params[INPNUM][i].updateClickBox();

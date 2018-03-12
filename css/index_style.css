@@ -66,7 +66,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
 #carousel .carousel-caption {
     z-index: 10;
     position: absolute;
-    top: 40%;
+    top: 50%;
     transform: translateY(-50%);
     margin: 0;
     padding: 0;
@@ -74,7 +74,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
 
 @media (min-width: 768px) {
     #carousel .carousel-caption p {
-        margin-bottom: 1em;
+        margin-bottom: 20px;
         line-height: 1.4;
         font-size: 21px;
     }
@@ -84,7 +84,6 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
         margin: 0;
         right: 20%;
         left: 20%;
-        top: 45%;
     }
 }
 
