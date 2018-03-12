@@ -9,16 +9,7 @@ Also, the performance can be bad when handling larger files or using slower mach
 This project is still in active development, therefore the GUI is very rudimentary and some options,
 like the number of inputs on gates and the direction of gates, are only editable with the keyboard. This will be changed in the
 future, so that every action can be done with the mouse.
-#### Interesting Sketches:
-* **https://logijs.netlify.com/logijs.html?sketch=4BitFromScratch**
 
-* **https://logijs.netlify.com/logijs.html?sketch=traffic**
-
-* **https://logijs.netlify.com/logijs.html?sketch=cpunew**
-
-* **https://logijs.netlify.com/logijs.html?sketch=multiplication**
-
-For an overview of all existing sketches, please see our Wiki here on GitHub.
 ## Tutorial
 ### The Basics
 If you want to use LogiJS for the first time, please let me tell you the basics on how to use it. We start simple.
@@ -113,7 +104,9 @@ pin. This also works for custom elements. In the properties mode, you can also c
 green or blue. When you add other objects, click on "Delete" or start the simulation, this mode will be left. You can also enter the
 properties mode with the escape key.
 ### The "New" and "Select" Buttons
-With the "New" button, you can create a new sketch, deleting all of the previous sketch and resetting the view. With the "Select" button, you can select an area to move it around on the canvas. Copy and delete will come later for that but are not integrated right now.
+With the "New" button, you can create a new sketch, deleting all of the previous sketch and resetting the view. The "Select" button
+is not yet implemented but will be used in the future to select parts of a sketch and copy, delete or move it. Right now, you can
+draw a rectangle with it, but there's now functionality.
 ### Changing number of inputs and rotating gates
 Right now, these features are only accessible with the keyboard. Hitting the numbers 1 to 0 will change the number of inputs of each
 new gate to this value (0 for 10). Rotating gates and custom elements can be done with the arrow keys. Right is the default direction.
@@ -125,10 +118,7 @@ enough, but I can't guarantee for anything. LogiJS is not professionally built a
 ## Closing word
 If you've read this tutorial, thank you so much. It means a lot to me when people are actually using and testing the software.
 If you have any ideas or found a bug, don't hesitate to create an issue. In case you're interested, LogiJS is built with p5.js
-(https://p5js.org) and linted with JSHint (http://jshint.com/). Right now, it works best with Google Chrome and Microsoft Edge.
-Parts of this tutorial may be outdated due to continous updates and changes. 
-
-Please feel free to contact me to tell me about your experience with LogiJS.
+(https://p5js.org). Please feel free to contact me to tell me about your experience with LogiJS.
 
 Best regards,
 Simon

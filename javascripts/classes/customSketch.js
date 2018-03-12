@@ -688,7 +688,7 @@ CustomSketch.prototype.show = function () {
             strokeWeight(3);
         } else if (this.inputs[i - 1] === true) {
             stroke(this.highColor);
-            strokeWeight(5);
+            strokeWeight(4);
         } else {
             stroke(this.lowColor);
             strokeWeight(3);
@@ -849,7 +849,7 @@ CustomSketch.prototype.show = function () {
             strokeWeight(3);
         } else if (this.outputs[i - 1] === true) {
             stroke(this.highColor);
-            strokeWeight(5);
+            strokeWeight(4);
         } else {
             stroke(this.lowColor);
             strokeWeight(3);

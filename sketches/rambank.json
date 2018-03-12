@@ -1,5 +1,5 @@
 {
-  "caption": "8 x 4-Bit RAM",
+  "caption": "rambank",
   "gates": [
     {
       "x": "3210",
