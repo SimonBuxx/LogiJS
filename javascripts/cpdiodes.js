@@ -5,7 +5,7 @@
 */
 function deleteInvalidDiodes() {
     for (let j = diodes.length - 1; j >= 0; j--) {
-        if (wirePoints(diodes[j].x, diodes[j].y, -1).length < 2) {
+        if (!rightAngle(diodes[j].x, diodes[j].y)) {
             diodes.splice(j, 1);
         }
     }
@@ -62,6 +62,25 @@ function createConpoint(x, y, state, g) {
 }
 
 /*
+    Determines, whether there is a vertical and a horizontal wire segment starting or ending in point (x, y)
+*/
+function rightAngle(x, y) {
+    let hor = false;
+    let ver = false;
+    for (let i = 0; i < segments.length; i++) {
+        if (segments[i].startX === x && segments[i].startY === y) {
+            hor = (hor || segments[i].direction === 0);
+            ver = (ver || segments[i].direction === 1);
+        }
+        if (segments[i].endX === x && segments[i].endY === y) {
+            hor = (hor || segments[i].direction === 0);
+            ver = (ver || segments[i].direction === 1);
+        }
+    }
+    return (hor && ver);
+}
+
+/*
     Creates a new diode if the point meets the requirements
     gA: Group A (horizontal, not influenced by the vertical wire)
     gB: Group B (vertical, synced to group A)
@@ -69,7 +88,7 @@ function createConpoint(x, y, state, g) {
 */
 function createDiode(x, y, state) {
     // If there is no diode and a diode can be set
-    if ((isDiode(x, y) < 0) && (wirePoints(x, y, -1).length > 1)) {
+    if ((isDiode(x, y) < 0) && (rightAngle(x, y))) {
         diodes.push(new Diode(x, y, state, transform));
         diodes[diodes.length - 1].updateClickBox();
         pushUndoAction('addDi', [], diodes[diodes.length - 1]);

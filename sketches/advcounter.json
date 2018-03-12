@@ -1,5 +1,5 @@
 {
-  "caption": "4-Bit Counter",
+  "caption": "advcounter",
   "gates": [
     {
       "x": "960",
@@ -11,17 +11,6 @@
       "caption": "\"=1\"",
       "outputsInv": "[false]",
       "inputsInv": "[false,true]"
-    },
-    {
-      "x": "810",
-      "y": "600",
-      "direction": "1",
-      "inputCount": "2",
-      "outputCount": "1",
-      "logicFunction": "\"and\"",
-      "caption": "\"&\"",
-      "outputsInv": "[false]",
-      "inputsInv": "[true,false]"
     },
     {
       "x": "960",
@@ -58,17 +47,6 @@
     },
     {
       "x": "810",
-      "y": "840",
-      "direction": "1",
-      "inputCount": "2",
-      "outputCount": "1",
-      "logicFunction": "\"and\"",
-      "caption": "\"&\"",
-      "outputsInv": "[false]",
-      "inputsInv": "[false,false]"
-    },
-    {
-      "x": "810",
       "y": "1080",
       "direction": "1",
       "inputCount": "2",
@@ -80,7 +58,7 @@
     },
     {
       "x": "810",
-      "y": "1320",
+      "y": "840",
       "direction": "1",
       "inputCount": "2",
       "outputCount": "1",
@@ -88,6 +66,17 @@
       "caption": "\"&\"",
       "outputsInv": "[false]",
       "inputsInv": "[false,false]"
+    },
+    {
+      "x": "810",
+      "y": "600",
+      "direction": "1",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[true,false]"
     }
   ],
   "outputs": [
@@ -413,6 +402,12 @@
       "y2": "1020"
     },
     {
+      "x1": "840",
+      "y1": "1140",
+      "x2": "840",
+      "y2": "1260"
+    },
+    {
       "x1": "870",
       "y1": "450",
       "x2": "870",
@@ -429,12 +424,6 @@
       "y1": "930",
       "x2": "870",
       "y2": "1080"
-    },
-    {
-      "x1": "870",
-      "y1": "1170",
-      "x2": "870",
-      "y2": "1320"
     },
     {
       "x1": "930",
@@ -477,12 +466,6 @@
       "y1": "900",
       "x2": "840",
       "y2": "1080"
-    },
-    {
-      "x1": "840",
-      "y1": "1140",
-      "x2": "840",
-      "y2": "1320"
     },
     {
       "x1": "1080",
@@ -545,7 +528,7 @@
       "y2": "870"
     },
     {
-      "x1": "870",
+      "x1": "900",
       "y1": "1170",
       "x2": "1320",
       "y2": "1170"
@@ -604,10 +587,6 @@
     },
     {
       "x": "840",
-      "y": "1260"
-    },
-    {
-      "x": "840",
       "y": "1020"
     },
     {
@@ -621,10 +600,6 @@
     {
       "x": "900",
       "y": "930"
-    },
-    {
-      "x": "900",
-      "y": "1170"
     },
     {
       "x": "1320",
@@ -709,5 +684,6 @@
       "outputsInv": "[false,false]",
       "inputsInv": "[false,false]"
     }
-  ]
+  ],
+  "labels": []
 }
