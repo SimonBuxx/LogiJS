@@ -293,13 +293,31 @@ function setup() { // jshint ignore:line
     directionSelect = createSelect();
     directionSelect.hide();
     directionSelect.option('Right');
-    directionSelect.option('Top');
+    directionSelect.option('Up');
     directionSelect.option('Left');
-    directionSelect.option('Bottom');
+    directionSelect.option('Down');
     directionSelect.changed(newDirection);
     directionSelect.elt.className = "selectLeft";
     directionSelect.parent(leftSideButtons);
     directionSelect.value('Right');
+
+    sfcheckbox = createCheckbox('Sync Ticks', true);
+    sfcheckbox.hide();
+    sfcheckbox.changed(function () {
+        syncFramerate = sfcheckbox.checked();
+        if (!sfcheckbox.checked() && simRunning) {
+            updater = setInterval(updateTick, 1);
+        } else {
+            clearInterval(updater);
+        }
+    });
+    sfcheckbox.elt.style.color = 'white';
+    sfcheckbox.elt.style.fontFamily = 'Arial';
+    sfcheckbox.elt.style.textAlign = 'center';
+    sfcheckbox.elt.style.margin = '10px 0 0 0';
+    //sfcheckbox.position(946, 4);
+    sfcheckbox.elt.className = 'checkbox';
+    sfcheckbox.parent(leftSideButtons);
 
     //Upper left
     // Activates the wiring mode
@@ -383,20 +401,6 @@ function setup() { // jshint ignore:line
     });
     propertiesButton.elt.className = "button";
 
-    sfcheckbox = createCheckbox('Sync Ticks', true);
-    sfcheckbox.changed(function () {
-        syncFramerate = sfcheckbox.checked();
-        if (!sfcheckbox.checked() && simRunning) {
-            updater = setInterval(updateTick, 1);
-        } else {
-            clearInterval(updater);
-        }
-    });
-    sfcheckbox.elt.style.color = 'white';
-    sfcheckbox.elt.style.fontFamily = 'Arial';
-    sfcheckbox.position(946, 4);
-    sfcheckbox.elt.className = 'checkbox';
-
     // Upper right
     // Input field for the file name
     textInput = createInput('');
@@ -470,10 +474,9 @@ function setup() { // jshint ignore:line
     frameRate(60); // Caps the framerate at 60 FPS
 
     //sets font-size for all label elements
-    var labels = document.getElementsByClassName('label');
-    for (i = 0; i < labels.length; i++) {
-
-        labels[i].style.fontSize = "16px";
+    let guiLabels = document.getElementsByClassName('label');
+    for (let i = 0; i < guiLabels.length; i++) {
+        guiLabels[i].style.fontSize = "16px";
     }
 
     let loadfile = urlParam('sketch');
@@ -637,9 +640,9 @@ function newGateInputNumber() {
 function newDirection() {
     switch(directionSelect.value()) {
         case 'Right': gateDirection = 0; break;
-        case 'Top': gateDirection = 3; break;
+        case 'Up': gateDirection = 3; break;
         case 'Left': gateDirection = 2; break;
-        case 'Bottom': gateDirection = 1; break;
+        case 'Down': gateDirection = 1; break;
     }
 }
 
@@ -980,6 +983,8 @@ function startSimulation() {
         }
     }
 
+    sfcheckbox.show();
+
     // Start the simulation and exit the properties mode
     simRunning = true;
     propMode = false;
@@ -998,6 +1003,7 @@ function endSimulation() {
     setPropMode(true);
     disableButtons(false); // Enable all buttons
     updateUndoButtons();
+    sfcheckbox.hide();
 
     groups = []; // Reset the groups, as they are regenerated when starting again
     for (const elem of gates) {
@@ -1278,191 +1284,6 @@ function wirePoints(x, y, j) {
 }
 
 /*
-    Starts or stops the properties mode
-*/
-function setPropMode(active) {
-    propMode = active;
-    if (!active) {
-        hidePropMenu();
-        unmarkPropTargets();
-    } else {
-        setControlMode('none');
-    }
-}
-
-// Hides the PropMenu without quitting the PropMode
-// Used, when the user clickes outside a valid target for PropMode
-function hidePropMenu() {
-    inputIsTopBox.hide();
-    inputCaptionBox.hide();
-    outputCaptionBox.hide();
-    outputColorBox.hide();
-    labelTextBox.hide();
-}
-
-/*
-    Unmarks all objects that can be marked in the properties mode
-*/
-function unmarkPropTargets() {
-    for (const elem of inputs) {
-        elem.mark(false);
-    }
-    for (const elem of outputs) {
-        elem.mark(false);
-    }
-    for (const elem of labels) {
-        elem.mark(false);
-    }
-    propInput = -1;
-    propOutput = -1;
-    propLabel = -1;
-}
-
-/*
-    Unmarks all markable objects, for example after dragging a selection
-*/
-function unmarkAll() {
-    for (const elem of inputs) {
-        elem.mark(false);
-    }
-    for (const elem of outputs) {
-        elem.mark(false);
-    }
-    for (const elem of labels) {
-        elem.mark(false);
-    }
-    for (const elem of gates) {
-        elem.marked = false;
-    }
-    for (const elem of customs) {
-        elem.marked = false;
-    }
-    for (const elem of conpoints) {
-        elem.marked = false;
-    }
-    for (const elem of diodes) {
-        elem.marked = false;
-    }
-    for (const elem of wires) {
-        elem.marked = false;
-    }
-}
-
-/*
-    Shows the DOM elements for the input options and unmarks all other
-    objects that can be marked in properties mode
-*/
-function showInputPropMenu() {
-    outputCaptionBox.hide();
-    outputColorBox.hide();
-    labelTextBox.hide();
-    inputIsTopBox.show();
-    inputCaptionBox.show();
-    inputIsTopBox.checked(inputs[propInput].isTop);
-    inputCaptionBox.value(inputs[propInput].lbl);
-    propOutput = -1;
-    propLabel = -1;
-    for (const elem of outputs) {
-        elem.mark(false);
-    }
-    for (const elem of labels) {
-        elem.mark(false);
-    }
-}
-
-/*
-    Shows the DOM elements for the label options and unmarks all other
-    objects that can be marked in properties mode
-*/
-function showLabelPropMenu() {
-    outputCaptionBox.hide();
-    outputColorBox.hide();
-    inputIsTopBox.hide();
-    inputCaptionBox.hide();
-    labelTextBox.show();
-    labelTextBox.value(labels[propLabel].txt);
-    propOutput = -1;
-    propInput = -1;
-    for (const elem of outputs) {
-        elem.mark(false);
-    }
-    for (const elem of inputs) {
-        elem.mark(false);
-    }
-}
-
-/*
-    Shows the DOM elements for the output options and unmarks all other
-    objects that can be marked in properties mode
-*/
-function showOutputPropMenu() {
-    inputIsTopBox.hide();
-    inputCaptionBox.hide();
-    labelTextBox.hide();
-    outputCaptionBox.show();
-    outputColorBox.show();
-    switch (outputs[propOutput].colr) {
-        case 0:
-            outputColorBox.value('red');
-            break;
-        case 1:
-            outputColorBox.value('yellow');
-            break;
-        case 2:
-            outputColorBox.value('green');
-            break;
-        case 3:
-            outputColorBox.value('blue');
-            break;
-        default:
-    }
-    outputCaptionBox.value(outputs[propOutput].lbl);
-    propInput = -1;
-    propLabel = -1;
-    for (const elem of inputs) {
-        elem.mark(false);
-    }
-    for (const elem of labels) {
-        elem.mark(false);
-    }
-}
-
-function newIsTopState() {
-    inputs[propInput].setIsTop(inputIsTopBox.checked());
-}
-
-function newInputCaption() {
-    inputs[propInput].lbl = inputCaptionBox.value();
-}
-
-function newOutputCaption() {
-    outputs[propOutput].lbl = outputCaptionBox.value();
-}
-
-/*
-    Updates the color of the marked output according to the
-    selected color in the select box
-*/
-function newOutputColor() {
-    switch (outputColorBox.value()) {
-        case 'red':
-            outputs[propOutput].colr = 0;
-            break;
-        case 'yellow':
-            outputs[propOutput].colr = 1;
-            break;
-        case 'green':
-            outputs[propOutput].colr = 2;
-            break;
-        case 'blue':
-            outputs[propOutput].colr = 3;
-            break;
-        default:
-    }
-    outputs[propOutput].updateColor();
-}
-
-/*
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
@@ -1477,121 +1298,6 @@ function keyPressed() {
     } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
         loadClicked();
     }
-}
-
-/*
-    This is invoked when the selection area is drawn
-    It selects all underlying items 
-*/
-function handleSelection(x1, y1, x2, y2) {
-    sClickBox.updatePosition(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
-    sClickBox.updateSize(x2 - x1, y2 - y1);
-    sClickBox.setTransform(transform);
-    showSClickBox = true;
-    selection = [];
-    for (let i = 0; i < gates.length; i++) {
-        if (gates[i].x >= x1 && gates[i].x <= x2 && gates[i].y >= y1 && gates[i].y <= y2) {
-            gates[i].marked = true;
-            selection.push(gates[i]);
-        }
-    }
-    for (let i = 0; i < customs.length; i++) {
-        if (customs[i].visible && (customs[i].x >= x1 && customs[i].x <= x2 && customs[i].y >= y1 && customs[i].y <= y2)) {
-            customs[i].marked = true;
-            selection.push(customs[i]);
-        }
-    }
-    for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].x >= x1 && inputs[i].x <= x2 && inputs[i].y >= y1 && inputs[i].y <= y2) {
-            inputs[i].marked = true;
-            selection.push(inputs[i]);
-        }
-    }
-    for (let i = 0; i < outputs.length; i++) {
-        if (outputs[i].x >= x1 && outputs[i].x <= x2 && outputs[i].y >= y1 && outputs[i].y <= y2) {
-            outputs[i].marked = true;
-            selection.push(outputs[i]);
-        }
-    }
-    for (let i = 0; i < conpoints.length; i++) {
-        if (conpoints[i].x >= x1 && conpoints[i].x <= x2 && conpoints[i].y >= y1 && conpoints[i].y <= y2) {
-            conpoints[i].marked = true;
-            selection.push(conpoints[i]);
-        }
-    }
-    for (let i = 0; i < diodes.length; i++) {
-        if (diodes[i].x >= x1 && diodes[i].x <= x2 && diodes[i].y >= y1 && diodes[i].y <= y2) {
-            diodes[i].marked = true;
-            selection.push(diodes[i]);
-        }
-    }
-    for (let i = 0; i < labels.length; i++) {
-        if (labels[i].x >= x1 && labels[i].x <= x2 && labels[i].y >= y1 && labels[i].y <= y2) {
-            labels[i].marked = true;
-            selection.push(labels[i]);
-        }
-    }
-    let wireSelection = [];
-    for (let i = 0; i < wires.length; i++) {
-        if ((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) && (wires[i].startX <= x2 || x2 >= wires[i].endX)) && (wires[i].startY >= y1 && wires[i].endY <= y2)) {
-            wires[i].marked = true;
-            wireSelection.push(wires[i]);
-        } else if ((wires[i].direction === 1) && ((wires[i].startY >= y1 || y1 <= wires[i].endY) && (wires[i].startY <= y2 || y2 >= wires[i].endY)) && (wires[i].startX >= x1 && wires[i].endX <= x2)) {
-            wires[i].marked = true;
-            wireSelection.push(wires[i]);
-        }
-    }
-    let segSelection = [];
-    for (let i = 0; i < wireSelection.length; i++) {
-        if (wireSelection[i].x1 === wireSelection[i].x2) {
-            // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-            for (let j = 0; j < (wireSelection[i].y2 - wireSelection[i].y1) / GRIDSIZE; j++) {
-                segSelection.push(new WSeg(1, wireSelection[i].x1, wireSelection[i].y1 + j * GRIDSIZE,
-                    false, transform));
-            }
-        } else if (wireSelection[i].y1 === wireSelection[i].y2) {
-            // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-            for (let j = 0; j < (wireSelection[i].x2 - wireSelection[i].x1) / GRIDSIZE; j++) {
-                segSelection.push(new WSeg(0, wireSelection[i].x1 + j * GRIDSIZE, wireSelection[i].y1,
-                    false, transform));
-            }
-        }
-    }
-    selection = selection.concat(wireSelection);
-    selection = selection.concat(segSelection);
-}
-
-/*
-    Moves the selected items by dx, dy
-*/
-function moveSelection(dx, dy) {
-    if ((sClickBox.x - sClickBox.w / 2 > GRIDSIZE || dx >= 0) && (sClickBox.y - sClickBox.h / 2 > GRIDSIZE || dy >= 0)) {
-        sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
-        for (let i = 0; i < selection.length; i++) {
-            selection[i].alterPosition(dx, dy);
-        }
-    }
-}
-
-/*
-    Recalculates all wire segments and redoes the connection points
-*/
-function finishSelection() {
-    segments = [];
-    for (let i = 0; i < wires.length; i++) {
-        if (wires[i].startX === wires[i].endX) {
-            // Vertical wire, split in n vertical segments
-            for (let j = 0; j < (wires[i].endY - wires[i].startY) / GRIDSIZE; j++) {
-                segments.push(new WSeg(1, wires[i].startX, (wires[i].startY + j * GRIDSIZE), false, transform));
-            }
-        } else if (wires[i].startY === wires[i].endY) {
-            // Horizontal wire, split in n horizontal segments
-            for (let j = 0; j < (wires[i].endX - wires[i].startX) / GRIDSIZE; j++) {
-                segments.push(new WSeg(0, wires[i].startX + j * GRIDSIZE, wires[i].startY, false, transform));
-            }
-        }
-    }
-    doConpoints();
 }
 
 /*
