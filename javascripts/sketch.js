@@ -503,6 +503,7 @@ function setup() { // jshint ignore:line
     andGate.mousePressed(labelButtonClicked);
     andGate.addClass('toolbar-button');
     andGate.style('height','5rem');
+    andGate.style('width','100%');
     andGate.style('background-size','3rem');
     andGate.style('line-height','8.5rem');
     andGate.style('background-position','50% 30%');
@@ -512,7 +513,8 @@ function setup() { // jshint ignore:line
     orGate.style('background-image','url(Or-Gate.svg)');
     orGate.mousePressed(labelButtonClicked);
     orGate.addClass('toolbar-button');
-    orGate.style('height','4rem');
+    orGate.style('height','5rem');
+    orGate.style('width','100%');
     orGate.style('background-size','3rem');
     orGate.style('background-position','center');
 
@@ -521,7 +523,8 @@ function setup() { // jshint ignore:line
     xorGate.style('background-image','url(Xor-Gate.svg)');
     xorGate.mousePressed(labelButtonClicked);
     xorGate.addClass('toolbar-button');
-    xorGate.style('height','4rem');
+    xorGate.style('height','5rem');
+    xorGate.style('width','100%');
     xorGate.style('background-size','3rem');
     xorGate.style('background-position','center');
 
@@ -530,7 +533,8 @@ function setup() { // jshint ignore:line
     labelButton5.style('background-image','url(Label.svg)');
     labelButton5.mousePressed(labelButtonClicked);
     labelButton5.addClass('toolbar-button');
-    labelButton5.style('height','4rem');
+    labelButton5.style('height','5rem');
+    labelButton5.style('width','100%');
     labelButton5.style('background-size','2rem');
 
     labelButton6 = createDiv('Label5');
@@ -538,7 +542,8 @@ function setup() { // jshint ignore:line
     labelButton6.style('background-image','url(Label.svg)');
     labelButton6.mousePressed(labelButtonClicked);
     labelButton6.addClass('toolbar-button');
-    labelButton6.style('height','4rem');
+    labelButton6.style('height','5rem');
+    labelButton6.style('width','100%');
     labelButton6.style('background-size','2rem');
 
     // </Test buttons in basicButtonContainer>
@@ -553,7 +558,7 @@ function setup() { // jshint ignore:line
     // uses same style as 'Basic' container, just slightly tweaked
     advancedContainer.addClass('guiContainer basicContainer');
     advancedContainer.style('top','1.5rem');
-    advancedContainer.style('width','5rem');
+    advancedContainer.style('width','5.5rem');
 
 
     // Description 'Basic' in basicContainer
@@ -574,6 +579,7 @@ function setup() { // jshint ignore:line
     andGate.mousePressed(labelButtonClicked);
     andGate.addClass('toolbar-button');
     andGate.style('height','5rem');
+    andGate.style('width','100%');
     andGate.style('background-size','3rem');
     andGate.style('line-height','8.5rem');
     andGate.style('background-position','50% 30%');
@@ -583,7 +589,8 @@ function setup() { // jshint ignore:line
     orGate.style('background-image','url(Or-Gate.svg)');
     orGate.mousePressed(labelButtonClicked);
     orGate.addClass('toolbar-button');
-    orGate.style('height','4rem');
+    orGate.style('width','100%');
+    orGate.style('height','5rem');
     orGate.style('background-size','3rem');
     orGate.style('background-position','center');
 
@@ -592,7 +599,8 @@ function setup() { // jshint ignore:line
     xorGate.style('background-image','url(Xor-Gate.svg)');
     xorGate.mousePressed(labelButtonClicked);
     xorGate.addClass('toolbar-button');
-    xorGate.style('height','4rem');
+    xorGate.style('height','5rem');
+    xorGate.style('width','100%');
     xorGate.style('background-size','3rem');
     xorGate.style('background-position','center');
 
@@ -601,7 +609,8 @@ function setup() { // jshint ignore:line
     labelButton5.style('background-image','url(Label.svg)');
     labelButton5.mousePressed(labelButtonClicked);
     labelButton5.addClass('toolbar-button');
-    labelButton5.style('height','4rem');
+    labelButton5.style('height','5rem');
+    labelButton5.style('width','100%');
     labelButton5.style('background-size','2rem');
 
     labelButton6 = createDiv('Label5');
@@ -609,7 +618,8 @@ function setup() { // jshint ignore:line
     labelButton6.style('background-image','url(Label.svg)');
     labelButton6.mousePressed(labelButtonClicked);
     labelButton6.addClass('toolbar-button');
-    labelButton6.style('height','4rem');
+    labelButton6.style('height','5rem');
+    labelButton6.style('width','100%');
     labelButton6.style('background-size','2rem');
 
     // </Test buttons in advancedButtonContainer>

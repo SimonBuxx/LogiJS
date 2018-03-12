@@ -429,7 +429,7 @@ input[type=text]:hover, input[type=text]:focus {
     position: relative;
     top: 1rem;
     left: 0.5rem;
-    width: 4rem;
+    width: 5.5rem;
     height: 15rem;
     background-color: #333333;
     display: flex;
