@@ -545,6 +545,90 @@ function setup() { // jshint ignore:line
 
 
 
+    // Parent container for advanced components (child of guiContainer)
+    // shall contain description 'Advanced' and a scrollable
+    // set of advanced components like flipflops, mux's, etc...
+    advancedContainer = createDiv('');
+    advancedContainer.parent(guiContainer);
+    // uses same style as 'Basic' container, just slightly tweaked
+    advancedContainer.addClass('guiContainer basicContainer');
+    advancedContainer.style('top','1.5rem');
+    advancedContainer.style('width','5rem');
+
+
+    // Description 'Basic' in basicContainer
+    advancedContainerText = createP('Advanced');
+    advancedContainerText.parent(advancedContainer);
+    advancedContainerText.addClass('basicContainerText');
+
+    // Container to hold the basic components like button, lamp and so on
+    advancedButtonContainer = createDiv('');
+    advancedButtonContainer.parent(advancedContainer);
+    advancedButtonContainer.addClass('basicButtonContainer');
+
+    // <Test buttons in basicButtonContainer>
+    
+    andGate = createDiv('And');
+    andGate.parent(advancedButtonContainer);
+    andGate.style('background-image','url(And-Gate.svg)');
+    andGate.mousePressed(labelButtonClicked);
+    andGate.addClass('toolbar-button');
+    andGate.style('height','5rem');
+    andGate.style('background-size','3rem');
+    andGate.style('line-height','8.5rem');
+    andGate.style('background-position','50% 30%');
+
+    orGate = createDiv('');
+    orGate.parent(advancedButtonContainer);
+    orGate.style('background-image','url(Or-Gate.svg)');
+    orGate.mousePressed(labelButtonClicked);
+    orGate.addClass('toolbar-button');
+    orGate.style('height','4rem');
+    orGate.style('background-size','3rem');
+    orGate.style('background-position','center');
+
+    xorGate = createDiv('');
+    xorGate.parent(advancedButtonContainer);
+    xorGate.style('background-image','url(Xor-Gate.svg)');
+    xorGate.mousePressed(labelButtonClicked);
+    xorGate.addClass('toolbar-button');
+    xorGate.style('height','4rem');
+    xorGate.style('background-size','3rem');
+    xorGate.style('background-position','center');
+
+    labelButton5 = createDiv('Label4');
+    labelButton5.parent(advancedButtonContainer);
+    labelButton5.style('background-image','url(Label.svg)');
+    labelButton5.mousePressed(labelButtonClicked);
+    labelButton5.addClass('toolbar-button');
+    labelButton5.style('height','4rem');
+    labelButton5.style('background-size','2rem');
+
+    labelButton6 = createDiv('Label5');
+    labelButton6.parent(advancedButtonContainer);
+    labelButton6.style('background-image','url(Label.svg)');
+    labelButton6.mousePressed(labelButtonClicked);
+    labelButton6.addClass('toolbar-button');
+    labelButton6.style('height','4rem');
+    labelButton6.style('background-size','2rem');
+
+    // </Test buttons in advancedButtonContainer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*
         Elements for the properties mode

@@ -434,6 +434,7 @@ input[type=text]:hover, input[type=text]:focus {
     background-color: #333333;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.16);
 }
 
 /* Child of basicContainer, styles the description 'Basic' */
@@ -455,5 +456,6 @@ input[type=text]:hover, input[type=text]:focus {
     background-color: #721a1a;
     display: flex;
     flex-flow: wrap;
-    overflow-y: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
