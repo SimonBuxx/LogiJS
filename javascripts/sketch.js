@@ -497,14 +497,15 @@ function setup() { // jshint ignore:line
 
     // <Test buttons in basicButtonContainer>
     
-    andGate = createDiv('');
+    andGate = createDiv('And');
     andGate.parent(basicButtonContainer);
     andGate.style('background-image','url(And-Gate.svg)');
     andGate.mousePressed(labelButtonClicked);
     andGate.addClass('toolbar-button');
-    andGate.style('height','4rem');
+    andGate.style('height','5rem');
     andGate.style('background-size','3rem');
-    andGate.style('background-position','center');
+    andGate.style('line-height','8.5rem');
+    andGate.style('background-position','50% 30%');
 
     orGate = createDiv('');
     orGate.parent(basicButtonContainer);
