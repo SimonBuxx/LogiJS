@@ -107,6 +107,24 @@ function mouseMoved() {
     if (!hand) {
         cursor(ARROW);
     }
+
+   /* if(ctrlMode === 'addObject' && addType === 'gate' &&
+        gateType === 'and' && !mouseOverGUI()){
+            let pseudoGate = addPseudoGate(gateType, gateInputCount, gateDirection);
+            pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    }
+    /*
+    if(ctrlMode === 'delete' && addType === 'gate' &&
+    gateType === 'and'){
+        gateInputSelect.hide();
+        labelGateInputs.hide();
+        directionSelect.hide();
+        labelDirection.hide();
+        redoButton.elt.disabled = (actionRedo.length === 0);
+        undoButton.elt.disabled = (actionUndo.length === 0);
+        ctrlMode = 'addObject';
+    }*/
+    
 }
 
 function mouseDragged() {

@@ -809,6 +809,48 @@ function addGate(type, inputs, direction) {
 }
 
 /*
+    Adds a new pseudo gate with given type, input count and direction
+    as a preview to directly see where it's gonna be placed
+*/
+/*function addPseudoGate(type, inputs, direction) {
+    for (let i = 0; i < gates.length; i++) {
+        if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            return;
+        }
+    }
+    let newGate = null;
+    switch (type) {
+        case 'and':
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and', '&');
+            newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+            //newGate.updateClickBoxes();
+            //gates.push(newGate);
+            //pushUndoAction('addGate', [], newGate);
+            break;
+        /*    Trying first with and gate only
+        case 'or':
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or', '≥1');
+            newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+            newGate.updateClickBoxes();
+            gates.push(newGate);
+            pushUndoAction('addGate', [], newGate);
+            break;
+        case 'xor':
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor', '=1');
+            newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+            newGate.updateClickBoxes();
+            gates.push(newGate);
+            pushUndoAction('addGate', [], newGate);
+            break;
+        */
+        /*default:
+            console.log('Gate type \'' + type + '\' not found!');
+    }
+    reDraw();
+}*/
+
+/*
     Adds a custom element and loads it file and sub-customs
 */
 function addCustom(file, direction) {
