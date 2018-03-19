@@ -9,6 +9,8 @@ let origY = 0;
 let lockElements = false; // For delete mode, ensures that wires can be deleted without
 // accidentally deleting other elements
 
+let pseudoGate = null;
+
 /*
     Triggers when the mouse wheel is used
 */
@@ -108,10 +110,22 @@ function mouseMoved() {
         cursor(ARROW);
     }
 
-   /* if(ctrlMode === 'addObject' && addType === 'gate' &&
-        gateType === 'and' && !mouseOverGUI()){
-            let pseudoGate = addPseudoGate(gateType, gateInputCount, gateDirection);
+    if(ctrlMode === 'addObject' && addType === 'gate' &&
+        gateType === 'and' && !mouseOverGUI() && pseudoGate === null){
+            for (let i = 0; i < gates.length; i++) {
+                if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+                    (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+                    return;
+                }
+            }
+            pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, inputs, gateInputCount, 'and', '&');
             pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+            reDraw();
+    }
+    else if(ctrlMode === 'addObject' && addType === 'gate' &&
+    gateType === 'and' && !mouseOverGUI() && pseudoGate !== null){
+        pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+        reDraw();
     }
     /*
     if(ctrlMode === 'delete' && addType === 'gate' &&

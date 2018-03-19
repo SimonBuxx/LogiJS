@@ -1283,6 +1283,10 @@ function showElements() {
         elem.show();
     }
 
+    if(pseudoGate !== null){
+        pseudoGate.show();
+    }
+
     for (const elem of customs) {
         if (elem.visible) {
             elem.show();
