@@ -112,7 +112,7 @@ function mouseMoved() {
 
     // Draws a preview of the gate, so the user will see where the gate will be placed
     if(ctrlMode === 'addObject' && addType === 'gate' &&
-        gateType === 'and' && !mouseOverGUI()){
+        (gateType === 'and' || gateType === 'or' || gateType === 'xor') && !mouseOverGUI()){
             // Prevents that a gate is created over an existing gate
             for (let i = 0; i < gates.length; i++) {
                 if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
