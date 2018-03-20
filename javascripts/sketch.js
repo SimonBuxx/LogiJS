@@ -639,6 +639,8 @@ function labelChanged() {
 
 function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value());
+    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+    pseudoGate.alpha = 100;
 }
 
 function newDirection() {
@@ -648,6 +650,8 @@ function newDirection() {
         case 'Left': gateDirection = 2; break;
         case 'Down': gateDirection = 1; break;
     }
+    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+    pseudoGate.alpha = 100;
 }
 
 function newClockspeed() {
@@ -681,6 +685,8 @@ function andClicked() {
     labelGateInputs.show();
     directionSelect.show();
     labelDirection.show();
+    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+    pseudoGate.alpha = 100;
 }
 
 function orClicked() {

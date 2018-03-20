@@ -127,7 +127,6 @@ function mouseMoved() {
             }
             // Create new preview gate with up-to-date properties and
             // change its coordinates according to mouse position
-            pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
             pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             reDraw();
     }  

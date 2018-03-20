@@ -8,6 +8,7 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.direction = direction;     // Gate direction (0 = inputs left)
     this.inputCount = inputCount;   // # of inputs
     this.outputCount = outputCount; // # of outputs
+    this.alpha = 255;
 
     this.w = 2 * GRIDSIZE; // Width of the gate
     this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1, this.outputCount - 1); // Height of the gate
@@ -280,9 +281,11 @@ LogicGate.prototype.show = function () {
     if (this.marked) {
         fill(this.markColor);
     } else {
-        fill(255);
+        fill(255, this.alpha);
     }
     strokeWeight(3);
+
+    
 
     if (this.direction % 2 === 0) {
         rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); //  Draw body
