@@ -113,20 +113,14 @@ function mouseMoved() {
     // Draws a preview of the gate, so the user will see where the gate will be placed
     if(ctrlMode === 'addObject' && addType === 'gate' &&
         gateType === 'and' && !mouseOverGUI()){
-            /* 
-            Don't know why this for loop was in addGate() in sketch.js but it seemed
-            important, as addGate() does almost the same as this function,
-            also tried to run without this loop (no changes visible...)
-            it could be useful though(?)
-            */
+            // Prevents that a gate is created over an existing gate
             for (let i = 0; i < gates.length; i++) {
                 if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
                     (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
                     return;
                 }
             }
-            // Create new preview gate with up-to-date properties and
-            // change its coordinates according to mouse position
+            // Changes preview gate coordinates according to mouse position
             pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             reDraw();
     }  
