@@ -639,8 +639,18 @@ function labelChanged() {
 
 function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value());
-    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-    pseudoGate.alpha = 100;
+    switch(gateType){
+        case 'and': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+                    pseudoGate.alpha = 100;
+                    break;
+        case 'or':  pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
+                    pseudoGate.alpha = 100;
+                    break;   
+        case 'xor': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
+                    pseudoGate.alpha = 100;
+                    break;           
+    }
+    
 }
 
 function newDirection() {
@@ -650,8 +660,17 @@ function newDirection() {
         case 'Left': gateDirection = 2; break;
         case 'Down': gateDirection = 1; break;
     }
-    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-    pseudoGate.alpha = 100;
+    switch(gateType){
+        case 'and': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+                    pseudoGate.alpha = 100;
+                    break;
+        case 'or':  pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
+                    pseudoGate.alpha = 100;
+                    break;   
+        case 'xor': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
+                    pseudoGate.alpha = 100;
+                    break;           
+    }
 }
 
 function newClockspeed() {
