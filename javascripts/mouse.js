@@ -110,6 +110,7 @@ function mouseMoved() {
         cursor(ARROW);
     }
 
+    // Draws a preview of the gate, so the user will see where the gate will be placed
     if(ctrlMode === 'addObject' && addType === 'gate' &&
         gateType === 'and' && !mouseOverGUI() && pseudoGate === null){
             for (let i = 0; i < gates.length; i++) {
@@ -121,12 +122,12 @@ function mouseMoved() {
             pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
             pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             reDraw();
-    }
+    } 
     else if(ctrlMode === 'addObject' && addType === 'gate' &&
-    gateType === 'and' && !mouseOverGUI() && pseudoGate !== null){
-        pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-        pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-        reDraw();
+                gateType === 'and' && !mouseOverGUI() && pseudoGate !== null){
+                    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+                    pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+                    reDraw();
     }    
 }
 
