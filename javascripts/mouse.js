@@ -118,12 +118,13 @@ function mouseMoved() {
                     return;
                 }
             }
-            pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, inputs, gateInputCount, 'and', '&');
+            pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
             pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             reDraw();
     }
     else if(ctrlMode === 'addObject' && addType === 'gate' &&
     gateType === 'and' && !mouseOverGUI() && pseudoGate !== null){
+        pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
         pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
         reDraw();
     }
