@@ -23,12 +23,12 @@ function mouseWheel(event) {
 			origY = mouseY * (transform.zoom);
 			transform.dx += (origX - (mouseX * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
 			transform.dy += (origY - (mouseY * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
-			if (transform.dx > 0) {
+			/*if (transform.dx > 0) {
 				transform.dx = 0;
 			}
 			if (transform.dy > 0) {
 				transform.dy = 0;
-			}
+			}*/
 
 			gridSize -= wheel;
 
