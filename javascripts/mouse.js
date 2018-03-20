@@ -127,19 +127,7 @@ function mouseMoved() {
         pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
         pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
         reDraw();
-    }
-    /*
-    if(ctrlMode === 'delete' && addType === 'gate' &&
-    gateType === 'and'){
-        gateInputSelect.hide();
-        labelGateInputs.hide();
-        directionSelect.hide();
-        labelDirection.hide();
-        redoButton.elt.disabled = (actionRedo.length === 0);
-        undoButton.elt.disabled = (actionUndo.length === 0);
-        ctrlMode = 'addObject';
-    }*/
-    
+    }    
 }
 
 function mouseDragged() {
