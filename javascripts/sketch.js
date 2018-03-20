@@ -641,14 +641,14 @@ function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value());
     // Ensure that the correct preview gate is displayed when user selection changes
     switch(gateType){
-        case 'and': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-                    pseudoGate.alpha = 100;
+        case 'and': previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+                    previewSymbol.alpha = 100;
                     break;
-        case 'or':  pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
-                    pseudoGate.alpha = 100;
+        case 'or':  previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
+                    previewSymbol.alpha = 100;
                     break;   
-        case 'xor': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
-                    pseudoGate.alpha = 100;
+        case 'xor': previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
+                    previewSymbol.alpha = 100;
                     break;           
     }
     
@@ -663,14 +663,14 @@ function newDirection() {
     }
     // Ensure that the correct preview gate is displayed when user selection changes
     switch(gateType){
-        case 'and': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-                    pseudoGate.alpha = 100;
+        case 'and': previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+                    previewSymbol.alpha = 100;
                     break;
-        case 'or':  pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
-                    pseudoGate.alpha = 100;
+        case 'or':  previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
+                    previewSymbol.alpha = 100;
                     break;   
-        case 'xor': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
-                    pseudoGate.alpha = 100;
+        case 'xor': previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
+                    previewSymbol.alpha = 100;
                     break;           
     }
 }
@@ -706,8 +706,8 @@ function andClicked() {
     labelGateInputs.show();
     directionSelect.show();
     labelDirection.show();
-    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-    pseudoGate.alpha = 100;
+    previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+    previewSymbol.alpha = 100;
 }
 
 function orClicked() {
@@ -718,8 +718,8 @@ function orClicked() {
     labelGateInputs.show();
     directionSelect.show();
     labelDirection.show();
-    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
-    pseudoGate.alpha = 100;
+    previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
+    previewSymbol.alpha = 100;
 }
 
 function xorClicked() {
@@ -730,8 +730,8 @@ function xorClicked() {
     labelGateInputs.show();
     directionSelect.show();
     labelDirection.show();
-    pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
-    pseudoGate.alpha = 100;
+    previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
+    previewSymbol.alpha = 100;
 }
 
 function inputClicked() {
@@ -739,6 +739,8 @@ function inputClicked() {
     newIsClock = false;
     setControlMode('addObject');
     addType = 'input';
+    previewSymbol = new Input(mouseX, mouseY, transform);
+    previewSymbol.alpha = 0;
 }
 
 function buttonClicked() {
@@ -1272,8 +1274,8 @@ function showElements() {
         elem.show();
     }
 
-    if(pseudoGate !== null){
-        pseudoGate.show();
+    if(previewSymbol !== null){
+        previewSymbol.show();
     }
 
     for (const elem of customs) {

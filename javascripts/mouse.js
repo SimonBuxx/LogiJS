@@ -9,7 +9,7 @@ let origY = 0;
 let lockElements = false; // For delete mode, ensures that wires can be deleted without
 // accidentally deleting other elements
 
-let pseudoGate = null;
+let previewSymbol = null;
 
 /*
     Triggers when the mouse wheel is used
@@ -111,7 +111,7 @@ function mouseMoved() {
     }
 
     // Draws a preview of the gate, so the user will see where the gate will be placed
-    if(ctrlMode === 'addObject' && addType === 'gate' &&
+    if(ctrlMode === 'addObject' && (addType === 'gate' || addType === 'input') &&
         (gateType === 'and' || gateType === 'or' || gateType === 'xor') && !mouseOverGUI()){
             // Prevents that a gate is created over an existing gate
             for (let i = 0; i < gates.length; i++) {
@@ -121,7 +121,7 @@ function mouseMoved() {
                 }
             }
             // Changes preview gate coordinates according to mouse position
-            pseudoGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+            previewSymbol.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             reDraw();
     }  
 }
