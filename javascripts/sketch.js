@@ -639,6 +639,7 @@ function labelChanged() {
 
 function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value());
+    // Ensure that the correct preview gate is displayed when user selection changes
     switch(gateType){
         case 'and': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
                     pseudoGate.alpha = 100;
@@ -660,6 +661,7 @@ function newDirection() {
         case 'Left': gateDirection = 2; break;
         case 'Down': gateDirection = 1; break;
     }
+    // Ensure that the correct preview gate is displayed when user selection changes
     switch(gateType){
         case 'and': pseudoGate = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
                     pseudoGate.alpha = 100;
