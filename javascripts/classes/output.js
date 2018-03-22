@@ -113,11 +113,12 @@ Output.prototype.show = function () {
         fill(this.highColor);
     } else if (this.marked) {
         fill(this.markColor);
-    } else if (!this.state && !this.marked && !mouseIsPressed) {
+    } else {
         fill(this.lowColor);
-        if(previewSymbol !== null){
-            fill(50, 50, 50, this.alpha);
-        }
+    }
+    // Makes preview symbol more transparent
+    if (previewSymbol !== null && !this.state && !this.marked && !mouseIsPressed){
+        fill(50, 50, 50, this.alpha);
     }
     // Draw the circle that represents the output
     ellipse(this.x, this.y, this.w, this.h);
