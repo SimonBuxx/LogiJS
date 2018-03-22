@@ -740,7 +740,7 @@ function inputClicked() {
     setControlMode('addObject');
     addType = 'input';
     previewSymbol = new Input(mouseX, mouseY, transform);
-    previewSymbol.alpha = 0;
+    previewSymbol.alpha = 100;
 }
 
 function buttonClicked() {
