@@ -748,6 +748,8 @@ function buttonClicked() {
     newIsClock = false;
     setControlMode('addObject');
     addType = 'input';
+    previewSymbol = new Input(mouseX, mouseY, transform);
+    previewSymbol.alpha = 100;
 }
 
 function clockClicked() {
