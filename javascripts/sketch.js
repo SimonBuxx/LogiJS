@@ -402,6 +402,8 @@ function setup() { // jshint ignore:line
     propertiesButton.mousePressed(function () {
         setControlMode('none');
         setPropMode(true);
+        previewSymbol = null;
+        reDraw();
     });
     propertiesButton.elt.className = "button";
 
@@ -433,7 +435,10 @@ function setup() { // jshint ignore:line
     // Button to import as custom
     ascustomButton = createButton('Import');
     ascustomButton.position(windowWidth - 70, 4);
-    ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json'); });
+    ascustomButton.mousePressed(function () { 
+        previewSymbol = null;
+        return customClicked(textInput.value() + '.json'); 
+    });
     ascustomButton.elt.className = "button";
 
     /*
@@ -511,6 +516,7 @@ function customClicked(filename) {
 function saveClicked() {
     selectMode = 'none';
     showSClickBox = false;
+    previewSymbol = null;
     saveSketch(textInput.value() + '.json');
     document.title = textInput.value() + ' - LogiJS';
 }
@@ -519,6 +525,7 @@ function saveClicked() {
 function loadClicked() {
     selectMode = 'none';
     showSClickBox = false;
+    previewSymbol = null;
     loadSketch(textInput.value() + '.json');
     reDraw();
 }
@@ -544,6 +551,7 @@ function newClicked() {
     textInput.value('');
     textInput.attribute('placeholder', 'New Sketch');
     findLines();
+    previewSymbol = null;
     reDraw();
 }
 
@@ -779,6 +787,8 @@ function outputClicked() {
 function diodeClicked() {
     setControlMode('addObject');
     addType = 'diode';
+    previewSymbol = null;
+    reDraw();
 }
 
 // Starts the selection process
@@ -793,6 +803,8 @@ function startSelect() {
 function labelButtonClicked() {
     setControlMode('addObject');
     addType = 'label';
+    previewSymbol = null;
+    reDraw();
 }
 
 /*
@@ -933,6 +945,7 @@ function addLabel() {
     newLabel.updateClickBox();
     labels.push(newLabel);
     pushUndoAction('addLabel', [], newLabel);
+    previewSymbol = null;
     reDraw();
 }
 
