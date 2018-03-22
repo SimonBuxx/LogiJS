@@ -764,6 +764,8 @@ function clockClicked() {
 function outputClicked() {
     setControlMode('addObject');
     addType = 'output';
+    previewSymbol = new Output(mouseX, mouseY, transform, 0);
+    previewSymbol.alpha = 100;
 }
 
 // diodeClick is toggling the diodes,
