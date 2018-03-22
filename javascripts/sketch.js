@@ -757,6 +757,8 @@ function clockClicked() {
     newIsClock = true;
     setControlMode('addObject');
     addType = 'input';
+    previewSymbol = new Input(mouseX, mouseY, transform);
+    previewSymbol.alpha = 100;
 }
 
 function outputClicked() {
