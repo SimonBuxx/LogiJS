@@ -582,6 +582,8 @@ function pushSelectAction(dx, dy) {
 function wiringClicked() {
     setControlMode('addWire'); // Activates wire adding, leaving all other modes
     wireMode = 'none'; // Resets the wiring mode
+    previewSymbol = null;
+    reDraw();
 }
 
 function deleteClicked() {
@@ -627,6 +629,8 @@ function deleteClicked() {
     //    }
     //} else {
     setControlMode('delete');
+    previewSymbol = null;
+    reDraw();
     //}
 }
 
@@ -689,6 +693,8 @@ function newClockspeed() {
 */
 function simClicked() {
     if (!simRunning) {
+        previewSymbol = null;
+        reDraw();
         startSimulation();
     } else {
         endSimulation();
@@ -779,6 +785,8 @@ function diodeClicked() {
 function startSelect() {
     setControlMode('select');
     selectMode = 'none';
+    previewSymbol = null;
+    reDraw();
 }
 
 // Triggered when a label should be added
