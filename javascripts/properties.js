@@ -22,6 +22,8 @@ function hidePropMenu() {
     outputCaptionBox.hide();
     outputColorBox.hide();
     labelTextBox.hide();
+    clockspeedLabel.hide();
+    clockspeedSlider.hide();
 }
 
 /*
@@ -82,6 +84,14 @@ function showInputPropMenu() {
     labelTextBox.hide();
     inputIsTopBox.show();
     inputCaptionBox.show();
+    if (inputs[propInput].clock) {
+        clockspeedLabel.show();
+        clockspeedSlider.show();
+        clockspeedSlider.value(60 - inputs[propInput].speed);
+    } else {
+        clockspeedLabel.hide();
+        clockspeedSlider.hide();
+    }
     inputIsTopBox.checked(inputs[propInput].isTop);
     inputCaptionBox.value(inputs[propInput].lbl);
     propOutput = -1;
@@ -103,6 +113,8 @@ function showLabelPropMenu() {
     outputColorBox.hide();
     inputIsTopBox.hide();
     inputCaptionBox.hide();
+    clockspeedLabel.hide();
+    clockspeedSlider.hide();
     labelTextBox.show();
     labelTextBox.value(labels[propLabel].txt);
     propOutput = -1;
@@ -123,6 +135,8 @@ function showOutputPropMenu() {
     inputIsTopBox.hide();
     inputCaptionBox.hide();
     labelTextBox.hide();
+    clockspeedLabel.hide();
+    clockspeedSlider.hide();
     outputCaptionBox.show();
     outputColorBox.show();
     switch (outputs[propOutput].colr) {

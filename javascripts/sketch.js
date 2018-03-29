@@ -70,7 +70,7 @@ let syncFramerate = true;
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, crText, propertiesButton, labelButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, propertiesButton, labelButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
 let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, labelDirection;
@@ -319,6 +319,25 @@ function setup() { // jshint ignore:line
     sfcheckbox.elt.className = 'checkbox';
     sfcheckbox.parent(leftSideButtons);
 
+    // Adds text 'Clock speed'
+    clockspeedLabel = createP('Clock speed');
+    clockspeedLabel.hide();
+    clockspeedLabel.elt.style.color = 'white';
+    clockspeedLabel.elt.style.fontFamily = 'Arial';
+    clockspeedLabel.elt.style.textAlign = 'center';
+    clockspeedLabel.elt.style.margin = '3px 0px 0px 0px';
+    clockspeedLabel.elt.className = 'label';
+    clockspeedLabel.parent(leftSideButtons);
+
+    // A slider for adjusting the clock speed
+    clockspeedSlider = createSlider(1, 60, 30, 1);
+    clockspeedSlider.hide();
+    clockspeedSlider.changed(newClockspeed);
+    clockspeedSlider.style('width', '141px');
+    clockspeedSlider.style('margin', '5px');
+    clockspeedSlider.elt.className = 'slider';
+    clockspeedSlider.parent(leftSideButtons);
+
     //Upper left
     // Activates the wiring mode
     wireButton = createButton('Wiring');
@@ -340,24 +359,9 @@ function setup() { // jshint ignore:line
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
 
-    // Adds text before the Clockrate slider
-    crText = createP('Clock: ');
-    crText.elt.style.color = 'white';
-    crText.elt.style.fontFamily = 'Arial';
-    crText.elt.style.margin = 0;
-    crText.position(364, 5);
-    crText.elt.className = 'label';
-
-    // A slider for adjusting the clock speed
-    clockspeedSlider = createSlider(1, 60, 30, 1);
-    clockspeedSlider.position(416, 4);
-    clockspeedSlider.style('width', '80px');
-    clockspeedSlider.style('margin', '0px');
-    clockspeedSlider.elt.className = 'slider';
-
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(502, 4);
+    undoButton.position(362, 4);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -366,7 +370,7 @@ function setup() { // jshint ignore:line
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(568, 4);
+    redoButton.position(427, 4);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -375,26 +379,26 @@ function setup() { // jshint ignore:line
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(634, 4);
+    selectButton.position(493, 4);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
     // Adds diodes (barricade in one direction)
     diodeButton = createButton('Diodes');
-    diodeButton.position(706, 4);
+    diodeButton.position(565, 4);
     diodeButton.mousePressed(diodeClicked);
     //diodeButton.elt.style.width = "117px";
     diodeButton.elt.className = "button";
 
     // Adds labels
     labelButton = createButton('Label');
-    labelButton.position(783, 4);
+    labelButton.position(642, 4);
     labelButton.mousePressed(labelButtonClicked);
     labelButton.elt.className = "button";
 
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(850, 4);
+    propertiesButton.position(709, 4);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
         setPropMode(true);
@@ -638,11 +642,19 @@ function newGateInputNumber() {
 }
 
 function newDirection() {
-    switch(directionSelect.value()) {
+    switch (directionSelect.value()) {
         case 'Right': gateDirection = 0; break;
         case 'Up': gateDirection = 3; break;
         case 'Left': gateDirection = 2; break;
         case 'Down': gateDirection = 1; break;
+    }
+}
+
+function newClockspeed() {
+    if (propInput >= 0) {
+        if (inputs[propInput].clock) {
+            inputs[propInput].speed = 60 - clockspeedSlider.value();
+        }
     }
 }
 
@@ -747,7 +759,10 @@ function setControlMode(mode) {
         unmarkAll();
         showSClickBox = false;
     }
-    if (mode === 'addObject' || mode === 'addWire' || mode === 'select' || mode === 'delete' || mode === 'none') {
+    if (mode === 'addObject' || mode === 'addWire' || mode === 'select' || mode === 'delete') {
+        setPropMode(false);
+        ctrlMode = mode;
+    } else if (mode === 'none') {
         ctrlMode = mode;
     } else {
         console.log('Control mode not supported!');
@@ -846,7 +861,7 @@ function addInput() {
     if (newIsButton) {
         newInput.framecount = BUTCOUNT;
     } else if (newIsClock) {
-        newInput.framecount = 60 - clockspeedSlider.value();
+        newInput.resetFramecount();
     } else {
         newInput.framecount = -1;
     }
@@ -979,7 +994,7 @@ function startSimulation() {
     // Reset all clocks
     for (const elem of inputs) {
         if (elem.getIsClock()) {
-            elem.framecount = 60 - clockspeedSlider.value();
+            elem.resetFramecount();
         }
     }
 
@@ -1163,7 +1178,7 @@ function updateTick() {
         if (value.framecount === 0) {
             if (value.getIsClock()) {
                 value.toggle();
-                value.framecount = 60 - clockspeedSlider.value();
+                value.resetFramecount();
             } else {
                 value.setState(false);
                 value.framecount = BUTCOUNT;
