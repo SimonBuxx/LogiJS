@@ -87,12 +87,12 @@ function handleSelection(x1, y1, x2, y2) {
     Moves the selected items by dx, dy
 */
 function moveSelection(dx, dy) {
-    if ((sClickBox.x - sClickBox.w / 2 > GRIDSIZE || dx >= 0) && (sClickBox.y - sClickBox.h / 2 > GRIDSIZE || dy >= 0)) {
+    //if ((sClickBox.x - sClickBox.w / 2 > GRIDSIZE || dx >= 0) && (sClickBox.y - sClickBox.h / 2 > GRIDSIZE || dy >= 0)) {
         sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
         for (let i = 0; i < selection.length; i++) {
             selection[i].alterPosition(dx, dy);
         }
-    }
+    //}
 }
 
 /*

@@ -1324,15 +1324,9 @@ function handleDragging() {
         frameRate(60);
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);
-            if (transform.dx > 0) {
-                transform.dx = 0;
-            }
         }
         if (lastY !== 0) {
             transform.dy += Math.round((mouseY - lastY) * dragSpeed);
-            if (transform.dy > 0) {
-                transform.dy = 0;
-            }
         }
         lastX = mouseX;
         lastY = mouseY;
@@ -1351,10 +1345,10 @@ function handleDragging() {
 function drawGrid() {
     stroke(140); // Grid lines are a bit darker than the background
     strokeWeight(3); // Grid lines are three pixels wide
-    for (let i = Math.round(transform.dx); i < width / transform.zoom; i += GRIDSIZE) { // Vertical lines
-        line(i, transform.dy, i, height / transform.zoom);
+    for (let i = Math.round(transform.dx % GRIDSIZE); i < width / transform.zoom; i += GRIDSIZE) { // Vertical lines
+        line(i, 0, i, height / transform.zoom);
     }
-    for (let j = Math.round(transform.dy); j < height / transform.zoom; j += GRIDSIZE) { // Horizontal lines
+    for (let j = Math.round(transform.dy % GRIDSIZE); j < height / transform.zoom; j += GRIDSIZE) { // Horizontal lines
         line(0, j, width / transform.zoom, j);
     }
 }
