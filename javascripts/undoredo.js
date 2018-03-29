@@ -79,9 +79,14 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'moveSel':
-                selection = act.actionObject;
+				ctrlMode = "select";
+				handleSelection(act.actionIndizes[2],act.actionIndizes[3],act.actionIndizes[4],act.actionIndizes[5]);
+				showSClickBox = false;
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
                 finishSelection();
+				ctrlMode = "none";
+				selection = [];
+				unmarkAll();
                 actionRedo.push(act);
                 break;
             case 'reWire':
@@ -180,9 +185,14 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'moveSel':
-                selection = act.actionObject;
+				ctrlMode = "select";
+				handleSelection(act.actionIndizes[2]-act.actionIndizes[0],act.actionIndizes[3]-act.actionIndizes[1],act.actionIndizes[4]-act.actionIndizes[0],act.actionIndizes[5]-act.actionIndizes[1]);
+				showSClickBox = false;
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
                 finishSelection();
+				ctrlMode = "none";
+				selection = [];
+				unmarkAll();
                 actionUndo.push(act);
                 break;
             case 'reWire':
