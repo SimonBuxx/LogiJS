@@ -324,7 +324,7 @@ function setup() { // jshint ignore:line
    // simulation container starts here 
 
     // Activates the wiring mode   
-    wireButton = createDiv('Wiring');
+    wireButton = createDiv('');
     wireButton.parent(commandDiv);
     wireButton.style('background-image','url(Wiring.svg)');
     wireButton.style('border-left','1px solid darkgrey');
@@ -346,7 +346,7 @@ function setup() { // jshint ignore:line
     */
    
    // Delete button
-   deleteButton = createDiv('Delete');
+   deleteButton = createDiv('');
    deleteButton.parent(commandDiv);
    deleteButton.style('background-image','url(Delete.svg)');
    deleteButton.addClass('toolbar-button');
@@ -355,7 +355,7 @@ function setup() { // jshint ignore:line
    });
    
    // Undos the last action
-   undoButton = createDiv('Undo');
+   undoButton = createDiv('');
    undoButton.parent(commandDiv);
    undoButton.style('background-image','url(Undo.svg)');
    undoButton.addClass('toolbar-startButton');
@@ -369,7 +369,7 @@ function setup() { // jshint ignore:line
    });
 
    // Redos the last action
-   redoButton = createDiv('Redo');
+   redoButton = createDiv('');
    redoButton.parent(commandDiv);
    redoButton.style('background-image','url(Redo.svg)');
    redoButton.addClass('toolbar-startButton');
@@ -378,7 +378,7 @@ function setup() { // jshint ignore:line
    });
    
    // Activates the mode for area selecting
-   selectButton = createDiv('Select');
+   selectButton = createDiv('');
    selectButton.parent(commandDiv);
    selectButton.style('background-image','url(Select.svg)');
    selectButton.mousePressed(startSelect);
@@ -386,14 +386,14 @@ function setup() { // jshint ignore:line
    selectButton.style('background-size','2.5rem');
 
    // Adds diodes (barricade in one direction)
-   diodeButton = createDiv('Toggle Diodes');
+   diodeButton = createDiv('');
    diodeButton.parent(commandDiv);
    diodeButton.style('background-image','url(ToggleDiodes.svg)');
    diodeButton.mousePressed(diodeClicked);
    diodeButton.addClass('toolbar-toggleButton');
 
     // Adds labels
-    labelButton = createDiv('Label');
+    labelButton = createDiv('');
     labelButton.parent(commandDiv);
     labelButton.style('background-image','url(Label.svg)');
     labelButton.mousePressed(labelButtonClicked);
@@ -401,7 +401,7 @@ function setup() { // jshint ignore:line
     labelButton.style('background-size','2rem');
 
     // Toggles the properties mode
-    propertiesButton = createDiv('Properties');
+    propertiesButton = createDiv('');
     propertiesButton.parent(commandDiv);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
@@ -414,7 +414,7 @@ function setup() { // jshint ignore:line
     propertiesButton.style('border-right','1px solid darkgrey');
 
     // Clears the canvas and resets the view
-    newButton = createDiv('New');
+    newButton = createDiv('');
     newButton.parent(commandDiv);
     newButton.style('background-image','url(New.svg)');
     newButton.mousePressed(newClicked);
@@ -469,7 +469,7 @@ function setup() { // jshint ignore:line
     loadButton.style('line-height','1.8rem');
 
     // Button to import as custom
-    ascustomButton = createDiv('Import');
+    ascustomButton = createDiv('');
     ascustomButton.parent(commandDiv);
     ascustomButton.mousePressed(function () { 
         return customClicked(textInput.value() + '.json'); 
