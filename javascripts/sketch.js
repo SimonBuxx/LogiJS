@@ -580,8 +580,8 @@ function clearActionStacks() {
     actionRedo = [];
 }
 
-function pushSelectAction(dx, dy) {
-    pushUndoAction('moveSel', [dx, dy], selection);
+function pushSelectAction(dx, dy,x1, y1, x2, y2) {
+    pushUndoAction('moveSel', [dx, dy,x1, y1, x2, y2],selection);
 }
 
 /*

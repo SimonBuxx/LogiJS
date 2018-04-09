@@ -192,7 +192,8 @@ function mousePressed() {
                             selectMode = 'drag';
                         } else {
                             setControlMode('none');
-                            pushSelectAction(sDragX2 - initX, sDragY2 - initY);
+                            pushSelectAction(sDragX2 - initX, sDragY2 - initY,sClickBox.x-sClickBox.w/2, sClickBox.y-sClickBox.h/2,
+                                sClickBox.x+sClickBox.w/2, sClickBox.y+sClickBox.w/2);
                             initX = -1;
                             initY = -1;
                         }
