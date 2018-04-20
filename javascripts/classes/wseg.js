@@ -23,7 +23,8 @@ function WSeg(dir, startX, startY, state, transform) {
     this.end = null;  // One segment can have at max two Outputs or two Inputs connected
 
     this.marked = false;
-    this.markColor = color(0, 100, 50); // Color for marking and deleting
+    //this.markColor = color(0, 100, 50); // Color for marking and deleting
+    this.markColor = color(15, 80, 90);
 
     this.changePosition(startX, startY); // Initialize the start point
 }
