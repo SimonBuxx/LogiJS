@@ -573,7 +573,7 @@ function clearActionStacks() {
 }
 
 function pushSelectAction(dx, dy, x1, y1, x2, y2) {
-    if (dx !== 0 || dy !== 0) {
+    if ((dx !== 0 || dy !== 0) && selection.length > 0) {
         pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], selection);
     }
 }
