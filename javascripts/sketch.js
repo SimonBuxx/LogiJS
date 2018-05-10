@@ -49,8 +49,8 @@ let sDragX1 = 0; // Variables for
 let sDragX2 = 0; // selection dragging
 let sDragY1 = 0;
 let sDragY2 = 0;
-let initX = -1;
-let initY = -1;
+let initX = 0;
+let initY = 0;
 
 // Variables for dragging
 let lastX = 0; var lastY = 0; // last mouse position
@@ -572,8 +572,10 @@ function clearActionStacks() {
     actionRedo = [];
 }
 
-function pushSelectAction(dx, dy,x1, y1, x2, y2) {
-    pushUndoAction('moveSel', [dx, dy,x1, y1, x2, y2],selection);
+function pushSelectAction(dx, dy, x1, y1, x2, y2) {
+    if (dx !== 0 || dy !== 0) {
+        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], selection);
+    }
 }
 
 /*

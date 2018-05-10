@@ -167,17 +167,17 @@ function mousePressed() {
                             sDragY1 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
                             sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
                             sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
-                            if (initX === -1 || initY === -1) {
+                            if (initX === 0 || initY === 0) {
                                 initX = sDragX1;
                                 initY = sDragY1;
                             }
                             selectMode = 'drag';
                         } else {
                             setControlMode('none');
-                            pushSelectAction(sDragX2 - initX, sDragY2 - initY,sClickBox.x-sClickBox.w/2, sClickBox.y-sClickBox.h/2,
-                                sClickBox.x+sClickBox.w/2, sClickBox.y+sClickBox.w/2);
-                            initX = -1;
-                            initY = -1;
+                            pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
+                                sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
+                            initX = 0;
+                            initY = 0;
                         }
                         break;
                     default:
