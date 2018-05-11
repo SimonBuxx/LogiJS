@@ -13,14 +13,14 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-	if(mouseX > 0){
-		// -1 for zoom in, +1 for zoom out
-		this.wheel = Math.sign(event.deltaY) * 1.5;
-		if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
-			origX = mouseX * (transform.zoom);
-			origY = mouseY * (transform.zoom);
-			transform.dx += (origX - (mouseX * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
-			transform.dy += (origY - (mouseY * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
+    if (mouseX > 0) {
+        // -1 for zoom in, +1 for zoom out
+        this.wheel = Math.sign(event.deltaY) * 1.5;
+        if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
+            origX = mouseX * (transform.zoom);
+            origY = mouseY * (transform.zoom);
+            transform.dx += (origX - (mouseX * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
+            transform.dy += (origY - (mouseY * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
 			/*if (transform.dx > 0) {
 				transform.dx = 0;
 			}
@@ -28,14 +28,14 @@ function mouseWheel(event) {
 				transform.dy = 0;
 			}*/
 
-			gridSize -= wheel;
+            gridSize -= wheel;
 
-		}
-		transform.zoom = (gridSize / GRIDSIZE);
-		if (!simRunning) {
-			reDraw();
-		}
-	}
+        }
+        transform.zoom = (gridSize / GRIDSIZE);
+        if (!simRunning) {
+            reDraw();
+        }
+    }
     let hand = false;
     if (simRunning || propMode) {
         if (!simRunning) {
@@ -201,6 +201,10 @@ function mouseClicked() {
         directionSelect.hide();
         labelDirection.hide();
     }
+    if (ctrlMode !== 'addObject' || addType !== 'segDisplay') {
+        bitSelect.hide();
+        labelBits.hide();
+    }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
@@ -218,6 +222,11 @@ function mouseClicked() {
                     case 'output':
                         if (mouseButton === LEFT) {
                             addOutput();
+                        }
+                        break;
+                    case 'segDisplay':
+                        if (mouseButton === LEFT) {
+                            addSegDisplay(segBits);
                         }
                         break;
                     case 'input':
@@ -273,6 +282,15 @@ function mouseClicked() {
                                     let act = new Action('invCOP', [i, j], null);
                                     actionUndo.push(act);
                                 }
+                            }
+                        }
+                    }
+                    for (let i = 0; i < segDisplays.length; i++) {
+                        for (let j = 0; j < segDisplays[i].inputCount; j++) {
+                            if (segDisplays[i].mouseOverInput(j)) {
+                                segDisplays[i].invertInput(j);
+                                let act = new Action('invDIP', [i, j], null);
+                                actionUndo.push(act);
                             }
                         }
                     }
@@ -402,6 +420,10 @@ function mouseReleased() {
                         if (labelNumber >= 0) {
                             deleteLabel(labelNumber);
                         }
+                        var segDisNumber = mouseOverSegDisplay();
+                        if (segDisNumber >= 0) {
+                            deleteSegDisplay(segDisNumber);
+                        }
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
                         var oldSegments = segments.slice(0);
@@ -518,6 +540,15 @@ function mouseOverDiode() {
 function mouseOverLabel() {
     for (var i = labels.length - 1; i >= 0; i--) {
         if (labels[i].mouseOver()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function mouseOverSegDisplay() {
+    for (var i = segDisplays.length - 1; i >= 0; i--) {
+        if (segDisplays[i].mouseOver()) {
             return i;
         }
     }

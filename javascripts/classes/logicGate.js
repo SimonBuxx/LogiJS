@@ -87,13 +87,6 @@ LogicGate.prototype.getData = function () {
 LogicGate.prototype.setCoordinates = function (nx, ny) {
     this.x = Math.round((nx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
     this.y = Math.round((ny - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-    // Check bounds
-    /*if (this.x < 0) {
-        this.x = 0;
-    }
-    if (this.y < 0) {
-        this.y = 0;
-    }*/
 };
 
 /*
@@ -285,7 +278,7 @@ LogicGate.prototype.show = function () {
     strokeWeight(3);
 
     if (this.direction % 2 === 0) {
-        rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); //  Draw body
+        rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); // Draw body
     } else {
         rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h);
     }

@@ -14,6 +14,7 @@ function saveSketch(filename) {
     json.diodes = [];
     json.customs = [];
     json.labels = [];
+    json.segDisplays = [];
     for (let i = 0; i < gates.length; i++) {
         json.gates.push(gates[i].getData());
     }
@@ -34,6 +35,9 @@ function saveSketch(filename) {
     }
     for (let i = 0; i < labels.length; i++) {
         json.labels.push(labels[i].getData());
+    }
+    for (let i = 0; i < segDisplays.length; i++) {
+        json.segDisplays.push(segDisplays[i].getData());
     }
     for (let i = 0; i < customs.length; i++) {
         if (customs[i].visible) {
@@ -61,6 +65,7 @@ function load(loadData) {
     customs = [];
     diodes = [];
     labels = [];
+    segDisplays = [];
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
@@ -128,6 +133,11 @@ function load(loadData) {
     if (loadData.hasOwnProperty("labels")) {
         for (let i = 0; i < loadData.labels.length; i++) {
             labels[i] = new Label(JSON.parse(loadData.labels[i].x), JSON.parse(loadData.labels[i].y), loadData.labels[i].txt, transform);
+        }
+    }
+    if (loadData.hasOwnProperty("segDisplays")) {
+        for (let i = 0; i < loadData.segDisplays.length; i++) {
+            segDisplays[i] = new SegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), transform, JSON.parse(loadData.segDisplays[i].inputCount));
         }
     }
     for (let i = 0; i < loadData.customs.length; i++) {

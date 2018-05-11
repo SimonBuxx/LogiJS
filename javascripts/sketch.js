@@ -12,6 +12,9 @@ let diodes = [];
 let customs = [];
 let wires = [];
 let labels = [];
+let segDisplays = [];
+
+let segBits = 4; // Number of bits for the 7-segment displays
 
 let selection = [];
 
@@ -70,10 +73,10 @@ let syncFramerate = true;
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, propertiesButton, labelButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, propertiesButton, labelButton, segDisplayButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
-let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, labelDirection;
+let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
@@ -162,6 +165,12 @@ function setup() { // jshint ignore:line
     outputButton.mousePressed(outputClicked);
     outputButton.elt.className = "buttonLeft";
     outputButton.parent(leftSideButtons);
+
+    // Adds 7-segment displays
+    segDisplayButton = createButton('7-Segment');
+    segDisplayButton.mousePressed(segDisplayClicked);
+    segDisplayButton.elt.className = "buttonLeft";
+    segDisplayButton.parent(leftSideButtons);
 
     // Adds text 'Advanced'
     labelAdvanced = createP('Advanced');
@@ -289,6 +298,7 @@ function setup() { // jshint ignore:line
     labelDirection.elt.style.margin = '3px 0px 0px 0px';
     labelDirection.elt.className = 'label';
     labelDirection.parent(leftSideButtons);
+    
 
     directionSelect = createSelect();
     directionSelect.hide();
@@ -300,6 +310,33 @@ function setup() { // jshint ignore:line
     directionSelect.elt.className = "selectLeft";
     directionSelect.parent(leftSideButtons);
     directionSelect.value('Right');
+
+    // Adds text 'Input width'
+    labelBits = createP('Input width');
+    labelBits.hide();
+    labelBits.elt.style.color = 'white';
+    labelBits.elt.style.fontFamily = 'Arial';
+    labelBits.elt.style.textAlign = 'center';
+    labelBits.elt.style.margin = '3px 0px 0px 0px';
+    labelBits.elt.className = 'label';
+    labelBits.parent(leftSideButtons);
+
+    bitSelect = createSelect();
+    bitSelect.hide();
+    bitSelect.option('1');
+    bitSelect.option('2');
+    bitSelect.option('3');
+    bitSelect.option('4');
+    bitSelect.option('5');
+    bitSelect.option('6');
+    bitSelect.option('7');
+    bitSelect.option('8');
+    bitSelect.option('16');
+    bitSelect.option('32');
+    bitSelect.changed(newBitLength);
+    bitSelect.elt.className = "selectLeft";
+    bitSelect.parent(leftSideButtons);
+    bitSelect.value('4');
 
     sfcheckbox = createCheckbox('Sync Ticks', true);
     sfcheckbox.hide();
@@ -562,6 +599,7 @@ function clearItems() {
     diodes = [];
     labels = [];
     wires = [];
+    segDisplays = [];
 }
 
 /*
@@ -641,6 +679,10 @@ function labelChanged() {
 
 function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value());
+}
+
+function newBitLength() {
+    segBits = parseInt(bitSelect.value());
 }
 
 function newDirection() {
@@ -729,6 +771,13 @@ function clockClicked() {
 function outputClicked() {
     setControlMode('addObject');
     addType = 'output';
+}
+
+function segDisplayClicked() {
+    setControlMode('addObject');
+    addType = 'segDisplay';
+    bitSelect.show();
+    labelBits.show();
 }
 
 // diodeClick is toggling the diodes,
@@ -848,6 +897,24 @@ function addOutput() {
 }
 
 /*
+    Adds a new 7-segment display
+*/
+function addSegDisplay(bits) {
+    for (var i = 0; i < segDisplays.length; i++) {
+        if ((segDisplays[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (segDisplays[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            return;
+        }
+    }
+    var newDisplay = new SegmentDisplay(mouseX, mouseY, transform, bits);
+    newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    newDisplay.updateClickBoxes();
+    segDisplays.push(newDisplay);
+    pushUndoAction('addSegDis', [], newDisplay);
+    reDraw();
+}
+
+/*
     Adds a new input (switch, button or clock)
 */
 function addInput() {
@@ -962,6 +1029,14 @@ function deleteLabel(labelNumber) {
 }
 
 /*
+    Deletes the given 7-segment display
+*/
+function deleteSegDisplay(segDisNumber) {
+    pushUndoAction('delSegDis', [], segDisplays.splice(segDisNumber, 1));
+    reDraw();
+}
+
+/*
     Starts the simulation mode
     - Groups are created and objects are integrated
     - simRunning is set so that the sketch can't be altered
@@ -1030,6 +1105,9 @@ function endSimulation() {
         elem.setSimRunning(false); // Shutdown all custom elements
         elem.shutdown();
     }
+    for (const elem of segDisplays) {
+        elem.shutdown();
+    }
     // Set all item states to zero
     for (const elem of conpoints) {
         elem.state = false;
@@ -1077,6 +1155,7 @@ function disableButtons(status) {
     wireButton.elt.disabled = status;
     inputButton.elt.disabled = status;
     outputButton.elt.disabled = status;
+    segDisplayButton.elt.disabled = status;
     buttonButton.elt.disabled = status;
     clockButton.elt.disabled = status;
     deleteButton.elt.disabled = status;
@@ -1190,6 +1269,10 @@ function updateTick() {
         }
     }
 
+    for (const value of segDisplays) {
+        value.update();
+    }
+
     for (const value of diodes) {
         value.state = groups[value.gA].state;
         if (value.state) {
@@ -1258,6 +1341,9 @@ function showElements() {
         elem.show();
     }
     for (const elem of diodes) {
+        elem.show();
+    }
+    for (const elem of segDisplays) {
         elem.show();
     }
     textSize(20);
