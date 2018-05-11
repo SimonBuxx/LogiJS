@@ -1322,10 +1322,11 @@ function showElements() {
     }
     //var t1 = performance.now();
     //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
+    textFont('Arial');
     for (const elem of gates) {
         elem.show();
     }
-
+    textFont('Trebuchet MS');
     for (const elem of customs) {
         if (elem.visible) {
             elem.show();
@@ -1343,14 +1344,17 @@ function showElements() {
     for (const elem of diodes) {
         elem.show();
     }
+    textFont('Courier New');
     for (const elem of segDisplays) {
         elem.show();
     }
+    textFont('Trebuchet MS');
     textSize(20);
     textAlign(LEFT, TOP);
     for (const elem of labels) {
         elem.show();
     }
+    textFont('Arial');
 
     if (showSClickBox) {
         sClickBox.markClickBox();
