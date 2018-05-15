@@ -117,7 +117,7 @@ function setup() { // jshint ignore:line
     // Adds text 'Basic'
     labelBasic = createP('Basic');
     labelBasic.elt.style.color = 'white';
-    labelBasic.elt.style.fontFamily = 'Arial';
+    labelBasic.elt.style.fontFamily = 'Open Sans';
     labelBasic.elt.className = 'label';
     labelBasic.elt.style.textAlign = 'center';
     labelBasic.elt.style.margin = '3px 0px 0px 0px';
@@ -175,7 +175,7 @@ function setup() { // jshint ignore:line
     // Adds text 'Advanced'
     labelAdvanced = createP('Advanced');
     labelAdvanced.elt.style.color = 'white';
-    labelAdvanced.elt.style.fontFamily = 'Arial';
+    labelAdvanced.elt.style.fontFamily = 'Open Sans';
     labelAdvanced.elt.style.textAlign = 'center';
     labelAdvanced.elt.style.margin = '3px 0px 0px 0px';
     labelAdvanced.elt.className = 'label';
@@ -266,7 +266,7 @@ function setup() { // jshint ignore:line
     labelGateInputs = createP('Gate inputs');
     labelGateInputs.hide();
     labelGateInputs.elt.style.color = 'white';
-    labelGateInputs.elt.style.fontFamily = 'Arial';
+    labelGateInputs.elt.style.fontFamily = 'Open Sans';
     labelGateInputs.elt.style.textAlign = 'center';
     labelGateInputs.elt.style.margin = '3px 0px 0px 0px';
     labelGateInputs.elt.className = 'label';
@@ -293,7 +293,7 @@ function setup() { // jshint ignore:line
     labelDirection = createP('Direction');
     labelDirection.hide();
     labelDirection.elt.style.color = 'white';
-    labelDirection.elt.style.fontFamily = 'Arial';
+    labelDirection.elt.style.fontFamily = 'Open Sans';
     labelDirection.elt.style.textAlign = 'center';
     labelDirection.elt.style.margin = '3px 0px 0px 0px';
     labelDirection.elt.className = 'label';
@@ -315,7 +315,7 @@ function setup() { // jshint ignore:line
     labelBits = createP('Input width');
     labelBits.hide();
     labelBits.elt.style.color = 'white';
-    labelBits.elt.style.fontFamily = 'Arial';
+    labelBits.elt.style.fontFamily = 'Open Sans';
     labelBits.elt.style.textAlign = 'center';
     labelBits.elt.style.margin = '3px 0px 0px 0px';
     labelBits.elt.className = 'label';
@@ -349,7 +349,7 @@ function setup() { // jshint ignore:line
         }
     });
     sfcheckbox.elt.style.color = 'white';
-    sfcheckbox.elt.style.fontFamily = 'Arial';
+    sfcheckbox.elt.style.fontFamily = 'Open Sans';
     sfcheckbox.elt.style.textAlign = 'center';
     sfcheckbox.elt.style.margin = '10px 0 0 0';
     //sfcheckbox.position(946, 4);
@@ -360,7 +360,7 @@ function setup() { // jshint ignore:line
     clockspeedLabel = createP('Clock speed');
     clockspeedLabel.hide();
     clockspeedLabel.elt.style.color = 'white';
-    clockspeedLabel.elt.style.fontFamily = 'Arial';
+    clockspeedLabel.elt.style.fontFamily = 'Open Sans';
     clockspeedLabel.elt.style.textAlign = 'center';
     clockspeedLabel.elt.style.margin = '3px 0px 0px 0px';
     clockspeedLabel.elt.className = 'label';
@@ -422,20 +422,20 @@ function setup() { // jshint ignore:line
 
     // Adds diodes (barricade in one direction)
     diodeButton = createButton('Diodes');
-    diodeButton.position(565, 4);
+    diodeButton.position(563, 4);
     diodeButton.mousePressed(diodeClicked);
     //diodeButton.elt.style.width = "117px";
     diodeButton.elt.className = "button";
 
     // Adds labels
     labelButton = createButton('Label');
-    labelButton.position(642, 4);
+    labelButton.position(641, 4);
     labelButton.mousePressed(labelButtonClicked);
     labelButton.elt.className = "button";
 
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(709, 4);
+    propertiesButton.position(708, 4);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
         setPropMode(true);
@@ -446,12 +446,14 @@ function setup() { // jshint ignore:line
     // Input field for the file name
     textInput = createInput('');
     textInput.attribute('placeholder', 'New Sketch');
-    textInput.size(200, 15);
-    textInput.position(windowWidth - textInput.width - 203, 4);
+    textInput.size(200, 16);
+    textInput.position(windowWidth - textInput.width - 206, 4);
+    textInput.elt.style.fontFamily = 'Open Sans';
+    textInput.elt.className = "textInput";
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(windowWidth - textInput.width - 262, 4);
+    newButton.position(windowWidth - textInput.width - 265, 4);
     newButton.mousePressed(newClicked);
     newButton.elt.className = "button";
 
@@ -463,13 +465,13 @@ function setup() { // jshint ignore:line
 
     // Button to load a sketch
     loadButton = createButton('Load');
-    loadButton.position(windowWidth - 134, 4);
+    loadButton.position(windowWidth - 136, 4);
     loadButton.mousePressed(loadClicked);
     loadButton.elt.className = "button";
 
     // Button to import as custom
     ascustomButton = createButton('Import');
-    ascustomButton.position(windowWidth - 70, 4);
+    ascustomButton.position(windowWidth - 73, 4);
     ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json'); });
     ascustomButton.elt.className = "button";
 
@@ -481,15 +483,17 @@ function setup() { // jshint ignore:line
     inputIsTopBox.position(windowWidth - 180, 35);
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.style.color = 'white';
-    inputIsTopBox.elt.style.fontFamily = 'Arial';
+    inputIsTopBox.elt.style.fontFamily = 'Open Sans';
 
     inputCaptionBox = createInput('');
+    inputCaptionBox.elt.style.fontFamily = 'Open Sans';
     inputCaptionBox.hide();
     inputCaptionBox.size(160, 15);
     inputCaptionBox.position(windowWidth - 180, 60);
     inputCaptionBox.input(newInputCaption);
 
     outputCaptionBox = createInput('');
+    outputCaptionBox.elt.style.fontFamily = 'Open Sans';
     outputCaptionBox.hide();
     outputCaptionBox.size(160, 15);
     outputCaptionBox.position(windowWidth - 180, 60);
@@ -497,6 +501,7 @@ function setup() { // jshint ignore:line
 
     outputColorBox = createSelect();
     outputColorBox.hide();
+    outputColorBox.elt.style.fontFamily = 'Open Sans';
     outputColorBox.position(windowWidth - 180, 35);
     outputColorBox.size(168, 20);
     outputColorBox.option('red');
@@ -506,6 +511,7 @@ function setup() { // jshint ignore:line
     outputColorBox.changed(newOutputColor);
 
     labelTextBox = createInput('');
+    labelTextBox.elt.style.fontFamily = 'Open Sans';
     labelTextBox.hide();
     labelTextBox.size(185, 20);
     labelTextBox.position(windowWidth - 195, 45);
@@ -1322,11 +1328,11 @@ function showElements() {
     }
     //var t1 = performance.now();
     //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
-    textFont('Arial');
+    textFont('PT Mono');
     for (const elem of gates) {
         elem.show();
     }
-    textFont('Trebuchet MS');
+    textFont('Open Sans');
     for (const elem of customs) {
         if (elem.visible) {
             elem.show();
@@ -1344,17 +1350,16 @@ function showElements() {
     for (const elem of diodes) {
         elem.show();
     }
-    textFont('Courier New');
+    textFont('PT Mono');
     for (const elem of segDisplays) {
         elem.show();
     }
-    textFont('Trebuchet MS');
+    textFont('Gudea');
     textSize(20);
     textAlign(LEFT, TOP);
     for (const elem of labels) {
         elem.show();
     }
-    textFont('Arial');
 
     if (showSClickBox) {
         sClickBox.markClickBox();
