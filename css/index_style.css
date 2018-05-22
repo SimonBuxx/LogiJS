@@ -2,8 +2,8 @@ body, html { overflow:hidden;  box-sizing: border-box;}
 
 body {
     background-color: rgb(50, 50, 50);
-    font-family:  'Open Sans', Arial, Helvetice Neue, sans-serif;
-    font-size: 12px;
+    font-family:  'Open Sans', Arial, sans-serif;
+    font-size: 14px;
 	
 	font-weight: 300; 
 	font-style: normal; 
@@ -50,17 +50,18 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
     -o-background-size: cover;
     background-size: cover;
     display: block;
-    filter: blur(5px);
-    -webkit-filter: blur(5px);
+    filter: blur(7px);
+    -webkit-filter: blur(7px);
     position: fixed;
     left: 0;
     right: 0;
+	top: -10px;
     z-index: -10;
     height: 100%;
      overflow-x: hidden;
 }
 #carousel {
-	height: 600px;
+	height: 350px;
 }
 
 #carousel .carousel-caption {
