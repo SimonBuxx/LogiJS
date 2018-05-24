@@ -1328,7 +1328,7 @@ function showElements() {
     }
     //var t1 = performance.now();
     //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
-    textFont('PT Mono');
+    textFont('monospace');
     for (const elem of gates) {
         elem.show();
     }
