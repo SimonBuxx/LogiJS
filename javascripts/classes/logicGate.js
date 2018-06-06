@@ -1,6 +1,6 @@
 // File: logicGate.js
 
-function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFunction, caption) {
+function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFunction) {
     this.x = x; // X-Position of the Gate (translated)
     this.y = y; // Y-Position
 
@@ -17,7 +17,7 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high in-/outputs (red)
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low in-/outputs (black)
 
-    this.caption = caption; // Caption of the logic gate
+    this.caption = '';    // Caption of the logic gate
     this.textSize = 40;   // Text size of the caption
 
     this.inputs = [];     // Vector of the input states
@@ -32,6 +32,13 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     // These contain the ClickBoxes of the inputs and outputs and the global ClickBox
     this.inputClickBoxes = [];
     this.outputClickBoxes = [];
+
+    switch(this.logicFunction) {
+        case 'and': this.caption = '&'; break;
+        case 'or': this.caption = '≥1'; break;
+        case 'xor': this.caption = '=1'; break;
+        default: this.caption = '';
+    }
 
     this.marked = false;
     this.markColor = color(15, 80, 90);   // Color for marked gates
@@ -75,7 +82,6 @@ LogicGate.prototype.getData = function () {
     data.inputCount = JSON.stringify(this.inputCount);
     data.outputCount = JSON.stringify(this.outputCount);
     data.logicFunction = JSON.stringify(this.logicFunction);
-    data.caption = JSON.stringify(this.caption);
     data.outputsInv = JSON.stringify(this.outputsInv);
     data.inputsInv = JSON.stringify(this.inputsInv);
     return data;
