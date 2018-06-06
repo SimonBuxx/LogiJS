@@ -109,18 +109,25 @@ function load(loadData) {
     }
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
-            if (JSON.parse(loadData.wires[i].x1) === JSON.parse(loadData.wires[i].x2)) {
-                // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-                for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
-                    segments.push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
-                        false, transform));
+            if (loadData.wires[i].hasOwnProperty("y2")) {
+                if (JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) { // For compability
+                    // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+                    for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
+                        segments.push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
+                            false, transform));
+                    }
                 }
-            } else if (JSON.parse(loadData.wires[i].y1) === JSON.parse(loadData.wires[i].y2)) {
-                // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-                for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
-                    segments.push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
-                        false, transform));
+            }
+            if (loadData.wires[i].hasOwnProperty("x2")) {
+                if (JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) { // For compability
+                    // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+                    for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
+                        segments.push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
+                            false, transform));
+                    }
                 }
+            } else {
+                console.log('JSON file is corrupted!');
             }
         }
     }
@@ -203,18 +210,25 @@ function loadCustom(loadData, num) {
     }
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
-            if (JSON.parse(loadData.wires[i].x1) === JSON.parse(loadData.wires[i].x2)) {
-                // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-                for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
-                    params[SEGNUM].push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
-                        false, transform));
+            if (loadData.wires[i].hasOwnProperty("y2")) {
+                if (JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) { // For compability
+                    // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+                    for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
+                        params[SEGNUM].push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
+                            false, transform));
+                    }
                 }
-            } else if (JSON.parse(loadData.wires[i].y1) === JSON.parse(loadData.wires[i].y2)) {
-                // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-                for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
-                    params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
-                        false, transform));
+            }
+            if (loadData.wires[i].hasOwnProperty("x2")) {
+                if (JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) { // For compability
+                    // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+                    for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
+                        params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
+                            false, transform));
+                    }
                 }
+            } else {
+                console.log('JSON file is corrupted!');
             }
         }
     }
