@@ -275,6 +275,10 @@ LogicGate.prototype.pointInOutput = function (n, px, py) {
     Draws the gate on the screen
 */
 LogicGate.prototype.show = function () {
+    if ((this.x + this.transform.dx) * this.transform.zoom < 0 - this.w * this.transform.zoom || (this.y + this.transform.dy) * this.transform.zoom < 0 - this.h * this.transform.zoom ||
+        (this.x + this.transform.dx) * this.transform.zoom > windowWidth || (this.y + this.transform.dy) * this.transform.zoom > windowHeight) {
+        return;
+    }
     stroke(0);
     if (this.marked) {
         fill(this.markColor);

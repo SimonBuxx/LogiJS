@@ -1,4 +1,4 @@
-// File: conpoints.js
+// File: conpoint.js
 
 function ConPoint(x, y, state, g) {
     this.x = x;
