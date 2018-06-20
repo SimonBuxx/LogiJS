@@ -126,10 +126,10 @@ function load(loadData) {
                             false, transform));
                     }
                 }
-            } else {
-                console.log('JSON file is corrupted!');
             }
         }
+    } else {
+        console.log('JSON file is corrupted!');
     }
     for (let i = 0; i < loadData.conpoints.length; i++) {
         conpoints[i] = new ConPoint(JSON.parse(loadData.conpoints[i].x), JSON.parse(loadData.conpoints[i].y), false, -1);
@@ -164,13 +164,24 @@ function load(loadData) {
     Loads the sketch with filename file into custom object # num
 */
 function loadCustomFile(file, num) {
-    loadJSON('sketches/' + file, function (loadData) { return loadCustom(loadData, num); });
+    loadJSON('sketches/' + file,
+        function (loadData) {
+            let prototype = false;
+            if (!loadedFiles.includes(file.toLowerCase())) {
+                loadedFiles.push(file.toLowerCase());
+                prototype = true;
+            }
+            loadCustom(loadData, num, prototype);
+            console.log('Loaded ' + file + ' into custom ' + num);
+            loadNext();
+        }
+    );
 }
 
 /*
     Invoked by loadCustomFile when the json is fully loaded
 */
-function loadCustom(loadData, num) {
+function loadCustom(loadData, num, prototype) {
     let params = [[], [], [], [], [], [], []]; // [] x Number of different objects
     let trans = new Transformation(0, 0, 1);
     for (let i = 0; i < loadData.gates.length; i++) {
@@ -227,10 +238,10 @@ function loadCustom(loadData, num) {
                             false, transform));
                     }
                 }
-            } else {
-                console.log('JSON file is corrupted!');
             }
         }
+    } else {
+        console.log('JSON file is corrupted!');
     }
     for (let i = 0; i < loadData.conpoints.length; i++) {
         params[CPNUM][i] = new ConPoint(JSON.parse(loadData.conpoints[i].x), JSON.parse(loadData.conpoints[i].y), false, -1);
@@ -244,9 +255,9 @@ function loadCustom(loadData, num) {
         customs[customs.length - 1].setCoordinates(JSON.parse(loadData.customs[i].x) / trans.zoom - trans.dx, JSON.parse(loadData.customs[i].y) / trans.zoom - trans.dy);
         customs[customs.length - 1].updateClickBoxes();
         customs[customs.length - 1].visible = false;
-        customs[customs.length - 1].loaded = true;
+        customs[customs.length - 1].loaded = false;
         customs[num].responsibles.push(customs[customs.length - 1]);
-        loadCustomFile(customs[customs.length - 1].filename, customs.length - 1);
+        //loadCustomFile(customs[customs.length - 1].filename, customs.length - 1);
         params[CUSTNUM][i] = customs[customs.length - 1];
     }
     customs[num].setSketchParams(params);
@@ -259,9 +270,22 @@ function loadCustom(loadData, num) {
     Loads the sketches of all customs (visible and invisible)
 */
 function loadCustomSketches() {
-    for (let i = 0; i < customs.length; i++) {
-        if (!customs[i].loaded) {
-            loadCustomFile(customs[i].filename, i);
-        }
+    nowLoading = 0;
+    loadState = true;
+    if (customs.length > 0) {
+        loadCustomFile(customs[nowLoading].filename, nowLoading);
+    }
+}
+
+function loadNext() {
+    console.log('loadNext(); Length: ' + customs.length);
+    nowLoading = Math.min(nowLoading + 1, customs.length - 1);
+    if (!customs[nowLoading].loaded) {
+        loadCustomFile(customs[nowLoading].filename, nowLoading);
+    } else {
+        console.log('Message by loadNext(): All customs loaded; Files that where loaded: ');
+        loadState = false;
+        reDraw();
+        console.log(loadedFiles);
     }
 }
