@@ -67,10 +67,6 @@ let showSClickBox = false;
 let simRunning = false;
 let propMode = false;
 
-let nowLoading = 0;
-let loadedFiles = [];
-let loadState = false;
-
 let syncFramerate = true;
 
 // GUI Elements
@@ -1310,9 +1306,6 @@ function reDraw() {
     strokeWeight(0);
     text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Show zoom label
     text(Math.round(frameRate()), window.width - 20, window.height - 20); // Show fps label
-    if (loadState) {
-        text('Loading...', 10, 10);
-    }
 
     // If the prop mode is active and an object was selected, show the menu background in the top right corner
     if (propMode && propInput + propOutput + propLabel >= -2) {
