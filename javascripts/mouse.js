@@ -227,6 +227,7 @@ function mouseClicked() {
                     case 'segDisplay':
                         if (mouseButton === LEFT) {
                             addSegDisplay(segBits);
+                            setTimeout(reDraw, 50);
                         }
                         break;
                     case 'input':

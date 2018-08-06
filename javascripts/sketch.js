@@ -83,6 +83,10 @@ let outputCaptionBox, outputColorBox;
 let propInput = -1;
 let propOutput = -1;
 let propLabel = -1;
+
+let showHints = true;
+let hintNum = 0;
+let closeHintsButton, nextHintButton;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
@@ -298,7 +302,7 @@ function setup() { // jshint ignore:line
     labelDirection.elt.style.margin = '3px 0px 0px 0px';
     labelDirection.elt.className = 'label';
     labelDirection.parent(leftSideButtons);
-    
+
 
     directionSelect = createSelect();
     directionSelect.hide();
@@ -475,6 +479,31 @@ function setup() { // jshint ignore:line
     ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json'); });
     ascustomButton.elt.className = "button";
 
+    // Button to close the hints
+    closeHintsButton = createButton('Close Hints');
+    closeHintsButton.position(170, windowHeight - 45);
+    closeHintsButton.mousePressed(function () {
+        showHints = false;
+        hintNum = 0;
+        closeHintsButton.hide();
+        nextHintButton.hide();
+    });
+    closeHintsButton.elt.className = "button";
+
+    // Button to open the next hint
+    nextHintButton = createButton('Next Hint');
+    nextHintButton.position(280, windowHeight - 45);
+    nextHintButton.mousePressed(function () {
+        hintNum++;
+        if (hintNum > 5) {
+            hintNum = 0;
+            showHints = false;
+            closeHintsButton.hide();
+            nextHintButton.hide();
+        }
+    });
+    nextHintButton.elt.className = "button";
+
     /*
         Elements for the properties mode
     */
@@ -532,6 +561,7 @@ function setup() { // jshint ignore:line
         loadSketch(loadfile + '.json');
     }
     reDraw();
+    setTimeout(reDraw, 50); // Redraw after 50 ms in case fonts weren't loaded on first redraw
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -1312,6 +1342,74 @@ function reDraw() {
         strokeWeight(0); // The prop menu background is dark grey without border
         fill(50); // DOM elements are shown seperatly
         rect(window.width - 200, -5, 205, 65, 5);
+    }
+    if (showHints) {
+        textFont('Gudea');
+        switch (hintNum) {
+            case 0:
+                fill(150, 30, 30);
+                ellipse(0, window.height, 1000, 400);
+                fill(255);
+                textSize(30);
+                text('Welcome!', 20, window.height - 170);
+                textSize(20);
+                text('LogiJS is a logic circuit editor.', 20, window.height - 115);
+                text('It\'s designed to be simple to use, yet powerful.', 20, window.height - 85);
+                break;
+            case 1:
+                fill(150, 30, 30);
+                ellipse(0, window.height, 1100, 400);
+                fill(255);
+                textSize(30);
+                text('Navigation', 20, window.height - 170);
+                textSize(20);
+                text('Use the mouse wheel to zoom in and out!', 20, window.height - 115);
+                text('Drag the sketch by holding the right mouse button.', 20, window.height - 85);
+                break;
+            case 2:
+                fill(150, 30, 30);
+                ellipse(0, window.height, 1200, 400);
+                fill(255);
+                textSize(30);
+                text('Basic elements', 20, window.height - 170);
+                textSize(20);
+                text('You can add And, Or and Xor Gates by clicking on', 20, window.height - 115);
+                text('the buttons on the left and then clicking on the canvas.', 20, window.height - 85);
+                break;
+            case 3:
+                fill(150, 30, 30);
+                ellipse(0, window.height, 1100, 400);
+                fill(255);
+                textSize(30);
+                text('Basic elements', 20, window.height - 170);
+                textSize(20);
+                text('Placing in- and outputs is just as easy.', 20, window.height - 115);
+                text('Try adding a switch and a lamp next to a gate!', 20, window.height - 85);
+                break;
+            case 4:
+                fill(150, 30, 30);
+                ellipse(0, window.height, 1200, 400);
+                fill(255);
+                textSize(30);
+                text('Connecting the dots', 20, window.height - 170);
+                textSize(20);
+                text('Click on the \'Wiring\' button in the top left corner.', 20, window.height - 115);
+                text('Add wires by dragging with the left mouse button pressed.', 20, window.height - 85);
+                break;
+            case 5:
+                fill(150, 30, 30);
+                ellipse(0, window.height, 1500, 400);
+                fill(255);
+                textSize(30);
+                text('Deleting elements', 20, window.height - 170);
+                textSize(20);
+                text('Click on the \'Delete\' button in the top left corner. Now you can', 20, window.height - 115);
+                text('delete elements by clicking on them. To delete wires, just drag over them.', 20, window.height - 85);
+                nextHintButton.hide();
+                break;
+            default:
+                break;
+        }
     }
 }
 
