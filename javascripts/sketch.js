@@ -362,23 +362,22 @@ function setup() { // jshint ignore:line
     sfcheckbox.parent(leftSideButtons);
 
     // Adds text 'Clock speed'
-    clockspeedLabel = createP('Clock speed');
+    clockspeedLabel = createP('Clock speed:');
     clockspeedLabel.hide();
     clockspeedLabel.elt.style.color = 'white';
     clockspeedLabel.elt.style.fontFamily = 'Open Sans';
     clockspeedLabel.elt.style.textAlign = 'center';
     clockspeedLabel.elt.style.margin = '3px 0px 0px 0px';
-    clockspeedLabel.elt.className = 'label';
-    clockspeedLabel.parent(leftSideButtons);
+    clockspeedLabel.position(windowWidth - 200, windowHeight - 140);
 
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
     clockspeedSlider.hide();
     clockspeedSlider.changed(newClockspeed);
-    clockspeedSlider.style('width', '141px');
+    clockspeedSlider.style('width', '188px');
     clockspeedSlider.style('margin', '5px');
     clockspeedSlider.elt.className = 'slider';
-    clockspeedSlider.parent(leftSideButtons);
+    clockspeedSlider.position(windowWidth - 205, windowHeight - 115);
 
     //Upper left
     // Activates the wiring mode
