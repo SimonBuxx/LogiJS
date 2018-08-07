@@ -1515,7 +1515,7 @@ function keyPressed() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (mouseIsPressed && mouseButton === RIGHT) {
+    if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         frameRate(60);
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);
