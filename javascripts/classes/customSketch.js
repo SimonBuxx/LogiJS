@@ -41,7 +41,7 @@ function CustomSketch(x, y, transform, direction, file) {
     this.outputClickBoxes = [];
 
     this.marked = false; // True, if the object is marked in the selection mode
-    this.markColor = color(15, 80, 90); // Color the object appears in when marked
+    this.markColor = color(150, 30, 30); // Color the object appears in when marked
 
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform); // Global clickbox
 

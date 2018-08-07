@@ -15,7 +15,7 @@ function Diode(x, y, state, transform) {
     this.clickBox = new ClickBox(this.x, this.y, 20, 20, this.transform);
 
     this.marked = false;
-    this.markColor = color(15, 80, 90);
+    this.markColor = color(150, 30, 30);
 
     this.getData = function () {
         var data = {};

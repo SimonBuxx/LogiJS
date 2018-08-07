@@ -24,7 +24,7 @@ function WSeg(dir, startX, startY, state, transform) {
 
     this.marked = false;
     //this.markColor = color(0, 100, 50); // Color for marking and deleting
-    this.markColor = color(15, 80, 90);
+    this.markColor = color(150, 30, 30);
 
     this.changePosition(startX, startY); // Initialize the start point
 }

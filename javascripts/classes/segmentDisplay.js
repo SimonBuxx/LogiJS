@@ -11,7 +11,7 @@ function SegmentDisplay(x, y, transform, bits) {
     this.marked = false;
     this.lowColor = color(50, 50, 50); // dark grey color
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs (red)
-    this.markColor = color(15, 80, 90);   // Color for marked displays
+    this.markColor = color(150, 30, 30);   // Color for marked displays
 
     this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, this.transform);
     this.inputClickBoxes = [];

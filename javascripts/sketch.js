@@ -80,6 +80,7 @@ let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitS
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
+let ipNameLabel, propBoxLabel, opNameLabel, colNameLabel, labCaptLabel;
 let propInput = -1;
 let propOutput = -1;
 let propLabel = -1;
@@ -507,43 +508,80 @@ function setup() { // jshint ignore:line
     /*
         Elements for the properties mode
     */
-    inputIsTopBox = createCheckbox('Set to top', false);
+    propBoxLabel = createP('Properties');
+    propBoxLabel.hide();
+    propBoxLabel.elt.style.color = 'white';
+    propBoxLabel.elt.style.fontFamily = 'Open Sans';
+    propBoxLabel.elt.style.margin = '3px 0px 0px 0px';
+    propBoxLabel.position(windowWidth - 200, windowHeight - 300);
+    propBoxLabel.style('font-size', '30px');
+
+    inputIsTopBox = createCheckbox('Draw input on top of the custom element', false);
     inputIsTopBox.hide();
-    inputIsTopBox.position(windowWidth - 180, 35);
+    inputIsTopBox.position(windowWidth - 200, windowHeight - 250);
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.style.color = 'white';
     inputIsTopBox.elt.style.fontFamily = 'Open Sans';
 
+    ipNameLabel = createP('Input name:');
+    ipNameLabel.hide();
+    ipNameLabel.elt.style.color = 'white';
+    ipNameLabel.elt.style.fontFamily = 'Open Sans';
+    ipNameLabel.elt.style.margin = '3px 0px 0px 0px';
+    ipNameLabel.position(windowWidth - 200, windowHeight - 200);
+
     inputCaptionBox = createInput('');
     inputCaptionBox.elt.style.fontFamily = 'Open Sans';
     inputCaptionBox.hide();
-    inputCaptionBox.size(160, 15);
-    inputCaptionBox.position(windowWidth - 180, 60);
+    inputCaptionBox.size(180, 15);
+    inputCaptionBox.position(windowWidth - 200, windowHeight - 170);
     inputCaptionBox.input(newInputCaption);
+
+    colNameLabel = createP('Lamp color:');
+    colNameLabel.hide();
+    colNameLabel.elt.style.color = 'white';
+    colNameLabel.elt.style.fontFamily = 'Open Sans';
+    colNameLabel.elt.style.margin = '3px 0px 0px 0px';
+    colNameLabel.position(windowWidth - 200, windowHeight - 250);
+
+    opNameLabel = createP('Output name:');
+    opNameLabel.hide();
+    opNameLabel.elt.style.color = 'white';
+    opNameLabel.elt.style.fontFamily = 'Open Sans';
+    opNameLabel.elt.style.margin = '3px 0px 0px 0px';
+    opNameLabel.position(windowWidth - 200, windowHeight - 220);
+
+    labCaptLabel = createP('Label caption:');
+    labCaptLabel.hide();
+    labCaptLabel.elt.style.color = 'white';
+    labCaptLabel.elt.style.fontFamily = 'Open Sans';
+    labCaptLabel.elt.style.margin = '3px 0px 0px 0px';
+    labCaptLabel.position(windowWidth - 200, windowHeight - 250);
 
     outputCaptionBox = createInput('');
     outputCaptionBox.elt.style.fontFamily = 'Open Sans';
     outputCaptionBox.hide();
-    outputCaptionBox.size(160, 15);
-    outputCaptionBox.position(windowWidth - 180, 60);
+    outputCaptionBox.size(180, 15);
+    outputCaptionBox.position(windowWidth - 200, windowHeight - 190);
     outputCaptionBox.input(newOutputCaption);
 
     outputColorBox = createSelect();
     outputColorBox.hide();
     outputColorBox.elt.style.fontFamily = 'Open Sans';
-    outputColorBox.position(windowWidth - 180, 35);
-    outputColorBox.size(168, 20);
+    outputColorBox.position(windowWidth - 110, windowHeight - 250);
+    outputColorBox.size(70, 20);
     outputColorBox.option('red');
     outputColorBox.option('yellow');
     outputColorBox.option('green');
     outputColorBox.option('blue');
     outputColorBox.changed(newOutputColor);
+    outputColorBox.elt.className = "selectLeft";
 
     labelTextBox = createInput('');
     labelTextBox.elt.style.fontFamily = 'Open Sans';
     labelTextBox.hide();
-    labelTextBox.size(185, 20);
-    labelTextBox.position(windowWidth - 195, 45);
+    labelTextBox.size(180, 20);
+    labelTextBox.position(windowWidth - 200, windowHeight - 220);
     labelTextBox.input(labelChanged);
 
 
@@ -1341,76 +1379,51 @@ function reDraw() {
     if (propMode && propInput + propOutput + propLabel >= -2) {
         strokeWeight(0); // The prop menu background is dark grey without border
         fill(50); // DOM elements are shown seperatly
-        rect(window.width - 200, -5, 205, 65, 5);
+        rect(window.width - 215, window.height - 300, 220, 305, 5);
     }
     if (showHints) {
         textFont('Gudea');
         switch (hintNum) {
             case 0:
-                fill(150, 30, 30);
-                ellipse(0, window.height, 1000, 400);
-                fill(255);
-                textSize(30);
-                text('Welcome!', 20, window.height - 170);
-                textSize(20);
-                text('LogiJS is a logic circuit editor.', 20, window.height - 115);
-                text('It\'s designed to be simple to use, yet powerful.', 20, window.height - 85);
+                displayHint(1000, 'Welcome!', 'LogiJS is a logic circuit editor.',
+                    'It\'s designed to be simple to use, yet powerful.');
                 break;
             case 1:
-                fill(150, 30, 30);
-                ellipse(0, window.height, 1100, 400);
-                fill(255);
-                textSize(30);
-                text('Navigation', 20, window.height - 170);
-                textSize(20);
-                text('Use the mouse wheel to zoom in and out!', 20, window.height - 115);
-                text('Drag the sketch by holding the right mouse button.', 20, window.height - 85);
+                displayHint(1100, 'Navigation', 'Use the mouse wheel to zoom in and out!',
+                    'Drag the sketch by holding the right mouse button.');
                 break;
             case 2:
-                fill(150, 30, 30);
-                ellipse(0, window.height, 1200, 400);
-                fill(255);
-                textSize(30);
-                text('Basic elements', 20, window.height - 170);
-                textSize(20);
-                text('You can add And, Or and Xor Gates by clicking on', 20, window.height - 115);
-                text('the buttons on the left and then clicking on the canvas.', 20, window.height - 85);
+                displayHint(1200, 'Basic elements', 'You can add And, Or and Xor Gates by clicking on',
+                    'the buttons on the left and then clicking on the canvas.');
                 break;
             case 3:
-                fill(150, 30, 30);
-                ellipse(0, window.height, 1100, 400);
-                fill(255);
-                textSize(30);
-                text('Basic elements', 20, window.height - 170);
-                textSize(20);
-                text('Placing in- and outputs is just as easy.', 20, window.height - 115);
-                text('Try adding a switch and a lamp next to a gate!', 20, window.height - 85);
+                displayHint(1100, 'Basic elements', 'Placing in- and outputs is just as easy.',
+                    'Try adding a switch and a lamp next to a gate!');
                 break;
             case 4:
-                fill(150, 30, 30);
-                ellipse(0, window.height, 1200, 400);
-                fill(255);
-                textSize(30);
-                text('Connecting the dots', 20, window.height - 170);
-                textSize(20);
-                text('Click on the \'Wiring\' button in the top left corner.', 20, window.height - 115);
-                text('Add wires by dragging with the left mouse button pressed.', 20, window.height - 85);
+                displayHint(1200, 'Connecting the dots', 'Click on the \'Wiring\' button in the top left corner.',
+                    'Add wires by dragging with the left mouse button pressed.');
                 break;
             case 5:
-                fill(150, 30, 30);
-                ellipse(0, window.height, 1500, 400);
-                fill(255);
-                textSize(30);
-                text('Deleting elements', 20, window.height - 170);
-                textSize(20);
-                text('Click on the \'Delete\' button in the top left corner. Now you can', 20, window.height - 115);
-                text('delete elements by clicking on them. To delete wires, just drag over them.', 20, window.height - 85);
+                displayHint(1500, 'Deleting elements', 'Click on the \'Delete\' button in the top left corner. Now you can',
+                    'delete elements by clicking on them. To delete wires, just drag over them.');
                 nextHintButton.hide();
                 break;
             default:
                 break;
         }
     }
+}
+
+function displayHint(bubbleWidth, caption, line1, line2) {
+    fill(200, 50, 50);
+    ellipse(0, window.height, bubbleWidth, 400);
+    fill(255);
+    textSize(30);
+    text(caption, 20, window.height - 170);
+    textSize(20);
+    text(line1, 20, window.height - 115);
+    text(line2, 20, window.height - 85);
 }
 
 function showElements() {
