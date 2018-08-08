@@ -88,9 +88,19 @@ let propLabel = -1;
 let showHints = true;
 let hintNum = 0;
 let closeHintsButton, nextHintButton;
+let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
+
+function preload() {
+    hintPic0 = loadImage('images/hint0.png');
+    hintPic1 = loadImage('images/hint1.png');
+    hintPic2 = loadImage('images/hint2.png');
+    hintPic3 = loadImage('images/hint3.png');
+    hintPic4 = loadImage('images/hint4.png');
+    hintPic5 = loadImage('images/hint5.png');
+}
 
 /*
     Sets up the canvas and caps the framerate
@@ -481,7 +491,7 @@ function setup() { // jshint ignore:line
 
     // Button to close the hints
     closeHintsButton = createButton('Close Hints');
-    closeHintsButton.position(170, windowHeight - 45);
+    closeHintsButton.position(370, windowHeight - 45);
     closeHintsButton.mousePressed(function () {
         showHints = false;
         hintNum = 0;
@@ -492,7 +502,7 @@ function setup() { // jshint ignore:line
 
     // Button to open the next hint
     nextHintButton = createButton('Next Hint');
-    nextHintButton.position(280, windowHeight - 45);
+    nextHintButton.position(480, windowHeight - 45);
     nextHintButton.mousePressed(function () {
         hintNum++;
         if (hintNum > 5) {
@@ -1384,27 +1394,27 @@ function reDraw() {
         textFont('Gudea');
         switch (hintNum) {
             case 0:
-                displayHint(1000, 'Welcome!', 'LogiJS is a logic circuit editor.',
+                displayHint(1000, hintPic0, 'Welcome!', 'LogiJS is a logic circuit editor.',
                     'It\'s designed to be simple to use, yet powerful.');
                 break;
             case 1:
-                displayHint(1100, 'Navigation', 'Use the mouse wheel to zoom in and out!',
+                displayHint(1100, hintPic1, 'Navigation', 'Use the mouse wheel to zoom in and out!',
                     'Drag the sketch by holding the right mouse button.');
                 break;
             case 2:
-                displayHint(1200, 'Basic elements', 'You can add And, Or and Xor Gates by clicking on',
+                displayHint(1200, hintPic2, 'Basic elements', 'You can add And, Or and Xor Gates by clicking on',
                     'the buttons on the left and then clicking on the canvas.');
                 break;
             case 3:
-                displayHint(1100, 'Basic elements', 'Placing in- and outputs is just as easy.',
+                displayHint(1100, hintPic3, 'Basic elements', 'Placing in- and outputs is just as easy.',
                     'Try adding a switch and a lamp next to a gate!');
                 break;
             case 4:
-                displayHint(1200, 'Connecting the dots', 'Click on the \'Wiring\' button in the top left corner.',
+                displayHint(1200, hintPic4, 'Connecting the dots', 'Click on the \'Wiring\' button in the top left corner.',
                     'Add wires by dragging with the left mouse button pressed.');
                 break;
             case 5:
-                displayHint(1500, 'Deleting elements', 'Click on the \'Delete\' button in the top left corner. Now you can',
+                displayHint(1500, hintPic5, 'Deleting elements', 'Click on the \'Delete\' button in the top left corner. Now you can',
                     'delete elements by clicking on them. To delete wires, just drag over them.');
                 nextHintButton.hide();
                 break;
@@ -1414,15 +1424,17 @@ function reDraw() {
     }
 }
 
-function displayHint(bubbleWidth, caption, line1, line2) {
+function displayHint(bubbleWidth, img, caption, line1, line2) {
     fill(200, 50, 50);
-    ellipse(0, window.height, bubbleWidth, 400);
+    ellipse(200, window.height, bubbleWidth, 400);
+    rect(0, window.height - 200, 200, 200);
+    image(img, 20, window.height - 180);
     fill(255);
     textSize(30);
-    text(caption, 20, window.height - 170);
+    text(caption, 220, window.height - 170);
     textSize(20);
-    text(line1, 20, window.height - 115);
-    text(line2, 20, window.height - 85);
+    text(line1, 220, window.height - 115);
+    text(line2, 220, window.height - 85);
 }
 
 function showElements() {
