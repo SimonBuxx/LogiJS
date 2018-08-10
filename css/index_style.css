@@ -59,16 +59,15 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetica Neu
      overflow-x: hidden;
 }
 #carousel {
-	height: 350px;
+    margin-top: 200px;
+    margin-left: 500px;
+    margin-right: 500px;
+    height: 280px;
+    background-color: rgba(50, 50, 50, 0.8);
 }
 
 #carousel .carousel-caption {
     z-index: 10;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0;
-    padding: 0;
 }
 
 @media (min-width: 768px) {
