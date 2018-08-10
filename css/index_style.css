@@ -105,7 +105,8 @@ nav ul li a:hover {
     text-align: center;
     position: relative;
     font-weight: 100;
-    margin-top: -0.5em;
+    margin: -1em auto 1em auto;
+    width: 80%;
 }
 
 .buttons {
