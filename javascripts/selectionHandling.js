@@ -53,6 +53,12 @@ function handleSelection(x1, y1, x2, y2) {
             selection.push(labels[i]);
         }
     }
+    for (let i = 0; i < segDisplays.length; i++) {
+        if (segDisplays[i].x >= x1 && segDisplays[i].x <= x2 && segDisplays[i].y >= y1 && segDisplays[i].y <= y2) {
+            segDisplays[i].marked = true;
+            selection.push(segDisplays[i]);
+        }
+    }
     let wireSelection = [];
     for (let i = 0; i < wires.length; i++) {
         if ((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) && (wires[i].startX <= x2 || x2 >= wires[i].endX)) && (wires[i].startY >= y1 && wires[i].endY <= y2)) {

@@ -12,6 +12,9 @@ let diodes = [];
 let customs = [];
 let wires = [];
 let labels = [];
+let segDisplays = [];
+
+let segBits = 4; // Number of bits for the 7-segment displays
 
 let selection = [];
 
@@ -49,8 +52,8 @@ let sDragX1 = 0; // Variables for
 let sDragX2 = 0; // selection dragging
 let sDragY1 = 0;
 let sDragY2 = 0;
-let initX = -1;
-let initY = -1;
+let initX = 0;
+let initY = 0;
 
 // Variables for dragging
 let lastX = 0; var lastY = 0; // last mouse position
@@ -70,19 +73,58 @@ let syncFramerate = true;
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, propertiesButton, labelButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, propertiesButton, labelButton, segDisplayButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
-let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, labelDirection;
+let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
+let ipNameLabel, propBoxLabel, opNameLabel, colNameLabel, labCaptLabel;
 let propInput = -1;
 let propOutput = -1;
 let propLabel = -1;
+
+let showHints = true;
+let hintNum = 0;
+let closeHintsButton, nextHintButton;
+let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
+    hintPic6, hintPic7, hintPic8, hintPic9, hintPic10, hintPic11,
+    hintPic12, hintPic13, hintPic14, hintPic15, hintPic16, hintPic17,
+    hintPic19, hintPic20, hintPic21, hintPic22, hintPic23, hintPic24,
+    hintPic25, hintPic26;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
+
+function preload() {
+    hintPic0 = loadImage('images/hint0.png');
+    hintPic1 = loadImage('images/hint1.png');
+    hintPic2 = loadImage('images/hint2.png');
+    hintPic3 = loadImage('images/hint3.png');
+    hintPic4 = loadImage('images/hint4.png');
+    hintPic5 = loadImage('images/hint5.png');
+    hintPic6 = loadImage('images/hint6.png');
+    hintPic7 = loadImage('images/hint7.png');
+    hintPic8 = loadImage('images/hint8.png');
+    hintPic9 = loadImage('images/hint9.png');
+    hintPic10 = loadImage('images/hint10.png');
+    hintPic11 = loadImage('images/hint11.png');
+    hintPic12 = loadImage('images/hint12.png');
+    hintPic13 = loadImage('images/hint13.png');
+    hintPic14 = loadImage('images/hint14.png');
+    hintPic15 = loadImage('images/hint15.png');
+    hintPic16 = loadImage('images/hint16.png');
+    hintPic17 = loadImage('images/hint17.png');
+    hintPic19 = loadImage('images/hint19.png');
+    hintPic20 = loadImage('images/hint20.png');
+    hintPic21 = loadImage('images/hint21.png');
+    hintPic22 = loadImage('images/hint22.png');
+    hintPic23 = loadImage('images/hint23.png');
+    hintPic24 = loadImage('images/hint24.png');
+    hintPic25 = loadImage('images/hint25.png');
+    hintPic26 = loadImage('images/hint26.png');
+}
 
 /*
     Sets up the canvas and caps the framerate
@@ -114,7 +156,7 @@ function setup() { // jshint ignore:line
     // Adds text 'Basic'
     labelBasic = createP('Basic');
     labelBasic.elt.style.color = 'white';
-    labelBasic.elt.style.fontFamily = 'Arial';
+    labelBasic.elt.style.fontFamily = 'Open Sans';
     labelBasic.elt.className = 'label';
     labelBasic.elt.style.textAlign = 'center';
     labelBasic.elt.style.margin = '3px 0px 0px 0px';
@@ -163,10 +205,16 @@ function setup() { // jshint ignore:line
     outputButton.elt.className = "buttonLeft";
     outputButton.parent(leftSideButtons);
 
+    // Adds 7-segment displays
+    segDisplayButton = createButton('7-Segment');
+    segDisplayButton.mousePressed(segDisplayClicked);
+    segDisplayButton.elt.className = "buttonLeft";
+    segDisplayButton.parent(leftSideButtons);
+
     // Adds text 'Advanced'
     labelAdvanced = createP('Advanced');
     labelAdvanced.elt.style.color = 'white';
-    labelAdvanced.elt.style.fontFamily = 'Arial';
+    labelAdvanced.elt.style.fontFamily = 'Open Sans';
     labelAdvanced.elt.style.textAlign = 'center';
     labelAdvanced.elt.style.margin = '3px 0px 0px 0px';
     labelAdvanced.elt.className = 'label';
@@ -257,7 +305,7 @@ function setup() { // jshint ignore:line
     labelGateInputs = createP('Gate inputs');
     labelGateInputs.hide();
     labelGateInputs.elt.style.color = 'white';
-    labelGateInputs.elt.style.fontFamily = 'Arial';
+    labelGateInputs.elt.style.fontFamily = 'Open Sans';
     labelGateInputs.elt.style.textAlign = 'center';
     labelGateInputs.elt.style.margin = '3px 0px 0px 0px';
     labelGateInputs.elt.className = 'label';
@@ -284,11 +332,12 @@ function setup() { // jshint ignore:line
     labelDirection = createP('Direction');
     labelDirection.hide();
     labelDirection.elt.style.color = 'white';
-    labelDirection.elt.style.fontFamily = 'Arial';
+    labelDirection.elt.style.fontFamily = 'Open Sans';
     labelDirection.elt.style.textAlign = 'center';
     labelDirection.elt.style.margin = '3px 0px 0px 0px';
     labelDirection.elt.className = 'label';
     labelDirection.parent(leftSideButtons);
+
 
     directionSelect = createSelect();
     directionSelect.hide();
@@ -301,6 +350,33 @@ function setup() { // jshint ignore:line
     directionSelect.parent(leftSideButtons);
     directionSelect.value('Right');
 
+    // Adds text 'Input width'
+    labelBits = createP('Input width');
+    labelBits.hide();
+    labelBits.elt.style.color = 'white';
+    labelBits.elt.style.fontFamily = 'Open Sans';
+    labelBits.elt.style.textAlign = 'center';
+    labelBits.elt.style.margin = '3px 0px 0px 0px';
+    labelBits.elt.className = 'label';
+    labelBits.parent(leftSideButtons);
+
+    bitSelect = createSelect();
+    bitSelect.hide();
+    bitSelect.option('1');
+    bitSelect.option('2');
+    bitSelect.option('3');
+    bitSelect.option('4');
+    bitSelect.option('5');
+    bitSelect.option('6');
+    bitSelect.option('7');
+    bitSelect.option('8');
+    bitSelect.option('16');
+    bitSelect.option('32');
+    bitSelect.changed(newBitLength);
+    bitSelect.elt.className = "selectLeft";
+    bitSelect.parent(leftSideButtons);
+    bitSelect.value('4');
+
     sfcheckbox = createCheckbox('Sync Ticks', true);
     sfcheckbox.hide();
     sfcheckbox.changed(function () {
@@ -312,7 +388,7 @@ function setup() { // jshint ignore:line
         }
     });
     sfcheckbox.elt.style.color = 'white';
-    sfcheckbox.elt.style.fontFamily = 'Arial';
+    sfcheckbox.elt.style.fontFamily = 'Open Sans';
     sfcheckbox.elt.style.textAlign = 'center';
     sfcheckbox.elt.style.margin = '10px 0 0 0';
     //sfcheckbox.position(946, 4);
@@ -320,23 +396,22 @@ function setup() { // jshint ignore:line
     sfcheckbox.parent(leftSideButtons);
 
     // Adds text 'Clock speed'
-    clockspeedLabel = createP('Clock speed');
+    clockspeedLabel = createP('Clock speed:');
     clockspeedLabel.hide();
     clockspeedLabel.elt.style.color = 'white';
-    clockspeedLabel.elt.style.fontFamily = 'Arial';
+    clockspeedLabel.elt.style.fontFamily = 'Open Sans';
     clockspeedLabel.elt.style.textAlign = 'center';
     clockspeedLabel.elt.style.margin = '3px 0px 0px 0px';
-    clockspeedLabel.elt.className = 'label';
-    clockspeedLabel.parent(leftSideButtons);
+    clockspeedLabel.position(windowWidth - 200, windowHeight - 140);
 
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
     clockspeedSlider.hide();
     clockspeedSlider.changed(newClockspeed);
-    clockspeedSlider.style('width', '141px');
+    clockspeedSlider.style('width', '188px');
     clockspeedSlider.style('margin', '5px');
     clockspeedSlider.elt.className = 'slider';
-    clockspeedSlider.parent(leftSideButtons);
+    clockspeedSlider.position(windowWidth - 205, windowHeight - 115);
 
     //Upper left
     // Activates the wiring mode
@@ -385,20 +460,20 @@ function setup() { // jshint ignore:line
 
     // Adds diodes (barricade in one direction)
     diodeButton = createButton('Diodes');
-    diodeButton.position(565, 4);
+    diodeButton.position(563, 4);
     diodeButton.mousePressed(diodeClicked);
     //diodeButton.elt.style.width = "117px";
     diodeButton.elt.className = "button";
 
     // Adds labels
     labelButton = createButton('Label');
-    labelButton.position(642, 4);
+    labelButton.position(641, 4);
     labelButton.mousePressed(labelButtonClicked);
     labelButton.elt.className = "button";
 
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(709, 4);
+    propertiesButton.position(708, 4);
     propertiesButton.mousePressed(function () {
         setControlMode('none');
         setPropMode(true);
@@ -409,12 +484,14 @@ function setup() { // jshint ignore:line
     // Input field for the file name
     textInput = createInput('');
     textInput.attribute('placeholder', 'New Sketch');
-    textInput.size(200, 15);
-    textInput.position(windowWidth - textInput.width - 203, 4);
+    textInput.size(200, 16);
+    textInput.position(windowWidth - textInput.width - 206, 4);
+    textInput.elt.style.fontFamily = 'Open Sans';
+    textInput.elt.className = "textInput";
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(windowWidth - textInput.width - 262, 4);
+    newButton.position(windowWidth - textInput.width - 265, 4);
     newButton.mousePressed(newClicked);
     newButton.elt.className = "button";
 
@@ -426,52 +503,112 @@ function setup() { // jshint ignore:line
 
     // Button to load a sketch
     loadButton = createButton('Load');
-    loadButton.position(windowWidth - 134, 4);
+    loadButton.position(windowWidth - 136, 4);
     loadButton.mousePressed(loadClicked);
     loadButton.elt.className = "button";
 
     // Button to import as custom
     ascustomButton = createButton('Import');
-    ascustomButton.position(windowWidth - 70, 4);
+    ascustomButton.position(windowWidth - 73, 4);
     ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json'); });
     ascustomButton.elt.className = "button";
+
+    // Button to close the hints
+    closeHintsButton = createButton('Close Hints');
+    closeHintsButton.position(370, windowHeight - 45);
+    closeHintsButton.mousePressed(function () {
+        showHints = false;
+        hintNum = 0;
+        closeHintsButton.hide();
+        nextHintButton.hide();
+    });
+    closeHintsButton.elt.className = "button";
+
+    // Button to open the next hint
+    nextHintButton = createButton('Next Hint');
+    nextHintButton.position(480, windowHeight - 45);
+    nextHintButton.mousePressed(function () {
+        hintNum++;
+    });
+    nextHintButton.elt.className = "button";
 
     /*
         Elements for the properties mode
     */
-    inputIsTopBox = createCheckbox('Set to top', false);
+    propBoxLabel = createP('Properties');
+    propBoxLabel.hide();
+    propBoxLabel.elt.style.color = 'white';
+    propBoxLabel.elt.style.fontFamily = 'Open Sans';
+    propBoxLabel.elt.style.margin = '3px 0px 0px 0px';
+    propBoxLabel.position(windowWidth - 200, windowHeight - 300);
+    propBoxLabel.style('font-size', '30px');
+
+    inputIsTopBox = createCheckbox('Draw input on top of the custom element', false);
     inputIsTopBox.hide();
-    inputIsTopBox.position(windowWidth - 180, 35);
+    inputIsTopBox.position(windowWidth - 200, windowHeight - 250);
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.style.color = 'white';
-    inputIsTopBox.elt.style.fontFamily = 'Arial';
+    inputIsTopBox.elt.style.fontFamily = 'Open Sans';
+
+    ipNameLabel = createP('Input name:');
+    ipNameLabel.hide();
+    ipNameLabel.elt.style.color = 'white';
+    ipNameLabel.elt.style.fontFamily = 'Open Sans';
+    ipNameLabel.elt.style.margin = '3px 0px 0px 0px';
+    ipNameLabel.position(windowWidth - 200, windowHeight - 200);
 
     inputCaptionBox = createInput('');
+    inputCaptionBox.elt.style.fontFamily = 'Open Sans';
     inputCaptionBox.hide();
-    inputCaptionBox.size(160, 15);
-    inputCaptionBox.position(windowWidth - 180, 60);
+    inputCaptionBox.size(180, 15);
+    inputCaptionBox.position(windowWidth - 200, windowHeight - 170);
     inputCaptionBox.input(newInputCaption);
 
+    colNameLabel = createP('Lamp color:');
+    colNameLabel.hide();
+    colNameLabel.elt.style.color = 'white';
+    colNameLabel.elt.style.fontFamily = 'Open Sans';
+    colNameLabel.elt.style.margin = '3px 0px 0px 0px';
+    colNameLabel.position(windowWidth - 200, windowHeight - 250);
+
+    opNameLabel = createP('Output name:');
+    opNameLabel.hide();
+    opNameLabel.elt.style.color = 'white';
+    opNameLabel.elt.style.fontFamily = 'Open Sans';
+    opNameLabel.elt.style.margin = '3px 0px 0px 0px';
+    opNameLabel.position(windowWidth - 200, windowHeight - 220);
+
+    labCaptLabel = createP('Label caption:');
+    labCaptLabel.hide();
+    labCaptLabel.elt.style.color = 'white';
+    labCaptLabel.elt.style.fontFamily = 'Open Sans';
+    labCaptLabel.elt.style.margin = '3px 0px 0px 0px';
+    labCaptLabel.position(windowWidth - 200, windowHeight - 250);
+
     outputCaptionBox = createInput('');
+    outputCaptionBox.elt.style.fontFamily = 'Open Sans';
     outputCaptionBox.hide();
-    outputCaptionBox.size(160, 15);
-    outputCaptionBox.position(windowWidth - 180, 60);
+    outputCaptionBox.size(180, 15);
+    outputCaptionBox.position(windowWidth - 200, windowHeight - 190);
     outputCaptionBox.input(newOutputCaption);
 
     outputColorBox = createSelect();
     outputColorBox.hide();
-    outputColorBox.position(windowWidth - 180, 35);
-    outputColorBox.size(168, 20);
+    outputColorBox.elt.style.fontFamily = 'Open Sans';
+    outputColorBox.position(windowWidth - 110, windowHeight - 250);
+    outputColorBox.size(70, 20);
     outputColorBox.option('red');
     outputColorBox.option('yellow');
     outputColorBox.option('green');
     outputColorBox.option('blue');
     outputColorBox.changed(newOutputColor);
+    outputColorBox.elt.className = "selectLeft";
 
     labelTextBox = createInput('');
+    labelTextBox.elt.style.fontFamily = 'Open Sans';
     labelTextBox.hide();
-    labelTextBox.size(185, 20);
-    labelTextBox.position(windowWidth - 195, 45);
+    labelTextBox.size(180, 20);
+    labelTextBox.position(windowWidth - 200, windowHeight - 220);
     labelTextBox.input(labelChanged);
 
 
@@ -489,6 +626,7 @@ function setup() { // jshint ignore:line
         loadSketch(loadfile + '.json');
     }
     reDraw();
+    setTimeout(reDraw, 50); // Redraw after 50 ms in case fonts weren't loaded on first redraw
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -562,6 +700,7 @@ function clearItems() {
     diodes = [];
     labels = [];
     wires = [];
+    segDisplays = [];
 }
 
 /*
@@ -572,8 +711,10 @@ function clearActionStacks() {
     actionRedo = [];
 }
 
-function pushSelectAction(dx, dy,x1, y1, x2, y2) {
-    pushUndoAction('moveSel', [dx, dy,x1, y1, x2, y2],selection);
+function pushSelectAction(dx, dy, x1, y1, x2, y2) {
+    if ((dx !== 0 || dy !== 0) && selection.length > 0) {
+        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], selection);
+    }
 }
 
 /*
@@ -639,6 +780,10 @@ function labelChanged() {
 
 function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value());
+}
+
+function newBitLength() {
+    segBits = parseInt(bitSelect.value());
 }
 
 function newDirection() {
@@ -729,6 +874,13 @@ function outputClicked() {
     addType = 'output';
 }
 
+function segDisplayClicked() {
+    setControlMode('addObject');
+    addType = 'segDisplay';
+    bitSelect.show();
+    labelBits.show();
+}
+
 // diodeClick is toggling the diodes,
 // not only adding them
 function diodeClicked() {
@@ -782,21 +934,21 @@ function addGate(type, inputs, direction) {
     let newGate = null;
     switch (type) {
         case 'and':
-            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and', '&');
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
         case 'or':
-            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or', '≥1');
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
         case 'xor':
-            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor', '=1');
+            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
@@ -842,6 +994,24 @@ function addOutput() {
     newOutput.updateClickBox();
     outputs.push(newOutput);
     pushUndoAction('addOut', [], newOutput);
+    reDraw();
+}
+
+/*
+    Adds a new 7-segment display
+*/
+function addSegDisplay(bits) {
+    for (var i = 0; i < segDisplays.length; i++) {
+        if ((segDisplays[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (segDisplays[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            return;
+        }
+    }
+    var newDisplay = new SegmentDisplay(mouseX, mouseY, transform, bits);
+    newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    newDisplay.updateClickBoxes();
+    segDisplays.push(newDisplay);
+    pushUndoAction('addSegDis', [], newDisplay);
     reDraw();
 }
 
@@ -960,6 +1130,14 @@ function deleteLabel(labelNumber) {
 }
 
 /*
+    Deletes the given 7-segment display
+*/
+function deleteSegDisplay(segDisNumber) {
+    pushUndoAction('delSegDis', [], segDisplays.splice(segDisNumber, 1));
+    reDraw();
+}
+
+/*
     Starts the simulation mode
     - Groups are created and objects are integrated
     - simRunning is set so that the sketch can't be altered
@@ -1028,6 +1206,9 @@ function endSimulation() {
         elem.setSimRunning(false); // Shutdown all custom elements
         elem.shutdown();
     }
+    for (const elem of segDisplays) {
+        elem.shutdown();
+    }
     // Set all item states to zero
     for (const elem of conpoints) {
         elem.state = false;
@@ -1075,6 +1256,7 @@ function disableButtons(status) {
     wireButton.elt.disabled = status;
     inputButton.elt.disabled = status;
     outputButton.elt.disabled = status;
+    segDisplayButton.elt.disabled = status;
     buttonButton.elt.disabled = status;
     clockButton.elt.disabled = status;
     deleteButton.elt.disabled = status;
@@ -1188,6 +1370,10 @@ function updateTick() {
         }
     }
 
+    for (const value of segDisplays) {
+        value.update();
+    }
+
     for (const value of diodes) {
         value.state = groups[value.gA].state;
         if (value.state) {
@@ -1220,8 +1406,141 @@ function reDraw() {
     if (propMode && propInput + propOutput + propLabel >= -2) {
         strokeWeight(0); // The prop menu background is dark grey without border
         fill(50); // DOM elements are shown seperatly
-        rect(window.width - 200, -5, 205, 65, 5);
+        rect(window.width - 215, window.height - 300, 220, 305, 5);
     }
+    if (showHints) {
+        textFont('Gudea');
+        switch (hintNum) {
+            case 0:
+                displayHint(1000, hintPic0, 'Welcome!', 'LogiJS is a logic circuit editor.',
+                    'It\'s designed to be simple to use, yet powerful.');
+                break;
+            case 1:
+                displayHint(1100, hintPic1, 'Navigation', 'Use the mouse wheel to zoom in and out!',
+                    'Drag the sketch by holding the right mouse button.');
+                break;
+            case 2:
+                displayHint(1200, hintPic2, 'Basic elements', 'You can add And, Or and Xor Gates by clicking on',
+                    'the buttons on the left and then clicking on the canvas.');
+                break;
+            case 3:
+                displayHint(1100, hintPic3, 'Basic elements', 'Placing in- and outputs is just as easy.',
+                    'Try adding a switch and a lamp next to a gate!');
+                break;
+            case 4:
+                displayHint(1200, hintPic4, 'Connecting the dots', 'Click on the \'Wiring\' button in the top left corner.',
+                    'Add wires by dragging with the left mouse button pressed.');
+                break;
+            case 5:
+                displayHint(1300, hintPic5, 'Starting the simulation', 'By clicking on the \'Start\' button in the top left corner,',
+                    'you can start the simulation. Clicking it again will stop it.');
+                break;
+            case 6:
+                displayHint(1200, hintPic6, 'Simulation mode', 'In the simulation, you can left-click on the inputs',
+                    'you\'ve placed to see the logic circuit act accordingly.');
+                break;
+            case 7:
+                displayHint(1500, hintPic7, 'Deleting elements', 'Click on the \'Delete\' button in the top left corner. Now you can',
+                    'delete elements by clicking on them. To delete wires, just drag over them.');
+                break;
+            case 8:
+                displayHint(1200, hintPic8, 'Undo and Redo', 'If you want to undo any change you\'ve made',
+                    'to the sketch, just use the \'Undo\' and \'Redo\' buttons.');
+                break;
+            case 9:
+                displayHint(1500, hintPic9, 'Switches, Buttons and Clocks', 'In contrast to the switch elements you\'ve already used,',
+                    'buttons are only activated for a short period of time when clicked on them.');
+                break;
+            case 10:
+                displayHint(1500, hintPic10, 'Switches, Buttons and Clocks', 'Clocks are switches that turn on and off automatically,',
+                    'you can change their speed in the properties menu that you\'ll see in a bit.');
+                break;
+            case 11:
+                displayHint(1500, hintPic11, 'Additional settings', 'Some elements have properties like input width and direction, that',
+                    'appear in the bottom left when clicking on the corresponding element button.');
+                break;
+            case 12:
+                displayHint(1500, hintPic12, 'The properties mode', 'By hitting \'Properties\' or the escape key, you enter the properties',
+                    'mode. You can now invert in- and outputs of gates by clicking on them. ');
+                break;
+            case 13:
+                displayHint(1500, hintPic13, 'The properties mode', 'When clicking on in- or output elements (eg. switches or lamps),',
+                    'you can change various properties of these elements in the appearing menu.');
+                break;
+            case 14:
+                displayHint(1500, hintPic14, '7-Segment displays', 'These take a variable number of input bits and display their binary',
+                    'value in decimal form. You can change the bit width in the additional settings.');
+                break;
+            case 15:
+                displayHint(1500, hintPic15, 'Advanced elements', 'These are more complex elements that are each made out of another',
+                    'sketch. This list is just a selection of custom elements that are pre-built by us.');
+                break;
+            case 16:
+                displayHint(1500, hintPic16, 'Loading and saving', 'To save a sketch, type in a name in the top right and hit save.',
+                    'You can then choose a folder on your hard drive to save it locally.');
+                break;
+            case 17:
+                displayHint(1200, hintPic17, 'Loading and saving', 'To load sketches, you must have a local',
+                    'LogiJS version on your computer. ');
+                break;
+            case 18:
+                displayHint(1500, hintPic16, 'Loading and saving', 'Make sure, your sketch file is in the \'sketches\' folder of your',
+                    'LogiJS version. Type the file name into the input field and hit \'Load\' or enter.');
+                break;
+            case 19:
+                displayHint(1500, hintPic19, 'Diodes', 'Diodes are elements that join two crossing wires in the horizontal',
+                    'but not in the vertical direction. They can be used for diode matrices.');
+                break;
+            case 20:
+                displayHint(1600, hintPic20, 'Diodes', 'Please load the sketch \'traffic\'. As you can see, there is an area with',
+                    'multiple diodes (little triangles) on it. Click on \'Diodes\' to enter the diode mode.');
+                break;
+            case 21:
+                displayHint(1500, hintPic21, 'Diodes', 'You can now toggle diodes by clicking on them or on empty wire',
+                    'crossings. Start the simulation to see how they are used in this example!');
+                break;
+            case 22:
+                displayHint(1500, hintPic22, 'Custom elements', 'If, instead of hitting \'Load\', you click on \'Import\', your sketch',
+                    'is imported as a custom element. Click anywhere on the sketch to place it.');
+                break;
+            case 23:
+                displayHint(1600, hintPic23, 'Custom elements', 'You can name in- and outputs and set inputs to the top of the element',
+                    'by altering these settings in the properties menu of the sketch to import.');
+                break;
+            case 24:
+                displayHint(1100, hintPic24, 'Custom elements', 'Pro tip: Inputs labeled with \'>\' will',
+                    'appear as clock inputs with an arrow drawn on them.');
+                break;
+            case 25:
+                displayHint(1300, hintPic25, 'Labels', 'You can add labels using the \'Label\' button.',
+                    'You can change their text in properties mode by clicking on them.');
+                break;
+            case 26:
+                displayHint(1500, hintPic26, '\'New\' and \'Select\'', 'Click on \'New\' to start a new sketch. When clicking on \'Select\'',
+                    'you can select parts of your sketch and move them on the canvas.');
+                break;
+            case 27:
+                displayHint(1500, hintPic0, 'Thank you!', 'You\'ve reached the end of this small tutorial on LogiJS.',
+                    'We hope that you like our work. You can give us feedback via Twitter.');
+                nextHintButton.hide();
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+function displayHint(bubbleWidth, img, caption, line1, line2) {
+    fill(200, 50, 50);
+    ellipse(200, window.height, bubbleWidth, 400);
+    rect(0, window.height - 200, 200, 200);
+    image(img, 20, window.height - 180);
+    fill(255);
+    textSize(30);
+    text(caption, 220, window.height - 170);
+    textSize(20);
+    text(line1, 220, window.height - 115);
+    text(line2, 220, window.height - 85);
 }
 
 function showElements() {
@@ -1237,10 +1556,11 @@ function showElements() {
     }
     //var t1 = performance.now();
     //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
+    textFont('monospace');
     for (const elem of gates) {
         elem.show();
     }
-
+    textFont('Open Sans');
     for (const elem of customs) {
         if (elem.visible) {
             elem.show();
@@ -1258,6 +1578,11 @@ function showElements() {
     for (const elem of diodes) {
         elem.show();
     }
+    textFont('PT Mono');
+    for (const elem of segDisplays) {
+        elem.show();
+    }
+    textFont('Gudea');
     textSize(20);
     textAlign(LEFT, TOP);
     for (const elem of labels) {
@@ -1320,7 +1645,7 @@ function keyPressed() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (mouseIsPressed && mouseButton === RIGHT) {
+    if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         frameRate(60);
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);

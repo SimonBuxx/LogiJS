@@ -4721,7 +4721,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 }
 
 .navbar-default .navbar-nav > li > a {
-  color: #777777;
+  color: #fff;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
@@ -6497,16 +6497,13 @@ button.close {
   background-color: #ffffff;
 }
 
-.carousel-caption {
-  position: absolute;
-  right: 15%;
-  bottom: 20px;
-  left: 15%;
+.carousel p, h1 {
   z-index: 10;
-  padding-top: 20px;
-  padding-bottom: 20px;
   color: #ffffff;
   text-align: center;
+}
+
+#caption p, h1, h2, h3 {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
@@ -6526,8 +6523,8 @@ button.close {
     font-size: 30px;
   }
   .carousel-caption {
-    right: 20%;
-    left: 20%;
+    /*right: 20%;
+    left: 20%;*/
     padding-bottom: 30px;
   }
   .carousel-indicators {

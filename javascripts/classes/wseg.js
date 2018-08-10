@@ -23,7 +23,8 @@ function WSeg(dir, startX, startY, state, transform) {
     this.end = null;  // One segment can have at max two Outputs or two Inputs connected
 
     this.marked = false;
-    this.markColor = color(0, 100, 50); // Color for marking and deleting
+    //this.markColor = color(0, 100, 50); // Color for marking and deleting
+    this.markColor = color(150, 30, 30);
 
     this.changePosition(startX, startY); // Initialize the start point
 }
@@ -40,8 +41,11 @@ WSeg.prototype.getWireData = function () {
     var data = {};
     data.x1 = JSON.stringify(this.startX);
     data.y1 = JSON.stringify(this.startY);
-    data.x2 = JSON.stringify(this.endX);
-    data.y2 = JSON.stringify(this.endY);
+    if (this.startX !== this.endX) {
+        data.x2 = JSON.stringify(this.endX);
+    } else {
+        data.y2 = JSON.stringify(this.endY);
+    }
     return data;
 };
 

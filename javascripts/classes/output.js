@@ -12,7 +12,7 @@ function Output(x, y, transform, colr) {
     this.marked = false;
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high outputs (red)
     this.lowColor = color(50, 50, 50); // Color for low outputs (dark grey)
-    this.markColor = color(0, 100, 50);   // Color for marked inputs
+    this.markColor = color(150, 30, 30);   // Color for marked outputs
 
     // ClickBox is used for input and global
     this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);

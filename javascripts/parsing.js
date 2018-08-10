@@ -248,6 +248,16 @@ function integrateElement() {
                     }
                 }
             }
+            for (let j = 0; j < segDisplays.length; j++) {
+                for (let k = 0; k < segDisplays[j].inputCount; k++) {
+                    if (segDisplays[j].pointInInput(k, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
+                        groups[h].segments[i].setStart(0, segDisplays[j], k);
+                    }
+                    if (segDisplays[j].pointInInput(k, groups[h].segments[i].endX, groups[h].segments[i].endY)) {
+                        groups[h].segments[i].setEnd(0, segDisplays[j], k);
+                    }
+                }
+            }
             for (let j = 0; j < inputs.length; j++) {
                 if (inputs[j].pointInOutput(null, groups[h].segments[i].startX, groups[h].segments[i].startY)) {
                     groups[h].segments[i].setStart(1, inputs[j], 0);

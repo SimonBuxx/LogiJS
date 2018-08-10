@@ -14,6 +14,7 @@ function saveSketch(filename) {
     json.diodes = [];
     json.customs = [];
     json.labels = [];
+    json.segDisplays = [];
     for (let i = 0; i < gates.length; i++) {
         json.gates.push(gates[i].getData());
     }
@@ -34,6 +35,9 @@ function saveSketch(filename) {
     }
     for (let i = 0; i < labels.length; i++) {
         json.labels.push(labels[i].getData());
+    }
+    for (let i = 0; i < segDisplays.length; i++) {
+        json.segDisplays.push(segDisplays[i].getData());
     }
     for (let i = 0; i < customs.length; i++) {
         if (customs[i].visible) {
@@ -61,6 +65,7 @@ function load(loadData) {
     customs = [];
     diodes = [];
     labels = [];
+    segDisplays = [];
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
@@ -69,7 +74,7 @@ function load(loadData) {
     // Load all gate parameters and create new gates based on that information
     for (let i = 0; i < loadData.gates.length; i++) {
         gates[i] = new LogicGate(JSON.parse(loadData.gates[i].x), JSON.parse(loadData.gates[i].y), transform, JSON.parse(loadData.gates[i].direction),
-            JSON.parse(loadData.gates[i].inputCount), JSON.parse(loadData.gates[i].outputCount), JSON.parse(loadData.gates[i].logicFunction), JSON.parse(loadData.gates[i].caption));
+            JSON.parse(loadData.gates[i].inputCount), JSON.parse(loadData.gates[i].outputCount), JSON.parse(loadData.gates[i].logicFunction));
         gates[i].setInvertions(JSON.parse(loadData.gates[i].inputsInv), JSON.parse(loadData.gates[i].outputsInv));
         gates[i].setCoordinates(JSON.parse(loadData.gates[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.gates[i].y) / transform.zoom - transform.dy);
         gates[i].updateClickBoxes();
@@ -104,18 +109,25 @@ function load(loadData) {
     }
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
-            if (JSON.parse(loadData.wires[i].x1) === JSON.parse(loadData.wires[i].x2)) {
-                // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-                for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
-                    segments.push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
-                        false, transform));
+            if (loadData.wires[i].hasOwnProperty("y2")) {
+                if (JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) { // For compability
+                    // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+                    for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
+                        segments.push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
+                            false, transform));
+                    }
                 }
-            } else if (JSON.parse(loadData.wires[i].y1) === JSON.parse(loadData.wires[i].y2)) {
-                // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-                for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
-                    segments.push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
-                        false, transform));
+            }
+            if (loadData.wires[i].hasOwnProperty("x2")) {
+                if (JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) { // For compability
+                    // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+                    for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
+                        segments.push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
+                            false, transform));
+                    }
                 }
+            } else {
+                console.log('JSON file is corrupted!');
             }
         }
     }
@@ -128,6 +140,11 @@ function load(loadData) {
     if (loadData.hasOwnProperty("labels")) {
         for (let i = 0; i < loadData.labels.length; i++) {
             labels[i] = new Label(JSON.parse(loadData.labels[i].x), JSON.parse(loadData.labels[i].y), loadData.labels[i].txt, transform);
+        }
+    }
+    if (loadData.hasOwnProperty("segDisplays")) {
+        for (let i = 0; i < loadData.segDisplays.length; i++) {
+            segDisplays[i] = new SegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), transform, JSON.parse(loadData.segDisplays[i].inputCount));
         }
     }
     for (let i = 0; i < loadData.customs.length; i++) {
@@ -158,7 +175,7 @@ function loadCustom(loadData, num) {
     let trans = new Transformation(0, 0, 1);
     for (let i = 0; i < loadData.gates.length; i++) {
         params[GATENUM][i] = new LogicGate(JSON.parse(loadData.gates[i].x), JSON.parse(loadData.gates[i].y), trans, JSON.parse(loadData.gates[i].direction),
-            JSON.parse(loadData.gates[i].inputCount), JSON.parse(loadData.gates[i].outputCount), JSON.parse(loadData.gates[i].logicFunction), JSON.parse(loadData.gates[i].caption));
+            JSON.parse(loadData.gates[i].inputCount), JSON.parse(loadData.gates[i].outputCount), JSON.parse(loadData.gates[i].logicFunction));
         params[GATENUM][i].setInvertions(JSON.parse(loadData.gates[i].inputsInv), JSON.parse(loadData.gates[i].outputsInv));
         params[GATENUM][i].setCoordinates(JSON.parse(loadData.gates[i].x) / trans.zoom - trans.dx, JSON.parse(loadData.gates[i].y) / trans.zoom - trans.dy);
         params[GATENUM][i].updateClickBoxes();
@@ -193,18 +210,25 @@ function loadCustom(loadData, num) {
     }
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
-            if (JSON.parse(loadData.wires[i].x1) === JSON.parse(loadData.wires[i].x2)) {
-                // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-                for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
-                    params[SEGNUM].push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
-                        false, transform));
+            if (loadData.wires[i].hasOwnProperty("y2")) {
+                if (JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) { // For compability
+                    // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+                    for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
+                        params[SEGNUM].push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
+                            false, transform));
+                    }
                 }
-            } else if (JSON.parse(loadData.wires[i].y1) === JSON.parse(loadData.wires[i].y2)) {
-                // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-                for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
-                    params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
-                        false, transform));
+            }
+            if (loadData.wires[i].hasOwnProperty("x2")) {
+                if (JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) { // For compability
+                    // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+                    for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
+                        params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
+                            false, transform));
+                    }
                 }
+            } else {
+                console.log('JSON file is corrupted!');
             }
         }
     }

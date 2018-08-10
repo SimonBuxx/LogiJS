@@ -1,4 +1,4 @@
-// File: conpoints.js
+// File: conpoint.js
 
 function ConPoint(x, y, state, g) {
     this.x = x;
@@ -10,7 +10,7 @@ function ConPoint(x, y, state, g) {
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
 
     this.marked = false;
-    this.markColor = color(0, 100, 50);
+    this.markColor = color(150, 30, 30);
 }
 
 ConPoint.prototype.getData = function () {
