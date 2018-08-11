@@ -740,35 +740,42 @@ function deleteClicked() {
 		unmarkAll();
 		 let toDelete = selection;
 		 let futurePwSeagments = [];
+		 let undos = 0;
 		for (let i = 0; i < toDelete.length; i++) {
 			for (let j = gates.length - 1; j >= 0; j--) {
 				if (JSON.stringify(gates[j]) === JSON.stringify(toDelete[i])) {
 					deleteGate(j);
+					undos++;
 				}
 			}
 			for (let j = customs.length - 1; j >= 0; j--) {
 				if (JSON.stringify(customs[j]) === JSON.stringify(toDelete[i])) {
 					deleteCustom(j);
+					undos++;
 				}
 			}
 			for (let j = diodes.length - 1; j >= 0; j--) {
 				if (JSON.stringify(diodes[j]) === JSON.stringify(toDelete[i])) {
 					deleteDiode(j);
+					undos++;
 				}
 			}
 			for (let j = inputs.length - 1; j >= 0; j--) {
 				if (JSON.stringify(inputs[j]) === JSON.stringify(toDelete[i])) {
 					deleteInput(j);
+					undos++;
 				}
 			}
 			for (let j = labels.length - 1; j >= 0; j--) {
 				if (JSON.stringify(labels[j]) === JSON.stringify(toDelete[i])) {
 					deleteLabel(j);
+					undos++;
 				}
 			}
 			for (let j = outputs.length - 1; j >= 0; j--) {
 				if (JSON.stringify(outputs[j]) === JSON.stringify(toDelete[i])) {
 					deleteOutput(j);
+					undos++;
 				}
 			}
 			
@@ -800,11 +807,13 @@ function deleteClicked() {
             if (existing) {
                 pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
                 findLines();
+				undos++;
             }
             pwSegments = [];
             wireMode = 'none';
             lockElements = false;
 			doConpoints();
+			pushUndoAction('multiple',0,[undos]);
     } else {
     setControlMode('delete');
     }

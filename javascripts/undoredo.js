@@ -108,6 +108,13 @@ function undo() {
                 doConpoints();
                 findLines();
                 break;
+			case 'multiple':
+				
+				for(let i = act.actionObject[0] - 1; i >= 0; i--){
+					undo();
+				}
+				actionRedo.push(act);
+				break;
             default:
                 break;
         }
@@ -225,6 +232,13 @@ function redo() {
                 doConpoints();
                 findLines();
                 break;
+			case 'multiple':
+				
+				for(let i = act.actionObject[0] - 1; i >= 0; i--){
+					redo();
+				}
+				actionUndo.push(act);
+				break;
             default:
                 break;
         }
