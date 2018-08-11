@@ -726,49 +726,88 @@ function wiringClicked() {
 }
 
 function deleteClicked() {
-    // TODO: Implement deleting of the selection (with one undo/redo event)
-    //if (ctrlMode === 'select' && selectMode === 'end') {
-    /*for (let i = 0; i < selection.length; i++) {
-        for (let j = gates.length - 1; j >= 0; j--) {
-            if (JSON.stringify(gates[j]) === JSON.stringify(selection[i])) {
-                deleteGate(j);
-            }
+    // TODO: Implement deleting of the selection with one undo/redo event
+    if (ctrlMode === 'select' && selectMode === 'end') {
+		
+		pushSelectAction(sDragX2 - initX, sDragY2 - initY,sClickBox.x-sClickBox.w/2, sClickBox.y-sClickBox.h/2,
+                                sClickBox.x+sClickBox.w/2, sClickBox.y+sClickBox.w/2);
+                            initX = -1;
+                            initY = -1;
+											
+		finishSelection();
+        selectMode = 'end';
+		showSClickBox = false;
+		unmarkAll();
+		 let toDelete = selection;
+		 let futurePwSeagments = [];
+		for (let i = 0; i < toDelete.length; i++) {
+			for (let j = gates.length - 1; j >= 0; j--) {
+				if (JSON.stringify(gates[j]) === JSON.stringify(toDelete[i])) {
+					deleteGate(j);
+				}
+			}
+			for (let j = customs.length - 1; j >= 0; j--) {
+				if (JSON.stringify(customs[j]) === JSON.stringify(toDelete[i])) {
+					deleteCustom(j);
+				}
+			}
+			for (let j = diodes.length - 1; j >= 0; j--) {
+				if (JSON.stringify(diodes[j]) === JSON.stringify(toDelete[i])) {
+					deleteDiode(j);
+				}
+			}
+			for (let j = inputs.length - 1; j >= 0; j--) {
+				if (JSON.stringify(inputs[j]) === JSON.stringify(toDelete[i])) {
+					deleteInput(j);
+				}
+			}
+			for (let j = labels.length - 1; j >= 0; j--) {
+				if (JSON.stringify(labels[j]) === JSON.stringify(toDelete[i])) {
+					deleteLabel(j);
+				}
+			}
+			for (let j = outputs.length - 1; j >= 0; j--) {
+				if (JSON.stringify(outputs[j]) === JSON.stringify(toDelete[i])) {
+					deleteOutput(j);
+				}
+			}
+			
+			for (let j = wires.length - 1; j >= 0; j--) {
+				if (JSON.stringify(wires[j]) === JSON.stringify(toDelete[i])) {
+					generateSegmentSet(wires[j].startX,wires[j].startY,wires[j].endX,wires[j].endY,0);
+					futurePwSeagments = futurePwSeagments.concat(pwSegments);
+				}
+			}
+			
+			
         }
-        for (let j = customs.length - 1; j >= 0; j--) {
-            if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
-                deleteCustom(j);
+		pwSegments = futurePwSeagments;
+			   
+		    var oldSegments = JSON.parse(JSON.stringify(segments.slice(0)));
+			
+			for(let i = segments.length - 1; i >= 0; i--) {
+				oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+			}
+			
+            var existing = false;
+            for (let i = pwSegments.length - 1; i >= 0; i--) {
+                var exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
+                if (exists >= 0) {
+                    existing = true;
+                    segments.splice(exists, 1);
+                }
             }
-        }
-        for (let j = diodes.length - 1; j >= 0; j--) {
-            if (JSON.stringify(diodes[j]) === JSON.stringify(selection[i])) {
-                deleteDiode(j);
+            if (existing) {
+                pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
+                findLines();
             }
-        }
-        for (let j = inputs.length - 1; j >= 0; j--) {
-            if (JSON.stringify(inputs[j]) === JSON.stringify(selection[i])) {
-                inputs.splice(j, 1);
-            }
-        }
-        for (let j = labels.length - 1; j >= 0; j--) {
-            if (JSON.stringify(labels[j]) === JSON.stringify(selection[i])) {
-                labels.splice(j, 1);
-            }
-        }
-        for (let j = outputs.length - 1; j >= 0; j--) {
-            if (JSON.stringify(outputs[j]) === JSON.stringify(selection[i])) {
-                outputs.splice(j, 1);
-            }
-        }
-        for (let j = wires.length - 1; j >= 0; j--) {
-            if (JSON.stringify(wires[j]) === JSON.stringify(selection[i])) {
-                wires.splice(j, 1);
-            }
-        }
-        finishSelection();*/
-    //    }
-    //} else {
+            pwSegments = [];
+            wireMode = 'none';
+            lockElements = false;
+			doConpoints();
+    } else {
     setControlMode('delete');
-    //}
+    }
 }
 
 /*
