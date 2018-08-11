@@ -8,7 +8,7 @@ function Label(x, y, txt, transform) {
     this.transform = transform;
     this.txt = txt; // Label text
     this.marked = false;
-    this.markColor = color(0, 100, 50);
+    this.markColor = color(150, 30, 30);
 
     this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 

@@ -25,6 +25,10 @@ function undo() {
                 inputs.pop();
                 actionRedo.push(act);
                 break;
+            case 'addSegDis':
+                segDisplays.pop();
+                actionRedo.push(act);
+                break;
             case 'addDi':
                 actionRedo.push(act);
                 diodes.pop();
@@ -50,6 +54,10 @@ function undo() {
                 customs[act.actionIndizes[0]].invertOutput(act.actionIndizes[1]);
                 actionRedo.push(act);
                 break;
+            case 'invDIP':
+                segDisplays[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
+                actionRedo.push(act);
+                break;
             case 'delGate':
                 gates.push(act.actionObject[0]);
                 actionRedo.push(act);
@@ -63,6 +71,10 @@ function undo() {
                 break;
             case 'delOut':
                 outputs.push(act.actionObject[0]);
+                actionRedo.push(act);
+                break;
+            case 'delSegDis':
+                segDisplays.push(act.actionObject[0]);
                 actionRedo.push(act);
                 break;
             case 'delIn':
@@ -129,6 +141,10 @@ function redo() {
                 inputs.push(act.actionObject);
                 actionUndo.push(act);
                 break;
+            case 'addSegDis':
+                segDisplays.push(act.actionObject);
+                actionUndo.push(act);
+                break;
             case 'addDi':
                 diodes.push(act.actionObject);
                 actionUndo.push(act);
@@ -159,6 +175,10 @@ function redo() {
                 inputs.pop();
                 actionUndo.push(act);
                 break;
+            case 'delSegDis':
+                segDisplays.pop();
+                actionUndo.push(act);
+                break;
             case 'delDi':
                 diodes.pop();
                 actionUndo.push(act[0]);
@@ -182,6 +202,10 @@ function redo() {
                 break;
             case 'invCOP':
                 customs[act.actionIndizes[0]].invertOutput(act.actionIndizes[1]);
+                actionUndo.push(act);
+                break;
+            case 'invDIP':
+                segDisplays[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
                 actionUndo.push(act);
                 break;
             case 'moveSel':

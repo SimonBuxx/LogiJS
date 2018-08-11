@@ -2,14 +2,9 @@
 **https://logijs.netlify.com/**
 
 This is a project that I'm working on in my spare time. It is a logic circuit editor written in JavaScript that focuses on 
-ease of use and a streamlined design. Please notice that, although this project has become far more than I've imagined,
-this is not a professionally developed piece of software. I've crushed a lot of bugs by now, but there might be some left.
-Also, the performance can be bad when handling larger files or using slower machines.
+ease of use and a streamlined design. Please notice that this is not a professionally developed piece of software. Altough I've crushed a lot of bugs by now, there might be some left.
 #### If you find any bugs or have ideas for improvement, please let me know!
-This project is still in active development, therefore the GUI is very rudimentary and some options,
-like the number of inputs on gates and the direction of gates, are only editable with the keyboard. This will be changed in the
-future, so that every action can be done with the mouse.
-#### Interesting Sketches:
+#### Interesting Sketches to give you an overview of the possibilities:
 * **https://logijs.netlify.com/logijs.html?sketch=4BitFromScratch**
 
 * **https://logijs.netlify.com/logijs.html?sketch=traffic**
@@ -18,7 +13,7 @@ future, so that every action can be done with the mouse.
 
 * **https://logijs.netlify.com/logijs.html?sketch=multiplication**
 
-For an overview of all existing sketches, please see our Wiki here on GitHub.
+For an overview of all existing default sketches, please see our Wiki here on GitHub.
 ## Tutorial
 ### The Basics
 If you want to use LogiJS for the first time, please let me tell you the basics on how to use it. We start simple.
@@ -38,7 +33,7 @@ Let's suppose, you've made a mistake. You have two ways to correct it: The first
 You can then delete objects by clicking on them or drag with the left mouse button to delete wires. Deleting wires is as easy
 as placing them, just draw the blue "anti-wire" onto the wire you want to delete. After releasing the mouse, the wire below is gone.
 
-The second option to correct mistakes is to use the "Undo" and "Redo" buttons. These are located in th top bar of the GUI.
+The second option to correct mistakes is to use the "Undo" and "Redo" buttons. These are located in the top bar of the GUI.
 You can undo and redo as many steps as you want and they disable automatically if there's nothing to undo or redo. You can
 also undo or redo when you deleted something you want to restore.
 ### Starting the Simulation
@@ -51,18 +46,19 @@ it's label to "Stop". Congratulations, you just ran your first simulation in Log
 Maybe you have noticed by now that there are two more inputs in the list on the left: The button and the clock. These are based on the
 switch but have different properties. The button is an input that is activated just a few milliseconds when you release the mouse.
 This can be useful when running a simulation one clock tick at a time. The clock is a bit more complex: It is essentially a switch
-that goes on and off by itself. You can alter the clock rate by dragging the slider on the top of the screen. But don't go faster
-than your creation can handle or else, over-clocking issues will start to happen. Additionally, you can determine if the update cycle
-of the sketch should be synced to the frame rate or not. You can change this with the checkbox in the top bar.
+that goes on and off by itself. You can alter the clock rate by dragging the slider that appears in the left bar when selecting the clock after clicking on the "Properties" button to get into the mode where you can edit element properties. But don't go faster
+than your creation can handle or else, over-clocking issues will start to happen.
+### 7-Segment displays
+These can be used to display a decimal number that is given as a binary vector. The number of input bits can be changed in the properties mode and the number of decimal places will update accordingly.
 ### Other Elements
-All the other buttons you see on the left, besides the "Toggle Diodes" button, can be used to add elements that aren't basic objects
+All the other buttons you see on the left can be used to add elements that aren't basic objects
 but are custom elements made out of multiple elements that can even contain other custom elements! They can be placed just like
-all other elements, but in the background, a sketch is rendered for every custom element. Take a moment to play around with them!
+all other elements, but in the background, another sketch is rendered for every custom element. Take a moment to play around with them!
 I'll tell you how to create your own custom elements later.
 ### Diodes
 Diodes are elements that join two crossing wires in the horizontal but not in the vertical direction. They can be very handy to build
-a diode matrix. I'll show you what I mean by that: Please click in the edit box in the top right corner and remove it's content.
-Then, type the word "traffic". After that, click on the "Load" button.
+a diode matrix. I'll show you what I mean by that: Please click in the edit box in the top right corner.
+Then, type the word "traffic". After that, click on the "Load" button or hit enter.
 
 You just loaded a sketch that I created. This sketch contains a counter, a decoder, some basic elements and wires. It can be used
 to simulate a traffic light for cars and one for pedestrians. Go ahead and start the simulation! If it's going too fast, drag the 
@@ -76,17 +72,15 @@ activates only the line with the corresponding number. This is where the diodes 
 at a crossing, the vertical line gets activated. If not, it remains in low state. By setting the diodes on different crossings,
 the states of the vertical wires can be "programmed" for every step.
 
-You can place and delete diodes by clicking the "Toggle Diodes" button and clicking on any diode or wire crossing to toggle it.
+You can place and delete diodes by clicking the "Diodes" button and clicking on any diode or wire crossing to toggle it.
 Please end the simulation, if it's still running and play around with this feature. It is pretty powerful as it allows the
 programming of whole CPUs to implement complex algorithms.
 ### Loading and saving sketches
 You can save your sketch at any time by entering a name for it in the edit box and clicking the "Save" button. This will open a save
 dialog. In this, select the "sketches" folder inside your LogiJS folder. Unfortunately, it is not yet possible to load own sketches
-on the https://logijs.netlify.com website but you can load them when you have a copy on your own computer.
+on the https://logijs.netlify.com website but you can load them if you have a copy on your own computer.
 
-To load a sketch, enter its name into the edit box and click on "Load". The sketch will appear, deleting your current sketch canvas. 
-Please notice that most browsers, including Google Chrome and Mozilla Firefox, don't allow you to load local files. You can either
-use a browser that does, for example Microsoft Edge, or host the LogiJS folder in a local server, for example via XAMPP
+To load a sketch, enter its name into the edit box and click on "Load" or hit enter. The sketch will appear, deleting your current sketch canvas. Please notice that most browsers, including Google Chrome and Mozilla Firefox, don't allow you to load local files. You can either use a browser that does, for example Microsoft Edge, or host the LogiJS folder in a local server, for example via XAMPP
 or a NodeJS script. So if nothing happens when you're trying to load your sketch, you know what to do.
 ### Creating and importing Custom Elements
 LogiJS supports the creation of custom elements. The process of creating them is pretty simple: You just save your sketch and instead
@@ -114,19 +108,17 @@ green or blue. When you add other objects, click on "Delete" or start the simula
 properties mode with the escape key.
 ### The "New" and "Select" Buttons
 With the "New" button, you can create a new sketch, deleting all of the previous sketch and resetting the view. With the "Select" button, you can select an area to move it around on the canvas. Copy and delete will come later for that but are not integrated right now.
-### Changing number of inputs and rotating gates
-Right now, these features are only accessible with the keyboard. Hitting the numbers 1 to 0 will change the number of inputs of each
-new gate to this value (0 for 10). Rotating gates and custom elements can be done with the arrow keys. Right is the default direction.
-As with the input number, this affects all new gates and custom elements.
+### Changing number of inputs and rotating gates and custom elements
+These settings are available in the left bar when you're about to create a new gate. Custom elements only have a direction property.
 ### Warning
 This software is under development and not thought to be used for any real life scenarios. For education purposes, it should be stable
 enough, but I can't guarantee for anything. LogiJS is not professionally built and not tested in a structured manner.
 
 ## Closing word
-If you've read this tutorial, thank you so much. It means a lot to me when people are actually using and testing the software.
+If you've read this tutorial, thank you so much. It means a lot to me when people are using and testing the software.
 If you have any ideas or found a bug, don't hesitate to create an issue. In case you're interested, LogiJS is built with p5.js
 (https://p5js.org) and linted with JSHint (http://jshint.com/). Right now, it works best with Google Chrome and Microsoft Edge.
-Parts of this tutorial may be outdated due to continous updates and changes. 
+Parts of this tutorial may be outdated due to continous updates and changes.
 
 Please feel free to contact me to tell me about your experience with LogiJS.
 
