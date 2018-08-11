@@ -372,12 +372,7 @@ function mouseReleased() {
                             }
                         }
                         if (pushed) {
-							var oldSegments = JSON.parse(JSON.stringify(segments.slice(0)));
-							
-							for(let i = segments.length - 1; i >= 0; i--) {
-								oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
-							}
-                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
+                            pushUndoAction('reWire', 0, [segments.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
                             if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
@@ -424,7 +419,6 @@ function mouseReleased() {
                         }
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
-					
                         var oldSegments = segments.slice(0);
                         var existing = false;
                         for (let i = pwSegments.length - 1; i >= 0; i--) {
