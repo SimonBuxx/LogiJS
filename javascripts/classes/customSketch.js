@@ -50,6 +50,9 @@ function CustomSketch(x, y, transform, direction, file) {
 
     this.simRunning = false; // True, when the simulation is running
     this.tops = 0;           // Number of inputs to draw on top of the object
+
+    this.id = '_' + Math.random().toString(36).substr(2, 9);
+    this.pid = null;
 }
 
 /*
@@ -95,13 +98,13 @@ CustomSketch.prototype.reSize = function () {
     this.tops = tops;
     if (this.direction % 2 === 0) {
         this.w = 2 * GRIDSIZE + Math.max(this.tops - 1, 0) * GRIDSIZE;
-        this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
+        this.h = GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
 
     } else {
-        this.w = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
+        this.w = GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
         this.h = 2 * GRIDSIZE + Math.max(this.tops - 1, 0) * GRIDSIZE;
     }
-    this.height = Math.max(this.inputCount - this.tops, this.outputCount) + 1;
+    this.height = Math.max(this.inputCount - this.tops, this.outputCount);
     this.updateClickBoxes();
 };
 
@@ -141,6 +144,8 @@ CustomSketch.prototype.setSketchParams = function (params) {
     this.inputCount = this.objects[INPNUM].length;
     this.outputCount = this.objects[OUTPNUM].length;
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
+    this.inputClickBoxes = [];
+    this.outputClickBoxes = [];
 
     for (let i = 0; i < this.inputCount; i++) {
         this.inputs.push(false); // Set all inputs to low
@@ -599,6 +604,10 @@ CustomSketch.prototype.invertOutput = function (output) {
     this.outputsInv[output] = !this.outputsInv[output]; // Invert isInverted-State
 };
 
+CustomSketch.prototype.setParentID = function (pid) {
+    this.pid = pid;
+};
+
 /*
     Updates the clickBoxes (once after creation)
 */
@@ -637,16 +646,8 @@ CustomSketch.prototype.updateClickBoxes = function () {
         this.outputClickBoxes[i].setTransform(this.transform);
     }
     // Update position and size of the global clickbox of the custom object
-    this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2);
-    if (this.tops === 0) {
-        if (this.direction % 2 === 0) {
-            this.gClickBox.updateSize(this.w, this.h - GRIDSIZE);
-        } else {
-            this.gClickBox.updateSize(this.w - GRIDSIZE, this.h);
-        }
-    } else {
-        this.gClickBox.updateSize(this.w, this.h);
-    }
+    this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2 + GRIDSIZE / 2);
+    this.gClickBox.updateSize(this.w, this.h);
     this.gClickBox.setTransform(this.transform);
 };
 
@@ -701,20 +702,21 @@ CustomSketch.prototype.show = function () {
     // Draw the body
     if (this.tops === 0) {
         if (this.direction % 2 === 0) {
-            rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE);
+            rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h);
         } else {
-            rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h);
+            rect(this.x + GRIDSIZE / 2, this.y, this.w, this.h);
         }
     } else {
         rect(this.x, this.y, this.w, this.h);
     }
 
-
     noStroke();
+    textSize(10);
+    text(this.id, this.x + this.w/2, this.y);
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
-    text(this.caption, this.x + this.w / 2, this.y + this.h / 2); // Draw text
+    text(this.caption, this.x + this.w / 2, this.y + this.h / 2 + GRIDSIZE / 2); // Draw text
 
     let tops = 0;
     // Draw inputs

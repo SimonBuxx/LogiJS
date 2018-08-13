@@ -26,6 +26,8 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.inputsInv = [];  // true, if input is inverted
     this.outputsInv = []; // true, if output is inverted
 
+    this.id = '_' + Math.random().toString(36).substr(2, 9);
+
     // The height (or length) of the gate, determined by the input/output count
     this.height = Math.max(this.outputCount + 1, this.inputCount + 1);
 
@@ -294,6 +296,8 @@ LogicGate.prototype.show = function () {
     }
 
     noStroke();
+    textSize(10);
+    text(this.id, this.x + this.w/2, this.y);
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
