@@ -17,6 +17,11 @@ function setPropMode(active) {
 // Hides the PropMenu without quitting the PropMode
 // Used, when the user clickes outside a valid target for PropMode
 function hidePropMenu() {
+    propBoxLabel.hide();
+    ipNameLabel.hide();
+    colNameLabel.hide();
+    labCaptLabel.hide();
+    opNameLabel.hide();
     inputIsTopBox.hide();
     inputCaptionBox.hide();
     outputCaptionBox.hide();
@@ -72,6 +77,9 @@ function unmarkAll() {
     for (const elem of wires) {
         elem.marked = false;
     }
+    for (const elem of segDisplays) {
+        elem.marked = false;
+    }
 }
 
 /*
@@ -79,11 +87,16 @@ function unmarkAll() {
     objects that can be marked in properties mode
 */
 function showInputPropMenu() {
+    propBoxLabel.show();
+    labCaptLabel.hide();
     outputCaptionBox.hide();
     outputColorBox.hide();
+    colNameLabel.hide();
     labelTextBox.hide();
     inputIsTopBox.show();
     inputCaptionBox.show();
+    ipNameLabel.show();
+    opNameLabel.hide();
     if (inputs[propInput].clock) {
         clockspeedLabel.show();
         clockspeedSlider.show();
@@ -109,6 +122,11 @@ function showInputPropMenu() {
     objects that can be marked in properties mode
 */
 function showLabelPropMenu() {
+    propBoxLabel.show();
+    labCaptLabel.show();
+    opNameLabel.hide();
+    ipNameLabel.hide();
+    colNameLabel.hide();
     outputCaptionBox.hide();
     outputColorBox.hide();
     inputIsTopBox.hide();
@@ -132,6 +150,11 @@ function showLabelPropMenu() {
     objects that can be marked in properties mode
 */
 function showOutputPropMenu() {
+    labCaptLabel.hide();
+    propBoxLabel.show();
+    opNameLabel.show();
+    ipNameLabel.hide();
+    colNameLabel.show();
     inputIsTopBox.hide();
     inputCaptionBox.hide();
     labelTextBox.hide();

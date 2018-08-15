@@ -1,6 +1,6 @@
 // File: logicGate.js
 
-function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFunction, caption) {
+function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFunction) {
     this.x = x; // X-Position of the Gate (translated)
     this.y = y; // Y-Position
 
@@ -18,7 +18,7 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high in-/outputs (red)
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low in-/outputs (black)
 
-    this.caption = caption; // Caption of the logic gate
+    this.caption = '';    // Caption of the logic gate
     this.textSize = 40;   // Text size of the caption
 
     this.inputs = [];     // Vector of the input states
@@ -27,6 +27,8 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.inputsInv = [];  // true, if input is inverted
     this.outputsInv = []; // true, if output is inverted
 
+    this.id = '_' + Math.random().toString(36).substr(2, 9);
+
     // The height (or length) of the gate, determined by the input/output count
     this.height = Math.max(this.outputCount + 1, this.inputCount + 1);
 
@@ -34,8 +36,15 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.inputClickBoxes = [];
     this.outputClickBoxes = [];
 
+    switch(this.logicFunction) {
+        case 'and': this.caption = '&'; break;
+        case 'or': this.caption = '≥1'; break;
+        case 'xor': this.caption = '=1'; break;
+        default: this.caption = '';
+    }
+
     this.marked = false;
-    this.markColor = color(0, 100, 50);   // Color for marked gates
+    this.markColor = color(150, 30, 30);   // Color for marked gates
 
     if (this.direction % 2 === 0) {
         this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, this.transform);
@@ -76,7 +85,6 @@ LogicGate.prototype.getData = function () {
     data.inputCount = JSON.stringify(this.inputCount);
     data.outputCount = JSON.stringify(this.outputCount);
     data.logicFunction = JSON.stringify(this.logicFunction);
-    data.caption = JSON.stringify(this.caption);
     data.outputsInv = JSON.stringify(this.outputsInv);
     data.inputsInv = JSON.stringify(this.inputsInv);
     return data;
@@ -88,13 +96,6 @@ LogicGate.prototype.getData = function () {
 LogicGate.prototype.setCoordinates = function (nx, ny) {
     this.x = Math.round((nx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
     this.y = Math.round((ny - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-    // Check bounds
-    /*if (this.x < 0) {
-        this.x = 0;
-    }
-    if (this.y < 0) {
-        this.y = 0;
-    }*/
 };
 
 /*
@@ -277,6 +278,10 @@ LogicGate.prototype.pointInOutput = function (n, px, py) {
     Draws the gate on the screen
 */
 LogicGate.prototype.show = function () {
+    if ((this.x + this.transform.dx) * this.transform.zoom < 0 - this.w * this.transform.zoom || (this.y + this.transform.dy) * this.transform.zoom < 0 - this.h * this.transform.zoom ||
+        (this.x + this.transform.dx) * this.transform.zoom > windowWidth || (this.y + this.transform.dy) * this.transform.zoom > windowHeight) {
+        return;
+    }
     stroke(0);
     if (this.marked) {
         fill(this.markColor);
@@ -288,12 +293,14 @@ LogicGate.prototype.show = function () {
     
 
     if (this.direction % 2 === 0) {
-        rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); //  Draw body
+        rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); // Draw body
     } else {
         rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h);
     }
 
     noStroke();
+    textSize(10);
+    text(this.id, this.x + this.w/2, this.y);
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);

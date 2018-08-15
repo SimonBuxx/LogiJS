@@ -15,29 +15,21 @@ let previewSymbol = null;
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-	if(mouseX > 0){
-		// -1 for zoom in, +1 for zoom out
-		this.wheel = Math.sign(event.deltaY) * 1.5;
-		if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
-			origX = mouseX * (transform.zoom);
-			origY = mouseY * (transform.zoom);
-			transform.dx += (origX - (mouseX * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
-			transform.dy += (origY - (mouseY * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
-			/*if (transform.dx > 0) {
-				transform.dx = 0;
-			}
-			if (transform.dy > 0) {
-				transform.dy = 0;
-			}*/
+    if (mouseX > 0 && mouseY > 0) {
+        wheel = Math.sign(event.deltaY) * 1.5; // -1 for zoom in, +1 for zoom out
+        if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
+            origX = mouseX * (transform.zoom);
+            origY = mouseY * (transform.zoom);
+            transform.dx += (origX - (mouseX * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
+            transform.dy += (origY - (mouseY * (((gridSize - wheel) / GRIDSIZE)))) * (GRIDSIZE / (gridSize - wheel)) * (GRIDSIZE / (gridSize - wheel));
+            gridSize -= wheel;
 
-			gridSize -= wheel;
-
-		}
-		transform.zoom = (gridSize / GRIDSIZE);
-		if (!simRunning) {
-			reDraw();
-		}
-	}
+        }
+        transform.zoom = (gridSize / GRIDSIZE);
+        if (!simRunning) {
+            reDraw();
+        }
+    }
     let hand = false;
     if (simRunning || propMode) {
         if (!simRunning) {
@@ -185,17 +177,17 @@ function mousePressed() {
                             sDragY1 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
                             sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
                             sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
-                            if (initX === -1 || initY === -1) {
+                            if (initX === 0 || initY === 0) {
                                 initX = sDragX1;
                                 initY = sDragY1;
                             }
                             selectMode = 'drag';
                         } else {
                             setControlMode('none');
-                            pushSelectAction(sDragX2 - initX, sDragY2 - initY,sClickBox.x-sClickBox.w/2, sClickBox.y-sClickBox.h/2,
-                                sClickBox.x+sClickBox.w/2, sClickBox.y+sClickBox.w/2);
-                            initX = -1;
-                            initY = -1;
+                            pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
+                                sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
+                            initX = 0;
+                            initY = 0;
                         }
                         break;
                     default:
@@ -219,6 +211,10 @@ function mouseClicked() {
         directionSelect.hide();
         labelDirection.hide();
     }
+    if (ctrlMode !== 'addObject' || addType !== 'segDisplay') {
+        bitSelect.hide();
+        labelBits.hide();
+    }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
@@ -236,6 +232,12 @@ function mouseClicked() {
                     case 'output':
                         if (mouseButton === LEFT) {
                             addOutput();
+                        }
+                        break;
+                    case 'segDisplay':
+                        if (mouseButton === LEFT) {
+                            addSegDisplay(segBits);
+                            setTimeout(reDraw, 50);
                         }
                         break;
                     case 'input':
@@ -291,6 +293,15 @@ function mouseClicked() {
                                     let act = new Action('invCOP', [i, j], null);
                                     actionUndo.push(act);
                                 }
+                            }
+                        }
+                    }
+                    for (let i = 0; i < segDisplays.length; i++) {
+                        for (let j = 0; j < segDisplays[i].inputCount; j++) {
+                            if (segDisplays[i].mouseOverInput(j)) {
+                                segDisplays[i].invertInput(j);
+                                let act = new Action('invDIP', [i, j], null);
+                                actionUndo.push(act);
                             }
                         }
                     }
@@ -379,7 +390,11 @@ function mouseReleased() {
                             }
                         }
                         if (pushed) {
-                            pushUndoAction('reWire', 0, [segments.slice(0), conpoints.slice(0)]); // push the action for undoing
+                            let oldSegments = [];
+                            for(let i = segments.length - 1; i >= 0; i--) {
+								oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform); 
+							} 
+                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
                             if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
@@ -400,32 +415,36 @@ function mouseReleased() {
                         if (gateNumber >= 0) {
                             deleteGate(gateNumber);
                         }
-                        var customNumber = mouseOverCustom();
+                        let customNumber = mouseOverCustom();
                         if (customNumber >= 0) {
                             deleteCustom(customNumber);
                         }
-                        var outputNumber = mouseOverOutput();
+                        let outputNumber = mouseOverOutput();
                         if (outputNumber >= 0) {
                             deleteOutput(outputNumber);
                         }
-                        var inputNumber = mouseOverInput();
+                        let inputNumber = mouseOverInput();
                         if (inputNumber >= 0) {
                             deleteInput(inputNumber);
                         }
-                        var diodeNumber = mouseOverDiode();
+                        let diodeNumber = mouseOverDiode();
                         if (diodeNumber >= 0) {
                             deleteDiode(diodeNumber);
                         }
-                        var labelNumber = mouseOverLabel();
+                        let labelNumber = mouseOverLabel();
                         if (labelNumber >= 0) {
                             deleteLabel(labelNumber);
                         }
+                        let segDisNumber = mouseOverSegDisplay();
+                        if (segDisNumber >= 0) {
+                            deleteSegDisplay(segDisNumber);
+                        }
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
-                        var oldSegments = segments.slice(0);
-                        var existing = false;
+                        let oldSegments = segments.slice(0);
+                        let existing = false;
                         for (let i = pwSegments.length - 1; i >= 0; i--) {
-                            var exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
+                            let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
                             if (exists >= 0) {
                                 existing = true;
                                 segments.splice(exists, 1);
@@ -479,7 +498,7 @@ function mouseReleased() {
 function mouseOverGate() {
     // Iterate backwards so that in overlapping situations
     // the last added gets removed first
-    for (var i = gates.length - 1; i >= 0; i--) {
+    for (let i = gates.length - 1; i >= 0; i--) {
         if (gates[i].mouseOver()) {
             return i;
         }
@@ -490,7 +509,7 @@ function mouseOverGate() {
 function mouseOverCustom() {
     // Iterate backwards so that in overlapping situations
     // the last added gets removed first
-    for (var i = customs.length - 1; i >= 0; i--) {
+    for (let i = customs.length - 1; i >= 0; i--) {
         if (customs[i].mouseOver() && customs[i].visible) {
             return i;
         }
@@ -503,7 +522,7 @@ function mouseOverCustom() {
     Output number, if found, -1 else
 */
 function mouseOverOutput() {
-    for (var i = outputs.length - 1; i >= 0; i--) {
+    for (let i = outputs.length - 1; i >= 0; i--) {
         if (outputs[i].mouseOver()) {
             return i;
         }
@@ -542,12 +561,21 @@ function mouseOverLabel() {
     return -1;
 }
 
+function mouseOverSegDisplay() {
+    for (var i = segDisplays.length - 1; i >= 0; i--) {
+        if (segDisplays[i].mouseOver()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 //Checks if the mouse hovers over the GUI(true) or the grid(false)
 function mouseOverGUI() {
     if (propInput + propOutput + propLabel < -2) {
         return (mouseY < 0) || (mouseX < 0);
     } else {
-        return (mouseY < 0) || (mouseX < 0) || (mouseY < 60 && mouseX > window.width - 200);
+        return (mouseY < 0) || (mouseX < 0) || (mouseY > window.height - 300 && mouseX > window.width - 215);
 
     }
 }

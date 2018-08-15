@@ -1,22 +1,20 @@
-body, html { overflow:hidden;  box-sizing: border-box;}
-
 body {
     background-color: rgb(50, 50, 50);
-    font-family:  'Open Sans', Arial, Helvetice Neue, sans-serif;
-    font-size: 12px;
+    font-family:  'Open Sans', Arial, sans-serif;
+    font-size: 14px;
 	
 	font-weight: 300; 
 	font-style: normal; 
-	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
+	-webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
 }
 
-h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neue, sans-serif; }
+h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetica Neue, sans-serif; }
 
 * {
-  -webkit-border-radius: 0 !important;
-     -moz-border-radius: 0 !important;
-          border-radius: 0 !important;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
 }
 
 .clear {
@@ -29,6 +27,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
 
 .top-menu {
     min-height:110px;
+    top: 0;
     background-color: rgb(50, 50, 50);
     z-index: 5000;
     width:100%;
@@ -50,41 +49,32 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
     -o-background-size: cover;
     background-size: cover;
     display: block;
-    filter: blur(5px);
-    -webkit-filter: blur(5px);
+    filter: blur(7px);
+    -webkit-filter: blur(7px);
     position: fixed;
     left: 0;
     right: 0;
+	top: -10px;
     z-index: -10;
     height: 100%;
-     overflow-x: hidden;
+    overflow-x: hidden;
 }
 #carousel {
-	height: 600px;
-}
-
-#carousel .carousel-caption {
-    z-index: 10;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0;
+    margin-top: 200px;
+    min-width: 400px;
     padding: 0;
+    height: 280px;
+    background-color: rgba(50, 50, 50, 0.8);
 }
 
-@media (min-width: 768px) {
-    #carousel .carousel-caption p {
-        margin-bottom: 20px;
-        line-height: 1.4;
-        font-size: 21px;
-    }
+#carousel p {
+    margin-bottom: 20px;
+    line-height: 1.4;
+    font-size: 21px;
+}
 
-    #carousel .carousel-caption {
-        padding: 0;
-        margin: 0;
-        right: 20%;
-        left: 20%;
-    }
+#caption {
+    padding-top: 30px;
 }
 
 .subheader {
@@ -148,12 +138,12 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetice Neu
 
 .footer_bottom {
 	background: rgb(50, 50, 50);
-	position: absolute;
-	width: 100%;
+	position: fixed;
+    width: 100%;
+    bottom: 0px;
 	margin: auto;
 	z-index: 20;
 	display: block;
-	bottom: 0px;
 }
 .footer_bottom_content {
 	padding-top: 10px;

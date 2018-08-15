@@ -6,55 +6,66 @@ function CustomSketch(x, y, transform, direction, file) {
 
     this.transform = transform; // Transformation (Zoom and Translation)
     this.direction = direction; // Direction (0 = inputs left)
-    this.inputCount = 0;   // # of inputs
-    this.outputCount = 0; // # of outputs
+    this.inputCount = 0;        // Number of inputs
+    this.outputCount = 0;       // Number of outputs
 
-    this.w = 2 * GRIDSIZE; // Width
-    this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1, this.outputCount - 1); // Height
+    this.w = 2 * GRIDSIZE;      // Width of the custom object in pixels
+    this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1, this.outputCount - 1); // Height in pixels
+
+    this.height = Math.max(this.outputCount + 1, this.inputCount + 1); // Height of the custom object in grid cells
 
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high in-/outputs (red)
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low in-/outputs (black)
 
-    this.objects = []; // Contains all objects (gates, wires, etc.)
-    this.filename = file; // A json file containing sketch info
+    this.objects = [];    // Contains all objects (gates, wires, etc.) the custom object consists of
+    this.filename = file; // The name of the json file the custom object is loaded from
 
     this.inputs = [];     // Vector of the input states
-    this.ipset = [];
+    this.ipset = [];      // true, if the input state is set (if a wire is connected to the input)
     this.outputs = [];    // Vector of the output state
     this.inputsInv = [];  // true, if input is inverted
     this.outputsInv = []; // true, if output is inverted
 
     this.responsibles = []; // Contains all custom objects that are included in this custom
-
-    this.height = Math.max(this.outputCount + 1, this.inputCount + 1); // Height in grid cells
+                            // This custom object is responsible for a certain amount of other custom objects
+                            // that are managed by the main sketch
 
     // Variables for wire tracing (Wires are grouped as in sketch.js)
     this.traced = [];
     this.groups = [];
 
-    this.caption = ''; // Caption of the custom object
+    this.caption = '';    // Caption of the custom object
     this.textSize = 10;   // Text size of the caption
 
-    this.inputClickBoxes = [];
+    this.inputClickBoxes = []; // Clickboxes for inputs and outputs
     this.outputClickBoxes = [];
 
-    this.marked = false;
-    this.markColor = color(0, 100, 50);
+    this.marked = false; // True, if the object is marked in the selection mode
+    this.markColor = color(150, 30, 30); // Color the object appears in when marked
 
-    this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
+    this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform); // Global clickbox
 
     this.loaded = false; // True, if the sketch has been loaded from file
     this.visible = true; // True, if the object is visible and not part of another object
 
-    this.simRunning = false;
-    this.tops = 0; // Number of inputs to draw on top
+    this.simRunning = false; // True, when the simulation is running
+    this.tops = 0;           // Number of inputs to draw on top of the object
+
+    this.id = '_' + Math.random().toString(36).substr(2, 9);
+    this.pid = null;
 }
 
+/*
+    Sets the invertion arrays, determing which in-/outputs are inverted
+*/
 CustomSketch.prototype.setInvertions = function (ipinv, opinv) {
     this.inputsInv = ipinv;
     this.outputsInv = opinv;
 };
 
+/*
+    Returns all object data that has to be saved in the json file
+*/
 CustomSketch.prototype.getData = function () {
     let data = {};
     data.x = JSON.stringify(this.x);
@@ -72,15 +83,11 @@ CustomSketch.prototype.getData = function () {
 CustomSketch.prototype.setCoordinates = function (nx, ny) {
     this.x = Math.round((nx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
     this.y = Math.round((ny - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-    // Check bounds
-    /*if (this.x < 0) {
-        this.x = 0;
-    }
-    if (this.y < 0) {
-        this.y = 0;
-    }*/
 };
 
+/*
+    Updates width and height of the object and all clickboxes
+*/
 CustomSketch.prototype.reSize = function () {
     let tops = 0;
     for(const elem of this.objects[INPNUM]) {
@@ -91,13 +98,13 @@ CustomSketch.prototype.reSize = function () {
     this.tops = tops;
     if (this.direction % 2 === 0) {
         this.w = 2 * GRIDSIZE + Math.max(this.tops - 1, 0) * GRIDSIZE;
-        this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
+        this.h = GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
 
     } else {
-        this.w = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
+        this.w = GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
         this.h = 2 * GRIDSIZE + Math.max(this.tops - 1, 0) * GRIDSIZE;
     }
-    this.height = Math.max(this.inputCount - this.tops, this.outputCount) + 1;
+    this.height = Math.max(this.inputCount - this.tops, this.outputCount);
     this.updateClickBoxes();
 };
 
@@ -117,6 +124,9 @@ CustomSketch.prototype.setInput = function (i, s) {
     }
 };
 
+/*
+    Alters the position of the object
+*/
 CustomSketch.prototype.alterPosition = function (x1, y1) {
     this.x += x1;
     this.y += y1;
@@ -134,6 +144,8 @@ CustomSketch.prototype.setSketchParams = function (params) {
     this.inputCount = this.objects[INPNUM].length;
     this.outputCount = this.objects[OUTPNUM].length;
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
+    this.inputClickBoxes = [];
+    this.outputClickBoxes = [];
 
     for (let i = 0; i < this.inputCount; i++) {
         this.inputs.push(false); // Set all inputs to low
@@ -152,6 +164,9 @@ CustomSketch.prototype.setSketchParams = function (params) {
     this.reSize();
 };
 
+/*
+    Sets the caption of the object
+*/
 CustomSketch.prototype.setCaption = function (caption) {
     this.caption = caption;
 };
@@ -226,6 +241,9 @@ CustomSketch.prototype.parseGroups = function () {
     this.deleteInvalidConpoints();
 };
 
+/*
+    Deletes all connection points that are not located at wire crossings
+*/
 CustomSketch.prototype.deleteInvalidConpoints = function () {
     for (let j = 0; j < this.objects[CPNUM].length; j++) {
         if (this.wirePoints(this.objects[CPNUM][j].x, this.objects[CPNUM][j].y, -1).length < 3) {
@@ -325,6 +343,9 @@ CustomSketch.prototype.exGroup = function (j, g) {
     }
 };
 
+/*
+    Integrates all sketch elements into the wire groups
+*/
 CustomSketch.prototype.integrateElement = function () {
     for (let h = 0; h < this.groups.length; h++) {
         for (let i = 0; i < this.groups[h].segments.length; i++) {
@@ -379,7 +400,7 @@ CustomSketch.prototype.integrateElement = function () {
                 if (this.objects[OUTPNUM][j].pointInInput(null, this.groups[h].segments[i].endX, this.groups[h].segments[i].endY)) {
                     this.groups[h].segments[i].setEnd(0, this.objects[OUTPNUM][j], 0);
                 }
-            } // -----------------------------------------------------
+            }
             for (let j = 0; j < this.objects[DINUM].length; j++) { // For all diodes
                 if ((this.groups[h].segments[i].startX === this.objects[DINUM][j].x) && (this.groups[h].segments[i].startY === this.objects[DINUM][j].y)) { // If there's a diode in the segment start
                     if (this.groups[h].segments[i].startX === this.groups[h].segments[i].endX) { // if the segment is vertical
@@ -436,11 +457,14 @@ CustomSketch.prototype.integrateElement = function () {
                         }
                     }
                 }
-            } // ------------------------------------
+            }
         }
     }
 };
 
+/*
+    Returns the group number, a given segment belongs to, or -1
+*/
 CustomSketch.prototype.getGroup = function (seg) {
     for (let i = 0; i < this.groups.length; i++) {
         for (let j = 0; j < this.groups[i].segments.length; j++) {
@@ -452,6 +476,9 @@ CustomSketch.prototype.getGroup = function (seg) {
     return -1;
 };
 
+/*
+    Returns the number of the segment starting in the given coordinates, or -1
+*/
 CustomSketch.prototype.segmentStartsIn = function (x, y) {
     for (let i = 0; i < this.objects[SEGNUM].length; i++) {
         if (this.objects[SEGNUM][i].startX === x && this.objects[SEGNUM][i].startY === y) {
@@ -461,6 +488,9 @@ CustomSketch.prototype.segmentStartsIn = function (x, y) {
     return -1;
 };
 
+/*
+    Returns the number of the segment ending in the given coordinates, or -1
+*/
 CustomSketch.prototype.segmentEndsIn = function (x, y) {
     for (let i = 0; i < this.objects[SEGNUM].length; i++) {
         if (this.objects[SEGNUM][i].endX === x && this.objects[SEGNUM][i].endY === y) {
@@ -504,6 +534,9 @@ CustomSketch.prototype.setSimRunning = function (simRunning) {
     }
 };
 
+/*
+    Updates the logic of the custom object
+*/
 CustomSketch.prototype.update = function () {
     for (let i = 0; i < this.inputCount; i++) {
         if (!this.ipset[i]) {
@@ -544,6 +577,9 @@ CustomSketch.prototype.update = function () {
     }
 };
 
+/*
+    Sets all in- and outputs to false
+*/
 CustomSketch.prototype.shutdown = function () {
     for (let i = 0; i < this.outputCount; i++) {
         this.outputs[i] = false;
@@ -566,6 +602,10 @@ CustomSketch.prototype.invertInput = function (input) {
 */
 CustomSketch.prototype.invertOutput = function (output) {
     this.outputsInv[output] = !this.outputsInv[output]; // Invert isInverted-State
+};
+
+CustomSketch.prototype.setParentID = function (pid) {
+    this.pid = pid;
 };
 
 /*
@@ -606,16 +646,8 @@ CustomSketch.prototype.updateClickBoxes = function () {
         this.outputClickBoxes[i].setTransform(this.transform);
     }
     // Update position and size of the global clickbox of the custom object
-    this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2);
-    if (this.tops === 0) {
-        if (this.direction % 2 === 0) {
-            this.gClickBox.updateSize(this.w, this.h - GRIDSIZE);
-        } else {
-            this.gClickBox.updateSize(this.w - GRIDSIZE, this.h);
-        }
-    } else {
-        this.gClickBox.updateSize(this.w, this.h);
-    }
+    this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2 + GRIDSIZE / 2);
+    this.gClickBox.updateSize(this.w, this.h);
     this.gClickBox.setTransform(this.transform);
 };
 
@@ -640,10 +672,16 @@ CustomSketch.prototype.mouseOverOutput = function (n) {
     return this.outputClickBoxes[n].mouseOver();
 };
 
+/*
+    Determines if the given point is in the clickbox of input n
+*/
 CustomSketch.prototype.pointInInput = function (n, px, py) {
     return this.inputClickBoxes[n].checkPoint(px, py);
 };
 
+/*
+    Determines if the given point is in the clickbox of output n
+*/
 CustomSketch.prototype.pointInOutput = function (n, px, py) {
     return this.outputClickBoxes[n].checkPoint(px, py);
 };
@@ -664,20 +702,21 @@ CustomSketch.prototype.show = function () {
     // Draw the body
     if (this.tops === 0) {
         if (this.direction % 2 === 0) {
-            rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE);
+            rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h);
         } else {
-            rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h);
+            rect(this.x + GRIDSIZE / 2, this.y, this.w, this.h);
         }
     } else {
         rect(this.x, this.y, this.w, this.h);
     }
 
-
     noStroke();
+    textSize(10);
+    text(this.id, this.x + this.w/2, this.y);
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
-    text(this.caption, this.x + this.w / 2, this.y + this.h / 2); // Draw text
+    text(this.caption, this.x + this.w / 2, this.y + this.h / 2 + GRIDSIZE / 2); // Draw text
 
     let tops = 0;
     // Draw inputs
@@ -910,12 +949,15 @@ CustomSketch.prototype.show = function () {
         }
     }
 
-    //this.gClickBox.markClickBox();
-    // TEMP: Show clickboxes of in- and outputs
-    /*for (let i = 0; i < this.inputClickBoxes.length; i++) {
+    // Uncomment to show global clickbox
+    // this.gClickBox.markClickBox();
+    // Uncomment to show clickboxes of in- and outputs
+    /* 
+    for (let i = 0; i < this.inputClickBoxes.length; i++) {
         this.inputClickBoxes[i].markClickBox();
     }
     for (let i = 0; i < this.outputClickBoxes.length; i++) {
         this.outputClickBoxes[i].markClickBox();
-    }*/
+    }
+    */
 };
