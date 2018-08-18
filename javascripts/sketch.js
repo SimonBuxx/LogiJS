@@ -56,8 +56,9 @@ let initX = 0;
 let initY = 0;
 
 // Variables for dragging
-let lastX = 0; var lastY = 0; // last mouse position
-let dragSpeed = 1.5;
+let lastX = 0; 
+var lastY = 0; // last mouse position
+let dragSpeed = 1;
 
 let transform = new Transformation(0, 0, 1);
 
