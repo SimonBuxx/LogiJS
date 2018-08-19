@@ -95,6 +95,7 @@ function createDiode(x, y, state) {
     }
     let cp = isConPoint(x, y);
     if (cp >= 0) {
+		diodes[diodes.length - 1].cp = true;
         conpoints.splice(cp, 1);
     }
 }
