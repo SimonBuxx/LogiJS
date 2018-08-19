@@ -372,11 +372,12 @@ function mouseReleased() {
                             }
                         }
                         if (pushed) {
-							var oldSegments = JSON.parse(JSON.stringify(segments.slice(0)));
-							
-							for(let i = segments.length - 1; i >= 0; i--) {
-								oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
-							}
+
+                            let oldSegments = [];
+                            for(let i = segments.length - 1; i >= 0; i--) {
+								oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform); 
+							} 
+
                             pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
@@ -398,37 +399,37 @@ function mouseReleased() {
                         if (gateNumber >= 0) {
                             deleteGate(gateNumber);
                         }
-                        var customNumber = mouseOverCustom();
+                        let customNumber = mouseOverCustom();
                         if (customNumber >= 0) {
                             deleteCustom(customNumber);
                         }
-                        var outputNumber = mouseOverOutput();
+                        let outputNumber = mouseOverOutput();
                         if (outputNumber >= 0) {
                             deleteOutput(outputNumber);
                         }
-                        var inputNumber = mouseOverInput();
+                        let inputNumber = mouseOverInput();
                         if (inputNumber >= 0) {
                             deleteInput(inputNumber);
                         }
-                        var diodeNumber = mouseOverDiode();
+                        let diodeNumber = mouseOverDiode();
                         if (diodeNumber >= 0) {
                             deleteDiode(diodeNumber);
                         }
-                        var labelNumber = mouseOverLabel();
+                        let labelNumber = mouseOverLabel();
                         if (labelNumber >= 0) {
                             deleteLabel(labelNumber);
                         }
-                        var segDisNumber = mouseOverSegDisplay();
+                        let segDisNumber = mouseOverSegDisplay();
                         if (segDisNumber >= 0) {
                             deleteSegDisplay(segDisNumber);
                         }
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
-					
-                        var oldSegments = segments.slice(0);
-                        var existing = false;
+                        let oldSegments = segments.slice(0);
+                        let existing = false;
+
                         for (let i = pwSegments.length - 1; i >= 0; i--) {
-                            var exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
+                            let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
                             if (exists >= 0) {
                                 existing = true;
                                 segments.splice(exists, 1);
@@ -482,7 +483,7 @@ function mouseReleased() {
 function mouseOverGate() {
     // Iterate backwards so that in overlapping situations
     // the last added gets removed first
-    for (var i = gates.length - 1; i >= 0; i--) {
+    for (let i = gates.length - 1; i >= 0; i--) {
         if (gates[i].mouseOver()) {
             return i;
         }
@@ -493,7 +494,7 @@ function mouseOverGate() {
 function mouseOverCustom() {
     // Iterate backwards so that in overlapping situations
     // the last added gets removed first
-    for (var i = customs.length - 1; i >= 0; i--) {
+    for (let i = customs.length - 1; i >= 0; i--) {
         if (customs[i].mouseOver() && customs[i].visible) {
             return i;
         }
@@ -506,7 +507,7 @@ function mouseOverCustom() {
     Output number, if found, -1 else
 */
 function mouseOverOutput() {
-    for (var i = outputs.length - 1; i >= 0; i--) {
+    for (let i = outputs.length - 1; i >= 0; i--) {
         if (outputs[i].mouseOver()) {
             return i;
         }

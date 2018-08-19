@@ -9,12 +9,19 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'addCust':
-                for (var i = customs.length - 1; i >= 0; i--) {
+                let toDelete = null;
+                for (let i = customs.length - 1; i >= 0; i--) {
                     if (customs[i].visible) {
-                        customs.splice(i);
+                        toDelete = customs[i];
                         break;
                     }
                 }
+                for (let i = customs.length - 1; i >= 0; i--) {
+                    if (customs[i].pid === toDelete.id) {
+                        customs.splice(i, 1);
+                    }
+                }
+                customs.splice(customs.indexOf(toDelete));
                 actionRedo.push(act);
                 break;
             case 'addOut':
@@ -59,14 +66,13 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'delGate':
-                gates.push(act.actionObject[0]);
+                gates.splice(act.actionObject[1], 0, act.actionObject[0][0]);
                 actionRedo.push(act);
                 break;
             case 'delCust':
-                customs.push(act.actionObject[0]);
-                for (let i = 0; i < act.actionObject[0].responsibles.length; i++) {
-                    customs.push(act.actionObject[0].responsibles[i]);
-                }
+                customs.splice(act.actionObject[1], 0, act.actionObject[0][0]);
+                customs[act.actionObject[1]].loaded = false;
+                loadCustomFile(customs[act.actionObject[1]].filename, act.actionObject[1], act.actionObject[1]);
                 actionRedo.push(act);
                 break;
             case 'delOut':
@@ -91,14 +97,27 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'moveSel':
-				ctrlMode = "select";
-				handleSelection(act.actionIndizes[2],act.actionIndizes[3],act.actionIndizes[4],act.actionIndizes[5]);
-				showSClickBox = false;
+                ctrlMode = "select";
+                handleSelection(act.actionIndizes[2], act.actionIndizes[3], act.actionIndizes[4], act.actionIndizes[5]);
+                showSClickBox = false;
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
                 finishSelection();
-				ctrlMode = "none";
-				selection = [];
-				unmarkAll();
+                ctrlMode = "none";
+                selection = [];
+                unmarkAll();
+                actionRedo.push(act);
+                break;
+            case 'delSel':
+                for (let i = 0; i < act.actionObject[0][0].length; i++) {
+                    gates.splice(act.actionObject[0][1][i], 0, act.actionObject[0][0][i]);
+                }
+                /*for (let i = 0; i < act.actionObject[1][0].length; i++) {
+                    customs.splice(act.actionObject[1][1][i], 0, act.actionObject[1][0][i]);
+                    loadCustomFile(act.actionObject[1][0][i].filename, act.actionObject[1][1][i]);
+                    /*for (let i = 0; i < act.actionObject[0].responsibles.length; i++) {
+                        customs.push(act.actionObject[0].responsibles[i]);
+                    }
+                }*/
                 actionRedo.push(act);
                 break;
             case 'reWire':
@@ -125,7 +144,7 @@ function undo() {
 }
 
 function redo() {
-    var act = actionRedo.pop();
+    let act = actionRedo.pop();
     if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
@@ -134,10 +153,8 @@ function redo() {
                 break;
             case 'addCust':
                 customs.push(act.actionObject);
-                loadCustomFile(customs[customs.length - 1].filename, customs.length - 1);
-                for (var i = 0; i < act.actionObject.responsibles.length; i++) {
-                    customs.push(act.actionObject.responsibles[i]);
-                }
+                customs[customs.length - 1].loaded = false;
+                loadCustomFile(customs[customs.length - 1].filename, customs.length - 1, customs.length - 1);
                 actionUndo.push(act);
                 break;
             case 'addOut':
@@ -162,16 +179,17 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'delGate':
-                gates.pop();
+                gates.splice(act.actionObject[1], 1);
                 actionUndo.push(act);
                 break;
             case 'delCust':
+                let toDelete = act.actionObject[0][0];
                 for (let i = customs.length - 1; i >= 0; i--) {
-                    if (customs[i].visible) {
-                        customs.splice(i);
-                        break;
+                    if (customs[i].pid === toDelete.id) {
+                        customs.splice(i, 1);
                     }
                 }
+                customs.splice(customs.indexOf(toDelete), 1);
                 actionUndo.push(act);
                 break;
             case 'delOut':
@@ -216,14 +234,38 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'moveSel':
-				ctrlMode = "select";
-				handleSelection(act.actionIndizes[2]-act.actionIndizes[0],act.actionIndizes[3]-act.actionIndizes[1],act.actionIndizes[4]-act.actionIndizes[0],act.actionIndizes[5]-act.actionIndizes[1]);
-				showSClickBox = false;
+                ctrlMode = "select";
+                handleSelection(act.actionIndizes[2] - act.actionIndizes[0], act.actionIndizes[3] - act.actionIndizes[1], act.actionIndizes[4] - act.actionIndizes[0], act.actionIndizes[5] - act.actionIndizes[1]);
+                showSClickBox = false;
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
                 finishSelection();
-				ctrlMode = "none";
-				selection = [];
-				unmarkAll();
+                ctrlMode = "none";
+                selection = [];
+                unmarkAll();
+                actionUndo.push(act);
+                break;
+            case 'delSel':
+                for (let i = act.actionObject[0][1].length - 1; i >= 0; i--) {
+                    gates.splice(act.actionObject[0][1][i], 1);
+                }
+                /*let toDelete = null;
+                for (let i = act.actionObject[1][1].length - 1; i >= 0; i--) {
+                    /*for (let j = 0; j < customs.length; j++) {
+                        if (customs[j].visible && (JSON.stringify(customs[j]) === JSON.stringify(act.actionObject[1][0][i]))) {
+                            toDelete = customs[j];
+                            console.log(j);
+                            break;
+                        }
+                    }
+                    toDelete = customs.indexOf(act.actionObject[1][0][i]);
+                    console.log(toDelete);
+                    console.log(customs[toDelete].responsibles);
+                    for (const elem of customs[toDelete].responsibles) {
+                        console.log(customs.indexOf(elem));
+                        customs.splice(customs.indexOf(elem), 1);
+                    }
+                    customs.splice(customs.indexOf(act.actionObject[1][0][i]), 1);
+                }*/
                 actionUndo.push(act);
                 break;
             case 'reWire':
@@ -251,6 +293,4 @@ function redo() {
 function pushUndoAction(type, indizees, objects) {
     actionUndo.push(new Action(type, indizees, objects));
     actionRedo.pop();
-    //redoButton.elt.disabled = (actionRedo.length === 0);
-    //undoButton.elt.disabled = (actionUndo.length === 0);
 }

@@ -142,8 +142,6 @@ function setup() { // jshint ignore:line
     }, false);
 
     document.title = 'New Sketch - LogiJS';
-    console.log(windowWidth);
-    console.log(windowHeight);
 
 
     //Div for the Left Side Buttons
@@ -712,7 +710,7 @@ function clearActionStacks() {
 }
 
 function pushSelectAction(dx, dy, x1, y1, x2, y2) {
-    if ((dx !== 0 || dy !== 0) && selection.length > 0) {
+    if ((Math.abs(dx) >= GRIDSIZE || Math.abs(dy) >= GRIDSIZE) && selection.length > 0) {
         pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], selection);
     }
 }
@@ -726,101 +724,104 @@ function wiringClicked() {
 }
 
 function deleteClicked() {
-    // TODO: Implement deleting of the selection with one undo/redo event
+    // TODO: Implement deleting of the selection (with one undo/redo event)
     if (ctrlMode === 'select' && selectMode === 'end') {
-		
-		pushSelectAction(sDragX2 - initX, sDragY2 - initY,sClickBox.x-sClickBox.w/2, sClickBox.y-sClickBox.h/2,
-                                sClickBox.x+sClickBox.w/2, sClickBox.y+sClickBox.w/2);
-                            initX = -1;
-                            initY = -1;
-											
-		finishSelection();
+        //pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
+        //    sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
+        //initX = -1;
+        //initY = -1;
+        finishSelection();
+        ctrlMode = 'none';
         selectMode = 'end';
-		showSClickBox = false;
-		unmarkAll();
-		 let toDelete = selection;
-		 let futurePwSeagments = [];
-		 let undos = 0;
-		for (let i = 0; i < toDelete.length; i++) {
-			for (let j = gates.length - 1; j >= 0; j--) {
-				if (JSON.stringify(gates[j]) === JSON.stringify(toDelete[i])) {
-					deleteGate(j);
-					undos++;
-				}
-			}
-			for (let j = customs.length - 1; j >= 0; j--) {
-				if (JSON.stringify(customs[j]) === JSON.stringify(toDelete[i])) {
-					deleteCustom(j);
-					undos++;
-				}
-			}
-			for (let j = diodes.length - 1; j >= 0; j--) {
-				if (JSON.stringify(diodes[j]) === JSON.stringify(toDelete[i])) {
-					deleteDiode(j);
-					undos++;
-				}
-			}
-			for (let j = inputs.length - 1; j >= 0; j--) {
-				if (JSON.stringify(inputs[j]) === JSON.stringify(toDelete[i])) {
-					deleteInput(j);
-					undos++;
-				}
-			}
-			for (let j = labels.length - 1; j >= 0; j--) {
-				if (JSON.stringify(labels[j]) === JSON.stringify(toDelete[i])) {
-					deleteLabel(j);
-					undos++;
-				}
-			}
-			for (let j = outputs.length - 1; j >= 0; j--) {
-				if (JSON.stringify(outputs[j]) === JSON.stringify(toDelete[i])) {
-					deleteOutput(j);
-					undos++;
-				}
-			}
-			
-			for (let j = wires.length - 1; j >= 0; j--) {
-				if (JSON.stringify(wires[j]) === JSON.stringify(toDelete[i])) {
-					generateSegmentSet(wires[j].startX,wires[j].startY,wires[j].endX,wires[j].endY,0);
-					futurePwSeagments = futurePwSeagments.concat(pwSegments);
-				}
-			}
-			
-			
-        }
-		pwSegments = futurePwSeagments;
-			   
-		    var oldSegments = JSON.parse(JSON.stringify(segments.slice(0)));
-			
-			for(let i = segments.length - 1; i >= 0; i--) {
-				oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
-			}
-			
-            var existing = false;
-            for (let i = pwSegments.length - 1; i >= 0; i--) {
-                var exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
-                if (exists >= 0) {
-                    existing = true;
-                    segments.splice(exists, 1);
+        showSClickBox = false;
+        unmarkAll();
+        let delGates = [[], []];
+        let delCustoms = [[], []];
+        for (let i = 0; i < selection.length; i++) {
+            if (selection[i] instanceof LogicGate) {
+                delGates[0].push(selection[i]);
+                delGates[1].push(gates.indexOf(selection[i]));
+                /*for (let j = gates.length - 1; j >= 0; j--) {
+                    if (JSON.stringify(gates[j]) === JSON.stringify(selection[i])) {
+                        delGates[0].push(selection[i]); // Save the deleted gate for undo
+                        delGates[1].push(j); // Save the index to undo the action properly
+                    }
+                }*/
+            } else if (selection[i] instanceof CustomSketch) {
+                for (const elem of selection[i].responsibles) {
+                    customs.splice(customs.indexOf(elem), 1);
+                }
+                delCustoms[0].push(selection[i]);
+                delCustoms[1].push(customs.indexOf(selection[i]));
+            }
+            /*for (let j = customs.length; j >= 0; j--) {
+                if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
+                    for (const elem of customs[j].responsibles) {
+                        customs.splice(customs.indexOf(elem), 1);
+                        delCustoms[0].push(selection[i]);
+                        delCustoms[1].push(j);
+                    }
+                }
+            }*/
+            /*for (let j = customs.length; j >= 0; j--) {
+                if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
+                    delCustoms[0].push(selection[i]);
+                    delCustoms[1].push(j);
+                }
+            }*/
+            //console.log(customs);
+            /*for (let j = diodes.length - 1; j >= 0; j--) {
+                if (JSON.stringify(diodes[j]) === JSON.stringify(selection[i])) {
+                    diodes.splice(j, 1);
                 }
             }
-            if (existing) {
-                pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
-                findLines();
-				undos++;
+            for (let j = inputs.length - 1; j >= 0; j--) {
+                if (JSON.stringify(inputs[j]) === JSON.stringify(selection[i])) {
+                    inputs.splice(j, 1);
+                }
             }
-            pwSegments = [];
-            wireMode = 'none';
-            lockElements = false;
-			doConpoints();
-			pushUndoAction('multiple',0,[undos]);
+            for (let j = labels.length - 1; j >= 0; j--) {
+                if (JSON.stringify(labels[j]) === JSON.stringify(selection[i])) {
+                    labels.splice(j, 1);
+                }
+            }
+            for (let j = outputs.length - 1; j >= 0; j--) {
+                if (JSON.stringify(outputs[j]) === JSON.stringify(selection[i])) {
+                    outputs.splice(j, 1);
+                }
+            }
+            for (let j = wires.length - 1; j >= 0; j--) {
+                if (JSON.stringify(wires[j]) === JSON.stringify(selection[i])) {
+                    wires.splice(j, 1);
+                }
+            }
+            for (let j = segDisplays.length - 1; j >= 0; j--) {
+                if (JSON.stringify(segDisplays[j]) === JSON.stringify(selection[i])) {
+                    segDisplays.splice(j, 1);
+                }
+            }*/
+        }
+        for (let j = delGates[1].length - 1; j >= 0; j--) {
+            gates.splice(delGates[1][j], 1);
+        }
+        for (let j = delCustoms[1].length - 1; j >= 0; j--) {
+            customs.splice(delCustoms[1][j], 1);
+        }
+        pwSegments = [];
+        wireMode = 'none';
+        lockElements = false;
+        doConpoints();
+        if (selection.length > 0) {
+            pushUndoAction('delSel', 0, [delGates.slice(0), delCustoms.slice(0)/*, diodes.slice(0), inputs.slice(0), labels.slice(0), outputs.slice(0), wires.slice(0), segDisplays.slice(0)*/]);
+        }
     } else {
-    setControlMode('delete');
+        setControlMode('delete');
+
     }
 }
 
 /*
-    This triggeres when a label text was altered
+    This triggers when a label text was altered
 */
 function labelChanged() {
     labels[propLabel].alterText(labelTextBox.value()); // Alter the text of the selected label
@@ -1012,7 +1013,7 @@ function addGate(type, inputs, direction) {
     Adds a custom element and loads it file and sub-customs
 */
 function addCustom(file, direction) {
-    for (var i = 0; i < customs.length; i++) {
+    for (let i = 0; i < customs.length; i++) {
         if (customs[i].visible) {
             if ((customs[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
                 (customs[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
@@ -1020,8 +1021,9 @@ function addCustom(file, direction) {
             }
         }
     }
-    var newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
+    let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    console.log(newCustom);
     customs.push(newCustom);
     pushUndoAction('addCust', [], newCustom);
     loadCustomSketches();
@@ -1129,7 +1131,7 @@ function toggleDiode() {
     Deletes the given gate
 */
 function deleteGate(gateNumber) {
-    pushUndoAction('delGate', [], gates.splice(gateNumber, 1));
+    pushUndoAction('delGate', [], [gates.splice(gateNumber, 1), gateNumber]);
     reDraw();
 }
 
@@ -1137,10 +1139,13 @@ function deleteGate(gateNumber) {
     Deletes the given custom
 */
 function deleteCustom(customNumber) {
-    for (const elem of customs[customNumber].responsibles) {
-        customs.splice(customs.indexOf(elem), 1);
+    console.log('deleting custom ' + customs[customNumber].id);
+    for (let i = customs.length - 1; i >= 0; i--) {
+        if (customs[i].pid === customs[customNumber].id) {
+            customs.splice(i, 1);
+        }
     }
-    pushUndoAction('delCust', [], customs.splice(customNumber, 1));
+    pushUndoAction('delCust', [], [customs.splice(customNumber, 1), customNumber]);
     reDraw();
 }
 
@@ -1680,6 +1685,9 @@ function keyPressed() {
             case ESCAPE:
                 setControlMode('none');
                 setPropMode(true);
+                break;
+            case RETURN:
+                console.log(customs);
                 break;
             default:
         }

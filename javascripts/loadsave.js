@@ -125,10 +125,10 @@ function load(loadData) {
                         segments.push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
                             false, transform));
                     }
+                } else {
+                    console.log('JSON file is corrupted!');
                 }
-            } else {
-                console.log('JSON file is corrupted!');
-            }
+            } 
         }
     }
     for (let i = 0; i < loadData.conpoints.length; i++) {
@@ -163,14 +163,14 @@ function load(loadData) {
 /*
     Loads the sketch with filename file into custom object # num
 */
-function loadCustomFile(file, num) {
-    loadJSON('sketches/' + file, function (loadData) { return loadCustom(loadData, num); });
+function loadCustomFile(file, num, hlparent) {
+    loadJSON('sketches/' + file, function (loadData) { return loadCustom(loadData, num, hlparent); });
 }
 
 /*
     Invoked by loadCustomFile when the json is fully loaded
 */
-function loadCustom(loadData, num) {
+function loadCustom(loadData, num, hlparent) {
     let params = [[], [], [], [], [], [], []]; // [] x Number of different objects
     let trans = new Transformation(0, 0, 1);
     for (let i = 0; i < loadData.gates.length; i++) {
@@ -226,9 +226,9 @@ function loadCustom(loadData, num) {
                         params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
                             false, transform));
                     }
+                } else {
+                    console.log('JSON file is corrupted!');
                 }
-            } else {
-                console.log('JSON file is corrupted!');
             }
         }
     }
@@ -244,9 +244,10 @@ function loadCustom(loadData, num) {
         customs[customs.length - 1].setCoordinates(JSON.parse(loadData.customs[i].x) / trans.zoom - trans.dx, JSON.parse(loadData.customs[i].y) / trans.zoom - trans.dy);
         customs[customs.length - 1].updateClickBoxes();
         customs[customs.length - 1].visible = false;
+        customs[customs.length - 1].setParentID(customs[hlparent].id);
         customs[customs.length - 1].loaded = true;
         customs[num].responsibles.push(customs[customs.length - 1]);
-        loadCustomFile(customs[customs.length - 1].filename, customs.length - 1);
+        loadCustomFile(customs[customs.length - 1].filename, customs.length - 1, num);
         params[CUSTNUM][i] = customs[customs.length - 1];
     }
     customs[num].setSketchParams(params);
@@ -261,7 +262,7 @@ function loadCustom(loadData, num) {
 function loadCustomSketches() {
     for (let i = 0; i < customs.length; i++) {
         if (!customs[i].loaded) {
-            loadCustomFile(customs[i].filename, i);
+            loadCustomFile(customs[i].filename, i, i);
         }
     }
 }
