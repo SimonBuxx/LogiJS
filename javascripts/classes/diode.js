@@ -5,7 +5,7 @@ function Diode(x, y, state, transform) {
     this.y = y; // Y position
     this.transform = transform;
     this.state = state; // State of the diode
-
+	this.cp = false;
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
 

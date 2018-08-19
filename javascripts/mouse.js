@@ -372,10 +372,12 @@ function mouseReleased() {
                             }
                         }
                         if (pushed) {
+
                             let oldSegments = [];
                             for(let i = segments.length - 1; i >= 0; i--) {
 								oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform); 
 							} 
+
                             pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
@@ -425,6 +427,7 @@ function mouseReleased() {
                     if (wireMode === 'delete') { // A wire should be deleted
                         let oldSegments = segments.slice(0);
                         let existing = false;
+
                         for (let i = pwSegments.length - 1; i >= 0; i--) {
                             let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
                             if (exists >= 0) {
