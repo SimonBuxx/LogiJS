@@ -49,8 +49,6 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetica Neu
     -o-background-size: cover;
     background-size: cover;
     display: block;
-    filter: blur(7px);
-    -webkit-filter: blur(7px);
     position: fixed;
     left: 0;
     right: 0;
