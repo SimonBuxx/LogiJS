@@ -38,7 +38,14 @@ function undo() {
                 break;
             case 'addDi':
                 actionRedo.push(act);
-                diodes.pop();
+                let x = diodes[diodes.length - 1].x;
+                let y = diodes[diodes.length - 1].y;
+                if (diodes[diodes.length - 1].cp) {
+                    diodes.pop();
+                    createConpoint(x, y, false, -1);
+                } else {
+                    diodes.pop();
+                }
                 doConpoints();
                 break;
             case 'addLabel':
@@ -196,8 +203,15 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'delDi':
-                diodes.pop();
-                actionUndo.push(act[0]);
+                actionUndo.push(act);
+                let x = diodes[diodes.length - 1].x;
+                let y = diodes[diodes.length - 1].y;
+                if (diodes[diodes.length - 1].cp) {
+                    diodes.pop();
+                    createConpoint(x, y, false, -1);
+                } else {
+                    diodes.pop();
+                }
                 doConpoints();
                 break;
             case 'delLabel':

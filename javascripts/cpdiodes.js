@@ -57,6 +57,7 @@ function segmentEndsIn(x, y) {
 */
 function createConpoint(x, y, state, g) {
     if ((isConPoint(x, y) < 0) && (isDiode(x, y) < 0)) {
+        console.log('Pushing a conpoint');
         conpoints.push(new ConPoint(x, y, state, g));
     }
 }
@@ -92,10 +93,12 @@ function createDiode(x, y, state) {
         diodes.push(new Diode(x, y, state, transform));
         diodes[diodes.length - 1].updateClickBox();
         pushUndoAction('addDi', [], diodes[diodes.length - 1]);
-    }
-    let cp = isConPoint(x, y);
-    if (cp >= 0) {
-        conpoints.splice(cp, 1);
+        let cp = isConPoint(x, y);
+        if (cp >= 0) {
+            console.log('Top diode is over conpoint');
+            diodes[diodes.length - 1].cp = true;
+            conpoints.splice(cp, 1);
+        }
     }
 }
 

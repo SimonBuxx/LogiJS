@@ -1046,7 +1046,6 @@ function addCustom(file, direction) {
     }
     let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    console.log(newCustom);
     customs.push(newCustom);
     pushUndoAction('addCust', [], newCustom);
     loadCustomSketches();
@@ -1192,7 +1191,16 @@ function deleteInput(inputNumber) {
     Deletes the given diode
 */
 function deleteDiode(diodeNumber) {
-    pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+    if (diodes[diodeNumber].cp) {
+        let x = diodes[diodeNumber].x;
+        let y = diodes[diodeNumber].y;
+        console.log('conpoint under deleted diode, restoring');
+        pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+        createConpoint(x, y, false, -1);
+    }
+    else {
+        pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+    }
     doConpoints(); // Conpoints under diodes should appear again
     reDraw();
 }
