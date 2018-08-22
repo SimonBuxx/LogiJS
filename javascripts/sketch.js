@@ -86,7 +86,7 @@ let propInput = -1;
 let propOutput = -1;
 let propLabel = -1;
 
-let showHints = true;
+let showHints;
 let hintNum = 0;
 let closeHintsButton, nextHintButton;
 let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
@@ -518,6 +518,7 @@ function setup() { // jshint ignore:line
     closeHintsButton = createButton('Close Hints');
     closeHintsButton.position(370, windowHeight - 45);
     closeHintsButton.mousePressed(function () {
+        document.cookie = "ClosedHint=true";
         showHints = false;
         hintNum = 0;
         closeHintsButton.hide();
@@ -625,6 +626,15 @@ function setup() { // jshint ignore:line
     if (loadfile !== "") {
         document.title = String(loadfile + ' - LogiJS');
         loadSketch(loadfile + '.json');
+    }
+    //Hide hints if there is a cookie 
+    if ((getCookieValue("ClosedHint") === "true")) {
+        showHints = false;
+        closeHintsButton.hide();
+        nextHintButton.hide();
+    }
+    else {
+        showHints = true;
     }
     reDraw();
     setTimeout(reDraw, 50); // Redraw after 50 ms in case fonts weren't loaded on first redraw
@@ -757,16 +767,17 @@ function deleteClicked() {
         unmarkAll();
         let delGates = [[], []];
         let delCustoms = [[], []];
+        let delDiodes = [[], []];
+        let delInputs = [[], []];
+        let delLabels = [[], []];
+        let delOutputs = [[], []];
+        let delWires = [[], []];
+        let delSegDisplays = [[], []];
+        let delConpoints = [[], []];
         for (let i = 0; i < selection.length; i++) {
             if (selection[i] instanceof LogicGate) {
                 delGates[0].push(selection[i]);
                 delGates[1].push(gates.indexOf(selection[i]));
-                /*for (let j = gates.length - 1; j >= 0; j--) {
-                    if (JSON.stringify(gates[j]) === JSON.stringify(selection[i])) {
-                        delGates[0].push(selection[i]); // Save the deleted gate for undo
-                        delGates[1].push(j); // Save the index to undo the action properly
-                    }
-                }*/
             } else if (selection[i] instanceof CustomSketch) {
                 for (const elem of selection[i].responsibles) {
                     customs.splice(customs.indexOf(elem), 1);
@@ -774,52 +785,34 @@ function deleteClicked() {
                 delCustoms[0].push(selection[i]);
                 delCustoms[1].push(customs.indexOf(selection[i]));
             }
-            /*for (let j = customs.length; j >= 0; j--) {
-                if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
-                    for (const elem of customs[j].responsibles) {
-                        customs.splice(customs.indexOf(elem), 1);
-                        delCustoms[0].push(selection[i]);
-                        delCustoms[1].push(j);
-                    }
-                }
-            }*/
-            /*for (let j = customs.length; j >= 0; j--) {
-                if (JSON.stringify(customs[j]) === JSON.stringify(selection[i])) {
-                    delCustoms[0].push(selection[i]);
-                    delCustoms[1].push(j);
-                }
-            }*/
-            //console.log(customs);
-            /*for (let j = diodes.length - 1; j >= 0; j--) {
-                if (JSON.stringify(diodes[j]) === JSON.stringify(selection[i])) {
-                    diodes.splice(j, 1);
-                }
+            else if (selection[i] instanceof Diode) {
+                delDiodes[0].push(selection[i]);
+                delDiodes[1].push(diodes.indexOf(selection[i]));
             }
-            for (let j = inputs.length - 1; j >= 0; j--) {
-                if (JSON.stringify(inputs[j]) === JSON.stringify(selection[i])) {
-                    inputs.splice(j, 1);
-                }
+            else if (selection[i] instanceof Input) {
+                delInputs[0].push(selection[i]);
+                delInputs[1].push(inputs.indexOf(selection[i]));
             }
-            for (let j = labels.length - 1; j >= 0; j--) {
-                if (JSON.stringify(labels[j]) === JSON.stringify(selection[i])) {
-                    labels.splice(j, 1);
-                }
+            else if (selection[i] instanceof Label) {
+                delLabels[0].push(selection[i]);
+                delLabels[1].push(labels.indexOf(selection[i]));
             }
-            for (let j = outputs.length - 1; j >= 0; j--) {
-                if (JSON.stringify(outputs[j]) === JSON.stringify(selection[i])) {
-                    outputs.splice(j, 1);
-                }
+            else if (selection[i] instanceof Output) {
+                delOutputs[0].push(selection[i]);
+                delOutputs[1].push(outputs.indexOf(selection[i]));
             }
-            for (let j = wires.length - 1; j >= 0; j--) {
-                if (JSON.stringify(wires[j]) === JSON.stringify(selection[i])) {
-                    wires.splice(j, 1);
-                }
+            else if (selection[i] instanceof WSeg) {
+                delWires[0].push(selection[i]);
+                delWires[1].push(wires.indexOf(selection[i]));
             }
-            for (let j = segDisplays.length - 1; j >= 0; j--) {
-                if (JSON.stringify(segDisplays[j]) === JSON.stringify(selection[i])) {
-                    segDisplays.splice(j, 1);
-                }
-            }*/
+            else if (selection[i] instanceof SegmentDisplay) {
+                delSegDisplays[0].push(selection[i]);
+                delSegDisplays[1].push(segDisplays.indexOf(selection[i]));
+            }
+            else if (selection[i] instanceof ConPoint) {
+                delConpoints[0].push(selection[i]);
+                delConpoints[1].push(conpoints.indexOf(selection[i]));
+            }
         }
         for (let j = delGates[1].length - 1; j >= 0; j--) {
             gates.splice(delGates[1][j], 1);
@@ -827,12 +820,53 @@ function deleteClicked() {
         for (let j = delCustoms[1].length - 1; j >= 0; j--) {
             customs.splice(delCustoms[1][j], 1);
         }
+        for (let j = delDiodes[1].length - 1; j >= 0; j--) {
+            diodes.splice(delDiodes[1][j], 1);
+        }
+        for (let j = delInputs[1].length - 1; j >= 0; j--) {
+            inputs.splice(delInputs[1][j], 1);
+        }
+        for (let j = delLabels[1].length - 1; j >= 0; j--) {
+            labels.splice(delLabels[1][j], 1);
+        }
+        for (let j = delOutputs[1].length - 1; j >= 0; j--) {
+            outputs.splice(delOutputs[1][j], 1);
+        }
+        for (let j = delWires[1].length - 1; j >= 0; j--) {
+            console.log(delWires[0][j]);
+            let segSelection = [];
+            if (delWires[0][j].startX === delWires[0][j].endX) {
+                // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+                for (let k = 0; k < (delWires[0][j].endY - delWires[0][j].startY) / GRIDSIZE; k++) {
+                    segSelection.push(new WSeg(1, delWires[0][j].startX, delWires[0][j].startY + k * GRIDSIZE,
+                        false, transform));
+                }
+            } else if (delWires[0][j].startY === delWires[0][j].endY) {
+                console.log('Hor');
+                // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+                for (let k = 0; k < (delWires[0][j].endX - delWires[0][j].startX) / GRIDSIZE; k++) {
+                    segSelection.push(new WSeg(0, delWires[0][j].startX + k * GRIDSIZE, delWires[0][j].startY,
+                        false, transform));
+                }
+            }
+            console.log(segSelection);
+            //wires.splice(delWires[1][j], 1);
+            for (let k = 0; k < segSelection.length; k++) {
+                segments.splice(segments.indexOf(segSelection[k]), 1);
+            }
+        }
+        for (let j = delSegDisplays[1].length - 1; j >= 0; j--) {
+            segDisplays.splice(delSegDisplays[1][j], 1);
+        }
+        for (let j = delConpoints[1].length - 1; j >= 0; j--) {
+            conpoints.splice(delConpoints[1][j], 1);
+        }
         pwSegments = [];
         wireMode = 'none';
         lockElements = false;
         doConpoints();
         if (selection.length > 0) {
-            pushUndoAction('delSel', 0, [delGates.slice(0), delCustoms.slice(0)/*, diodes.slice(0), inputs.slice(0), labels.slice(0), outputs.slice(0), wires.slice(0), segDisplays.slice(0)*/]);
+            pushUndoAction('delSel', 0, [delGates.slice(0), delCustoms.slice(0), diodes.slice(0), inputs.slice(0), labels.slice(0), outputs.slice(0), wires.slice(0), segDisplays.slice(0), conpoints.slice(0)]);
         }
     } else {
         setControlMode('delete');
@@ -1089,7 +1123,6 @@ function addCustom(file, direction) {
     }
     let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    console.log(newCustom);
     customs.push(newCustom);
     pushUndoAction('addCust', [], newCustom);
     loadCustomSketches();
@@ -1236,7 +1269,15 @@ function deleteInput(inputNumber) {
     Deletes the given diode
 */
 function deleteDiode(diodeNumber) {
-    pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+    if (diodes[diodeNumber].cp) {
+        let x = diodes[diodeNumber].x;
+        let y = diodes[diodeNumber].y;
+        pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+        createConpoint(x, y, false, -1);
+    }
+    else {
+        pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+    }
     doConpoints(); // Conpoints under diodes should appear again
     reDraw();
 }
@@ -1424,7 +1465,7 @@ function draw() {
     }
 
     // If wire preview is active, generate a segment set and display the preview segments
-    // When the mode is delete, mark the wire by drawing it in blue
+    // When the mode is delete, mark the wire by drawing it in red
     if (wireMode === 'preview' || wireMode === 'delete') {
         reDraw();
         scale(transform.zoom);
@@ -1754,7 +1795,8 @@ function keyPressed() {
                 setPropMode(true);
                 break;
             case RETURN:
-                console.log(customs);
+                console.log(wires);
+                console.log(segments);
                 break;
             default:
         }
@@ -1799,4 +1841,9 @@ function drawGrid() {
     for (let j = Math.round(transform.dy % GRIDSIZE); j < height / transform.zoom; j += GRIDSIZE) { // Horizontal lines
         line(0, j, width / transform.zoom, j);
     }
+}
+
+function getCookieValue(a) {
+    var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+    return b ? b.pop() : '';
 }

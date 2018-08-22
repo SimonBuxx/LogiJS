@@ -86,7 +86,8 @@ function handleSelection(x1, y1, x2, y2) {
         }
     }
     selection = selection.concat(wireSelection);
-    selection = selection.concat(segSelection);
+    //selection = selection.concat(segSelection);
+    console.log(selection);
 }
 
 /*
