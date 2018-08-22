@@ -85,7 +85,7 @@ let propInput = -1;
 let propOutput = -1;
 let propLabel = -1;
 
-let showHints = true;
+let showHints;
 let hintNum = 0;
 let closeHintsButton, nextHintButton;
 let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
@@ -515,6 +515,7 @@ function setup() { // jshint ignore:line
     closeHintsButton = createButton('Close Hints');
     closeHintsButton.position(370, windowHeight - 45);
     closeHintsButton.mousePressed(function () {
+        document.cookie = "ClosedHint=true";
         showHints = false;
         hintNum = 0;
         closeHintsButton.hide();
@@ -622,6 +623,15 @@ function setup() { // jshint ignore:line
     if (loadfile !== "") {
         document.title = String(loadfile + ' - LogiJS');
         loadSketch(loadfile + '.json');
+    }
+    //Hide hints if there is a cookie 
+    if ((getCookieValue("ClosedHint") === "true")) {
+        showHints = false;
+        closeHintsButton.hide();
+        nextHintButton.hide();
+    }
+    else {
+        showHints = true;
     }
     reDraw();
     setTimeout(reDraw, 50); // Redraw after 50 ms in case fonts weren't loaded on first redraw
@@ -1194,7 +1204,6 @@ function deleteDiode(diodeNumber) {
     if (diodes[diodeNumber].cp) {
         let x = diodes[diodeNumber].x;
         let y = diodes[diodeNumber].y;
-        console.log('conpoint under deleted diode, restoring');
         pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
         createConpoint(x, y, false, -1);
     }
@@ -1764,4 +1773,9 @@ function drawGrid() {
     for (let j = Math.round(transform.dy % GRIDSIZE); j < height / transform.zoom; j += GRIDSIZE) { // Horizontal lines
         line(0, j, width / transform.zoom, j);
     }
+}
+
+function getCookieValue(a) {
+    var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+    return b ? b.pop() : '';
 }

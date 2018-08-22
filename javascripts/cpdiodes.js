@@ -57,7 +57,6 @@ function segmentEndsIn(x, y) {
 */
 function createConpoint(x, y, state, g) {
     if ((isConPoint(x, y) < 0) && (isDiode(x, y) < 0)) {
-        console.log('Pushing a conpoint');
         conpoints.push(new ConPoint(x, y, state, g));
     }
 }
