@@ -27,8 +27,8 @@ function CustomSketch(x, y, transform, direction, file) {
     this.outputsInv = []; // true, if output is inverted
 
     this.responsibles = []; // Contains all custom objects that are included in this custom
-                            // This custom object is responsible for a certain amount of other custom objects
-                            // that are managed by the main sketch
+    // This custom object is responsible for a certain amount of other custom objects
+    // that are managed by the main sketch
 
     // Variables for wire tracing (Wires are grouped as in sketch.js)
     this.traced = [];
@@ -88,9 +88,10 @@ CustomSketch.prototype.setCoordinates = function (nx, ny) {
 /*
     Updates width and height of the object and all clickboxes
 */
+
 CustomSketch.prototype.reSize = function () {
     let tops = 0;
-    for(const elem of this.objects[INPNUM]) {
+    for (const elem of this.objects[INPNUM]) {
         if (elem.isTop) {
             tops++;
         }
@@ -98,13 +99,12 @@ CustomSketch.prototype.reSize = function () {
     this.tops = tops;
     if (this.direction % 2 === 0) {
         this.w = 2 * GRIDSIZE + Math.max(this.tops - 1, 0) * GRIDSIZE;
-        this.h = GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
-
+        this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
     } else {
-        this.w = GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
+        this.w = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
         this.h = 2 * GRIDSIZE + Math.max(this.tops - 1, 0) * GRIDSIZE;
     }
-    this.height = Math.max(this.inputCount - this.tops, this.outputCount);
+    this.height = Math.max(this.inputCount - this.tops, this.outputCount) + 1;
     this.updateClickBoxes();
 };
 
@@ -646,8 +646,16 @@ CustomSketch.prototype.updateClickBoxes = function () {
         this.outputClickBoxes[i].setTransform(this.transform);
     }
     // Update position and size of the global clickbox of the custom object
-    this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2 + GRIDSIZE / 2);
-    this.gClickBox.updateSize(this.w, this.h);
+    this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2);
+    if (this.tops === 0) {
+        if (this.direction % 2 === 0) {
+            this.gClickBox.updateSize(this.w, this.h - GRIDSIZE);
+        } else {
+            this.gClickBox.updateSize(this.w - GRIDSIZE, this.h);
+        }
+    } else {
+        this.gClickBox.updateSize(this.w, this.h);
+    }
     this.gClickBox.setTransform(this.transform);
 };
 
@@ -702,21 +710,21 @@ CustomSketch.prototype.show = function () {
     // Draw the body
     if (this.tops === 0) {
         if (this.direction % 2 === 0) {
-            rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h);
+            rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE);
         } else {
-            rect(this.x + GRIDSIZE / 2, this.y, this.w, this.h);
+            rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h);
         }
     } else {
         rect(this.x, this.y, this.w, this.h);
     }
 
     noStroke();
-    textSize(10);
-    text(this.id, this.x + this.w/2, this.y);
+    //textSize(10);
+    //text(this.id, this.x + this.w / 2, this.y);
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
-    text(this.caption, this.x + this.w / 2, this.y + this.h / 2 + GRIDSIZE / 2); // Draw text
+    text(this.caption, this.x + this.w / 2, this.y + this.h / 2); // Draw text
 
     let tops = 0;
     // Draw inputs
@@ -952,7 +960,7 @@ CustomSketch.prototype.show = function () {
     // Uncomment to show global clickbox
     // this.gClickBox.markClickBox();
     // Uncomment to show clickboxes of in- and outputs
-    /* 
+    /*
     for (let i = 0; i < this.inputClickBoxes.length; i++) {
         this.inputClickBoxes[i].markClickBox();
     }

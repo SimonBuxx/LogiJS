@@ -296,8 +296,8 @@ LogicGate.prototype.show = function () {
     }
 
     noStroke();
-    textSize(10);
-    text(this.id, this.x + this.w/2, this.y);
+    //textSize(10);
+    //text(this.id, this.x + this.w/2, this.y);
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);

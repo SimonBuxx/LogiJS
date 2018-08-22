@@ -111,13 +111,11 @@ function undo() {
                 for (let i = 0; i < act.actionObject[0][0].length; i++) {
                     gates.splice(act.actionObject[0][1][i], 0, act.actionObject[0][0][i]);
                 }
-                /*for (let i = 0; i < act.actionObject[1][0].length; i++) {
+                for (let i = 0; i < act.actionObject[1][0].length; i++) {
                     customs.splice(act.actionObject[1][1][i], 0, act.actionObject[1][0][i]);
-                    loadCustomFile(act.actionObject[1][0][i].filename, act.actionObject[1][1][i]);
-                    /*for (let i = 0; i < act.actionObject[0].responsibles.length; i++) {
-                        customs.push(act.actionObject[0].responsibles[i]);
-                    }
-                }*/
+                    customs[act.actionObject[1][1][i]].loaded = false;
+                    loadCustomFile(customs[act.actionObject[1][1][i]].filename, act.actionObject[1][1][i], act.actionObject[1][1][i]);
+                }
                 actionRedo.push(act);
                 break;
             case 'reWire':
@@ -241,24 +239,15 @@ function redo() {
                 for (let i = act.actionObject[0][1].length - 1; i >= 0; i--) {
                     gates.splice(act.actionObject[0][1][i], 1);
                 }
-                /*let toDelete = null;
                 for (let i = act.actionObject[1][1].length - 1; i >= 0; i--) {
-                    /*for (let j = 0; j < customs.length; j++) {
-                        if (customs[j].visible && (JSON.stringify(customs[j]) === JSON.stringify(act.actionObject[1][0][i]))) {
-                            toDelete = customs[j];
-                            console.log(j);
-                            break;
+                    let toDelete = act.actionObject[1][0][i];
+                    for (let j = customs.length - 1; j >= 0; j--) {
+                        if (customs[j].pid === toDelete.id) {
+                            customs.splice(j, 1);
                         }
                     }
-                    toDelete = customs.indexOf(act.actionObject[1][0][i]);
-                    console.log(toDelete);
-                    console.log(customs[toDelete].responsibles);
-                    for (const elem of customs[toDelete].responsibles) {
-                        console.log(customs.indexOf(elem));
-                        customs.splice(customs.indexOf(elem), 1);
-                    }
-                    customs.splice(customs.indexOf(act.actionObject[1][0][i]), 1);
-                }*/
+                    customs.splice(customs.indexOf(toDelete), 1);
+                }
                 actionUndo.push(act);
                 break;
             case 'reWire':
