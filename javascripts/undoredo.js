@@ -38,7 +38,16 @@ function undo() {
                 break;
             case 'addDi':
                 actionRedo.push(act);
-                diodes.pop();
+				let x =diodes[diodes.length-1].x ;
+				let y = diodes[diodes.length-1].y;
+				if(diodes[diodes.length-1].cp ==true){
+					diodes.pop();
+					createConpoint(x, y, false, -1);
+					
+				}
+				else{
+					diodes.pop();
+				}
                 doConpoints();
                 break;
             case 'addLabel':
@@ -125,6 +134,13 @@ function undo() {
                 doConpoints();
                 findLines();
                 break;
+			case 'multiple':
+				
+				for(let i = act.actionObject[0] - 1; i >= 0; i--){
+					undo();
+				}
+				actionRedo.push(act);
+				break;
             default:
                 break;
         }
@@ -256,6 +272,13 @@ function redo() {
                 doConpoints();
                 findLines();
                 break;
+			case 'multiple':
+				
+				for(let i = act.actionObject[0] - 1; i >= 0; i--){
+					redo();
+				}
+				actionUndo.push(act);
+				break;
             default:
                 break;
         }

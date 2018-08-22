@@ -85,7 +85,8 @@ let propInput = -1;
 let propOutput = -1;
 let propLabel = -1;
 
-let showHints = true;
+let showHints  ;
+
 let hintNum = 0;
 let closeHintsButton, nextHintButton;
 let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
@@ -98,32 +99,34 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
 
 function preload() {
-    hintPic0 = loadImage('images/hint0.png');
-    hintPic1 = loadImage('images/hint1.png');
-    hintPic2 = loadImage('images/hint2.png');
-    hintPic3 = loadImage('images/hint3.png');
-    hintPic4 = loadImage('images/hint4.png');
-    hintPic5 = loadImage('images/hint5.png');
-    hintPic6 = loadImage('images/hint6.png');
-    hintPic7 = loadImage('images/hint7.png');
-    hintPic8 = loadImage('images/hint8.png');
-    hintPic9 = loadImage('images/hint9.png');
-    hintPic10 = loadImage('images/hint10.png');
-    hintPic11 = loadImage('images/hint11.png');
-    hintPic12 = loadImage('images/hint12.png');
-    hintPic13 = loadImage('images/hint13.png');
-    hintPic14 = loadImage('images/hint14.png');
-    hintPic15 = loadImage('images/hint15.png');
-    hintPic16 = loadImage('images/hint16.png');
-    hintPic17 = loadImage('images/hint17.png');
-    hintPic19 = loadImage('images/hint19.png');
-    hintPic20 = loadImage('images/hint20.png');
-    hintPic21 = loadImage('images/hint21.png');
-    hintPic22 = loadImage('images/hint22.png');
-    hintPic23 = loadImage('images/hint23.png');
-    hintPic24 = loadImage('images/hint24.png');
-    hintPic25 = loadImage('images/hint25.png');
-    hintPic26 = loadImage('images/hint26.png');
+   
+	
+	hintPic0 = loadImage('images/hint0.png');
+	hintPic1 = loadImage('images/hint1.png');
+	hintPic2 = loadImage('images/hint2.png');
+	hintPic3 = loadImage('images/hint3.png');
+	hintPic4 = loadImage('images/hint4.png');
+	hintPic5 = loadImage('images/hint5.png');
+	hintPic6 = loadImage('images/hint6.png');
+	hintPic7 = loadImage('images/hint7.png');
+	hintPic8 = loadImage('images/hint8.png');
+	hintPic9 = loadImage('images/hint9.png');
+	hintPic10 = loadImage('images/hint10.png');
+	hintPic11 = loadImage('images/hint11.png');
+	hintPic12 = loadImage('images/hint12.png');
+	hintPic13 = loadImage('images/hint13.png');
+	hintPic14 = loadImage('images/hint14.png');
+	hintPic15 = loadImage('images/hint15.png');
+	hintPic16 = loadImage('images/hint16.png');
+	hintPic17 = loadImage('images/hint17.png');
+	hintPic19 = loadImage('images/hint19.png');
+	hintPic20 = loadImage('images/hint20.png');
+	hintPic21 = loadImage('images/hint21.png');
+	hintPic22 = loadImage('images/hint22.png');
+	hintPic23 = loadImage('images/hint23.png');
+	hintPic24 = loadImage('images/hint24.png');
+	hintPic25 = loadImage('images/hint25.png');
+	hintPic26 = loadImage('images/hint26.png');
 }
 
 /*
@@ -515,6 +518,7 @@ function setup() { // jshint ignore:line
     closeHintsButton = createButton('Close Hints');
     closeHintsButton.position(370, windowHeight - 45);
     closeHintsButton.mousePressed(function () {
+		document.cookie = "ClosedHint=true";
         showHints = false;
         hintNum = 0;
         closeHintsButton.hide();
@@ -623,6 +627,17 @@ function setup() { // jshint ignore:line
         document.title = String(loadfile + ' - LogiJS');
         loadSketch(loadfile + '.json');
     }
+	//Hide hints if there is a cookie
+	if((getCookieValue("ClosedHint")=="true")){
+		showHints = false;
+		closeHintsButton.hide();
+		nextHintButton.hide();
+	}
+	else{
+		
+		showHints = true;
+		
+	}
     reDraw();
     setTimeout(reDraw, 50); // Redraw after 50 ms in case fonts weren't loaded on first redraw
 }
@@ -840,6 +855,7 @@ function deleteClicked() {
         }
     } else {
         setControlMode('delete');
+
     }
 }
 
@@ -1046,7 +1062,6 @@ function addCustom(file, direction) {
     }
     let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    console.log(newCustom);
     customs.push(newCustom);
     pushUndoAction('addCust', [], newCustom);
     loadCustomSketches();
@@ -1192,7 +1207,18 @@ function deleteInput(inputNumber) {
     Deletes the given diode
 */
 function deleteDiode(diodeNumber) {
-    pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+	let x =diodes[diodeNumber].x ;
+	let y = diodes[diodeNumber].y;
+	if(diodes[diodeNumber].cp ==true){
+		 pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+		createConpoint(x, y, false, -1);
+		
+	}
+	else{
+		 pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+	}
+   
+	
     doConpoints(); // Conpoints under diodes should appear again
     reDraw();
 }
@@ -1756,4 +1782,8 @@ function drawGrid() {
     for (let j = Math.round(transform.dy % GRIDSIZE); j < height / transform.zoom; j += GRIDSIZE) { // Horizontal lines
         line(0, j, width / transform.zoom, j);
     }
+}
+function getCookieValue(a) {
+    var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+    return b ? b.pop() : '';
 }
