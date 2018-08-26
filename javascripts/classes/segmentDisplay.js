@@ -12,6 +12,7 @@ function SegmentDisplay(x, y, transform, bits) {
     this.lowColor = color(50, 50, 50); // dark grey color
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs (red)
     this.markColor = color(150, 30, 30);   // Color for marked displays
+    this.alpha = 255;
 
     this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, this.transform);
     this.inputClickBoxes = [];
@@ -133,19 +134,23 @@ SegmentDisplay.prototype.update = function () {
 };
 
 /*
-    Draws the gate on the screen
+Draws the gate on the screen
 */
 SegmentDisplay.prototype.show = function () {
     stroke(0);
     if (this.marked) {
         fill(this.markColor);
     } else {
-        fill(255);
+        fill(255, 255);
     }
     strokeWeight(3);
+    
+    if(previewSymbol !== null && !mouseIsPressed && !this.marked){
+        fill(255, this.alpha);   
+    }
 
     rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h); // Draw body
-
+    
     noStroke();
     textSize(80);
     textAlign(CENTER, CENTER);
@@ -156,7 +161,7 @@ SegmentDisplay.prototype.show = function () {
     }
     txt += this.value.toString();
     text(txt, this.x + this.w / 2, this.y + this.h / 2);
-
+    
     // Draw inputs
     for (let i = 1; i <= this.inputCount; i++) {
         // Draw inputs
@@ -170,21 +175,22 @@ SegmentDisplay.prototype.show = function () {
             stroke(0);
             strokeWeight(3);
         }
-
+        
         this.x1 = this.x + (GRIDSIZE * i);
         this.y1 = this.y + this.h;
         this.x2 = this.x + (GRIDSIZE * i);
         this.y2 = this.y + this.h + 6;
         line(this.x1, this.y1, this.x2, this.y2);
-
+        
         fill(255);
         strokeWeight(2);
-
+        
         if (this.inputsInv[i - 1]) {
             ellipse(this.x1, this.y1 + this.h / 20, 10, 10);
         }
     }
-
+    
+    
     // TEMP: Show clickboxes of inputs
     /*for (let i = 0; i < this.inputClickBoxes.length; i++) {
         this.inputClickBoxes[i].markClickBox();

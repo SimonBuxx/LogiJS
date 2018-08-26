@@ -511,7 +511,10 @@ function setup() { // jshint ignore:line
     // Button to import as custom
     ascustomButton = createButton('Import');
     ascustomButton.position(windowWidth - 73, 4);
-    ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json'); });
+    ascustomButton.mousePressed(function () { 
+        previewSymbol = null;
+        return customClicked(textInput.value() + '.json'); 
+    });
     ascustomButton.elt.className = "button";
 
     // Button to close the hints
@@ -665,7 +668,7 @@ function saveClicked() {
         "/g" says to search through the whole string and replace "\s" (whitespace) by ""
         TODO: Delete all illegal characters
     */
-    if(textInput.value().replace(/\s/g, "") != ""){
+    if(textInput.value().replace(/\s/g, "") !== ""){
         selectMode = 'none';
         showSClickBox = false;
         previewSymbol = null;
@@ -674,6 +677,8 @@ function saveClicked() {
     } else {
         // TODO: Error should pop up as tooltip under textInput
         alert("Circuit name cannot be empty");
+        previewSymbol = null;
+        reDraw();
     }
 }
 
@@ -870,6 +875,8 @@ function deleteClicked() {
         }
     } else {
         setControlMode('delete');
+        previewSymbol = null;
+        reDraw();
     }
 }
 
@@ -899,6 +906,8 @@ function newGateInputNumber() {
 
 function newBitLength() {
     segBits = parseInt(bitSelect.value());
+    previewSymbol = new SegmentDisplay(mouseX, mouseY, transform, segBits);
+    previewSymbol.alpha = 100;
 }
 
 function newDirection() {
@@ -1022,6 +1031,8 @@ function segDisplayClicked() {
     addType = 'segDisplay';
     bitSelect.show();
     labelBits.show();
+    previewSymbol = new SegmentDisplay(mouseX, mouseY, transform, 4);
+    previewSymbol.alpha = 100;
 }
 
 // diodeClick is toggling the diodes,
@@ -1721,6 +1732,11 @@ function showElements() {
     for (const elem of gates) {
         elem.show();
     }
+
+    if(previewSymbol !== null){
+        previewSymbol.show();
+    }
+
     textFont('Open Sans');
     for (const elem of customs) {
         if (elem.visible) {

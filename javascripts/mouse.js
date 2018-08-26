@@ -105,12 +105,28 @@ function mouseMoved() {
     // Draws a preview of the gate, so the user will see where the gate will be placed
     // First checks whether and/or/xor gates or switch/button/clock are chosen 
     if(ctrlMode === 'addObject' && (addType === 'gate' && (gateType === 'and' || 
-        gateType === 'or' || gateType === 'xor') || addType === 'input' || addType === 'output') && !mouseOverGUI()){
+        gateType === 'or' || gateType === 'xor') || addType === 'input' || addType === 'output' || addType === 'segDisplay') && !mouseOverGUI()){
         // Prevents that a gate is created over an existing gate
-        for (let i = 0; i < gates.length; i++) {
-            if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+        for (let i = 0; i < gates.length + inputs.length + outputs.length + segDisplays.length; i++) {
+            if  (gates.length > 0) {
+                console.log("x: " + gates[i].x + " vs " + Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE + " und " + gates[i].y + " vs " + Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE + " transform.zoom " + transform.zoom + " transform.dx " + transform.dx);
+                if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
                 (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-                return;
+                    return;
+                }  
+            } else if (inputs.length > 0) {
+                console.log("x: " + inputs[i].x + " vs " + Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE + " und " + inputs[i].y + " vs " + Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+                if ((inputs[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+                       (inputs[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+                        return;
+                    }
+            
+            } else if (outputs.length > 0 && (outputs[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+                        (outputs[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+                            return;
+            } else if (segDisplays.length > 0 && (segDisplays[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+                        (segDisplays[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+                            return;
             }
         }
         // Changes preview gate coordinates according to mouse position
