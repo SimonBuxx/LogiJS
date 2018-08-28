@@ -744,7 +744,7 @@ function deleteClicked() {
         unmarkAll();
         let delGates = [[], []];
         let delCustoms = [[], []];
-        let delDiodes = [[], []];
+        //let delDiodes = [[], []];
         let delInputs = [[], []];
         let delLabels = [[], []];
         let delOutputs = [[], []];
@@ -761,10 +761,6 @@ function deleteClicked() {
                 }
                 delCustoms[0].push(selection[i]);
                 delCustoms[1].push(customs.indexOf(selection[i]));
-            }
-            else if (selection[i] instanceof Diode) {
-                delDiodes[0].push(selection[i]);
-                delDiodes[1].push(diodes.indexOf(selection[i]));
             }
             else if (selection[i] instanceof Input) {
                 delInputs[0].push(selection[i]);
@@ -802,9 +798,6 @@ function deleteClicked() {
         for (let j = delCustoms[1].length - 1; j >= 0; j--) {
             customs.splice(delCustoms[1][j], 1);
         }
-        for (let j = delDiodes[1].length - 1; j >= 0; j--) {
-            diodes.splice(delDiodes[1][j], 1);
-        }
         for (let j = delInputs[1].length - 1; j >= 0; j--) {
             inputs.splice(delInputs[1][j], 1);
         }
@@ -829,7 +822,7 @@ function deleteClicked() {
         wireMode = 'none';
         lockElements = false;
         if (selection.length > 0) {
-            pushUndoAction('delSel', 0, [delGates.slice(0), delCustoms.slice(0), delDiodes.slice(0), delInputs.slice(0), delLabels.slice(0), delOutputs.slice(0), delWires.slice(0), delSegDisplays.slice(0), conpoints.slice(0), delSegments.slice(0)]);
+            pushUndoAction('delSel', 0, [delGates.slice(0), delCustoms.slice(0), diodes.slice(0), delInputs.slice(0), delLabels.slice(0), delOutputs.slice(0), delWires.slice(0), delSegDisplays.slice(0), conpoints.slice(0), delSegments.slice(0)]);
         }
         doConpoints();
     } else {

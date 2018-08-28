@@ -125,9 +125,7 @@ function undo() {
                     customs[act.actionObject[1][1][i]].loaded = false;
                     loadCustomFile(customs[act.actionObject[1][1][i]].filename, act.actionObject[1][1][i], act.actionObject[1][1][i]);
                 }
-                for (let i = 0; i < act.actionObject[2][0].length; i++) {
-                    diodes.splice(act.actionObject[2][1][i], 0, act.actionObject[2][0][i]);
-                }
+                diodes = act.actionObject[2].slice(0);
                 for (let i = 0; i < act.actionObject[3][0].length; i++) {
                     inputs.splice(act.actionObject[3][1][i], 0, act.actionObject[3][0][i]);
                 }
