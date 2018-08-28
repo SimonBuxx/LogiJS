@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>LogiJS</title>
     <meta name="keywords" content="" />
@@ -10,6 +11,24 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300" rel="stylesheet" type="text/css">
     <link href="css/bootstrap.css" rel='stylesheet' type='text/css'>
     <link href="css/index_style.css" rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#323232",
+                        "text": "#ffffff"
+                    },
+                    "button": {
+                        "background": "#c83232",
+                        "text": "#ffffff"
+                    }
+                }
+            })
+        });
+    </script>
 </head>
 
 <body>
