@@ -37,3 +37,5 @@ const OUTPNUM = 1; // Index of the outputs
 const DINUM = 6; // Index of the diodes
 
 const BUTCOUNT = 10; // Number of frames the button should be high
+
+const HIST_LENGTH = 20; // Max number of undos possible

@@ -69,6 +69,9 @@ let propMode = false;
 
 let syncFramerate = true;
 
+let segIndizees = [];
+let wireIndizees = [];
+
 // GUI Elements
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
@@ -734,13 +737,7 @@ function wiringClicked() {
 }
 
 function deleteClicked() {
-    // TODO: Implement deleting of the selection (with one undo/redo event)
     if (ctrlMode === 'select' && selectMode === 'end') {
-        //pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
-        //    sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
-        //initX = -1;
-        //initY = -1;
-        finishSelection();
         ctrlMode = 'none';
         selectMode = 'end';
         showSClickBox = false;
@@ -752,8 +749,8 @@ function deleteClicked() {
         let delLabels = [[], []];
         let delOutputs = [[], []];
         let delWires = [[], []];
+        let delSegments = [[], []];
         let delSegDisplays = [[], []];
-        let delConpoints = [[], []];
         for (let i = 0; i < selection.length; i++) {
             if (selection[i] instanceof LogicGate) {
                 delGates[0].push(selection[i]);
@@ -781,17 +778,22 @@ function deleteClicked() {
                 delOutputs[0].push(selection[i]);
                 delOutputs[1].push(outputs.indexOf(selection[i]));
             }
+            // Filtering out wires and segments and pushing them into their arrays
             else if (selection[i] instanceof WSeg) {
-                delWires[0].push(selection[i]);
-                delWires[1].push(wires.indexOf(selection[i]));
+                // The last selection[] element is the # of wires, therefore
+                // all elements before that index are wires, the rest are segments
+                if (i < selection[selection.length - 1]) {
+                    delWires[0].push(selection[i]);
+                    // Find the index of the wire and push it
+                    delWires[1].push(wireIndizees.pop());
+                } else {
+                    delSegments[0].push(selection[i]);
+                    delSegments[1].push(segIndizees.pop());
+                }
             }
             else if (selection[i] instanceof SegmentDisplay) {
                 delSegDisplays[0].push(selection[i]);
                 delSegDisplays[1].push(segDisplays.indexOf(selection[i]));
-            }
-            else if (selection[i] instanceof ConPoint) {
-                delConpoints[0].push(selection[i]);
-                delConpoints[1].push(conpoints.indexOf(selection[i]));
             }
         }
         for (let j = delGates[1].length - 1; j >= 0; j--) {
@@ -813,43 +815,52 @@ function deleteClicked() {
             outputs.splice(delOutputs[1][j], 1);
         }
         for (let j = delWires[1].length - 1; j >= 0; j--) {
-            console.log(delWires[0][j]);
-            let segSelection = [];
-            if (delWires[0][j].startX === delWires[0][j].endX) {
-                // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-                for (let k = 0; k < (delWires[0][j].endY - delWires[0][j].startY) / GRIDSIZE; k++) {
-                    segSelection.push(new WSeg(1, delWires[0][j].startX, delWires[0][j].startY + k * GRIDSIZE,
-                        false, transform));
-                }
-            } else if (delWires[0][j].startY === delWires[0][j].endY) {
-                console.log('Hor');
-                // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-                for (let k = 0; k < (delWires[0][j].endX - delWires[0][j].startX) / GRIDSIZE; k++) {
-                    segSelection.push(new WSeg(0, delWires[0][j].startX + k * GRIDSIZE, delWires[0][j].startY,
-                        false, transform));
-                }
-            }
-            console.log(segSelection);
-            //wires.splice(delWires[1][j], 1);
-            for (let k = 0; k < segSelection.length; k++) {
-                segments.splice(segments.indexOf(segSelection[k]), 1);
-            }
+            //console.log('Deleting wire No. ' + delWires[1][j]);
+            wires.splice(delWires[1][j], 1);
+        }
+        for (let j = delSegments[1].length - 1; j >= 0; j--) {
+            //console.log('Deleting segment No. ' + delSegments[1][j]);
+            segments.splice(delSegments[1][j], 1);
         }
         for (let j = delSegDisplays[1].length - 1; j >= 0; j--) {
             segDisplays.splice(delSegDisplays[1][j], 1);
         }
-        for (let j = delConpoints[1].length - 1; j >= 0; j--) {
-            conpoints.splice(delConpoints[1][j], 1);
-        }
         pwSegments = [];
         wireMode = 'none';
         lockElements = false;
-        doConpoints();
         if (selection.length > 0) {
-            pushUndoAction('delSel', 0, [delGates.slice(0), delCustoms.slice(0), diodes.slice(0), inputs.slice(0), labels.slice(0), outputs.slice(0), wires.slice(0), segDisplays.slice(0), conpoints.slice(0)]);
+            pushUndoAction('delSel', 0, [delGates.slice(0), delCustoms.slice(0), delDiodes.slice(0), delInputs.slice(0), delLabels.slice(0), delOutputs.slice(0), delWires.slice(0), delSegDisplays.slice(0), conpoints.slice(0), delSegments.slice(0)]);
         }
+        doConpoints();
     } else {
         setControlMode('delete');
+    }
+}
+
+let cWires, cSegments, cConpoints;
+
+function startCheck() {
+    cWires = wires.slice(0);
+    cSegments = segments.slice(0);
+    cConpoints = conpoints.slice(0);
+}
+
+function endCheck() {
+    console.log('State Checks: ');
+    if (JSON.stringify(cWires) === JSON.stringify(wires)) {
+        console.log('Wire state check passed');
+    } else {
+        console.error('Wire state check failed!');
+    }
+    if (JSON.stringify(cSegments) === JSON.stringify(segments)) {
+        console.log('Segment state check passed');
+    } else {
+        console.error('Segment state check failed!');
+    }
+    if (JSON.stringify(cConpoints) === JSON.stringify(conpoints)) {
+        console.log('Conpoint state check passed');
+    } else {
+        console.error('Conpoint state check failed!');
     }
 }
 
@@ -1171,7 +1182,6 @@ function deleteGate(gateNumber) {
     Deletes the given custom
 */
 function deleteCustom(customNumber) {
-    console.log('deleting custom ' + customs[customNumber].id);
     for (let i = customs.length - 1; i >= 0; i--) {
         if (customs[i].pid === customs[customNumber].id) {
             customs.splice(i, 1);
@@ -1404,7 +1414,7 @@ function draw() {
         translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
         if (!mouseOverGUI()) {
             generateSegmentSet(pwstartX, pwstartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
-                Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, 0);
+                Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
             // Display preview segments
             for (const elem of pwSegments) {
                 elem.show(wireMode === 'delete');
