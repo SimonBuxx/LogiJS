@@ -4,7 +4,7 @@ function WSeg(dir, startX, startY, state, transform) {
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
 
-    this.state = state; // Wire state (0 low, 1 high);
+    this.state = state; // Wire state (false low, true high);
 
     this.direction = dir; // 0 or 1, meaning horizontal or vertical
     this.transform = transform;

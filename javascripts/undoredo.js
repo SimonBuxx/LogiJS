@@ -2,6 +2,8 @@
 
 function undo() {
     let act = actionUndo.pop();
+    console.log('undo');
+    console.log(act);
     if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
@@ -103,7 +105,7 @@ function undo() {
                 labels.push(act.actionObject[0]);
                 actionRedo.push(act);
                 break;
-            case 'moveSel':
+            case 'moveSel': // Broken
                 ctrlMode = "select";
                 handleSelection(act.actionIndizes[2], act.actionIndizes[3], act.actionIndizes[4], act.actionIndizes[5]);
                 showSClickBox = false;
@@ -123,6 +125,27 @@ function undo() {
                     customs[act.actionObject[1][1][i]].loaded = false;
                     loadCustomFile(customs[act.actionObject[1][1][i]].filename, act.actionObject[1][1][i], act.actionObject[1][1][i]);
                 }
+                diodes = act.actionObject[2].slice(0);
+                for (let i = 0; i < act.actionObject[3][0].length; i++) {
+                    inputs.splice(act.actionObject[3][1][i], 0, act.actionObject[3][0][i]);
+                }
+                for (let i = 0; i < act.actionObject[4][0].length; i++) {
+                    labels.splice(act.actionObject[4][1][i], 0, act.actionObject[4][0][i]);
+                }
+                for (let i = 0; i < act.actionObject[5][0].length; i++) {
+                    outputs.splice(act.actionObject[5][1][i], 0, act.actionObject[5][0][i]);
+                }
+                for (let i = 0; i < act.actionObject[6][0].length; i++) {
+                    wires.splice(act.actionObject[6][1][i], 0, act.actionObject[6][0][i]);
+                }
+                for (let i = 0; i < act.actionObject[7][0].length; i++) {
+                    segDisplays.splice(act.actionObject[7][1][i], 0, act.actionObject[7][0][i]);
+                }
+                conpoints = act.actionObject[8].slice(0);
+                for (let i = 0; i < act.actionObject[9][0].length; i++) {
+                    segments.splice(act.actionObject[9][1][i], 0, act.actionObject[9][0][i]);
+                }
+                doConpoints();
                 actionRedo.push(act);
                 break;
             case 'reWire':
@@ -262,6 +285,48 @@ function redo() {
                     }
                     customs.splice(customs.indexOf(toDelete), 1);
                 }
+                for (let i = act.actionObject[2][1].length - 1; i >= 0; i--) {
+                    diodes.splice(act.actionObject[2][1][i], 1);
+                }
+                for (let i = act.actionObject[3][1].length - 1; i >= 0; i--) {
+                    inputs.splice(act.actionObject[3][1][i], 1);
+                }
+                for (let i = act.actionObject[4][1].length - 1; i >= 0; i--) {
+                    labels.splice(act.actionObject[4][1][i], 1);
+                }
+                for (let i = act.actionObject[5][1].length - 1; i >= 0; i--) {
+                    outputs.splice(act.actionObject[5][1][i], 1);
+                }
+                for (let j = act.actionObject[6][1].length - 1; j >= 0; j--) {
+                    wires.splice(wires.indexOf(act.actionObject[6][0][0][0]), 1);
+                    // Splitting the wires into individual segments
+                    let segSelection = [];
+                    if (act.actionObject[6][0][j].startX === act.actionObject[6][0][j].endX) {
+                        // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
+                        for (let k = 0; k < (act.actionObject[6][0][j].endY - act.actionObject[6][0][j].startY) / GRIDSIZE; k++) {
+                            segSelection.push(new WSeg(1, act.actionObject[6][0][j].startX, act.actionObject[6][0][j].startY + k * GRIDSIZE,
+                                false, transform));
+                        }
+                    } else if (act.actionObject[6][0][j].startY === act.actionObject[6][0][j].endY) {
+                        // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
+                        for (let k = 0; k < (act.actionObject[6][0][j].endX - act.actionObject[6][0][j].startX) / GRIDSIZE; k++) {
+                            segSelection.push(new WSeg(0, act.actionObject[6][0][j].startX + k * GRIDSIZE, act.actionObject[6][0][j].startY,
+                                false, transform));
+                        }
+                    }
+                    // Pushing the individual segments and deleting them from the segments array
+                    for (let k = 0; k < segSelection.length; k++) {
+                        act.actionObject[6][0].push(segSelection[k]);
+                        segments.splice(segments.indexOf(segSelection[k]), 1);
+                    }
+                }
+                for (let i = act.actionObject[7][1].length - 1; i >= 0; i--) {
+                    segDisplays.splice(act.actionObject[7][1][i], 1);
+                }
+                for (let i = act.actionObject[8][1].length - 1; i >= 0; i--) {
+                    conpoints.splice(act.actionObject[8][1][i], 1);
+                }
+                doConpoints();
                 actionUndo.push(act);
                 break;
             case 'reWire':
@@ -282,4 +347,8 @@ function redo() {
 function pushUndoAction(type, indizees, objects) {
     actionUndo.push(new Action(type, indizees, objects));
     actionRedo.pop();
+    if (actionUndo.length > HIST_LENGTH) {
+        actionUndo.splice(0, 1);
+    }
+    updateUndoButtons();
 }

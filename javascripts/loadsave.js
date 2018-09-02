@@ -126,7 +126,7 @@ function load(loadData) {
                             false, transform));
                     }
                 } else {
-                    console.log('JSON file is corrupted!');
+                    console.error('JSON file is corrupted or created with an old version!');
                 }
             } 
         }
@@ -227,7 +227,7 @@ function loadCustom(loadData, num, hlparent) {
                             false, transform));
                     }
                 } else {
-                    console.log('JSON file is corrupted!');
+                    console.error('JSON file is corrupted or created with an old version!');
                 }
             }
         }
