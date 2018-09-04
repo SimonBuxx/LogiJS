@@ -223,82 +223,82 @@ function setup() { // jshint ignore:line
 
     // Adds a counter (2Bit)
     counter2Button = createButton('2Bit-Counter');
-    counter2Button.mousePressed(function () { return customClicked('2BitCounter.json'); });
+    counter2Button.mousePressed(function () { setActive(counter2Button, true); return customClicked('2BitCounter.json'); });
     counter2Button.elt.className = "buttonLeft";
     counter2Button.parent(leftSideButtons);
     // Adds a counter (4Bit)
     counter4Button = createButton('4Bit-Counter');
-    counter4Button.mousePressed(function () { return customClicked('4BitCounter.json'); });
+    counter4Button.mousePressed(function () { setActive(counter4Button, true); return customClicked('4BitCounter.json'); });
     counter4Button.elt.className = "buttonLeft";
     counter4Button.parent(leftSideButtons);
     // Adds a decoder (2Bit)
     decoder2Button = createButton('2Bit-Decoder');
-    decoder2Button.mousePressed(function () { return customClicked('2BitDec.json'); });
+    decoder2Button.mousePressed(function () { setActive(decoder2Button, true); return customClicked('2BitDec.json'); });
     decoder2Button.elt.className = "buttonLeft";
     decoder2Button.parent(leftSideButtons);
     // Adds a decoder (4Bit)
     decoder4Button = createButton('4Bit-Decoder');
-    decoder4Button.mousePressed(function () { return customClicked('4BitDec.json'); });
+    decoder4Button.mousePressed(function () { setActive(decoder4Button, true); return customClicked('4BitDec.json'); });
     decoder4Button.elt.className = "buttonLeft";
     decoder4Button.parent(leftSideButtons);
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
-    add4BitButton.mousePressed(function () { return customClicked('4BitNeu.json'); });
+    add4BitButton.mousePressed(function () { setActive(add4BitButton, true); return customClicked('4BitNeu.json'); });
     add4BitButton.elt.className = "buttonLeft";
     add4BitButton.parent(leftSideButtons);
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
-    dFlipFlopButton.mousePressed(function () { return customClicked('d-flipflop.json'); });
+    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return customClicked('d-flipflop.json'); });
     dFlipFlopButton.elt.className = "buttonLeft";
     dFlipFlopButton.parent(leftSideButtons);
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
-    rsFlipFlopButton.mousePressed(function () { return customClicked('rsNoWhobble.json'); });
+    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return customClicked('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.className = "buttonLeft";
     rsFlipFlopButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
-    reg4Button.mousePressed(function () { return customClicked('4BitReg.json'); });
+    reg4Button.mousePressed(function () { setActive(reg4Button, true); return customClicked('4BitReg.json'); });
     reg4Button.elt.className = "buttonLeft";
     reg4Button.parent(leftSideButtons);
     // Adds a 1-multiplexer
     mux1Button = createButton('1-Multiplexer');
-    mux1Button.mousePressed(function () { return customClicked('1-mux.json'); });
+    mux1Button.mousePressed(function () { setActive(mux1Button, true); return customClicked('1-mux.json'); });
     mux1Button.elt.className = "buttonLeft";
     mux1Button.parent(leftSideButtons);
     // Adds a 2-multiplexer
     mux2Button = createButton('2-Multiplexer');
-    mux2Button.mousePressed(function () { return customClicked('2-mux.json'); });
+    mux2Button.mousePressed(function () { setActive(mux2Button, true); return customClicked('2-mux.json'); });
     mux2Button.elt.className = "buttonLeft";
     mux2Button.parent(leftSideButtons);
     // Adds a 3-multiplexer
     mux3Button = createButton('3-Multiplexer');
-    mux3Button.mousePressed(function () { return customClicked('3-mux.json'); });
+    mux3Button.mousePressed(function () { setActive(mux3Button, true); return customClicked('3-mux.json'); });
     mux3Button.elt.className = "buttonLeft";
     mux3Button.parent(leftSideButtons);
     // Adds a 1-demultiplexer
     demux1Button = createButton('1-Demultiplexer');
-    demux1Button.mousePressed(function () { return customClicked('1-demux.json'); });
+    demux1Button.mousePressed(function () { setActive(demux1Button, true); return customClicked('1-demux.json'); });
     demux1Button.elt.className = "buttonLeft";
     demux1Button.parent(leftSideButtons);
     // Adds a 2-demultiplexer
     demux2Button = createButton('2-Demultiplexer');
-    demux2Button.mousePressed(function () { return customClicked('2-demux.json'); });
+    demux2Button.mousePressed(function () { setActive(demux2Button, true); return customClicked('2-demux.json'); });
     demux2Button.elt.className = "buttonLeft";
     demux2Button.parent(leftSideButtons);
     // Adds a 3-demultiplexer
     demux3Button = createButton('3-Demultiplexer');
-    demux3Button.mousePressed(function () { return customClicked('3-demux.json'); });
+    demux3Button.mousePressed(function () { setActive(demux3Button, true); return customClicked('3-demux.json'); });
     demux3Button.elt.className = "buttonLeft";
     demux3Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.mousePressed(function () { return customClicked('halbadd.json'); });
+    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return customClicked('halbadd.json'); });
     halfaddButton.elt.className = "buttonLeft";
     halfaddButton.parent(leftSideButtons);
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.mousePressed(function () { return customClicked('volladd.json'); });
+    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return customClicked('volladd.json'); });
     fulladdButton.elt.className = "buttonLeft";
     fulladdButton.parent(leftSideButtons);
 
@@ -476,10 +476,11 @@ function setup() { // jshint ignore:line
     propertiesButton = createButton('Properties');
     propertiesButton.position(708, 4);
     propertiesButton.mousePressed(function () {
+        setActive(propertiesButton);
         setControlMode('none');
         setPropMode(true);
     });
-    propertiesButton.elt.className = "button";
+    propertiesButton.elt.className = "button active";
 
     // Upper right
     // Input field for the file name
@@ -511,7 +512,7 @@ function setup() { // jshint ignore:line
     // Button to import as custom
     ascustomButton = createButton('Import');
     ascustomButton.position(windowWidth - 73, 4);
-    ascustomButton.mousePressed(function () { return customClicked(textInput.value() + '.json'); });
+    ascustomButton.mousePressed(function () { setActive(ascustomButton); return customClicked(textInput.value() + '.json'); });
     ascustomButton.elt.className = "button";
 
     // Button to close the hints
@@ -728,15 +729,60 @@ function pushSelectAction(dx, dy, x1, y1, x2, y2) {
     }
 }
 
+function setActive(btn, left) {
+    setUnactive();
+    if (left) {
+        btn.elt.className = 'buttonLeft active';
+    } else {
+        btn.elt.className = 'button active';
+    }
+}
+
+function setUnactive() {
+    wireButton.elt.className = 'button';
+    deleteButton.elt.className = 'button';
+    andButton.elt.className = 'buttonLeft';
+    orButton.elt.className = 'buttonLeft';
+    xorButton.elt.className = 'buttonLeft';
+    inputButton.elt.className = 'buttonLeft';
+    buttonButton.elt.className = 'buttonLeft';
+    clockButton.elt.className = 'buttonLeft';
+    outputButton.elt.className = 'buttonLeft';
+    diodeButton.elt.className = 'button';
+    propertiesButton.elt.className = 'button';
+    labelButton.elt.className = 'button';
+    selectButton.elt.className = 'button';
+    segDisplayButton.elt.className = 'buttonLeft';
+    counter4Button.elt.className = 'buttonLeft';
+    counter2Button.elt.className = 'buttonLeft';
+    decoder4Button.elt.className = 'buttonLeft';
+    decoder2Button.elt.className = 'buttonLeft';
+    dFlipFlopButton.elt.className = 'buttonLeft';
+    rsFlipFlopButton.elt.className = 'buttonLeft';
+    reg4Button.elt.className = 'buttonLeft';
+    add4BitButton.elt.className = 'buttonLeft';
+    mux1Button.elt.className = 'buttonLeft';
+    mux2Button.elt.className = 'buttonLeft';
+    mux3Button.elt.className = 'buttonLeft';
+    demux1Button.elt.className = 'buttonLeft';
+    demux2Button.elt.className = 'buttonLeft';
+    demux3Button.elt.className = 'buttonLeft';
+    halfaddButton.elt.className = 'buttonLeft';
+    fulladdButton.elt.className = 'buttonLeft';
+    ascustomButton.elt.className = 'button';
+}
+
 /*
     Triggered when the wiring button is clicked
 */
 function wiringClicked() {
     setControlMode('addWire'); // Activates wire adding, leaving all other modes
+    setActive(wireButton);
     wireMode = 'none'; // Resets the wiring mode
 }
 
 function deleteClicked() {
+    setActive(deleteButton);
     if (ctrlMode === 'select' && selectMode === 'end') {
         ctrlMode = 'none';
         selectMode = 'end';
@@ -905,6 +951,7 @@ function simClicked() {
     Adding modes for gates, in/out, customs, etc.
 */
 function andClicked() {
+    setActive(andButton, true);
     setControlMode('addObject');
     addType = 'gate';
     gateType = 'and';
@@ -915,6 +962,7 @@ function andClicked() {
 }
 
 function orClicked() {
+    setActive(orButton, true);
     setControlMode('addObject');
     addType = 'gate';
     gateType = 'or';
@@ -925,6 +973,7 @@ function orClicked() {
 }
 
 function xorClicked() {
+    setActive(xorButton, true);
     setControlMode('addObject');
     addType = 'gate';
     gateType = 'xor';
@@ -935,6 +984,7 @@ function xorClicked() {
 }
 
 function inputClicked() {
+    setActive(inputButton, true);
     newIsButton = false;
     newIsClock = false;
     setControlMode('addObject');
@@ -942,6 +992,7 @@ function inputClicked() {
 }
 
 function buttonClicked() {
+    setActive(buttonButton, true);
     newIsButton = true;
     newIsClock = false;
     setControlMode('addObject');
@@ -949,6 +1000,7 @@ function buttonClicked() {
 }
 
 function clockClicked() {
+    setActive(clockButton, true);
     newIsButton = false;
     newIsClock = true;
     setControlMode('addObject');
@@ -956,11 +1008,13 @@ function clockClicked() {
 }
 
 function outputClicked() {
+    setActive(outputButton, true);
     setControlMode('addObject');
     addType = 'output';
 }
 
 function segDisplayClicked() {
+    setActive(segDisplayButton, true);
     setControlMode('addObject');
     addType = 'segDisplay';
     bitSelect.show();
@@ -970,18 +1024,21 @@ function segDisplayClicked() {
 // diodeClick is toggling the diodes,
 // not only adding them
 function diodeClicked() {
+    setActive(diodeButton);
     setControlMode('addObject');
     addType = 'diode';
 }
 
 // Starts the selection process
 function startSelect() {
+    setActive(selectButton);
     setControlMode('select');
     selectMode = 'none';
 }
 
 // Triggered when a label should be added
 function labelButtonClicked() {
+    setActive(labelButton);
     setControlMode('addObject');
     addType = 'label';
 }
@@ -1246,6 +1303,7 @@ function startSimulation() {
     }
     setSimButtonText('Stop'); // Alter the caption of the Start/Stop button
     setControlMode('none');
+    setUnactive();
     disableButtons(true);
     setPropMode(false);
     showSClickBox = false; // Hide the selection click box
@@ -1290,6 +1348,7 @@ function endSimulation() {
     setSimButtonText('Start'); // Set the button caption to 'Start'
     setControlMode('none');
     setPropMode(true);
+    setActive(propertiesButton);
     disableButtons(false); // Enable all buttons
     updateUndoButtons();
     sfcheckbox.hide();
@@ -1727,6 +1786,7 @@ function keyPressed() {
         switch (keyCode) {
             case ESCAPE:
                 setControlMode('none');
+                setActive(propertiesButton);
                 setPropMode(true);
                 break;
             case RETURN:

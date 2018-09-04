@@ -2,8 +2,6 @@
 
 function undo() {
     let act = actionUndo.pop();
-    console.log('undo');
-    console.log(act);
     if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
@@ -146,6 +144,8 @@ function undo() {
                     segments.splice(act.actionObject[9][1][i], 0, act.actionObject[9][0][i]);
                 }
                 doConpoints();
+                act.actionObject[2] = diodes.slice(0);
+                act.actionObject[8] = conpoints.slice(0);
                 actionRedo.push(act);
                 break;
             case 'reWire':
@@ -165,6 +165,8 @@ function undo() {
 }
 
 function redo() {
+    console.log(wires);
+    console.log(segments);
     let act = actionRedo.pop();
     if (act !== null) {
         switch (act.actionType) {
@@ -272,8 +274,8 @@ function redo() {
                 unmarkAll();
                 actionUndo.push(act);
                 break;
-            case 'delSel':
-                for (let i = act.actionObject[0][1].length - 1; i >= 0; i--) {
+            case 'delSel': // TODO
+                /*for (let i = act.actionObject[0][1].length - 1; i >= 0; i--) {
                     gates.splice(act.actionObject[0][1][i], 1);
                 }
                 for (let i = act.actionObject[1][1].length - 1; i >= 0; i--) {
@@ -285,9 +287,7 @@ function redo() {
                     }
                     customs.splice(customs.indexOf(toDelete), 1);
                 }
-                for (let i = act.actionObject[2][1].length - 1; i >= 0; i--) {
-                    diodes.splice(act.actionObject[2][1][i], 1);
-                }
+                diodes = act.actionObject[2].slice(0);
                 for (let i = act.actionObject[3][1].length - 1; i >= 0; i--) {
                     inputs.splice(act.actionObject[3][1][i], 1);
                 }
@@ -296,11 +296,13 @@ function redo() {
                 }
                 for (let i = act.actionObject[5][1].length - 1; i >= 0; i--) {
                     outputs.splice(act.actionObject[5][1][i], 1);
-                }
-                for (let j = act.actionObject[6][1].length - 1; j >= 0; j--) {
-                    wires.splice(wires.indexOf(act.actionObject[6][0][0][0]), 1);
+                }*/
+                console.log(act.actionObject);
+                console.log(wires);
+                for (let i = act.actionObject[6][1].length - 1; i >= 0; i--) {
+                    //wires.splice(wires.indexOf(act.actionObject[6][0][0][0]), 1);
                     // Splitting the wires into individual segments
-                    let segSelection = [];
+                    /*let segSelection = [];
                     if (act.actionObject[6][0][j].startX === act.actionObject[6][0][j].endX) {
                         // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
                         for (let k = 0; k < (act.actionObject[6][0][j].endY - act.actionObject[6][0][j].startY) / GRIDSIZE; k++) {
@@ -318,15 +320,20 @@ function redo() {
                     for (let k = 0; k < segSelection.length; k++) {
                         act.actionObject[6][0].push(segSelection[k]);
                         segments.splice(segments.indexOf(segSelection[k]), 1);
-                    }
+                    }*/
+                    wires.splice(act.actionObject[6][1][i]);
                 }
-                for (let i = act.actionObject[7][1].length - 1; i >= 0; i--) {
+                console.log(wires);
+                /*for (let i = act.actionObject[7][1].length - 1; i >= 0; i--) {
                     segDisplays.splice(act.actionObject[7][1][i], 1);
                 }
-                for (let i = act.actionObject[8][1].length - 1; i >= 0; i--) {
-                    conpoints.splice(act.actionObject[8][1][i], 1);
+                conpoints = act.actionObject[8].slice(0);*/
+                for (let i = act.actionObject[9][1].length - 1; i >= 0; i--) {
+                    segments.splice(act.actionObject[9][1][i]);
                 }
-                doConpoints();
+                //doConpoints();
+                //act.actionObject[2] = diodes.slice(0);
+                //act.actionObject[8] = conpoints.slice(0);
                 actionUndo.push(act);
                 break;
             case 'reWire':
