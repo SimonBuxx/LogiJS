@@ -782,15 +782,14 @@ function wiringClicked() {
 }
 
 function deleteClicked() {
-    setActive(deleteButton);
     if (ctrlMode === 'select' && selectMode === 'end') {
+        setActive(propertiesButton);
         ctrlMode = 'none';
         selectMode = 'end';
         showSClickBox = false;
         unmarkAll();
         let delGates = [[], []];
         let delCustoms = [[], []];
-        //let delDiodes = [[], []];
         let delInputs = [[], []];
         let delLabels = [[], []];
         let delOutputs = [[], []];
@@ -872,6 +871,7 @@ function deleteClicked() {
         }
         doConpoints();
     } else {
+        setActive(deleteButton);
         setControlMode('delete');
     }
 }
