@@ -48,6 +48,11 @@ function undo() {
                 }
                 doConpoints();
                 break;
+            case 'addCp':
+                conpoints.pop();
+                actionRedo.push(act);
+                doConpoints();
+                break;
             case 'addLabel':
                 actionRedo.push(act);
                 labels.pop();
@@ -99,6 +104,11 @@ function undo() {
                 actionRedo.push(act);
                 doConpoints();
                 break;
+            case 'delCp':
+                conpoints.push(act.actionObject[0]);
+                actionRedo.push(act);
+                doConpoints();
+                break;    
             case 'delLabel':
                 labels.push(act.actionObject[0]);
                 actionRedo.push(act);
@@ -165,8 +175,8 @@ function undo() {
 }
 
 function redo() {
-    console.log(wires);
-    console.log(segments);
+    //console.log(wires);
+    //console.log(segments);
     let act = actionRedo.pop();
     if (act !== null) {
         switch (act.actionType) {
@@ -194,6 +204,11 @@ function redo() {
                 break;
             case 'addDi':
                 diodes.push(act.actionObject);
+                actionUndo.push(act);
+                doConpoints();
+                break;
+            case 'addCp':
+                conpoints.push(act.actionObject);
                 actionUndo.push(act);
                 doConpoints();
                 break;
@@ -237,6 +252,11 @@ function redo() {
                 } else {
                     diodes.pop();
                 }
+                doConpoints();
+                break;
+            case 'delCp':
+                conpoints.pop();
+                actionUndo.push(act);
                 doConpoints();
                 break;
             case 'delLabel':
@@ -297,8 +317,8 @@ function redo() {
                 for (let i = act.actionObject[5][1].length - 1; i >= 0; i--) {
                     outputs.splice(act.actionObject[5][1][i], 1);
                 }*/
-                console.log(act.actionObject);
-                console.log(wires);
+                //console.log(act.actionObject);
+                //console.log(wires);
                 for (let i = act.actionObject[6][1].length - 1; i >= 0; i--) {
                     //wires.splice(wires.indexOf(act.actionObject[6][0][0][0]), 1);
                     // Splitting the wires into individual segments
@@ -323,7 +343,7 @@ function redo() {
                     }*/
                     wires.splice(act.actionObject[6][1][i]);
                 }
-                console.log(wires);
+                //console.log(wires);
                 /*for (let i = act.actionObject[7][1].length - 1; i >= 0; i--) {
                     segDisplays.splice(act.actionObject[7][1][i], 1);
                 }

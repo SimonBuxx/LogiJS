@@ -1220,6 +1220,28 @@ function toggleDiode() {
     reDraw();
 }
 
+function toggleConpoint() {
+    for (var i = 0; i < conpoints.length; i++) {
+        if ((conpoints[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (conpoints[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            let cp = conpoints.splice(i, 1);
+            let before = conpoints.slice(0);
+            doConpoints();
+            if (JSON.stringify(conpoints) === JSON.stringify(before)) {
+                pushUndoAction('delCp', [], cp);
+            }
+            return;
+        }
+    }
+    conpoints.push(new ConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, -1));
+    let before = conpoints.slice(0);
+    doConpoints();
+    if (JSON.stringify(conpoints) === JSON.stringify(before)) {
+        pushUndoAction('addCp', [], conpoints[conpoints.length - 1]);
+    }
+    reDraw();
+}
+
 /*
     Deletes the given gate
 */

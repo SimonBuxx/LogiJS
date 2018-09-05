@@ -333,6 +333,7 @@ function mouseClicked() {
                         hidePropMenu();
                         unmarkPropTargets();
                     }
+                    toggleConpoint();
                 }
                 break;
             default:
