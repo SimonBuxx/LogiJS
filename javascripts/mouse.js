@@ -83,6 +83,34 @@ function mouseMoved() {
                     cursor(HAND);
                 }
             }
+            for (const elem of gates) {
+                for (const e of elem.inputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+                for (const e of elem.outputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+            }
+            for (const elem of customs) {
+                for (const e of elem.inputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+                for (const e of elem.outputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+            }
         } else {
             for (const elem of inputs) {
                 if (elem.mouseOver() && !elem.getIsClock()) {
