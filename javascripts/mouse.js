@@ -97,7 +97,18 @@ function mouseMoved() {
                     }
                 }
             }
+            for (const elem of segDisplays) {
+                for (const e of elem.inputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+            }
             for (const elem of customs) {
+                if (!elem.visible) {
+                    continue;
+                }
                 for (const e of elem.inputClickBoxes) {
                     if (e.mouseOver()) {
                         hand = true;
@@ -126,6 +137,18 @@ function mouseMoved() {
     }
     if (!hand) {
         cursor(ARROW);
+    }
+    if (ctrlMode === 'addObject' && addType === 'diode') {
+        for (const elem of diodes) {
+            if (elem.mouseOver()) {
+                hand = true;
+                cursor(HAND);
+            }
+        }
+        if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            hand = true;
+            cursor(HAND);
+        }
     }
 }
 
@@ -403,9 +426,9 @@ function mouseReleased() {
                         }
                         if (pushed) {
                             let oldSegments = [];
-                            for(let i = segments.length - 1; i >= 0; i--) {
-								oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform); 
-							} 
+                            for (let i = segments.length - 1; i >= 0; i--) {
+                                oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                            }
                             pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
