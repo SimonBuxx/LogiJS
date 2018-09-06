@@ -68,16 +68,28 @@ function rightAngle(x, y) {
     let hor = false;
     let ver = false;
     for (let i = 0; i < segments.length; i++) {
-        if (segments[i].startX === x && segments[i].startY === y) {
-            hor = (hor || segments[i].direction === 0);
-            ver = (ver || segments[i].direction === 1);
-        }
-        if (segments[i].endX === x && segments[i].endY === y) {
+        if ((segments[i].startX === x && segments[i].startY === y) || (segments[i].endX === x && segments[i].endY === y)) {
             hor = (hor || segments[i].direction === 0);
             ver = (ver || segments[i].direction === 1);
         }
     }
     return (hor && ver);
+}
+
+function fullCrossing(x, y) {
+    let horCount = 0;
+    let verCount = 0;
+    for (let i = 0; i < segments.length; i++) {
+        if ((segments[i].startX === x && segments[i].startY === y) || (segments[i].endX === x && segments[i].endY === y)) {
+            if (segments[i].direction === 0) {
+                horCount++;
+            }
+            if (segments[i].direction === 1) {
+                verCount++;
+            }
+        }
+    }
+    return (horCount >= 2 && verCount >= 2);
 }
 
 /*

@@ -122,6 +122,10 @@ function mouseMoved() {
                     }
                 }
             }
+            if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                hand = true;
+                cursor(HAND);
+            }
         } else {
             for (const elem of inputs) {
                 if (elem.mouseOver() && !elem.getIsClock()) {
