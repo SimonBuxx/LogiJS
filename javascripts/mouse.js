@@ -85,6 +85,49 @@ function mouseMoved() {
                     cursor(HAND);
                 }
             }
+            for (const elem of gates) {
+                for (const e of elem.inputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+                for (const e of elem.outputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+            }
+            for (const elem of segDisplays) {
+                for (const e of elem.inputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+            }
+            for (const elem of customs) {
+                if (!elem.visible) {
+                    continue;
+                }
+                for (const e of elem.inputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+                for (const e of elem.outputClickBoxes) {
+                    if (e.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+            }
+            if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                hand = true;
+                cursor(HAND);
+            }
         } else {
             for (const elem of inputs) {
                 if (elem.mouseOver() && !elem.getIsClock()) {
@@ -103,7 +146,7 @@ function mouseMoved() {
     }
 
     // Draws a preview of the gate, so the user will see where the gate will be placed
-    // First checks whether and/or/xor gates or switch/button/clock are chosen 
+    // First checks whether and/or/xor gates or switch/button/clock/segmentDisplay are chosen 
     if(ctrlMode === 'addObject' && (addType === 'gate' && (gateType === 'and' || 
         gateType === 'or' || gateType === 'xor') || addType === 'input' || addType === 'output' || addType === 'segDisplay') && !mouseOverGUI()){
         // Prevents that a gate is created over an existing gate
@@ -116,6 +159,20 @@ function mouseMoved() {
         // Changes preview gate coordinates according to mouse position
         previewSymbol.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
         reDraw();
+    }
+
+    if (ctrlMode === 'addObject' && addType === 'diode') {
+        for (const elem of diodes) {
+            if (elem.mouseOver()) {
+                hand = true;
+                cursor(HAND);
+            }
+        }
+        // if two wires have a right angle, show a hand
+        if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            hand = true;
+            cursor(HAND);
+        }
     }
 }
 
@@ -184,6 +241,7 @@ function mousePressed() {
                             selectMode = 'drag';
                         } else {
                             setControlMode('none');
+                            setUnactive();
                             pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
                                 sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
                             initX = 0;
@@ -350,6 +408,7 @@ function mouseClicked() {
                         hidePropMenu();
                         unmarkPropTargets();
                     }
+                    toggleConpoint();
                 }
                 break;
             default:
@@ -391,9 +450,9 @@ function mouseReleased() {
                         }
                         if (pushed) {
                             let oldSegments = [];
-                            for(let i = segments.length - 1; i >= 0; i--) {
-								oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform); 
-							} 
+                            for (let i = segments.length - 1; i >= 0; i--) {
+                                oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                            }
                             pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments

@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetica Neu
     margin-top: 200px;
     min-width: 400px;
     padding: 0;
-    height: 280px;
+    height: 260px;
     background-color: rgba(50, 50, 50, 0.8);
 }
 
@@ -72,7 +72,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetica Neu
 }
 
 #caption {
-    padding-top: 30px;
+    padding-top: 40px;
 }
 
 .subheader {
