@@ -76,7 +76,7 @@ let wireIndizees = [];
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, propertiesButton, labelButton, segDisplayButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
 let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits;
@@ -446,7 +446,7 @@ function setup() { // jshint ignore:line
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(427, 4);
+    redoButton.position(428, 4);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -459,22 +459,15 @@ function setup() { // jshint ignore:line
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
-    // Adds diodes (barricade in one direction)
-    diodeButton = createButton('Diodes');
-    diodeButton.position(563, 4);
-    diodeButton.mousePressed(diodeClicked);
-    //diodeButton.elt.style.width = "117px";
-    diodeButton.elt.className = "button";
-
     // Adds labels
     labelButton = createButton('Label');
-    labelButton.position(641, 4);
+    labelButton.position(563, 4);
     labelButton.mousePressed(labelButtonClicked);
     labelButton.elt.className = "button";
 
     // Toggles the properties mode
     propertiesButton = createButton('Properties');
-    propertiesButton.position(708, 4);
+    propertiesButton.position(630, 4);
     propertiesButton.mousePressed(function () {
         setActive(propertiesButton);
         setControlMode('none');
@@ -748,7 +741,6 @@ function setUnactive() {
     buttonButton.elt.className = 'buttonLeft';
     clockButton.elt.className = 'buttonLeft';
     outputButton.elt.className = 'buttonLeft';
-    diodeButton.elt.className = 'button';
     propertiesButton.elt.className = 'button';
     labelButton.elt.className = 'button';
     selectButton.elt.className = 'button';
@@ -1021,14 +1013,6 @@ function segDisplayClicked() {
     labelBits.show();
 }
 
-// diodeClick is toggling the diodes,
-// not only adding them
-function diodeClicked() {
-    setActive(diodeButton);
-    setControlMode('addObject');
-    addType = 'diode';
-}
-
 // Starts the selection process
 function startSelect() {
     setActive(selectButton);
@@ -1202,32 +1186,28 @@ function addLabel() {
     reDraw();
 }
 
-/*
-    Adds a diode as a special type of ConPoints in the diodes array
-    Caution: Also deletes diodes if existing => More like toggleDiode()
-*/
-function toggleDiode() {
+function toggleDiode(restore) {
     for (var i = 0; i < diodes.length; i++) {
-        if ((diodes[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+        if ((diodes[i].x === Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
+            (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+            diodes[i].cp = true;
             deleteDiode(i);
             return;
         }
     }
     createDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
-        Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
-    // Undo-Redo handling in createDiode()
+        Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, restore);
     reDraw();
 }
 
-function toggleConpoint() {
+function toggleConpoint(undoable) {
     for (var i = 0; i < conpoints.length; i++) {
-        if ((conpoints[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (conpoints[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+        if ((conpoints[i].x === Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
+            (conpoints[i].y === Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
             let cp = conpoints.splice(i, 1);
             let before = conpoints.slice(0);
             doConpoints();
-            if (JSON.stringify(conpoints) === JSON.stringify(before)) {
+            if (JSON.stringify(conpoints) === JSON.stringify(before) && undoable) {
                 pushUndoAction('delCp', [], cp);
             }
             return;
@@ -1236,8 +1216,21 @@ function toggleConpoint() {
     conpoints.push(new ConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, -1));
     let before = conpoints.slice(0);
     doConpoints();
-    if (JSON.stringify(conpoints) === JSON.stringify(before)) {
+    if ((JSON.stringify(conpoints) === JSON.stringify(before)) && undoable) {
         pushUndoAction('addCp', [], conpoints[conpoints.length - 1]);
+    }
+    reDraw();
+}
+
+function toggleDiodeAndConpoint() {
+    if (isDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) >= 0) {
+        toggleDiode(false);
+    } else {
+        if (isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) >= 0) {
+            toggleConpoint(true);
+        } else {
+            toggleDiode(false);
+        }
     }
     reDraw();
 }
@@ -1438,7 +1431,6 @@ function disableButtons(status) {
     clockButton.elt.disabled = status;
     deleteButton.elt.disabled = status;
     selectButton.elt.disabled = status;
-    diodeButton.elt.disabled = status;
     reg4Button.elt.disabled = status;
     decoder4Button.elt.disabled = status;
     decoder2Button.elt.disabled = status;
@@ -1670,10 +1662,10 @@ function reDraw() {
                 break;
             case 20:
                 displayHint(1600, hintPic20, 'Diodes', 'Please load the sketch \'traffic\'. As you can see, there is an area with',
-                    'multiple diodes (little triangles) on it. Click on \'Diodes\' to enter the diode mode.');
+                    'multiple diodes (little triangles) on it.');
                 break;
             case 21:
-                displayHint(1500, hintPic21, 'Diodes', 'You can now toggle diodes by clicking on them or on empty wire',
+                displayHint(1500, hintPic21, 'Diodes', 'In properties mode, you can toggle diodes by clicking on them or on empty wire',
                     'crossings. Start the simulation to see how they are used in this example!');
                 break;
             case 22:
@@ -1805,6 +1797,10 @@ function wirePoints(x, y, j) {
 */
 function keyPressed() {
     if (textInput.elt !== document.activeElement) {
+        if (keyCode >= 49 && keyCode <= 57) {
+            gateInputCount = keyCode - 48;
+            return;
+        }
         switch (keyCode) {
             case ESCAPE:
                 setControlMode('none');
@@ -1815,7 +1811,26 @@ function keyPressed() {
                 console.log(wires);
                 console.log(segments);
                 break;
+            case CONTROL:
+                startSelect();
+                break;
+            case 48: // 0
+                gateInputCount = 10;
+                break;
+            case RIGHT_ARROW:
+                gateDirection = 0;
+                break;
+            case DOWN_ARROW:
+                gateDirection = 1;
+                break;
+            case LEFT_ARROW:
+                gateDirection = 2;
+                break;
+            case UP_ARROW:
+                gateDirection = 3;
+                break;
             default:
+                break;
         }
     } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
         loadClicked();

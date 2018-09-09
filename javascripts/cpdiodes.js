@@ -98,19 +98,15 @@ function fullCrossing(x, y) {
     gB: Group B (vertical, synced to group A)
     Nice-to-have-TODO: Diodes can only be put in places where horizontal + vertical wires are
 */
-function createDiode(x, y, state) {
-    // If there is no diode and a diode can be set
-    if ((isDiode(x, y) < 0) && (rightAngle(x, y))) {
-        diodes.push(new Diode(x, y, state, transform));
-        diodes[diodes.length - 1].updateClickBox();
-        pushUndoAction('addDi', [], diodes[diodes.length - 1]);
-        let cp = isConPoint(x, y);
-        if (cp >= 0) {
-            console.log('Top diode is over conpoint');
-            diodes[diodes.length - 1].cp = true;
-            conpoints.splice(cp, 1);
-        }
+function createDiode(x, y, state, restore) {
+    diodes.push(new Diode(x, y, state, transform));
+    diodes[diodes.length - 1].updateClickBox();
+    pushUndoAction('addDi', [], diodes[diodes.length - 1]);
+    let cp = isConPoint(x, y);
+    if (cp >= 0) {
+        conpoints.splice(cp, 1);
     }
+    diodes[diodes.length - 1].cp = ((restore) && (cp >= 0));
 }
 
 /*

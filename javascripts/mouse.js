@@ -28,40 +28,14 @@ function mouseWheel(event) {
             reDraw();
         }
     }
-    let hand = false;
-    if (simRunning || propMode) {
-        if (!simRunning) {
-            for (const elem of outputs) {
-                if (elem.mouseOver()) {
-                    hand = true;
-                    cursor(HAND);
-                }
-            }
-            for (const elem of inputs) {
-                if (elem.mouseOver()) {
-                    hand = true;
-                    cursor(HAND);
-                }
-            }
-        } else {
-            for (const elem of inputs) {
-                if (elem.mouseOver() && !elem.getIsClock()) {
-                    hand = true;
-                    cursor(HAND);
-                }
-            }
-        }
-    }
-    if (ctrlMode === 'select' && sClickBox.mouseOver() && showSClickBox) {
-        hand = true;
-        cursor(MOVE);
-    }
-    if (!hand) {
-        cursor(ARROW);
-    }
+    updateCursors();
 }
 
 function mouseMoved() {
+    updateCursors();
+}
+
+function updateCursors() {
     let hand = false;
     if (simRunning || propMode) {
         if (!simRunning) {
@@ -122,8 +96,7 @@ function mouseMoved() {
                     }
                 }
             }
-            if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
-            isDiode(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) < 0) {
+            if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                 hand = true;
                 cursor(HAND);
             }
@@ -142,18 +115,6 @@ function mouseMoved() {
     }
     if (!hand) {
         cursor(ARROW);
-    }
-    if (ctrlMode === 'addObject' && addType === 'diode') {
-        for (const elem of diodes) {
-            if (elem.mouseOver()) {
-                hand = true;
-                cursor(HAND);
-            }
-        }
-        if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-            hand = true;
-            cursor(HAND);
-        }
     }
 }
 
@@ -222,7 +183,7 @@ function mousePressed() {
                             selectMode = 'drag';
                         } else {
                             setControlMode('none');
-                            setUnactive();
+                            setActive(propertiesButton);
                             pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
                                 sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
                             initX = 0;
@@ -389,7 +350,11 @@ function mouseClicked() {
                         hidePropMenu();
                         unmarkPropTargets();
                     }
-                    toggleConpoint();
+                    if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                        toggleDiodeAndConpoint();
+                    } else if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                        toggleDiode();
+                    }
                 }
                 break;
             default:
