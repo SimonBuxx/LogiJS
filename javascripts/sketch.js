@@ -27,10 +27,10 @@ let groups = [];
 
 let gridSize = GRIDSIZE; // Size of the grid
 
-let ctrlMode = 'none'; // Possible modes: none, delete, addObject, addWire, select ...
+let ctrlMode = 'none'; // Possible modes: none, delete, addObject, select ...
 let addType = 'none'; // Possilbe modes: none, gate, output, input, ...
 let gateType = 'none'; // Possible modes: and, or, xor, ...
-let wireMode = 'none'; // Possible modes: none, preview, delete ...
+let wireMode = 'none'; // Possible modes: none, hold, preview, delete ...
 let selectMode = 'start';
 
 let gateInputCount = 2; // Input count for new gates
@@ -74,7 +74,7 @@ let wireIndizees = [];
 
 // GUI Elements
 let textInput, saveButton, loadButton, newButton; // Right hand side
-let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
+let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
@@ -211,6 +211,12 @@ function setup() { // jshint ignore:line
     segDisplayButton.mousePressed(segDisplayClicked);
     segDisplayButton.elt.className = "buttonLeft";
     segDisplayButton.parent(leftSideButtons);
+
+    // Adds labels
+    labelButton = createButton('Label');
+    labelButton.mousePressed(labelButtonClicked);
+    labelButton.elt.className = "buttonLeft";
+    labelButton.parent(leftSideButtons);
 
     // Adds text 'Advanced'
     labelAdvanced = createP('Advanced');
@@ -415,29 +421,34 @@ function setup() { // jshint ignore:line
     clockspeedSlider.position(windowWidth - 205, windowHeight - 115);
 
     //Upper left
-    // Activates the wiring mode
-    wireButton = createButton('Wiring');
-    wireButton.position(153, 4);
-    wireButton.mousePressed(wiringClicked);
-    //wireButton.elt.style.width = "117px";
-    wireButton.elt.className = "button";
+
+    // Activates the default mode
+    propertiesButton = createButton('Default');
+    propertiesButton.position(152, 4);
+    propertiesButton.mousePressed(function () {
+        setActive(propertiesButton);
+        setControlMode('none');
+        setPropMode(true);
+    });
+    propertiesButton.elt.className = "button active";
+
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('Delete');
-    deleteButton.position(226, 4);
+    deleteButton.position(231, 4);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
 
     // Starts and stops the simulation
     simButton = createButton('Start');
     simButton.elt.style.width = '34px';
-    simButton.position(299, 4);
+    simButton.position(304, 4);
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
 
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(362, 4);
+    undoButton.position(366, 4);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -446,7 +457,7 @@ function setup() { // jshint ignore:line
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(428, 4);
+    redoButton.position(432, 4);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -455,25 +466,9 @@ function setup() { // jshint ignore:line
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(493, 4);
+    selectButton.position(496, 4);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
-
-    // Adds labels
-    labelButton = createButton('Label');
-    labelButton.position(563, 4);
-    labelButton.mousePressed(labelButtonClicked);
-    labelButton.elt.className = "button";
-
-    // Toggles the properties mode
-    propertiesButton = createButton('Properties');
-    propertiesButton.position(630, 4);
-    propertiesButton.mousePressed(function () {
-        setActive(propertiesButton);
-        setControlMode('none');
-        setPropMode(true);
-    });
-    propertiesButton.elt.className = "button active";
 
     // Upper right
     // Input field for the file name
@@ -631,7 +626,7 @@ function setup() { // jshint ignore:line
         showHints = true;
     }
     reDraw();
-    setTimeout(reDraw, 50); // Redraw after 50 ms in case fonts weren't loaded on first redraw
+    setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -643,11 +638,16 @@ function urlParam(name, w) {
 }
 
 function customClicked(filename) {
-    setControlMode('addObject');
-    addType = 'custom';
-    directionSelect.show();
-    labelDirection.show();
-    custFile = filename;
+    if (ctrlMode === 'addObject' && addType === 'custom' && filename === custFile) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setControlMode('addObject');
+        addType = 'custom';
+        directionSelect.show();
+        labelDirection.show();
+        custFile = filename;
+    }
 }
 
 // Triggered when a sketch should be saved
@@ -732,7 +732,6 @@ function setActive(btn, left) {
 }
 
 function setUnactive() {
-    wireButton.elt.className = 'button';
     deleteButton.elt.className = 'button';
     andButton.elt.className = 'buttonLeft';
     orButton.elt.className = 'buttonLeft';
@@ -742,7 +741,7 @@ function setUnactive() {
     clockButton.elt.className = 'buttonLeft';
     outputButton.elt.className = 'buttonLeft';
     propertiesButton.elt.className = 'button';
-    labelButton.elt.className = 'button';
+    labelButton.elt.className = 'buttonLeft';
     selectButton.elt.className = 'button';
     segDisplayButton.elt.className = 'buttonLeft';
     counter4Button.elt.className = 'buttonLeft';
@@ -762,15 +761,6 @@ function setUnactive() {
     halfaddButton.elt.className = 'buttonLeft';
     fulladdButton.elt.className = 'buttonLeft';
     ascustomButton.elt.className = 'button';
-}
-
-/*
-    Triggered when the wiring button is clicked
-*/
-function wiringClicked() {
-    setControlMode('addWire'); // Activates wire adding, leaving all other modes
-    setActive(wireButton);
-    wireMode = 'none'; // Resets the wiring mode
 }
 
 function deleteClicked() {
@@ -863,8 +853,13 @@ function deleteClicked() {
         }
         doConpoints();
     } else {
-        setActive(deleteButton);
-        setControlMode('delete');
+        if (ctrlMode === 'delete') {
+            setControlMode('none');
+            setActive(propertiesButton);
+        } else {
+            setActive(deleteButton);
+            setControlMode('delete');
+        }
     }
 }
 
@@ -943,88 +938,138 @@ function simClicked() {
     Adding modes for gates, in/out, customs, etc.
 */
 function andClicked() {
-    setActive(andButton, true);
-    setControlMode('addObject');
-    addType = 'gate';
-    gateType = 'and';
-    gateInputSelect.show();
-    labelGateInputs.show();
-    directionSelect.show();
-    labelDirection.show();
+    if (ctrlMode === 'addObject' && addType === 'gate' && gateType === 'and') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(andButton, true);
+        setControlMode('addObject');
+        addType = 'gate';
+        gateType = 'and';
+        gateInputSelect.show();
+        labelGateInputs.show();
+        directionSelect.show();
+        labelDirection.show();
+    }
 }
 
 function orClicked() {
-    setActive(orButton, true);
-    setControlMode('addObject');
-    addType = 'gate';
-    gateType = 'or';
-    gateInputSelect.show();
-    labelGateInputs.show();
-    directionSelect.show();
-    labelDirection.show();
+    if (ctrlMode === 'addObject' && addType === 'gate' && gateType === 'or') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(orButton, true);
+        setControlMode('addObject');
+        addType = 'gate';
+        gateType = 'or';
+        gateInputSelect.show();
+        labelGateInputs.show();
+        directionSelect.show();
+        labelDirection.show();
+    }
 }
 
 function xorClicked() {
-    setActive(xorButton, true);
-    setControlMode('addObject');
-    addType = 'gate';
-    gateType = 'xor';
-    gateInputSelect.show();
-    labelGateInputs.show();
-    directionSelect.show();
-    labelDirection.show();
+    if (ctrlMode === 'addObject' && addType === 'gate' && gateType === 'xor') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(xorButton, true);
+        setControlMode('addObject');
+        addType = 'gate';
+        gateType = 'xor';
+        gateInputSelect.show();
+        labelGateInputs.show();
+        directionSelect.show();
+        labelDirection.show();
+    }
 }
 
 function inputClicked() {
-    setActive(inputButton, true);
-    newIsButton = false;
-    newIsClock = false;
-    setControlMode('addObject');
-    addType = 'input';
+    if (ctrlMode === 'addObject' && addType === 'input') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(inputButton, true);
+        newIsButton = false;
+        newIsClock = false;
+        setControlMode('addObject');
+        addType = 'input';
+    }
 }
 
 function buttonClicked() {
-    setActive(buttonButton, true);
-    newIsButton = true;
-    newIsClock = false;
-    setControlMode('addObject');
-    addType = 'input';
+    if (ctrlMode === 'addObject' && addType === 'input') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(buttonButton, true);
+        newIsButton = true;
+        newIsClock = false;
+        setControlMode('addObject');
+        addType = 'input';
+    }
 }
 
 function clockClicked() {
-    setActive(clockButton, true);
-    newIsButton = false;
-    newIsClock = true;
-    setControlMode('addObject');
-    addType = 'input';
+    if (ctrlMode === 'addObject' && addType === 'input') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(clockButton, true);
+        newIsButton = false;
+        newIsClock = true;
+        setControlMode('addObject');
+        addType = 'input';
+    }
 }
 
 function outputClicked() {
-    setActive(outputButton, true);
-    setControlMode('addObject');
-    addType = 'output';
+    if (ctrlMode === 'addObject' && addType === 'output') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(outputButton, true);
+        setControlMode('addObject');
+        addType = 'output';
+    }
 }
 
 function segDisplayClicked() {
-    setActive(segDisplayButton, true);
-    setControlMode('addObject');
-    addType = 'segDisplay';
-    bitSelect.show();
-    labelBits.show();
+    if (ctrlMode === 'addObject' && addType === 'segDisplay') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(segDisplayButton, true);
+        setControlMode('addObject');
+        addType = 'segDisplay';
+        bitSelect.show();
+        labelBits.show();
+    }
 }
 
 // Starts the selection process
 function startSelect() {
-    setActive(selectButton);
-    setControlMode('select');
-    selectMode = 'none';
+    if (ctrlMode === 'select') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(selectButton);
+        setControlMode('select');
+        selectMode = 'none';
+    }
 }
 
 // Triggered when a label should be added
 function labelButtonClicked() {
-    setActive(labelButton);
-    setControlMode('addObject');
-    addType = 'label';
+    if (ctrlMode === 'addObject' && addType === 'label') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(labelButton, true);
+        setControlMode('addObject');
+        addType = 'label';
+    }
 }
 
 /*
@@ -1038,7 +1083,7 @@ function setControlMode(mode) {
         unmarkAll();
         showSClickBox = false;
     }
-    if (mode === 'addObject' || mode === 'addWire' || mode === 'select' || mode === 'delete') {
+    if (mode === 'addObject' || mode === 'select' || mode === 'delete') {
         setPropMode(false);
         ctrlMode = mode;
     } else if (mode === 'none') {
@@ -1423,7 +1468,6 @@ function disableButtons(status) {
     andButton.elt.disabled = status;
     orButton.elt.disabled = status;
     xorButton.elt.disabled = status;
-    wireButton.elt.disabled = status;
     inputButton.elt.disabled = status;
     outputButton.elt.disabled = status;
     segDisplayButton.elt.disabled = status;

@@ -137,9 +137,13 @@ function mousePressed() {
     if (ctrlMode !== 'select') {
         showSClickBox = false;
     }
+    if (wireMode === 'hold') {
+        wireMode = 'none';
+    }
     if (!simRunning && !mouseOverGUI() && (mouseButton === LEFT)) {
         switch (ctrlMode) {
-            case 'addWire':
+            case 'none':
+                
                 switch (wireMode) {
                     case 'none':
                         wireMode = 'preview';
@@ -260,102 +264,6 @@ function mouseClicked() {
                 }
                 break;
             case 'none':
-                if (mouseButton === LEFT) {
-                    // Invert In-/Outputs
-                    for (let i = 0; i < gates.length; i++) {
-                        for (let j = 0; j < gates[i].inputCount; j++) {
-                            if (gates[i].mouseOverInput(j)) {
-                                gates[i].invertInput(j);
-                                let act = new Action('invGIP', [i, j], null);
-                                actionUndo.push(act);
-                            }
-                        }
-                        for (let j = 0; j < gates[i].outputCount; j++) {
-                            if (gates[i].mouseOverOutput(j)) {
-                                gates[i].invertOutput(j);
-                                let act = new Action('invGOP', [i, j], null);
-                                actionUndo.push(act);
-                            }
-                        }
-                    }
-                    for (let i = 0; i < customs.length; i++) {
-                        if (customs[i].visible) {
-                            for (let j = 0; j < customs[i].inputCount; j++) {
-                                if (customs[i].mouseOverInput(j)) {
-                                    customs[i].invertInput(j);
-                                    let act = new Action('invCIP', [i, j], null);
-                                    actionUndo.push(act);
-                                }
-                            }
-                            for (let j = 0; j < customs[i].outputCount; j++) {
-                                if (customs[i].mouseOverOutput(j)) {
-                                    customs[i].invertOutput(j);
-                                    let act = new Action('invCOP', [i, j], null);
-                                    actionUndo.push(act);
-                                }
-                            }
-                        }
-                    }
-                    for (let i = 0; i < segDisplays.length; i++) {
-                        for (let j = 0; j < segDisplays[i].inputCount; j++) {
-                            if (segDisplays[i].mouseOverInput(j)) {
-                                segDisplays[i].invertInput(j);
-                                let act = new Action('invDIP', [i, j], null);
-                                actionUndo.push(act);
-                            }
-                        }
-                    }
-                    let noValidTarget = true;
-                    for (let i = 0; i < inputs.length; i++) {
-                        if (Boolean(inputs[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            // If the propMode is active, give options to name and make top
-                            if (propInput !== i) {
-                                if (propInput >= 0) {
-                                    inputs[propInput].mark(false);
-                                }
-                                inputs[i].mark(true);
-                                propInput = i;
-                                showInputPropMenu();
-                            }
-                        }
-                    }
-                    for (let i = 0; i < outputs.length; i++) {
-                        if (Boolean(outputs[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            if (propOutput !== i) {
-                                if (propOutput >= 0) {
-                                    outputs[propOutput].mark(false);
-                                }
-                                outputs[i].mark(true);
-                                propOutput = i;
-                                showOutputPropMenu();
-                            }
-                        }
-                    }
-                    for (let i = 0; i < labels.length; i++) {
-                        if (Boolean(labels[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            if (propLabel !== i) {
-                                if (propLabel >= 0) {
-                                    labels[propLabel].mark(false);
-                                }
-                                labels[i].mark(true);
-                                propLabel = i;
-                                showLabelPropMenu();
-                            }
-                        }
-                    }
-                    if (noValidTarget && propMode) {
-                        hidePropMenu();
-                        unmarkPropTargets();
-                    }
-                    if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
-                        toggleDiodeAndConpoint();
-                    } else if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
-                        toggleDiode();
-                    }
-                }
                 break;
             default:
                 break;
@@ -386,7 +294,7 @@ function mouseReleased() {
             switch (ctrlMode) {
                 case 'addObject':
                     break;
-                case 'addWire':
+                case 'none':
                     if (wireMode === 'preview') { // If the preview wire mode is active
                         let pushed = false;
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
@@ -409,8 +317,108 @@ function mouseReleased() {
                         findLines();
                         lockElements = false;
                         pwSegments = []; // delete the preview segments
-                        wireMode = 'none'; // wiring done, reset wireMode
+                        if (pushed) {
+                            wireMode = 'hold'; // wiring done, reset wireMode
+                        } else {
+                            wireMode = 'none';
+                        }
                         doConpoints(); // Update all conpoints and diodes
+                    }
+                    if (wireMode === 'none') {
+                        // Invert In-/Outputs
+                        for (let i = 0; i < gates.length; i++) {
+                            for (let j = 0; j < gates[i].inputCount; j++) {
+                                if (gates[i].mouseOverInput(j)) {
+                                    gates[i].invertInput(j);
+                                    let act = new Action('invGIP', [i, j], null);
+                                    actionUndo.push(act);
+                                }
+                            }
+                            for (let j = 0; j < gates[i].outputCount; j++) {
+                                if (gates[i].mouseOverOutput(j)) {
+                                    gates[i].invertOutput(j);
+                                    let act = new Action('invGOP', [i, j], null);
+                                    actionUndo.push(act);
+                                }
+                            }
+                        }
+                        for (let i = 0; i < customs.length; i++) {
+                            if (customs[i].visible) {
+                                for (let j = 0; j < customs[i].inputCount; j++) {
+                                    if (customs[i].mouseOverInput(j)) {
+                                        customs[i].invertInput(j);
+                                        let act = new Action('invCIP', [i, j], null);
+                                        actionUndo.push(act);
+                                    }
+                                }
+                                for (let j = 0; j < customs[i].outputCount; j++) {
+                                    if (customs[i].mouseOverOutput(j)) {
+                                        customs[i].invertOutput(j);
+                                        let act = new Action('invCOP', [i, j], null);
+                                        actionUndo.push(act);
+                                    }
+                                }
+                            }
+                        }
+                        for (let i = 0; i < segDisplays.length; i++) {
+                            for (let j = 0; j < segDisplays[i].inputCount; j++) {
+                                if (segDisplays[i].mouseOverInput(j)) {
+                                    segDisplays[i].invertInput(j);
+                                    let act = new Action('invDIP', [i, j], null);
+                                    actionUndo.push(act);
+                                }
+                            }
+                        }
+                        let noValidTarget = true;
+                        for (let i = 0; i < inputs.length; i++) {
+                            if (Boolean(inputs[i].mouseOver()) && propMode) {
+                                noValidTarget = false;
+                                // If the propMode is active, give options to name and make top
+                                if (propInput !== i) {
+                                    if (propInput >= 0) {
+                                        inputs[propInput].mark(false);
+                                    }
+                                    inputs[i].mark(true);
+                                    propInput = i;
+                                    showInputPropMenu();
+                                }
+                            }
+                        }
+                        for (let i = 0; i < outputs.length; i++) {
+                            if (Boolean(outputs[i].mouseOver()) && propMode) {
+                                noValidTarget = false;
+                                if (propOutput !== i) {
+                                    if (propOutput >= 0) {
+                                        outputs[propOutput].mark(false);
+                                    }
+                                    outputs[i].mark(true);
+                                    propOutput = i;
+                                    showOutputPropMenu();
+                                }
+                            }
+                        }
+                        for (let i = 0; i < labels.length; i++) {
+                            if (Boolean(labels[i].mouseOver()) && propMode) {
+                                noValidTarget = false;
+                                if (propLabel !== i) {
+                                    if (propLabel >= 0) {
+                                        labels[propLabel].mark(false);
+                                    }
+                                    labels[i].mark(true);
+                                    propLabel = i;
+                                    showLabelPropMenu();
+                                }
+                            }
+                        }
+                        if (noValidTarget && propMode) {
+                            hidePropMenu();
+                            unmarkPropTargets();
+                        }
+                        if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                            toggleDiodeAndConpoint();
+                        } else if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                            toggleDiode();
+                        }
                     }
                     break;
                 case 'delete': // If the delete mode is active
@@ -465,8 +473,6 @@ function mouseReleased() {
                         doConpoints();
                     }
                     break;
-                case 'none':
-                    break;
                 case 'select':
                     switch (selectMode) {
                         case 'start':
@@ -490,7 +496,7 @@ function mouseReleased() {
         redoButton.elt.disabled = (actionRedo.length === 0);
         undoButton.elt.disabled = (actionUndo.length === 0);
     } else {
-        pwSegments = []; // Not shure if this else branch has any purpose...
+        pwSegments = [];
         wireMode = 'none';
         lockElements = false;
     }
