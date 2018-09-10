@@ -255,11 +255,11 @@ function mouseClicked() {
     if (ctrlMode !== 'none' && selectMode === 'none') {
         setPropMode(false);
     }
-    if (ctrlMode !== 'addObject' || (addType > 3 || addType !== 0)) {
+    if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
         gateInputSelect.hide();
         labelGateInputs.hide();
     }
-    if (ctrlMode !== 'addObject' || ((addType > 3 || addType !== 0) && addType !== 10)) {
+    if (ctrlMode !== 'addObject' || ((addType > 3 || addType === 0) && addType !== 10)) {
         directionSelect.hide();
         labelDirection.hide();
     }
@@ -302,11 +302,6 @@ function mouseClicked() {
                                 addInput();
                             }
                             break;
-                        /*case 'diode':
-                            if (mouseButton === LEFT) {
-                                toggleDiode();
-                            }
-                            break;*/
                         case 9:
                             addLabel();
                             break;
