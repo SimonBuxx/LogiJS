@@ -50,6 +50,21 @@ function mouseWheel(event) {
                 break;
 
         }
+        if (ctrlMode !== 'none' && selectMode === 'none') {
+            setPropMode(false);
+        }
+        if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
+            gateInputSelect.hide();
+            labelGateInputs.hide();
+        }
+        if (ctrlMode !== 'addObject' || ((addType > 3 || addType === 0) && addType !== 10)) {
+            directionSelect.hide();
+            labelDirection.hide();
+        }
+        if (ctrlMode !== 'addObject' || addType !== 8) {
+            bitSelect.hide();
+            labelBits.hide();
+        }
         return;
     }
     if (mouseX > 0 && mouseY > 0) {
