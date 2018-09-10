@@ -13,7 +13,7 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-    if (keyIsDown(SHIFT)) {
+    if (keyIsDown(18)) {
         wheel = Math.sign(event.deltaY); // -1 for zoom in, +1 for zoom out
         addType = Math.max(1, Math.min(9, addType + wheel));
         console.log(addType);
