@@ -28,8 +28,7 @@ let groups = [];
 let gridSize = GRIDSIZE; // Size of the grid
 
 let ctrlMode = 'none'; // Possible modes: none, delete, addObject, select ...
-let addType = 'none'; // Possilbe modes: none, gate, output, input, ...
-let gateType = 'none'; // Possible modes: and, or, xor, ...
+let addType = 0; // Possible modes: none, and, output, input, ...
 let wireMode = 'none'; // Possible modes: none, hold, preview, delete ...
 let selectMode = 'start';
 
@@ -166,55 +165,55 @@ function setup() { // jshint ignore:line
     // Left Side Buttons
     // Adds and-gates
     andButton = createButton('And-Gate');
-    andButton.mousePressed(andClicked);
+    andButton.mousePressed(function () { andClicked(false); });
     andButton.elt.className = "buttonLeft";
     andButton.parent(leftSideButtons);
 
     // Adds or-gates
     orButton = createButton('Or-Gate');
-    orButton.mousePressed(orClicked);
+    orButton.mousePressed(function () { orClicked(false); });
     orButton.elt.className = "buttonLeft";
     orButton.parent(leftSideButtons);
 
     // Adds xor-gates
     xorButton = createButton('Xor-Gate');
-    xorButton.mousePressed(xorClicked);
+    xorButton.mousePressed(function () { xorClicked(false); });
     xorButton.elt.className = "buttonLeft";
     xorButton.parent(leftSideButtons);
 
     // Adds switches
     inputButton = createButton('Switch');
-    inputButton.mousePressed(inputClicked);
+    inputButton.mousePressed(function () { inputClicked(false); });
     inputButton.elt.className = "buttonLeft";
     inputButton.parent(leftSideButtons);
 
     // Adds buttons (short impulse)
     buttonButton = createButton('Button');
-    buttonButton.mousePressed(buttonClicked);
+    buttonButton.mousePressed(function () { buttonClicked(false); });
     buttonButton.elt.className = "buttonLeft";
     buttonButton.parent(leftSideButtons);
 
     // Adds clocks (variable impulse)
     clockButton = createButton('Clock');
-    clockButton.mousePressed(clockClicked);
+    clockButton.mousePressed(function () { clockClicked(false); });
     clockButton.elt.className = "buttonLeft";
     clockButton.parent(leftSideButtons);
 
     // Adds outputs (lamps)
     outputButton = createButton('Lamp');
-    outputButton.mousePressed(outputClicked);
+    outputButton.mousePressed(function () { outputClicked(false); });
     outputButton.elt.className = "buttonLeft";
     outputButton.parent(leftSideButtons);
 
     // Adds 7-segment displays
     segDisplayButton = createButton('7-Segment');
-    segDisplayButton.mousePressed(segDisplayClicked);
+    segDisplayButton.mousePressed(function () { segDisplayClicked(false); });
     segDisplayButton.elt.className = "buttonLeft";
     segDisplayButton.parent(leftSideButtons);
 
     // Adds labels
     labelButton = createButton('Label');
-    labelButton.mousePressed(labelButtonClicked);
+    labelButton.mousePressed(function () { labelButtonClicked(false); });
     labelButton.elt.className = "buttonLeft";
     labelButton.parent(leftSideButtons);
 
@@ -638,12 +637,12 @@ function urlParam(name, w) {
 }
 
 function customClicked(filename) {
-    if (ctrlMode === 'addObject' && addType === 'custom' && filename === custFile) {
+    if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
         setControlMode('addObject');
-        addType = 'custom';
+        addType = 10; // custom
         directionSelect.show();
         labelDirection.show();
         custFile = filename;
@@ -937,15 +936,14 @@ function simClicked() {
 /*
     Adding modes for gates, in/out, customs, etc.
 */
-function andClicked() {
-    if (ctrlMode === 'addObject' && addType === 'gate' && gateType === 'and') {
+function andClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 1 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
         setActive(andButton, true);
         setControlMode('addObject');
-        addType = 'gate';
-        gateType = 'and';
+        addType = 1; // and
         gateInputSelect.show();
         labelGateInputs.show();
         directionSelect.show();
@@ -953,15 +951,14 @@ function andClicked() {
     }
 }
 
-function orClicked() {
-    if (ctrlMode === 'addObject' && addType === 'gate' && gateType === 'or') {
+function orClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 2 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
         setActive(orButton, true);
         setControlMode('addObject');
-        addType = 'gate';
-        gateType = 'or';
+        addType = 2; // or
         gateInputSelect.show();
         labelGateInputs.show();
         directionSelect.show();
@@ -969,15 +966,14 @@ function orClicked() {
     }
 }
 
-function xorClicked() {
-    if (ctrlMode === 'addObject' && addType === 'gate' && gateType === 'xor') {
+function xorClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 3 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
         setActive(xorButton, true);
         setControlMode('addObject');
-        addType = 'gate';
-        gateType = 'xor';
+        addType = 3; // xor
         gateInputSelect.show();
         labelGateInputs.show();
         directionSelect.show();
@@ -985,8 +981,8 @@ function xorClicked() {
     }
 }
 
-function inputClicked() {
-    if (ctrlMode === 'addObject' && addType === 'input') {
+function inputClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 4 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
@@ -994,12 +990,12 @@ function inputClicked() {
         newIsButton = false;
         newIsClock = false;
         setControlMode('addObject');
-        addType = 'input';
+        addType = 4; // switch
     }
 }
 
-function buttonClicked() {
-    if (ctrlMode === 'addObject' && addType === 'input') {
+function buttonClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 5 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
@@ -1007,12 +1003,13 @@ function buttonClicked() {
         newIsButton = true;
         newIsClock = false;
         setControlMode('addObject');
-        addType = 'input';
+        addType = 5; // button
     }
 }
 
-function clockClicked() {
-    if (ctrlMode === 'addObject' && addType === 'input') {
+function clockClicked(dontToggle = false) {
+    console.log(dontToggle);
+    if (ctrlMode === 'addObject' && addType === 6 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
@@ -1020,29 +1017,29 @@ function clockClicked() {
         newIsButton = false;
         newIsClock = true;
         setControlMode('addObject');
-        addType = 'input';
+        addType = 6; // clock
     }
 }
 
-function outputClicked() {
-    if (ctrlMode === 'addObject' && addType === 'output') {
+function outputClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 7 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
         setActive(outputButton, true);
         setControlMode('addObject');
-        addType = 'output';
+        addType = 7; // output
     }
 }
 
-function segDisplayClicked() {
-    if (ctrlMode === 'addObject' && addType === 'segDisplay') {
+function segDisplayClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 8 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
         setActive(segDisplayButton, true);
         setControlMode('addObject');
-        addType = 'segDisplay';
+        addType = 8; // segDisplay
         bitSelect.show();
         labelBits.show();
     }
@@ -1061,14 +1058,14 @@ function startSelect() {
 }
 
 // Triggered when a label should be added
-function labelButtonClicked() {
-    if (ctrlMode === 'addObject' && addType === 'label') {
+function labelButtonClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 9 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
     } else {
         setActive(labelButton, true);
         setControlMode('addObject');
-        addType = 'label';
+        addType = 9; // label
     }
 }
 
@@ -1105,21 +1102,21 @@ function addGate(type, inputs, direction) {
     }
     let newGate = null;
     switch (type) {
-        case 'and':
+        case 1:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
-        case 'or':
+        case 2:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
-        case 'xor':
+        case 3:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
@@ -1840,6 +1837,9 @@ function wirePoints(x, y, j) {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
+    if (inputCaptionBox.elt === document.activeElement || outputCaptionBox.elt === document.activeElement || labelTextBox.elt === document.activeElement) {
+        return;
+    }
     if (textInput.elt !== document.activeElement) {
         if (keyCode >= 49 && keyCode <= 57) {
             gateInputCount = keyCode - 48;
@@ -1854,9 +1854,19 @@ function keyPressed() {
             case RETURN:
                 console.log(wires);
                 console.log(segments);
+                simClicked();
                 break;
             case CONTROL:
                 startSelect();
+                break;
+            case 32: // Space
+                if (ctrlMode !== 'delete') {
+                    deleteClicked();
+                } else {
+                    setActive(propertiesButton);
+                    setControlMode('none');
+                    setPropMode(true);
+                }
                 break;
             case 48: // 0
                 gateInputCount = 10;

@@ -11,6 +11,7 @@ function setPropMode(active) {
         unmarkPropTargets();
     } else {
         setControlMode('none');
+        addType = 0;
     }
 }
 

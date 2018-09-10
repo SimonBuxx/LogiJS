@@ -13,8 +13,47 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
+    if (keyIsDown(SHIFT)) {
+        wheel = Math.sign(event.deltaY); // -1 for zoom in, +1 for zoom out
+        addType = Math.max(1, Math.min(9, addType + wheel));
+        console.log(addType);
+        switch (addType) {
+            case 1:
+                andClicked(true);
+                break;
+            case 2:
+                orClicked(true);
+                break;
+            case 3:
+                xorClicked(true);
+                break;
+            case 4:
+                inputClicked(true);
+                break;
+            case 5:
+                buttonClicked(true);
+                break;
+            case 6:
+                clockClicked(true);
+                break;
+            case 7:
+                outputClicked(true);
+                break;
+            case 8:
+                segDisplayClicked(true);
+                break;
+            case 9:
+                labelButtonClicked(true);
+                break;
+            default:
+                console.log('Invalid object type!');
+                break;
+
+        }
+        return;
+    }
     if (mouseX > 0 && mouseY > 0) {
-        wheel = Math.sign(event.deltaY) * 1.5; // -1 for zoom in, +1 for zoom out
+        wheel = Math.sign(event.deltaY) * 1.5; // -1.5 for zoom in, +1.5 for zoom out
         if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
             origX = mouseX * (transform.zoom);
             origY = mouseY * (transform.zoom);
@@ -143,7 +182,16 @@ function mousePressed() {
     if (!simRunning && !mouseOverGUI() && (mouseButton === LEFT)) {
         switch (ctrlMode) {
             case 'none':
-                
+                switch (wireMode) {
+                    case 'none':
+                        wireMode = 'preview';
+                        pwstartX = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
+                        pwstartY = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+                        break;
+                    default:
+                }
+                break;
+            case 'addObject':
                 switch (wireMode) {
                     case 'none':
                         wireMode = 'preview';
@@ -207,60 +255,66 @@ function mouseClicked() {
     if (ctrlMode !== 'none' && selectMode === 'none') {
         setPropMode(false);
     }
-    if (ctrlMode !== 'addObject' || addType !== 'gate') {
+    if (ctrlMode !== 'addObject' || (addType > 3 || addType !== 0)) {
         gateInputSelect.hide();
         labelGateInputs.hide();
     }
-    if (ctrlMode !== 'addObject' || (addType !== 'gate' && addType !== 'custom')) {
+    if (ctrlMode !== 'addObject' || ((addType > 3 || addType !== 0) && addType !== 10)) {
         directionSelect.hide();
         labelDirection.hide();
     }
-    if (ctrlMode !== 'addObject' || addType !== 'segDisplay') {
+    if (ctrlMode !== 'addObject' || addType !== 8) {
         bitSelect.hide();
         labelBits.hide();
     }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
-                switch (addType) { // Handle object adding
-                    case 'gate':
-                        if (mouseButton === LEFT) {
-                            addGate(gateType, gateInputCount, gateDirection);
-                        }
-                        break;
-                    case 'custom':
-                        if (mouseButton === LEFT) {
-                            addCustom(custFile, gateDirection);
-                        }
-                        break;
-                    case 'output':
-                        if (mouseButton === LEFT) {
-                            addOutput();
-                        }
-                        break;
-                    case 'segDisplay':
-                        if (mouseButton === LEFT) {
-                            addSegDisplay(segBits);
-                            setTimeout(reDraw, 50);
-                        }
-                        break;
-                    case 'input':
-                        if (mouseButton === LEFT) {
-                            addInput();
-                        }
-                        break;
-                    case 'diode':
-                        if (mouseButton === LEFT) {
-                            toggleDiode();
-                        }
-                        break;
-                    case 'label':
-                        addLabel();
-                        break;
-                    case 'none':
-                        break;
-                    default:
-                        console.log('Invalid object type!');
+                if (wireMode !== 'hold') {
+                    switch (addType) { // Handle object adding
+                        case 1:
+                        case 2:
+                        case 3:
+                            if (mouseButton === LEFT) {
+                                addGate(addType, gateInputCount, gateDirection);
+                            }
+                            break;
+                        case 10:
+                            if (mouseButton === LEFT) {
+                                addCustom(custFile, gateDirection);
+                            }
+                            break;
+                        case 7:
+                            if (mouseButton === LEFT) {
+                                addOutput();
+                            }
+                            break;
+                        case 8:
+                            if (mouseButton === LEFT) {
+                                addSegDisplay(segBits);
+                                setTimeout(reDraw, 50);
+                            }
+                            break;
+                        case 4:
+                        case 5:
+                        case 6:
+                            if (mouseButton === LEFT) {
+                                addInput();
+                            }
+                            break;
+                        /*case 'diode':
+                            if (mouseButton === LEFT) {
+                                toggleDiode();
+                            }
+                            break;*/
+                        case 9:
+                            addLabel();
+                            break;
+                        case 'none':
+                            break;
+                        default:
+                            console.log('Invalid object type!');
+                    }
                 }
                 break;
             case 'none':
@@ -293,6 +347,35 @@ function mouseReleased() {
         if (mouseButton === LEFT) {
             switch (ctrlMode) {
                 case 'addObject':
+                    if (wireMode === 'preview') { // If the preview wire mode is active
+                        let pushed = false;
+                        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
+                            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
+                                pushed = true;
+                            }
+                        }
+                        if (pushed) {
+                            let oldSegments = [];
+                            for (let i = segments.length - 1; i >= 0; i--) {
+                                oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                            }
+                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
+                        }
+                        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
+                            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
+                                segments.push(pwSegments[i]);
+                            }
+                        }
+                        findLines();
+                        lockElements = false;
+                        pwSegments = []; // delete the preview segments
+                        if (pushed) {
+                            wireMode = 'hold'; // wiring done, reset wireMode
+                        } else {
+                            wireMode = 'none';
+                        }
+                        doConpoints(); // Update all conpoints and diodes
+                    }
                     break;
                 case 'none':
                     if (wireMode === 'preview') { // If the preview wire mode is active
