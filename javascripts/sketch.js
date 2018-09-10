@@ -1853,7 +1853,14 @@ function keyPressed() {
                 break;
             case RETURN:
                 console.log(wires);
-                console.log(segments);
+                console.log(segments)
+                setPropMode(false);
+                gateInputSelect.hide();
+                labelGateInputs.hide();
+                directionSelect.hide();
+                labelDirection.hide();
+                bitSelect.hide();
+                labelBits.hide();
                 simClicked();
                 break;
             case CONTROL:
