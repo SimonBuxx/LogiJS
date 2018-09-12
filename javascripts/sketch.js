@@ -27,10 +27,9 @@ let groups = [];
 
 let gridSize = GRIDSIZE; // Size of the grid
 
-let ctrlMode = 'none'; // Possible modes: none, delete, addObject, addWire, select ...
-let addType = 'none'; // Possilbe modes: none, gate, output, input, ...
-let gateType = 'none'; // Possible modes: and, or, xor, ...
-let wireMode = 'none'; // Possible modes: none, preview, delete ...
+let ctrlMode = 'none'; // Possible modes: none, delete, addObject, select ...
+let addType = 0; // Possible modes: none, and, output, input, ...
+let wireMode = 'none'; // Possible modes: none, hold, preview, delete ...
 let selectMode = 'start';
 
 let gateInputCount = 2; // Input count for new gates
@@ -75,9 +74,9 @@ let wireIndizees = [];
 
 // GUI Elements
 let textInput, saveButton, loadButton, newButton; // Right hand side
-let wireButton, deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
+let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, diodeButton, propertiesButton, labelButton, segDisplayButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
 let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
 let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits;
@@ -167,51 +166,57 @@ function setup() { // jshint ignore:line
     // Left Side Buttons
     // Adds and-gates
     andButton = createButton('And-Gate');
-    andButton.mousePressed(andClicked);
+    andButton.mousePressed(function () { andClicked(false); });
     andButton.elt.className = "buttonLeft";
     andButton.parent(leftSideButtons);
 
     // Adds or-gates
     orButton = createButton('Or-Gate');
-    orButton.mousePressed(orClicked);
+    orButton.mousePressed(function () { orClicked(false); });
     orButton.elt.className = "buttonLeft";
     orButton.parent(leftSideButtons);
 
     // Adds xor-gates
     xorButton = createButton('Xor-Gate');
-    xorButton.mousePressed(xorClicked);
+    xorButton.mousePressed(function () { xorClicked(false); });
     xorButton.elt.className = "buttonLeft";
     xorButton.parent(leftSideButtons);
 
     // Adds switches
     inputButton = createButton('Switch');
-    inputButton.mousePressed(inputClicked);
+    inputButton.mousePressed(function () { inputClicked(false); });
     inputButton.elt.className = "buttonLeft";
     inputButton.parent(leftSideButtons);
 
     // Adds buttons (short impulse)
     buttonButton = createButton('Button');
-    buttonButton.mousePressed(buttonClicked);
+    buttonButton.mousePressed(function () { buttonClicked(false); });
     buttonButton.elt.className = "buttonLeft";
     buttonButton.parent(leftSideButtons);
 
     // Adds clocks (variable impulse)
     clockButton = createButton('Clock');
-    clockButton.mousePressed(clockClicked);
+    clockButton.mousePressed(function () { clockClicked(false); });
     clockButton.elt.className = "buttonLeft";
     clockButton.parent(leftSideButtons);
 
     // Adds outputs (lamps)
     outputButton = createButton('Lamp');
-    outputButton.mousePressed(outputClicked);
+    outputButton.mousePressed(function () { outputClicked(false); });
     outputButton.elt.className = "buttonLeft";
     outputButton.parent(leftSideButtons);
 
     // Adds 7-segment displays
     segDisplayButton = createButton('7-Segment');
-    segDisplayButton.mousePressed(segDisplayClicked);
+    segDisplayButton.mousePressed(function () { segDisplayClicked(false); });
     segDisplayButton.elt.className = "buttonLeft";
     segDisplayButton.parent(leftSideButtons);
+
+    // Adds labels
+    labelButton = createButton('Label');
+    labelButton.mousePressed(function () { labelButtonClicked(false); });
+    labelButton.elt.className = "buttonLeft";
+    labelButton.parent(leftSideButtons);
 
     // Adds text 'Advanced'
     labelAdvanced = createP('Advanced');
@@ -416,29 +421,34 @@ function setup() { // jshint ignore:line
     clockspeedSlider.position(windowWidth - 205, windowHeight - 115);
 
     //Upper left
-    // Activates the wiring mode
-    wireButton = createButton('Wiring');
-    wireButton.position(153, 4);
-    wireButton.mousePressed(wiringClicked);
-    //wireButton.elt.style.width = "117px";
-    wireButton.elt.className = "button";
+
+    // Activates the default mode
+    propertiesButton = createButton('Default');
+    propertiesButton.position(152, 4);
+    propertiesButton.mousePressed(function () {
+        setActive(propertiesButton);
+        setControlMode('none');
+        setPropMode(true);
+    });
+    propertiesButton.elt.className = "button active";
+
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('Delete');
-    deleteButton.position(226, 4);
+    deleteButton.position(231, 4);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
 
     // Starts and stops the simulation
     simButton = createButton('Start');
     simButton.elt.style.width = '34px';
-    simButton.position(299, 4);
+    simButton.position(304, 4);
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
 
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(362, 4);
+    undoButton.position(366, 4);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -447,7 +457,7 @@ function setup() { // jshint ignore:line
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(427, 4);
+    redoButton.position(432, 4);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -456,34 +466,9 @@ function setup() { // jshint ignore:line
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(493, 4);
+    selectButton.position(496, 4);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
-
-    // Adds diodes (barricade in one direction)
-    diodeButton = createButton('Diodes');
-    diodeButton.position(563, 4);
-    diodeButton.mousePressed(diodeClicked);
-    //diodeButton.elt.style.width = "117px";
-    diodeButton.elt.className = "button";
-
-    // Adds labels
-    labelButton = createButton('Label');
-    labelButton.position(641, 4);
-    labelButton.mousePressed(labelButtonClicked);
-    labelButton.elt.className = "button";
-
-    // Toggles the properties mode
-    propertiesButton = createButton('Properties');
-    propertiesButton.position(708, 4);
-    propertiesButton.mousePressed(function () {
-        setActive(propertiesButton);
-        setControlMode('none');
-        setPropMode(true);
-        previewSymbol = null;
-        reDraw();
-    });
-    propertiesButton.elt.className = "button active";
 
     // Upper right
     // Input field for the file name
@@ -645,7 +630,7 @@ function setup() { // jshint ignore:line
         showHints = true;
     }
     reDraw();
-    setTimeout(reDraw, 50); // Redraw after 50 ms in case fonts weren't loaded on first redraw
+    setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -657,11 +642,16 @@ function urlParam(name, w) {
 }
 
 function customClicked(filename) {
-    setControlMode('addObject');
-    addType = 'custom';
-    directionSelect.show();
-    labelDirection.show();
-    custFile = filename;
+    if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setControlMode('addObject');
+        addType = 10; // custom
+        directionSelect.show();
+        labelDirection.show();
+        custFile = filename;
+    }
 }
 
 // Triggered when a sketch should be saved
@@ -763,7 +753,6 @@ function setActive(btn, left) {
 }
 
 function setUnactive() {
-    wireButton.elt.className = 'button';
     deleteButton.elt.className = 'button';
     andButton.elt.className = 'buttonLeft';
     orButton.elt.className = 'buttonLeft';
@@ -772,9 +761,8 @@ function setUnactive() {
     buttonButton.elt.className = 'buttonLeft';
     clockButton.elt.className = 'buttonLeft';
     outputButton.elt.className = 'buttonLeft';
-    diodeButton.elt.className = 'button';
     propertiesButton.elt.className = 'button';
-    labelButton.elt.className = 'button';
+    labelButton.elt.className = 'buttonLeft';
     selectButton.elt.className = 'button';
     segDisplayButton.elt.className = 'buttonLeft';
     counter4Button.elt.className = 'buttonLeft';
@@ -794,17 +782,6 @@ function setUnactive() {
     halfaddButton.elt.className = 'buttonLeft';
     fulladdButton.elt.className = 'buttonLeft';
     ascustomButton.elt.className = 'button';
-}
-
-/*
-    Triggered when the wiring button is clicked
-*/
-function wiringClicked() {
-    setControlMode('addWire'); // Activates wire adding, leaving all other modes
-    setActive(wireButton);
-    wireMode = 'none'; // Resets the wiring mode
-    previewSymbol = null;
-    reDraw();
 }
 
 function deleteClicked() {
@@ -897,10 +874,13 @@ function deleteClicked() {
         }
         doConpoints();
     } else {
-        setActive(deleteButton);
-        setControlMode('delete');
-        previewSymbol = null;
-        reDraw();
+        if (ctrlMode === 'delete') {
+            setControlMode('none');
+            setActive(propertiesButton);
+        } else {
+            setActive(deleteButton);
+            setControlMode('delete');
+        }
     }
 }
 
@@ -941,14 +921,15 @@ function labelChanged() {
 function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value());
     // Ensure that the correct preview gate is displayed when user selection changes
-    switch(gateType){
-        case 'and': previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+    // TODO change to createPreviewSymbol()
+    switch(addType){
+        case 1: previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
                     previewSymbol.alpha = 100;
                     break;
-        case 'or':  previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
+        case 2:  previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
                     previewSymbol.alpha = 100;
                     break;   
-        case 'xor': previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
+        case 3: previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
                     previewSymbol.alpha = 100;
                     break;           
     }
@@ -957,6 +938,8 @@ function newGateInputNumber() {
 
 function newBitLength() {
     segBits = parseInt(bitSelect.value());
+
+    // TODO change to createPreviewSymbol()
     previewSymbol = new SegmentDisplay(mouseX, mouseY, transform, segBits);
     previewSymbol.alpha = 100;
 }
@@ -969,14 +952,15 @@ function newDirection() {
         case 'Down': gateDirection = 1; break;
     }
     // Ensure that the correct preview gate is displayed when user selection changes
-    switch(gateType){
-        case 'and': previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
+    // TODO change to createPreviewSymbol()
+    switch(addType){
+        case 1: previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
                     previewSymbol.alpha = 100;
                     break;
-        case 'or':  previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
+        case 2:  previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
                     previewSymbol.alpha = 100;
                     break;   
-        case 'xor': previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
+        case 3: previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
                     previewSymbol.alpha = 100;
                     break;           
     }
@@ -1007,119 +991,137 @@ function simClicked() {
 /*
     Adding modes for gates, in/out, customs, etc.
 */
-function andClicked() {
-    setActive(andButton, true);
-    setControlMode('addObject');
-    addType = 'gate';
-    gateType = 'and';
-    gateInputSelect.show();
-    labelGateInputs.show();
-    directionSelect.show();
-    labelDirection.show();
-    previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-    previewSymbol.alpha = 100;
+function andClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 1 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(andButton, true);
+        setControlMode('addObject');
+        addType = 1; // and
+        gateInputSelect.show();
+        labelGateInputs.show();
+        directionSelect.show();
+        labelDirection.show();
+    }
 }
 
-function orClicked() {
-    setActive(orButton, true);
-    setControlMode('addObject');
-    addType = 'gate';
-    gateType = 'or';
-    gateInputSelect.show();
-    labelGateInputs.show();
-    directionSelect.show();
-    labelDirection.show();
-    previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
-    previewSymbol.alpha = 100;
+function orClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 2 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(orButton, true);
+        setControlMode('addObject');
+        addType = 2; // or
+        gateInputSelect.show();
+        labelGateInputs.show();
+        directionSelect.show();
+        labelDirection.show();
+    }
 }
 
-function xorClicked() {
-    setActive(xorButton, true);
-    setControlMode('addObject');
-    addType = 'gate';
-    gateType = 'xor';
-    gateInputSelect.show();
-    labelGateInputs.show();
-    directionSelect.show();
-    labelDirection.show();
-    previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
-    previewSymbol.alpha = 100;
+function xorClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 3 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(xorButton, true);
+        setControlMode('addObject');
+        addType = 3; // xor
+        gateInputSelect.show();
+        labelGateInputs.show();
+        directionSelect.show();
+        labelDirection.show();
+    }
 }
 
-function inputClicked() {
-    setActive(inputButton, true);
-    newIsButton = false;
-    newIsClock = false;
-    setControlMode('addObject');
-    addType = 'input';
-    previewSymbol = new Input(mouseX, mouseY, transform);
-    previewSymbol.alpha = 100;
+function inputClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 4 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(inputButton, true);
+        newIsButton = false;
+        newIsClock = false;
+        setControlMode('addObject');
+        addType = 4; // switch
+    }
 }
 
-function buttonClicked() {
-    setActive(buttonButton, true);
-    newIsButton = true;
-    newIsClock = false;
-    setControlMode('addObject');
-    addType = 'input';
-    previewSymbol = new Input(mouseX, mouseY, transform);
-    previewSymbol.alpha = 100;
+function buttonClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 5 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(buttonButton, true);
+        newIsButton = true;
+        newIsClock = false;
+        setControlMode('addObject');
+        addType = 5; // button
+    }
 }
 
-function clockClicked() {
-    setActive(clockButton, true);
-    newIsButton = false;
-    newIsClock = true;
-    setControlMode('addObject');
-    addType = 'input';
-    previewSymbol = new Input(mouseX, mouseY, transform);
-    previewSymbol.alpha = 100;
+function clockClicked(dontToggle = false) {
+    console.log(dontToggle);
+    if (ctrlMode === 'addObject' && addType === 6 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(clockButton, true);
+        newIsButton = false;
+        newIsClock = true;
+        setControlMode('addObject');
+        addType = 6; // clock
+    }
 }
 
-function outputClicked() {
-    setActive(outputButton, true);
-    setControlMode('addObject');
-    addType = 'output';
-    previewSymbol = new Output(mouseX, mouseY, transform, 0);
-    previewSymbol.alpha = 100;
+function outputClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 7 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(outputButton, true);
+        setControlMode('addObject');
+        addType = 7; // output
+    }
 }
 
-function segDisplayClicked() {
-    setActive(segDisplayButton, true);
-    setControlMode('addObject');
-    addType = 'segDisplay';
-    bitSelect.show();
-    labelBits.show();
-    previewSymbol = new SegmentDisplay(mouseX, mouseY, transform, 4);
-    previewSymbol.alpha = 100;
-}
-
-// diodeClick is toggling the diodes,
-// not only adding them
-function diodeClicked() {
-    setActive(diodeButton);
-    setControlMode('addObject');
-    addType = 'diode';
-    previewSymbol = null;
-    reDraw();
+function segDisplayClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 8 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(segDisplayButton, true);
+        setControlMode('addObject');
+        addType = 8; // segDisplay
+        bitSelect.show();
+        labelBits.show();
+    }
 }
 
 // Starts the selection process
 function startSelect() {
-    setActive(selectButton);
-    setControlMode('select');
-    selectMode = 'none';
-    previewSymbol = null;
-    reDraw();
+    if (ctrlMode === 'select') {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(selectButton);
+        setControlMode('select');
+        selectMode = 'none';
+    }
 }
 
 // Triggered when a label should be added
-function labelButtonClicked() {
-    setActive(labelButton);
-    setControlMode('addObject');
-    addType = 'label';
-    previewSymbol = null;
-    reDraw();
+function labelButtonClicked(dontToggle = false) {
+    if (ctrlMode === 'addObject' && addType === 9 && !dontToggle) {
+        setControlMode('none');
+        setActive(propertiesButton);
+    } else {
+        setActive(labelButton, true);
+        setControlMode('addObject');
+        addType = 9; // label
+    }
 }
 
 /*
@@ -1133,7 +1135,7 @@ function setControlMode(mode) {
         unmarkAll();
         showSClickBox = false;
     }
-    if (mode === 'addObject' || mode === 'addWire' || mode === 'select' || mode === 'delete') {
+    if (mode === 'addObject' || mode === 'select' || mode === 'delete') {
         setPropMode(false);
         ctrlMode = mode;
     } else if (mode === 'none') {
@@ -1155,21 +1157,21 @@ function addGate(type, inputs, direction) {
     }
     let newGate = null;
     switch (type) {
-        case 'and':
+        case 1:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
-        case 'or':
+        case 2:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
-        case 'xor':
+        case 3:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
@@ -1282,32 +1284,28 @@ function addLabel() {
     reDraw();
 }
 
-/*
-    Adds a diode as a special type of ConPoints in the diodes array
-    Caution: Also deletes diodes if existing => More like toggleDiode()
-*/
-function toggleDiode() {
+function toggleDiode(restore) {
     for (var i = 0; i < diodes.length; i++) {
-        if ((diodes[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+        if ((diodes[i].x === Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
+            (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+            diodes[i].cp = true;
             deleteDiode(i);
             return;
         }
     }
     createDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
-        Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
-    // Undo-Redo handling in createDiode()
+        Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, restore);
     reDraw();
 }
 
-function toggleConpoint() {
+function toggleConpoint(undoable) {
     for (var i = 0; i < conpoints.length; i++) {
-        if ((conpoints[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (conpoints[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+        if ((conpoints[i].x === Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
+            (conpoints[i].y === Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
             let cp = conpoints.splice(i, 1);
             let before = conpoints.slice(0);
             doConpoints();
-            if (JSON.stringify(conpoints) === JSON.stringify(before)) {
+            if (JSON.stringify(conpoints) === JSON.stringify(before) && undoable) {
                 pushUndoAction('delCp', [], cp);
             }
             return;
@@ -1316,8 +1314,21 @@ function toggleConpoint() {
     conpoints.push(new ConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, -1));
     let before = conpoints.slice(0);
     doConpoints();
-    if (JSON.stringify(conpoints) === JSON.stringify(before)) {
+    if ((JSON.stringify(conpoints) === JSON.stringify(before)) && undoable) {
         pushUndoAction('addCp', [], conpoints[conpoints.length - 1]);
+    }
+    reDraw();
+}
+
+function toggleDiodeAndConpoint() {
+    if (isDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) >= 0) {
+        toggleDiode(false);
+    } else {
+        if (isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) >= 0) {
+            toggleConpoint(true);
+        } else {
+            toggleDiode(false);
+        }
     }
     reDraw();
 }
@@ -1510,7 +1521,6 @@ function disableButtons(status) {
     andButton.elt.disabled = status;
     orButton.elt.disabled = status;
     xorButton.elt.disabled = status;
-    wireButton.elt.disabled = status;
     inputButton.elt.disabled = status;
     outputButton.elt.disabled = status;
     segDisplayButton.elt.disabled = status;
@@ -1518,7 +1528,6 @@ function disableButtons(status) {
     clockButton.elt.disabled = status;
     deleteButton.elt.disabled = status;
     selectButton.elt.disabled = status;
-    diodeButton.elt.disabled = status;
     reg4Button.elt.disabled = status;
     decoder4Button.elt.disabled = status;
     decoder2Button.elt.disabled = status;
@@ -1750,10 +1759,10 @@ function reDraw() {
                 break;
             case 20:
                 displayHint(1600, hintPic20, 'Diodes', 'Please load the sketch \'traffic\'. As you can see, there is an area with',
-                    'multiple diodes (little triangles) on it. Click on \'Diodes\' to enter the diode mode.');
+                    'multiple diodes (little triangles) on it.');
                 break;
             case 21:
-                displayHint(1500, hintPic21, 'Diodes', 'You can now toggle diodes by clicking on them or on empty wire',
+                displayHint(1500, hintPic21, 'Diodes', 'In properties mode, you can toggle diodes by clicking on them or on empty wire',
                     'crossings. Start the simulation to see how they are used in this example!');
                 break;
             case 22:
@@ -1818,6 +1827,7 @@ function showElements() {
         elem.show();
     }
 
+    // TODO find better implementation
     if(previewSymbol !== null){
         previewSymbol.show();
     }
@@ -1889,7 +1899,14 @@ function wirePoints(x, y, j) {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
+    if (inputCaptionBox.elt === document.activeElement || outputCaptionBox.elt === document.activeElement || labelTextBox.elt === document.activeElement) {
+        return;
+    }
     if (textInput.elt !== document.activeElement) {
+        if (keyCode >= 49 && keyCode <= 57) {
+            gateInputCount = keyCode - 48;
+            return;
+        }
         switch (keyCode) {
             case ESCAPE:
                 setControlMode('none');
@@ -1898,9 +1915,45 @@ function keyPressed() {
                 break;
             case RETURN:
                 console.log(wires);
-                console.log(segments);
+                console.log(segments)
+                setPropMode(false);
+                gateInputSelect.hide();
+                labelGateInputs.hide();
+                directionSelect.hide();
+                labelDirection.hide();
+                bitSelect.hide();
+                labelBits.hide();
+                simClicked();
+                break;
+            case CONTROL:
+                startSelect();
+                break;
+            case 32: // Space
+                if (ctrlMode !== 'delete') {
+                    deleteClicked();
+                } else {
+                    setActive(propertiesButton);
+                    setControlMode('none');
+                    setPropMode(true);
+                }
+                break;
+            case 48: // 0
+                gateInputCount = 10;
+                break;
+            case RIGHT_ARROW:
+                gateDirection = 0;
+                break;
+            case DOWN_ARROW:
+                gateDirection = 1;
+                break;
+            case LEFT_ARROW:
+                gateDirection = 2;
+                break;
+            case UP_ARROW:
+                gateDirection = 3;
                 break;
             default:
+                break;
         }
     } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
         loadClicked();

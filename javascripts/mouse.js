@@ -15,8 +15,62 @@ let previewSymbol = null;
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
+    if (keyIsDown(18) && !simRunning) {
+        wheel = Math.sign(event.deltaY); // -1 for zoom in, +1 for zoom out
+        addType = Math.max(1, Math.min(9, addType + wheel));
+        console.log(addType);
+        switch (addType) {
+            case 1:
+                andClicked(true);
+                break;
+            case 2:
+                orClicked(true);
+                break;
+            case 3:
+                xorClicked(true);
+                break;
+            case 4:
+                inputClicked(true);
+                break;
+            case 5:
+                buttonClicked(true);
+                break;
+            case 6:
+                clockClicked(true);
+                break;
+            case 7:
+                outputClicked(true);
+                break;
+            case 8:
+                segDisplayClicked(true);
+                break;
+            case 9:
+                labelButtonClicked(true);
+                break;
+            default:
+                console.log('Invalid object type!');
+                break;
+
+        }
+        if (ctrlMode !== 'none' && selectMode === 'none') {
+            setPropMode(false);
+        }
+        if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
+            gateInputSelect.hide();
+            labelGateInputs.hide();
+        }
+        if (ctrlMode !== 'addObject' || ((addType > 3 || addType === 0) && addType !== 10)) {
+            directionSelect.hide();
+            labelDirection.hide();
+        }
+        if (ctrlMode !== 'addObject' || addType !== 8) {
+            bitSelect.hide();
+            labelBits.hide();
+        }
+        return;
+    }
     if (mouseX > 0 && mouseY > 0) {
-        wheel = Math.sign(event.deltaY) * 1.5; // -1 for zoom in, +1 for zoom out
+        wheel = Math.sign(event.deltaY) * 1.5; // -1.5 for zoom in, +1.5 for zoom out
         if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
             origX = mouseX * (transform.zoom);
             origY = mouseY * (transform.zoom);
@@ -30,40 +84,14 @@ function mouseWheel(event) {
             reDraw();
         }
     }
-    let hand = false;
-    if (simRunning || propMode) {
-        if (!simRunning) {
-            for (const elem of outputs) {
-                if (elem.mouseOver()) {
-                    hand = true;
-                    cursor(HAND);
-                }
-            }
-            for (const elem of inputs) {
-                if (elem.mouseOver()) {
-                    hand = true;
-                    cursor(HAND);
-                }
-            }
-        } else {
-            for (const elem of inputs) {
-                if (elem.mouseOver() && !elem.getIsClock()) {
-                    hand = true;
-                    cursor(HAND);
-                }
-            }
-        }
-    }
-    if (ctrlMode === 'select' && sClickBox.mouseOver() && showSClickBox) {
-        hand = true;
-        cursor(MOVE);
-    }
-    if (!hand) {
-        cursor(ARROW);
-    }
+    updateCursors();
 }
 
 function mouseMoved() {
+    updateCursors();
+}
+
+function updateCursors() {
     let hand = false;
     if (simRunning || propMode) {
         if (!simRunning) {
@@ -124,7 +152,7 @@ function mouseMoved() {
                     }
                 }
             }
-            if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+            if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                 hand = true;
                 cursor(HAND);
             }
@@ -145,21 +173,23 @@ function mouseMoved() {
         cursor(ARROW);
     }
 
-    // Draws a preview of the gate, so the user will see where the gate will be placed
+    // Repositions and draws the component, so the user will see where the gate will be placed
     // First checks whether and/or/xor gates or switch/button/clock/segmentDisplay are chosen 
-    if(ctrlMode === 'addObject' && (addType === 'gate' && (gateType === 'and' || 
-        gateType === 'or' || gateType === 'xor') || addType === 'input' || addType === 'output' || addType === 'segDisplay') && !mouseOverGUI()){
-        // Prevents that a gate is created over an existing gate
-        for (let i = 0; i < gates.length; i++) {
-            if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-                (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-                    return;
-                }  
+    if(ctrlMode === 'addObject' && !mouseOverGUI() && previewSymbol !== null){
+        if(0 >= addType <= 9){
+            // Prevents that a gate is created over an existing gate
+            for (let i = 0; i < gates.length; i++) {
+                if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+                    (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+                        return;
+                    }  
+            }
         }
         // Changes preview gate coordinates according to mouse position
         previewSymbol.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
         reDraw();
-    }
+    } 
+    
 
     if (ctrlMode === 'addObject' && addType === 'diode') {
         for (const elem of diodes) {
@@ -195,9 +225,22 @@ function mousePressed() {
     if (ctrlMode !== 'select') {
         showSClickBox = false;
     }
+    if (wireMode === 'hold') {
+        wireMode = 'none';
+    }
     if (!simRunning && !mouseOverGUI() && (mouseButton === LEFT)) {
         switch (ctrlMode) {
-            case 'addWire':
+            case 'none':
+                switch (wireMode) {
+                    case 'none':
+                        wireMode = 'preview';
+                        pwstartX = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
+                        pwstartY = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+                        break;
+                    default:
+                }
+                break;
+            case 'addObject':
                 switch (wireMode) {
                     case 'none':
                         wireMode = 'preview';
@@ -241,7 +284,7 @@ function mousePressed() {
                             selectMode = 'drag';
                         } else {
                             setControlMode('none');
-                            setUnactive();
+                            setActive(propertiesButton);
                             pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
                                 sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
                             initX = 0;
@@ -261,155 +304,64 @@ function mouseClicked() {
     if (ctrlMode !== 'none' && selectMode === 'none') {
         setPropMode(false);
     }
-    if (ctrlMode !== 'addObject' || addType !== 'gate') {
+    if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
         gateInputSelect.hide();
         labelGateInputs.hide();
     }
-    if (ctrlMode !== 'addObject' || (addType !== 'gate' && addType !== 'custom')) {
+    if (ctrlMode !== 'addObject' || ((addType > 3 || addType === 0) && addType !== 10)) {
         directionSelect.hide();
         labelDirection.hide();
     }
-    if (ctrlMode !== 'addObject' || addType !== 'segDisplay') {
+    if (ctrlMode !== 'addObject' || addType !== 8) {
         bitSelect.hide();
         labelBits.hide();
     }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
-                switch (addType) { // Handle object adding
-                    case 'gate':
-                        if (mouseButton === LEFT) {
-                            addGate(gateType, gateInputCount, gateDirection);
-                        }
-                        break;
-                    case 'custom':
-                        if (mouseButton === LEFT) {
-                            addCustom(custFile, gateDirection);
-                        }
-                        break;
-                    case 'output':
-                        if (mouseButton === LEFT) {
-                            addOutput();
-                        }
-                        break;
-                    case 'segDisplay':
-                        if (mouseButton === LEFT) {
-                            addSegDisplay(segBits);
-                            setTimeout(reDraw, 50);
-                        }
-                        break;
-                    case 'input':
-                        if (mouseButton === LEFT) {
-                            addInput();
-                        }
-                        break;
-                    case 'diode':
-                        if (mouseButton === LEFT) {
-                            toggleDiode();
-                        }
-                        break;
-                    case 'label':
-                        addLabel();
-                        break;
-                    case 'none':
-                        break;
-                    default:
-                        console.log('Invalid object type!');
+                if (wireMode !== 'hold') {
+                    switch (addType) { // Handle object adding
+                        case 1:
+                        case 2:
+                        case 3:
+                            if (mouseButton === LEFT) {
+                                addGate(addType, gateInputCount, gateDirection);
+                            }
+                            break;
+                        case 10:
+                            if (mouseButton === LEFT) {
+                                addCustom(custFile, gateDirection);
+                            }
+                            break;
+                        case 7:
+                            if (mouseButton === LEFT) {
+                                addOutput();
+                            }
+                            break;
+                        case 8:
+                            if (mouseButton === LEFT) {
+                                addSegDisplay(segBits);
+                                setTimeout(reDraw, 50);
+                            }
+                            break;
+                        case 4:
+                        case 5:
+                        case 6:
+                            if (mouseButton === LEFT) {
+                                addInput();
+                            }
+                            break;
+                        case 9:
+                            addLabel();
+                            break;
+                        case 'none':
+                            break;
+                        default:
+                            console.log('Invalid object type!');
+                    }
                 }
                 break;
             case 'none':
-                if (mouseButton === LEFT) {
-                    // Invert In-/Outputs
-                    for (let i = 0; i < gates.length; i++) {
-                        for (let j = 0; j < gates[i].inputCount; j++) {
-                            if (gates[i].mouseOverInput(j)) {
-                                gates[i].invertInput(j);
-                                let act = new Action('invGIP', [i, j], null);
-                                actionUndo.push(act);
-                            }
-                        }
-                        for (let j = 0; j < gates[i].outputCount; j++) {
-                            if (gates[i].mouseOverOutput(j)) {
-                                gates[i].invertOutput(j);
-                                let act = new Action('invGOP', [i, j], null);
-                                actionUndo.push(act);
-                            }
-                        }
-                    }
-                    for (let i = 0; i < customs.length; i++) {
-                        if (customs[i].visible) {
-                            for (let j = 0; j < customs[i].inputCount; j++) {
-                                if (customs[i].mouseOverInput(j)) {
-                                    customs[i].invertInput(j);
-                                    let act = new Action('invCIP', [i, j], null);
-                                    actionUndo.push(act);
-                                }
-                            }
-                            for (let j = 0; j < customs[i].outputCount; j++) {
-                                if (customs[i].mouseOverOutput(j)) {
-                                    customs[i].invertOutput(j);
-                                    let act = new Action('invCOP', [i, j], null);
-                                    actionUndo.push(act);
-                                }
-                            }
-                        }
-                    }
-                    for (let i = 0; i < segDisplays.length; i++) {
-                        for (let j = 0; j < segDisplays[i].inputCount; j++) {
-                            if (segDisplays[i].mouseOverInput(j)) {
-                                segDisplays[i].invertInput(j);
-                                let act = new Action('invDIP', [i, j], null);
-                                actionUndo.push(act);
-                            }
-                        }
-                    }
-                    let noValidTarget = true;
-                    for (let i = 0; i < inputs.length; i++) {
-                        if (Boolean(inputs[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            // If the propMode is active, give options to name and make top
-                            if (propInput !== i) {
-                                if (propInput >= 0) {
-                                    inputs[propInput].mark(false);
-                                }
-                                inputs[i].mark(true);
-                                propInput = i;
-                                showInputPropMenu();
-                            }
-                        }
-                    }
-                    for (let i = 0; i < outputs.length; i++) {
-                        if (Boolean(outputs[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            if (propOutput !== i) {
-                                if (propOutput >= 0) {
-                                    outputs[propOutput].mark(false);
-                                }
-                                outputs[i].mark(true);
-                                propOutput = i;
-                                showOutputPropMenu();
-                            }
-                        }
-                    }
-                    for (let i = 0; i < labels.length; i++) {
-                        if (Boolean(labels[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            if (propLabel !== i) {
-                                if (propLabel >= 0) {
-                                    labels[propLabel].mark(false);
-                                }
-                                labels[i].mark(true);
-                                propLabel = i;
-                                showLabelPropMenu();
-                            }
-                        }
-                    }
-                    if (noValidTarget && propMode) {
-                        hidePropMenu();
-                        unmarkPropTargets();
-                    }
-                    toggleConpoint();
-                }
                 break;
             default:
                 break;
@@ -439,8 +391,6 @@ function mouseReleased() {
         if (mouseButton === LEFT) {
             switch (ctrlMode) {
                 case 'addObject':
-                    break;
-                case 'addWire':
                     if (wireMode === 'preview') { // If the preview wire mode is active
                         let pushed = false;
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
@@ -463,8 +413,139 @@ function mouseReleased() {
                         findLines();
                         lockElements = false;
                         pwSegments = []; // delete the preview segments
-                        wireMode = 'none'; // wiring done, reset wireMode
+                        if (pushed) {
+                            wireMode = 'hold'; // wiring done, reset wireMode
+                        } else {
+                            wireMode = 'none';
+                        }
                         doConpoints(); // Update all conpoints and diodes
+                    }
+                    break;
+                case 'none':
+                    if (wireMode === 'preview') { // If the preview wire mode is active
+                        let pushed = false;
+                        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
+                            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
+                                pushed = true;
+                            }
+                        }
+                        if (pushed) {
+                            let oldSegments = [];
+                            for (let i = segments.length - 1; i >= 0; i--) {
+                                oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                            }
+                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
+                        }
+                        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
+                            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
+                                segments.push(pwSegments[i]);
+                            }
+                        }
+                        findLines();
+                        lockElements = false;
+                        pwSegments = []; // delete the preview segments
+                        if (pushed) {
+                            wireMode = 'hold'; // wiring done, reset wireMode
+                        } else {
+                            wireMode = 'none';
+                        }
+                        doConpoints(); // Update all conpoints and diodes
+                    }
+                    if (wireMode === 'none') {
+                        // Invert In-/Outputs
+                        for (let i = 0; i < gates.length; i++) {
+                            for (let j = 0; j < gates[i].inputCount; j++) {
+                                if (gates[i].mouseOverInput(j)) {
+                                    gates[i].invertInput(j);
+                                    let act = new Action('invGIP', [i, j], null);
+                                    actionUndo.push(act);
+                                }
+                            }
+                            for (let j = 0; j < gates[i].outputCount; j++) {
+                                if (gates[i].mouseOverOutput(j)) {
+                                    gates[i].invertOutput(j);
+                                    let act = new Action('invGOP', [i, j], null);
+                                    actionUndo.push(act);
+                                }
+                            }
+                        }
+                        for (let i = 0; i < customs.length; i++) {
+                            if (customs[i].visible) {
+                                for (let j = 0; j < customs[i].inputCount; j++) {
+                                    if (customs[i].mouseOverInput(j)) {
+                                        customs[i].invertInput(j);
+                                        let act = new Action('invCIP', [i, j], null);
+                                        actionUndo.push(act);
+                                    }
+                                }
+                                for (let j = 0; j < customs[i].outputCount; j++) {
+                                    if (customs[i].mouseOverOutput(j)) {
+                                        customs[i].invertOutput(j);
+                                        let act = new Action('invCOP', [i, j], null);
+                                        actionUndo.push(act);
+                                    }
+                                }
+                            }
+                        }
+                        for (let i = 0; i < segDisplays.length; i++) {
+                            for (let j = 0; j < segDisplays[i].inputCount; j++) {
+                                if (segDisplays[i].mouseOverInput(j)) {
+                                    segDisplays[i].invertInput(j);
+                                    let act = new Action('invDIP', [i, j], null);
+                                    actionUndo.push(act);
+                                }
+                            }
+                        }
+                        let noValidTarget = true;
+                        for (let i = 0; i < inputs.length; i++) {
+                            if (Boolean(inputs[i].mouseOver()) && propMode) {
+                                noValidTarget = false;
+                                // If the propMode is active, give options to name and make top
+                                if (propInput !== i) {
+                                    if (propInput >= 0) {
+                                        inputs[propInput].mark(false);
+                                    }
+                                    inputs[i].mark(true);
+                                    propInput = i;
+                                    showInputPropMenu();
+                                }
+                            }
+                        }
+                        for (let i = 0; i < outputs.length; i++) {
+                            if (Boolean(outputs[i].mouseOver()) && propMode) {
+                                noValidTarget = false;
+                                if (propOutput !== i) {
+                                    if (propOutput >= 0) {
+                                        outputs[propOutput].mark(false);
+                                    }
+                                    outputs[i].mark(true);
+                                    propOutput = i;
+                                    showOutputPropMenu();
+                                }
+                            }
+                        }
+                        for (let i = 0; i < labels.length; i++) {
+                            if (Boolean(labels[i].mouseOver()) && propMode) {
+                                noValidTarget = false;
+                                if (propLabel !== i) {
+                                    if (propLabel >= 0) {
+                                        labels[propLabel].mark(false);
+                                    }
+                                    labels[i].mark(true);
+                                    propLabel = i;
+                                    showLabelPropMenu();
+                                }
+                            }
+                        }
+                        if (noValidTarget && propMode) {
+                            hidePropMenu();
+                            unmarkPropTargets();
+                        }
+                        if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                            toggleDiodeAndConpoint();
+                        } else if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                            toggleDiode();
+                        }
                     }
                     break;
                 case 'delete': // If the delete mode is active
@@ -519,8 +600,6 @@ function mouseReleased() {
                         doConpoints();
                     }
                     break;
-                case 'none':
-                    break;
                 case 'select':
                     switch (selectMode) {
                         case 'start':
@@ -544,7 +623,7 @@ function mouseReleased() {
         redoButton.elt.disabled = (actionRedo.length === 0);
         undoButton.elt.disabled = (actionUndo.length === 0);
     } else {
-        pwSegments = []; // Not shure if this else branch has any purpose...
+        pwSegments = [];
         wireMode = 'none';
         lockElements = false;
     }

@@ -38,14 +38,7 @@ function undo() {
                 break;
             case 'addDi':
                 actionRedo.push(act);
-                let x = diodes[diodes.length - 1].x;
-                let y = diodes[diodes.length - 1].y;
-                if (diodes[diodes.length - 1].cp) {
-                    diodes.pop();
-                    createConpoint(x, y, false, -1);
-                } else {
-                    diodes.pop();
-                }
+                diodes.pop();
                 doConpoints();
                 break;
             case 'addCp':

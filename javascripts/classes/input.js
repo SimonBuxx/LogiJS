@@ -150,11 +150,11 @@ Input.prototype.show = function () {
     } else{
         fill(50,50,50, this.alpha);
         // Make the preview symbol of button look the same as the clicked version
-        if(previewSymbol !== null && addType === 'input' && newIsButton === true){
+        if(previewSymbol !== null && addType === '5' && newIsButton === true){
             rect(this.x + 10, this.y + 10, this.w / 3, this.h / 3);
         }
         // Make the preview symbol of clock look the same as the clicked version
-        else if(previewSymbol !== null && addType === 'input' && newIsClock === true){
+        else if(previewSymbol !== null && addType === '6' && newIsClock === true){
             ellipse(this.x + 15, this.y + 15, this.w / 2, this.h / 2);
         }
     }
