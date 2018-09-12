@@ -936,14 +936,11 @@ function newGateInputNumber() {
     // Ensure that the correct preview gate is displayed when user selection changes
     // TODO change to createPreviewSymbol()
     switch(addType){
-        case 1: previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-                    previewSymbol.alpha = 100;
+        case 1: previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&'));
                     break;
-        case 2:  previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
-                    previewSymbol.alpha = 100;
+        case 2:  previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1'));
                     break;   
-        case 3: previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
-                    previewSymbol.alpha = 100;
+        case 3: previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1'));
                     break;           
     }
     
@@ -953,8 +950,7 @@ function newBitLength() {
     segBits = parseInt(bitSelect.value());
 
     // TODO change to createPreviewSymbol()
-    previewSymbol = new SegmentDisplay(mouseX, mouseY, transform, segBits);
-    previewSymbol.alpha = 100;
+    previewSymbol = new CreatePreviewSymbol(new SegmentDisplay(mouseX, mouseY, transform, segBits));
 }
 
 function newDirection() {
@@ -967,14 +963,11 @@ function newDirection() {
     // Ensure that the correct preview gate is displayed when user selection changes
     // TODO change to createPreviewSymbol()
     switch(addType){
-        case 1: previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&');
-                    previewSymbol.alpha = 100;
+        case 1: previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&'));
                     break;
-        case 2:  previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1');
-                    previewSymbol.alpha = 100;
+        case 2:  previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1'));
                     break;   
-        case 3: previewSymbol = new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1');
-                    previewSymbol.alpha = 100;
+        case 3: previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1'));
                     break;           
     }
 }
@@ -1016,6 +1009,7 @@ function andClicked(dontToggle = false) {
         labelGateInputs.show();
         directionSelect.show();
         labelDirection.show();
+        previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&'));
     }
 }
 
@@ -1031,6 +1025,7 @@ function orClicked(dontToggle = false) {
         labelGateInputs.show();
         directionSelect.show();
         labelDirection.show();
+        previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'or', '≥1'));
     }
 }
 
@@ -1046,6 +1041,7 @@ function xorClicked(dontToggle = false) {
         labelGateInputs.show();
         directionSelect.show();
         labelDirection.show();
+        previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'xor', '=1'));
     }
 }
 
@@ -1059,6 +1055,7 @@ function inputClicked(dontToggle = false) {
         newIsClock = false;
         setControlMode('addObject');
         addType = 4; // switch
+        previewSymbol = new CreatePreviewSymbol(new Input(mouseX, mouseY, transform));
     }
 }
 
@@ -1072,6 +1069,7 @@ function buttonClicked(dontToggle = false) {
         newIsClock = false;
         setControlMode('addObject');
         addType = 5; // button
+        previewSymbol = new CreatePreviewSymbol(new Input(mouseX, mouseY, transform));
     }
 }
 
@@ -1086,6 +1084,7 @@ function clockClicked(dontToggle = false) {
         newIsClock = true;
         setControlMode('addObject');
         addType = 6; // clock
+        previewSymbol = new CreatePreviewSymbol(new Input(mouseX, mouseY, transform));
     }
 }
 
@@ -1097,6 +1096,7 @@ function outputClicked(dontToggle = false) {
         setActive(outputButton, true);
         setControlMode('addObject');
         addType = 7; // output
+        previewSymbol = new CreatePreviewSymbol(new Output(mouseX, mouseY, transform, 0));
     }
 }
 
@@ -1110,6 +1110,7 @@ function segDisplayClicked(dontToggle = false) {
         addType = 8; // segDisplay
         bitSelect.show();
         labelBits.show();
+        previewSymbol = new CreatePreviewSymbol(new SegmentDisplay(mouseX, mouseY, transform, 4));
     }
 }
 
@@ -1122,6 +1123,7 @@ function startSelect() {
         setActive(selectButton);
         setControlMode('select');
         selectMode = 'none';
+        previewSymbol = null;
     }
 }
 
@@ -1843,7 +1845,7 @@ function showElements() {
 
     // TODO find better implementation
     if(previewSymbol !== null){
-        previewSymbol.show();
+        previewSymbol.showPreview();
     }
 
     textFont('Open Sans');

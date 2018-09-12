@@ -124,3 +124,12 @@ Output.prototype.show = function () {
     ellipse(this.x, this.y, this.w, this.h);
     //this.clickBox.markClickBox();
 };
+
+Output.prototype.showPreview = function () {
+    stroke(0);
+    strokeWeight(3);
+    fill(50, 50, 50, 100);
+    
+    // Draw the circle that represents the output
+    ellipse(this.x, this.y, this.w, this.h);
+};

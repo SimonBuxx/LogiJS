@@ -197,3 +197,38 @@ SegmentDisplay.prototype.show = function () {
     }*/
     //this.gClickBox.markClickBox();
 };
+
+SegmentDisplay.prototype.showPreview = function () {
+    stroke(0);
+    strokeWeight(3);
+
+    fill(255, 100);   
+    rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h); // Draw body
+    
+    noStroke();
+    textSize(80);
+    textAlign(CENTER, CENTER);
+    fill(0);
+    let txt = '';
+    for (let i = 0; i < this.digits - this.value.toString().length; i++) {
+        txt += '0';
+    }
+    txt += this.value.toString();
+    text(txt, this.x + this.w / 2, this.y + this.h / 2);
+    
+    // Draw inputs
+    for (let i = 1; i <= this.inputCount; i++) {
+        // Draw inputs
+        stroke(0);
+        strokeWeight(3);
+        
+        this.x1 = this.x + (GRIDSIZE * i);
+        this.y1 = this.y + this.h;
+        this.x2 = this.x + (GRIDSIZE * i);
+        this.y2 = this.y + this.h + 6;
+        line(this.x1, this.y1, this.x2, this.y2);
+        
+        fill(255);
+        strokeWeight(2);
+    }
+};

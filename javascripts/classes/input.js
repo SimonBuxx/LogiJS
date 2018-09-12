@@ -177,3 +177,34 @@ Input.prototype.show = function () {
 
     //this.clickBox.markClickBox();
 };
+
+Input.prototype.showPreview = function () {
+    stroke(0);
+    strokeWeight(3);
+    fill(50,50,50, 100);
+    // Make the preview symbol of button look the same as the clicked version
+    if(addType === 5 && newIsButton === true){
+        rect(this.x + 10, this.y + 10, this.w / 3, this.h / 3);
+    }
+    // Make the preview symbol of clock look the same as the clicked version
+    else if(addType === 6 && newIsClock === true){
+        ellipse(this.x + 15, this.y + 15, this.w / 2, this.h / 2);
+    }
+    
+    // Draw the rectangle that represents the input
+    rect(this.x, this.y, this.w, this.h);
+
+    if (this.framecount >= 0 && !this.clock) {
+        fill(0);
+        if (this.state) {
+            strokeWeight(7);
+        }
+        rect(this.x + 10, this.y + 10, this.w / 3, this.h / 3);
+    }
+
+    if (this.clock) {
+        fill(0);
+        noStroke();
+        ellipse(this.x + 15, this.y + 15, this.w / 2, this.h / 2);
+    }
+};

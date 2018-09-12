@@ -186,7 +186,6 @@ function updateCursors() {
             }
         }
         // Changes preview gate coordinates according to mouse position
-        previewSymbol.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
         reDraw();
     } 
     
