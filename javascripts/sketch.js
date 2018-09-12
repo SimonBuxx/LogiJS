@@ -96,6 +96,7 @@ let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
     hintPic12, hintPic13, hintPic14, hintPic15, hintPic16, hintPic17,
     hintPic19, hintPic20, hintPic21, hintPic22, hintPic23, hintPic24,
     hintPic25, hintPic26;
+
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
@@ -145,7 +146,6 @@ function setup() { // jshint ignore:line
     }, false);
 
     document.title = 'New Sketch - LogiJS';
-
 
     //Div for the Left Side Buttons
     let leftSideButtons = createDiv(" ");
@@ -232,76 +232,91 @@ function setup() { // jshint ignore:line
     counter2Button.mousePressed(function () { setActive(counter2Button, true); return customClicked('2BitCounter.json'); });
     counter2Button.elt.className = "buttonLeft";
     counter2Button.parent(leftSideButtons);
+
     // Adds a counter (4Bit)
     counter4Button = createButton('4Bit-Counter');
     counter4Button.mousePressed(function () { setActive(counter4Button, true); return customClicked('4BitCounter.json'); });
     counter4Button.elt.className = "buttonLeft";
     counter4Button.parent(leftSideButtons);
+
     // Adds a decoder (2Bit)
     decoder2Button = createButton('2Bit-Decoder');
     decoder2Button.mousePressed(function () { setActive(decoder2Button, true); return customClicked('2BitDec.json'); });
     decoder2Button.elt.className = "buttonLeft";
     decoder2Button.parent(leftSideButtons);
+
     // Adds a decoder (4Bit)
     decoder4Button = createButton('4Bit-Decoder');
     decoder4Button.mousePressed(function () { setActive(decoder4Button, true); return customClicked('4BitDec.json'); });
     decoder4Button.elt.className = "buttonLeft";
     decoder4Button.parent(leftSideButtons);
+
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
     add4BitButton.mousePressed(function () { setActive(add4BitButton, true); return customClicked('4BitNeu.json'); });
     add4BitButton.elt.className = "buttonLeft";
     add4BitButton.parent(leftSideButtons);
+
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
     dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return customClicked('d-flipflop.json'); });
     dFlipFlopButton.elt.className = "buttonLeft";
     dFlipFlopButton.parent(leftSideButtons);
+
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
     rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return customClicked('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.className = "buttonLeft";
     rsFlipFlopButton.parent(leftSideButtons);
+
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
     reg4Button.mousePressed(function () { setActive(reg4Button, true); return customClicked('4BitReg.json'); });
     reg4Button.elt.className = "buttonLeft";
     reg4Button.parent(leftSideButtons);
+
     // Adds a 1-multiplexer
     mux1Button = createButton('1-Multiplexer');
     mux1Button.mousePressed(function () { setActive(mux1Button, true); return customClicked('1-mux.json'); });
     mux1Button.elt.className = "buttonLeft";
     mux1Button.parent(leftSideButtons);
+
     // Adds a 2-multiplexer
     mux2Button = createButton('2-Multiplexer');
     mux2Button.mousePressed(function () { setActive(mux2Button, true); return customClicked('2-mux.json'); });
     mux2Button.elt.className = "buttonLeft";
     mux2Button.parent(leftSideButtons);
+
     // Adds a 3-multiplexer
     mux3Button = createButton('3-Multiplexer');
     mux3Button.mousePressed(function () { setActive(mux3Button, true); return customClicked('3-mux.json'); });
     mux3Button.elt.className = "buttonLeft";
     mux3Button.parent(leftSideButtons);
+
     // Adds a 1-demultiplexer
     demux1Button = createButton('1-Demultiplexer');
     demux1Button.mousePressed(function () { setActive(demux1Button, true); return customClicked('1-demux.json'); });
     demux1Button.elt.className = "buttonLeft";
     demux1Button.parent(leftSideButtons);
+
     // Adds a 2-demultiplexer
     demux2Button = createButton('2-Demultiplexer');
     demux2Button.mousePressed(function () { setActive(demux2Button, true); return customClicked('2-demux.json'); });
     demux2Button.elt.className = "buttonLeft";
     demux2Button.parent(leftSideButtons);
+
     // Adds a 3-demultiplexer
     demux3Button = createButton('3-Demultiplexer');
     demux3Button.mousePressed(function () { setActive(demux3Button, true); return customClicked('3-demux.json'); });
     demux3Button.elt.className = "buttonLeft";
     demux3Button.parent(leftSideButtons);
+
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return customClicked('halbadd.json'); });
     halfaddButton.elt.className = "buttonLeft";
     halfaddButton.parent(leftSideButtons);
+
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
     fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return customClicked('volladd.json'); });
@@ -344,7 +359,6 @@ function setup() { // jshint ignore:line
     labelDirection.elt.style.margin = '3px 0px 0px 0px';
     labelDirection.elt.className = 'label';
     labelDirection.parent(leftSideButtons);
-
 
     directionSelect = createSelect();
     directionSelect.hide();
@@ -398,7 +412,6 @@ function setup() { // jshint ignore:line
     sfcheckbox.elt.style.fontFamily = 'Open Sans';
     sfcheckbox.elt.style.textAlign = 'center';
     sfcheckbox.elt.style.margin = '10px 0 0 0';
-    //sfcheckbox.position(946, 4);
     sfcheckbox.elt.className = 'checkbox';
     sfcheckbox.parent(leftSideButtons);
 
@@ -1674,6 +1687,7 @@ function reDraw() {
         fill(50); // DOM elements are shown seperatly
         rect(window.width - 215, window.height - 300, 220, 305, 5);
     }
+    
     if (showHints) {
         textFont('Gudea');
         switch (hintNum) {
@@ -1838,22 +1852,28 @@ function showElements() {
             elem.show();
         }
     }
+
     for (const elem of conpoints) {
         elem.show();
     }
+
     for (const elem of outputs) {
         elem.show();
     }
+
     for (const elem of inputs) {
         elem.show();
     }
+
     for (const elem of diodes) {
         elem.show();
     }
+
     textFont('PT Mono');
     for (const elem of segDisplays) {
         elem.show();
     }
+
     textFont('Gudea');
     textSize(20);
     textAlign(LEFT, TOP);
