@@ -84,4 +84,15 @@ function Label(x, y, txt, transform) {
         text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
         //this.clickBox.markClickBox();
     };
+
+    this.showPreview = function () {
+        strokeWeight(3);
+        stroke(140);
+        fill(150, 100);
+        rect(this.x - 15, this.y - 15, this.w, this.h + 10);
+        noStroke();
+        fill(0);
+        rect(this.x - 5, this.y - 5, 10, 10);
+        text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
+    };
 }

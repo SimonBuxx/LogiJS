@@ -442,6 +442,7 @@ function setup() { // jshint ignore:line
         setActive(propertiesButton);
         setControlMode('none');
         setPropMode(true);
+        previewSymbol = null;
     });
     propertiesButton.elt.className = "button active";
 
@@ -463,6 +464,7 @@ function setup() { // jshint ignore:line
     undoButton = createButton('Undo');
     undoButton.position(366, 4);
     undoButton.mousePressed(() => {
+        previewSymbol = null;
         undo();
     });
     undoButton.elt.disabled = true;
@@ -472,6 +474,7 @@ function setup() { // jshint ignore:line
     redoButton = createButton('Redo');
     redoButton.position(432, 4);
     redoButton.mousePressed(() => {
+        previewSymbol = null;
         redo();
     });
     redoButton.elt.disabled = true;
@@ -655,6 +658,7 @@ function urlParam(name, w) {
 }
 
 function customClicked(filename) {
+    previewSymbol = null;
     if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -669,6 +673,7 @@ function customClicked(filename) {
 
 // Triggered when a sketch should be saved
 function saveClicked() {
+    previewSymbol = null;
     /*  
         Only save circuits with "valid" names, here erasing all whitespaces (for now)
         replace(...) used as suggestion from StackOverflow 
@@ -676,16 +681,15 @@ function saveClicked() {
         "/g" says to search through the whole string and replace "\s" (whitespace) by ""
         TODO: Delete all illegal characters
     */
-    if(textInput.value().replace(/\s/g, "") !== ""){
-        selectMode = 'none';
-        showSClickBox = false;
-        previewSymbol = null;
-        saveSketch(textInput.value() + '.json');
-        document.title = textInput.value() + ' - LogiJS';
+   if(textInput.value().replace(/\s/g, "") !== ""){
+       selectMode = 'none';
+       showSClickBox = false;
+       previewSymbol = null;
+       saveSketch(textInput.value() + '.json');
+       document.title = textInput.value() + ' - LogiJS';
     } else {
         // TODO: Error should pop up as tooltip under textInput
         alert("Circuit name cannot be empty");
-        previewSymbol = null;
         reDraw();
     }
 }
@@ -798,6 +802,7 @@ function setUnactive() {
 }
 
 function deleteClicked() {
+    previewSymbol = null;
     if (ctrlMode === 'select' && selectMode === 'end') {
         setActive(propertiesButton);
         ctrlMode = 'none';
@@ -985,8 +990,8 @@ function newClockspeed() {
     Button label updated in the functions
 */
 function simClicked() {
+    previewSymbol = null;
     if (!simRunning) {
-        previewSymbol = null;
         reDraw();
         startSimulation();
     } else {
@@ -1001,6 +1006,7 @@ function andClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 1 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(andButton, true);
         setControlMode('addObject');
@@ -1017,6 +1023,7 @@ function orClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 2 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(orButton, true);
         setControlMode('addObject');
@@ -1033,6 +1040,7 @@ function xorClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 3 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(xorButton, true);
         setControlMode('addObject');
@@ -1049,6 +1057,7 @@ function inputClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 4 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(inputButton, true);
         newIsButton = false;
@@ -1063,6 +1072,7 @@ function buttonClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 5 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(buttonButton, true);
         newIsButton = true;
@@ -1078,6 +1088,7 @@ function clockClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 6 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(clockButton, true);
         newIsButton = false;
@@ -1092,6 +1103,7 @@ function outputClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 7 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(outputButton, true);
         setControlMode('addObject');
@@ -1104,6 +1116,7 @@ function segDisplayClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 8 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(segDisplayButton, true);
         setControlMode('addObject');
@@ -1116,6 +1129,7 @@ function segDisplayClicked(dontToggle = false) {
 
 // Starts the selection process
 function startSelect() {
+    previewSymbol = null;
     if (ctrlMode === 'select') {
         setControlMode('none');
         setActive(propertiesButton);
@@ -1123,7 +1137,6 @@ function startSelect() {
         setActive(selectButton);
         setControlMode('select');
         selectMode = 'none';
-        previewSymbol = null;
     }
 }
 
@@ -1132,10 +1145,12 @@ function labelButtonClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 9 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        previewSymbol = null;
     } else {
         setActive(labelButton, true);
         setControlMode('addObject');
         addType = 9; // label
+        previewSymbol = new CreatePreviewSymbol(new Label(mouseX, mouseY, 'New label', transform));
     }
 }
 
@@ -1211,6 +1226,7 @@ function addCustom(file, direction) {
             }
         }
     }
+    previewSymbol = null;
     let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     customs.push(newCustom);
@@ -1295,7 +1311,6 @@ function addLabel() {
     newLabel.updateClickBox();
     labels.push(newLabel);
     pushUndoAction('addLabel', [], newLabel);
-    previewSymbol = null;
     reDraw();
 }
 
