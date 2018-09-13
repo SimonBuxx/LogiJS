@@ -1,12 +1,15 @@
-function CreatePreviewSymbol(component) {
-        this.previewComponent = component;
+class CreatePreviewSymbol {
+        constructor(component) {
+                this.previewComponent = component;
+        }
+        
+        showPreview() {
+                // Methods are executed by the referenced component itself
+                this.previewComponent.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+                this.previewComponent.showPreview();
+        }
 }
 
-CreatePreviewSymbol.prototype.showPreview = function(){
-        // Methods are executed by the referenced component itself
-        this.previewComponent.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-        this.previewComponent.showPreview();
-};
 
 /*
 this method didn't seem to work like 
