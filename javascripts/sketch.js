@@ -56,7 +56,7 @@ let initY = 0;
 
 // Variables for dragging
 let lastX = 0; var lastY = 0; // last mouse position
-let dragSpeed = 1.5;
+let dragSpeed = 1;
 
 let transform = new Transformation(0, 0, 1);
 
@@ -99,6 +99,9 @@ let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
 
+/*
+    Executed before setup(), loads all hint images
+*/
 function preload() {
     hintPic0 = loadImage('images/hint0.png');
     hintPic1 = loadImage('images/hint1.png');
@@ -1502,70 +1505,82 @@ function disableButtons(status) {
 }
 
 /*
-    Executes in every frame, draws objects and stuff
+    Executes in every frame, draws everything and updates the sketch logic
 */
 function draw() {
+    // If the simulation is running, update the sketch logic (if synced to framerate) and redraw the sketch and GUI
     if (simRunning) {
-        // Update the simulation logic if it's synced to the framerate
         if (sfcheckbox.checked()) {
             updateTick();
         }
-        reDraw(); // Redraw the canvas in every frame when the simulation runs
+        reDraw();
     }
 
     // If wire preview is active, generate a segment set and display the preview segments
     // When the mode is delete, mark the wire by drawing it in red
     if (wireMode === 'preview' || wireMode === 'delete') {
-        reDraw();
-        scale(transform.zoom);
-        translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
-        if (!mouseOverGUI()) {
+        reDraw(); // Necessary to hide the old segment set 
+        scale(transform.zoom); // Scale and translate
+        translate(transform.dx, transform.dy);
+
+        if (!mouseOverGUI()) { // If the mouse is over a gui element, no wire should be drawn
             generateSegmentSet(pwstartX, pwstartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
-            // Display preview segments
-            for (const elem of pwSegments) {
+            for (const elem of pwSegments) { // Display preview segments
                 elem.show(wireMode === 'delete');
             }
         }
-        scale(1 / transform.zoom);
+        scale(1 / transform.zoom); // Reverse scaling and translating
         translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
     }
 
-    // If an area should be selected, get the new end point and draw the transparent rectangle
+    // If in select mode, handle the select logic
     if (ctrlMode === 'select') {
         reDraw();
-        scale(transform.zoom);
-        translate(transform.dx, transform.dy); // Handle the offset from dragging and zooming
-        fill(0, 0, 0, 100);
-        strokeWeight(0);
+        scale(transform.zoom); // Handle the offset from scaling and translating
+        translate(transform.dx, transform.dy);
+        fill(0, 0, 0, 100); // Set the fill color to a semi-transparent black
+        noStroke();
         if (selectMode === 'start') {
             selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
             selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
             rect(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
                 Math.abs(selectStartX - selectEndX), Math.abs(selectStartY - selectEndY));
         }
-        scale(1 / transform.zoom);
+        scale(1 / transform.zoom); // // Reverse scaling and translating
         translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
     }
+
+    // Execute the dragging logic
     handleDragging();
 }
 
+/*
+    Executes one update tick of the sketch logic
+*/
 function updateTick() {
+    // Tell all gates to update
     for (const value of gates) {
         value.update();
     }
 
+    // Tell all visible customs to update
+    // (they will update all of their gates and customs by themselves)
     for (const value of customs) {
         if (value.visible) {
             value.update();
         }
     }
+
+    // Update all wire groups
     updateGroups();
 
+    // Update all connection points to adopt the state of their wire group
     for (const value of conpoints) {
         value.state = groups[value.group].state;
     }
 
+    // Update all self-toggling input elements (buttons and clocks)
     for (const value of inputs) {
         if (value.framecount === 0) {
             if (value.getIsClock()) {
@@ -1580,10 +1595,14 @@ function updateTick() {
         }
     }
 
+    // Update all segments displays
     for (const value of segDisplays) {
         value.update();
     }
 
+    // Update the states of all diodes
+    // They adopt the state of their group A (horizontal wire)
+    // and if they are high, they pass that event to group B
     for (const value of diodes) {
         value.state = groups[value.gA].state;
         if (value.state) {
@@ -1596,155 +1615,177 @@ function updateTick() {
     Redraws all items on the screen, partly translated and scaled
 */
 function reDraw() {
-    background(150); // Sets the background to light grey
-    scale(transform.zoom); // Scales the canvas to the current zoom factor
-    drawGrid(); // Draws the grid, a bit darker than the background
-    translate(transform.dx, transform.dy); // Handles the offset from dragging and zooming
+    // Set the background, scale and draw the grid
+    background(150);
+    scale(transform.zoom);
+    drawGrid();
 
-    showElements(); // Draws all sketch elements on screen
+    // Handle the offset from dragging
+    translate(transform.dx, transform.dy);
 
+    // Draw all sketch elements on screen
+    showElements();
+
+    // Reverse the scaling and translating to draw the stationary elements of the GUI
     scale(1 / transform.zoom);
-    translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy); // Reverses the offset from dragging and zooming
-    // Here, all GUI objects are drawn, that are not sensitive to zoom and/or offset
-    textSize(12); // Set text size and color for the zoom and fps labels
-    fill(0);
-    strokeWeight(0);
-    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Show zoom label
-    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Show fps label
+    translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 
-    // If the prop mode is active and an object was selected, show the menu background in the top right corner
+    // Draw the zoom and framerate labels
+    textSize(12);
+    fill(0);
+    noStroke();
+    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
+    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
+
+    // If the prop mode is active and an object was selected, show the config menu background in the bottom right corner
+    // propInput, propOutput and propLabel are -1 when no element is selected. If one of them is > -1, the sum is >= -2
     if (propMode && propInput + propOutput + propLabel >= -2) {
-        strokeWeight(0); // The prop menu background is dark grey without border
-        fill(50); // DOM elements are shown seperatly
+        noStroke();
+        fill(50);
         rect(window.width - 215, window.height - 300, 220, 305, 5);
     }
+
+    // If the tutorial should be shown, display it on screen
     if (showHints) {
-        textFont('Gudea');
-        switch (hintNum) {
-            case 0:
-                displayHint(1000, hintPic0, 'Welcome!', 'LogiJS is a logic circuit editor.',
-                    'It\'s designed to be simple to use, yet powerful.');
-                break;
-            case 1:
-                displayHint(1100, hintPic1, 'Navigation', 'Use the mouse wheel to zoom in and out!',
-                    'Drag the sketch by holding the right mouse button.');
-                break;
-            case 2:
-                displayHint(1200, hintPic2, 'Basic elements', 'You can add And, Or and Xor Gates by clicking on',
-                    'the buttons on the left and then clicking on the canvas.');
-                break;
-            case 3:
-                displayHint(1100, hintPic3, 'Basic elements', 'Placing in- and outputs is just as easy.',
-                    'Try adding a switch and a lamp next to a gate!');
-                break;
-            case 4:
-                displayHint(1200, hintPic4, 'Connecting the dots', 'Click on the \'Wiring\' button in the top left corner.',
-                    'Add wires by dragging with the left mouse button pressed.');
-                break;
-            case 5:
-                displayHint(1300, hintPic5, 'Starting the simulation', 'By clicking on the \'Start\' button in the top left corner,',
-                    'you can start the simulation. Clicking it again will stop it.');
-                break;
-            case 6:
-                displayHint(1200, hintPic6, 'Simulation mode', 'In the simulation, you can left-click on the inputs',
-                    'you\'ve placed to see the logic circuit act accordingly.');
-                break;
-            case 7:
-                displayHint(1500, hintPic7, 'Deleting elements', 'Click on the \'Delete\' button in the top left corner. Now you can',
-                    'delete elements by clicking on them. To delete wires, just drag over them.');
-                break;
-            case 8:
-                displayHint(1200, hintPic8, 'Undo and Redo', 'If you want to undo any change you\'ve made',
-                    'to the sketch, just use the \'Undo\' and \'Redo\' buttons.');
-                break;
-            case 9:
-                displayHint(1500, hintPic9, 'Switches, Buttons and Clocks', 'In contrast to the switch elements you\'ve already used,',
-                    'buttons are only activated for a short period of time when clicked on them.');
-                break;
-            case 10:
-                displayHint(1500, hintPic10, 'Switches, Buttons and Clocks', 'Clocks are switches that turn on and off automatically,',
-                    'you can change their speed in the properties menu that you\'ll see in a bit.');
-                break;
-            case 11:
-                displayHint(1500, hintPic11, 'Additional settings', 'Some elements have properties like input width and direction, that',
-                    'appear in the bottom left when clicking on the corresponding element button.');
-                break;
-            case 12:
-                displayHint(1500, hintPic12, 'The properties mode', 'By hitting \'Properties\' or the escape key, you enter the properties',
-                    'mode. You can now invert in- and outputs of gates by clicking on them. ');
-                break;
-            case 13:
-                displayHint(1500, hintPic13, 'The properties mode', 'When clicking on in- or output elements (eg. switches or lamps),',
-                    'you can change various properties of these elements in the appearing menu.');
-                break;
-            case 14:
-                displayHint(1500, hintPic14, '7-Segment displays', 'These take a variable number of input bits and display their binary',
-                    'value in decimal form. You can change the bit width in the additional settings.');
-                break;
-            case 15:
-                displayHint(1500, hintPic15, 'Advanced elements', 'These are more complex elements that are each made out of another',
-                    'sketch. This list is just a selection of custom elements that are pre-built by us.');
-                break;
-            case 16:
-                displayHint(1500, hintPic16, 'Loading and saving', 'To save a sketch, type in a name in the top right and hit save.',
-                    'You can then choose a folder on your hard drive to save it locally.');
-                break;
-            case 17:
-                displayHint(1200, hintPic17, 'Loading and saving', 'To load sketches, you must have a local',
-                    'LogiJS version on your computer. ');
-                break;
-            case 18:
-                displayHint(1500, hintPic16, 'Loading and saving', 'Make sure, your sketch file is in the \'sketches\' folder of your',
-                    'LogiJS version. Type the file name into the input field and hit \'Load\' or enter.');
-                break;
-            case 19:
-                displayHint(1500, hintPic19, 'Diodes', 'Diodes are elements that join two crossing wires in the horizontal',
-                    'but not in the vertical direction. They can be used for diode matrices.');
-                break;
-            case 20:
-                displayHint(1600, hintPic20, 'Diodes', 'Please load the sketch \'traffic\'. As you can see, there is an area with',
-                    'multiple diodes (little triangles) on it.');
-                break;
-            case 21:
-                displayHint(1500, hintPic21, 'Diodes', 'In properties mode, you can toggle diodes by clicking on them or on empty wire',
-                    'crossings. Start the simulation to see how they are used in this example!');
-                break;
-            case 22:
-                displayHint(1500, hintPic22, 'Custom elements', 'If, instead of hitting \'Load\', you click on \'Import\', your sketch',
-                    'is imported as a custom element. Click anywhere on the sketch to place it.');
-                break;
-            case 23:
-                displayHint(1600, hintPic23, 'Custom elements', 'You can name in- and outputs and set inputs to the top of the element',
-                    'by altering these settings in the properties menu of the sketch to import.');
-                break;
-            case 24:
-                displayHint(1100, hintPic24, 'Custom elements', 'Pro tip: Inputs labeled with \'>\' will',
-                    'appear as clock inputs with an arrow drawn on them.');
-                break;
-            case 25:
-                displayHint(1300, hintPic25, 'Labels', 'You can add labels using the \'Label\' button.',
-                    'You can change their text in properties mode by clicking on them.');
-                break;
-            case 26:
-                displayHint(1500, hintPic26, '\'New\' and \'Select\'', 'Click on \'New\' to start a new sketch. When clicking on \'Select\'',
-                    'you can select parts of your sketch and move them on the canvas.');
-                break;
-            case 27:
-                displayHint(1500, hintPic0, 'Thank you!', 'You\'ve reached the end of this small tutorial on LogiJS.',
-                    'We hope that you like our work. You can give us feedback via Twitter.');
-                nextHintButton.hide();
-                break;
-            default:
-                break;
-        }
+        showTutorial();
     }
 }
 
+/*
+    Displays the hint with number hintNum in a box in the bottom left corner
+*/
+function showTutorial() {
+    textFont('Gudea');
+    switch (hintNum) {
+        case 0:
+            displayHint(1000, hintPic0, 'Welcome!', 'LogiJS is a logic circuit editor.',
+                'It\'s designed to be simple to use, yet powerful.');
+            break;
+        case 1:
+            displayHint(1100, hintPic1, 'Navigation', 'Use the mouse wheel to zoom in and out!',
+                'Drag the sketch by holding the right mouse button.');
+            break;
+        case 2:
+            displayHint(1200, hintPic2, 'Basic elements', 'You can add And, Or and Xor Gates by clicking on',
+                'the buttons on the left and then clicking on the canvas.');
+            break;
+        case 3:
+            displayHint(1100, hintPic3, 'Basic elements', 'Placing in- and outputs is just as easy.',
+                'Try adding a switch and a lamp next to a gate!');
+            break;
+        case 4:
+            displayHint(1200, hintPic4, 'Connecting the dots', 'Click on the \'Wiring\' button in the top left corner.',
+                'Add wires by dragging with the left mouse button pressed.');
+            break;
+        case 5:
+            displayHint(1300, hintPic5, 'Starting the simulation', 'By clicking on the \'Start\' button in the top left corner,',
+                'you can start the simulation. Clicking it again will stop it.');
+            break;
+        case 6:
+            displayHint(1200, hintPic6, 'Simulation mode', 'In the simulation, you can left-click on the inputs',
+                'you\'ve placed to see the logic circuit act accordingly.');
+            break;
+        case 7:
+            displayHint(1500, hintPic7, 'Deleting elements', 'Click on the \'Delete\' button in the top left corner. Now you can',
+                'delete elements by clicking on them. To delete wires, just drag over them.');
+            break;
+        case 8:
+            displayHint(1200, hintPic8, 'Undo and Redo', 'If you want to undo any change you\'ve made',
+                'to the sketch, just use the \'Undo\' and \'Redo\' buttons.');
+            break;
+        case 9:
+            displayHint(1500, hintPic9, 'Switches, Buttons and Clocks', 'In contrast to the switch elements you\'ve already used,',
+                'buttons are only activated for a short period of time when clicked on them.');
+            break;
+        case 10:
+            displayHint(1500, hintPic10, 'Switches, Buttons and Clocks', 'Clocks are switches that turn on and off automatically,',
+                'you can change their speed in the properties menu that you\'ll see in a bit.');
+            break;
+        case 11:
+            displayHint(1500, hintPic11, 'Additional settings', 'Some elements have properties like input width and direction, that',
+                'appear in the bottom left when clicking on the corresponding element button.');
+            break;
+        case 12:
+            displayHint(1500, hintPic12, 'The properties mode', 'By hitting \'Properties\' or the escape key, you enter the properties',
+                'mode. You can now invert in- and outputs of gates by clicking on them. ');
+            break;
+        case 13:
+            displayHint(1500, hintPic13, 'The properties mode', 'When clicking on in- or output elements (eg. switches or lamps),',
+                'you can change various properties of these elements in the appearing menu.');
+            break;
+        case 14:
+            displayHint(1500, hintPic14, '7-Segment displays', 'These take a variable number of input bits and display their binary',
+                'value in decimal form. You can change the bit width in the additional settings.');
+            break;
+        case 15:
+            displayHint(1500, hintPic15, 'Advanced elements', 'These are more complex elements that are each made out of another',
+                'sketch. This list is just a selection of custom elements that are pre-built by us.');
+            break;
+        case 16:
+            displayHint(1500, hintPic16, 'Loading and saving', 'To save a sketch, type in a name in the top right and hit save.',
+                'You can then choose a folder on your hard drive to save it locally.');
+            break;
+        case 17:
+            displayHint(1200, hintPic17, 'Loading and saving', 'To load sketches, you must have a local',
+                'LogiJS version on your computer. ');
+            break;
+        case 18:
+            displayHint(1500, hintPic16, 'Loading and saving', 'Make sure, your sketch file is in the \'sketches\' folder of your',
+                'LogiJS version. Type the file name into the input field and hit \'Load\' or enter.');
+            break;
+        case 19:
+            displayHint(1500, hintPic19, 'Diodes', 'Diodes are elements that join two crossing wires in the horizontal',
+                'but not in the vertical direction. They can be used for diode matrices.');
+            break;
+        case 20:
+            displayHint(1600, hintPic20, 'Diodes', 'Please load the sketch \'traffic\'. As you can see, there is an area with',
+                'multiple diodes (little triangles) on it.');
+            break;
+        case 21:
+            displayHint(1500, hintPic21, 'Diodes', 'In properties mode, you can toggle diodes by clicking on them or on empty wire',
+                'crossings. Start the simulation to see how they are used in this example!');
+            break;
+        case 22:
+            displayHint(1500, hintPic22, 'Custom elements', 'If, instead of hitting \'Load\', you click on \'Import\', your sketch',
+                'is imported as a custom element. Click anywhere on the sketch to place it.');
+            break;
+        case 23:
+            displayHint(1600, hintPic23, 'Custom elements', 'You can name in- and outputs and set inputs to the top of the element',
+                'by altering these settings in the properties menu of the sketch to import.');
+            break;
+        case 24:
+            displayHint(1100, hintPic24, 'Custom elements', 'Pro tip: Inputs labeled with \'>\' will',
+                'appear as clock inputs with an arrow drawn on them.');
+            break;
+        case 25:
+            displayHint(1300, hintPic25, 'Labels', 'You can add labels using the \'Label\' button.',
+                'You can change their text in properties mode by clicking on them.');
+            break;
+        case 26:
+            displayHint(1500, hintPic26, '\'New\' and \'Select\'', 'Click on \'New\' to start a new sketch. When clicking on \'Select\'',
+                'you can select parts of your sketch and move them on the canvas.');
+            break;
+        case 27:
+            displayHint(1500, hintPic0, 'Thank you!', 'You\'ve reached the end of this small tutorial on LogiJS.',
+                'We hope that you like our work. You can give us feedback via Twitter.');
+            nextHintButton.hide();
+            break;
+        default:
+            break;
+    }
+}
+
+/*
+    Displays the given hint text (two lines + caption) and an image in a box in the bottom left corner
+*/
 function displayHint(bubbleWidth, img, caption, line1, line2) {
+    // Draw a red ellipse and a rectangle to form the box shape
     fill(200, 50, 50);
     ellipse(200, window.height, bubbleWidth, 400);
     rect(0, window.height - 200, 200, 200);
+    // Display the given image in the bottom left
     image(img, 20, window.height - 180);
+    // Set the text attributes and draw caption and text lines
     fill(255);
     textSize(30);
     text(caption, 220, window.height - 170);
@@ -1843,6 +1884,7 @@ function keyPressed() {
     if (textInput.elt !== document.activeElement) {
         if (keyCode >= 49 && keyCode <= 57) {
             gateInputCount = keyCode - 48;
+            gateInputSelect.value(gateInputCount);
             return;
         }
         switch (keyCode) {
@@ -1853,7 +1895,7 @@ function keyPressed() {
                 break;
             case RETURN:
                 console.log(wires);
-                console.log(segments)
+                console.log(segments);
                 setPropMode(false);
                 gateInputSelect.hide();
                 labelGateInputs.hide();
@@ -1877,48 +1919,29 @@ function keyPressed() {
                 break;
             case 48: // 0
                 gateInputCount = 10;
+                gateInputSelect.value('10');
                 break;
             case RIGHT_ARROW:
                 gateDirection = 0;
+                directionSelect.value('Right');
                 break;
             case DOWN_ARROW:
                 gateDirection = 1;
+                directionSelect.value('Down');
                 break;
             case LEFT_ARROW:
                 gateDirection = 2;
+                directionSelect.value('Left');
                 break;
             case UP_ARROW:
                 gateDirection = 3;
+                directionSelect.value('Up');
                 break;
             default:
                 break;
         }
     } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
         loadClicked();
-    }
-}
-
-/*
-    Handles the dragging of the canvas
-    by calculating dx and dy
-*/
-function handleDragging() {
-    if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
-        frameRate(60);
-        if (lastX !== 0) {
-            transform.dx += Math.round((mouseX - lastX) * dragSpeed);
-        }
-        if (lastY !== 0) {
-            transform.dy += Math.round((mouseY - lastY) * dragSpeed);
-        }
-        lastX = mouseX;
-        lastY = mouseY;
-        if (!simRunning) {
-            reDraw();
-        }
-    } else {
-        lastX = 0;
-        lastY = 0;
     }
 }
 
