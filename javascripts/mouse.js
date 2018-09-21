@@ -678,6 +678,9 @@ function mouseOverSegDisplay() {
 
 //Checks if the mouse hovers over the GUI(true) or the grid(false)
 function mouseOverGUI() {
+    if (mouseY > window.height - 220 && mouseX < 970 && showHints) {
+        return true;
+    }
     if (propInput + propOutput + propLabel < -2) {
         return (mouseY < 0) || (mouseX < 0);
     } else {

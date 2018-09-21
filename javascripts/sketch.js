@@ -89,7 +89,7 @@ let propLabel = -1;
 
 let showHints;
 let hintNum = 0;
-let closeHintsButton, nextHintButton;
+let closeTutorialButton, nextStepButton;
 let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
     hintPic6, hintPic7, hintPic8, hintPic9, hintPic10, hintPic11,
     hintPic12, hintPic13, hintPic14, hintPic15, hintPic16, hintPic17,
@@ -424,8 +424,8 @@ function setup() { // jshint ignore:line
 
     //Upper left
 
-    // Activates the default mode
-    propertiesButton = createButton('Default');
+    // Activates the edit mode
+    propertiesButton = createButton('Edit');
     propertiesButton.position(152, 4);
     propertiesButton.mousePressed(function () {
         setActive(propertiesButton);
@@ -437,20 +437,20 @@ function setup() { // jshint ignore:line
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('Delete');
-    deleteButton.position(231, 4);
+    deleteButton.position(207, 4);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
 
     // Starts and stops the simulation
     simButton = createButton('Start');
     simButton.elt.style.width = '34px';
-    simButton.position(304, 4);
+    simButton.position(280, 4);
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
 
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(366, 4);
+    undoButton.position(342, 4);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -459,7 +459,7 @@ function setup() { // jshint ignore:line
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(432, 4);
+    redoButton.position(408, 4);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -468,7 +468,7 @@ function setup() { // jshint ignore:line
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(496, 4);
+    selectButton.position(472, 4);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
@@ -506,24 +506,24 @@ function setup() { // jshint ignore:line
     ascustomButton.elt.className = "button";
 
     // Button to close the hints
-    closeHintsButton = createButton('Close Hints');
-    closeHintsButton.position(370, windowHeight - 45);
-    closeHintsButton.mousePressed(function () {
+    closeTutorialButton = createButton('Close Tutorial');
+    closeTutorialButton.position(370, windowHeight - 65);
+    closeTutorialButton.mousePressed(function () {
         document.cookie = "ClosedHint=true";
         showHints = false;
         hintNum = 0;
-        closeHintsButton.hide();
-        nextHintButton.hide();
+        closeTutorialButton.hide();
+        nextStepButton.hide();
     });
-    closeHintsButton.elt.className = "button";
+    closeTutorialButton.elt.className = "button";
 
     // Button to open the next hint
-    nextHintButton = createButton('Next Hint');
-    nextHintButton.position(480, windowHeight - 45);
-    nextHintButton.mousePressed(function () {
+    nextStepButton = createButton('Next Step');
+    nextStepButton.position(494, windowHeight - 65);
+    nextStepButton.mousePressed(function () {
         hintNum++;
     });
-    nextHintButton.elt.className = "button";
+    nextStepButton.elt.className = "button";
 
     /*
         Elements for the properties mode
@@ -621,8 +621,8 @@ function setup() { // jshint ignore:line
     //Hide hints if there is a cookie 
     if ((getCookieValue("ClosedHint") === "true")) {
         showHints = false;
-        closeHintsButton.hide();
-        nextHintButton.hide();
+        closeTutorialButton.hide();
+        nextStepButton.hide();
     }
     else {
         showHints = true;
@@ -1658,117 +1658,117 @@ function showTutorial() {
     textFont('Gudea');
     switch (hintNum) {
         case 0:
-            displayHint(1000, hintPic0, 'Welcome!', 'LogiJS is a logic circuit editor.',
-                'It\'s designed to be simple to use, yet powerful.');
+            displayHint(450, hintPic0, 'Welcome!', 'If this is your first time using LogiJS,',
+                'we suggest you to go through this quick tutorial.');
             break;
         case 1:
-            displayHint(1100, hintPic1, 'Navigation', 'Use the mouse wheel to zoom in and out!',
-                'Drag the sketch by holding the right mouse button.');
+            displayHint(600, hintPic1, 'Navigation', 'You can drag the sketch area by dragging with the right',
+                'mouse button pressed. To zoom in and out, use the mouse wheel.');
             break;
         case 2:
-            displayHint(1200, hintPic2, 'Basic elements', 'You can add And, Or and Xor Gates by clicking on',
+            displayHint(500, hintPic2, 'Basic components', 'You can add the standard gate types by clicking on',
                 'the buttons on the left and then clicking on the canvas.');
             break;
         case 3:
-            displayHint(1100, hintPic3, 'Basic elements', 'Placing in- and outputs is just as easy.',
-                'Try adding a switch and a lamp next to a gate!');
+            displayHint(450, hintPic3, 'Basic components', 'Placing in- and outputs is just as easy.',
+                'Try adding switches and a lamp next to a gate!');
             break;
         case 4:
-            displayHint(1200, hintPic4, 'Connecting the dots', 'Click on the \'Wiring\' button in the top left corner.',
-                'Add wires by dragging with the left mouse button pressed.');
+            displayHint(600, hintPic4, 'Connecting the dots', 'You can always add wires by simply dragging with the left',
+                'mouse button pressed. Go ahead and connect your components!');
             break;
         case 5:
-            displayHint(1300, hintPic5, 'Starting the simulation', 'By clicking on the \'Start\' button in the top left corner,',
+            displayHint(500, hintPic5, 'Starting the simulation', 'By clicking on the \'Start\' button in the top left corner,',
                 'you can start the simulation. Clicking it again will stop it.');
             break;
         case 6:
-            displayHint(1200, hintPic6, 'Simulation mode', 'In the simulation, you can left-click on the inputs',
-                'you\'ve placed to see the logic circuit act accordingly.');
+            displayHint(500, hintPic6, 'Simulation mode', 'During simulation, you can left-click on the inputs',
+                'you\'ve placed to see your logic circuit act accordingly.');
             break;
         case 7:
-            displayHint(1500, hintPic7, 'Deleting elements', 'Click on the \'Delete\' button in the top left corner. Now you can',
-                'delete elements by clicking on them. To delete wires, just drag over them.');
+            displayHint(650, hintPic7, 'Deleting components', 'Click the \'Delete\' button in the top left corner. Now you can delete',
+                'components by left-clicking on them. To delete wires, just drag over them.');
             break;
         case 8:
-            displayHint(1200, hintPic8, 'Undo and Redo', 'If you want to undo any change you\'ve made',
+            displayHint(500, hintPic8, 'Undo and Redo', 'If you want to undo any change you\'ve made',
                 'to the sketch, just use the \'Undo\' and \'Redo\' buttons.');
             break;
         case 9:
-            displayHint(1500, hintPic9, 'Switches, Buttons and Clocks', 'In contrast to the switch elements you\'ve already used,',
-                'buttons are only activated for a short period of time when clicked on them.');
+            displayHint(650, hintPic9, 'Switches, Buttons and Clocks', 'In contrast to the switch component you\'ve already used, buttons are ',
+                'only activated for a short period of time when clicked on them.');
             break;
         case 10:
-            displayHint(1500, hintPic10, 'Switches, Buttons and Clocks', 'Clocks are switches that turn on and off automatically,',
-                'you can change their speed in the properties menu that you\'ll see in a bit.');
+            displayHint(650, hintPic10, 'Switches, Buttons and Clocks', 'Clocks are switches that turn on and off automatically, you can change',
+                'their speed in the properties menu that we\'ll show you in a bit.');
             break;
         case 11:
-            displayHint(1500, hintPic11, 'Additional settings', 'Some elements have properties like input width and direction, that',
-                'appear in the bottom left when clicking on the corresponding element button.');
+            displayHint(700, hintPic11, 'Additional settings', 'Some components have properties like input width and direction, that appear',
+                'in the bottom left when clicking on the corresponding component button.');
             break;
         case 12:
-            displayHint(1500, hintPic12, 'The properties mode', 'By hitting \'Properties\' or the escape key, you enter the properties',
-                'mode. You can now invert in- and outputs of gates by clicking on them. ');
+            displayHint(700, hintPic12, 'Edit mode', 'By clicking \'Edit\' or using the escape key, you enter the edit mode. You can now',
+                'invert in- and outputs of gates and custom components by clicking on them. ');
             break;
         case 13:
-            displayHint(1500, hintPic13, 'The properties mode', 'When clicking on in- or output elements (eg. switches or lamps),',
-                'you can change various properties of these elements in the appearing menu.');
+            displayHint(700, hintPic13, 'Edit mode', 'When clicking on in- or output components (eg. switches or lamps),',
+                'you can change various properties of these components in the appearing menu.');
             break;
         case 14:
-            displayHint(1500, hintPic14, '7-Segment displays', 'These take a variable number of input bits and display their binary',
-                'value in decimal form. You can change the bit width in the additional settings.');
+            displayHint(750, hintPic14, '7-Segment displays', 'These take a variable number of input bits and display their binary value in decimal',
+                'form. You can change the bit width in the additional settings before placing them.');
             break;
         case 15:
-            displayHint(1500, hintPic15, 'Advanced elements', 'These are more complex elements that are each made out of another',
-                'sketch. This list is just a selection of custom elements that are pre-built by us.');
+            displayHint(750, hintPic15, 'Advanced components', 'These are more complex components that are each made out of another',
+                'sketch. This list is just a selection of custom components that are pre-built by us.');
             break;
         case 16:
-            displayHint(1500, hintPic16, 'Loading and saving', 'To save a sketch, type in a name in the top right and hit save.',
+            displayHint(600, hintPic16, 'Loading and saving', 'To save a sketch, type in a name in the top right corner and hit save.',
                 'You can then choose a folder on your hard drive to save it locally.');
             break;
         case 17:
-            displayHint(1200, hintPic17, 'Loading and saving', 'To load sketches, you must have a local',
+            displayHint(400, hintPic17, 'Loading and saving', 'To load sketches, you must have a local',
                 'LogiJS version on your computer. ');
             break;
         case 18:
-            displayHint(1500, hintPic16, 'Loading and saving', 'Make sure, your sketch file is in the \'sketches\' folder of your',
-                'LogiJS version. Type the file name into the input field and hit \'Load\' or enter.');
+            displayHint(700, hintPic16, 'Loading and saving', 'Make sure, your sketch file is in the \'sketches\' folder of your LogiJS version.',
+                'Type the file name into the input field and hit \'Load\' or the enter key.');
             break;
         case 19:
-            displayHint(1500, hintPic19, 'Diodes', 'Diodes are elements that join two crossing wires in the horizontal',
+            displayHint(650, hintPic19, 'Diodes', 'Diodes are components that join two crossing wires in the horizontal',
                 'but not in the vertical direction. They can be used for diode matrices.');
             break;
         case 20:
-            displayHint(1600, hintPic20, 'Diodes', 'Please load the sketch \'traffic\'. As you can see, there is an area with',
-                'multiple diodes (little triangles) on it.');
+            displayHint(550, hintPic20, 'Diodes', 'Please load the sketch called \'traffic\'. As you can see,',
+                'there is an area with multiple diodes (little triangles) on it.');
             break;
         case 21:
-            displayHint(1500, hintPic21, 'Diodes', 'In properties mode, you can toggle diodes by clicking on them or on empty wire',
-                'crossings. Start the simulation to see how they are used in this example!');
+            displayHint(750, hintPic21, 'Diodes', 'In edit mode, you can toggle diodes and connection points by clicking on them or on',
+                'empty wire crossings. Start the simulation to see how they are used in this example!');
             break;
         case 22:
-            displayHint(1500, hintPic22, 'Custom elements', 'If, instead of hitting \'Load\', you click on \'Import\', your sketch',
-                'is imported as a custom element. Click anywhere on the sketch to place it.');
+            displayHint(700, hintPic22, 'Custom components', 'If instead of hitting \'Load\' you click on \'Import\', your sketch will be',
+                'imported as a custom component. Click anywhere on the sketch to place it.');
             break;
         case 23:
-            displayHint(1600, hintPic23, 'Custom elements', 'You can name in- and outputs and set inputs to the top of the element',
+            displayHint(650, hintPic23, 'Custom components', 'You can name in- and outputs and set inputs to the top of the component',
                 'by altering these settings in the properties menu of the sketch to import.');
             break;
         case 24:
-            displayHint(1100, hintPic24, 'Custom elements', 'Pro tip: Inputs labeled with \'>\' will',
-                'appear as clock inputs with an arrow drawn on them.');
+            displayHint(450, hintPic24, 'Custom components', 'Inputs labeled with \'>\' will appear as',
+                'clock inputs with an arrow drawn on them.');
             break;
         case 25:
-            displayHint(1300, hintPic25, 'Labels', 'You can add labels using the \'Label\' button.',
-                'You can change their text in properties mode by clicking on them.');
+            displayHint(600, hintPic25, 'Labels', 'You can add text labels using the \'Label\' button. The text can',
+                'be changed in the properties menu after clicking on them.');
             break;
         case 26:
-            displayHint(1500, hintPic26, '\'New\' and \'Select\'', 'Click on \'New\' to start a new sketch. When clicking on \'Select\'',
-                'you can select parts of your sketch and move them on the canvas.');
+            displayHint(650, hintPic26, '\'New\' and \'Select\'', 'Click on \'New\' to start a new sketch. When clicking on \'Select\' you can',
+                'select parts of your sketch to move them on the canvas or delete them.');
             break;
         case 27:
-            displayHint(1500, hintPic0, 'Thank you!', 'You\'ve reached the end of this small tutorial on LogiJS.',
-                'We hope that you like our work. You can give us feedback via Twitter.');
-            nextHintButton.hide();
+            displayHint(600, hintPic0, 'Thank you!', 'You\'ve reached the end of this little tutorial on LogiJS.',
+                'We hope that you like our work and we value any feedback from you.');
+            nextStepButton.hide();
             break;
         default:
             break;
@@ -1778,20 +1778,24 @@ function showTutorial() {
 /*
     Displays the given hint text (two lines + caption) and an image in a box in the bottom left corner
 */
-function displayHint(bubbleWidth, img, caption, line1, line2) {
+function displayHint(width, img, caption, line1, line2) {
     // Draw a red ellipse and a rectangle to form the box shape
     fill(200, 50, 50);
-    ellipse(200, window.height, bubbleWidth, 400);
-    rect(0, window.height - 200, 200, 200);
+    stroke(50);
+    strokeWeight(3);
+    rect(20, window.height - 220, width + 200, 200);
     // Display the given image in the bottom left
-    image(img, 20, window.height - 180);
+    strokeWeight(6);
+    rect(40, window.height - 200, 160, 160);
+    image(img, 40, window.height - 200);
     // Set the text attributes and draw caption and text lines
     fill(255);
+    noStroke();
     textSize(30);
-    text(caption, 220, window.height - 170);
+    text(caption, 220, window.height - 190);
     textSize(20);
-    text(line1, 220, window.height - 115);
-    text(line2, 220, window.height - 85);
+    text(line1, 220, window.height - 135);
+    text(line2, 220, window.height - 105);
 }
 
 function showElements() {
