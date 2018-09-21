@@ -87,7 +87,7 @@ let propInput = -1;
 let propOutput = -1;
 let propLabel = -1;
 
-let showHints;
+let showHints = true;
 let hintNum = 0;
 let closeTutorialButton, nextStepButton;
 let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
@@ -103,6 +103,10 @@ let cnv; // Canvas variable
     Executed before setup(), loads all hint images
 */
 function preload() {
+    if (!window.location.href.includes('.com')) {
+        showHints = false;
+        return;
+    }
     hintPic0 = loadImage('images/hint0.png');
     hintPic1 = loadImage('images/hint1.png');
     hintPic2 = loadImage('images/hint2.png');
@@ -524,6 +528,10 @@ function setup() { // jshint ignore:line
         hintNum++;
     });
     nextStepButton.elt.className = "button";
+    if (!showHints) {
+        closeTutorialButton.hide();
+        nextStepButton.hide();
+    }
 
     /*
         Elements for the properties mode
@@ -623,9 +631,6 @@ function setup() { // jshint ignore:line
         showHints = false;
         closeTutorialButton.hide();
         nextStepButton.hide();
-    }
-    else {
-        showHints = true;
     }
     reDraw();
     setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
