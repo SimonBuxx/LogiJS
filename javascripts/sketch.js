@@ -1952,7 +1952,7 @@ function keyPressed() {
                 break;
             case RETURN:
                 console.log(wires);
-                console.log(segments)
+                console.log(segments);
                 setPropMode(false);
                 gateInputSelect.hide();
                 labelGateInputs.hide();
