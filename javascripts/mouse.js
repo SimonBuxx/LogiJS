@@ -69,6 +69,7 @@ function mouseWheel(event) {
         }
         return;
     }
+    
     if (mouseX > 0 && mouseY > 0) {
         wheel = Math.sign(event.deltaY) * 1.5; // -1.5 for zoom in, +1.5 for zoom out
         if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
@@ -80,6 +81,7 @@ function mouseWheel(event) {
 
         }
         transform.zoom = (gridSize / GRIDSIZE);
+        dragSpeed = 1 / transform.zoom;
         if (!simRunning) {
             reDraw();
         }
@@ -709,10 +711,36 @@ function mouseOverSegDisplay() {
 
 //Checks if the mouse hovers over the GUI(true) or the grid(false)
 function mouseOverGUI() {
+    if (mouseY > window.height - 220 && mouseX < 970 && showHints) {
+        return true;
+    }
     if (propInput + propOutput + propLabel < -2) {
         return (mouseY < 0) || (mouseX < 0);
     } else {
         return (mouseY < 0) || (mouseX < 0) || (mouseY > window.height - 300 && mouseX > window.width - 215);
 
+    }
+}
+
+/*
+    Handles the dragging of the canvas
+    by calculating dx and dy
+*/
+function handleDragging() {
+    if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
+        if (lastX !== 0) {
+            transform.dx += Math.round((mouseX - lastX) * dragSpeed);
+        }
+        if (lastY !== 0) {
+            transform.dy += Math.round((mouseY - lastY) * dragSpeed);
+        }
+        lastX = mouseX;
+        lastY = mouseY;
+        if (!simRunning) {
+            reDraw();
+        }
+    } else {
+        lastX = 0;
+        lastY = 0;
     }
 }
