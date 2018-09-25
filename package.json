@@ -1,0 +1,20 @@
+{
+  "name": "LogiJS",
+  "version": "1.0.0",
+  "description": "**https://logijs.netlify.com/**",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crisbbi/LogiJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crisbbi/LogiJS/issues"
+  },
+  "homepage": "https://github.com/crisbbi/LogiJS#readme"
+}
