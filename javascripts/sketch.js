@@ -73,6 +73,8 @@ let wireIndizees = [];
 
 let showTooltip = true;
 let negPreviewShown = false;
+let diodePreviewShown = false;
+let conpointPreviewShown = false;
 
 // GUI Elements
 let textInput, saveButton, loadButton, newButton; // Right hand side
@@ -618,6 +620,9 @@ function setup() { // jshint ignore:line
 
     frameRate(60); // Caps the framerate at 60 FPS
 
+    setControlMode('none');
+    setPropMode(true);
+
     //sets font-size for all label elements
     let guiLabels = document.getElementsByClassName('label');
     for (let i = 0; i < guiLabels.length; i++) {
@@ -651,6 +656,7 @@ function customClicked(filename) {
     if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setControlMode('addObject');
         addType = 10; // custom
@@ -776,6 +782,7 @@ function setUnactive() {
 function deleteClicked() {
     if (ctrlMode === 'select' && selectMode === 'end') {
         setActive(propertiesButton);
+        setPropMode(true);
         ctrlMode = 'none';
         selectMode = 'end';
         showSClickBox = false;
@@ -866,6 +873,7 @@ function deleteClicked() {
         if (ctrlMode === 'delete') {
             setControlMode('none');
             setActive(propertiesButton);
+            setPropMode(true);
         } else {
             setActive(deleteButton);
             setControlMode('delete');
@@ -951,6 +959,7 @@ function andClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 1 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(andButton, true);
         setControlMode('addObject');
@@ -966,6 +975,7 @@ function orClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 2 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(orButton, true);
         setControlMode('addObject');
@@ -981,6 +991,7 @@ function xorClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 3 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(xorButton, true);
         setControlMode('addObject');
@@ -996,6 +1007,7 @@ function inputClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 4 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(inputButton, true);
         newIsButton = false;
@@ -1009,6 +1021,7 @@ function buttonClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 5 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(buttonButton, true);
         newIsButton = true;
@@ -1023,6 +1036,7 @@ function clockClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 6 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(clockButton, true);
         newIsButton = false;
@@ -1036,6 +1050,7 @@ function outputClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 7 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(outputButton, true);
         setControlMode('addObject');
@@ -1047,6 +1062,7 @@ function segDisplayClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 8 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(segDisplayButton, true);
         setControlMode('addObject');
@@ -1061,6 +1077,7 @@ function startSelect() {
     if (ctrlMode === 'select') {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(selectButton);
         setControlMode('select');
@@ -1073,6 +1090,7 @@ function labelButtonClicked(dontToggle = false) {
     if (ctrlMode === 'addObject' && addType === 9 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(labelButton, true);
         setControlMode('addObject');
@@ -1995,6 +2013,26 @@ function showNegationPreview(clickBox, isOutput, direction, isTop) {
         ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy - offset)), 10 * transform.zoom, 10 * transform.zoom);
     } 
 }
+
+function showDiodePreview(x, y) {
+    fill(50, 50, 50, 200);
+    noStroke();
+    scale(transform.zoom); // Handle the offset from scaling and translating
+    translate(transform.dx, transform.dy);
+    triangle(x, y + 11, x - 11, y, x + 11, y);
+    scale(1 / transform.zoom);
+    translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
+}   
+
+function showConPointPreview(x, y) {
+    fill(50, 50, 50);
+    noStroke();
+    scale(transform.zoom); // Handle the offset from scaling and translating
+    translate(transform.dx, transform.dy);
+    rect(x - 3, y - 3, 7, 7);
+    scale(1 / transform.zoom);
+    translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
+}   
 
 /*
     Draws the underlying grid on the canvas

@@ -97,6 +97,8 @@ function updateCursors() {
     let isOutput = false;
     let isTop = false;
     let hand = false;
+    let showDPreview = false;
+    let showCPPreview = false;
     if (simRunning || propMode) {
         if (!simRunning) {
             for (const elem of outputs) {
@@ -175,6 +177,15 @@ function updateCursors() {
             if (rightAngle(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                 hand = true;
                 cursor(HAND);
+                if (!fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) ||
+                    (isDiode(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) < 0 &&
+                        isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) < 0)) {
+                    showDPreview = true;
+                } else if ((isDiode(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2) >= 0) ||
+                    isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) >= 0) &&
+                    fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                    showCPPreview = true;
+                }
             }
         } else {
             for (const elem of inputs) {
@@ -191,6 +202,22 @@ function updateCursors() {
     }
     if (!hand) {
         cursor(ARROW);
+    }
+    if (showDPreview) {
+        reDraw();
+        showDiodePreview(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+        diodePreviewShown = true;
+    } else if (diodePreviewShown) {
+        reDraw();
+        diodePreviewShown = false;
+    }
+    if (showCPPreview) {
+        reDraw();
+        showConPointPreview(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+        conpointPreviewShown = true;
+    } else if (conpointPreviewShown) {
+        reDraw();
+        conpointPreviewShown = false;
     }
     if (negPort !== null) {
         reDraw();
