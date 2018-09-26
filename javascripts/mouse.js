@@ -67,7 +67,7 @@ function mouseWheel(event) {
         }
         return;
     }
-    
+
     if (mouseX > 0 && mouseY > 0) {
         wheel = Math.sign(event.deltaY) * 1.5; // -1.5 for zoom in, +1.5 for zoom out
         if ((gridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (gridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
@@ -92,6 +92,10 @@ function mouseMoved() {
 }
 
 function updateCursors() {
+    let negDir = 0;
+    let negPort = null;
+    let isOutput = false;
+    let isTop = false;
     let hand = false;
     if (simRunning || propMode) {
         if (!simRunning) {
@@ -118,12 +122,18 @@ function updateCursors() {
                     if (e.mouseOver()) {
                         hand = true;
                         cursor(HAND);
+                        negDir = elem.direction;
+                        negPort = e;
+                        isOutput = false;
                     }
                 }
                 for (const e of elem.outputClickBoxes) {
                     if (e.mouseOver()) {
                         hand = true;
                         cursor(HAND);
+                        negDir = elem.direction;
+                        negPort = e;
+                        isOutput = true;
                     }
                 }
             }
@@ -132,6 +142,9 @@ function updateCursors() {
                     if (e.mouseOver()) {
                         hand = true;
                         cursor(HAND);
+                        negDir = 3;
+                        negPort = e;
+                        isOutput = false;
                     }
                 }
             }
@@ -139,16 +152,23 @@ function updateCursors() {
                 if (!elem.visible) {
                     continue;
                 }
-                for (const e of elem.inputClickBoxes) {
-                    if (e.mouseOver()) {
+                for (let i = 0; i < elem.inputClickBoxes.length; i++) {
+                    if (elem.inputClickBoxes[i].mouseOver()) {
                         hand = true;
                         cursor(HAND);
+                        negDir = elem.direction;
+                        negPort = elem.inputClickBoxes[i];
+                        isOutput = false;
+                        isTop = elem.objects[INPNUM][i].isTop; // Seems to work
                     }
                 }
                 for (const e of elem.outputClickBoxes) {
                     if (e.mouseOver()) {
                         hand = true;
                         cursor(HAND);
+                        negDir = elem.direction;
+                        negPort = e;
+                        isOutput = true;
                     }
                 }
             }
@@ -171,6 +191,14 @@ function updateCursors() {
     }
     if (!hand) {
         cursor(ARROW);
+    }
+    if (negPort !== null) {
+        reDraw();
+        showNegationPreview(negPort, isOutput, negDir, isTop);
+        negPreviewShown = true;
+    } else if (negPreviewShown) {
+        reDraw();
+        negPreviewShown = false;
     }
 }
 
