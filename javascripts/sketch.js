@@ -947,7 +947,6 @@ function labelChanged() {
 function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value());
     // Ensure that the correct preview gate is displayed when user selection changes
-    // TODO change to createPreviewSymbol()
     switch(addType){
         case 1: previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&'));
                     break;
@@ -961,8 +960,6 @@ function newGateInputNumber() {
 
 function newBitLength() {
     segBits = parseInt(bitSelect.value());
-
-    // TODO change to createPreviewSymbol()
     previewSymbol = new CreatePreviewSymbol(new SegmentDisplay(mouseX, mouseY, transform, segBits));
 }
 
@@ -974,7 +971,6 @@ function newDirection() {
         case 'Down': gateDirection = 1; break;
     }
     // Ensure that the correct preview gate is displayed when user selection changes
-    // TODO change to createPreviewSymbol()
     switch(addType){
         case 1: previewSymbol = new CreatePreviewSymbol(new LogicGate(mouseX, mouseY, transform, gateDirection, gateInputCount, 1, 'and', '&'));
                     break;

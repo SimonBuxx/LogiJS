@@ -116,10 +116,6 @@ Output.prototype.show = function () {
     } else {
         fill(this.lowColor);
     }
-    // Makes preview symbol more transparent
-    if (previewSymbol !== null && !this.state && !this.marked && !mouseIsPressed){
-        fill(50, 50, 50, this.alpha);
-    }
     // Draw the circle that represents the output
     ellipse(this.x, this.y, this.w, this.h);
     //this.clickBox.markClickBox();
