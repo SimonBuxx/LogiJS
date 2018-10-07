@@ -82,7 +82,6 @@ function Label(x, y, txt, transform) {
         fill(0);
         rect(this.x - 5, this.y - 5, 10, 10);
         text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
-        //this.clickBox.markClickBox();
     };
 
     this.showPreview = function () {
@@ -93,6 +92,12 @@ function Label(x, y, txt, transform) {
         noStroke();
         fill(0);
         rect(this.x - 5, this.y - 5, 10, 10);
+        // Needed to redefine text output after trying many bug fixes
+        // somehow it works like this but still a bug with text displaying 
+        // with offset to the right of the cursor 
+        textFont('Gudea');
+        textSize(20);
+        fill(75);
         text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
     };
 }
