@@ -727,7 +727,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
+    if (mouseIsPressed && mouseButton === CENTER && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);
         }
