@@ -294,8 +294,6 @@ LogicGate.prototype.show = function () {
     }
     strokeWeight(3);
 
-    
-
     if (this.direction % 2 === 0) {
         rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE); // Draw body
     } else {
@@ -303,8 +301,6 @@ LogicGate.prototype.show = function () {
     }
 
     noStroke();
-    //textSize(10);
-    //text(this.id, this.x + this.w/2, this.y);
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
