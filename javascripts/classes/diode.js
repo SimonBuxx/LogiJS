@@ -80,7 +80,7 @@ function Diode(x, y, state, transform) {
     };
 
     this.show = function () {
-        strokeWeight(0);
+        noStroke();
         if (this.marked) {
             fill(this.markColor);
         } else if (this.state) {

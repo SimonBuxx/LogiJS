@@ -72,6 +72,11 @@ let syncFramerate = true;
 let segIndizees = [];
 let wireIndizees = [];
 
+let showTooltip = true;
+let negPreviewShown = false;
+let diodePreviewShown = false;
+let conpointPreviewShown = false;
+
 // GUI Elements
 let textInput, saveButton, loadButton, newButton; // Right hand side
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
@@ -636,6 +641,9 @@ function setup() { // jshint ignore:line
 
     frameRate(60); // Caps the framerate at 60 FPS
 
+    setControlMode('none');
+    setPropMode(true);
+
     //sets font-size for all label elements
     let guiLabels = document.getElementsByClassName('label');
     for (let i = 0; i < guiLabels.length; i++) {
@@ -670,6 +678,7 @@ function customClicked(filename) {
     if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setControlMode('addObject');
         addType = 10; // custom
@@ -813,6 +822,7 @@ function deleteClicked() {
     previewSymbol = null;
     if (ctrlMode === 'select' && selectMode === 'end') {
         setActive(propertiesButton);
+        setPropMode(true);
         ctrlMode = 'none';
         selectMode = 'end';
         showSClickBox = false;
@@ -903,6 +913,7 @@ function deleteClicked() {
         if (ctrlMode === 'delete') {
             setControlMode('none');
             setActive(propertiesButton);
+            setPropMode(true);
         } else {
             setActive(deleteButton);
             setControlMode('delete');
@@ -1011,6 +1022,7 @@ function andClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(andButton, true);
         setControlMode('addObject');
@@ -1028,6 +1040,7 @@ function orClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(orButton, true);
         setControlMode('addObject');
@@ -1045,6 +1058,7 @@ function xorClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(xorButton, true);
         setControlMode('addObject');
@@ -1062,6 +1076,7 @@ function inputClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(inputButton, true);
         newIsButton = false;
@@ -1077,6 +1092,7 @@ function buttonClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(buttonButton, true);
         newIsButton = true;
@@ -1093,6 +1109,7 @@ function clockClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(clockButton, true);
         newIsButton = false;
@@ -1108,6 +1125,7 @@ function outputClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(outputButton, true);
         setControlMode('addObject');
@@ -1121,6 +1139,7 @@ function segDisplayClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(segDisplayButton, true);
         setControlMode('addObject');
@@ -1137,6 +1156,7 @@ function startSelect() {
     if (ctrlMode === 'select') {
         setControlMode('none');
         setActive(propertiesButton);
+        setPropMode(true);
     } else {
         setActive(selectButton);
         setControlMode('select');
@@ -1150,6 +1170,7 @@ function labelButtonClicked(dontToggle = false) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
+        setPropMode(true);
     } else {
         setActive(labelButton, true);
         setControlMode('addObject');
@@ -1318,55 +1339,6 @@ function addLabel() {
     reDraw();
 }
 
-function toggleDiode(restore) {
-    for (var i = 0; i < diodes.length; i++) {
-        if ((diodes[i].x === Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
-            (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
-            diodes[i].cp = true;
-            deleteDiode(i);
-            return;
-        }
-    }
-    createDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
-        Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, restore);
-    reDraw();
-}
-
-function toggleConpoint(undoable) {
-    for (var i = 0; i < conpoints.length; i++) {
-        if ((conpoints[i].x === Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
-            (conpoints[i].y === Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
-            let cp = conpoints.splice(i, 1);
-            let before = conpoints.slice(0);
-            doConpoints();
-            if (JSON.stringify(conpoints) === JSON.stringify(before) && undoable) {
-                pushUndoAction('delCp', [], cp);
-            }
-            return;
-        }
-    }
-    conpoints.push(new ConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, -1));
-    let before = conpoints.slice(0);
-    doConpoints();
-    if ((JSON.stringify(conpoints) === JSON.stringify(before)) && undoable) {
-        pushUndoAction('addCp', [], conpoints[conpoints.length - 1]);
-    }
-    reDraw();
-}
-
-function toggleDiodeAndConpoint() {
-    if (isDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) >= 0) {
-        toggleDiode(false);
-    } else {
-        if (isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) >= 0) {
-            toggleConpoint(true);
-        } else {
-            toggleDiode(false);
-        }
-    }
-    reDraw();
-}
-
 /*
     Deletes the given gate
 */
@@ -1444,7 +1416,7 @@ function deleteSegDisplay(segDisNumber) {
 */
 function startSimulation() {
     // If the update cycle shouldn't be synced with the framerate,
-    // update every 10ms (may be too fast for slower machines, not a great solution)
+    // update every 1ms (not a great solution)
     if (!sfcheckbox.checked()) {
         updater = setInterval(updateTick, 1);
     }
@@ -1454,11 +1426,6 @@ function startSimulation() {
     disableButtons(true);
     setPropMode(false);
     showSClickBox = false; // Hide the selection click box
-
-    // Tell all customs that the simulation started
-    for (const elem of customs) {
-        elem.setSimRunning(true);
-    }
 
     // Parse all groups, integrate all elements and parse again (this is required)
     parseGroups();
@@ -1475,6 +1442,11 @@ function startSimulation() {
         if (elem.getIsClock()) {
             elem.resetFramecount();
         }
+    }
+
+    // Tell all customs that the simulation started
+    for (const elem of customs) {
+        elem.setSimRunning(true);
     }
 
     sfcheckbox.show();
@@ -1597,10 +1569,10 @@ function disableButtons(status) {
 function draw() {
     // If the simulation is running, update the sketch logic (if synced to framerate) and redraw the sketch and GUI
     if (simRunning) {
-        if (sfcheckbox.checked()) {
-            updateTick();
-        }
+        updateTick();
         reDraw();
+        handleDragging();
+        return;
     }
 
     // If wire preview is active, generate a segment set and display the preview segments
@@ -1711,7 +1683,10 @@ function reDraw() {
     translate(transform.dx, transform.dy);
 
     // Draw all sketch elements on screen
+    //let t0 = performance.now();
     showElements();
+    //let t1 = performance.now();
+    //console.log("took " + (t1 - t0) + " milliseconds.");
 
     // Reverse the scaling and translating to draw the stationary elements of the GUI
     scale(1 / transform.zoom);
@@ -1727,7 +1702,6 @@ function reDraw() {
     // If the prop mode is active and an object was selected, show the config menu background in the bottom right corner
     // propInput, propOutput and propLabel are -1 when no element is selected. If one of them is > -1, the sum is >= -2
     if (propMode && propInput + propOutput + propLabel >= -2) {
-        noStroke();
         fill(50);
         rect(window.width - 215, window.height - 300, 220, 305, 5);
     }
@@ -1736,6 +1710,10 @@ function reDraw() {
     if (showHints) {
         showTutorial();
     }
+
+    /*if (showTooltip) {
+        displayTooltipBar();
+    }*/
 }
 
 /*
@@ -1885,8 +1863,13 @@ function displayHint(width, img, caption, line1, line2) {
     text(line2, 220, window.height - 105);
 }
 
+function displayTooltipBar() {
+    fill(50, 50, 50);
+    noStroke();
+    rect(0, 0, window.width, 150);
+}
+
 function showElements() {
-    //var t0 = performance.now();
     if (simRunning) {
         for (const elem of groups) {
             elem.show();
@@ -1896,8 +1879,7 @@ function showElements() {
             elem.show();
         }
     }
-    //var t1 = performance.now();
-    //console.log("Drawing wires took " + (t1 - t0) + " milliseconds.")
+    //let t0 = performance.now();
     textFont('monospace');
     for (const elem of gates) {
         elem.show();
@@ -1914,7 +1896,6 @@ function showElements() {
             elem.show();
         }
     }
-
     for (const elem of conpoints) {
         elem.show();
     }
@@ -2046,6 +2027,33 @@ function keyPressed() {
     } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
         loadClicked();
     }
+}
+
+function showNegationPreview(clickBox, isOutput, direction, isTop) {
+    fill(150);
+    stroke(0);
+    strokeWeight(2 * transform.zoom);
+    let offset;
+    if (isOutput) {
+        offset = 3;
+    } else {
+        offset = -3;
+    }
+    if (isTop) {
+        direction += 1;
+        if (direction > 3) {
+            direction = 0;
+        }
+    }
+    if (direction === 0) {
+        ellipse((transform.zoom * (clickBox.x + transform.dx + offset)), (transform.zoom * (clickBox.y + transform.dy)), 10 * transform.zoom, 10 * transform.zoom);
+    } else if (direction === 1) {
+        ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy + offset)), 10 * transform.zoom, 10 * transform.zoom);
+    } else if (direction === 2) {
+        ellipse((transform.zoom * (clickBox.x + transform.dx - offset)), (transform.zoom * (clickBox.y + transform.dy)), 10 * transform.zoom, 10 * transform.zoom);
+    } else if (direction === 3) {
+        ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy - offset)), 10 * transform.zoom, 10 * transform.zoom);
+    } 
 }
 
 /*
