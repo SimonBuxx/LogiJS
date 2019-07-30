@@ -306,7 +306,7 @@ function mousePressed() {
                             setControlMode('none');
                             setActive(propertiesButton);
                             pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
-                                sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
+                                sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.h / 2);
                             initX = 0;
                             initY = 0;
                         }

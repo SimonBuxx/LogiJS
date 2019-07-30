@@ -2,26 +2,26 @@
 
 p5.disableFriendlyErrors = true; // jshint ignore:line
 
-let gates = []; // All normal gates (no inputs, outputs, etc.)
-let outputs = []; // All outputs
-let inputs = []; // All inputs
-let segments = []; // All wire segments
-let pwSegments = [];
-let conpoints = [];
-let diodes = [];
-let customs = [];
-let wires = [];
-let labels = [];
-let segDisplays = [];
+let gates = []; // List of gates (and, or, xor)
+let outputs = []; // List of outputs
+let inputs = []; // List of inputs (buttons, switches)
+let segments = []; // List of fixed wire segments
+let pwSegments = []; // List of preview wire segments
+let conpoints = []; // List of wire connection points
+let diodes = []; // List of diodes
+let customs = []; // List of custom objects
+let wires = []; // List of wires (aggregated wire segments)
+let labels = []; // List of text labels
+let segDisplays = []; // List of 7-segment displays
 
-let segBits = 4; // Number of bits for the 7-segment displays
+let segBits = 4; // Number of bits for new 7-segment displays
 
-let selection = [];
+let selection = []; // List of all selected elements
 
-let pwstartX = 0;
+let pwstartX = 0; // Start point (x, y) of the preview segments
 let pwstartY = 0;
 
-let groups = [];
+let groups = []; // List of all logical wire groups
 
 //let caption = []; // Name of the sketch, displayed on customs
 

@@ -108,7 +108,6 @@ function undo() {
                 break;
             case 'moveSel': // Broken
                 ctrlMode = "select";
-                handleSelection(act.actionIndizes[2], act.actionIndizes[3], act.actionIndizes[4], act.actionIndizes[5]);
                 showSClickBox = false;
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
                 finishSelection();
