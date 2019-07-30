@@ -106,9 +106,10 @@ function undo() {
                 labels.push(act.actionObject[0]);
                 actionRedo.push(act);
                 break;
-            case 'moveSel': // Broken
+            case 'moveSel':
                 ctrlMode = "select";
                 showSClickBox = false;
+                selection = act.actionObject;
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
                 finishSelection();
                 ctrlMode = "none";
@@ -277,8 +278,8 @@ function redo() {
                 break;
             case 'moveSel':
                 ctrlMode = "select";
-                handleSelection(act.actionIndizes[2] - act.actionIndizes[0], act.actionIndizes[3] - act.actionIndizes[1], act.actionIndizes[4] - act.actionIndizes[0], act.actionIndizes[5] - act.actionIndizes[1]);
                 showSClickBox = false;
+                selection = act.actionObject;
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
                 finishSelection();
                 ctrlMode = "none";
