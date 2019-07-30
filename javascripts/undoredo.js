@@ -109,9 +109,13 @@ function undo() {
             case 'moveSel':
                 ctrlMode = "select";
                 showSClickBox = false;
-                selection = act.actionObject;
+                //console.log('Selection: ');
+                selection = act.actionObject.slice(0);
+                //console.log(selection);
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
                 finishSelection();
+                //console.log('Selection after undo: ');
+                //console.log(selection);
                 ctrlMode = "none";
                 selection = [];
                 unmarkAll();
@@ -279,9 +283,11 @@ function redo() {
             case 'moveSel':
                 ctrlMode = "select";
                 showSClickBox = false;
-                selection = act.actionObject;
+                selection = act.actionObject.slice(0);
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
                 finishSelection();
+                //console.log('Selection after redo: ');
+                //console.log(selection);
                 ctrlMode = "none";
                 selection = [];
                 unmarkAll();
@@ -352,8 +358,12 @@ function redo() {
             case 'reWire':
                 actionUndo.push(new Action('reWire', 0, [segments.slice(0), conpoints.slice(0)]));
                 segments = act.actionObject[0].slice(0);
+                //console.log('Restored segments: ');
+                //console.log(segments);
                 doConpoints();
                 findLines();
+                //console.log('Wires after redo wiring: ');
+                //console.log(wires);
                 break;
             default:
                 break;

@@ -92,28 +92,21 @@ function handleSelection(x1, y1, x2, y2) {
             }
         }
     }
-    //console.log(segsInWires);
     let segSelection = [];
     for (let i = 0; i < segments.length; i++) {
         // This is genius
-        if (segsInWires.findIndex(function(a) { // jshint ignore:line
+        if (segsInWires.findIndex(function (a) { // jshint ignore:line
             return ((a.startX === segments[i].startX) && (a.endX === segments[i].endX) && (a.startY === segments[i].startY) && (a.endY === segments[i].endY));
         }) >= 0) {
-        //if ((segments[i].direction === 0) && ((segments[i].startX >= x1 || x1 <= segments[i].endX) && (segments[i].startX <= x2 || x2 >= segments[i].endX)) && (segments[i].startY >= y1 && segments[i].endY <= y2)) {
             segSelection.push(segments[i]);
             segIndizees.push(i);
-        }/* else if ((segments[i].direction === 1) && ((segments[i].startY >= y1 || y1 <= segments[i].endY) && (segments[i].startY <= y2 || y2 >= segments[i].endY)) && (segments[i].startX >= x1 && segments[i].endX <= x2)) {
-            segSelection.push(segments[i]);
-            segIndizees.push(i);
-        }*/
+        }
     }
     segIndizees.reverse();
     let preLength = selection.length;
     selection = selection.concat(wireSelection);
     selection = selection.concat(segSelection);
     selection.push(wireSelection.length + preLength);
-    //console.log(segSelection);
-    //console.log(segIndizees);
 }
 
 function compWires(a, b) {
@@ -125,8 +118,14 @@ function compWires(a, b) {
 */
 function moveSelection(dx, dy) {
     sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
-    for (let i = 0; i < selection[selection.length - 1]; i++) {
+    for (let i = 0; i < /*selection[selection.length - 1]*/selection.length - 1; i++) {
+        let index = wires.findIndex(function (a) { // jshint ignore:line
+            return compWires(a, selection[i]);
+        });
         selection[i].alterPosition(dx, dy);
+        if (index >= 0) {
+            wires.splice(index, 1, selection[i]);
+        }
     }
 }
 
