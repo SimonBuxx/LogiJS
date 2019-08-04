@@ -613,6 +613,7 @@ function mouseReleased() {
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
                         let oldWires = wires.slice(0);
+                        let oldSegments = segments.slice(0);
                         let existing = false;
                         for (let i = pwSegments.length - 1; i >= 0; i--) {
                             let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
@@ -622,7 +623,7 @@ function mouseReleased() {
                             }
                         }
                         if (existing) {
-                            pushUndoAction('reWire', 0, [oldWires.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
+                            pushUndoAction('reWire', 0, [oldSegments.slice(0), oldWires.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
                             findLines();
                         }
                         pwSegments = [];
