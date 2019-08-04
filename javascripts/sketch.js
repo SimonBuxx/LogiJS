@@ -734,7 +734,7 @@ function clearActionStacks() {
 
 function pushSelectAction(dx, dy, x1, y1, x2, y2) {
     if ((Math.abs(dx) >= GRIDSIZE || Math.abs(dy) >= GRIDSIZE) && selection.length > 0) {
-        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], selection);
+        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], _.cloneDeep(selection));
     }
 }
 
@@ -1929,6 +1929,7 @@ function keyPressed() {
             case UP_ARROW:
                 gateDirection = 3;
                 directionSelect.value('Up');
+                console.log(actionUndo);
                 break;
             default:
                 break;

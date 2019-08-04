@@ -336,7 +336,7 @@ function integrateElement() {
 }
 
 function findLines() {
-    let seg = segments.slice(0);
+    let seg = _.cloneDeep(segments);
     for (let i = 0; i < seg.length; i++) {
         for (let j = 0; j < seg.length; j++) {
             if (i !== j  && seg[i] !== null && seg[j] !== null) {

@@ -109,7 +109,7 @@ function undo() {
             case 'moveSel':
                 ctrlMode = "select";
                 showSClickBox = false;
-                selection = act.actionObject.slice(0);
+                selection = _.cloneDeep(act.actionObject);
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
                 finishSelection();
                 ctrlMode = "none";
@@ -152,17 +152,16 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'reWire':
-                actionRedo.push(new Action('reWire', 0, [segments.slice(0), wires.slice(0), conpoints.slice(0)]));
-                conpoints = act.actionObject[2].slice(0);
-                wires = act.actionObject[1].slice(0);
-                segments = act.actionObject[0].slice(0);
+                actionRedo.push(new Action('reWire', 0, [_.cloneDeep(segments), _.cloneDeep(wires), _.cloneDeep(conpoints)]));
+                conpoints = _.cloneDeep(act.actionObject[2]);
+                wires = _.cloneDeep(act.actionObject[1]);
+                segments = _.cloneDeep(act.actionObject[0]);
                 break;
             default:
                 break;
         }
     }
-    redoButton.elt.disabled = (actionRedo.length === 0);
-    undoButton.elt.disabled = (actionUndo.length === 0);
+    updateUndoButtons();
     reDraw();
 }
 
@@ -276,7 +275,7 @@ function redo() {
             case 'moveSel':
                 ctrlMode = "select";
                 showSClickBox = false;
-                selection = act.actionObject.slice(0);
+                selection = _.cloneDeep(act.actionObject);
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
                 finishSelection();
                 ctrlMode = "none";
@@ -347,22 +346,23 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'reWire':
-                actionUndo.push(new Action('reWire', 0, [segments.slice(0), wires.slice(0), conpoints.slice(0)]));
-                wires = act.actionObject[1].slice(0);
-                conpoints = act.actionObject[2].slice(0);
-                segments = act.actionObject[0].slice(0);
+                actionUndo.push(new Action('reWire', 0, [_.cloneDeep(segments), _.cloneDeep(wires), _.cloneDeep(conpoints)]));
+                wires = _.cloneDeep(act.actionObject[1]);
+                conpoints = _.cloneDeep(act.actionObject[2]);
+                segments = _.cloneDeep(act.actionObject[0]);
                 break;
             default:
                 break;
         }
     }
-    redoButton.elt.disabled = (actionRedo.length === 0);
-    undoButton.elt.disabled = (actionUndo.length === 0);
+    updateUndoButtons();
     reDraw();
 }
 
 function pushUndoAction(type, indizees, objects) {
     actionUndo.push(new Action(type, indizees, objects));
+    console.log('Saved action ' + type + ' with objects: ');
+    console.log(objects);
     actionRedo.pop();
     if (actionUndo.length > HIST_LENGTH) {
         actionUndo.splice(0, 1);
