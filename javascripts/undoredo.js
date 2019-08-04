@@ -349,12 +349,6 @@ function redo() {
                 wires = act.actionObject[1].slice(0);
                 conpoints = act.actionObject[2].slice(0);
                 segments = act.actionObject[0].slice(0);
-                //console.log('Restored segments: ');
-                //console.log(segments);
-                //doConpoints();
-                //findLines();
-                //console.log('Wires after redo wiring: ');
-                //console.log(wires);
                 break;
             default:
                 break;
