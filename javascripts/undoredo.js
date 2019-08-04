@@ -111,6 +111,7 @@ function undo() {
                 showSClickBox = false;
                 selection = act.actionObject.slice(0);
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
+                finishSelection();
                 ctrlMode = "none";
                 selection = [];
                 unmarkAll();
@@ -277,6 +278,7 @@ function redo() {
                 showSClickBox = false;
                 selection = act.actionObject.slice(0);
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
+                finishSelection();
                 ctrlMode = "none";
                 selection = [];
                 unmarkAll();
