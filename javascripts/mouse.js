@@ -178,7 +178,7 @@ function updateCursors() {
                 hand = true;
                 cursor(HAND);
                 if (isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) < 0 ||
-                isDiode(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) >= 0) {
+                    isDiode(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) >= 0) {
                     showDPreview = true;
                 } else {
                     showCPPreview = true;
@@ -232,6 +232,7 @@ function mouseDragged() {
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
             moveSelection(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE - sDragX2,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE - sDragY2);
+            finishSelection();
             sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
             sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
         }
@@ -280,14 +281,14 @@ function mousePressed() {
                     case 'none':
                         selectStartX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
                         selectStartY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
-                        selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
-                        selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
+                        //selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
+                        //selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectMode = 'start';
                         reDraw();
                         break;
                     case 'end':
-                        selectStartX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
-                        selectStartY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
+                        //selectStartX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
+                        //selectStartY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
                         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectMode = 'start';
@@ -419,11 +420,19 @@ function mouseReleased() {
                             }
                         }
                         if (pushed) {
+                            let oldWires = [];
+                            for (let i = wires.length - 1; i >= 0; i--) {
+                                oldWires[i] = new WSeg(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
+                                oldWires[i].endX = wires[i].endX;
+                                oldWires[i].endY = wires[i].endY;
+                                oldWires[i].id = wires[i].id;
+                            }
                             let oldSegments = [];
                             for (let i = segments.length - 1; i >= 0; i--) {
                                 oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                                oldSegments[i].id = segments[i].id;
                             }
-                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
+                            pushUndoAction('reWire', 0, [oldSegments.slice(0), oldWires.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
                             if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
@@ -450,11 +459,19 @@ function mouseReleased() {
                             }
                         }
                         if (pushed) {
+                            let oldWires = [];
+                            for (let i = wires.length - 1; i >= 0; i--) {
+                                oldWires[i] = new WSeg(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
+                                oldWires[i].endX = wires[i].endX;
+                                oldWires[i].endY = wires[i].endY;
+                                oldWires[i].id = wires[i].id;
+                            }
                             let oldSegments = [];
                             for (let i = segments.length - 1; i >= 0; i--) {
                                 oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                                oldSegments[i].id = segments[i].id;
                             }
-                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
+                            pushUndoAction('reWire', 0, [oldSegments.slice(0), oldWires.slice(0), conpoints.slice(0)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
                             if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
@@ -599,7 +616,7 @@ function mouseReleased() {
                         }
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
-                        let oldSegments = segments.slice(0);
+                        let oldWires = wires.slice(0);
                         let existing = false;
                         for (let i = pwSegments.length - 1; i >= 0; i--) {
                             let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
@@ -609,7 +626,7 @@ function mouseReleased() {
                             }
                         }
                         if (existing) {
-                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
+                            pushUndoAction('reWire', 0, [oldWires.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
                             findLines();
                         }
                         pwSegments = [];
@@ -627,7 +644,6 @@ function mouseReleased() {
                             selectMode = 'end';
                             break;
                         case 'drag':
-                            finishSelection();
                             selectMode = 'end';
                             break;
                         default:

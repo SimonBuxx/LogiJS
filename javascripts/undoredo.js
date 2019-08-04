@@ -109,13 +109,8 @@ function undo() {
             case 'moveSel':
                 ctrlMode = "select";
                 showSClickBox = false;
-                //console.log('Selection: ');
                 selection = act.actionObject.slice(0);
-                //console.log(selection);
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
-                finishSelection();
-                //console.log('Selection after undo: ');
-                //console.log(selection);
                 ctrlMode = "none";
                 selection = [];
                 unmarkAll();
@@ -156,11 +151,10 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'reWire':
-                actionRedo.push(new Action('reWire', 0, [segments.slice(0), conpoints.slice(0)]));
-                conpoints = act.actionObject[1].slice(0);
+                actionRedo.push(new Action('reWire', 0, [segments.slice(0), wires.slice(0), conpoints.slice(0)]));
+                conpoints = act.actionObject[2].slice(0);
+                wires = act.actionObject[1].slice(0);
                 segments = act.actionObject[0].slice(0);
-                doConpoints();
-                findLines();
                 break;
             default:
                 break;
@@ -172,8 +166,6 @@ function undo() {
 }
 
 function redo() {
-    //console.log(wires);
-    //console.log(segments);
     let act = actionRedo.pop();
     if (act !== null) {
         switch (act.actionType) {
@@ -285,9 +277,6 @@ function redo() {
                 showSClickBox = false;
                 selection = act.actionObject.slice(0);
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
-                finishSelection();
-                //console.log('Selection after redo: ');
-                //console.log(selection);
                 ctrlMode = "none";
                 selection = [];
                 unmarkAll();
@@ -356,12 +345,14 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'reWire':
-                actionUndo.push(new Action('reWire', 0, [segments.slice(0), conpoints.slice(0)]));
+                actionUndo.push(new Action('reWire', 0, [segments.slice(0), wires.slice(0), conpoints.slice(0)]));
+                wires = act.actionObject[1].slice(0);
+                conpoints = act.actionObject[2].slice(0);
                 segments = act.actionObject[0].slice(0);
                 //console.log('Restored segments: ');
                 //console.log(segments);
-                doConpoints();
-                findLines();
+                //doConpoints();
+                //findLines();
                 //console.log('Wires after redo wiring: ');
                 //console.log(wires);
                 break;

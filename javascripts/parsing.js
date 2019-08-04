@@ -336,7 +336,6 @@ function integrateElement() {
 }
 
 function findLines() {
-    let counter = wires.length;
     let seg = segments.slice(0);
     for (let i = 0; i < seg.length; i++) {
         for (let j = 0; j < seg.length; j++) {
@@ -374,5 +373,4 @@ function findLines() {
         }
     }
     wires = seg;
-    console.log('findLines Bilanz: + ' + (wires.length - counter));
 }

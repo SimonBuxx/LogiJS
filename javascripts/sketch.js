@@ -69,7 +69,7 @@ let propMode = false;
 let syncFramerate = true;
 
 let segIndizees = [];
-let wireIndizees = [];
+let wireIndices = [];
 
 let showTooltip = true;
 let negPreviewShown = false;
