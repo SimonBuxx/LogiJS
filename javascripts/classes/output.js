@@ -14,6 +14,8 @@ function Output(x, y, transform, colr) {
     this.lowColor = color(50, 50, 50); // Color for low outputs (dark grey)
     this.markColor = color(150, 30, 30);   // Color for marked outputs
 
+    this.id = Date.now() + Math.random();
+
     // ClickBox is used for input and global
     this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 

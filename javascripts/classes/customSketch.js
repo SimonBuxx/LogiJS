@@ -51,7 +51,8 @@ function CustomSketch(x, y, transform, direction, file) {
     this.simRunning = false; // True, when the simulation is running
     this.tops = 0;           // Number of inputs to draw on top of the object
 
-    this.id = '_' + Math.random().toString(36).substr(2, 9);
+    //this.id = '_' + Math.random().toString(36).substr(2, 9);
+    this.id = Date.now() + Math.random();
     this.pid = null;
 }
 

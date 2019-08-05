@@ -24,6 +24,8 @@ function Input(x, y, transform) {
     this.lbl = '';
     this.marked = false;
 
+    this.id = Date.now() + Math.random();
+
     // ClickBox is used for output and global
     this.clickBox = new ClickBox(this.x - GRIDSIZE / 2, this.y - GRIDSIZE / 2, this.w, this.h, this.transform);
     this.updateClickBox();

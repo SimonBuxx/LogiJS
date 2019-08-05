@@ -10,6 +10,8 @@ function Label(x, y, txt, transform) {
     this.marked = false;
     this.markColor = color(150, 30, 30);
 
+    this.id = Date.now() + Math.random();
+
     this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 
     this.getData = function () {

@@ -361,8 +361,6 @@ function redo() {
 
 function pushUndoAction(type, indizees, objects) {
     actionUndo.push(new Action(type, indizees, objects));
-    console.log('Saved action ' + type + ' with objects: ');
-    console.log(objects);
     actionRedo.pop();
     if (actionUndo.length > HIST_LENGTH) {
         actionUndo.splice(0, 1);

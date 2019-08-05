@@ -111,8 +111,8 @@ function handleSelection(x1, y1, x2, y2) {
     selection.push(wireSelection.length);
 }
 
-function compWires(a, b, dx = 0, dy = 0) {
-    return ((a.startX === (b.startX + dx)) && (a.endX === (b.endX + dx)) && (a.startY === (b.startY + dy)) && (a.endY === (b.endY + dy)));
+function compWires(a, b) {
+    return ((a.startX === b.startX) && (a.endX === b.endX) && (a.startY === b.startY) && (a.endY === b.endY));
 }
 
 /*
@@ -122,8 +122,80 @@ function moveSelection(dx, dy) {
     sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
     let wireCount = selection[selection.length - 1];
     let preLength = selection[selection.length - 2];
+    let found = false;
     for (let i = 0; i < preLength; i++) {
-        selection[i].alterPosition(dx, dy);
+        found = false;
+        //selection[i].alterPosition(dx, dy);
+        for (let j = 0; j < outputs.length; j++) { 
+            if (outputs[j].id === selection[i].id) {
+                outputs[j].alterPosition(dx, dy);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            for (let j = 0; j < inputs.length; j++) { 
+                if (inputs[j].id === selection[i].id) {
+                    inputs[j].alterPosition(dx, dy);
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            for (let j = 0; j < segDisplays.length; j++) { 
+                if (segDisplays[j].id === selection[i].id) {
+                    segDisplays[j].alterPosition(dx, dy);
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            for (let j = 0; j < labels.length; j++) { 
+                if (labels[j].id === selection[i].id) {
+                    labels[j].alterPosition(dx, dy);
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            for (let j = 0; j < diodes.length; j++) { 
+                if (diodes[j].id === selection[i].id) {
+                    diodes[j].alterPosition(dx, dy);
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            for (let j = 0; j < conpoints.length; j++) { 
+                if (conpoints[j].id === selection[i].id) {
+                    conpoints[j].alterPosition(dx, dy);
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            for (let j = 0; j < customs.length; j++) { 
+                if (customs[j].id === selection[i].id) {
+                    customs[j].alterPosition(dx, dy);
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            for (let j = 0; j < gates.length; j++) { 
+                if (gates[j].id === selection[i].id) {
+                    gates[j].alterPosition(dx, dy);
+                    found = true;
+                    break;
+                }
+            }
+        }
     }
     for (let i = preLength; i < preLength + wireCount; i++) {
         for (let j = 0; j < wires.length; j++) {

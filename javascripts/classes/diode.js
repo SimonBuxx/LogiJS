@@ -18,6 +18,8 @@ function Diode(x, y, state, transform) {
     this.marked = false;
     this.markColor = color(150, 30, 30);
 
+    this.id = Date.now() + Math.random();
+
     this.getData = function () {
         var data = {};
         data.x = JSON.stringify(this.x);
