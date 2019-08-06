@@ -148,65 +148,42 @@ function exGroup(j, g) {
 */
 function generateSegmentSet(startX, startY, endX, endY, wstate) {
     pwSegments = [];
-    let togo = 0;
-    if (startDirection === 0) {
-        // Horizontal first
-        togo = Math.abs(endX - startX);
+    if (startDirection === 0) { // Horizontal first
         if (startX < endX) {
-            while (togo >= GRIDSIZE) {
-                let seg = new WSeg(0, endX - togo, startY, wstate, transform);
-                pwSegments.push(seg);
-                togo -= GRIDSIZE;
+            for (let i = Math.abs(endX - startX); i >= GRIDSIZE; i -= GRIDSIZE) {
+                pwSegments.push(new WSeg(0, endX - i, startY, wstate, transform));
             }
         } else if (startX > endX) {
-            while (togo >= GRIDSIZE) {
-                let seg = new WSeg(0, startX - togo, startY, wstate, transform);
-                pwSegments.push(seg);
-                togo -= GRIDSIZE;
+            for (let i = Math.abs(endX - startX); i >= GRIDSIZE; i -= GRIDSIZE) {
+                pwSegments.push(new WSeg(0, startX - i, startY, wstate, transform));
             }
         }
-        togo = Math.abs(endY - startY);
         if (startY < endY) {
-            while (togo >= GRIDSIZE) {
-                let seg = new WSeg(1, endX, endY - togo, wstate, transform);
-                pwSegments.push(seg);
-                togo -= GRIDSIZE;
+            for (let i = Math.abs(endY - startY); i >= GRIDSIZE; i -= GRIDSIZE) {
+                pwSegments.push(new WSeg(1, endX, endY - i, wstate, transform));
             }
         } else if (startY > endY) {
-            while (togo >= GRIDSIZE) {
-                let seg = new WSeg(1, endX, startY - togo, wstate, transform);
-                pwSegments.push(seg);
-                togo -= GRIDSIZE;
+            for (let i = Math.abs(endY - startY); i >= GRIDSIZE; i -= GRIDSIZE) {
+                pwSegments.push(new WSeg(1, endX, startY - i, wstate, transform));
             }
         }
-    } else {
-        // Vertical first
-        togo = Math.abs(endY - startY);
+    } else { // Vertical first
         if (startY < endY) {
-            while (togo >= GRIDSIZE) {
-                let seg = new WSeg(1, startX, endY - togo, wstate, transform);
-                pwSegments.push(seg);
-                togo -= GRIDSIZE;
+            for (let i = Math.abs(endY - startY); i >= GRIDSIZE; i -= GRIDSIZE) {
+                pwSegments.push(new WSeg(1, startX, endY - i, wstate, transform));
             }
         } else if (startY > endY) {
-            while (togo >= GRIDSIZE) {
-                let seg = new WSeg(1, startX, startY - togo, wstate, transform);
-                pwSegments.push(seg);
-                togo -= GRIDSIZE;
+            for (let i = Math.abs(endY - startY); i >= GRIDSIZE; i -= GRIDSIZE) {
+                pwSegments.push(new WSeg(1, startX, startY - i, wstate, transform));
             }
         }
-        togo = Math.abs(endX - startX);
         if (startX < endX) {
-            while (togo >= GRIDSIZE) {
-                let seg = new WSeg(0, endX - togo, endY, wstate, transform);
-                pwSegments.push(seg);
-                togo -= GRIDSIZE;
+            for (let i = Math.abs(endX - startX); i >= GRIDSIZE; i -= GRIDSIZE) {
+                pwSegments.push(new WSeg(0, endX - i, endY, wstate, transform));
             }
         } else if (startX > endX) {
-            while (togo >= GRIDSIZE) {
-                let seg = new WSeg(0, startX - togo, endY, wstate, transform);
-                pwSegments.push(seg);
-                togo -= GRIDSIZE;
+            for (let i = Math.abs(endX - startX); i >= GRIDSIZE; i -= GRIDSIZE) {
+                pwSegments.push(new WSeg(0, startX - i, endY, wstate, transform));
             }
         }
     }
