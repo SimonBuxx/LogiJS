@@ -25,6 +25,8 @@ function WSeg(dir, startX, startY, state, transform) {
     this.marked = false;
     this.markColor = color(150, 30, 30);  // Color for marking and deleting
 
+    this.group = -1;
+
     this.id = Date.now() + Math.random();
 
     this.changePosition(startX, startY); // Initialize the start point
@@ -76,6 +78,10 @@ WSeg.prototype.changePosition = function (newX, newY) {
 
 WSeg.prototype.setState = function (s) {
     this.state = s;
+};
+
+WSeg.prototype.setGroup = function (g) {
+    this.group = g;
 };
 
 WSeg.prototype.setStart = function (io, parent, port) {

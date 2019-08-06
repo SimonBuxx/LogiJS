@@ -226,8 +226,6 @@ function loadCustom(loadData, num, hlparent) {
                         params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
                             false, transform));
                     }
-                } else {
-                    console.error('JSON file is corrupted or created with an old version!');
                 }
             }
         }

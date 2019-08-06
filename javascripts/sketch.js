@@ -881,33 +881,6 @@ function deleteClicked() {
     }
 }
 
-let cWires, cSegments, cConpoints;
-
-function startCheck() {
-    cWires = wires.slice(0);
-    cSegments = segments.slice(0);
-    cConpoints = conpoints.slice(0);
-}
-
-function endCheck() {
-    console.log('State Checks: ');
-    if (JSON.stringify(cWires) === JSON.stringify(wires)) {
-        console.log('Wire state check passed');
-    } else {
-        console.error('Wire state check failed!');
-    }
-    if (JSON.stringify(cSegments) === JSON.stringify(segments)) {
-        console.log('Segment state check passed');
-    } else {
-        console.error('Segment state check failed!');
-    }
-    if (JSON.stringify(cConpoints) === JSON.stringify(conpoints)) {
-        console.log('Conpoint state check passed');
-    } else {
-        console.error('Conpoint state check failed!');
-    }
-}
-
 /*
     This triggers when a label text was altered
 */
@@ -1845,26 +1818,6 @@ function updateGroups() {
     for (var i = 0; i < groups.length; i++) {
         groups[i].updateAll();
     }
-}
-
-/*
-    Gives a list of all wires that have an end in x, y, except wire j
-*/
-function wirePoints(x, y, j) {
-    var indexList = [];
-    for (var i = 0; i < segments.length; i++) {
-        if (segments[i].endX === x && segments[i].endY === y) {
-            if (i !== j) {
-                indexList.push(i);
-            }
-        }
-        if (segments[i].startX === x && segments[i].startY === y) {
-            if (i !== j) {
-                indexList.push(i);
-            }
-        }
-    }
-    return indexList;
 }
 
 /*

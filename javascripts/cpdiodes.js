@@ -22,17 +22,6 @@ function deleteInvalidConpoints() {
     }
 }
 
-function getGroup(seg) {
-    for (let i = 0; i < groups.length; i++) {
-        for (let j = 0; j < groups[i].segments.length; j++) {
-            if ((groups[i].segments[j].startX === seg.startX) && (groups[i].segments[j].startY === seg.startY) && (groups[i].segments[j].direction === seg.direction)) {
-                return i;
-            }
-        }
-    }
-    return -1;
-}
-
 function segmentStartsIn(x, y) {
     for (let i = 0; i < segments.length; i++) {
         if (segments[i].startX === x && segments[i].startY === y) {
