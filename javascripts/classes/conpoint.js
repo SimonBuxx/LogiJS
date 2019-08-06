@@ -12,7 +12,7 @@ function ConPoint(x, y, state, g) {
     this.marked = false;
     this.markColor = color(150, 30, 30);
 
-    this.id = Date.now() + Math.random();
+    this.id = 'p' + Date.now() + Math.random();
 }
 
 ConPoint.prototype.getData = function () {

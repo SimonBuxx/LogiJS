@@ -22,7 +22,7 @@ function SegmentDisplay(x, y, transform, bits) {
 
     this.value = 0; // Decimal input value
 
-    this.id = Date.now() + Math.random();
+    this.id = 's' + Date.now() + Math.random();
 
     // Initialize the inputs
     for (let i = 0; i < this.inputCount; i++) {
