@@ -45,7 +45,6 @@ function CustomSketch(x, y, transform, direction, file) {
 
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform); // Global clickbox
 
-    this.loaded = false; // True, if the sketch has been loaded from file
     this.visible = true; // True, if the object is visible and not part of another object
 
     this.simRunning = false; // True, when the simulation is running

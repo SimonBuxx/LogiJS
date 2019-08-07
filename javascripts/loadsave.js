@@ -169,6 +169,7 @@ function load(loadData) {
 function loadCustomFile(file, num, hlparent) {
    if (cachedFiles.indexOf(file) >= 0) {
         setTimeout(function () { 
+            //console.log('Loading ' + file + ' from cache');
             loadCallback(cachedData[cachedFiles.indexOf(file)], num, hlparent); 
         }, 0);
     } else {
@@ -177,6 +178,7 @@ function loadCustomFile(file, num, hlparent) {
                 cachedFiles.push(file);
                 cachedData.push(loadData);
             }
+            //console.log('Loading ' + file + ' from disk');
             loadCallback(loadData, num, hlparent); 
         });
     }
@@ -192,16 +194,12 @@ function loadCustom(loadData, num, hlparent) {
         params[GATENUM][i] = new LogicGate(JSON.parse(loadData.gates[i].x), JSON.parse(loadData.gates[i].y), trans, JSON.parse(loadData.gates[i].direction),
             JSON.parse(loadData.gates[i].inputCount), JSON.parse(loadData.gates[i].outputCount), JSON.parse(loadData.gates[i].logicFunction));
         params[GATENUM][i].setInvertions(JSON.parse(loadData.gates[i].inputsInv), JSON.parse(loadData.gates[i].outputsInv));
-        params[GATENUM][i].setCoordinates(JSON.parse(loadData.gates[i].x) / trans.zoom - trans.dx, JSON.parse(loadData.gates[i].y) / trans.zoom - trans.dy);
-        params[GATENUM][i].updateClickBoxes();
     }
     for (let i = 0; i < loadData.outputs.length; i++) {
         params[OUTPNUM][i] = new Output(JSON.parse(loadData.outputs[i].x), JSON.parse(loadData.outputs[i].y), trans, JSON.parse(loadData.outputs[i].colr));
         if (loadData.outputs[i].hasOwnProperty("lbl")) {
             params[OUTPNUM][i].lbl = loadData.outputs[i].lbl;
         }
-        params[OUTPNUM][i].setCoordinates(JSON.parse(loadData.outputs[i].x) / trans.zoom - trans.dx, JSON.parse(loadData.outputs[i].y) / trans.zoom - trans.dy);
-        params[OUTPNUM][i].updateClickBox();
     }
     for (let i = 0; i < loadData.inputs.length; i++) {
         params[INPNUM][i] = new Input(JSON.parse(loadData.inputs[i].x), JSON.parse(loadData.inputs[i].y), trans);
@@ -216,12 +214,6 @@ function loadCustom(loadData, num, hlparent) {
         if (loadData.inputs[i].hasOwnProperty("speed")) {
             params[INPNUM][i].speed = JSON.parse(loadData.inputs[i].speed);
         }
-        params[INPNUM][i].setCoordinates(JSON.parse(loadData.inputs[i].x) / trans.zoom - trans.dx, JSON.parse(loadData.inputs[i].y) / trans.zoom - trans.dy);
-        params[INPNUM][i].updateClickBox();
-    }
-    for (let i = 0; i < loadData.segments.length; i++) {
-        params[SEGNUM][i] = new WSeg(JSON.parse(loadData.segments[i].direction), JSON.parse(loadData.segments[i].startX), JSON.parse(loadData.segments[i].startY),
-            false, trans);
     }
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
@@ -230,7 +222,7 @@ function loadCustom(loadData, num, hlparent) {
                     // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
                     for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
                         params[SEGNUM].push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
-                            false, transform));
+                            false, trans));
                     }
                 }
             }
@@ -239,7 +231,7 @@ function loadCustom(loadData, num, hlparent) {
                     // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
                     for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
                         params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
-                            false, transform));
+                            false, trans));
                     }
                 }
             }
@@ -254,18 +246,14 @@ function loadCustom(loadData, num, hlparent) {
     for (let i = 0; i < loadData.customs.length; i++) {
         customs.push(new CustomSketch(JSON.parse(loadData.customs[i].x), JSON.parse(loadData.customs[i].y), trans, JSON.parse(loadData.customs[i].direction), JSON.parse(loadData.customs[i].filename)));
         customs[customs.length - 1].setInvertions(JSON.parse(loadData.customs[i].inputsInv), JSON.parse(loadData.customs[i].outputsInv));
-        customs[customs.length - 1].setCoordinates(JSON.parse(loadData.customs[i].x) / trans.zoom - trans.dx, JSON.parse(loadData.customs[i].y) / trans.zoom - trans.dy);
-        customs[customs.length - 1].updateClickBoxes();
         customs[customs.length - 1].visible = false;
         customs[customs.length - 1].setParentID(customs[hlparent].id);
-        customs[customs.length - 1].loaded = true;
         customs[num].responsibles.push(customs[customs.length - 1]);
         queue.push([customs[customs.length - 1].filename, customs.length - 1, num]);
         params[CUSTNUM][i] = customs[customs.length - 1];
     }
     customs[num].setSketchParams(params);
     customs[num].setCaption(loadData.caption);
-    customs[num].loaded = true;
     reDraw();
 }
 
@@ -274,9 +262,7 @@ function loadCustom(loadData, num, hlparent) {
 */
 function loadCustomSketches() {
     for (let i = 0; i < customs.length; i++) {
-        if (!customs[i].loaded) {
-            queue.push([customs[i].filename, i, i]);
-        }
+        queue.push([customs[i].filename, i, i]);
     }
     loadNext();
 }
