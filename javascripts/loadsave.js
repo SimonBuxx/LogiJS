@@ -48,6 +48,9 @@ function saveSketch(filename) {
 }
 
 function loadSketch(file) {
+    next = 0;
+    queue = [];
+    loading = true;
     loadJSON('sketches/' + file, load, fileNotFoundError);
 }
 
@@ -164,7 +167,19 @@ function load(loadData) {
     Loads the sketch with filename file into custom object # num
 */
 function loadCustomFile(file, num, hlparent) {
-    loadJSON('sketches/' + file, function (loadData) { return loadCustom(loadData, num, hlparent); });
+   if (cachedFiles.indexOf(file) >= 0) {
+        setTimeout(function () { 
+            loadCallback(cachedData[cachedFiles.indexOf(file)], num, hlparent); 
+        }, 0);
+    } else {
+        loadJSON('sketches/' + file, function (loadData) { 
+            if (cachedFiles.indexOf(file) < 0) {
+                cachedFiles.push(file);
+                cachedData.push(loadData);
+            }
+            loadCallback(loadData, num, hlparent); 
+        });
+    }
 }
 
 /*
@@ -245,7 +260,7 @@ function loadCustom(loadData, num, hlparent) {
         customs[customs.length - 1].setParentID(customs[hlparent].id);
         customs[customs.length - 1].loaded = true;
         customs[num].responsibles.push(customs[customs.length - 1]);
-        loadCustomFile(customs[customs.length - 1].filename, customs.length - 1, num);
+        queue.push([customs[customs.length - 1].filename, customs.length - 1, num]);
         params[CUSTNUM][i] = customs[customs.length - 1];
     }
     customs[num].setSketchParams(params);
@@ -260,7 +275,24 @@ function loadCustom(loadData, num, hlparent) {
 function loadCustomSketches() {
     for (let i = 0; i < customs.length; i++) {
         if (!customs[i].loaded) {
-            loadCustomFile(customs[i].filename, i, i);
+            queue.push([customs[i].filename, i, i]);
         }
     }
+    loadNext();
+}
+
+function loadNext() {
+    if (next < 0) { next = 0; return; }
+    loadCustomFile(queue[next][0], queue[next][1], queue[next][2]);
+    if (queue.length > next + 1) {
+        next++;
+    } else {
+        next = -1;
+        loading = false;
+    }
+}
+
+function loadCallback(loadData, num, hlparent) {
+    loadCustom(loadData, num, hlparent);
+    loadNext();
 }

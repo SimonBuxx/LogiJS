@@ -13,6 +13,7 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
+    if (loading) { return; }
     if (keyIsDown(18) && !simRunning) {
         wheel = Math.sign(event.deltaY); // -1 for zoom in, +1 for zoom out
         addType = Math.max(1, Math.min(9, addType + wheel));
@@ -88,6 +89,7 @@ function mouseWheel(event) {
 }
 
 function mouseMoved() {
+    if (loading) { return; }
     updateCursors();
 }
 
@@ -227,6 +229,7 @@ function updateCursors() {
 }
 
 function mouseDragged() {
+    if (loading) { return; }
     if (ctrlMode === 'select' && selectMode === 'drag') {
         if (sDragX2 !== Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE ||
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
@@ -243,6 +246,7 @@ function mouseDragged() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
+    if (loading) { return; }
     if (ctrlMode !== 'select') {
         showSClickBox = false;
     }
@@ -318,6 +322,7 @@ function mousePressed() {
 }
 
 function mouseClicked() {
+    if (loading) { return; }
     if (ctrlMode !== 'none' && selectMode === 'none') {
         setPropMode(false);
     }
@@ -404,6 +409,7 @@ function mouseClicked() {
           Finishing the selection process by invoking handleSelection
 */
 function mouseReleased() {
+    if (loading) { return; }
     if (!simRunning && !mouseOverGUI()) {
         if (mouseButton === LEFT) {
             switch (ctrlMode) {
@@ -758,6 +764,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
+    if (loading) { return; }
     if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);

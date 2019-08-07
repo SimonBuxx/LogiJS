@@ -71,6 +71,13 @@ let syncFramerate = true;
 let segIndizees = [];
 let wireIndices = [];
 
+let cachedFiles = [];
+let cachedData = [];
+let queue = [];
+let next = 0;
+
+let loading = false;
+
 let showTooltip = true;
 let negPreviewShown = false;
 let diodePreviewShown = false;
@@ -1605,6 +1612,10 @@ function reDraw() {
     /*if (showTooltip) {
         displayTooltipBar();
     }*/
+
+    if (loading) {
+        showLoadingSymbol();
+    }
 }
 
 /*
@@ -1731,11 +1742,27 @@ function showTutorial() {
     }
 }
 
+function showLoadingSymbol() {
+    fill(0, 0, 0, 80);
+    noStroke();
+    rect(0, 0, window.width, window.height);
+
+    fill(200, 50, 50);
+    stroke(50);
+    strokeWeight(3);
+    rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150);
+
+    fill(255);
+    noStroke();
+    textSize(30);
+    textAlign(CENTER, CENTER);
+    text('Loading...', window.width / 2, window.height / 2);
+}
+
 /*
     Displays the given hint text (two lines + caption) and an image in a box in the bottom left corner
 */
 function displayHint(width, img, caption, line1, line2) {
-    // Draw a red ellipse and a rectangle to form the box shape
     fill(200, 50, 50);
     stroke(50);
     strokeWeight(3);
@@ -1824,7 +1851,7 @@ function updateGroups() {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
-    if (inputCaptionBox.elt === document.activeElement || outputCaptionBox.elt === document.activeElement || labelTextBox.elt === document.activeElement) {
+    if (inputCaptionBox.elt === document.activeElement || outputCaptionBox.elt === document.activeElement || labelTextBox.elt === document.activeElement || loading) {
         return;
     }
     if (textInput.elt !== document.activeElement) {
