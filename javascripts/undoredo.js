@@ -76,7 +76,7 @@ function undo() {
                 break;
             case 'delCust':
                 customs.splice(act.actionObject[1], 0, act.actionObject[0][0]);
-                customs[act.actionObject[1]].loaded = false;
+                //customs[act.actionObject[1]].loaded = false;
                 loadCustomFile(customs[act.actionObject[1]].filename, act.actionObject[1], act.actionObject[1]);
                 actionRedo.push(act);
                 break;
@@ -123,7 +123,7 @@ function undo() {
                 }
                 for (let i = 0; i < act.actionObject[1][0].length; i++) {
                     customs.splice(act.actionObject[1][1][i], 0, act.actionObject[1][0][i]);
-                    customs[act.actionObject[1][1][i]].loaded = false;
+                    //customs[act.actionObject[1][1][i]].loaded = false;
                     loadCustomFile(customs[act.actionObject[1][1][i]].filename, act.actionObject[1][1][i], act.actionObject[1][1][i]);
                 }
                 diodes = act.actionObject[2].slice(0);
@@ -175,7 +175,7 @@ function redo() {
                 break;
             case 'addCust':
                 customs.push(act.actionObject);
-                customs[customs.length - 1].loaded = false;
+                //customs[customs.length - 1].loaded = false;
                 loadCustomFile(customs[customs.length - 1].filename, customs.length - 1, customs.length - 1);
                 actionUndo.push(act);
                 break;

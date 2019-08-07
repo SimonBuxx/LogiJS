@@ -106,10 +106,6 @@ function load(loadData) {
         inputs[i].setCoordinates(JSON.parse(loadData.inputs[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.inputs[i].y) / transform.zoom - transform.dy);
         inputs[i].updateClickBox();
     }
-    for (let i = 0; i < loadData.segments.length; i++) {
-        segments[i] = new WSeg(JSON.parse(loadData.segments[i].direction), JSON.parse(loadData.segments[i].startX), JSON.parse(loadData.segments[i].startY),
-            false, transform);
-    }
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
             if (loadData.wires[i].hasOwnProperty("y2")) {
@@ -128,8 +124,6 @@ function load(loadData) {
                         segments.push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
                             false, transform));
                     }
-                } else {
-                    console.error('JSON file is corrupted or created with an old version!');
                 }
             } 
         }
@@ -167,9 +161,8 @@ function load(loadData) {
     Loads the sketch with filename file into custom object # num
 */
 function loadCustomFile(file, num, hlparent) {
-   if (cachedFiles.indexOf(file) >= 0) {
-        setTimeout(function () { 
-            //console.log('Loading ' + file + ' from cache');
+    if (cachedFiles.indexOf(file) >= 0) {
+        setTimeout(function () {
             loadCallback(cachedData[cachedFiles.indexOf(file)], num, hlparent); 
         }, 0);
     } else {
@@ -178,7 +171,6 @@ function loadCustomFile(file, num, hlparent) {
                 cachedFiles.push(file);
                 cachedData.push(loadData);
             }
-            //console.log('Loading ' + file + ' from disk');
             loadCallback(loadData, num, hlparent); 
         });
     }
@@ -249,7 +241,7 @@ function loadCustom(loadData, num, hlparent) {
         customs[customs.length - 1].visible = false;
         customs[customs.length - 1].setParentID(customs[hlparent].id);
         customs[num].responsibles.push(customs[customs.length - 1]);
-        queue.push([customs[customs.length - 1].filename, customs.length - 1, num]);
+        queue.push([customs[customs.length - 1].filename, (customs.length - 1), num]);
         params[CUSTNUM][i] = customs[customs.length - 1];
     }
     customs[num].setSketchParams(params);
@@ -264,17 +256,20 @@ function loadCustomSketches() {
     for (let i = 0; i < customs.length; i++) {
         queue.push([customs[i].filename, i, i]);
     }
-    loadNext();
+    if (queue.length > 0) {
+        loadNext();
+    } else {
+        loading = false;
+    }
 }
 
 function loadNext() {
-    if (next < 0) { next = 0; return; }
-    loadCustomFile(queue[next][0], queue[next][1], queue[next][2]);
-    if (queue.length > next + 1) {
-        next++;
-    } else {
-        next = -1;
+    if (queue.length <= next) {
         loading = false;
+        reDraw();
+    } else {
+        loadCustomFile(queue[next][0], queue[next][1], queue[next][2]);
+        next++;
     }
 }
 

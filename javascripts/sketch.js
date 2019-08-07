@@ -1154,6 +1154,8 @@ function addCustom(file, direction) {
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     customs.push(newCustom);
     pushUndoAction('addCust', [], newCustom);
+    queue = [];
+    next = 0;
     loadCustomSketches();
 }
 
@@ -1343,8 +1345,8 @@ function startSimulation() {
     }
 
     // Tell all customs that the simulation started
-    for (const elem of customs) {
-        elem.setSimRunning(true);
+    for (let i = 0; i < customs.length; i++) {
+        customs[i].setSimRunning(true);
     }
 
     sfcheckbox.show();
@@ -1867,8 +1869,7 @@ function keyPressed() {
                 setPropMode(true);
                 break;
             case RETURN:
-                console.log(wires);
-                console.log(segments);
+                console.log(customs);
                 setPropMode(false);
                 gateInputSelect.hide();
                 labelGateInputs.hide();
