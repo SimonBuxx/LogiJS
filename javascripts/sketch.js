@@ -1153,10 +1153,8 @@ function addCustom(file, direction) {
     let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     customs.push(newCustom);
+    loadCustomFile(newCustom.filename, customs.length - 1, customs.length - 1);
     pushUndoAction('addCust', [], newCustom);
-    queue = [];
-    next = 0;
-    loadCustomSketches();
 }
 
 /*
