@@ -638,7 +638,7 @@ function setup() { // jshint ignore:line
 
     let loadfile = urlParam('sketch');
     if (loadfile !== "") {
-        document.title = String(loadfile + ' - LogiJS');
+        document.title = loadfile + ' - LogiJS';
         loadSketch(loadfile + '.json');
     }
     //Hide hints if there is a cookie 
@@ -685,6 +685,7 @@ function saveClicked() {
 function loadClicked() {
     selectMode = 'none';
     showSClickBox = false;
+    document.title = textInput.value() + ' - LogiJS';
     loadSketch(textInput.value() + '.json');
     reDraw();
 }

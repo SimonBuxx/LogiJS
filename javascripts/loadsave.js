@@ -153,9 +153,6 @@ function load(loadData) {
         customs[i].setCoordinates(JSON.parse(loadData.customs[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.customs[i].y) / transform.zoom - transform.dy);
     }
     loadCustomSketches(); // Load all custom sketches from file
-    if (textInput.value() !== 'New Sketch') {
-        document.title = textInput.value() + ' - LogiJS';
-    }
     findLines();
     reDraw();
 }
