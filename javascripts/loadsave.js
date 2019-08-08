@@ -74,6 +74,9 @@ function load(loadData) {
     actionUndo = []; // Clear Undo / Redo stacks
     actionRedo = [];
     endSimulation(); // End ongoing simulations
+    disableButtons(true);
+    simButton.elt.disabled = true;
+    saveButton.elt.disabled = true;
     // Load all gate parameters and create new gates based on that information
     for (let i = 0; i < loadData.gates.length; i++) {
         gates[i] = new LogicGate(JSON.parse(loadData.gates[i].x), JSON.parse(loadData.gates[i].y), transform, JSON.parse(loadData.gates[i].direction),
@@ -260,12 +263,18 @@ function loadCustomSketches() {
         loadNext();
     } else {
         loading = false;
+        endSimulation();
+        simButton.elt.disabled = false;
+        saveButton.elt.disabled = false;
     }
 }
 
 function loadNext() {
     if (queue.length <= next) {
         loading = false;
+        endSimulation();
+        simButton.elt.disabled = false;
+        saveButton.elt.disabled = false;
         reDraw();
     } else {
         loadCustomFile(queue[next][0], queue[next][1], queue[next][2]);

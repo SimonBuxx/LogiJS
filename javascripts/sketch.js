@@ -699,6 +699,9 @@ function newClicked() {
     gateInputSelect.value('2');
     gateDirection = 0;
     directionSelect.value('Right');
+    loading = false;
+    simButton.elt.disabled = false;
+    saveButton.elt.disabled = false;
     endSimulation(); // End the simulation, if started
     setPropMode(false); // Restarting PropMode so that the menu hides
     setPropMode(true); // when new is clicked while it's open
