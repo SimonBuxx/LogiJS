@@ -17,7 +17,6 @@ function mouseWheel(event) {
     if (keyIsDown(18) && !simRunning) {
         wheel = Math.sign(event.deltaY); // -1 for zoom in, +1 for zoom out
         addType = Math.max(1, Math.min(9, addType + wheel));
-        console.log(addType);
         switch (addType) {
             case 1:
                 andClicked(true);
@@ -264,52 +263,50 @@ function mousePressed() {
                         break;
                     default:
                 }
-                if (ctrlMode === 'none' && selectMode === 'start') {
-                    let noValidTarget = true;
-                    for (let i = 0; i < inputs.length; i++) {
-                        if (Boolean(inputs[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            // If the propMode is active, give options to name and make top
-                            if (propInput !== i) {
-                                if (propInput >= 0) {
-                                    inputs[propInput].mark(false);
-                                }
-                                inputs[i].mark(true);
-                                propInput = i;
-                                showInputPropMenu();
+                let noValidTarget = true;
+                for (let i = 0; i < inputs.length; i++) {
+                    if (Boolean(inputs[i].mouseOver()) && propMode) {
+                        noValidTarget = false;
+                        // If the propMode is active, give options to name and make top
+                        if (propInput !== i) {
+                            if (propInput >= 0) {
+                                inputs[propInput].mark(false);
                             }
+                            inputs[i].mark(true);
+                            propInput = i;
+                            showInputPropMenu();
                         }
                     }
-                    for (let i = 0; i < outputs.length; i++) {
-                        if (Boolean(outputs[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            if (propOutput !== i) {
-                                if (propOutput >= 0) {
-                                    outputs[propOutput].mark(false);
-                                }
-                                outputs[i].mark(true);
-                                propOutput = i;
-                                showOutputPropMenu();
+                }
+                for (let i = 0; i < outputs.length; i++) {
+                    if (Boolean(outputs[i].mouseOver()) && propMode) {
+                        noValidTarget = false;
+                        if (propOutput !== i) {
+                            if (propOutput >= 0) {
+                                outputs[propOutput].mark(false);
                             }
+                            outputs[i].mark(true);
+                            propOutput = i;
+                            showOutputPropMenu();
                         }
                     }
-                    for (let i = 0; i < labels.length; i++) {
-                        if (Boolean(labels[i].mouseOver()) && propMode) {
-                            noValidTarget = false;
-                            if (propLabel !== i) {
-                                if (propLabel >= 0) {
-                                    labels[propLabel].mark(false);
-                                }
-                                labels[i].mark(true);
-                                propLabel = i;
-                                showLabelPropMenu();
+                }
+                for (let i = 0; i < labels.length; i++) {
+                    if (Boolean(labels[i].mouseOver()) && propMode) {
+                        noValidTarget = false;
+                        if (propLabel !== i) {
+                            if (propLabel >= 0) {
+                                labels[propLabel].mark(false);
                             }
+                            labels[i].mark(true);
+                            propLabel = i;
+                            showLabelPropMenu();
                         }
                     }
-                    if (noValidTarget && propMode) {
-                        hidePropMenu();
-                        unmarkPropTargets();
-                    }
+                }
+                if (noValidTarget && propMode) {
+                    hidePropMenu();
+                    unmarkPropTargets();
                 }
                 break;
             case 'addObject':
@@ -619,7 +616,6 @@ function mouseReleased() {
                     if (wireMode === 'delete') { // A wire should be deleted
                         let oldWires = _.cloneDeep(wires);
                         let oldSegments = _.cloneDeep(segments);
-                        console.log(oldWires);
                         let existing = false;
                         for (let i = pwSegments.length - 1; i >= 0; i--) {
                             let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);

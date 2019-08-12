@@ -1016,7 +1016,6 @@ function buttonClicked(dontToggle = false) {
 }
 
 function clockClicked(dontToggle = false) {
-    console.log(dontToggle);
     if (ctrlMode === 'addObject' && addType === 6 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -1912,7 +1911,6 @@ function keyPressed() {
             case UP_ARROW:
                 gateDirection = 3;
                 directionSelect.value('Up');
-                console.log(actionUndo);
                 break;
             default:
                 break;

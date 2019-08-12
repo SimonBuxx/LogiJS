@@ -36,7 +36,6 @@ Output.prototype.getData = function () {
     data.y = JSON.stringify(this.y);
     data.colr = JSON.stringify(this.colr);
     if (this.lbl !== '') {
-        console.log('adding label');
         data.lbl = this.lbl;
     }
     return data;
