@@ -29,57 +29,30 @@ Group.prototype.addOutput = function (gate, port) {
     this.outputPorts.push(port);
 };
 
-/*Group.prototype.deleteGate = function (gate) {
-    console.log('deleteGate');
-    for (let i = 0; i < this.outputGates.length; i++) {
-          if (this.outputGates[i].id === gate.id) {
-            this.outputGates.splice(i, 1);
-            this.outputPorts.splice(i, 1);
-            this.outputStates.splice(i, 1);
-        }
-    }
-    for (let i = 0; i < this.inputGates.length; i++) {
-        if (this.inputGates[i].id === gate.id) {
-            this.inputGates.splice(i, 1);
-            this.inputPorts.splice(i, 1);
-        }
-    }
-    for (let i = 0; i < this.segments.length; i++) {
-        if (this.segments[i].parentStart.id === gate.id) {
-            this.segments[i].parentStart = null;
-        }
-        if (this.segments[i].parentEnd.id === gate.id) {
-            this.segments[i].parentEnd = null;
-        }
-
-    }
-};*/
-
 Group.prototype.diodeHigh = function () {
     this.diodeState = true;
     this.dstateset = true;
 };
 
 Group.prototype.updateAll = function () {
+    this.state = false;
     // Get all states of the gate outputs
     for (let j = 0; j < this.outputGates.length; j++) {
-        this.outputStates[j] = this.outputGates[j].getOutput(this.outputPorts[j]);
-    }
-
-    this.state = false;
-    for (let i = 0; i < this.outputStates.length; i++) {
-        if (this.outputStates[i]) { // If one is high, everything should be high
+        //this.outputStates[j] = this.outputGates[j].getOutput(this.outputPorts[j]);
+        if (this.outputGates[j].getOutput(this.outputPorts[j])) {
+            this.state = true;
             for (let j = 0; j < this.outputGates.length; j++) {
                 this.outputGates[j].outputs[this.outputPorts[j]] = true;
             }
-            this.state = true;
+            break;
         }
     }
+
     // If no input is true, take diodeState as state
-    if (this.state === false && this.dstateset) {
+    if (!this.state && this.dstateset) {
         this.state = this.diodeState;
         this.dstateset = false;
-    } else if (this.dstateset === false) {
+    } else if (!this.dstateset) {
         this.diodeState = false;
     }
 
@@ -88,7 +61,9 @@ Group.prototype.updateAll = function () {
         this.inputGates[j].setInput(this.inputPorts[j], this.state);
     }
 
-    this.propagateState(); // Propagate the state to all segments/wires
+    if (this.segments[0].state !== this.state) {
+        this.propagateState(); // Propagate the state to all segments/wires
+    }
 };
 
 Group.prototype.show = function () {

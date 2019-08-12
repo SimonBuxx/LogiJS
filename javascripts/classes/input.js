@@ -161,9 +161,15 @@ Input.prototype.show = function () {
     }
 
     if (this.clock) {
-        fill(0);
+        fill(this.lowColor);
         noStroke();
-        ellipse(this.x + 15, this.y + 15, this.w / 2, this.h / 2);
+        ellipse(this.x + 15, this.y + 15, this.w / 2 + 5, this.h / 2 + 5);
+        noFill();
+        stroke(0);
+        strokeWeight(2);
+        ellipse(this.x + 15, this.y + 15, this.w / 2 + 5, this.h / 2 + 5);
+        line(this.x + 15, this.y + 8, this.x + 15, this.y + 15);
+        line(this.x + 15, this.y + 15, this.x + 20, this.y + 20);
     }
 
     //this.clickBox.markClickBox();
