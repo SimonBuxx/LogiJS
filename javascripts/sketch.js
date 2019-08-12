@@ -427,16 +427,16 @@ function setup() { // jshint ignore:line
     clockspeedLabel.elt.style.fontFamily = 'Open Sans';
     clockspeedLabel.elt.style.textAlign = 'center';
     clockspeedLabel.elt.style.margin = '3px 0px 0px 0px';
-    clockspeedLabel.position(windowWidth - 200, windowHeight - 140);
+    clockspeedLabel.position(windowWidth - 190, 180);
 
     // A slider for adjusting the clock speed
     clockspeedSlider = createSlider(1, 60, 30, 1);
     clockspeedSlider.hide();
     clockspeedSlider.changed(newClockspeed);
-    clockspeedSlider.style('width', '188px');
+    clockspeedSlider.style('width', '178px');
     clockspeedSlider.style('margin', '5px');
     clockspeedSlider.elt.className = 'slider';
-    clockspeedSlider.position(windowWidth - 205, windowHeight - 115);
+    clockspeedSlider.position(windowWidth - 195, 203);
 
     //Upper left
 
@@ -553,12 +553,12 @@ function setup() { // jshint ignore:line
     propBoxLabel.elt.style.color = 'white';
     propBoxLabel.elt.style.fontFamily = 'Open Sans';
     propBoxLabel.elt.style.margin = '3px 0px 0px 0px';
-    propBoxLabel.position(windowWidth - 200, windowHeight - 300);
+    propBoxLabel.position(windowWidth - 190, 30);
     propBoxLabel.style('font-size', '30px');
 
-    inputIsTopBox = createCheckbox('Draw input on top of the custom element', false);
+    inputIsTopBox = createCheckbox('Pin input to the top', false);
     inputIsTopBox.hide();
-    inputIsTopBox.position(windowWidth - 200, windowHeight - 250);
+    inputIsTopBox.position(windowWidth - 190, 90);
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.style.color = 'white';
     inputIsTopBox.elt.style.fontFamily = 'Open Sans';
@@ -568,48 +568,48 @@ function setup() { // jshint ignore:line
     ipNameLabel.elt.style.color = 'white';
     ipNameLabel.elt.style.fontFamily = 'Open Sans';
     ipNameLabel.elt.style.margin = '3px 0px 0px 0px';
-    ipNameLabel.position(windowWidth - 200, windowHeight - 200);
+    ipNameLabel.position(windowWidth - 190, 120);
 
     inputCaptionBox = createInput('');
     inputCaptionBox.elt.style.fontFamily = 'Open Sans';
     inputCaptionBox.hide();
-    inputCaptionBox.size(180, 15);
-    inputCaptionBox.position(windowWidth - 200, windowHeight - 170);
+    inputCaptionBox.size(170, 15);
+    inputCaptionBox.position(windowWidth - 190, 150);
     inputCaptionBox.input(newInputCaption);
 
-    colNameLabel = createP('Lamp color:');
+    colNameLabel = createP('Color:');
     colNameLabel.hide();
     colNameLabel.elt.style.color = 'white';
     colNameLabel.elt.style.fontFamily = 'Open Sans';
     colNameLabel.elt.style.margin = '3px 0px 0px 0px';
-    colNameLabel.position(windowWidth - 200, windowHeight - 250);
+    colNameLabel.position(windowWidth - 190, 90);
 
     opNameLabel = createP('Output name:');
     opNameLabel.hide();
     opNameLabel.elt.style.color = 'white';
     opNameLabel.elt.style.fontFamily = 'Open Sans';
     opNameLabel.elt.style.margin = '3px 0px 0px 0px';
-    opNameLabel.position(windowWidth - 200, windowHeight - 220);
+    opNameLabel.position(windowWidth - 190, 120);
 
     labCaptLabel = createP('Label caption:');
     labCaptLabel.hide();
     labCaptLabel.elt.style.color = 'white';
     labCaptLabel.elt.style.fontFamily = 'Open Sans';
     labCaptLabel.elt.style.margin = '3px 0px 0px 0px';
-    labCaptLabel.position(windowWidth - 200, windowHeight - 250);
+    labCaptLabel.position(windowWidth - 190, 90);
 
     outputCaptionBox = createInput('');
     outputCaptionBox.elt.style.fontFamily = 'Open Sans';
     outputCaptionBox.hide();
-    outputCaptionBox.size(180, 15);
-    outputCaptionBox.position(windowWidth - 200, windowHeight - 190);
+    outputCaptionBox.size(170, 15);
+    outputCaptionBox.position(windowWidth - 190, 150);
     outputCaptionBox.input(newOutputCaption);
 
     outputColorBox = createSelect();
     outputColorBox.hide();
     outputColorBox.elt.style.fontFamily = 'Open Sans';
-    outputColorBox.position(windowWidth - 110, windowHeight - 250);
-    outputColorBox.size(70, 20);
+    outputColorBox.position(windowWidth - 140, 88);
+    outputColorBox.size(100, 20);
     outputColorBox.option('red');
     outputColorBox.option('yellow');
     outputColorBox.option('green');
@@ -620,8 +620,8 @@ function setup() { // jshint ignore:line
     labelTextBox = createInput('');
     labelTextBox.elt.style.fontFamily = 'Open Sans';
     labelTextBox.hide();
-    labelTextBox.size(180, 20);
-    labelTextBox.position(windowWidth - 200, windowHeight - 220);
+    labelTextBox.size(170, 15);
+    labelTextBox.position(windowWidth - 190, 120);
     labelTextBox.input(labelChanged);
 
 
@@ -1605,7 +1605,7 @@ function reDraw() {
     // propInput, propOutput and propLabel are -1 when no element is selected. If one of them is > -1, the sum is >= -2
     if (propMode && propInput + propOutput + propLabel >= -2) {
         fill(50);
-        rect(window.width - 215, window.height - 300, 220, 305, 5);
+        rect(window.width - 203, 0, 203, window.height);
     }
 
     // If the tutorial should be shown, display it on screen

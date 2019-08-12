@@ -119,8 +119,12 @@ Output.prototype.show = function () {
     }
     // Draw the circle that represents the output
     ellipse(this.x, this.y, this.w, this.h);
-    stroke(255);
-    strokeWeight(1);
+    if (!this.state) {
+        stroke(200);
+    } else {
+        stroke(255);
+    }
+    strokeWeight(3);
     noFill();
     arc(this.x, this.y, 20, 20, PI, PI + HALF_PI);
     //this.clickBox.markClickBox();

@@ -264,6 +264,53 @@ function mousePressed() {
                         break;
                     default:
                 }
+                if (ctrlMode === 'none' && selectMode === 'start') {
+                    let noValidTarget = true;
+                    for (let i = 0; i < inputs.length; i++) {
+                        if (Boolean(inputs[i].mouseOver()) && propMode) {
+                            noValidTarget = false;
+                            // If the propMode is active, give options to name and make top
+                            if (propInput !== i) {
+                                if (propInput >= 0) {
+                                    inputs[propInput].mark(false);
+                                }
+                                inputs[i].mark(true);
+                                propInput = i;
+                                showInputPropMenu();
+                            }
+                        }
+                    }
+                    for (let i = 0; i < outputs.length; i++) {
+                        if (Boolean(outputs[i].mouseOver()) && propMode) {
+                            noValidTarget = false;
+                            if (propOutput !== i) {
+                                if (propOutput >= 0) {
+                                    outputs[propOutput].mark(false);
+                                }
+                                outputs[i].mark(true);
+                                propOutput = i;
+                                showOutputPropMenu();
+                            }
+                        }
+                    }
+                    for (let i = 0; i < labels.length; i++) {
+                        if (Boolean(labels[i].mouseOver()) && propMode) {
+                            noValidTarget = false;
+                            if (propLabel !== i) {
+                                if (propLabel >= 0) {
+                                    labels[propLabel].mark(false);
+                                }
+                                labels[i].mark(true);
+                                propLabel = i;
+                                showLabelPropMenu();
+                            }
+                        }
+                    }
+                    if (noValidTarget && propMode) {
+                        hidePropMenu();
+                        unmarkPropTargets();
+                    }
+                }
                 break;
             case 'addObject':
                 switch (wireMode) {
@@ -323,9 +370,6 @@ function mousePressed() {
 
 function mouseClicked() {
     if (loading) { return; }
-    if (ctrlMode !== 'none' && selectMode === 'none') {
-        setPropMode(false);
-    }
     if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
         gateInputSelect.hide();
         labelGateInputs.hide();
@@ -535,51 +579,6 @@ function mouseReleased() {
                                 }
                             }
                         }
-                        let noValidTarget = true;
-                        for (let i = 0; i < inputs.length; i++) {
-                            if (Boolean(inputs[i].mouseOver()) && propMode) {
-                                noValidTarget = false;
-                                // If the propMode is active, give options to name and make top
-                                if (propInput !== i) {
-                                    if (propInput >= 0) {
-                                        inputs[propInput].mark(false);
-                                    }
-                                    inputs[i].mark(true);
-                                    propInput = i;
-                                    showInputPropMenu();
-                                }
-                            }
-                        }
-                        for (let i = 0; i < outputs.length; i++) {
-                            if (Boolean(outputs[i].mouseOver()) && propMode) {
-                                noValidTarget = false;
-                                if (propOutput !== i) {
-                                    if (propOutput >= 0) {
-                                        outputs[propOutput].mark(false);
-                                    }
-                                    outputs[i].mark(true);
-                                    propOutput = i;
-                                    showOutputPropMenu();
-                                }
-                            }
-                        }
-                        for (let i = 0; i < labels.length; i++) {
-                            if (Boolean(labels[i].mouseOver()) && propMode) {
-                                noValidTarget = false;
-                                if (propLabel !== i) {
-                                    if (propLabel >= 0) {
-                                        labels[propLabel].mark(false);
-                                    }
-                                    labels[i].mark(true);
-                                    propLabel = i;
-                                    showLabelPropMenu();
-                                }
-                            }
-                        }
-                        if (noValidTarget && propMode) {
-                            hidePropMenu();
-                            unmarkPropTargets();
-                        }
                         if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                             toggleDiodeAndConpoint();
                         }
@@ -754,7 +753,7 @@ function mouseOverGUI() {
     if (propInput + propOutput + propLabel < -2) {
         return (mouseY < 0) || (mouseX < 0);
     } else {
-        return (mouseY < 0) || (mouseX < 0) || (mouseY > window.height - 300 && mouseX > window.width - 215);
+        return (mouseY < 0) || (mouseX < 0) || (mouseX > window.width - 203);
 
     }
 }
