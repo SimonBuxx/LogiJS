@@ -8,7 +8,6 @@ function Group() {
     this.outputStates = [];
 
     this.segments = [];
-    this.conpoints = [];
 
     this.state = false;
     this.diodeState = false;
@@ -29,6 +28,9 @@ Group.prototype.addOutput = function (gate, port) {
     this.outputPorts.push(port);
 };
 
+/*
+    This is evoked when a diode associated with this group is high
+*/
 Group.prototype.diodeHigh = function () {
     this.diodeState = true;
     this.dstateset = true;

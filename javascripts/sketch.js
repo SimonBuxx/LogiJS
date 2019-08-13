@@ -1316,11 +1316,10 @@ function deleteSegDisplay(segDisNumber) {
     - simRunning is set so that the sketch can't be altered
 */
 function startSimulation() {
-    // If the update cycle shouldn't be synced with the framerate,
-    // update every 1ms (not a great solution)
     if (!sfcheckbox.checked()) {
-        updater = setInterval(updateTick, 1);
+        updater = setInterval(updateTick, 0);
     }
+
     setSimButtonText('Stop'); // Alter the caption of the Start/Stop button
     setControlMode('none');
     setUnactive();
@@ -1379,7 +1378,6 @@ function endSimulation() {
     }
     for (const elem of customs) {
         elem.setSimRunning(false); // Shutdown all custom elements
-        elem.shutdown();
     }
     for (const elem of segDisplays) {
         elem.shutdown();
@@ -1468,50 +1466,22 @@ function disableButtons(status) {
     Executes in every frame, draws everything and updates the sketch logic
 */
 function draw() {
-    // If the simulation is running, update the sketch logic (if synced to framerate) and redraw the sketch and GUI
     if (simRunning) {
-        updateTick();
-        reDraw();
-        handleDragging();
-        return;
-    }
-
-    // If wire preview is active, generate a segment set and display the preview segments
-    // When the mode is delete, mark the wire by drawing it in red
-    if (wireMode === 'preview' || wireMode === 'delete') {
-        reDraw(); // Necessary to hide the old segment set 
-        scale(transform.zoom); // Scale and translate
-        translate(transform.dx, transform.dy);
-
-        if (!mouseOverGUI()) { // If the mouse is over a gui element, no wire should be drawn
+        updateTick(); // Updates the circuit logic
+        reDraw(); // Redraw all elements of the sketch
+    } else {
+        if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI()) {
             generateSegmentSet(pwstartX, pwstartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
-            for (const elem of pwSegments) { // Display preview segments
-                elem.show(wireMode === 'delete');
-            }
+            reDraw();
         }
-        scale(1 / transform.zoom); // Reverse scaling and translating
-        translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
+
+        if (ctrlMode === 'select') {
+            reDraw();
+        }
+
     }
 
-    // If in select mode, handle the select logic
-    if (ctrlMode === 'select') {
-        reDraw();
-        scale(transform.zoom); // Handle the offset from scaling and translating
-        translate(transform.dx, transform.dy);
-        fill(0, 0, 0, 100); // Set the fill color to a semi-transparent black
-        noStroke();
-        if (selectMode === 'start') {
-            selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
-            selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
-            rect(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
-                Math.abs(selectStartX - selectEndX), Math.abs(selectStartY - selectEndY));
-        }
-        scale(1 / transform.zoom); // // Reverse scaling and translating
-        translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
-    }
-
-    // Execute the dragging logic
     handleDragging();
 }
 
@@ -1586,6 +1556,22 @@ function reDraw() {
     // Draw all sketch elements on screen
     //let t0 = performance.now();
     showElements();
+
+    // Display the preview wire segment set
+    if (wireMode === 'preview' || wireMode === 'delete') {
+        for (const elem of pwSegments) { // Display preview segments
+            elem.show(wireMode === 'delete');
+        }
+    }
+
+    if (ctrlMode === 'select' && selectMode === 'start') {
+        fill(0, 0, 0, 100); // Set the fill color to a semi-transparent black
+        noStroke();
+        selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
+        selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
+        rect(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
+            Math.abs(selectStartX - selectEndX), Math.abs(selectStartY - selectEndY));
+    }
     //let t1 = performance.now();
     //console.log("took " + (t1 - t0) + " milliseconds.");
 
@@ -1600,8 +1586,7 @@ function reDraw() {
     text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
     text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
 
-    // If the prop mode is active and an object was selected, show the config menu background in the bottom right corner
-    // propInput, propOutput and propLabel are -1 when no element is selected. If one of them is > -1, the sum is >= -2
+    // If the prop mode is active and an object was selected, show the config menu background
     if (propMode && propInput + propOutput + propLabel >= -2) {
         fill(50);
         rect(window.width - 203, 0, 203, window.height);
@@ -1611,10 +1596,6 @@ function reDraw() {
     if (showHints) {
         showTutorial();
     }
-
-    /*if (showTooltip) {
-        displayTooltipBar();
-    }*/
 
     if (loading) {
         showLoadingSymbol();
@@ -1784,12 +1765,6 @@ function displayHint(width, img, caption, line1, line2) {
     text(line2, 220, window.height - 105);
 }
 
-function displayTooltipBar() {
-    fill(50, 50, 50);
-    noStroke();
-    rect(0, 0, window.width, 150);
-}
-
 function showElements() {
     if (simRunning) {
         for (const elem of groups) {
@@ -1800,19 +1775,23 @@ function showElements() {
             elem.show();
         }
     }
-    //let t0 = performance.now();
-    textFont('monospace');
-    for (const elem of gates) {
-        elem.show();
-    }
-    textFont('Open Sans');
-    for (const elem of customs) {
-        if (elem.visible) {
+    
+    if (gates.length > 0) {
+        textFont('monospace');
+        for (const elem of gates) {
             elem.show();
         }
     }
-    //let t1 = performance.now();
-    //console.log('Drawing wires took ' + (t1 - t0) + ' milliseconds.');
+
+    if (customs.length > 0) {
+        textFont('Open Sans');
+        for (const elem of customs) {
+            if (elem.visible) {
+                elem.show();
+            }
+        }
+    }
+
     for (const elem of conpoints) {
         elem.show();
     }
@@ -1825,16 +1804,20 @@ function showElements() {
     for (const elem of diodes) {
         elem.show();
     }
-    textFont('PT Mono');
-    for (const elem of segDisplays) {
-        elem.show();
+
+    if (segDisplays.length > 0) {
+        textFont('PT Mono');
+        for (const elem of segDisplays) {
+            elem.show();
+        }
     }
+
     textFont('Gudea');
     textSize(20);
     textAlign(LEFT, TOP);
-    for (const elem of labels) {
-        elem.show();
-    }
+        for (const elem of labels) {
+            elem.show();
+        }
 
     if (showSClickBox) {
         sClickBox.markClickBox();
@@ -1944,7 +1927,7 @@ function showNegationPreview(clickBox, isOutput, direction, isTop) {
         ellipse((transform.zoom * (clickBox.x + transform.dx - offset)), (transform.zoom * (clickBox.y + transform.dy)), 10 * transform.zoom, 10 * transform.zoom);
     } else if (direction === 3) {
         ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy - offset)), 10 * transform.zoom, 10 * transform.zoom);
-    } 
+    }
 }
 
 /*

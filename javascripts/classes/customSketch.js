@@ -14,9 +14,6 @@ function CustomSketch(x, y, transform, direction, file) {
 
     this.height = Math.max(this.outputCount + 1, this.inputCount + 1); // Height of the custom object in grid cells
 
-    this.highColor = color(HRED, HGREEN, HBLUE); // Color for high in-/outputs (red)
-    this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low in-/outputs (black)
-
     this.objects = [];    // Contains all objects (gates, wires, etc.) the custom object consists of
     this.filename = file; // The name of the json file the custom object is loaded from
 
@@ -49,11 +46,10 @@ function CustomSketch(x, y, transform, direction, file) {
     this.simRunning = false; // True, when the simulation is running
     this.tops = 0;           // Number of inputs to draw on top of the object
 
-    //this.id = '_' + Math.random().toString(36).substr(2, 9);
     this.id = 'c' + Date.now() + Math.random();
     this.pid = null;
 
-    this.parsed = false;
+    this.parsed = false; // true, if the components have been rendered once
 }
 
 /*
@@ -495,7 +491,7 @@ CustomSketch.prototype.setSimRunning = function (simRunning) {
             this.objects[GATENUM][i].shutdown();
         }
         for (let i = 0; i < this.objects[CUSTNUM].length; i++) {
-            this.objects[CUSTNUM][i].shutdown();
+            this.objects[CUSTNUM][i].setSimRunning(false);
         }
         for (let i = 0; i < this.objects[CPNUM].length; i++) {
             this.objects[CPNUM][i].state = false;
@@ -510,6 +506,13 @@ CustomSketch.prototype.setSimRunning = function (simRunning) {
             this.objects[INPNUM][i].state = false;
             this.objects[INPNUM][i].outputs = false;
         }
+        for (let i = 0; i < this.outputCount; i++) {
+            this.outputs[i] = false;
+        }
+        for (let i = 0; i < this.inputCount; i++) {
+            this.inputs[i] = false;
+            this.ipset[i] = false;
+        }
     }
 };
 
@@ -521,9 +524,7 @@ CustomSketch.prototype.update = function () {
         if (!this.ipset[i]) {
             this.inputs[i] = this.inputsInv[i];
         }
-    }
-    // Set all inputs to the corresponding input pins
-    for (let i = 0; i < this.inputCount; i++) {
+        // Set all inputs to the corresponding input pins
         this.objects[INPNUM][i].setState(this.inputs[i]);
     }
 
@@ -539,10 +540,6 @@ CustomSketch.prototype.update = function () {
     // Set all output pins to the corresponding outputs
     for (let i = 0; i < this.outputCount; i++) {
         this.outputs[i] = this.objects[OUTPNUM][i].state;
-        //this.objects[OUTPNUM][i].show();
-    }
-
-    for (let i = 0; i < this.outputs.length; i++) {
         if (this.outputsInv[i]) {
             this.outputs[i] = !this.outputs[i];
         }
@@ -553,19 +550,6 @@ CustomSketch.prototype.update = function () {
             this.groups[this.objects[DINUM][i].gB].diodeHigh();
         }
         this.objects[DINUM][i].state = this.groups[this.objects[DINUM][i].gA].state;
-    }
-};
-
-/*
-    Sets all in- and outputs to false
-*/
-CustomSketch.prototype.shutdown = function () {
-    for (let i = 0; i < this.outputCount; i++) {
-        this.outputs[i] = false;
-    }
-    for (let i = 0; i < this.inputCount; i++) {
-        this.inputs[i] = false;
-        this.ipset[i] = false;
     }
 };
 
@@ -711,10 +695,10 @@ CustomSketch.prototype.show = function () {
             stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.inputs[i - 1] === true) {
-            stroke(this.highColor);
+            stroke(HRED, HGREEN, HBLUE);
             strokeWeight(5);
         } else {
-            stroke(this.lowColor);
+            stroke(LRED, LGREEN, LBLUE);
             strokeWeight(3);
         }
 
@@ -872,10 +856,10 @@ CustomSketch.prototype.show = function () {
             stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.outputs[i - 1] === true) {
-            stroke(this.highColor);
+            stroke(HRED, HGREEN, HBLUE);
             strokeWeight(5);
         } else {
-            stroke(this.lowColor);
+            stroke(LRED, LGREEN, LBLUE);
             strokeWeight(3);
         }
 
