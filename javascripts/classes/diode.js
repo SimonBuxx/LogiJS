@@ -16,7 +16,6 @@ function Diode(x, y, state, transform) {
     this.clickBox = new ClickBox(this.x, this.y, 20, 20, this.transform);
 
     this.marked = false;
-    this.markColor = color(150, 30, 30);
 
     this.id = 'd' + Date.now() + Math.random();
 
@@ -84,7 +83,7 @@ function Diode(x, y, state, transform) {
     this.show = function () {
         noStroke();
         if (this.marked) {
-            fill(this.markColor);
+            fill(MRED, MGREEN, MBLUE);
         } else if (this.state) {
             fill(this.highColor);
         } else {

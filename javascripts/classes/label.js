@@ -8,7 +8,6 @@ function Label(x, y, txt, transform) {
     this.transform = transform;
     this.txt = txt; // Label text
     this.marked = false;
-    this.markColor = color(150, 30, 30);
 
     this.id = 'l' + Date.now() + Math.random();
 
@@ -75,7 +74,7 @@ function Label(x, y, txt, transform) {
         strokeWeight(3);
         stroke(140);
         if (this.marked) {
-            fill(this.markColor);
+            fill(MRED, MGREEN, MBLUE);
         } else {
             fill(150, 200);
         }

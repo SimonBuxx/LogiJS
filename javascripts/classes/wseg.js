@@ -23,7 +23,6 @@ function WSeg(dir, startX, startY, state, transform) {
     this.end = null;  // One segment can have at max two Outputs or two Inputs connected
 
     this.marked = false;
-    this.markColor = color(150, 30, 30);  // Color for marking and deleting
 
     this.group = -1;
 
@@ -109,7 +108,7 @@ WSeg.prototype.show = function (del) {
     if (this.state) {
         stroke(this.highColor);
     } else if (this.marked || del) {
-        stroke(this.markColor);
+        stroke(MRED, MGREEN, MBLUE);
     } else {
         stroke(this.lowColor);
     }

@@ -41,7 +41,6 @@ function CustomSketch(x, y, transform, direction, file) {
     this.outputClickBoxes = [];
 
     this.marked = false; // True, if the object is marked in the selection mode
-    this.markColor = color(150, 30, 30); // Color the object appears in when marked
 
     this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform); // Global clickbox
 
@@ -682,7 +681,7 @@ CustomSketch.prototype.show = function () {
     stroke(0);
     strokeWeight(3);
     if (this.marked) {
-        fill(this.markColor);
+        fill(MRED, MGREEN, MBLUE);
     } else {
         fill(255);
     }
@@ -699,8 +698,6 @@ CustomSketch.prototype.show = function () {
     }
 
     noStroke();
-    //textSize(10);
-    //text(this.id, this.x + this.w / 2, this.y);
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
@@ -711,7 +708,7 @@ CustomSketch.prototype.show = function () {
     for (let i = 1; i <= this.inputCount; i++) {
         // Draw inputs
         if (this.marked) {
-            stroke(this.markColor);
+            stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.inputs[i - 1] === true) {
             stroke(this.highColor);
@@ -872,7 +869,7 @@ CustomSketch.prototype.show = function () {
     for (let i = 1; i <= this.outputCount; i++) {
         // Draw outputs
         if (this.marked) {
-            stroke(this.markColor);
+            stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.outputs[i - 1] === true) {
             stroke(this.highColor);

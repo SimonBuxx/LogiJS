@@ -44,7 +44,6 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     }
 
     this.marked = false;
-    this.markColor = color(150, 30, 30);   // Color for marked gates
 
     if (this.direction % 2 === 0) {
         this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, this.transform);
@@ -284,7 +283,7 @@ LogicGate.prototype.show = function () {
     }
     stroke(0);
     if (this.marked) {
-        fill(this.markColor);
+        fill(MRED, MGREEN, MBLUE);
     } else {
         fill(255);
     }
@@ -308,7 +307,7 @@ LogicGate.prototype.show = function () {
     for (let i = 1; i <= this.inputCount; i++) {
         // Draw inputs
         if (this.marked) {
-            stroke(this.markColor);
+            stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.inputs[i - 1] === true) {
             stroke(this.highColor);
@@ -365,7 +364,7 @@ LogicGate.prototype.show = function () {
     for (let i = 1; i <= this.outputCount; i++) {
         // Draw outputs
         if (this.marked) {
-            stroke(this.markColor);
+            stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.outputs[i - 1] === true) {
             stroke(this.highColor);
