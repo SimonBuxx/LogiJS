@@ -186,7 +186,7 @@ SegmentDisplay.prototype.show = function () {
         strokeWeight(2);
         
         if (this.inputsInv[i - 1]) {
-            ellipse(this.x1, this.y1 + this.h / 20, 10, 10);
+            ellipse(this.x1, this.y1 + this.h / 20 - 1.5, 10, 10);
         }
     }
     
