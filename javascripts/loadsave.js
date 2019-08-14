@@ -73,7 +73,7 @@ function load(loadData) {
     gridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
     actionRedo = [];
-    endSimulation(); // End ongoing simulations
+    endSimulation(false); // End ongoing simulations
     disableButtons(true);
     simButton.elt.disabled = true;
     saveButton.elt.disabled = true;
@@ -260,7 +260,7 @@ function loadCustomSketches() {
         loadNext();
     } else {
         loading = false;
-        endSimulation();
+        endSimulation(false);
         simButton.elt.disabled = false;
         saveButton.elt.disabled = false;
     }
@@ -269,7 +269,7 @@ function loadCustomSketches() {
 function loadNext() {
     if (queue.length <= next) {
         loading = false;
-        endSimulation();
+        endSimulation(false);
         simButton.elt.disabled = false;
         saveButton.elt.disabled = false;
         reDraw();

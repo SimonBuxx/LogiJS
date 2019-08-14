@@ -191,6 +191,8 @@ function generateSegmentSet(startX, startY, endX, endY, wstate) {
     if (pwSegments[0] != null && !lockElements) { // jshint ignore:line
         lockElements = true;
         startDirection = pwSegments[0].direction;
+        hidePropMenu();
+        unmarkPropTargets();
     }
 }
 

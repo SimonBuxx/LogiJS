@@ -14,8 +14,8 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
 */
 function mouseWheel(event) {
     if (loading) { return; }
-    if (keyIsDown(18) && !simRunning) {
-        wheel = Math.sign(event.deltaY); // -1 for zoom in, +1 for zoom out
+    if (keyIsDown(18) && !simRunning) { // If the alt key is pressed => scroll trough basic elements
+        wheel = Math.sign(event.deltaY);
         addType = Math.max(1, Math.min(9, addType + wheel));
         switch (addType) {
             case 1:
@@ -53,7 +53,7 @@ function mouseWheel(event) {
         if (ctrlMode !== 'none' && selectMode === 'none') {
             setPropMode(false);
         }
-        if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
+        /*if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
             gateInputSelect.hide();
             labelGateInputs.hide();
         }
@@ -64,7 +64,7 @@ function mouseWheel(event) {
         if (ctrlMode !== 'addObject' || addType !== 8) {
             bitSelect.hide();
             labelBits.hide();
-        }
+        }*/
         return;
     }
 
@@ -367,7 +367,7 @@ function mousePressed() {
 
 function mouseClicked() {
     if (loading) { return; }
-    if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
+    /*if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
         gateInputSelect.hide();
         labelGateInputs.hide();
     }
@@ -378,7 +378,7 @@ function mouseClicked() {
     if (ctrlMode !== 'addObject' || addType !== 8) {
         bitSelect.hide();
         labelBits.hide();
-    }
+    }*/
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':

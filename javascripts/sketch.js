@@ -15,6 +15,8 @@ let labels = []; // List of text labels
 let segDisplays = []; // List of 7-segment displays
 
 let segBits = 4; // Number of bits for new 7-segment displays
+let counterBitWidth = 4; // Output width of counter objects
+let decoderBitWidth = 4; // Input width of decoder objects
 
 let selection = []; // List of all selected elements
 
@@ -88,9 +90,10 @@ let textInput, saveButton, loadButton, newButton; // Right hand side
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
-let counter4Button, counter2Button, decoder4Button, decoder2Button, dFlipFlopButton, rsFlipFlopButton, reg4Button,
+let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
-let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits;
+let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelCounterBits,
+    decoderBitSelect, labelDecoderBits;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
@@ -245,26 +248,16 @@ function setup() { // jshint ignore:line
     labelAdvanced.elt.className = 'label';
     labelAdvanced.parent(leftSideButtons);
 
-    // Adds a counter (2Bit)
-    counter2Button = createButton('2Bit-Counter');
-    counter2Button.mousePressed(function () { setActive(counter2Button, true); return customClicked('2BitCounter.json'); });
-    counter2Button.elt.className = "buttonLeft";
-    counter2Button.parent(leftSideButtons);
-    // Adds a counter (4Bit)
-    counter4Button = createButton('4Bit-Counter');
-    counter4Button.mousePressed(function () { setActive(counter4Button, true); return customClicked('4BitCounter.json'); });
-    counter4Button.elt.className = "buttonLeft";
-    counter4Button.parent(leftSideButtons);
+    // Adds a counter
+    counterButton = createButton('Counter');
+    counterButton.mousePressed(function () { setActive(counterButton, true); return counterClicked(); });
+    counterButton.elt.className = "buttonLeft";
+    counterButton.parent(leftSideButtons);
     // Adds a decoder (2Bit)
-    decoder2Button = createButton('2Bit-Decoder');
-    decoder2Button.mousePressed(function () { setActive(decoder2Button, true); return customClicked('2BitDec.json'); });
-    decoder2Button.elt.className = "buttonLeft";
-    decoder2Button.parent(leftSideButtons);
-    // Adds a decoder (4Bit)
-    decoder4Button = createButton('4Bit-Decoder');
-    decoder4Button.mousePressed(function () { setActive(decoder4Button, true); return customClicked('4BitDec.json'); });
-    decoder4Button.elt.className = "buttonLeft";
-    decoder4Button.parent(leftSideButtons);
+    decoderButton = createButton('Decoder');
+    decoderButton.mousePressed(function () { setActive(decoderButton, true); return decoderClicked(); });
+    decoderButton.elt.className = "buttonLeft";
+    decoderButton.parent(leftSideButtons);
     // Adds an adder (4Bit)
     add4BitButton = createButton('4Bit-Adder');
     add4BitButton.mousePressed(function () { setActive(add4BitButton, true); return customClicked('4BitNeu.json'); });
@@ -338,16 +331,9 @@ function setup() { // jshint ignore:line
 
     gateInputSelect = createSelect();
     gateInputSelect.hide();
-    gateInputSelect.option('1');
-    gateInputSelect.option('2');
-    gateInputSelect.option('3');
-    gateInputSelect.option('4');
-    gateInputSelect.option('5');
-    gateInputSelect.option('6');
-    gateInputSelect.option('7');
-    gateInputSelect.option('8');
-    gateInputSelect.option('9');
-    gateInputSelect.option('10');
+    for (let i = 1; i <= 10; i++) {
+        gateInputSelect.option(i);
+    }
     gateInputSelect.changed(newGateInputNumber);
     gateInputSelect.elt.className = "selectLeft";
     gateInputSelect.parent(leftSideButtons);
@@ -385,22 +371,59 @@ function setup() { // jshint ignore:line
     labelBits.elt.className = 'label';
     labelBits.parent(leftSideButtons);
 
+    // Adds text 'Output width'
+    labelCounterBits = createP('Output width');
+    labelCounterBits.hide();
+    labelCounterBits.elt.style.color = 'white';
+    labelCounterBits.elt.style.fontFamily = 'Open Sans';
+    labelCounterBits.elt.style.textAlign = 'center';
+    labelCounterBits.elt.style.margin = '3px 0px 0px 0px';
+    labelCounterBits.elt.className = 'label';
+    labelCounterBits.parent(leftSideButtons);
+
+    // Adds text 'Input width'
+    labelDecoderBits = createP('Input width');
+    labelDecoderBits.hide();
+    labelDecoderBits.elt.style.color = 'white';
+    labelDecoderBits.elt.style.fontFamily = 'Open Sans';
+    labelDecoderBits.elt.style.textAlign = 'center';
+    labelDecoderBits.elt.style.margin = '3px 0px 0px 0px';
+    labelDecoderBits.elt.className = 'label';
+    labelDecoderBits.parent(leftSideButtons);
+
+
     bitSelect = createSelect();
     bitSelect.hide();
-    bitSelect.option('1');
-    bitSelect.option('2');
-    bitSelect.option('3');
-    bitSelect.option('4');
-    bitSelect.option('5');
-    bitSelect.option('6');
-    bitSelect.option('7');
-    bitSelect.option('8');
+    for (let i = 1; i <= 8; i++) {
+        bitSelect.option(i);
+    }
     bitSelect.option('16');
     bitSelect.option('32');
     bitSelect.changed(newBitLength);
     bitSelect.elt.className = "selectLeft";
     bitSelect.parent(leftSideButtons);
     bitSelect.value('4');
+
+    counterBitSelect = createSelect();
+    counterBitSelect.hide();
+    for (let i = 2; i <= 5; i++) {
+        counterBitSelect.option(i);
+    }
+    counterBitSelect.changed(newCounterBitLength);
+    counterBitSelect.elt.className = "selectLeft";
+    counterBitSelect.parent(leftSideButtons);
+    counterBitSelect.value('4');
+
+    decoderBitSelect = createSelect();
+    decoderBitSelect.hide();
+    for (let i = 2; i <= 5; i++) {
+        decoderBitSelect.option(i);
+    }
+    decoderBitSelect.changed(newDecoderBitLength);
+    decoderBitSelect.elt.className = "selectLeft";
+    decoderBitSelect.parent(leftSideButtons);
+    decoderBitSelect.value('4');
+
 
     sfcheckbox = createCheckbox('Sync Ticks', true);
     sfcheckbox.hide();
@@ -660,6 +683,7 @@ function urlParam(name, w) {
 }
 
 function customClicked(filename) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -673,6 +697,28 @@ function customClicked(filename) {
     }
 }
 
+function counterClicked() {
+    hideAllOptions();
+    setControlMode('addObject');
+    addType = 10;
+    directionSelect.show();
+    labelDirection.show();
+    counterBitSelect.show();
+    labelCounterBits.show();
+    custFile = counterBitWidth + 'BitCounter.json';
+}
+
+function decoderClicked() {
+    hideAllOptions();
+    setControlMode('addObject');
+    addType = 10;
+    directionSelect.show();
+    labelDirection.show();
+    decoderBitSelect.show();
+    labelDecoderBits.show();
+    custFile = decoderBitWidth + 'BitDec.json';
+}
+
 // Triggered when a sketch should be saved
 function saveClicked() {
     selectMode = 'none';
@@ -684,6 +730,9 @@ function saveClicked() {
 // Triggered when a sketch should be loaded
 function loadClicked() {
     selectMode = 'none';
+    setControlMode('none');
+    setActive(propertiesButton);
+    setPropMode(true);
     showSClickBox = false;
     document.title = textInput.value() + ' - LogiJS';
     loadSketch(textInput.value() + '.json');
@@ -694,6 +743,7 @@ function loadClicked() {
 function newClicked() {
     clearItems();
     clearActionStacks();
+    hideAllOptions();
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
     gateInputCount = 2;
@@ -715,6 +765,19 @@ function newClicked() {
     textInput.attribute('placeholder', 'New Sketch');
     findLines();
     reDraw();
+}
+
+function hideAllOptions() {
+    bitSelect.hide();
+    labelBits.hide();
+    directionSelect.hide();
+    labelDirection.hide();
+    gateInputSelect.hide();
+    labelGateInputs.hide();
+    counterBitSelect.hide();
+    labelCounterBits.hide();
+    decoderBitSelect.hide();
+    labelDecoderBits.hide();
 }
 
 /*
@@ -751,11 +814,16 @@ function pushSelectAction(dx, dy, x1, y1, x2, y2) {
 
 function setActive(btn, left) {
     setUnactive();
+    hideAllOptions();
     if (left) {
         btn.elt.className = 'buttonLeft active';
     } else {
         btn.elt.className = 'button active';
     }
+}
+
+function isActive(btn) {
+    return btn.elt.className.includes('active');
 }
 
 function setUnactive() {
@@ -771,10 +839,8 @@ function setUnactive() {
     labelButton.elt.className = 'buttonLeft';
     selectButton.elt.className = 'button';
     segDisplayButton.elt.className = 'buttonLeft';
-    counter4Button.elt.className = 'buttonLeft';
-    counter2Button.elt.className = 'buttonLeft';
-    decoder4Button.elt.className = 'buttonLeft';
-    decoder2Button.elt.className = 'buttonLeft';
+    counterButton.elt.className = 'buttonLeft';
+    decoderButton.elt.className = 'buttonLeft';
     dFlipFlopButton.elt.className = 'buttonLeft';
     rsFlipFlopButton.elt.className = 'buttonLeft';
     reg4Button.elt.className = 'buttonLeft';
@@ -907,6 +973,16 @@ function newBitLength() {
     segBits = parseInt(bitSelect.value());
 }
 
+function newCounterBitLength() {
+    counterBitWidth = parseInt(counterBitSelect.value());
+    custFile = counterBitWidth + 'BitCounter.json';
+}
+
+function newDecoderBitLength() {
+    decoderBitWidth = parseInt(decoderBitSelect.value());
+    custFile = decoderBitWidth + 'BitDec.json';
+}
+
 function newDirection() {
     switch (directionSelect.value()) {
         case 'Right': gateDirection = 0; break;
@@ -940,6 +1016,7 @@ function simClicked() {
     Adding modes for gates, in/out, customs, etc.
 */
 function andClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 1 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -956,6 +1033,7 @@ function andClicked(dontToggle = false) {
 }
 
 function orClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 2 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -972,6 +1050,7 @@ function orClicked(dontToggle = false) {
 }
 
 function xorClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 3 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -988,6 +1067,7 @@ function xorClicked(dontToggle = false) {
 }
 
 function inputClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 4 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -1002,6 +1082,7 @@ function inputClicked(dontToggle = false) {
 }
 
 function buttonClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 5 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -1016,6 +1097,7 @@ function buttonClicked(dontToggle = false) {
 }
 
 function clockClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 6 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -1030,6 +1112,7 @@ function clockClicked(dontToggle = false) {
 }
 
 function outputClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 7 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -1042,6 +1125,7 @@ function outputClicked(dontToggle = false) {
 }
 
 function segDisplayClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 8 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -1070,6 +1154,7 @@ function startSelect() {
 
 // Triggered when a label should be added
 function labelButtonClicked(dontToggle = false) {
+    hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 9 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
@@ -1325,6 +1410,7 @@ function startSimulation() {
     setUnactive();
     disableButtons(true);
     setPropMode(false);
+    hideAllOptions();
     showSClickBox = false; // Hide the selection click box
 
     // Parse all groups, integrate all elements and parse again (this is required)
@@ -1362,12 +1448,14 @@ function startSimulation() {
     - Objects are set to low state
     - simRunning is cleared so that the sketch can be altered
 */
-function endSimulation() {
+function endSimulation(reset = true) {
     clearInterval(updater); // Stop the unsynced simulation updater
     setSimButtonText('Start'); // Set the button caption to 'Start'
-    setControlMode('none');
-    setPropMode(true);
-    setActive(propertiesButton);
+    if (reset) {
+        setControlMode('none');
+        setPropMode(true);
+        setActive(propertiesButton);
+    }
     disableButtons(false); // Enable all buttons
     updateUndoButtons();
     sfcheckbox.hide();
@@ -1434,10 +1522,8 @@ function disableButtons(status) {
     deleteButton.elt.disabled = status;
     selectButton.elt.disabled = status;
     reg4Button.elt.disabled = status;
-    decoder4Button.elt.disabled = status;
-    decoder2Button.elt.disabled = status;
-    counter2Button.elt.disabled = status;
-    counter4Button.elt.disabled = status;
+    decoderButton.elt.disabled = status;
+    counterButton.elt.disabled = status;
     mux1Button.elt.disabled = status;
     mux2Button.elt.disabled = status;
     mux3Button.elt.disabled = status;
@@ -1775,7 +1861,7 @@ function showElements() {
             elem.show();
         }
     }
-    
+
     if (gates.length > 0) {
         textFont('monospace');
         for (const elem of gates) {
@@ -1815,9 +1901,9 @@ function showElements() {
     textFont('Gudea');
     textSize(20);
     textAlign(LEFT, TOP);
-        for (const elem of labels) {
-            elem.show();
-        }
+    for (const elem of labels) {
+        elem.show();
+    }
 
     if (showSClickBox) {
         sClickBox.markClickBox();
@@ -1855,12 +1941,7 @@ function keyPressed() {
             case RETURN:
                 console.log(customs);
                 setPropMode(false);
-                gateInputSelect.hide();
-                labelGateInputs.hide();
-                directionSelect.hide();
-                labelDirection.hide();
-                bitSelect.hide();
-                labelBits.hide();
+                hideAllOptions();
                 simClicked();
                 break;
             case CONTROL:
