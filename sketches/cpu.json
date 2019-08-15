@@ -693,59 +693,14 @@
   ],
   "labels": [
     {
-      "x": "210",
-      "y": "420",
-      "txt": "This is a little CPU"
+      "x": "360",
+      "y": "180",
+      "txt": "This is a little CPU\nwith two 4-bit registers."
     },
     {
-      "x": "210",
-      "y": "450",
-      "txt": "with two 4-bit registers."
-    },
-    {
-      "x": "210",
-      "y": "510",
-      "txt": "The commands are:"
-    },
-    {
-      "x": "210",
-      "y": "540",
-      "txt": "000 - NOP"
-    },
-    {
-      "x": "210",
-      "y": "570",
-      "txt": "001 - OR"
-    },
-    {
-      "x": "210",
-      "y": "600",
-      "txt": "010 - AND"
-    },
-    {
-      "x": "210",
-      "y": "630",
-      "txt": "011 - ADD"
-    },
-    {
-      "x": "210",
-      "y": "660",
-      "txt": "100 - SUB"
-    },
-    {
-      "x": "210",
-      "y": "690",
-      "txt": "101 - XOR"
-    },
-    {
-      "x": "210",
-      "y": "720",
-      "txt": "110 - LDI A"
-    },
-    {
-      "x": "210",
-      "y": "750",
-      "txt": "111 - LDI B"
+      "x": "690",
+      "y": "810",
+      "txt": "The commands are:\n000 - NOP\n001 - OR\n010 - AND\n011 - ADD\n100 - SUB\n101 - XOR\n110 - LDI A\n111 - LDI B"
     }
   ],
   "segDisplays": [

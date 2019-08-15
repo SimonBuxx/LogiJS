@@ -614,7 +614,7 @@ function setup() { // jshint ignore:line
     opNameLabel.elt.style.margin = '3px 0px 0px 0px';
     opNameLabel.position(windowWidth - 190, 120);
 
-    labCaptLabel = createP('Label caption:');
+    labCaptLabel = createP('Label text:');
     labCaptLabel.hide();
     labCaptLabel.elt.style.color = 'white';
     labCaptLabel.elt.style.fontFamily = 'Open Sans';
@@ -640,13 +640,13 @@ function setup() { // jshint ignore:line
     outputColorBox.changed(newOutputColor);
     outputColorBox.elt.className = "selectLeft";
 
-    labelTextBox = createInput('');
+    labelTextBox = createElement('textarea');
     labelTextBox.elt.style.fontFamily = 'Open Sans';
+    labelTextBox.elt.style.fontSize = '15px';
     labelTextBox.hide();
-    labelTextBox.size(170, 15);
+    labelTextBox.size(170, 200);
     labelTextBox.position(windowWidth - 190, 120);
     labelTextBox.input(labelChanged);
-
 
     frameRate(60); // Caps the framerate at 60 FPS
 
@@ -731,6 +731,7 @@ function saveClicked() {
 function loadClicked() {
     selectMode = 'none';
     setControlMode('none');
+    hidePropMenu();
     setActive(propertiesButton);
     setPropMode(true);
     showSClickBox = false;
