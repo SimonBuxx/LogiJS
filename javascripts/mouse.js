@@ -203,7 +203,7 @@ function updateCursors() {
     }
     if (showDPreview) {
         reDraw();
-        showDiodePreview(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+        showPreview('diode', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
         diodePreviewShown = true;
     } else if (diodePreviewShown) {
         reDraw();
@@ -211,7 +211,7 @@ function updateCursors() {
     }
     if (showCPPreview) {
         reDraw();
-        showConPointPreview(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+        showPreview('conpoint', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
         conpointPreviewShown = true;
     } else if (conpointPreviewShown) {
         reDraw();
