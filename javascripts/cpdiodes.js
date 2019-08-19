@@ -16,7 +16,7 @@ function deleteInvalidDiodes() {
 */
 function deleteInvalidConpoints() {
     for (let j = conpoints.length - 1; j >= 0; j--) {
-        if (wirePoints(conpoints[j].x, conpoints[j].y, -1).length < 3 || isDiode(conpoints[j].x, conpoints[j].y) >= 0) {
+        if (wirePoints(conpoints[j].x, conpoints[j].y, -1).length < 3) {
             conpoints.splice(j, 1);
         }
     }
@@ -45,7 +45,7 @@ function segmentEndsIn(x, y) {
     Only creates if not existing and no diode at the point
 */
 function createConpoint(x, y, state, g) {
-    if ((isConPoint(x, y) < 0) && (isDiode(x, y) < 0)) {
+    if (isConPoint(x, y) < 0) {
         conpoints.push(new ConPoint(x, y, state, g));
     }
 }
@@ -127,42 +127,18 @@ function doConpoints() {
         // Get all segments starting or ending in the point
         let wp1 = wirePoints(segments[i].startX, segments[i].startY, -1);
         let wp2 = wirePoints(segments[i].endX, segments[i].endY, -1);
-
+        
         // If there are 3 segments connecting
         if (wp1.length === 3) {
-            if (isConPoint(segments[i].startX, segments[i].startY) < 0) {
-                createConpoint(segments[i].startX, segments[i].startY, false, -1);
-            }
-        } else if (wp1.length === 4) {
-            if (isConPoint(segments[i].startX, segments[i].startY) < 0) {
-                for (let k = 0; k < wp1.length; k++) {
-                    if (segments[wp1[k]].direction === segments[i].direction) { // If they have the same direction
-                        let s = wp1[k];
-                        wp1 = []; // Only explore in this segment
-                        wp1.push(s);
-                    }
-                }
-            } // else explore every segment
+            createConpoint(segments[i].startX, segments[i].startY, false, -1);
         }
         // Same thing for the other direction
         if (wp2.length === 3) {
-            if (isConPoint(segments[i].endX, segments[i].endY) < 0) {
-                createConpoint(segments[i].endX, segments[i].endY, false, -1);
-            }
-        } else if (wp2.length === 4) {
-            if (isConPoint(segments[i].endX, segments[i].endY) < 0) {
-                for (let k = 0; k < wp2.length; k++) {
-                    if (segments[wp2[k]].direction === segments[i].direction) { // If they have the same direction
-                        let s = wp2[k];
-                        wp2 = []; // Only explore in this segment
-                        wp2.push(s);
-                    }
-                }
-            } // else explore every segment
+            createConpoint(segments[i].endX, segments[i].endY, false, -1);
         }
     }
-    deleteInvalidConpoints();
     deleteInvalidDiodes();
+    deleteInvalidConpoints();
 }
 
 function showDiodePreview(x, y) {
@@ -173,7 +149,7 @@ function showDiodePreview(x, y) {
     triangle(x, y + 11, x - 11, y, x + 11, y);
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
-}   
+}
 
 function showConPointPreview(x, y) {
     fill(50, 50, 50);
@@ -183,7 +159,7 @@ function showConPointPreview(x, y) {
     rect(x - 3, y - 3, 7, 7);
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
-}   
+}
 
 function toggleDiode(restore) {
     for (var i = 0; i < diodes.length; i++) {
