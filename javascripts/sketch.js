@@ -897,7 +897,7 @@ function deleteClicked() {
                 delOutputs[1].push(outputs.indexOf(selection[i]));
             }
             // Filtering out wires and segments and pushing them into their arrays
-            else if (selection[i] instanceof WSeg) {
+            else if (selection[i] instanceof Wire) {
                 // The last selection[] element is the # of wires, therefore
                 // all elements before that index are wires, the rest are segments
                 if (i < selection[selection.length - 1]) {
@@ -1414,15 +1414,8 @@ function startSimulation() {
     hideAllOptions();
     showSClickBox = false; // Hide the selection click box
 
-    // Parse all groups, integrate all elements and parse again (this is required)
     parseGroups();
     integrateElement();
-    parseGroups();
-
-    // Reduce the displayed wires for performance
-    for (const elem of groups) {
-        elem.findLines();
-    }
 
     // Reset all clocks
     for (const elem of inputs) {
@@ -1484,7 +1477,7 @@ function endSimulation(reset = true) {
     for (const elem of diodes) {
         elem.setState(false);
     }
-    for (const elem of segments) {
+    for (const elem of wires) {
         elem.state = false;
     }
     simRunning = false;
@@ -1940,7 +1933,6 @@ function keyPressed() {
                 setPropMode(true);
                 break;
             case RETURN:
-                console.log(customs);
                 setPropMode(false);
                 hideAllOptions();
                 simClicked();

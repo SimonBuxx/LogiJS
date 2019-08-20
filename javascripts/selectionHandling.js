@@ -199,12 +199,12 @@ function finishSelection() {
         if (wires[i].startX === wires[i].endX) {
             // Vertical wire, split in n vertical segments
             for (let j = 0; j < (wires[i].endY - wires[i].startY) / GRIDSIZE; j++) {
-                segments.push(new WSeg(1, wires[i].startX, (wires[i].startY + j * GRIDSIZE), false, transform));
+                segments.push(new Wire(1, wires[i].startX, (wires[i].startY + j * GRIDSIZE), false, transform));
             }
         } else if (wires[i].startY === wires[i].endY) {
             // Horizontal wire, split in n horizontal segments
             for (let j = 0; j < (wires[i].endX - wires[i].startX) / GRIDSIZE; j++) {
-                segments.push(new WSeg(0, wires[i].startX + j * GRIDSIZE, wires[i].startY, false, transform));
+                segments.push(new Wire(0, wires[i].startX + j * GRIDSIZE, wires[i].startY, false, transform));
             }
         }
     }

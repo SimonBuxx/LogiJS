@@ -16,7 +16,7 @@ function deleteInvalidDiodes() {
 */
 function deleteInvalidConpoints() {
     for (let j = conpoints.length - 1; j >= 0; j--) {
-        if (wirePoints(conpoints[j].x, conpoints[j].y, -1).length < 3) {
+        if (segmentPoints(conpoints[j].x, conpoints[j].y, -1).length < 3) {
             conpoints.splice(j, 1);
         }
     }
@@ -94,6 +94,24 @@ function isConPoint(x, y) {
     return -1;
 }
 
+function listConpoints(x1, y1, x2, y2) {
+    let cps = [];
+    if (y1 === y2) {
+        for (let i = 0; i < conpoints.length; i++) {
+            if (conpoints[i].x > x1 && conpoints[i].x < x2 && conpoints[i].y === y1) {
+                cps.push(i);
+            }
+        }
+    } else {
+        for (let i = 0; i < conpoints.length; i++) {
+            if (conpoints[i].y > y1 && conpoints[i].y < y2 && conpoints[i].x === x1) {
+                cps.push(i);
+            }
+        }
+    }
+    return cps;
+}
+
 function isDiode(x, y) {
     for (let i = 0; i < diodes.length; i++) {
         if (diodes[i].x === x && diodes[i].y === y) {
@@ -109,8 +127,8 @@ function isDiode(x, y) {
 function doConpoints() {
     for (let i = 0; i < segments.length; i++) {
         // Get all segments starting or ending in the point
-        let wp1 = wirePoints(segments[i].startX, segments[i].startY, -1);
-        let wp2 = wirePoints(segments[i].endX, segments[i].endY, -1);
+        let wp1 = segmentPoints(segments[i].startX, segments[i].startY, -1);
+        let wp2 = segmentPoints(segments[i].endX, segments[i].endY, -1);
 
         // If there are 3 segments connecting
         if (wp1.length === 3) {

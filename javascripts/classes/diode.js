@@ -50,13 +50,6 @@ function Diode(x, y, state, transform) {
     this.setCoordinates = function (nx, ny) {
         this.x = Math.round(nx / GRIDSIZE) * GRIDSIZE;
         this.y = Math.round(ny / GRIDSIZE) * GRIDSIZE;
-        // Check bounds
-        /*if (this.x < 0) {
-            this.x = 0;
-        }
-        if (this.y < 0) {
-            this.y = 0;
-        }*/
     };
 
     this.updateClickBox = function () {

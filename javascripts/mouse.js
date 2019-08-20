@@ -465,14 +465,14 @@ function mouseReleased() {
                         if (pushed) {
                             let oldWires = [];
                             for (let i = wires.length - 1; i >= 0; i--) {
-                                oldWires[i] = new WSeg(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
+                                oldWires[i] = new Wire(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
                                 oldWires[i].endX = wires[i].endX;
                                 oldWires[i].endY = wires[i].endY;
                                 oldWires[i].id = wires[i].id;
                             }
                             let oldSegments = [];
                             for (let i = segments.length - 1; i >= 0; i--) {
-                                oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                                oldSegments[i] = new Wire(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
                                 oldSegments[i].id = segments[i].id;
                             }
                             pushUndoAction('reWire', 0, [_.cloneDeep(oldSegments), _.cloneDeep(oldWires), _.cloneDeep(conpoints)]); // push the action for undoing
@@ -504,14 +504,14 @@ function mouseReleased() {
                         if (pushed) {
                             let oldWires = [];
                             for (let i = wires.length - 1; i >= 0; i--) {
-                                oldWires[i] = new WSeg(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
+                                oldWires[i] = new Wire(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
                                 oldWires[i].endX = wires[i].endX;
                                 oldWires[i].endY = wires[i].endY;
                                 oldWires[i].id = wires[i].id;
                             }
                             let oldSegments = [];
                             for (let i = segments.length - 1; i >= 0; i--) {
-                                oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                                oldSegments[i] = new Wire(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
                                 oldSegments[i].id = segments[i].id;
                             }
                             pushUndoAction('reWire', 0, [_.cloneDeep(oldSegments), _.cloneDeep(oldWires), _.cloneDeep(conpoints)]); // push the action for undoing
@@ -625,7 +625,7 @@ function mouseReleased() {
                             }
                         }
                         if (existing) {
-                            pushUndoAction('reWire', 0, [_.cloneDeep(oldSegments), _.cloneDeep(oldWires), _.cloneDeep(conpoints)]); // Push the action, if more than 0 segments were deleted
+                            pushUndoAction('reWire', 0, [oldSegments, oldWires, _.cloneDeep(conpoints)]); // Push the action, if more than 0 segments were deleted
                             findLines();
                         }
                         pwSegments = [];
