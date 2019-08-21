@@ -1415,7 +1415,7 @@ function startSimulation() {
     showSClickBox = false; // Hide the selection click box
 
     parseGroups();
-    integrateElement();
+    integrateElements();
 
     // Reset all clocks
     for (const elem of inputs) {

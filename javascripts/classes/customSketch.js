@@ -335,7 +335,7 @@ CustomSketch.prototype.exGroup = function (j, g) {
 /*
     Integrates all sketch elements into the wire groups
 */
-CustomSketch.prototype.integrateElement = function () {
+CustomSketch.prototype.integrateElements = function () {
     for (let h = 0; h < this.groups.length; h++) {
         for (let i = 0; i < this.groups[h].segments.length; i++) {
             for (let j = 0; j < this.objects[GATENUM].length; j++) {
@@ -484,7 +484,7 @@ CustomSketch.prototype.setSimRunning = function (simRunning) {
     if (this.simRunning && !this.parsed) {
         this.parsed = true;
         this.parseGroups();
-        this.integrateElement();
+        this.integrateElements();
         this.parseGroups();
     } else {
         for (let i = 0; i < this.objects[GATENUM].length; i++) {

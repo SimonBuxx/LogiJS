@@ -1,7 +1,7 @@
 // File: parsing.js
 
-let startDirection = 0;
-let traced = []; // List of all traced segments
+let startDirection = 0; // Start direction for the current wire preview
+let traced = []; // List of all traced segments (needed by parseGroups)
 
 /*
     Gives a list of all segments that have an end in x, y, except segment j
@@ -76,7 +76,7 @@ function wiresTrough(x, y, j) {
 }
 
 /*
-    Finds connected wires and orders them in groups of segments
+    Groups all wires in the sketch
 */
 function parseGroups() {
     traced = [];
@@ -89,19 +89,17 @@ function parseGroups() {
 }
 
 /*
-    Explores one part of the graph
-    j: Start segment
+    Explores the group that contains the given wire
 */
 
-function exploreGroup(j) {
+function exploreGroup(wire) {
     groups.push(new Group());
-    exGroup(j, groups.length - 1);
+    exGroup(wire, groups.length - 1);
 }
 
 /*
     Recursive wire traversing algorithm
-    Starts at one segment and explorers one wire group, meaning a set of segments
-    that are connected and therefore always have the same state
+    Starts at one wire and explorers one wire group
 */
 function exGroup(j, g) {
     wires[j].setGroup(g);
@@ -109,19 +107,16 @@ function exGroup(j, g) {
     traced.push(j);
 
     let connected = wireConnect(wires[j]); // Gives all connected wires (no full crossings)
-    let cp = listConpoints(wires[j].startX, wires[j].startY, wires[j].endX, wires[j].endY);
 
-    for (let k = 0; k < cp.length; k++) {
-        let troughWire = wiresTrough(conpoints[cp[k]].x, conpoints[cp[k]].y, j);
+    for (let elem of listConpoints(wires[j].startX, wires[j].startY, wires[j].endX, wires[j].endY)) {
+        conpoints[elem].setGroup(g);
+        let troughWire = wiresTrough(conpoints[elem].x, conpoints[elem].y, j);
         if (troughWire.length === 1) {
             connected.push(troughWire[0]);
-            conpoints[cp[k]].setGroup(g);
-        } else {
-            conpoints[cp[k]].setGroup(g);
         }
     }
 
-    // Trace the remaining segments recursivly
+    // Trace the remaining wires recursivly
     for (let i = 0; i < connected.length; i++) {
         if (traced.indexOf(connected[i]) < 0) {
             exGroup(connected[i], g);
@@ -182,6 +177,9 @@ function generateSegmentSet(startX, startY, endX, endY, wstate) {
     }
 }
 
+/*
+    Returns the index of a segment at the given position or -1 if it doesn't exist
+*/
 function segmentExists(startX, startY, endX, endY) {
     for (let i = 0; i < segments.length; i++) {
         if ((segments[i].startX === startX) && (segments[i].startY === startY) && (segments[i].endX === endX) && (segments[i].endY === endY)) {
@@ -191,7 +189,11 @@ function segmentExists(startX, startY, endX, endY) {
     return -1;
 }
 
-function integrateElement() {
+/*
+    Links all in- and outputs to the wire group that they belong to
+    This requires that the wires have been grouped by parseGroups()
+*/
+function integrateElements() {
     for (let j = 0; j < gates.length; j++) {
         for (let k = 0; k < gates[j].outputCount; k++) {
             let outputWires = wirePoints(gates[j].outputClickBoxes[k].x, gates[j].outputClickBoxes[k].y, -1);
@@ -259,6 +261,9 @@ function integrateElement() {
     }
 }
 
+/*
+    Takes all segments and bundles them into wires (straight lines that are potentially longer than one segment)
+*/
 function findLines() {
     let seg = segments.slice(0);
     for (let i = 0; i < seg.length; i++) {
