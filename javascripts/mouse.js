@@ -6,8 +6,7 @@ let minZoom = 0.2;
 let origX = 0;
 let origY = 0;
 
-let lockElements = false; // For delete mode, ensures that wires can be deleted without
-// accidentally deleting other elements
+let lockElements = false; // For delete mode, ensures that wires can be deleted without accidentally deleting other elements
 
 /*
     Triggers when the mouse wheel is used
@@ -53,18 +52,6 @@ function mouseWheel(event) {
         if (ctrlMode !== 'none' && selectMode === 'none') {
             setPropMode(false);
         }
-        /*if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
-            gateInputSelect.hide();
-            labelGateInputs.hide();
-        }
-        if (ctrlMode !== 'addObject' || ((addType > 3 || addType === 0) && addType !== 10)) {
-            directionSelect.hide();
-            labelDirection.hide();
-        }
-        if (ctrlMode !== 'addObject' || addType !== 8) {
-            bitSelect.hide();
-            labelBits.hide();
-        }*/
         return;
     }
 
@@ -367,18 +354,6 @@ function mousePressed() {
 
 function mouseClicked() {
     if (loading) { return; }
-    /*if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
-        gateInputSelect.hide();
-        labelGateInputs.hide();
-    }
-    if (ctrlMode !== 'addObject' || ((addType > 3 || addType === 0) && addType !== 10)) {
-        directionSelect.hide();
-        labelDirection.hide();
-    }
-    if (ctrlMode !== 'addObject' || addType !== 8) {
-        bitSelect.hide();
-        labelBits.hide();
-    }*/
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':

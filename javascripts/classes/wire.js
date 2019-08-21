@@ -30,14 +30,6 @@ function Wire(dir, startX, startY, state, transform) {
 
 Wire.prototype.getData = function () {
     var data = {};
-    data.startX = JSON.stringify(this.startX);
-    data.startY = JSON.stringify(this.startY);
-    data.direction = JSON.stringify(this.direction);
-    return data;
-};
-
-Wire.prototype.getWireData = function () {
-    var data = {};
     data.x1 = JSON.stringify(this.startX);
     data.y1 = JSON.stringify(this.startY);
     if (this.startX !== this.endX) {

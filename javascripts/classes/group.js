@@ -40,7 +40,6 @@ Group.prototype.updateAll = function () {
     this.state = false;
     // Get all states of the gate outputs
     for (let j = 0; j < this.outputGates.length; j++) {
-        //this.outputStates[j] = this.outputGates[j].getOutput(this.outputPorts[j]);
         if (this.outputGates[j].getOutput(this.outputPorts[j])) {
             this.state = true;
             for (let j = 0; j < this.outputGates.length; j++) {
@@ -57,7 +56,7 @@ Group.prototype.updateAll = function () {
     } else if (!this.dstateset) {
         this.diodeState = false;
     }
-
+    
     // Propagate the state to all inputs
     for (let j = 0; j < this.inputGates.length; j++) {
         this.inputGates[j].setInput(this.inputPorts[j], this.state);

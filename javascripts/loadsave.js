@@ -25,7 +25,7 @@ function saveSketch(filename) {
         json.inputs.push(inputs[i].getData());
     }
     for (let i = 0; i < wires.length; i++) {
-        json.wires.push(wires[i].getWireData());
+        json.wires.push(wires[i].getData());
     }
     for (let i = 0; i < conpoints.length; i++) {
         json.conpoints.push(conpoints[i].getData());
@@ -128,7 +128,7 @@ function load(loadData) {
                             false, transform));
                     }
                 }
-            } 
+            }
         }
     }
     for (let i = 0; i < loadData.conpoints.length; i++) {
@@ -163,15 +163,15 @@ function load(loadData) {
 function loadCustomFile(file, num, hlparent) {
     if (cachedFiles.indexOf(file) >= 0) {
         setTimeout(function () {
-            loadCallback(cachedData[cachedFiles.indexOf(file)], num, hlparent); 
+            loadCallback(cachedData[cachedFiles.indexOf(file)], num, hlparent);
         }, 0);
     } else {
-        loadJSON('sketches/' + file, function (loadData) { 
+        loadJSON('sketches/' + file, function (loadData) {
             if (cachedFiles.indexOf(file) < 0) {
                 cachedFiles.push(file);
                 cachedData.push(loadData);
             }
-            loadCallback(loadData, num, hlparent); 
+            loadCallback(loadData, num, hlparent);
         });
     }
 }
@@ -207,28 +207,23 @@ function loadCustom(loadData, num, hlparent) {
             params[INPNUM][i].speed = JSON.parse(loadData.inputs[i].speed);
         }
     }
+
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
-            if (loadData.wires[i].hasOwnProperty("y2")) {
-                if (JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) { // For compability
-                    // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-                    for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
-                        params[SEGNUM].push(new WSeg(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
-                            false, trans));
-                    }
-                }
-            }
-            if (loadData.wires[i].hasOwnProperty("x2")) {
-                if (JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) { // For compability
-                    // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-                    for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
-                        params[SEGNUM].push(new WSeg(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
-                            false, trans));
-                    }
-                }
+            if (loadData.wires[i].hasOwnProperty("y2") && JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) {
+                params[SEGNUM][i] = new Wire(1, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1), false, trans);
+                params[SEGNUM][i].endX = JSON.parse(loadData.wires[i].x1);
+                params[SEGNUM][i].endY = JSON.parse(loadData.wires[i].y2);
+            } else if (loadData.wires[i].hasOwnProperty("x2") && JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) {
+                params[SEGNUM][i] = new Wire(0, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1), false, trans);
+                params[SEGNUM][i].endX = JSON.parse(loadData.wires[i].x2);
+                params[SEGNUM][i].endY = JSON.parse(loadData.wires[i].y1);
             }
         }
+    } else {
+        console.log('The file you are trying to load was built with an old version of LogiJS (pre-01/2018)!');
     }
+
     for (let i = 0; i < loadData.conpoints.length; i++) {
         params[CPNUM][i] = new ConPoint(JSON.parse(loadData.conpoints[i].x), JSON.parse(loadData.conpoints[i].y), false, -1);
     }

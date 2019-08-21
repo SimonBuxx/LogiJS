@@ -209,13 +209,32 @@ CustomSketch.prototype.updateGroups = function () {
 CustomSketch.prototype.wirePoints = function (x, y, j) {
     let indexList = [];
     for (let i = 0; i < this.objects[SEGNUM].length; i++) {
-        if (this.objects[SEGNUM][i].endX === x && this.objects[SEGNUM][i].endY === y) {
-            if (i !== j) {
+        if (((this.objects[SEGNUM][i].direction === 0 && this.objects[SEGNUM][i].endX <= x && this.objects[SEGNUM][i].startX >= x && this.objects[SEGNUM][i].startY === y) ||
+            (this.objects[SEGNUM][i].direction === 1 && this.objects[SEGNUM][i].endY <= y && this.objects[SEGNUM][i].startY >= y && this.objects[SEGNUM][i].startX === x) ||
+            (this.objects[SEGNUM][i].direction === 0 && this.objects[SEGNUM][i].startX <= x && this.objects[SEGNUM][i].endX >= x && this.objects[SEGNUM][i].startY === y) ||
+            (this.objects[SEGNUM][i].direction === 1 && this.objects[SEGNUM][i].startY <= y && this.objects[SEGNUM][i].endY >= y && this.objects[SEGNUM][i].startX === x)) &&
+            (i !== j)) {
+            indexList.push(i);
+        }
+    }
+    return indexList;
+};
+
+CustomSketch.prototype.wireConnect = function (wire) {
+    let indexList = [];
+    for (let i = 0; i < this.objects[SEGNUM].length; i++) {
+        if (wire.direction === 0 && this.objects[SEGNUM][i].direction === 1) {
+            if ((this.objects[SEGNUM][i].startY <= wire.startY && this.objects[SEGNUM][i].endY === wire.startY && this.objects[SEGNUM][i].startX >= wire.startX && this.objects[SEGNUM][i].startX <= wire.endX) ||
+                (this.objects[SEGNUM][i].startY === wire.startY && this.objects[SEGNUM][i].endY >= wire.startY && this.objects[SEGNUM][i].startX >= wire.startX && this.objects[SEGNUM][i].startX <= wire.endX) ||
+                (this.objects[SEGNUM][i].startY <= wire.startY && this.objects[SEGNUM][i].endY >= wire.startY && this.objects[SEGNUM][i].startX >= wire.startX && this.objects[SEGNUM][i].startX === wire.endX) ||
+                (this.objects[SEGNUM][i].startY <= wire.startY && this.objects[SEGNUM][i].endY >= wire.startY && this.objects[SEGNUM][i].startX === wire.startX && this.objects[SEGNUM][i].startX <= wire.endX)) {
                 indexList.push(i);
             }
-        }
-        if (this.objects[SEGNUM][i].startX === x && this.objects[SEGNUM][i].startY === y) {
-            if (i !== j) {
+        } else if (wire.direction === 1 && this.objects[SEGNUM][i].direction === 0) {
+            if ((wire.startY <= this.objects[SEGNUM][i].startY && wire.endY === this.objects[SEGNUM][i].startY && wire.startX >= this.objects[SEGNUM][i].startX && wire.startX <= this.objects[SEGNUM][i].endX) ||
+                (wire.startY === this.objects[SEGNUM][i].startY && wire.endY >= this.objects[SEGNUM][i].startY && wire.startX >= this.objects[SEGNUM][i].startX && wire.startX <= this.objects[SEGNUM][i].endX) ||
+                (wire.startY <= this.objects[SEGNUM][i].startY && wire.endY >= this.objects[SEGNUM][i].startY && wire.startX >= this.objects[SEGNUM][i].startX && wire.startX === this.objects[SEGNUM][i].endX) ||
+                (wire.startY <= this.objects[SEGNUM][i].startY && wire.endY >= this.objects[SEGNUM][i].startY && wire.startX === this.objects[SEGNUM][i].startX && wire.startX <= this.objects[SEGNUM][i].endX)) {
                 indexList.push(i);
             }
         }
@@ -223,111 +242,73 @@ CustomSketch.prototype.wirePoints = function (x, y, j) {
     return indexList;
 };
 
-/*
-    Finds connected wires and orders them in groups of segments
-*/
+
+CustomSketch.prototype.listConpoints = function (x1, y1, x2, y2) {
+    let cps = [];
+    if (y1 === y2) {
+        for (let i = 0; i < this.objects[CPNUM].length; i++) {
+            if (this.objects[CPNUM][i].x > x1 && this.objects[CPNUM][i].x < x2 && this.objects[CPNUM][i].y === y1) {
+                cps.push(i);
+            }
+        }
+    } else {
+        for (let i = 0; i < this.objects[CPNUM].length; i++) {
+            if (this.objects[CPNUM][i].y > y1 && this.objects[CPNUM][i].y < y2 && this.objects[CPNUM][i].x === x1) {
+                cps.push(i);
+            }
+        }
+    }
+    return cps;
+};
+
+CustomSketch.prototype.wiresTrough = function (x, y, j) {
+    let indexList = [];
+    for (let i = 0; i < this.objects[SEGNUM].length; i++) {
+        if (((this.objects[SEGNUM][i].direction === 0 && this.objects[SEGNUM][i].endX < x && this.objects[SEGNUM][i].startX > x && this.objects[SEGNUM][i].startY === y) ||
+            (this.objects[SEGNUM][i].direction === 1 && this.objects[SEGNUM][i].endY < y && this.objects[SEGNUM][i].startY > y && this.objects[SEGNUM][i].startX === x) ||
+            (this.objects[SEGNUM][i].direction === 0 && this.objects[SEGNUM][i].startX < x && this.objects[SEGNUM][i].endX > x && this.objects[SEGNUM][i].startY === y) ||
+            (this.objects[SEGNUM][i].direction === 1 && this.objects[SEGNUM][i].startY < y && this.objects[SEGNUM][i].endY > y && this.objects[SEGNUM][i].startX === x)) &&
+            (i !== j)) {
+            indexList.push(i);
+        }
+    }
+    return indexList;
+};
+
 CustomSketch.prototype.parseGroups = function () {
     this.traced = [];
     this.groups = [];
     for (let i = 0; i < this.objects[SEGNUM].length; i++) {
-        if (this.traced.indexOf(i) < 0) {
-            this.exploreGroup(i);
+        if (this.traced.indexOf(i) < 0) { // If the segment wasn't included in a group yet
+            this.exploreGroup(i); // Explore a new group starting at this segment
         }
     }
 };
 
-/*
-    Explores one part of the graph
-    j: Start segment
-*/
-
-CustomSketch.prototype.exploreGroup = function (j) {
+CustomSketch.prototype.exploreGroup = function (wire) {
     this.groups.push(new Group());
-    this.exGroup(j, this.groups.length - 1);
+    this.exGroup(wire, this.groups.length - 1);
 };
 
-/*
-    Recursive wire traversing algorithm
-*/
 CustomSketch.prototype.exGroup = function (j, g) {
-    if (this.traced.indexOf(j) > 0) {
-        return;
-    }
-    this.groups[g].addSegment(this.objects[SEGNUM][j]);
     this.objects[SEGNUM][j].setGroup(g);
+    this.groups[g].addSegment(this.objects[SEGNUM][j]);
     this.traced.push(j);
 
-    if (this.objects[SEGNUM][j].parentStart !== null) {
-        if (this.objects[SEGNUM][j].startIO) {
-            this.groups[g].addOutput(this.objects[SEGNUM][j].parentStart, this.objects[SEGNUM][j].start);
-        } else {
-            this.groups[g].addInput(this.objects[SEGNUM][j].parentStart, this.objects[SEGNUM][j].start);
+    let connected = this.wireConnect(this.objects[SEGNUM][j]); // Gives all connected wires (no full crossings)
+
+    for (let elem of this.listConpoints(this.objects[SEGNUM][j].startX, this.objects[SEGNUM][j].startY, this.objects[SEGNUM][j].endX, this.objects[SEGNUM][j].endY)) {
+        this.objects[CPNUM][elem].setGroup(g);
+        let troughWire = this.wiresTrough(this.objects[CPNUM][elem].x, this.objects[CPNUM][elem].y, j);
+        if (troughWire.length === 1) {
+            connected.push(troughWire[0]);
         }
     }
 
-    if (this.objects[SEGNUM][j].parentEnd !== null) {
-        if (this.objects[SEGNUM][j].endIO) {
-            this.groups[g].addOutput(this.objects[SEGNUM][j].parentEnd, this.objects[SEGNUM][j].end);
-        } else {
-            this.groups[g].addInput(this.objects[SEGNUM][j].parentEnd, this.objects[SEGNUM][j].end);
-        }
-    }
-
-    let wp1 = this.wirePoints(this.objects[SEGNUM][j].startX, this.objects[SEGNUM][j].startY, j);
-    let wp2 = this.wirePoints(this.objects[SEGNUM][j].endX, this.objects[SEGNUM][j].endY, j);
-
-    let cp = this.isConPoint(this.objects[SEGNUM][j].startX, this.objects[SEGNUM][j].startY);
-
-    // If there are 3 segments connecting
-    if (wp1.length === 2) {
-        if (cp >= 0) {
-            this.objects[CPNUM][cp].setGroup(g);
-        }
-    } else if (wp1.length === 3) {
-        if (cp < 0) {
-            for (let k = 0; k < wp1.length; k++) {
-                if (this.objects[SEGNUM][wp1[k]].direction === this.objects[SEGNUM][j].direction) { // If they have the same direction
-                    let s = wp1[k];
-                    wp1 = []; // Only explore in this segment
-                    wp1.push(s);
-                }
-            }
-        } else { // else explore every segment
-            this.objects[CPNUM][cp].setGroup(g);
-        }
-    }
-
-    cp = this.isConPoint(this.objects[SEGNUM][j].endX, this.objects[SEGNUM][j].endY);
-
-    // Same thing for the other direction
-    if (wp2.length === 2) {
-        if (cp >= 0) {
-            this.objects[CPNUM][cp].setGroup(g);
-        }
-    } else if (wp2.length === 3) {
-        if (cp < 0) {
-            for (let k = 0; k < wp2.length; k++) {
-                if (this.objects[SEGNUM][wp2[k]].direction === this.objects[SEGNUM][j].direction) { // If they have the same direction
-                    let s = wp2[k];
-                    wp2 = []; // Only explore in this segment
-                    wp2.push(s);
-                }
-            }
-        } else { // else explore every segment
-            this.objects[CPNUM][cp].setGroup(g);
-        }
-    }
-
-    // Trace the remaining segments recursivly
-    for (let i = 0; i < wp1.length; i++) {
-        if (this.traced.indexOf(wp1[i]) < 0) {
-            this.exGroup(wp1[i], g);
-        }
-    }
-
-    for (let i = 0; i < wp2.length; i++) {
-        if (this.traced.indexOf(wp2[i]) < 0) {
-            this.exGroup(wp2[i], g);
+    // Trace the remaining wires recursivly
+    for (let i = 0; i < connected.length; i++) {
+        if (this.traced.indexOf(connected[i]) < 0) {
+            this.exGroup(connected[i], g);
         }
     }
 };
@@ -336,143 +317,60 @@ CustomSketch.prototype.exGroup = function (j, g) {
     Integrates all sketch elements into the wire groups
 */
 CustomSketch.prototype.integrateElements = function () {
-    for (let h = 0; h < this.groups.length; h++) {
-        for (let i = 0; i < this.groups[h].segments.length; i++) {
-            for (let j = 0; j < this.objects[GATENUM].length; j++) {
-                for (let k = 0; k < this.objects[GATENUM][j].outputCount; k++) {
-                    if (this.objects[GATENUM][j].pointInOutput(k, this.groups[h].segments[i].startX, this.groups[h].segments[i].startY)) {
-                        this.groups[h].segments[i].setStart(1, this.objects[GATENUM][j], k);
-                    }
-                    if (this.objects[GATENUM][j].pointInOutput(k, this.groups[h].segments[i].endX, this.groups[h].segments[i].endY)) {
-                        this.groups[h].segments[i].setEnd(1, this.objects[GATENUM][j], k);
-                    }
-                }
-                for (let k = 0; k < this.objects[GATENUM][j].inputCount; k++) {
-                    if (this.objects[GATENUM][j].pointInInput(k, this.groups[h].segments[i].startX, this.groups[h].segments[i].startY)) {
-                        this.groups[h].segments[i].setStart(0, this.objects[GATENUM][j], k);
-                    }
-                    if (this.objects[GATENUM][j].pointInInput(k, this.groups[h].segments[i].endX, this.groups[h].segments[i].endY)) {
-                        this.groups[h].segments[i].setEnd(0, this.objects[GATENUM][j], k);
-                    }
-                }
+    for (let j = 0; j < this.objects[GATENUM].length; j++) {
+        for (let k = 0; k < this.objects[GATENUM][j].outputCount; k++) {
+            let outputWires = this.wirePoints(this.objects[GATENUM][j].outputClickBoxes[k].x, this.objects[GATENUM][j].outputClickBoxes[k].y, -1);
+            if (outputWires.length > 0) {
+                this.groups[this.objects[SEGNUM][outputWires[0]].group].addOutput(this.objects[GATENUM][j], k);
             }
-            for (let j = 0; j < this.objects[CUSTNUM].length; j++) {
-                for (let k = 0; k < this.objects[CUSTNUM][j].outputCount; k++) {
-                    if (this.objects[CUSTNUM][j].pointInOutput(k, this.groups[h].segments[i].startX, this.groups[h].segments[i].startY)) {
-                        this.groups[h].segments[i].setStart(1, this.objects[CUSTNUM][j], k);
-                    }
-                    if (this.objects[CUSTNUM][j].pointInOutput(k, this.groups[h].segments[i].endX, this.groups[h].segments[i].endY)) {
-                        this.groups[h].segments[i].setEnd(1, this.objects[CUSTNUM][j], k);
-                    }
-                }
-                for (let k = 0; k < this.objects[CUSTNUM][j].inputCount; k++) {
-                    if (this.objects[CUSTNUM][j].pointInInput(k, this.groups[h].segments[i].startX, this.groups[h].segments[i].startY)) {
-                        this.groups[h].segments[i].setStart(0, this.objects[CUSTNUM][j], k);
-                    }
-                    if (this.objects[CUSTNUM][j].pointInInput(k, this.groups[h].segments[i].endX, this.groups[h].segments[i].endY)) {
-                        this.groups[h].segments[i].setEnd(0, this.objects[CUSTNUM][j], k);
-                    }
-                }
-            }
-            for (let j = 0; j < this.objects[INPNUM].length; j++) {
-                if (this.objects[INPNUM][j].pointInOutput(null, this.groups[h].segments[i].startX, this.groups[h].segments[i].startY)) {
-                    this.groups[h].segments[i].setStart(1, this.objects[INPNUM][j], 0);
-                }
-                if (this.objects[INPNUM][j].pointInOutput(null, this.groups[h].segments[i].endX, this.groups[h].segments[i].endY)) {
-                    this.groups[h].segments[i].setEnd(1, this.objects[INPNUM][j], 0);
-                }
-            }
-            for (let j = 0; j < this.objects[OUTPNUM].length; j++) {
-                if (this.objects[OUTPNUM][j].pointInInput(null, this.groups[h].segments[i].startX, this.groups[h].segments[i].startY)) {
-                    this.groups[h].segments[i].setStart(0, this.objects[OUTPNUM][j], 0);
-                }
-                if (this.objects[OUTPNUM][j].pointInInput(null, this.groups[h].segments[i].endX, this.groups[h].segments[i].endY)) {
-                    this.groups[h].segments[i].setEnd(0, this.objects[OUTPNUM][j], 0);
-                }
-            }
-            for (let j = 0; j < this.objects[DINUM].length; j++) { // For all diodes
-                if ((this.groups[h].segments[i].startX === this.objects[DINUM][j].x) && (this.groups[h].segments[i].startY === this.objects[DINUM][j].y)) { // If there's a diode in the segment start
-                    if (this.groups[h].segments[i].startX === this.groups[h].segments[i].endX) { // if the segment is vertical
-                        let s = this.segmentStartsIn(this.groups[h].segments[i].startX, this.groups[h].segments[i].startY); // Get the segment that starts in x,y or -1
-                        let t = this.segmentEndsIn(this.groups[h].segments[i].startX, this.groups[h].segments[i].startY); // Get the segment that ends in x,y or -1
-                        if (s >= 0) { // if a horizontal segment exists
-                            if (this.objects[SEGNUM][s].startY === this.objects[SEGNUM][s].endY) { // If the segment is horizontal
-                                this.objects[DINUM][j].setGroups(this.objects[SEGNUM][s].group, h); // Set the diode groups
-                            }
-                        } else if (t >= 0) {
-                            if (this.objects[SEGNUM][t].startY === this.objects[SEGNUM][t].endY) { // If the segment is horizontal
-                                this.objects[DINUM][j].setGroups(this.objects[SEGNUM][t].group, h); // Set the diode groups
-                            }
-                        }
-
-                    } else if (this.groups[h].segments[i].startY === this.groups[h].segments[i].endY) { // if the segment is horizontal
-                        let s = this.segmentStartsIn(this.groups[h].segments[i].startX, this.groups[h].segments[i].startY); // Get the segment that starts in x,y or -1
-                        let t = this.segmentEndsIn(this.groups[h].segments[i].startX, this.groups[h].segments[i].startY); // Get the segment that ends in x,y or -1
-                        if (s >= 0) {
-                            if (this.objects[SEGNUM][s].startX === this.objects[SEGNUM][s].endX) { // If the segment is vertical
-                                this.objects[DINUM][j].setGroups(h, this.objects[SEGNUM][s].group); // Set the diode groups
-                            }
-                        } else if (t >= 0) {
-                            if (this.objects[SEGNUM][t].startX === this.objects[SEGNUM][t].endX) { // If the segment is vertical
-                                this.objects[DINUM][j].setGroups(h, this.objects[SEGNUM][t].group); // Set the diode groups
-                            }
-                        }
-                    }
-                }
-                if ((this.groups[h].segments[i].endX === this.objects[DINUM][j].x) && (this.groups[h].segments[i].endY === this.objects[DINUM][j].y)) { // If there's a diode in the segment end
-                    if (this.groups[h].segments[i].startX === this.groups[h].segments[i].endX) { // if it's vertical
-                        let s = this.segmentStartsIn(this.groups[h].segments[i].endX, this.groups[h].segments[i].endY); // Get the segment that starts in x,y or -1
-                        let t = this.segmentEndsIn(this.groups[h].segments[i].endX, this.groups[h].segments[i].endY); // Get the segment that ends in x,y or -1
-                        if (s >= 0) { // if a horizontal segment exists
-                            if (this.objects[SEGNUM][s].startY === this.objects[SEGNUM][s].endY) { // If the segment is horizontal
-                                this.objects[DINUM][j].setGroups(this.objects[SEGNUM][s].group, h); // Set the diode groups
-                            }
-                        } else if (t >= 0) {
-                            if (this.objects[SEGNUM][t].startY === this.objects[SEGNUM][t].endY) { // If the segment is horizontal
-                                this.objects[DINUM][j].setGroups(this.objects[SEGNUM][t].group, h); // Set the diode groups
-                            }
-                        }
-                    } else if (this.groups[h].segments[i].startY === this.groups[h].segments[i].endY) { // if the segment is horizontal
-                        let s = this.segmentStartsIn(this.groups[h].segments[i].endX, this.groups[h].segments[i].endY); // Get the segment that starts in x,y or -1
-                        let t = this.segmentEndsIn(this.groups[h].segments[i].endX, this.groups[h].segments[i].endY); // Get the segment that ends in x,y or -1
-                        if (s >= 0) {
-                            if (this.objects[SEGNUM][s].startX === this.objects[SEGNUM][s].endX) { // If the segment is vertical
-                                this.objects[DINUM][j].setGroups(h, this.objects[SEGNUM][s].group); // Set the diode groups
-                            }
-                        } else if (t >= 0) {
-                            if (this.objects[SEGNUM][t].startX === this.objects[SEGNUM][t].endX) { // If the segment is vertical
-                                this.objects[DINUM][j].setGroups(h, this.objects[SEGNUM][t].group); // Set the diode groups
-                            }
-                        }
-                    }
-                }
+        }
+        for (let k = 0; k < this.objects[GATENUM][j].inputCount; k++) {
+            let inputWires = this.wirePoints(this.objects[GATENUM][j].inputClickBoxes[k].x, this.objects[GATENUM][j].inputClickBoxes[k].y, -1);
+            if (inputWires.length > 0) {
+                this.groups[this.objects[SEGNUM][inputWires[0]].group].addInput(this.objects[GATENUM][j], k);
             }
         }
     }
-};
 
-/*
-    Returns the number of the segment starting in the given coordinates, or -1
-*/
-CustomSketch.prototype.segmentStartsIn = function (x, y) {
-    for (let i = 0; i < this.objects[SEGNUM].length; i++) {
-        if (this.objects[SEGNUM][i].startX === x && this.objects[SEGNUM][i].startY === y) {
-            return i;
+    for (let j = 0; j < this.objects[CUSTNUM].length; j++) {
+        for (let k = 0; k < this.objects[CUSTNUM][j].outputCount; k++) {
+            let outputWires = this.wirePoints(this.objects[CUSTNUM][j].outputClickBoxes[k].x, this.objects[CUSTNUM][j].outputClickBoxes[k].y, -1);
+            if (outputWires.length > 0) {
+                this.groups[this.objects[SEGNUM][outputWires[0]].group].addOutput(this.objects[CUSTNUM][j], k);
+            }
+        }
+        for (let k = 0; k < this.objects[CUSTNUM][j].inputCount; k++) {
+            let inputWires = this.wirePoints(this.objects[CUSTNUM][j].inputClickBoxes[k].x, this.objects[CUSTNUM][j].inputClickBoxes[k].y, -1);
+            if (inputWires.length > 0) {
+                this.groups[this.objects[SEGNUM][inputWires[0]].group].addInput(this.objects[CUSTNUM][j], k);
+            }
         }
     }
-    return -1;
-};
 
-/*
-    Returns the number of the segment ending in the given coordinates, or -1
-*/
-CustomSketch.prototype.segmentEndsIn = function (x, y) {
-    for (let i = 0; i < this.objects[SEGNUM].length; i++) {
-        if (this.objects[SEGNUM][i].endX === x && this.objects[SEGNUM][i].endY === y) {
-            return i;
+    for (let j = 0; j < this.objects[INPNUM].length; j++) {
+        let outputWires = this.wirePoints(this.objects[INPNUM][j].clickBox.x, this.objects[INPNUM][j].clickBox.y, -1);
+        if (outputWires.length > 0) {
+            this.groups[this.objects[SEGNUM][outputWires[0]].group].addOutput(this.objects[INPNUM][j], 0);
         }
     }
-    return -1;
+
+    for (let j = 0; j < this.objects[OUTPNUM].length; j++) {
+        let inputWires = this.wirePoints(this.objects[OUTPNUM][j].clickBox.x, this.objects[OUTPNUM][j].clickBox.y, -1);
+        if (inputWires.length > 0) {
+            this.groups[this.objects[SEGNUM][inputWires[0]].group].addInput(this.objects[OUTPNUM][j], 0);
+        }
+    }
+
+    for (let j = 0; j < this.objects[DINUM].length; j++) {
+        let diodeWires = this.wiresTrough(this.objects[DINUM][j].clickBox.x, this.objects[DINUM][j].clickBox.y, -1);
+        if (diodeWires.length > 1) {
+            if (this.objects[SEGNUM][diodeWires[0]].direction === 0 && this.objects[SEGNUM][diodeWires[1]].direction === 1) {
+                this.objects[DINUM][j].setGroups(this.objects[SEGNUM][diodeWires[0]].group, this.objects[SEGNUM][diodeWires[1]].group);
+            } else if (this.objects[SEGNUM][diodeWires[0]].direction === 1 && this.objects[SEGNUM][diodeWires[1]].direction === 0) {
+                this.objects[DINUM][j].setGroups(this.objects[SEGNUM][diodeWires[1]].group, this.objects[SEGNUM][diodeWires[0]].group);
+            }
+        }
+    }
 };
 
 /*
@@ -485,7 +383,6 @@ CustomSketch.prototype.setSimRunning = function (simRunning) {
         this.parsed = true;
         this.parseGroups();
         this.integrateElements();
-        this.parseGroups();
     } else {
         for (let i = 0; i < this.objects[GATENUM].length; i++) {
             this.objects[GATENUM][i].shutdown();
