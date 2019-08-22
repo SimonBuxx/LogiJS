@@ -254,20 +254,13 @@ function loadCustomSketches() {
     if (queue.length > 0) {
         loadNext();
     } else {
-        loading = false;
-        endSimulation(false);
-        simButton.elt.disabled = false;
-        saveButton.elt.disabled = false;
+        setLoading(false);
     }
 }
 
 function loadNext() {
     if (queue.length <= next) {
-        loading = false;
-        endSimulation(false);
-        simButton.elt.disabled = false;
-        saveButton.elt.disabled = false;
-        reDraw();
+        setLoading(false);
     } else {
         loadCustomFile(queue[next][0], queue[next][1], queue[next][2]);
         next++;

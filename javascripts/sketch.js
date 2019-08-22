@@ -858,9 +858,10 @@ function setUnactive() {
 }
 
 function deleteClicked() {
+    // If the button was clicked at the end of a select process
     if (ctrlMode === 'select' && selectMode === 'end') {
         setActive(propertiesButton);
-        setPropMode(true);
+        setPropMode(true); // The select process is finished, go back to prop mode
         ctrlMode = 'none';
         selectMode = 'end';
         showSClickBox = false;
@@ -896,8 +897,12 @@ function deleteClicked() {
                 delOutputs[0].push(selection[i]);
                 delOutputs[1].push(outputs.indexOf(selection[i]));
             }
+            else if (selection[i] instanceof SegmentDisplay) {
+                delSegDisplays[0].push(selection[i]);
+                delSegDisplays[1].push(segDisplays.indexOf(selection[i]));
+            }
             // Filtering out wires and segments and pushing them into their arrays
-            else if (selection[i] instanceof Wire) {
+            /*else if (selection[i] instanceof Wire) {
                 // The last selection[] element is the # of wires, therefore
                 // all elements before that index are wires, the rest are segments
                 if (i < selection[selection.length - 1]) {
@@ -908,11 +913,7 @@ function deleteClicked() {
                     delSegments[0].push(selection[i]);
                     delSegments[1].push(segIndizees.pop());
                 }
-            }
-            else if (selection[i] instanceof SegmentDisplay) {
-                delSegDisplays[0].push(selection[i]);
-                delSegDisplays[1].push(segDisplays.indexOf(selection[i]));
-            }
+            }*/
         }
         for (let j = delGates[1].length - 1; j >= 0; j--) {
             gates.splice(delGates[1][j], 1);
@@ -929,14 +930,14 @@ function deleteClicked() {
         for (let j = delOutputs[1].length - 1; j >= 0; j--) {
             outputs.splice(delOutputs[1][j], 1);
         }
-        for (let j = delWires[1].length - 1; j >= 0; j--) {
+        /*for (let j = delWires[1].length - 1; j >= 0; j--) {
             //console.log('Deleting wire No. ' + delWires[1][j]);
             wires.splice(delWires[1][j], 1);
         }
         for (let j = delSegments[1].length - 1; j >= 0; j--) {
             //console.log('Deleting segment No. ' + delSegments[1][j]);
             segments.splice(delSegments[1][j], 1);
-        }
+        }*/
         for (let j = delSegDisplays[1].length - 1; j >= 0; j--) {
             segDisplays.splice(delSegDisplays[1][j], 1);
         }
@@ -944,7 +945,7 @@ function deleteClicked() {
         wireMode = 'none';
         lockElements = false;
         if (selection.length > 0) {
-            pushUndoAction('delSel', 0, [delGates.slice(0), delCustoms.slice(0), diodes.slice(0), delInputs.slice(0), delLabels.slice(0), delOutputs.slice(0), delWires.slice(0), delSegDisplays.slice(0), conpoints.slice(0), delSegments.slice(0)]);
+            pushUndoAction('delSel', 0, [_.cloneDeep(delGates), _.cloneDeep(delCustoms), _.cloneDeep(diodes), _.cloneDeep(delInputs), _.cloneDeep(delLabels), _.cloneDeep(delOutputs), _.cloneDeep(delWires), _.cloneDeep(delSegDisplays), _.cloneDeep(conpoints), _.cloneDeep(delSegments)]);
         }
         doConpoints();
     } else {
@@ -1495,6 +1496,10 @@ function setSimButtonText(text) {
 function updateUndoButtons() {
     redoButton.elt.disabled = (actionRedo.length === 0);
     undoButton.elt.disabled = (actionUndo.length === 0);
+    if (loading) {
+        redoButton.elt.disabled = true;
+        undoButton.elt.disabled = true;
+    }
 }
 
 /*
@@ -2002,6 +2007,19 @@ function showNegationPreview(clickBox, isOutput, direction, isTop) {
     } else if (direction === 3) {
         ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy - offset)), 10 * transform.zoom, 10 * transform.zoom);
     }
+}
+
+function setLoading(l) {
+    loading = l;
+    disableButtons(l);
+    simButton.elt.disabled = l;
+    saveButton.elt.disabled = l;
+    updateUndoButtons();
+    if (l) {
+        undoButton.elt.disabled = true;
+        redoButton.elt.disabled = true;
+    }
+    reDraw();
 }
 
 /*

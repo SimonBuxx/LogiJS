@@ -9,19 +9,19 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'addCust':
-                let toDelete = null;
+                let toDelete = -1;
                 for (let i = customs.length - 1; i >= 0; i--) {
                     if (customs[i].visible) {
-                        toDelete = customs[i];
+                        toDelete = i;
                         break;
                     }
                 }
                 for (let i = customs.length - 1; i >= 0; i--) {
-                    if (customs[i].pid === toDelete.id) {
+                    if (customs[i].pid === customs[toDelete].id) {
                         customs.splice(i, 1);
                     }
                 }
-                customs.splice(customs.indexOf(toDelete));
+                customs.splice(toDelete, 1);
                 actionRedo.push(act);
                 break;
             case 'addOut':
@@ -76,7 +76,6 @@ function undo() {
                 break;
             case 'delCust':
                 customs.splice(act.actionObject[1], 0, act.actionObject[0][0]);
-                //customs[act.actionObject[1]].loaded = false;
                 loadCustomFile(customs[act.actionObject[1]].filename, act.actionObject[1], act.actionObject[1]);
                 actionRedo.push(act);
                 break;
@@ -101,7 +100,7 @@ function undo() {
                 conpoints.push(act.actionObject[0]);
                 actionRedo.push(act);
                 doConpoints();
-                break;    
+                break;
             case 'delLabel':
                 labels.push(act.actionObject[0]);
                 actionRedo.push(act);
@@ -121,12 +120,12 @@ function undo() {
                 for (let i = 0; i < act.actionObject[0][0].length; i++) {
                     gates.splice(act.actionObject[0][1][i], 0, act.actionObject[0][0][i]);
                 }
+                setLoading(true);
                 for (let i = 0; i < act.actionObject[1][0].length; i++) {
                     customs.splice(act.actionObject[1][1][i], 0, act.actionObject[1][0][i]);
-                    //customs[act.actionObject[1][1][i]].loaded = false;
+                    customs[act.actionObject[1][1][i]].parsed = false;
                     loadCustomFile(customs[act.actionObject[1][1][i]].filename, act.actionObject[1][1][i], act.actionObject[1][1][i]);
                 }
-                diodes = act.actionObject[2].slice(0);
                 for (let i = 0; i < act.actionObject[3][0].length; i++) {
                     inputs.splice(act.actionObject[3][1][i], 0, act.actionObject[3][0][i]);
                 }
@@ -136,19 +135,18 @@ function undo() {
                 for (let i = 0; i < act.actionObject[5][0].length; i++) {
                     outputs.splice(act.actionObject[5][1][i], 0, act.actionObject[5][0][i]);
                 }
-                for (let i = 0; i < act.actionObject[6][0].length; i++) {
-                    wires.splice(act.actionObject[6][1][i], 0, act.actionObject[6][0][i]);
-                }
                 for (let i = 0; i < act.actionObject[7][0].length; i++) {
                     segDisplays.splice(act.actionObject[7][1][i], 0, act.actionObject[7][0][i]);
                 }
-                conpoints = act.actionObject[8].slice(0);
-                for (let i = 0; i < act.actionObject[9][0].length; i++) {
+                /*for (let i = 0; i < act.actionObject[6][0].length; i++) {
+                    wires.splice(act.actionObject[6][1][i], 0, act.actionObject[6][0][i]);
+                }*/
+                diodes = _.cloneDeep(act.actionObject[2]);
+                conpoints = _.cloneDeep(act.actionObject[8]);
+                /*for (let i = 0; i < act.actionObject[9][0].length; i++) {
                     segments.splice(act.actionObject[9][1][i], 0, act.actionObject[9][0][i]);
-                }
+                }*/
                 doConpoints();
-                act.actionObject[2] = diodes.slice(0);
-                act.actionObject[8] = conpoints.slice(0);
                 actionRedo.push(act);
                 break;
             case 'reWire':
@@ -175,7 +173,7 @@ function redo() {
                 break;
             case 'addCust':
                 customs.push(act.actionObject);
-                //customs[customs.length - 1].loaded = false;
+                customs[customs.length - 1].parsed = false;
                 loadCustomFile(customs[customs.length - 1].filename, customs.length - 1, customs.length - 1);
                 actionUndo.push(act);
                 break;
@@ -284,10 +282,10 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'delSel': // TODO
-                /*for (let i = act.actionObject[0][1].length - 1; i >= 0; i--) {
+                for (let i = act.actionObject[0][0].length - 1; i >= 0; i--) {
                     gates.splice(act.actionObject[0][1][i], 1);
                 }
-                for (let i = act.actionObject[1][1].length - 1; i >= 0; i--) {
+                for (let i = act.actionObject[1][0].length - 1; i >= 0; i--) {
                     let toDelete = act.actionObject[1][0][i];
                     for (let j = customs.length - 1; j >= 0; j--) {
                         if (customs[j].pid === toDelete.id) {
@@ -296,53 +294,27 @@ function redo() {
                     }
                     customs.splice(customs.indexOf(toDelete), 1);
                 }
-                diodes = act.actionObject[2].slice(0);
-                for (let i = act.actionObject[3][1].length - 1; i >= 0; i--) {
+                for (let i = act.actionObject[3][0].length - 1; i >= 0; i--) {
                     inputs.splice(act.actionObject[3][1][i], 1);
                 }
-                for (let i = act.actionObject[4][1].length - 1; i >= 0; i--) {
+                for (let i = act.actionObject[4][0].length - 1; i >= 0; i--) {
                     labels.splice(act.actionObject[4][1][i], 1);
                 }
-                for (let i = act.actionObject[5][1].length - 1; i >= 0; i--) {
+                for (let i = act.actionObject[5][0].length - 1; i >= 0; i--) {
                     outputs.splice(act.actionObject[5][1][i], 1);
-                }*/
-                //console.log(act.actionObject);
-                //console.log(wires);
-                for (let i = act.actionObject[6][1].length - 1; i >= 0; i--) {
-                    //wires.splice(wires.indexOf(act.actionObject[6][0][0][0]), 1);
-                    // Splitting the wires into individual segments
-                    /*let segSelection = [];
-                    if (act.actionObject[6][0][j].startX === act.actionObject[6][0][j].endX) {
-                        // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-                        for (let k = 0; k < (act.actionObject[6][0][j].endY - act.actionObject[6][0][j].startY) / GRIDSIZE; k++) {
-                            segSelection.push(new WSeg(1, act.actionObject[6][0][j].startX, act.actionObject[6][0][j].startY + k * GRIDSIZE,
-                                false, transform));
-                        }
-                    } else if (act.actionObject[6][0][j].startY === act.actionObject[6][0][j].endY) {
-                        // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-                        for (let k = 0; k < (act.actionObject[6][0][j].endX - act.actionObject[6][0][j].startX) / GRIDSIZE; k++) {
-                            segSelection.push(new WSeg(0, act.actionObject[6][0][j].startX + k * GRIDSIZE, act.actionObject[6][0][j].startY,
-                                false, transform));
-                        }
-                    }
-                    // Pushing the individual segments and deleting them from the segments array
-                    for (let k = 0; k < segSelection.length; k++) {
-                        act.actionObject[6][0].push(segSelection[k]);
-                        segments.splice(segments.indexOf(segSelection[k]), 1);
-                    }*/
-                    wires.splice(act.actionObject[6][1][i]);
                 }
-                //console.log(wires);
-                /*for (let i = act.actionObject[7][1].length - 1; i >= 0; i--) {
+                for (let i = act.actionObject[7][0].length - 1; i >= 0; i--) {
                     segDisplays.splice(act.actionObject[7][1][i], 1);
                 }
-                conpoints = act.actionObject[8].slice(0);*/
-                for (let i = act.actionObject[9][1].length - 1; i >= 0; i--) {
-                    segments.splice(act.actionObject[9][1][i]);
-                }
-                //doConpoints();
-                //act.actionObject[2] = diodes.slice(0);
-                //act.actionObject[8] = conpoints.slice(0);
+                /*for (let i = 0; i < act.actionObject[6][0].length; i++) {
+                    wires.splice(act.actionObject[6][1][i], 0, act.actionObject[6][0][i]);
+                }*/
+                diodes = act.actionObject[2].slice(0);
+                conpoints = act.actionObject[8].slice(0);
+                /*for (let i = 0; i < act.actionObject[9][0].length; i++) {
+                    segments.splice(act.actionObject[9][1][i], 0, act.actionObject[9][0][i]);
+                }*/
+                doConpoints();
                 actionUndo.push(act);
                 break;
             case 'reWire':
