@@ -28,7 +28,6 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetica Neu
 .top-menu {
     min-height:110px;
     top: 0;
-    background-color: rgb(50, 50, 50);
     z-index: 5000;
     width:100%;
 }
@@ -57,6 +56,23 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetica Neu
     height: 100%;
     overflow-x: hidden;
 }
+
+#blur_dark {
+    background: url('../images/background_dark.png') no-repeat center center; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+	top: -10px;
+    z-index: -10;
+    height: 100%;
+    overflow-x: hidden;
+}
+
 #carousel {
     margin-top: 200px;
     min-width: 400px;
@@ -93,8 +109,22 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, Helvetica Neu
     color:#ffffff;
 }
 
+.btn-green {
+    background-color: rgb(40, 180, 40);
+    border-bottom:2px solid black;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    color:#ffffff;
+}
+
 .btn-orange:hover, .btn-orange:focus, .btn-orange:active, .btn-orange.active, .open .dropdown-toggle.btn-orange {
-    background-color: rgb(210, 60, 60);
+    background-color: rgb(209, 71, 71);
+    color:#ffffff;
+}
+
+.btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
+    background-color: rgb(78, 208, 69);
     color:#ffffff;
 }
 
