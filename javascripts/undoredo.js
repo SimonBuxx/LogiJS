@@ -120,7 +120,9 @@ function undo() {
                 for (let i = 0; i < act.actionObject[0][0].length; i++) {
                     gates.splice(act.actionObject[0][1][i], 0, act.actionObject[0][0][i]);
                 }
-                setLoading(true);
+                if (act.actionObject[1][0].length >= 1) {
+                    setLoading(true);
+                }
                 for (let i = 0; i < act.actionObject[1][0].length; i++) {
                     customs.splice(act.actionObject[1][1][i], 0, act.actionObject[1][0][i]);
                     customs[act.actionObject[1][1][i]].parsed = false;
