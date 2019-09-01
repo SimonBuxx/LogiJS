@@ -51,12 +51,15 @@ function loadSketch(file) {
     next = 0;
     queue = [];
     loading = true;
+    loadFile = file;
     loadJSON('sketches/' + file, load, fileNotFoundError);
 }
 
 function fileNotFoundError() {
     // Change the site's title to the error message
     document.title = "Sketch not found! - LogiJS";
+    showMessage('Sketch not found!', 'Please use a local copy of LogiJS to open local files.');
+    setTimeout(function() {setLoading(false);}, 3000);
 }
 
 function load(loadData) {
@@ -161,6 +164,7 @@ function load(loadData) {
     Loads the sketch with filename file into custom object # num
 */
 function loadCustomFile(file, num, hlparent) {
+    loadFile = file;
     if (cachedFiles.indexOf(file) >= 0) {
         setTimeout(function () {
             loadCallback(cachedData[cachedFiles.indexOf(file)], num, hlparent);

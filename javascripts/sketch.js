@@ -79,6 +79,7 @@ let queue = [];
 let next = 0;
 
 let loading = false;
+let loadFile = '';
 
 let showTooltip = true;
 let negPreviewShown = false;
@@ -1683,7 +1684,7 @@ function reDraw() {
     }
 
     if (loading) {
-        showLoadingSymbol();
+        showMessage('Loading...', loadFile.split('.json')[0]);
     }
 }
 
@@ -1811,7 +1812,7 @@ function showTutorial() {
     }
 }
 
-function showLoadingSymbol() {
+function showMessage(msg, subline = '') {
     fill(0, 0, 0, 80);
     noStroke();
     rect(0, 0, window.width, window.height);
@@ -1825,7 +1826,9 @@ function showLoadingSymbol() {
     noStroke();
     textSize(30);
     textAlign(CENTER, CENTER);
-    text('Loading...', window.width / 2, window.height / 2);
+    text(msg, window.width / 2, window.height / 2);
+    textSize(20);
+    text(subline, window.width / 2, window.height / 2 + 30);
 }
 
 /*
@@ -2014,6 +2017,8 @@ function setLoading(l) {
     disableButtons(l);
     simButton.elt.disabled = l;
     saveButton.elt.disabled = l;
+    closeTutorialButton.elt.disabled = l;
+    nextStepButton.elt.disabled = l;
     updateUndoButtons();
     if (l) {
         undoButton.elt.disabled = true;
