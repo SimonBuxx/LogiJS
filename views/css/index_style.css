@@ -41,8 +41,34 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
     margin: 10px 0 0 0;
 }
 
+.username {
+    margin: 20px;
+    width: 300px;
+    font-size: 20px;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid black;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.password {
+    width: 300px;
+    margin: 20px;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 20px;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid black;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
 #blur {
-    background: url('../images/background.png') no-repeat center center; 
+    background: url('/images/background.png') no-repeat center center; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -58,7 +84,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 }
 
 #blur_dark {
-    background: url('../images/background_dark.png') no-repeat center center; 
+    background: url('/images/background_dark.png') no-repeat center center; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -81,7 +107,37 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
     background-color: rgba(50, 50, 50, 0.9);
 }
 
-#carousel p {
+#login_back {
+    margin-top: 200px;
+    max-width: 400px;
+    padding: 0;
+    height: 400px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: rgba(50, 50, 50, 0.9);
+}
+
+#dashboard_wc_back {
+    max-width: 61%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 0;
+    height: 65px;
+    background-color: rgba(50, 50, 50, 0.9);
+}
+
+#dashboard_item_back {
+    max-width: 61%;
+    margin-top: 25px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 20px;
+    height: 240px;
+    background-color: rgba(50, 50, 50, 0.9);
+}
+
+#carousel p, #login_back p {
     margin-bottom: 20px;
     line-height: 1.4;
     font-size: 21px;
@@ -134,13 +190,13 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 
 .nav > li > a:hover,
 .nav > li > a:focus {
-    background-color: rgb(200, 50, 50);
+    background-color: rgb(100, 100, 100);
     color:#fff;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-    background-color: rgb(200, 50, 50);
+    background-color: rgb(100, 100, 100);
     color:#fff;
 }
 

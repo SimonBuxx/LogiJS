@@ -1,0 +1,110 @@
+{
+  "caption": "testsheet_1",
+  "gates": [
+    {
+      "x": "120",
+      "y": "60",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "420",
+      "y": "90",
+      "colr": "1",
+      "lbl": "O"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "15",
+      "y": "75",
+      "lbl": "S1",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "15",
+      "y": "135",
+      "lbl": "S2",
+      "framecount": "0",
+      "clock": "false"
+    },
+    {
+      "x": "15",
+      "y": "195",
+      "istop": "true",
+      "lbl": "R",
+      "framecount": "0",
+      "clock": "true",
+      "speed": "48"
+    }
+  ],
+  "segments": [],
+  "wires": [
+    {
+      "x1": "60",
+      "y1": "120",
+      "y2": "150"
+    },
+    {
+      "x1": "30",
+      "y1": "150",
+      "x2": "60"
+    },
+    {
+      "x1": "60",
+      "y1": "120",
+      "x2": "120"
+    },
+    {
+      "x1": "360",
+      "y1": "90",
+      "x2": "420"
+    },
+    {
+      "x1": "180",
+      "y1": "90",
+      "x2": "300"
+    },
+    {
+      "x1": "30",
+      "y1": "90",
+      "x2": "120"
+    },
+    {
+      "x1": "210",
+      "y1": "120",
+      "x2": "300"
+    },
+    {
+      "x1": "210",
+      "y1": "120",
+      "y2": "210"
+    },
+    {
+      "x1": "30",
+      "y1": "210",
+      "x2": "210"
+    }
+  ],
+  "conpoints": [],
+  "diodes": [],
+  "customs": [
+    {
+      "x": "300",
+      "y": "60",
+      "direction": "0",
+      "filename": "\"rsNoWhobble.json\"",
+      "outputsInv": "[true]",
+      "inputsInv": "[]"
+    }
+  ],
+  "labels": [],
+  "segDisplays": []
+}

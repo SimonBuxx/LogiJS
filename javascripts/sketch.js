@@ -457,7 +457,7 @@ function setup() { // jshint ignore:line
     clockspeedSlider = createSlider(1, 60, 30, 1);
     clockspeedSlider.hide();
     clockspeedSlider.changed(newClockspeed);
-    clockspeedSlider.style('width', '178px');
+    clockspeedSlider.style('width', '180px');
     clockspeedSlider.style('margin', '5px');
     clockspeedSlider.elt.className = 'slider';
     clockspeedSlider.position(windowWidth - 195, 203);
@@ -516,14 +516,14 @@ function setup() { // jshint ignore:line
     // Input field for the file name
     textInput = createInput('');
     textInput.attribute('placeholder', 'New Sketch');
-    textInput.size(200, 16);
-    textInput.position(windowWidth - textInput.width - 206, 4);
+    textInput.size(195, 16);
+    textInput.position(windowWidth - 405, 4);
     textInput.elt.style.fontFamily = 'Open Sans';
     textInput.elt.className = "textInput";
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(windowWidth - textInput.width - 265, 4);
+    newButton.position(windowWidth - textInput.width - 259, 4);
     newButton.mousePressed(newClicked);
     newButton.elt.className = "button";
 
@@ -1818,10 +1818,13 @@ function showMessage(msg, subline = '') {
     rect(0, 0, window.width, window.height);
 
     fill(200, 50, 50);
-    stroke(50);
-    strokeWeight(3);
+    noStroke();
     rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150);
-
+    stroke(0);
+    strokeWeight(4);
+    strokeCap(SQUARE);
+    line(window.width / 2 - 300, window.height / 2 + 75, window.width / 2 + 300, window.height / 2 + 75);
+    strokeCap(ROUND);
     fill(255);
     noStroke();
     textSize(30);

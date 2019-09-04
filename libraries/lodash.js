@@ -1,3 +1,4 @@
+// jshint ignore: start
 /**
  * @license
  * Lodash <https://lodash.com/>

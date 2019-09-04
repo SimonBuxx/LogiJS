@@ -1,0 +1,599 @@
+{
+  "caption": "tutorial",
+  "gates": [
+    {
+      "x": "330",
+      "y": "2160",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"xor\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "210",
+      "y": "2490",
+      "direction": "3",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"or\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "420",
+      "y": "420",
+      "colr": "0"
+    },
+    {
+      "x": "240",
+      "y": "840",
+      "colr": "0"
+    },
+    {
+      "x": "210",
+      "y": "1200",
+      "colr": "0"
+    },
+    {
+      "x": "270",
+      "y": "1200",
+      "colr": "0"
+    },
+    {
+      "x": "330",
+      "y": "1200",
+      "colr": "0"
+    },
+    {
+      "x": "480",
+      "y": "2190",
+      "colr": "0"
+    },
+    {
+      "x": "510",
+      "y": "2490",
+      "colr": "0"
+    },
+    {
+      "x": "540",
+      "y": "2550",
+      "colr": "0"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "195",
+      "y": "405",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "195",
+      "y": "465",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "195",
+      "y": "705",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "195",
+      "y": "1575",
+      "framecount": "0",
+      "clock": "true",
+      "speed": "30"
+    },
+    {
+      "x": "195",
+      "y": "2175",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "195",
+      "y": "2235",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "165",
+      "y": "2475",
+      "framecount": "0",
+      "clock": "false"
+    }
+  ],
+  "segments": [],
+  "wires": [
+    {
+      "x1": "210",
+      "y1": "480",
+      "x2": "240"
+    },
+    {
+      "x1": "240",
+      "y1": "450",
+      "y2": "480"
+    },
+    {
+      "x1": "240",
+      "y1": "720",
+      "y2": "750"
+    },
+    {
+      "x1": "270",
+      "y1": "720",
+      "y2": "750"
+    },
+    {
+      "x1": "300",
+      "y1": "720",
+      "y2": "750"
+    },
+    {
+      "x1": "330",
+      "y1": "720",
+      "y2": "750"
+    },
+    {
+      "x1": "360",
+      "y1": "720",
+      "y2": "750"
+    },
+    {
+      "x1": "390",
+      "y1": "720",
+      "y2": "750"
+    },
+    {
+      "x1": "420",
+      "y1": "720",
+      "y2": "750"
+    },
+    {
+      "x1": "240",
+      "y1": "810",
+      "y2": "840"
+    },
+    {
+      "x1": "330",
+      "y1": "1590",
+      "x2": "360"
+    },
+    {
+      "x1": "360",
+      "y1": "1560",
+      "y2": "1590"
+    },
+    {
+      "x1": "240",
+      "y1": "2550",
+      "y2": "2580"
+    },
+    {
+      "x1": "240",
+      "y1": "2460",
+      "y2": "2490"
+    },
+    {
+      "x1": "330",
+      "y1": "2520",
+      "x2": "360"
+    },
+    {
+      "x1": "510",
+      "y1": "2460",
+      "y2": "2490"
+    },
+    {
+      "x1": "540",
+      "y1": "2520",
+      "y2": "2550"
+    },
+    {
+      "x1": "240",
+      "y1": "450",
+      "x2": "300"
+    },
+    {
+      "x1": "360",
+      "y1": "420",
+      "x2": "420"
+    },
+    {
+      "x1": "210",
+      "y1": "1140",
+      "y2": "1200"
+    },
+    {
+      "x1": "270",
+      "y1": "1140",
+      "y2": "1200"
+    },
+    {
+      "x1": "330",
+      "y1": "1140",
+      "y2": "1200"
+    },
+    {
+      "x1": "330",
+      "y1": "1620",
+      "x2": "390"
+    },
+    {
+      "x1": "390",
+      "y1": "1560",
+      "y2": "1620"
+    },
+    {
+      "x1": "210",
+      "y1": "1590",
+      "x2": "270"
+    },
+    {
+      "x1": "900",
+      "y1": "2490",
+      "y2": "2550"
+    },
+    {
+      "x1": "180",
+      "y1": "2580",
+      "x2": "240"
+    },
+    {
+      "x1": "330",
+      "y1": "2460",
+      "y2": "2520"
+    },
+    {
+      "x1": "330",
+      "y1": "1650",
+      "x2": "420"
+    },
+    {
+      "x1": "210",
+      "y1": "420",
+      "x2": "300"
+    },
+    {
+      "x1": "420",
+      "y1": "1560",
+      "y2": "1650"
+    },
+    {
+      "x1": "330",
+      "y1": "1680",
+      "x2": "450"
+    },
+    {
+      "x1": "450",
+      "y1": "1560",
+      "y2": "1680"
+    },
+    {
+      "x1": "420",
+      "y1": "2520",
+      "x2": "540"
+    },
+    {
+      "x1": "180",
+      "y1": "2490",
+      "y2": "2580"
+    },
+    {
+      "x1": "210",
+      "y1": "720",
+      "x2": "420"
+    },
+    {
+      "x1": "720",
+      "y1": "2490",
+      "x2": "900"
+    },
+    {
+      "x1": "240",
+      "y1": "2460",
+      "x2": "510"
+    }
+  ],
+  "conpoints": [
+    {
+      "x": "240",
+      "y": "720"
+    },
+    {
+      "x": "270",
+      "y": "720"
+    },
+    {
+      "x": "300",
+      "y": "720"
+    },
+    {
+      "x": "330",
+      "y": "720"
+    },
+    {
+      "x": "360",
+      "y": "720"
+    },
+    {
+      "x": "390",
+      "y": "720"
+    },
+    {
+      "x": "330",
+      "y": "2460"
+    }
+  ],
+  "diodes": [],
+  "customs": [
+    {
+      "x": "270",
+      "y": "1560",
+      "direction": "0",
+      "filename": "\"4BitCounter.json\"",
+      "outputsInv": "[]",
+      "inputsInv": "[]"
+    },
+    {
+      "x": "360",
+      "y": "2490",
+      "direction": "0",
+      "filename": "\"rsNoWhobble.json\"",
+      "outputsInv": "[]",
+      "inputsInv": "[]"
+    }
+  ],
+  "labels": [
+    {
+      "x": "90",
+      "y": "60",
+      "txt": "Welcome to LogiJS!"
+    },
+    {
+      "x": "90",
+      "y": "90",
+      "txt": "This sketch is designed to give you a brief introduction."
+    },
+    {
+      "x": "90",
+      "y": "180",
+      "txt": "1. Navigation"
+    },
+    {
+      "x": "120",
+      "y": "210",
+      "txt": "Use the scroll wheel to zoom the canvas."
+    },
+    {
+      "x": "120",
+      "y": "240",
+      "txt": "You can drag the canvas by holding the right mouse button."
+    },
+    {
+      "x": "90",
+      "y": "300",
+      "txt": "2. Basic objects"
+    },
+    {
+      "x": "120",
+      "y": "330",
+      "txt": "You can place gates, inputs and outputs by clicking the buttons on the left."
+    },
+    {
+      "x": "150",
+      "y": "360",
+      "txt": "Try it! Please add a gate of your choice to the circuit below."
+    },
+    {
+      "x": "120",
+      "y": "540",
+      "txt": "You can change the direction of the gate and the number of inputs"
+    },
+    {
+      "x": "120",
+      "y": "570",
+      "txt": "using the options in the bottom right corner or by using shortcuts:"
+    },
+    {
+      "x": "150",
+      "y": "600",
+      "txt": "1-9: Set the input number to this value, 0 for 10 inputs"
+    },
+    {
+      "x": "150",
+      "y": "630",
+      "txt": "Arrow keys for setting the gate direction (outputs face in the selected direction)"
+    },
+    {
+      "x": "150",
+      "y": "660",
+      "txt": "Try it! Place a gate with seven inputs in downwards direction in the sketch on the right."
+    },
+    {
+      "x": "120",
+      "y": "900",
+      "txt": "Switches, buttons and clocks are the three input elements in LogiJS."
+    },
+    {
+      "x": "150",
+      "y": "930",
+      "txt": "Switches: These are the simplest form of input, you can toggle them when the simulation is running."
+    },
+    {
+      "x": "150",
+      "y": "960",
+      "txt": "Buttons: Buttons are only high for a few milliseconds after pressing."
+    },
+    {
+      "x": "150",
+      "y": "990",
+      "txt": "Clocks: A clock is an input that toggles by itself with a given frequency."
+    },
+    {
+      "x": "180",
+      "y": "1020",
+      "txt": "To alter this frequency, click on \"Default\" in the top left corner or hit escape. You are now in \"Default\" mode."
+    },
+    {
+      "x": "180",
+      "y": "1050",
+      "txt": "Now, click on the clock element. A window is appearing in the bottom right, allowing you to alter the clock speed."
+    },
+    {
+      "x": "120",
+      "y": "1080",
+      "txt": "Try it! Please place a switch, a button and a clock on the wire ends in the sketch below."
+    },
+    {
+      "x": "120",
+      "y": "1260",
+      "txt": "Lamps: The standard output element"
+    },
+    {
+      "x": "150",
+      "y": "1290",
+      "txt": "Lamps are the circular element you see all over this sketch. "
+    },
+    {
+      "x": "150",
+      "y": "1320",
+      "txt": "They indicate if the wire they are connected to is high or low."
+    },
+    {
+      "x": "120",
+      "y": "1380",
+      "txt": "7-Segment displays: Showing binary numbers as decimal digits."
+    },
+    {
+      "x": "150",
+      "y": "1410",
+      "txt": "These are handy if you want to represent a binary bit vector in the decimal system."
+    },
+    {
+      "x": "150",
+      "y": "1440",
+      "txt": "Try it! Place a 7-segment display in the sketch below."
+    },
+    {
+      "x": "150",
+      "y": "1740",
+      "txt": "You can change the input width of the element in the bottom left. The number of displayed digits will alter accordingly."
+    },
+    {
+      "x": "150",
+      "y": "1770",
+      "txt": "By the way: The object above is a 4 bit counter that increases its binary output with every clock tick."
+    },
+    {
+      "x": "120",
+      "y": "1830",
+      "txt": "Labels: Adding text to the sketch"
+    },
+    {
+      "x": "150",
+      "y": "1860",
+      "txt": "Every bit of text you see in this sketch is a label. They are useful to comment on things and to organize your sketch."
+    },
+    {
+      "x": "150",
+      "y": "1890",
+      "txt": "You can set the text of the label in \"Default\" mode by clicking on it."
+    },
+    {
+      "x": "180",
+      "y": "1920",
+      "txt": "Try it! Place a label below and alter its text."
+    },
+    {
+      "x": "90",
+      "y": "2040",
+      "txt": "3. Adding wires"
+    },
+    {
+      "x": "120",
+      "y": "2070",
+      "txt": "Wires are a key element of LogiJS sketches. They are used to connect the elements in the sketch."
+    },
+    {
+      "x": "120",
+      "y": "2100",
+      "txt": "You can add wires in \"Default\" mode or in any add modes. Just drag with the left mouse button to create a new wire."
+    },
+    {
+      "x": "150",
+      "y": "2130",
+      "txt": "Try it! Connect the inputs and outputs in the sketch below to the gate."
+    },
+    {
+      "x": "90",
+      "y": "2310",
+      "txt": "4. Deleting elements"
+    },
+    {
+      "x": "120",
+      "y": "2340",
+      "txt": "You can delete elements and wires by entering the \"Delete\" mode by clicking the button in the top left."
+    },
+    {
+      "x": "120",
+      "y": "2370",
+      "txt": "Now you can click on any element you want to remove."
+    },
+    {
+      "x": "120",
+      "y": "2400",
+      "txt": "Deleting wires is just as easy as creating them. Just draw a line on the wire you want to delete."
+    },
+    {
+      "x": "150",
+      "y": "2430",
+      "txt": "Try it! Delete all elements and wires in the sketch below."
+    },
+    {
+      "x": "750",
+      "y": "2520",
+      "txt": "Delete me!"
+    },
+    {
+      "x": "120",
+      "y": "2610",
+      "txt": "Tipp: You can toggle between \"Delete\" and \"Default\" mode by hitting the space key."
+    },
+    {
+      "x": "90",
+      "y": "2670",
+      "txt": "5. Features in \"Default\" mode"
+    },
+    {
+      "x": "120",
+      "y": "2700",
+      "txt": "In \"Default\" mode, you can invert the in- and outputs of gates and other elements by clicking directly on them."
+    },
+    {
+      "x": "120",
+      "y": "2730",
+      "txt": "You can also add or remove diodes on any wire crossings by clicking on the crossing."
+    },
+    {
+      "x": "120",
+      "y": "2760",
+      "txt": "Diodes allow the connection in one direction, but not in the other."
+    }
+  ],
+  "segDisplays": [
+    {
+      "x": "570",
+      "y": "2460",
+      "inputCount": "4",
+      "inputsInv": "[false,false,false,false]"
+    }
+  ]
+}
