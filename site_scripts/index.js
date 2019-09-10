@@ -8,11 +8,13 @@ const sharp = require('sharp');
 const glob = require('glob');
 const app = express();
 
+const PORT = process.env.PORT || 7555;
+
 let jwt_handler = require('./jwt_module.js');
 let user_data = require('./user_data.js');
 
-let server = app.listen(7555, () => {
-    console.log('Server running on http://localhost:7555');
+let server = app.listen(PORT, () => {
+    console.log('Server running on port ' + PORT);
 });
 
 const io = require('socket.io')(server);
