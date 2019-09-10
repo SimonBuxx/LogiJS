@@ -39,7 +39,7 @@ head
             li.active
               a(href='#') IMPRINT
             li
-              if authenticated
+              if user !== ''
                 a.internal-link(rel='nofollow', href='/dashboard', target='_parent', style="margin-left: 30px; color: rgb(40, 180, 40);") #{user.toUpperCase()}
               else
                 a.internal-link(rel='nofollow', href='/login', target='_parent', style="margin-left: 30px;") SIGN IN

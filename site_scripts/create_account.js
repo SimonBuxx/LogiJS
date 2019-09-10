@@ -3,13 +3,19 @@ CreateUser.addEventListener('submit', (e) => {
     e.preventDefault();
     const username = CreateUser.querySelector('.username').value;
     const password = CreateUser.querySelector('.password').value;
-    post('/createUser', { username, password }).then(({ status }) => {
-        if (status === 200) {
-            window.location = '/login';
-        } else {
-            window.location = '/signup';
-        }
-    });
+    let invalid = (username.length >= 50 || password.length >= 50 ||
+        username.length < 5 || password.length <= 8);
+    if (invalid) {
+        window.location = '/signup?invalid=true';
+    } else {
+        post('/createUser', { username, password }).then(({ status }) => {
+            if (status === 200) {
+                window.location = '/login';
+            } else {
+                window.location = '/signup?failed=true';
+            }
+        });
+    }
 });
 
 function post(path, data) {

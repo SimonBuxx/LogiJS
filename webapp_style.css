@@ -293,9 +293,35 @@ input[type=range]::-ms-tooltip {
 }
 
 input[type=text] {
-    padding-left: 7px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding: 10px;
+    margin: 20px;
+    font-size: 20px;
+    width: 280px;
+}
+
+.btn-red {
+    background-color: rgb(200, 50, 50);
+    border: 0;
+    border-bottom:2px solid black;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    padding: 10px 40px;
+    margin: 10px;
+    font-family:  'Open Sans', Arial, sans-serif;
+    font-size: 14px;
+    color:#ffffff;
+    font-weight: 300; 
+	font-style: normal; 
+	-webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    cursor: pointer;
+    width: 145px;
+}
+
+.btn-red:hover {
+    background-color: rgb(209, 71, 71);
+    color:#ffffff;
 }
 
 textarea {

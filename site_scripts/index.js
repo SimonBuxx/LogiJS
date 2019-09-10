@@ -1,34 +1,59 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const store = require('./store');
+const path = require('path');
 const fs = require('fs');
+const sharp = require('sharp');
+const glob = require('glob');
 const app = express();
+
+let jwt_handler = require('./jwt_module.js');
+let user_data = require('./user_data.js');
+
+let server = app.listen(7555, () => {
+    console.log('Server running on http://localhost:7555');
+});
+
+const io = require('socket.io')(server);
 
 const router = express.Router();
 
-let loginFailed = false;
-let signupFailed = false;
-let tooLong = false;
+let dlname = ''; //!
 
+sharp.cache(false);
+
+app.use(cookieParser());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('views'));
 app.use(express.static('libraries'));
 app.use(express.static('site_scripts'));
 app.use(express.static('sketches'));
 app.set('view engine', 'pug');
 
+var i = 'LogiJS';                    // Issuer 
+var s = 'logijs@outlook.com';        // Subject 
+var a = 'http://logijs.netlify.com'; // Audience
+
+app.use('/', router);
+
 router.use(function (req, res, next) {
-    if (req.url === '/dashboard' && !app.locals.authenticated) {
-        res.redirect('/login');
-        return;
+    if (req.url === '/dashboard') {
+        if (!jwt_handler.verify(req.cookies.access_token, { issuer: i, subject: s, audience: a })) {
+            res.redirect('/login');
+            return;
+        }
     }
     next();
 });
 
 router.use(function (req, res, next) {
-    if ((req.url === '/login' || req.url === '/signup') && app.locals.authenticated) {
-        res.redirect('/dashboard');
-        return;
+    if ((req.url === '/login' || req.url === '/signup')) {
+        if (jwt_handler.verify(req.cookies.access_token, { issuer: i, subject: s, audience: a })) {
+            res.redirect('/dashboard');
+            return;
+        }
     }
     next();
 });
@@ -42,74 +67,57 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', function (req, res) {
-    res.render('index');
+    res.render('index', {
+        user: getUser(req)
+    });
 });
 
 router.get('/editor', function (req, res) {
-    res.render('logijs');
+    res.render('logijs', {
+        user: getUser(req)
+    });
 });
 
 router.get('/features', function (req, res) {
-    res.render('features');
+    res.render('features', {
+        user: getUser(req)
+    });
 });
 
 router.get('/imprint', function (req, res) {
-    res.render('imprint');
+    res.render('imprint', {
+        user: getUser(req)
+    });
 });
 
 router.get('/login', function (req, res) {
     res.render('login', {
-        failed: loginFailed
+        failed: req.query.failed
     });
-    loginFailed = false;
 });
 
 router.get('/signup', function (req, res) {
     res.render('signup', {
-        failed: signupFailed,
-        tooLong: tooLong
+        failed: req.query.failed,
+        invalid: req.query.invalid
     });
-    signupFailed = false;
-    tooLong = false;
 });
 
 router.get('/dashboard', function (req, res) {
-    res.render('dashboard');
+    let user = getUser(req);
+    user_data.getSketches(user, function (data) {
+        res.render('dashboard', {
+            user: user,
+            sketchData: data
+        });
+    });
 });
 
-app.use('/', router);
-
-router.post('/createUser', (req, res) => {
-    if (req.body.username.length > 50 || req.body.password.length > 50) {
-        signupFailed = true;
-        tooLong = true;
-        res.sendStatus(401);
-        return;
-    }
-    store
-        .createUser({
-            username: req.body.username,
-            password: req.body.password
-        })
-        .then(({ success }) => {
-            if (success) {
-                signupFailed = false;
-                tooLong = false;
-                res.sendStatus(200);
-            } else {
-                signupFailed = true;
-                tooLong = false;
-                res.sendStatus(401);
-            }
-        });
+router.get('/download', (req, res) => {
+    res.download('./userSketches/' + getUser(req) + '/' + req.query.file + '.json');
 });
 
 router.post('/login', (req, res) => {
-    if (req.body.username.length > 50 || req.body.password.length > 50) {
-        loginFailed = true;
-        res.sendStatus(401);
-        return;
-    }
     store
         .authenticate({
             username: req.body.username,
@@ -117,25 +125,49 @@ router.post('/login', (req, res) => {
         })
         .then(({ success }) => {
             if (success) {
-                app.locals.user = req.body.username;
-                app.locals.authenticated = true;
-                loginFailed = false;
+                let token = jwt_handler.sign({ user: req.body.username }, { issuer: i, subject: s, audience: a });
+                res.cookie('access_token', token);
                 res.sendStatus(200);
             } else {
-                app.locals.user = '';
-                app.locals.authenticated = false;
-                loginFailed = true;
                 res.sendStatus(401);
             }
         });
 });
 
-router.post('/logout', (req, res) => {
-    app.locals.user = '';
-    app.locals.authenticated = false;
-    loginFailed = false;
-    signupFailed = false;
-    res.sendStatus(200);
+router.post('/createUser', (req, res) => {
+    store
+        .createUser({
+            username: req.body.username,
+            password: req.body.password
+        })
+        .then(({ success }) => {
+            if (success) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(401);
+            }
+        });
+});
+
+router.post('/delete', (req, res) => {
+    let user = getUser(req);
+    try {
+        fs.unlink('./userSketches/' + user + '/' + req.body.sketch + '.json', (err) => {
+            if (err) {
+                console.log('[MAJOR] File delete error!');
+                console.log('./userSketches/' + user + '/' + req.body.sketch + '.json');
+            }
+        });
+    } catch (e) {
+    }
+    try {
+        fs.unlink('./views/previews/' + user + '/' + req.body.sketch + '.png', (err) => {
+            console.log('[MINOR] File delete error!');
+            console.log('./views/previews/' + user + '/' + req.body.sketch + '.png');
+        });
+    } catch (e) {
+
+    }
 });
 
 /*
@@ -153,6 +185,90 @@ app.post('/save', (req, res) => {
     });
 });
 */
-app.listen(7555, () => {
-    console.log('Server running on http://localhost:7555');
+
+io.on('connection', (socket) => {
+    socket.on('getUserSketch', (data) => {
+        let path = './userSketches/' + app.locals.user + '/' + data.file + '.json';
+        try {
+            let raw = fs.readFileSync(path);
+            let sketchData = JSON.parse(raw);
+            io.sockets.emit('userSketchData', {
+                data: sketchData,
+                success: true
+            });
+        } catch (e) {
+            console.log('[MAJOR] File loading error!');
+            console.log(path);
+            io.sockets.emit('userSketchData', {
+                data: {},
+                success: false
+            });
+        }
+    });
+
+    socket.on('savePreview', (data) => {
+        if (!app.locals.authenticated) {
+            return;
+        }
+        let img = data.img;
+        img = img.replace(/^data:image\/\w+;base64,/, "");
+        let buffer = new Buffer(img, 'base64');
+        fs.writeFile('./views/previews/' + app.locals.user + '/temp.png', buffer, function (err) {
+            if (err) {
+                console.log('[MINOR] Preview saving error!');
+                console.log('./views/previews/' + app.locals.user + '/' + data.name + '.png');
+            } else {
+                sharp('./views/previews/' + app.locals.user + '/temp.png').resize({ height: 200, width: 200, position: 'left' })
+                    .toFile('./views/previews/' + app.locals.user + '/' + data.name + '.png');
+            }
+        });
+    });
 });
+
+function getFilesize(filename) {
+    const stats = fs.statSync(filename);
+    return Math.round(stats.size / 1000);
+}
+
+function getBirthtime(filename) {
+    const stats = fs.statSync(filename);
+    let millis = stats.birthtimeMs;
+    let newDate = new Date(millis);
+    return newDate.toLocaleDateString("de-DE") + ' ' + newDate.toLocaleTimeString("de-DE");
+}
+
+function getModifiedTime(filename) {
+    const stats = fs.statSync(filename);
+    let millis = stats.mtime;
+    let newDate = new Date(millis);
+    return newDate.toLocaleDateString("de-DE") + ' ' + newDate.toLocaleTimeString("de-DE");
+}
+
+function getFiles(user) {
+    glob('./userSketches/' + user + '/*.json', { nodir: true }, function (err, files) {
+        let sketches = [];
+        let sketchSizes = [];
+        let sketchBirthtimes = [];
+        let sketchModified = [];
+        for (let i = 0; i < files.length; i++) {
+            sketches.push(path.basename(files[i], '.json'));
+            sketchSizes.push(getFilesize(files[i]));
+            sketchBirthtimes.push(getBirthtime(files[i]));
+            sketchModified.push(getModifiedTime(files[i]));
+        }
+        return {
+            sketches: sketches,
+            sizes: sketchSizes,
+            birthtimes: sketchBirthtimes,
+            modified: sketchModified
+        };
+    });
+}
+
+function getUser(req) {
+    let user = '';
+    if (req.cookies.hasOwnProperty('access_token')) {
+        user = jwt_handler.decode(req.cookies.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+    }
+    return user;
+}

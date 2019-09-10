@@ -1,2 +1,5 @@
 node_modules
+userSketches
+views/previews
 .DS_Store
+private.key

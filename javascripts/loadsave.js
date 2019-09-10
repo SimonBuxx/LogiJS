@@ -44,6 +44,8 @@ function saveSketch(filename) {
             json.customs.push(customs[i].getData());
         }
     }
+    let img = document.getElementById('mainCanvas').toDataURL('image/png');
+    socket.emit('savePreview', {name: filename.substring(0, filename.indexOf('.')), img: img});
     saveJSON(json, filename); // Save the file as json (asks for directory...)
 }
 
@@ -52,14 +54,35 @@ function loadSketch(file) {
     queue = [];
     loading = true;
     loadFile = file;
-    loadJSON('sketches/' + file, load, fileNotFoundError);
+    document.title = loadFile.split('.')[0] + ' - LogiJS';
+    loadJSON('sketches/' + file, load, function () {
+        socket.emit('getUserSketch', { file: file.split('.')[0] });
+        socket.on('userSketchData', (data) => {
+            console.log(data.success === true);
+            if (data.success === true) {
+                load(data.data);
+            } else {
+                fileNotFoundError();
+            }
+            socket.off('userSketchData');
+        });
+    });
+}
+
+function loadSketchFromJSON(data, file) {
+    next = 0;
+    queue = [];
+    loading = true;
+    loadFile = file;
+    document.title = file + ' - LogiJS';
+    load(data);
 }
 
 function fileNotFoundError() {
     // Change the site's title to the error message
     document.title = "Sketch not found! - LogiJS";
     showMessage('Sketch not found!', 'Please use a local copy of LogiJS to open local files.');
-    setTimeout(function() {setLoading(false);}, 3000);
+    setTimeout(function () { setLoading(false); }, 3000);
 }
 
 function load(loadData) {
@@ -176,6 +199,19 @@ function loadCustomFile(file, num, hlparent) {
                 cachedData.push(loadData);
             }
             loadCallback(loadData, num, hlparent);
+        }, function () {
+            socket.emit('getUserSketch', { file: file.split('.')[0] });
+            socket.on('userSketchData', (data) => {
+                let loadData = data.data;
+                if (data.success === true) {
+                    if (cachedFiles.indexOf(file) < 0) {
+                        cachedFiles.push(file);
+                        cachedData.push(loadData);
+                    }
+                    loadCallback(loadData, num, hlparent);
+                }
+                socket.off('userSketchData');
+            });
         });
     }
 }

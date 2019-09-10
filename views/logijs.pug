@@ -3,6 +3,7 @@ head
   meta(charset='UTF-8')
   link(rel='shortcut icon', type='image/x-icon', href='images/favicon.ico')
   link(href='https://fonts.googleapis.com/css?family=Open+Sans|Gudea|PT+Mono', rel='stylesheet')
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
   script
     include ../libraries/p5.min.js
     include ../libraries/p5.dom.js
@@ -33,8 +34,12 @@ head
     include ../webapp_style.css
 a(href='https://github.com/SimonBuxx/LogiJS')
   img#github(src='images/github.png', alt='Fork me on GitHub')
-a(href='/')
-  img#logo(src='images/logo.png', alt='LogiJS Logo')
+if user !== ''
+  a(href='/dashboard')
+    img#logo(src='images/logo.png', alt='LogiJS Logo')
+else
+  a(href='/')
+    img#logo(src='images/logo.png', alt='LogiJS Logo')
 // Start of Survicate (www.survicate.com) code
 script(type='text/javascript').
   if (window.location.href.includes('.com')) {
@@ -48,3 +53,6 @@ script(type='text/javascript').
   })(window);
   }
 // End of Survicate code
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js

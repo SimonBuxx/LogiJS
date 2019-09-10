@@ -68,6 +68,8 @@ let showSClickBox = false;
 let simRunning = false;
 let propMode = false;
 
+let saveDialog = true;
+
 let syncFramerate = true;
 
 let segIndizees = [];
@@ -81,13 +83,15 @@ let next = 0;
 let loading = false;
 let loadFile = '';
 
+let URLSketchLoaded = false;
+
 let showTooltip = true;
 let negPreviewShown = false;
 let diodePreviewShown = false;
 let conpointPreviewShown = false;
 
 // GUI Elements
-let textInput, saveButton, loadButton, newButton; // Right hand side
+let textInput, saveButton, cancelButton, loadButton, newButton; // Right hand side
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
@@ -111,6 +115,7 @@ let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
     hintPic12, hintPic13, hintPic14, hintPic15, hintPic16, hintPic17,
     hintPic19, hintPic20, hintPic21, hintPic22, hintPic23, hintPic24,
     hintPic25, hintPic26;
+let socket;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
@@ -158,6 +163,7 @@ function setup() { // jshint ignore:line
     // Creates the canvas in full window size
     cnv = createCanvas(windowWidth - 150, windowHeight - 30);
     cnv.position(150, 30);
+    cnv.id('mainCanvas');
 
     // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -515,9 +521,9 @@ function setup() { // jshint ignore:line
     // Upper right
     // Input field for the file name
     textInput = createInput('');
-    textInput.attribute('placeholder', 'New Sketch');
-    textInput.size(195, 16);
-    textInput.position(windowWidth - 405, 4);
+    textInput.attribute('placeholder', 'SKETCH NAME');
+    //textInput.size(360, 40);
+    textInput.position(windowWidth / 2 - 170, windowHeight / 2 - 104);
     textInput.elt.style.fontFamily = 'Open Sans';
     textInput.elt.className = "textInput";
 
@@ -529,9 +535,14 @@ function setup() { // jshint ignore:line
 
     // Button to save the sketch
     saveButton = createButton('Save');
-    saveButton.position(windowWidth - 198, 4);
+    saveButton.position(windowWidth / 2 - 5, windowHeight / 2 + 150);
     saveButton.mousePressed(saveClicked);
-    saveButton.elt.className = "button";
+    saveButton.elt.className = "btn btn-lg btn-red";
+
+    cancelButton = createButton('Cancel');
+    cancelButton.position(windowWidth / 2 - 160, windowHeight / 2 + 150);
+    cancelButton.mousePressed(cancelClicked);
+    cancelButton.elt.className = "btn btn-lg btn-red";
 
     // Button to load a sketch
     loadButton = createButton('Load');
@@ -660,17 +671,33 @@ function setup() { // jshint ignore:line
         guiLabels[i].style.fontSize = "16px";
     }
 
+    socket = io.connect();
+
     let loadfile = urlParam('sketch');
-    if (loadfile !== "") {
-        document.title = loadfile + ' - LogiJS';
-        loadSketch(loadfile + '.json');
+    if (loadfile !== '') {
+        setLoading(true);
+        socket.emit('getUserSketch', { file: loadfile });
+        socket.on('userSketchData', (data) => {
+            if (data.success === true) {
+                if (!URLSketchLoaded) {
+                    loadSketchFromJSON(data.data, loadfile);
+                }
+            } else {
+                fileNotFoundError();
+            }
+            URLSketchLoaded = true;
+        });
+    } else {
+        URLSketchLoaded = true;
     }
+
     //Hide hints if there is a cookie 
     if ((getCookieValue("ClosedHint") === "true")) {
         showHints = false;
         closeTutorialButton.hide();
         nextStepButton.hide();
     }
+
     reDraw();
     setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
 }
@@ -726,6 +753,15 @@ function saveClicked() {
     showSClickBox = false;
     saveSketch(textInput.value() + '.json');
     document.title = textInput.value() + ' - LogiJS';
+    saveDialog = false;
+    saveButton.hide();
+    cancelButton.hide();
+}
+
+function cancelClicked() {
+    saveDialog = false;
+    saveButton.hide();
+    cancelButton.hide();
 }
 
 // Triggered when a sketch should be loaded
@@ -1686,6 +1722,10 @@ function reDraw() {
     if (loading) {
         showMessage('Loading...', loadFile.split('.json')[0]);
     }
+
+    if (saveDialog) {
+        showSaveDialog();
+    }
 }
 
 /*
@@ -1832,6 +1872,12 @@ function showMessage(msg, subline = '') {
     text(msg, window.width / 2, window.height / 2);
     textSize(20);
     text(subline, window.width / 2, window.height / 2 + 30);
+}
+
+function showSaveDialog() {
+    fill('rgba(50, 50, 50, 0.9)');
+    noStroke();
+    rect(window.width / 2 - 275, window.height / 2 - 188, 400, 400);
 }
 
 /*

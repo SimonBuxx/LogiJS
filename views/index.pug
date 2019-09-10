@@ -55,21 +55,21 @@ head
             li
               a.internal-link(rel='nofollow', href='/imprint', target='_parent') IMPRINT
             li
-              if authenticated
+              if user !== ''
                 a.internal-link(rel='nofollow', href='/dashboard', target='_parent', style="margin-left: 30px; color: rgb(40, 180, 40);") #{user.toUpperCase()}
               else
                 a.internal-link(rel='nofollow', href='/login', target='_parent', style="margin-left: 30px;") SIGN IN
 #blur
 #carousel.carousel
   #caption
-    if authenticated
+    if user !== ''
       h1 WELCOME, #{user.toUpperCase()}!
     else
       h1 WELCOME TO LOGIJS
     p Logic circuit simulation. Easy to use, yet powerful.
   p
     a.btn.btn-lg.btn-orange(href='/editor', role='button' style="margin-right: 6px;") START CREATING
-    if authenticated
+    if user !== ''
       a.btn.btn-lg.btn-green(href='/dashboard', role='button') DASHBOARD
     else
       a.btn.btn-lg.btn-green(href='/login', role='button') SIGN IN

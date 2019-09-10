@@ -132,8 +132,8 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
     margin-top: 25px;
     margin-right: auto;
     margin-left: auto;
-    padding: 20px;
-    height: 240px;
+    padding: 10px;
+    height: 220px;
     background-color: rgba(50, 50, 50, 0.9);
 }
 
