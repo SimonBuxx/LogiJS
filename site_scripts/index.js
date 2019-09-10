@@ -21,8 +21,6 @@ const io = require('socket.io')(server);
 
 const router = express.Router();
 
-let dlname = ''; //!
-
 sharp.cache(false);
 
 app.use(cookieParser());
@@ -226,46 +224,6 @@ io.on('connection', (socket) => {
         });
     });
 });
-
-function getFilesize(filename) {
-    const stats = fs.statSync(filename);
-    return Math.round(stats.size / 1000);
-}
-
-function getBirthtime(filename) {
-    const stats = fs.statSync(filename);
-    let millis = stats.birthtimeMs;
-    let newDate = new Date(millis);
-    return newDate.toLocaleDateString("de-DE") + ' ' + newDate.toLocaleTimeString("de-DE");
-}
-
-function getModifiedTime(filename) {
-    const stats = fs.statSync(filename);
-    let millis = stats.mtime;
-    let newDate = new Date(millis);
-    return newDate.toLocaleDateString("de-DE") + ' ' + newDate.toLocaleTimeString("de-DE");
-}
-
-function getFiles(user) {
-    glob('./userSketches/' + user + '/*.json', { nodir: true }, function (err, files) {
-        let sketches = [];
-        let sketchSizes = [];
-        let sketchBirthtimes = [];
-        let sketchModified = [];
-        for (let i = 0; i < files.length; i++) {
-            sketches.push(path.basename(files[i], '.json'));
-            sketchSizes.push(getFilesize(files[i]));
-            sketchBirthtimes.push(getBirthtime(files[i]));
-            sketchModified.push(getModifiedTime(files[i]));
-        }
-        return {
-            sketches: sketches,
-            sizes: sketchSizes,
-            birthtimes: sketchBirthtimes,
-            modified: sketchModified
-        };
-    });
-}
 
 function getUser(req) {
     let user = '';
