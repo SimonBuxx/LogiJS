@@ -13,8 +13,11 @@ const PORT = process.env.PORT || 7555;
 let jwt_handler = require('./jwt_module.js');
 let user_data = require('./user_data.js');
 
-let server = app.listen(PORT, () => {
+/*let server = app.listen(PORT, () => {
     console.log('Server running on port ' + PORT);
+});*/
+let server = app.listen(PORT, () => {
+    console.log('Server running http://localhost:' + PORT);
 });
 
 const io = require('socket.io')(server);
@@ -170,25 +173,15 @@ router.post('/delete', (req, res) => {
     }
 });
 
-/*
-app.post('/save', (req, res) => {
-    store.save({
-        owner: app.locals.user,
-        filename: req.body.filename
-    });
-    fs.writeFile('C:/Users/Simon Buchholz/Documents/Programmierung/Projekte/LogiJS-DB/files/' + req.body.filename, req.body.content, 'utf8', function (err) {
-        if (err) {
-            return res.sendStatus(500);
-        } else {
-            return res.sendStatus(200);
-        }
-    });
-});
-*/
-
 io.on('connection', (socket) => {
     socket.on('getUserSketch', (data) => {
-        let path = './userSketches/' + app.locals.user + '/' + data.file + '.json';
+        let path = '';
+        if (data.access_token === '') {
+            path = './views/sketches/' + data.file + '.json';
+        } else {
+            let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+            path = './userSketches/' + user + '/' + data.file + '.json';
+        }
         try {
             let raw = fs.readFileSync(path);
             let sketchData = JSON.parse(raw);
@@ -207,20 +200,25 @@ io.on('connection', (socket) => {
     });
 
     socket.on('savePreview', (data) => {
-        if (!app.locals.authenticated) {
+        if (data.access_token === '') {
             return;
         }
+        let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
         let img = data.img;
         img = img.replace(/^data:image\/\w+;base64,/, "");
         let buffer = new Buffer(img, 'base64');
-        fs.writeFile('./views/previews/' + app.locals.user + '/temp.png', buffer, function (err) {
-            if (err) {
-                console.log('[MINOR] Preview saving error!');
-                console.log('./views/previews/' + app.locals.user + '/' + data.name + '.png');
-            } else {
-                sharp('./views/previews/' + app.locals.user + '/temp.png').resize({ height: 200, width: 200, position: 'left' })
-                    .toFile('./views/previews/' + app.locals.user + '/' + data.name + '.png');
-            }
+        sharp(buffer)
+            .resize({ height: 200, width: 200, position: 'left' })
+            .toFile('./views/previews/' + user + '/' + data.name + '.png');
+    });
+
+    socket.on('saveUserSketch', (data) => {
+        if (data.access_token === '') {
+            return;
+        }
+        let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+        fs.writeFile('./userSketches/' + user + '/' + data.file, JSON.stringify(data.json), 'utf8', function (err) {
+
         });
     });
 });

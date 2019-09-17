@@ -44,9 +44,11 @@ function saveSketch(filename) {
             json.customs.push(customs[i].getData());
         }
     }
-    let img = document.getElementById('mainCanvas').toDataURL('image/png');
-    socket.emit('savePreview', {name: filename.substring(0, filename.indexOf('.')), img: img});
-    saveJSON(json, filename); // Save the file as json (asks for directory...)
+    if (getCookieValue('access_token') !== '') {
+        socket.emit('saveUserSketch', { file: filename, json: json, access_token: getCookieValue('access_token') });
+    } else {
+        saveJSON(json, filename); // Save the file as json (asks for directory...)
+    }
 }
 
 function loadSketch(file) {
@@ -56,7 +58,7 @@ function loadSketch(file) {
     loadFile = file;
     document.title = loadFile.split('.')[0] + ' - LogiJS';
     loadJSON('sketches/' + file, load, function () {
-        socket.emit('getUserSketch', { file: file.split('.')[0] });
+        socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
         socket.on('userSketchData', (data) => {
             console.log(data.success === true);
             if (data.success === true) {
@@ -200,7 +202,7 @@ function loadCustomFile(file, num, hlparent) {
             }
             loadCallback(loadData, num, hlparent);
         }, function () {
-            socket.emit('getUserSketch', { file: file.split('.')[0] });
+            socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
             socket.on('userSketchData', (data) => {
                 let loadData = data.data;
                 if (data.success === true) {

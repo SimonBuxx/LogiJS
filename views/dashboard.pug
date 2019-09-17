@@ -66,7 +66,9 @@ head
   #dashboard_item_back.carousel
     img.preview(src='previews/' + user + '/' + sketchData.sketches[i] + '.png', style='height: 200px; width: 200px; float:left; margin-right: 20px;', alt=sketchData.sketches[i])
     h1(style="text-align: left; margin: 0;") #{sketchData.sketches[i].toUpperCase()}
-    p(style="text-align: left; margin: 10px; position: absolute; bottom: 0; left: 220px; font-size: 20px;") CREATED: #{sketchData.birthtimes[i]} | LAST EDITED: #{sketchData.modified[i]} | FILE SIZE: #{sketchData.sizes[i]} KB
+    p(style="text-align: left; margin: 10px; position: absolute; bottom: 0; right: 190px; font-size: 15px;") FILE SIZE: #{sketchData.sizes[i]} KB
+    p(style="text-align: left; margin: 10px; position: absolute; bottom: 0; left: 500px; font-size: 15px;") LAST EDITED: #{sketchData.modified[i]}
+    p(style="text-align: left; margin: 10px; position: absolute; bottom: 0; left: 220px; font-size: 15px;") CREATED: #{sketchData.birthtimes[i]}
     input.btn.btn-lg.btn-orange.download(type='submit', id=sketchData.sketches[i], role='button' value="Download" style="position: absolute; right: 0; top: 0; padding: 10px 40px; margin: 10px; float:right; width: 170px;")
     input.btn.btn-lg.btn-orange.delete(type='submit', id=sketchData.sketches[i], role='button' value="Delete" style="position: absolute; right: 0; top: 55px; padding: 10px 40px; margin: 10px; float:right; width: 170px;")
     input.btn.btn-lg.btn-green.open(type='submit', id=sketchData.sketches[i], role='button' value="Open" style="position: absolute; right: 0; bottom: 0; padding: 10px 40px; margin: 10px; float:right; width: 170px;")

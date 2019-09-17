@@ -68,7 +68,7 @@ let showSClickBox = false;
 let simRunning = false;
 let propMode = false;
 
-let saveDialog = true;
+let saveDialog = false;
 
 let syncFramerate = true;
 
@@ -91,7 +91,7 @@ let diodePreviewShown = false;
 let conpointPreviewShown = false;
 
 // GUI Elements
-let textInput, saveButton, cancelButton, loadButton, newButton; // Right hand side
+let textInput, saveDialogText, saveButton, saveDialogButton, cancelButton, loadButton, newButton; // Right hand side
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
@@ -472,7 +472,7 @@ function setup() { // jshint ignore:line
 
     // Activates the edit mode
     propertiesButton = createButton('Edit');
-    propertiesButton.position(152, 4);
+    propertiesButton.position(152, 3);
     propertiesButton.mousePressed(function () {
         setActive(propertiesButton);
         setControlMode('none');
@@ -483,20 +483,20 @@ function setup() { // jshint ignore:line
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('Delete');
-    deleteButton.position(207, 4);
+    deleteButton.position(207, 3);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
 
     // Starts and stops the simulation
     simButton = createButton('Start');
     simButton.elt.style.width = '34px';
-    simButton.position(280, 4);
+    simButton.position(280, 3);
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
 
     // Undos the last action
     undoButton = createButton('Undo');
-    undoButton.position(342, 4);
+    undoButton.position(342, 3);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -505,7 +505,7 @@ function setup() { // jshint ignore:line
 
     // Redos the last action
     redoButton = createButton('Redo');
-    redoButton.position(408, 4);
+    redoButton.position(408, 3);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -514,7 +514,7 @@ function setup() { // jshint ignore:line
 
     // Activates the mode for area selecting
     selectButton = createButton('Select');
-    selectButton.position(472, 4);
+    selectButton.position(472, 3);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
@@ -522,14 +522,14 @@ function setup() { // jshint ignore:line
     // Input field for the file name
     textInput = createInput('');
     textInput.attribute('placeholder', 'SKETCH NAME');
-    //textInput.size(360, 40);
     textInput.position(windowWidth / 2 - 170, windowHeight / 2 - 104);
     textInput.elt.style.fontFamily = 'Open Sans';
     textInput.elt.className = "textInput";
+    textInput.hide();
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(windowWidth - textInput.width - 259, 4);
+    newButton.position(windowWidth - 260, 3);
     newButton.mousePressed(newClicked);
     newButton.elt.className = "button";
 
@@ -538,21 +538,28 @@ function setup() { // jshint ignore:line
     saveButton.position(windowWidth / 2 - 5, windowHeight / 2 + 150);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = "btn btn-lg btn-red";
+    saveButton.hide();
 
     cancelButton = createButton('Cancel');
     cancelButton.position(windowWidth / 2 - 160, windowHeight / 2 + 150);
     cancelButton.mousePressed(cancelClicked);
     cancelButton.elt.className = "btn btn-lg btn-red";
+    cancelButton.hide();
 
     // Button to load a sketch
     loadButton = createButton('Load');
-    loadButton.position(windowWidth - 136, 4);
+    loadButton.position(windowWidth - 138, 3);
     loadButton.mousePressed(loadClicked);
     loadButton.elt.className = "button";
 
+    saveDialogButton = createButton('Save');
+    saveDialogButton.position(windowWidth - 200, 3);
+    saveDialogButton.mousePressed(saveDialogClicked);
+    saveDialogButton.elt.className = "button";
+
     // Button to import as custom
     ascustomButton = createButton('Import');
-    ascustomButton.position(windowWidth - 73, 4);
+    ascustomButton.position(windowWidth - 75, 3);
     ascustomButton.mousePressed(function () { setActive(ascustomButton); return customClicked(textInput.value() + '.json'); });
     ascustomButton.elt.className = "button";
 
@@ -590,6 +597,14 @@ function setup() { // jshint ignore:line
     propBoxLabel.elt.style.margin = '3px 0px 0px 0px';
     propBoxLabel.position(windowWidth - 190, 30);
     propBoxLabel.style('font-size', '30px');
+
+    saveDialogText = createP('Save Sketch');
+    saveDialogText.hide();
+    saveDialogText.elt.style.color = 'white';
+    saveDialogText.elt.style.fontFamily = 'Open Sans';
+    saveDialogText.elt.style.margin = '3px 0px 0px 0px';
+    saveDialogText.position(windowWidth / 2 - 105, windowHeight / 2 - 160);
+    saveDialogText.style('font-size', '36px');
 
     inputIsTopBox = createCheckbox('Pin input to the top', false);
     inputIsTopBox.hide();
@@ -676,10 +691,11 @@ function setup() { // jshint ignore:line
     let loadfile = urlParam('sketch');
     if (loadfile !== '') {
         setLoading(true);
-        socket.emit('getUserSketch', { file: loadfile });
+        socket.emit('getUserSketch', { file: loadfile, access_token: getCookieValue('access_token') });
         socket.on('userSketchData', (data) => {
             if (data.success === true) {
                 if (!URLSketchLoaded) {
+                    textInput.elt.value = loadfile;
                     loadSketchFromJSON(data.data, loadfile);
                 }
             } else {
@@ -749,19 +765,26 @@ function decoderClicked() {
 
 // Triggered when a sketch should be saved
 function saveClicked() {
-    selectMode = 'none';
-    showSClickBox = false;
     saveSketch(textInput.value() + '.json');
     document.title = textInput.value() + ' - LogiJS';
     saveDialog = false;
     saveButton.hide();
     cancelButton.hide();
+    textInput.hide();
+    saveDialogText.hide();
+    setLoading(false);
+    reDraw();
+    let img = document.getElementById('mainCanvas').toDataURL('image/png');
+    socket.emit('savePreview', {name: textInput.value(), img: img, access_token: getCookieValue('access_token')});
 }
 
 function cancelClicked() {
     saveDialog = false;
     saveButton.hide();
     cancelButton.hide();
+    textInput.hide();
+    saveDialogText.hide();
+    setLoading(false);
 }
 
 // Triggered when a sketch should be loaded
@@ -774,6 +797,16 @@ function loadClicked() {
     showSClickBox = false;
     document.title = textInput.value() + ' - LogiJS';
     loadSketch(textInput.value() + '.json');
+    reDraw();
+}
+
+function saveDialogClicked() {
+    setLoading(true);
+    saveDialog = true;
+    saveButton.show();
+    cancelButton.show();
+    textInput.show();
+    saveDialogText.show();
     reDraw();
 }
 
@@ -1719,7 +1752,7 @@ function reDraw() {
         showTutorial();
     }
 
-    if (loading) {
+    if (loading && !saveDialog) {
         showMessage('Loading...', loadFile.split('.json')[0]);
     }
 
@@ -1875,7 +1908,7 @@ function showMessage(msg, subline = '') {
 }
 
 function showSaveDialog() {
-    fill('rgba(50, 50, 50, 0.9)');
+    fill('rgba(50, 50, 50, 0.95)');
     noStroke();
     rect(window.width / 2 - 275, window.height / 2 - 188, 400, 400);
 }
@@ -2065,7 +2098,10 @@ function setLoading(l) {
     loading = l;
     disableButtons(l);
     simButton.elt.disabled = l;
-    saveButton.elt.disabled = l;
+    saveDialogButton.elt.disabled = l;
+    if (!l) {
+        saveButton.elt.disabled = false;
+    }
     closeTutorialButton.elt.disabled = l;
     nextStepButton.elt.disabled = l;
     updateUndoButtons();

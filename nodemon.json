@@ -1,0 +1,3 @@
+{
+    "ignore": ["javascripts/*", "libraries/*", "userSketches/*", "views/*"]
+  }
