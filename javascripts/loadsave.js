@@ -60,7 +60,6 @@ function loadSketch(file) {
     loadJSON('sketches/' + file, load, function () {
         socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
         socket.on('userSketchData', (data) => {
-            console.log(data.success === true);
             if (data.success === true) {
                 load(data.data);
             } else {

@@ -83,7 +83,7 @@ let next = 0;
 let loading = false;
 let loadFile = '';
 
-let URLSketchLoaded = false;
+let previewImg;
 
 let showTooltip = true;
 let negPreviewShown = false;
@@ -91,7 +91,7 @@ let diodePreviewShown = false;
 let conpointPreviewShown = false;
 
 // GUI Elements
-let textInput, saveDialogText, saveButton, saveDialogButton, cancelButton, loadButton, newButton; // Right hand side
+let textInput, saveDialogText, saveButton, saveDialogButton, cancelButton, descInput, loadButton, newButton; // Right hand side
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
@@ -518,30 +518,38 @@ function setup() { // jshint ignore:line
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
-    // Upper right
-    // Input field for the file name
     textInput = createInput('');
     textInput.attribute('placeholder', 'SKETCH NAME');
-    textInput.position(windowWidth / 2 - 170, windowHeight / 2 - 104);
+    textInput.position(windowWidth / 2 - 63, windowHeight / 2 - 104);
     textInput.elt.style.fontFamily = 'Open Sans';
     textInput.elt.className = "textInput";
     textInput.hide();
 
+    descInput = createElement('textarea');
+    descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(COMING SOON!)');
+    descInput.position(windowWidth / 2 - 43, windowHeight / 2 - 25);
+    descInput.size(292, 165);
+    descInput.elt.style.fontFamily = 'Open Sans';
+    descInput.elt.style.fontSize = '15px';
+    descInput.elt.className = "textInput";
+    descInput.elt.disabled = true;
+    descInput.hide();
+
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(windowWidth - 260, 3);
+    newButton.position(windowWidth - 120, 3);
     newButton.mousePressed(newClicked);
     newButton.elt.className = "button";
 
     // Button to save the sketch
     saveButton = createButton('Save');
-    saveButton.position(windowWidth / 2 - 5, windowHeight / 2 + 150);
+    saveButton.position(windowWidth / 2 + 102, windowHeight / 2 + 150);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = "btn btn-lg btn-red";
     saveButton.hide();
 
     cancelButton = createButton('Cancel');
-    cancelButton.position(windowWidth / 2 - 160, windowHeight / 2 + 150);
+    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 150);
     cancelButton.mousePressed(cancelClicked);
     cancelButton.elt.className = "btn btn-lg btn-red";
     cancelButton.hide();
@@ -551,9 +559,10 @@ function setup() { // jshint ignore:line
     loadButton.position(windowWidth - 138, 3);
     loadButton.mousePressed(loadClicked);
     loadButton.elt.className = "button";
+    loadButton.hide();
 
     saveDialogButton = createButton('Save');
-    saveDialogButton.position(windowWidth - 200, 3);
+    saveDialogButton.position(windowWidth - 60, 3);
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = "button";
 
@@ -562,6 +571,7 @@ function setup() { // jshint ignore:line
     ascustomButton.position(windowWidth - 75, 3);
     ascustomButton.mousePressed(function () { setActive(ascustomButton); return customClicked(textInput.value() + '.json'); });
     ascustomButton.elt.className = "button";
+    ascustomButton.hide();
 
     // Button to close the hints
     closeTutorialButton = createButton('Close Tutorial');
@@ -691,20 +701,7 @@ function setup() { // jshint ignore:line
     let loadfile = urlParam('sketch');
     if (loadfile !== '') {
         setLoading(true);
-        socket.emit('getUserSketch', { file: loadfile, access_token: getCookieValue('access_token') });
-        socket.on('userSketchData', (data) => {
-            if (data.success === true) {
-                if (!URLSketchLoaded) {
-                    textInput.elt.value = loadfile;
-                    loadSketchFromJSON(data.data, loadfile);
-                }
-            } else {
-                fileNotFoundError();
-            }
-            URLSketchLoaded = true;
-        });
-    } else {
-        URLSketchLoaded = true;
+        loadSketch(loadfile + '.json');
     }
 
     //Hide hints if there is a cookie 
@@ -771,11 +768,11 @@ function saveClicked() {
     saveButton.hide();
     cancelButton.hide();
     textInput.hide();
+    descInput.hide();
     saveDialogText.hide();
     setLoading(false);
     reDraw();
-    let img = document.getElementById('mainCanvas').toDataURL('image/png');
-    socket.emit('savePreview', {name: textInput.value(), img: img, access_token: getCookieValue('access_token')});
+    socket.emit('savePreview', { name: textInput.value(), img: previewImg, access_token: getCookieValue('access_token') });
 }
 
 function cancelClicked() {
@@ -783,6 +780,7 @@ function cancelClicked() {
     saveButton.hide();
     cancelButton.hide();
     textInput.hide();
+    descInput.hide();
     saveDialogText.hide();
     setLoading(false);
 }
@@ -801,12 +799,14 @@ function loadClicked() {
 }
 
 function saveDialogClicked() {
-    setLoading(true);
     saveDialog = true;
     saveButton.show();
     cancelButton.show();
     textInput.show();
+    descInput.show();
     saveDialogText.show();
+    previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
+    setLoading(true);
     reDraw();
 }
 
@@ -833,7 +833,7 @@ function newClicked() {
     showSClickBox = false;
     document.title = 'New Sketch - LogiJS';
     textInput.value('');
-    textInput.attribute('placeholder', 'New Sketch');
+    textInput.attribute('placeholder', 'SKETCH NAME');
     findLines();
     reDraw();
 }
@@ -1758,6 +1758,7 @@ function reDraw() {
 
     if (saveDialog) {
         showSaveDialog();
+        showPreviewImage();
     }
 }
 
@@ -1910,7 +1911,15 @@ function showMessage(msg, subline = '') {
 function showSaveDialog() {
     fill('rgba(50, 50, 50, 0.95)');
     noStroke();
-    rect(window.width / 2 - 275, window.height / 2 - 188, 400, 400);
+    rect(window.width / 2 - 365, window.height / 2 - 188, 580, 400);
+}
+
+function showPreviewImage() {
+    let raw = new Image();
+    raw.src = previewImg;
+    let img = createImage(raw.width, raw.height);
+    img.drawingContext.drawImage(raw, 0, 0);
+    image(img, window.width / 2 - 330, window.height / 2 - 99, 200, 200, 0, 0, raw.height, raw.height);
 }
 
 /*
