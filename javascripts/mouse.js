@@ -12,7 +12,7 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-    if (loading) { return; }
+    if (loading || mouseOverGUI()) { return; }
     if (keyIsDown(18) && !simRunning) { // If the alt key is pressed => scroll trough basic elements
         wheel = Math.sign(event.deltaY);
         addType = Math.max(1, Math.min(9, addType + wheel));
