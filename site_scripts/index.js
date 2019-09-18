@@ -8,14 +8,11 @@ const sharp = require('sharp');
 const glob = require('glob');
 const app = express();
 
-const PORT = process.env.PORT || 7555;
+const PORT = 8080;
 
 let jwt_handler = require('./jwt_module.js');
 let user_data = require('./user_data.js');
 
-/*let server = app.listen(PORT, () => {
-    console.log('Server running on port ' + PORT);
-});*/
 let server = app.listen(PORT, () => {
     console.log('Server running http://localhost:' + PORT);
 });
@@ -32,12 +29,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('views'));
 app.use(express.static('libraries'));
 app.use(express.static('site_scripts'));
-app.use(express.static('sketches'));
+//app.use(express.static('sketches'));
 app.set('view engine', 'pug');
 
 var i = 'LogiJS';                    // Issuer 
 var s = 'logijs@outlook.com';        // Subject 
-var a = 'http://logijs.netlify.com'; // Audience
+var a = 'http://logijs.com'; // Audience
 
 app.use('/', router);
 
@@ -87,8 +84,8 @@ router.get('/features', function (req, res) {
     });
 });
 
-router.get('/imprint', function (req, res) {
-    res.render('imprint', {
+router.get('/legal', function (req, res) {
+    res.render('legal', {
         user: getUser(req)
     });
 });
@@ -225,7 +222,7 @@ io.on('connection', (socket) => {
 
 function getUser(req) {
     let user = '';
-    if (req.cookies.hasOwnProperty('access_token')) {
+    if (Object.hasOwnProperty.call(req.cookies, 'access_token')) {
         user = jwt_handler.decode(req.cookies.access_token, { issuer: i, subject: s, audience: a }).payload.user;
     }
     return user;
