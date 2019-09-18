@@ -91,7 +91,7 @@ let diodePreviewShown = false;
 let conpointPreviewShown = false;
 
 // GUI Elements
-let textInput, saveDialogText, saveButton, saveDialogButton, cancelButton, descInput, loadButton, newButton; // Right hand side
+let textInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton; // Right hand side
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
@@ -172,7 +172,7 @@ function setup() { // jshint ignore:line
         }
     }, false);
 
-    document.title = 'New Sketch - LogiJS';
+    document.title = 'LogiJS: New Sketch';
 
 
     //Div for the Left Side Buttons
@@ -522,23 +522,32 @@ function setup() { // jshint ignore:line
     textInput.attribute('placeholder', 'SKETCH NAME');
     textInput.position(windowWidth / 2 - 63, windowHeight / 2 - 104);
     textInput.elt.style.fontFamily = 'Open Sans';
-    textInput.elt.className = "textInput";
+    textInput.elt.className = "textInput saveInput";
     textInput.hide();
 
     descInput = createElement('textarea');
     descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(COMING SOON!)');
     descInput.position(windowWidth / 2 - 43, windowHeight / 2 - 25);
-    descInput.size(292, 165);
+    descInput.size(280, 153);
     descInput.elt.style.fontFamily = 'Open Sans';
     descInput.elt.style.fontSize = '15px';
-    descInput.elt.className = "textInput";
+    descInput.elt.className = "textInput descInput";
     descInput.elt.disabled = true;
     descInput.hide();
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(windowWidth - 120, 3);
-    newButton.mousePressed(newClicked);
+    newButton.position(windowWidth - 236, 3);
+    newButton.elt.style.width = '40px';
+    newButton.mousePressed(function () {
+        if (newButton.html() === 'SURE?') {
+            newButton.html('New');
+            newClicked();
+        } else {
+            newButton.html('SURE?');
+            setTimeout(function() {newButton.html('New');}, 3000);
+        }
+    });
     newButton.elt.className = "button";
 
     // Button to save the sketch
@@ -562,7 +571,7 @@ function setup() { // jshint ignore:line
     loadButton.hide();
 
     saveDialogButton = createButton('Save');
-    saveDialogButton.position(windowWidth - 60, 3);
+    saveDialogButton.position(windowWidth - 167, 3);
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = "button";
 
@@ -572,6 +581,23 @@ function setup() { // jshint ignore:line
     ascustomButton.mousePressed(function () { setActive(ascustomButton); return customClicked(textInput.value() + '.json'); });
     ascustomButton.elt.className = "button";
     ascustomButton.hide();
+
+    if (getCookieValue('access_token') !== '') {
+        dashboardButton = createButton('Dashboard');
+    } else {
+        dashboardButton = createButton('Sign In');
+    }
+    dashboardButton.elt.style.width = '78px';
+    dashboardButton.mousePressed(function () {
+        if (dashboardButton.html() === 'SURE?') {
+            window.location = '/dashboard';
+        } else {
+            dashboardButton.html('SURE?');
+            setTimeout(function() {dashboardButton.html('Dashboard');}, 3000);
+        }
+    });
+    dashboardButton.position(windowWidth - 105, 3);
+    dashboardButton.elt.className = "button";
 
     // Button to close the hints
     closeTutorialButton = createButton('Close Tutorial');
@@ -636,6 +662,7 @@ function setup() { // jshint ignore:line
     inputCaptionBox.size(170, 15);
     inputCaptionBox.position(windowWidth - 190, 150);
     inputCaptionBox.input(newInputCaption);
+    inputCaptionBox.elt.className = "textInput";
 
     colNameLabel = createP('Color:');
     colNameLabel.hide();
@@ -663,6 +690,7 @@ function setup() { // jshint ignore:line
     outputCaptionBox.hide();
     outputCaptionBox.size(170, 15);
     outputCaptionBox.position(windowWidth - 190, 150);
+    outputCaptionBox.elt.className = 'textInput';
     outputCaptionBox.input(newOutputCaption);
 
     outputColorBox = createSelect();
@@ -762,8 +790,18 @@ function decoderClicked() {
 
 // Triggered when a sketch should be saved
 function saveClicked() {
+    if (textInput.value().includes(' ')) {
+        saveDialogText.position(windowWidth / 2 - 165, windowHeight / 2 - 160);
+        saveDialogText.elt.style.color = 'red';
+        saveDialogText.html('No spaces allowed!');
+        setTimeout(function() {
+            saveDialogText.elt.style.color = '#fff'; 
+            saveDialogText.position(windowWidth / 2 - 105, windowHeight / 2 - 160); 
+            saveDialogText.html('Save Sketch');}, 3000);
+        return;
+    }
     saveSketch(textInput.value() + '.json');
-    document.title = textInput.value() + ' - LogiJS';
+    document.title = 'LogiJS: ' + textInput.value();
     saveDialog = false;
     saveButton.hide();
     cancelButton.hide();
@@ -793,7 +831,7 @@ function loadClicked() {
     setActive(propertiesButton);
     setPropMode(true);
     showSClickBox = false;
-    document.title = textInput.value() + ' - LogiJS';
+    document.title = 'LogiJS: ' + textInput.value();
     loadSketch(textInput.value() + '.json');
     reDraw();
 }
@@ -831,7 +869,7 @@ function newClicked() {
     wireMode = 'none';
     selectMode = 'none';
     showSClickBox = false;
-    document.title = 'New Sketch - LogiJS';
+    document.title = 'LogiJS: New Sketch';
     textInput.value('');
     textInput.attribute('placeholder', 'SKETCH NAME');
     findLines();

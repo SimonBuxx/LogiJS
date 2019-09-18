@@ -151,6 +151,12 @@ body {
 .textInput {
     border: 0;
     border-bottom: 2px solid black;
+    font-size: 15px;
+    padding: 5px;
+}
+
+.descInput {
+    padding: 10px;
 }
 
 .selectLeft{
@@ -271,7 +277,7 @@ input[type=range]::-ms-tooltip {
     display: none;
 }
 
-input[type=text] {
+.saveInput {
     padding: 10px;
     margin: 20px;
     font-size: 20px;
@@ -324,16 +330,6 @@ textarea {
     width: 150px;
     margin: 0;
     padding: 0;
-}
-
-#usertag {
-    position: fixed;
-    right: 20px;
-    top: 4px;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
-    color: rgb(200, 50, 50);
-    text-decoration: none;
 }
 
 body{

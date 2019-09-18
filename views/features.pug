@@ -1,7 +1,7 @@
 doctype html
 <html style="position: relative; min-height: 100%;">
 head
-  title LogiJS
+  title LogiJS: Features
   meta(name='keywords', content='')
   meta(name='description', content='')
   meta(charset='UTF-8')
@@ -15,8 +15,6 @@ head
 .top-menu
   .container
     .navbar.navbar-default.navbar-fixed-top(style='background: rgb(50, 50, 50);', role='navigation')
-      a(href='https://www.github.com/SimonBuxx/LogiJS')
-        img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png', alt='Fork me on GitHub')
       .container
         .navbar-header
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
@@ -24,7 +22,7 @@ head
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='index.html')
+          a.navbar-brand(href='/')
             img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
         #nav-bar.navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
@@ -36,8 +34,6 @@ head
               a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
             li
               a.external-link(rel='nofollow', href='https://www.twitter.com/logi_js', target='_parent') TWITTER
-            li
-              a.internal-link(rel='nofollow', href='/imprint', target='_parent') IMPRINT
             li
               if user !== ''
                 a.internal-link(rel='nofollow', href='/dashboard', target='_parent' style="margin-left: 30px; color: rgb(40, 180, 40);") #{user.toUpperCase()}
@@ -62,18 +58,6 @@ div
           |                         These parts can be dragged to another place or be deleted from the sketch. We want to extend
           |                         this features
           |                         to enable the user to copy parts of a sketch and paste it multiple times.
-        br
-        li
-          b Server environment to save sketches online:
-          |  To load your own sketches in LogiJS, you need
-          |                         to get a local copy
-          |                         from GitHub to open the file. This isn&apos;t very user friendly and may lead to confusion about how
-          |                         to load sketches.
-          |                         We want to set up a server structure that allows us to handle user accounts and files online. As
-          |                         an alternative
-          |                         to hosting all files ourselves, we could imagine a cloud service based solution like loading
-          |                         files from Google Drive
-          |                         or Dropbox directly into LogiJS.
         br
         li
           b Support for the VHDL hardware description language:
@@ -105,6 +89,9 @@ div
       span#footer-line
         | Copyright &copy; 2019 
         a(href='https://www.github.com/SimonBuxx') Simon Buchholz
+        |  | 
+      span(style="text-align: right;")
+        a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
 script
   include ../libraries/jquery.min.js
   include ../libraries/bootstrap.min.js

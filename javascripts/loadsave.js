@@ -56,7 +56,7 @@ function loadSketch(file) {
     queue = [];
     loading = true;
     loadFile = file;
-    document.title = loadFile.split('.')[0] + ' - LogiJS';
+    document.title = 'LogiJS: ' + loadFile.split('.')[0];
     loadJSON('sketches/' + file, load, function () {
         socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
         socket.on('userSketchData', (data) => {
@@ -75,13 +75,13 @@ function loadSketchFromJSON(data, file) {
     queue = [];
     loading = true;
     loadFile = file;
-    document.title = file + ' - LogiJS';
+    document.title = 'LogiJS: ' + file;
     load(data);
 }
 
 function fileNotFoundError() {
     // Change the site's title to the error message
-    document.title = "Sketch not found! - LogiJS";
+    document.title = 'LogiJS: Sketch not found!';
     showMessage('Sketch not found!', 'Please use a local copy of LogiJS to open local files.');
     setTimeout(function () { setLoading(false); }, 3000);
 }
