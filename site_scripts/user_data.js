@@ -10,6 +10,7 @@ module.exports = {
             let sketchBirthtimes = [];
             let sketchModified = [];
             let images = [];
+            let descriptions = [];
             for (let i = 0; i < files.length; i++) {
                 sketches.push(path.basename(files[i], '.json'));
                 sketchSizes.push(getFilesize(files[i]));
@@ -21,6 +22,12 @@ module.exports = {
                 } else {
                     images.push('');
                 }
+                if (fs.existsSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt')) {
+                    descriptions.push(fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt'));
+                    //images[i] = new Buffer(images[i], "binary").toString("base64");
+                } else {
+                    descriptions.push('No description available.');
+                }
             }
             callback({
                 sketches: {
@@ -29,7 +36,8 @@ module.exports = {
                     birthtimes: sketchBirthtimes,
                     modified: sketchModified
                 },
-                images: images
+                images: images,
+                descriptions: descriptions
             });
         });
     }

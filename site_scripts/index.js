@@ -109,7 +109,8 @@ router.get('/dashboard', function (req, res) {
         res.render('dashboard', {
             user: user,
             sketchData: data.sketches,
-            images: data.images
+            images: data.images,
+            descriptions: data.descriptions
         });
     });
 });
@@ -169,6 +170,14 @@ router.post('/delete', (req, res) => {
     } catch (e) {
 
     }
+    try {
+        fs.unlink('./userSketches/' + user + '/' + req.body.sketch + '.txt', (err) => {
+            console.log('[MINOR] File delete error!');
+            console.log('./userSKetches/' + user + '/' + req.body.sketch + '.txt');
+        });
+    } catch (e) {
+
+    }
 });
 
 io.on('connection', (socket) => {
@@ -203,11 +212,15 @@ io.on('connection', (socket) => {
         }
         let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
         let img = data.img;
+        let desc = data.desc;
         img = img.replace(/^data:image\/\w+;base64,/, "");
         let buffer = new Buffer(img, 'base64');
         sharp(buffer)
             .resize({ height: 200, width: 200, position: 'left' })
             .toFile('./userSketches/' + user + '/' + data.name + '.png');
+        fs.writeFile('./userSketches/' + user + '/' + data.name + '.txt', desc, 'utf8', function (err) {
+
+        });
     });
 
     socket.on('saveUserSketch', (data) => {

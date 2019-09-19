@@ -526,13 +526,12 @@ function setup() { // jshint ignore:line
     textInput.hide();
 
     descInput = createElement('textarea');
-    descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(COMING SOON!)');
+    descInput.attribute('placeholder', 'SKETCH DESCRIPTION');
     descInput.position(windowWidth / 2 - 43, windowHeight / 2 - 25);
     descInput.size(280, 153);
     descInput.elt.style.fontFamily = 'Open Sans';
     descInput.elt.style.fontSize = '15px';
     descInput.elt.className = "textInput descInput";
-    descInput.elt.disabled = true;
     descInput.hide();
 
     // Clears the canvas and resets the view
@@ -728,6 +727,7 @@ function setup() { // jshint ignore:line
 
     let loadfile = urlParam('sketch');
     if (loadfile !== '') {
+        textInput.value(loadfile);
         setLoading(true);
         loadSketch(loadfile + '.json');
     }
@@ -810,7 +810,7 @@ function saveClicked() {
     saveDialogText.hide();
     setLoading(false);
     reDraw();
-    socket.emit('savePreview', { name: textInput.value(), img: previewImg, access_token: getCookieValue('access_token') });
+    socket.emit('savePreview', { name: textInput.value(), img: previewImg, desc: descInput.value(), access_token: getCookieValue('access_token') });
 }
 
 function cancelClicked() {
