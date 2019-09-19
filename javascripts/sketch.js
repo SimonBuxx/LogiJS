@@ -544,7 +544,7 @@ function setup() { // jshint ignore:line
             newClicked();
         } else {
             newButton.html('SURE?');
-            setTimeout(function() {newButton.html('New');}, 3000);
+            setTimeout(function () { newButton.html('New'); }, 3000);
         }
     });
     newButton.elt.className = "button";
@@ -592,7 +592,7 @@ function setup() { // jshint ignore:line
             window.location = '/dashboard';
         } else {
             dashboardButton.html('SURE?');
-            setTimeout(function() {dashboardButton.html('Dashboard');}, 3000);
+            setTimeout(function () { dashboardButton.html('Dashboard'); }, 3000);
         }
     });
     dashboardButton.position(windowWidth - 105, 3);
@@ -730,6 +730,13 @@ function setup() { // jshint ignore:line
         textInput.value(loadfile);
         setLoading(true);
         loadSketch(loadfile + '.json');
+        socket.emit('getDescription', { file: loadfile, access_token: getCookieValue('access_token') });
+        socket.on('sketchDescription', (data) => {
+            if (data.success === true) {
+                descInput.value(data.data);
+            }
+            socket.off('sketchDescription');
+        });
     }
 
     //Hide hints if there is a cookie 
@@ -794,10 +801,11 @@ function saveClicked() {
         saveDialogText.position(windowWidth / 2 - 165, windowHeight / 2 - 160);
         saveDialogText.elt.style.color = 'red';
         saveDialogText.html('No spaces allowed!');
-        setTimeout(function() {
-            saveDialogText.elt.style.color = '#fff'; 
-            saveDialogText.position(windowWidth / 2 - 105, windowHeight / 2 - 160); 
-            saveDialogText.html('Save Sketch');}, 3000);
+        setTimeout(function () {
+            saveDialogText.elt.style.color = '#fff';
+            saveDialogText.position(windowWidth / 2 - 105, windowHeight / 2 - 160);
+            saveDialogText.html('Save Sketch');
+        }, 3000);
         return;
     }
     saveSketch(textInput.value() + '.json');

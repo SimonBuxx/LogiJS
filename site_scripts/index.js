@@ -165,7 +165,7 @@ router.post('/delete', (req, res) => {
     try {
         fs.unlink('./userSketches/' + user + '/' + req.body.sketch + '.png', (err) => {
             console.log('[MINOR] File delete error!');
-            console.log('./userSKetches/' + user + '/' + req.body.sketch + '.png');
+            console.log('./userSketches/' + user + '/' + req.body.sketch + '.png');
         });
     } catch (e) {
 
@@ -173,7 +173,7 @@ router.post('/delete', (req, res) => {
     try {
         fs.unlink('./userSketches/' + user + '/' + req.body.sketch + '.txt', (err) => {
             console.log('[MINOR] File delete error!');
-            console.log('./userSKetches/' + user + '/' + req.body.sketch + '.txt');
+            console.log('./userSketches/' + user + '/' + req.body.sketch + '.txt');
         });
     } catch (e) {
 
@@ -206,6 +206,30 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('getDescription', (data) => {
+        let path = '';
+        if (data.access_token === '') {
+            path = './views/sketches/' + data.file + '.txt';
+        } else {
+            let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+            path = './userSketches/' + user + '/' + data.file + '.txt';
+        }
+        try {
+            let desc = fs.readFileSync(path, 'utf8');
+            io.sockets.emit('sketchDescription', {
+                data: desc,
+                success: true
+            });
+        } catch (e) {
+            console.log('[MINOR] File loading error!');
+            console.log(path);
+            io.sockets.emit('sketchDescription', {
+                data: {},
+                success: false
+            });
+        }
+    });
+
     socket.on('savePreview', (data) => {
         if (data.access_token === '') {
             return;
@@ -218,9 +242,20 @@ io.on('connection', (socket) => {
         sharp(buffer)
             .resize({ height: 200, width: 200, position: 'left' })
             .toFile('./userSketches/' + user + '/' + data.name + '.png');
-        fs.writeFile('./userSketches/' + user + '/' + data.name + '.txt', desc, 'utf8', function (err) {
+        if (desc.length > 0) {
+            fs.writeFile('./userSketches/' + user + '/' + data.name + '.txt', desc, 'utf8', function (err) {
 
-        });
+            });
+        } else {
+            try {
+                fs.unlink('./userSketches/' + user + '/' + data.name + '.txt', (err) => {
+                    console.log('[MINOR] File delete error!');
+                    console.log('./userSketches/' + user + '/' + data.name + '.txt');
+                });
+            } catch (e) {
+        
+            }
+        }
     });
 
     socket.on('saveUserSketch', (data) => {
