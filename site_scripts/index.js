@@ -108,7 +108,8 @@ router.get('/dashboard', function (req, res) {
     user_data.getSketches(user, function (data) {
         res.render('dashboard', {
             user: user,
-            sketchData: data
+            sketchData: data.sketches,
+            images: data.images
         });
     });
 });
@@ -161,9 +162,9 @@ router.post('/delete', (req, res) => {
     } catch (e) {
     }
     try {
-        fs.unlink('./views/previews/' + user + '/' + req.body.sketch + '.png', (err) => {
+        fs.unlink('./userSketches/' + user + '/' + req.body.sketch + '.png', (err) => {
             console.log('[MINOR] File delete error!');
-            console.log('./views/previews/' + user + '/' + req.body.sketch + '.png');
+            console.log('./userSKetches/' + user + '/' + req.body.sketch + '.png');
         });
     } catch (e) {
 
@@ -206,7 +207,7 @@ io.on('connection', (socket) => {
         let buffer = new Buffer(img, 'base64');
         sharp(buffer)
             .resize({ height: 200, width: 200, position: 'left' })
-            .toFile('./views/previews/' + user + '/' + data.name + '.png');
+            .toFile('./userSketches/' + user + '/' + data.name + '.png');
     });
 
     socket.on('saveUserSketch', (data) => {

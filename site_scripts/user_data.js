@@ -9,17 +9,27 @@ module.exports = {
             let sketchSizes = [];
             let sketchBirthtimes = [];
             let sketchModified = [];
+            let images = [];
             for (let i = 0; i < files.length; i++) {
                 sketches.push(path.basename(files[i], '.json'));
                 sketchSizes.push(getFilesize(files[i]));
                 sketchBirthtimes.push(getBirthtime(files[i]));
                 sketchModified.push(getModifiedTime(files[i]));
+                if (fs.existsSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.png')) {
+                    images.push(fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.png'));
+                    images[i] = new Buffer(images[i], "binary").toString("base64");
+                } else {
+                    images.push('');
+                }
             }
             callback({
-                sketches: sketches,
-                sizes: sketchSizes,
-                birthtimes: sketchBirthtimes,
-                modified: sketchModified
+                sketches: {
+                    sketches: sketches,
+                    sizes: sketchSizes,
+                    birthtimes: sketchBirthtimes,
+                    modified: sketchModified
+                },
+                images: images
             });
         });
     }
