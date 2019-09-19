@@ -17,6 +17,7 @@ let segDisplays = []; // List of 7-segment displays
 let segBits = 4; // Number of bits for new 7-segment displays
 let counterBitWidth = 4; // Output width of counter objects
 let decoderBitWidth = 4; // Input width of decoder objects
+let muxBitWidth = 1; // In/output width for (de-) multiplexers
 
 let selection = []; // List of all selected elements
 
@@ -96,9 +97,9 @@ let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
-    add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
-let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelCounterBits,
-    decoderBitSelect, labelDecoderBits;
+    muxButton, demuxButton, halfaddButton, fulladdButton, ascustomButton;
+let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
+    decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
@@ -255,66 +256,41 @@ function setup() { // jshint ignore:line
     labelAdvanced.elt.className = 'label';
     labelAdvanced.parent(leftSideButtons);
 
-    // Adds a counter
-    counterButton = createButton('Counter');
-    counterButton.mousePressed(function () { setActive(counterButton, true); return counterClicked(); });
-    counterButton.elt.className = "buttonLeft";
-    counterButton.parent(leftSideButtons);
-    // Adds a decoder (2Bit)
-    decoderButton = createButton('Decoder');
-    decoderButton.mousePressed(function () { setActive(decoderButton, true); return decoderClicked(); });
-    decoderButton.elt.className = "buttonLeft";
-    decoderButton.parent(leftSideButtons);
-    // Adds an adder (4Bit)
-    add4BitButton = createButton('4Bit-Adder');
-    add4BitButton.mousePressed(function () { setActive(add4BitButton, true); return customClicked('4BitNeu.json'); });
-    add4BitButton.elt.className = "buttonLeft";
-    add4BitButton.parent(leftSideButtons);
-    // Adds a d-flipflop
-    dFlipFlopButton = createButton('D-FlipFlop');
-    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return customClicked('d-flipflop.json'); });
-    dFlipFlopButton.elt.className = "buttonLeft";
-    dFlipFlopButton.parent(leftSideButtons);
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
     rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return customClicked('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.className = "buttonLeft";
     rsFlipFlopButton.parent(leftSideButtons);
+    // Adds a d-flipflop
+    dFlipFlopButton = createButton('D-FlipFlop');
+    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return customClicked('d-flipflop.json'); });
+    dFlipFlopButton.elt.className = "buttonLeft";
+    dFlipFlopButton.parent(leftSideButtons);
+    // Adds a counter
+    counterButton = createButton('Counter');
+    counterButton.mousePressed(function () { setActive(counterButton, true); return counterClicked(); });
+    counterButton.elt.className = "buttonLeft";
+    counterButton.parent(leftSideButtons);
+    // Adds a decoder
+    decoderButton = createButton('Decoder');
+    decoderButton.mousePressed(function () { setActive(decoderButton, true); return decoderClicked(); });
+    decoderButton.elt.className = "buttonLeft";
+    decoderButton.parent(leftSideButtons);
+    // Adds a multiplexer
+    muxButton = createButton('Multiplexer');
+    muxButton.mousePressed(function () { setActive(muxButton, true); return muxClicked(); });
+    muxButton.elt.className = "buttonLeft";
+    muxButton.parent(leftSideButtons);
+    // Adds a demultiplexer
+    demuxButton = createButton('Demultiplexer');
+    demuxButton.mousePressed(function () { setActive(demuxButton, true); return demuxClicked(); });
+    demuxButton.elt.className = "buttonLeft";
+    demuxButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
     reg4Button.mousePressed(function () { setActive(reg4Button, true); return customClicked('4BitReg.json'); });
     reg4Button.elt.className = "buttonLeft";
     reg4Button.parent(leftSideButtons);
-    // Adds a 1-multiplexer
-    mux1Button = createButton('1-Multiplexer');
-    mux1Button.mousePressed(function () { setActive(mux1Button, true); return customClicked('1-mux.json'); });
-    mux1Button.elt.className = "buttonLeft";
-    mux1Button.parent(leftSideButtons);
-    // Adds a 2-multiplexer
-    mux2Button = createButton('2-Multiplexer');
-    mux2Button.mousePressed(function () { setActive(mux2Button, true); return customClicked('2-mux.json'); });
-    mux2Button.elt.className = "buttonLeft";
-    mux2Button.parent(leftSideButtons);
-    // Adds a 3-multiplexer
-    mux3Button = createButton('3-Multiplexer');
-    mux3Button.mousePressed(function () { setActive(mux3Button, true); return customClicked('3-mux.json'); });
-    mux3Button.elt.className = "buttonLeft";
-    mux3Button.parent(leftSideButtons);
-    // Adds a 1-demultiplexer
-    demux1Button = createButton('1-Demultiplexer');
-    demux1Button.mousePressed(function () { setActive(demux1Button, true); return customClicked('1-demux.json'); });
-    demux1Button.elt.className = "buttonLeft";
-    demux1Button.parent(leftSideButtons);
-    // Adds a 2-demultiplexer
-    demux2Button = createButton('2-Demultiplexer');
-    demux2Button.mousePressed(function () { setActive(demux2Button, true); return customClicked('2-demux.json'); });
-    demux2Button.elt.className = "buttonLeft";
-    demux2Button.parent(leftSideButtons);
-    // Adds a 3-demultiplexer
-    demux3Button = createButton('3-Demultiplexer');
-    demux3Button.mousePressed(function () { setActive(demux3Button, true); return customClicked('3-demux.json'); });
-    demux3Button.elt.className = "buttonLeft";
-    demux3Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return customClicked('halbadd.json'); });
@@ -379,24 +355,24 @@ function setup() { // jshint ignore:line
     labelBits.parent(leftSideButtons);
 
     // Adds text 'Output width'
-    labelCounterBits = createP('Output width');
-    labelCounterBits.hide();
-    labelCounterBits.elt.style.color = 'white';
-    labelCounterBits.elt.style.fontFamily = 'Open Sans';
-    labelCounterBits.elt.style.textAlign = 'center';
-    labelCounterBits.elt.style.margin = '3px 0px 0px 0px';
-    labelCounterBits.elt.className = 'label';
-    labelCounterBits.parent(leftSideButtons);
+    labelOutputWidth = createP('Output width');
+    labelOutputWidth.hide();
+    labelOutputWidth.elt.style.color = 'white';
+    labelOutputWidth.elt.style.fontFamily = 'Open Sans';
+    labelOutputWidth.elt.style.textAlign = 'center';
+    labelOutputWidth.elt.style.margin = '3px 0px 0px 0px';
+    labelOutputWidth.elt.className = 'label';
+    labelOutputWidth.parent(leftSideButtons);
 
     // Adds text 'Input width'
-    labelDecoderBits = createP('Input width');
-    labelDecoderBits.hide();
-    labelDecoderBits.elt.style.color = 'white';
-    labelDecoderBits.elt.style.fontFamily = 'Open Sans';
-    labelDecoderBits.elt.style.textAlign = 'center';
-    labelDecoderBits.elt.style.margin = '3px 0px 0px 0px';
-    labelDecoderBits.elt.className = 'label';
-    labelDecoderBits.parent(leftSideButtons);
+    labelInputWidth = createP('Input width');
+    labelInputWidth.hide();
+    labelInputWidth.elt.style.color = 'white';
+    labelInputWidth.elt.style.fontFamily = 'Open Sans';
+    labelInputWidth.elt.style.textAlign = 'center';
+    labelInputWidth.elt.style.margin = '3px 0px 0px 0px';
+    labelInputWidth.elt.className = 'label';
+    labelInputWidth.parent(leftSideButtons);
 
 
     bitSelect = createSelect();
@@ -431,6 +407,16 @@ function setup() { // jshint ignore:line
     decoderBitSelect.parent(leftSideButtons);
     decoderBitSelect.value('4');
 
+    
+    multiplexerBitSelect = createSelect();
+    multiplexerBitSelect.hide();
+    for (let i = 1; i <= 3; i++) {
+        multiplexerBitSelect.option(i);
+    }
+    multiplexerBitSelect.changed(newMuxBitLength);
+    multiplexerBitSelect.elt.className = "selectLeft";
+    multiplexerBitSelect.parent(leftSideButtons);
+    multiplexerBitSelect.value('1');
 
     sfcheckbox = createCheckbox('Sync Ticks', true);
     sfcheckbox.hide();
@@ -780,7 +766,7 @@ function counterClicked() {
     directionSelect.show();
     labelDirection.show();
     counterBitSelect.show();
-    labelCounterBits.show();
+    labelOutputWidth.show();
     custFile = counterBitWidth + 'BitCounter.json';
 }
 
@@ -791,8 +777,30 @@ function decoderClicked() {
     directionSelect.show();
     labelDirection.show();
     decoderBitSelect.show();
-    labelDecoderBits.show();
+    labelInputWidth.show();
     custFile = decoderBitWidth + 'BitDec.json';
+}
+
+function muxClicked() {
+    hideAllOptions();
+    setControlMode('addObject');
+    addType = 10;
+    directionSelect.show();
+    labelDirection.show();
+    multiplexerBitSelect.show();
+    labelInputWidth.show();
+    custFile = muxBitWidth + '-mux.json';
+}
+
+function demuxClicked() {
+    hideAllOptions();
+    setControlMode('addObject');
+    addType = 10;
+    directionSelect.show();
+    labelDirection.show();
+    multiplexerBitSelect.show();
+    labelInputWidth.show();
+    custFile = muxBitWidth + '-demux.json';
 }
 
 // Triggered when a sketch should be saved
@@ -892,9 +900,10 @@ function hideAllOptions() {
     gateInputSelect.hide();
     labelGateInputs.hide();
     counterBitSelect.hide();
-    labelCounterBits.hide();
+    labelOutputWidth.hide();
     decoderBitSelect.hide();
-    labelDecoderBits.hide();
+    multiplexerBitSelect.hide();
+    labelInputWidth.hide();
 }
 
 /*
@@ -961,13 +970,8 @@ function setUnactive() {
     dFlipFlopButton.elt.className = 'buttonLeft';
     rsFlipFlopButton.elt.className = 'buttonLeft';
     reg4Button.elt.className = 'buttonLeft';
-    add4BitButton.elt.className = 'buttonLeft';
-    mux1Button.elt.className = 'buttonLeft';
-    mux2Button.elt.className = 'buttonLeft';
-    mux3Button.elt.className = 'buttonLeft';
-    demux1Button.elt.className = 'buttonLeft';
-    demux2Button.elt.className = 'buttonLeft';
-    demux3Button.elt.className = 'buttonLeft';
+    muxButton.elt.className = 'buttonLeft';
+    demuxButton.elt.className = 'buttonLeft';
     halfaddButton.elt.className = 'buttonLeft';
     fulladdButton.elt.className = 'buttonLeft';
     ascustomButton.elt.className = 'button';
@@ -1099,6 +1103,15 @@ function newCounterBitLength() {
 function newDecoderBitLength() {
     decoderBitWidth = parseInt(decoderBitSelect.value());
     custFile = decoderBitWidth + 'BitDec.json';
+}
+
+function newMuxBitLength() {
+    muxBitWidth = parseInt(multiplexerBitSelect.value());
+    if (isActive(muxButton)) {
+        custFile = muxBitWidth + '-mux.json';
+    } else if (isActive(demuxButton)) {
+        custFile = muxBitWidth + '-demux.json';
+    }
 }
 
 function newDirection() {
@@ -1639,15 +1652,10 @@ function disableButtons(status) {
     reg4Button.elt.disabled = status;
     decoderButton.elt.disabled = status;
     counterButton.elt.disabled = status;
-    mux1Button.elt.disabled = status;
-    mux2Button.elt.disabled = status;
-    mux3Button.elt.disabled = status;
-    demux1Button.elt.disabled = status;
-    demux2Button.elt.disabled = status;
-    demux3Button.elt.disabled = status;
+    muxButton.elt.disabled = status;
+    demuxButton.elt.disabled = status;
     dFlipFlopButton.elt.disabled = status;
     rsFlipFlopButton.elt.disabled = status;
-    add4BitButton.elt.disabled = status;
     halfaddButton.elt.disabled = status;
     fulladdButton.elt.disabled = status;
     ascustomButton.elt.disabled = status;
