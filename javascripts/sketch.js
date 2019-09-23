@@ -582,7 +582,7 @@ function setup() { // jshint ignore:line
             window.location = '/dashboard';
         } else {
             dashboardButton.html('SURE?');
-            setTimeout(function () { dashboardButton.html('Dashboard'); }, 3000);
+            setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('Dashboard'); } else {dashboardButton.html('Login');}}, 3000);
         }
     });
     dashboardButton.position(windowWidth - 105, 3);
