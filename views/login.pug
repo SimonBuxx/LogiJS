@@ -48,10 +48,10 @@ head
               a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
             li
               a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
-            li
-              a.external-link(rel='nofollow', href='https://www.twitter.com/logi_js', target='_parent') TWITTER
             li.active
-              a(href='#', style="margin-left: 30px;") SIGN IN
+              a(href='#', style="margin-left: 60px;") LOGIN
+            li
+              a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
 #blur
 #login_back.carousel
   form.Login
@@ -60,7 +60,7 @@ head
     else if failed
       h1(style='padding-top: 20px; color: red; font-size: 20px;') Login failed!
     else
-      h1(style='padding-top: 20px;') Sign In
+      h1(style='padding-top: 20px;') Login
     p
       input.username(type='text', placeholder='USERNAME')
       br
@@ -69,7 +69,7 @@ head
       input.btn.btn-lg.btn-orange(style='width: 300px; margin-top: 10px;', type='submit', value='Login', role='button')
     p(style='font-size: 15px;')
       | DON&apos;T HAVE AN ACCOUNT? 
-      a(href='/signup') SIGN UP
+      a(href='/signup') REGISTER
     br
 .footer_bottom
   .text-center

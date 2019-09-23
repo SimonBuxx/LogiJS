@@ -519,7 +519,7 @@ function setup() { // jshint ignore:line
     descInput.elt.style.fontSize = '15px';
     descInput.elt.className = "textInput descInput";
     if (getCookieValue('access_token') === '') {
-        descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(SIGN IN TO GIVE A DESCRIPTION)');
+        descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(LOG IN TO GIVE A DESCRIPTION)');
         descInput.elt.disabled = true;
     }
     descInput.hide();
@@ -574,7 +574,7 @@ function setup() { // jshint ignore:line
     if (getCookieValue('access_token') !== '') {
         dashboardButton = createButton('Dashboard');
     } else {
-        dashboardButton = createButton('Sign In');
+        dashboardButton = createButton('Login');
     }
     dashboardButton.elt.style.width = '78px';
     dashboardButton.mousePressed(function () {
@@ -1891,50 +1891,34 @@ function showTutorial() {
                 'sketch. This list is just a selection of custom components that are pre-built by us.');
             break;
         case 16:
-            displayHint(600, hintPic16, 'Loading and saving', 'To save a sketch, type in a name in the top right corner and hit save.',
-                'You can then choose a folder on your hard drive to save it locally.');
-            break;
-        case 17:
-            displayHint(400, hintPic17, 'Loading and saving', 'To load sketches, you must have a local',
-                'LogiJS version on your computer. ');
-            break;
-        case 18:
-            displayHint(700, hintPic16, 'Loading and saving', 'Make sure, your sketch file is in the \'sketches\' folder of your LogiJS version.',
-                'Type the file name into the input field and hit \'Load\' or the enter key.');
-            break;
-        case 19:
             displayHint(650, hintPic19, 'Diodes', 'Diodes are components that join two crossing wires in the horizontal',
                 'but not in the vertical direction. They can be used for diode matrices.');
             break;
-        case 20:
+        case 17:
             displayHint(550, hintPic20, 'Diodes', 'Please load the sketch called \'traffic\'. As you can see,',
                 'there is an area with multiple diodes (little triangles) on it.');
             break;
-        case 21:
+        case 18:
             displayHint(750, hintPic21, 'Diodes', 'In edit mode, you can toggle diodes and connection points by clicking on them or on',
                 'empty wire crossings. Start the simulation to see how they are used in this example!');
             break;
-        case 22:
-            displayHint(700, hintPic22, 'Custom components', 'If instead of hitting \'Load\' you click on \'Import\', your sketch will be',
-                'imported as a custom component. Click anywhere on the sketch to place it.');
-            break;
-        case 23:
+        case 19:
             displayHint(650, hintPic23, 'Custom components', 'You can name in- and outputs and set inputs to the top of the component',
                 'by altering these settings in the properties menu of the sketch to import.');
             break;
-        case 24:
+        case 20:
             displayHint(450, hintPic24, 'Custom components', 'Inputs labeled with \'>\' will appear as',
                 'clock inputs with an arrow drawn on them.');
             break;
-        case 25:
+        case 21:
             displayHint(600, hintPic25, 'Labels', 'You can add text labels using the \'Label\' button. The text can',
                 'be changed in the properties menu after clicking on them.');
             break;
-        case 26:
+        case 22:
             displayHint(650, hintPic26, '\'New\' and \'Select\'', 'Click on \'New\' to start a new sketch. When clicking on \'Select\' you can',
                 'select parts of your sketch to move them on the canvas or delete them.');
             break;
-        case 27:
+        case 23:
             displayHint(600, hintPic0, 'Thank you!', 'You\'ve reached the end of this little tutorial on LogiJS.',
                 'We hope that you like our work and we value any feedback from you.');
             nextStepButton.hide();
