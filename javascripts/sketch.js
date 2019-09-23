@@ -518,6 +518,10 @@ function setup() { // jshint ignore:line
     descInput.elt.style.fontFamily = 'Open Sans';
     descInput.elt.style.fontSize = '15px';
     descInput.elt.className = "textInput descInput";
+    if (getCookieValue('access_token') === '') {
+        descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(SIGN IN TO GIVE A DESCRIPTION)');
+        descInput.elt.disabled = true;
+    }
     descInput.hide();
 
     // Clears the canvas and resets the view

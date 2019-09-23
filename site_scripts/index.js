@@ -8,7 +8,7 @@ const sharp = require('sharp');
 const glob = require('glob');
 const app = express();
 
-const PORT = 8080;
+const PORT = 80;
 
 let jwt_handler = require('./jwt_module.js');
 let user_data = require('./user_data.js');
