@@ -23,8 +23,17 @@ module.exports = {
                     images.push('');
                 }
                 if (fs.existsSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt')) {
-                    descriptions.push(fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt'));
-                    //images[i] = new Buffer(images[i], "binary").toString("base64");
+                    let description = JSON.parse(fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt'));
+                    console.log(description);
+                    if (description.hasOwnProperty('desc')) {
+                        if (description.desc !== '') {
+                            descriptions.push(description.desc);
+                        } else {
+                            descriptions.push('No description available.');
+                        }
+                    } else {
+                        descriptions.push('No description available.');
+                    }
                 } else {
                     descriptions.push('No description available.');
                 }

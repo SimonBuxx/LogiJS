@@ -1,6 +1,6 @@
 // File: loadsave.js
 
-function saveSketch(filename) {
+function saveSketch(filename, callback) {
     // Create a new json object to store all elements in
     let json = {};
     // New elements should have the filename as their caption (for now)
@@ -49,6 +49,7 @@ function saveSketch(filename) {
     } else {
         saveJSON(json, filename); // Save the file as json (asks for directory...)
     }
+    callback(getLookData(json));
 }
 
 function loadSketch(file) {
@@ -311,4 +312,32 @@ function loadNext() {
 function loadCallback(loadData, num, hlparent) {
     loadCustom(loadData, num, hlparent);
     loadNext();
+}
+
+function getLookData(json) {
+    let look = {};
+    look.tops = [];
+    look.inputLabels = [];
+    look.outputLabels = [];
+    look.caption = json.caption;
+    look.inputs = json.inputs.length;
+    look.outputs = json.outputs.length;
+    for (let i = 0; i < json.inputs.length; i++) {
+        if (json.inputs[i].isTop) {
+            look.tops.push(i);
+        }
+        if (json.inputs[i].hasOwnProperty('lbl')) {
+            look.inputLabels.push(json.inputs[i].lbl);
+        } else {
+            look.inputLabels.push('');
+        }
+    }
+    for (let i = 0; i < json.outputs.length; i++) {
+        if (json.outputs[i].hasOwnProperty('lbl')) {
+            look.outputLabels.push(json.outputs[i].lbl);
+        } else {
+            look.outputLabels.push('');
+        }
+    }
+    return look;
 }

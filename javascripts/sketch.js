@@ -407,7 +407,7 @@ function setup() { // jshint ignore:line
     decoderBitSelect.parent(leftSideButtons);
     decoderBitSelect.value('4');
 
-    
+
     multiplexerBitSelect = createSelect();
     multiplexerBitSelect.hide();
     for (let i = 1; i <= 3; i++) {
@@ -582,7 +582,7 @@ function setup() { // jshint ignore:line
             window.location = '/dashboard';
         } else {
             dashboardButton.html('SURE?');
-            setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('Dashboard'); } else {dashboardButton.html('Login');}}, 3000);
+            setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('Dashboard'); } else { dashboardButton.html('Login'); } }, 3000);
         }
     });
     dashboardButton.position(windowWidth - 105, 3);
@@ -722,8 +722,9 @@ function setup() { // jshint ignore:line
         loadSketch(loadfile + '.json');
         socket.emit('getDescription', { file: loadfile, access_token: getCookieValue('access_token') });
         socket.on('sketchDescription', (data) => {
+            let d = JSON.parse(data.data);
             if (data.success === true) {
-                descInput.value(data.data);
+                descInput.value(d.desc);
             }
             socket.off('sketchDescription');
         });
@@ -820,17 +821,21 @@ function saveClicked() {
         }, 3000);
         return;
     }
-    saveSketch(textInput.value() + '.json');
-    document.title = 'LogiJS: ' + textInput.value();
-    saveDialog = false;
-    saveButton.hide();
-    cancelButton.hide();
-    textInput.hide();
-    descInput.hide();
-    saveDialogText.hide();
-    setLoading(false);
+    saveSketch(textInput.value() + '.json', function (look) {
+        console.log(look);
+        document.title = 'LogiJS: ' + textInput.value();
+        saveDialog = false;
+        saveButton.hide();
+        cancelButton.hide();
+        textInput.hide();
+        descInput.hide();
+        saveDialogText.hide();
+        setLoading(false);
+        reDraw();
+        look.desc = descInput.value();
+        socket.emit('savePreview', { name: textInput.value(), img: previewImg, desc: JSON.stringify(look), access_token: getCookieValue('access_token') });
+    });
     reDraw();
-    socket.emit('savePreview', { name: textInput.value(), img: previewImg, desc: descInput.value(), access_token: getCookieValue('access_token') });
 }
 
 function cancelClicked() {
@@ -841,6 +846,7 @@ function cancelClicked() {
     descInput.hide();
     saveDialogText.hide();
     setLoading(false);
+    reDraw();
 }
 
 // Triggered when a sketch should be loaded
@@ -857,6 +863,7 @@ function loadClicked() {
 }
 
 function saveDialogClicked() {
+    endSimulation();
     saveDialog = true;
     saveButton.show();
     cancelButton.show();
@@ -1792,13 +1799,6 @@ function reDraw() {
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 
-    // Draw the zoom and framerate labels
-    textSize(12);
-    fill(0);
-    noStroke();
-    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
-    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
-
     // If the prop mode is active and an object was selected, show the config menu background
     if (propMode && propInput + propOutput + propLabel >= -2) {
         fill(50);
@@ -1815,9 +1815,17 @@ function reDraw() {
     }
 
     if (saveDialog) {
+        stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
         showSaveDialog();
         showPreviewImage();
     }
+
+    // Draw the zoom and framerate labels
+    textSize(12);
+    fill(0);
+    noStroke();
+    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
+    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
 }
 
 /*
@@ -1959,9 +1967,14 @@ function showSaveDialog() {
 function showPreviewImage() {
     let raw = new Image();
     raw.src = previewImg;
-    let img = createImage(raw.width, raw.height);
-    img.drawingContext.drawImage(raw, 0, 0);
-    image(img, window.width / 2 - 330, window.height / 2 - 99, 200, 200, 0, 0, raw.height, raw.height);
+    raw.onload = function () {
+        let img = createImage(raw.width, raw.height);
+        img.drawingContext.drawImage(raw, 0, 0, window.height, window.height, 0, 0, window.height, window.height);
+        img.resize(0, window.height / 1.5);
+        img.resize(0, window.height / 3);
+        img.resize(0, 200);
+        image(img, window.width / 2 - 330, window.height / 2 - 99);
+    };
 }
 
 /*
@@ -2161,6 +2174,170 @@ function setLoading(l) {
         redoButton.elt.disabled = true;
     }
     reDraw();
+}
+
+function showImportPreview(item, x, y) {
+    let x1, x2, y1, y2;
+    let w = Math.max((item.tops - 1), 0) * 30 + 60;
+    let h = Math.max(item.inputs, item.outputs) * 30;
+    stroke(0);
+    strokeWeight(3);
+    fill(255);
+
+    // Draw the body
+    if (item.tops === 0) {
+        rect(x, y + GRIDSIZE / 2, w, h - GRIDSIZE);
+    } else {
+        rect(x, y, w, h);
+    }
+
+    noStroke();
+    textSize(this.textSize);
+    textAlign(CENTER, CENTER);
+    fill(0);
+    text(this.caption, x + w / 2, y + h / 2); // Draw text
+    /*
+        // Draw inputs
+        for (let i = 1; i <= item.inputs; i++) {
+            // Draw inputs
+            stroke(0);
+            strokeWeight(3);
+    
+            if (!item.inputTop[i - 1]) {
+                x1 = x - 6;
+                y1 = y + (h * (i - item.tops)) / Math.max(item.inputs, item.outputs);
+                x2 = x;
+                y2 = y + (h * (i - item.tops)) / Math.max(item.inputs, item.outputs);
+            } else {
+                tops++;
+                x1 = x + (h * item.tops) / height;
+                y1 = y - 6;
+                x2 = x + (h * item.tops) / height;
+                y2 = y;
+            }
+            line(x1, y1, x2, y2);
+    
+            fill(0);
+    
+            if (this.objects[INPNUM][i - 1].lbl === ">") {
+                stroke(0);
+                if (!this.objects[INPNUM][i - 1].isTop) {
+                    switch (this.direction) {
+                        case 0:
+                            line(x2 + 14, y1, x2, y1 - 6);
+                            line(x2 + 14, y1, x2, y1 + 6);
+                            break;
+                        case 1:
+                            line(x1, y2 + 14, x1 - 6, y2);
+                            line(x1, y2 + 14, x1 + 6, y2);
+                            break;
+                        case 2:
+                            line(x1 - 14, y1, x1, y1 - 6);
+                            line(x1 - 14, y1, x1, y1 + 6);
+                            break;
+                        case 3:
+                            line(x1, y1 - 14, x1 - 6, y1);
+                            line(x1, y1 - 14, x1 + 6, y1);
+                            break;
+                    }
+                } else {
+                    switch (this.direction) {
+                        case 0:
+                            line(x1, y2 + 14, x1 - 6, y2);
+                            line(x1, y2 + 14, x1 + 6, y2);
+                            break;
+                        case 1:
+                            line(x2 - 14, y1, x2, y1 - 6);
+                            line(x2 - 14, y1, x2, y1 + 6);
+                            break;
+                        case 2:
+                            line(x1, y1 - 14, x1 - 6, y1);
+                            line(x1, y1 - 14, x1 + 6, y1);
+                            break;
+                        case 3:
+                            line(x1 + 14, y1, x1, y1 - 6);
+                            line(x1 + 14, y1, x1, y1 + 6);
+                            break;
+                    }
+                }
+            } else if (this.objects[INPNUM][i - 1].lbl !== '') {
+                noStroke();
+                textSize(14);
+                if (!this.objects[INPNUM][i - 1].isTop) {
+                    switch (this.direction) {
+                        case 0: text(this.objects[INPNUM][i - 1].lbl, x2 + 10, y1); break;
+                        case 1: text(this.objects[INPNUM][i - 1].lbl, x1, y2 + 10); break;
+                        case 2: text(this.objects[INPNUM][i - 1].lbl, x1 - 10, y1); break;
+                        case 3: text(this.objects[INPNUM][i - 1].lbl, x1, y1 - 10); break;
+                    }
+                } else {
+                    switch (this.direction) {
+                        case 0: text(this.objects[INPNUM][i - 1].lbl, x1, y2 + 10); break;
+                        case 1: text(this.objects[INPNUM][i - 1].lbl, x2 - 10, y1); break;
+                        case 2: text(this.objects[INPNUM][i - 1].lbl, x1, y1 - 10); break;
+                        case 3: text(this.objects[INPNUM][i - 1].lbl, x1 + 10, y1); break;
+                    }
+                }
+            }
+        }
+    
+        // Draw outputs
+        for (let i = 1; i <= this.outputCount; i++) {
+            // Draw outputs
+            if (this.marked) {
+                stroke(MRED, MGREEN, MBLUE);
+                strokeWeight(3);
+            } else if (this.outputs[i - 1] === true) {
+                stroke(HRED, HGREEN, HBLUE);
+                strokeWeight(5);
+            } else {
+                stroke(LRED, LGREEN, LBLUE);
+                strokeWeight(3);
+            }
+    
+            switch (this.direction) {
+                case 0:
+                    x1 = this.x + this.w;
+                    y1 = this.y + (this.h * i) / this.height;
+                    x2 = this.x + this.w + 6;
+                    y2 = this.y + (this.h * i) / this.height;
+                    break;
+                case 1:
+                    x1 = this.x + (this.w * i) / this.height;
+                    y1 = this.y + this.h;
+                    x2 = this.x + (this.w * i) / this.height;
+                    y2 = this.y + this.h + 6;
+                    break;
+                case 2:
+                    x1 = this.x - 6;
+                    y1 = this.y + (this.h * i) / this.height;
+                    x2 = this.x;
+                    y2 = this.y + (this.h * i) / this.height;
+                    break;
+                case 3:
+                    x1 = this.x + (this.w * i) / this.height;
+                    y1 = this.y;
+                    x2 = this.x + (this.w * i) / this.height;
+                    y2 = this.y - 6;
+                    break;
+                default:
+                    console.log('Gate direction doesn\'t exist!');
+            }
+            line(x1, y1, x2, y2);
+    
+            fill(0);
+            noStroke();
+            textSize(14);
+            if (this.objects[OUTPNUM][i - 1].lbl !== "") {
+                switch (this.direction) {
+                    case 0: text(this.objects[OUTPNUM][i - 1].lbl, x1 - 10, y1); break;
+                    case 1: text(this.objects[OUTPNUM][i - 1].lbl, x1, y1 - 10); break;
+                    case 2: text(this.objects[OUTPNUM][i - 1].lbl, x1 + 16, y1); break;
+                    case 3: text(this.objects[OUTPNUM][i - 1].lbl, x1, y1 + 10); break;
+                }
+            }
+        }*/
+
 }
 
 /*
