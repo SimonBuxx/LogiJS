@@ -27,17 +27,17 @@ module.exports = {
                         let description = fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt');
                         try {
                             description = JSON.parse(description);
-                        } catch (e) {
-                            descriptions.push(fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt'));
-                        }
-                        if (description.hasOwnProperty('desc')) {
-                            if (description.desc !== '') {
-                                descriptions.push(description.desc);
+                            if (description.hasOwnProperty('desc')) {
+                                if (description.desc !== '') {
+                                    descriptions.push(description.desc);
+                                } else {
+                                    descriptions.push('No description available.');
+                                }
                             } else {
                                 descriptions.push('No description available.');
                             }
-                        } else {
-                            descriptions.push('No description available.');
+                        } catch (e) {
+                            descriptions.push(fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt'));
                         }
                     } catch (e) {
                         
