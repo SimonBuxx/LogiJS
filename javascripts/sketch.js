@@ -722,9 +722,15 @@ function setup() { // jshint ignore:line
         loadSketch(loadfile + '.json');
         socket.emit('getDescription', { file: loadfile, access_token: getCookieValue('access_token') });
         socket.on('sketchDescription', (data) => {
-            let d = JSON.parse(data.data);
-            if (data.success === true) {
-                descInput.value(d.desc);
+            try {
+                let d = JSON.parse(data.data);
+                if (data.success === true) {
+                    descInput.value(d.desc);
+                }
+            } catch (e) {
+                if (data.success === true) {
+                    descInput.value(data.data);
+                }
             }
             socket.off('sketchDescription');
         });
