@@ -28,7 +28,7 @@ module.exports = {
                         try {
                             description = JSON.parse(description);
                         } catch (e) {
-                            description = fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt');
+                            descriptions.push(fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.txt'));
                         }
                         if (description.hasOwnProperty('desc')) {
                             if (description.desc !== '') {
