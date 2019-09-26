@@ -1747,7 +1747,7 @@ function disableButtons(status) {
     rsFlipFlopButton.elt.disabled = status;
     halfaddButton.elt.disabled = status;
     fulladdButton.elt.disabled = status;
-    if (getCookieValue('access_token' !== '')) {
+    if (getCookieValue('access_token') !== '') {
         customButton.elt.disabled = status;
     }
     propertiesButton.elt.disabled = status;
@@ -2334,7 +2334,7 @@ function setLoading(l) {
     disableButtons(l);
     simButton.elt.disabled = l;
     saveDialogButton.elt.disabled = l;
-    if (getCookieValue('access_token' !== '')) {
+    if (getCookieValue('access_token') !== '') {
         customButton.elt.disabled = l;
     }
     if (!l) {
