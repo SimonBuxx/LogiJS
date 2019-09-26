@@ -1747,7 +1747,9 @@ function disableButtons(status) {
     rsFlipFlopButton.elt.disabled = status;
     halfaddButton.elt.disabled = status;
     fulladdButton.elt.disabled = status;
-    customButton.elt.disabled = status;
+    if (getCookieValue('access_token' !== '')) {
+        customButton.elt.disabled = status;
+    }
     propertiesButton.elt.disabled = status;
     labelButton.elt.disabled = status;
     // Sets the colors of the labels
@@ -2332,7 +2334,9 @@ function setLoading(l) {
     disableButtons(l);
     simButton.elt.disabled = l;
     saveDialogButton.elt.disabled = l;
-    customButton.elt.disabled = l;
+    if (getCookieValue('access_token' !== '')) {
+        customButton.elt.disabled = l;
+    }
     if (!l) {
         saveButton.elt.disabled = false;
     }
