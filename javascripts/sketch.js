@@ -2074,19 +2074,17 @@ function showCustomDialog() {
 }
 
 function showCustomItem(place, img, caption, look) {
-    console.log(custPage);
-    console.log('Max: ' + maxPage);
     let row = Math.ceil(place / maxCustCols - 1) - (custPage * maxCustRows);
     let x = ((place - 1) % maxCustCols) * 240 + Math.round(window.width / 8) + 40;
     let y = (row * 240) + 90 + 40;
     if (row >= maxCustRows || row < 0) {
         return;
     }
-    if (look.hasOwnProperty('outputs')) {
+    /*if (look.hasOwnProperty('outputs')) {
         if (look.outputs === 0) {
             return;
         }
-    }
+    }*/
     if (img !== '') {
         img = 'data:image/png;base64,' + img;
         let raw = new Image(200, 200);
@@ -2102,21 +2100,42 @@ function showCustomItem(place, img, caption, look) {
         let img3 = createImg('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', function () {
             img3.elt.className = 'gradient';
             img3.position(x + 150, y + 30);
-            img3.elt.style.cursor = 'pointer';
-            img3.mousePressed(function () {
-                setActive(customButton, true);
-                importCustom(caption + '.json');
-                closeCustomDialog();
-            });
-            img3.elt.addEventListener('mouseenter', function (event) {
-                if (custMarked !== place) {
-                    custMarked = place;
+            if (look.hasOwnProperty('outputs')) {
+                if (look.outputs > 0) {
+                    img3.elt.style.cursor = 'pointer';
+                    img3.mousePressed(function () {
+                        setActive(customButton, true);
+                        importCustom(caption + '.json');
+                        closeCustomDialog();
+                    });
+                } else {
+                    img3.elt.style.cursor = 'not-allowed';
                 }
-                stroke(200, 50, 50);
-                strokeWeight(4);
-                noFill();
-                rect(x - 2, y - 2, 204, 204);
-            }, false);
+            }
+            if (look.hasOwnProperty('outputs')) {
+                if (look.outputs > 0) {
+                    img3.elt.addEventListener('mouseenter', function (event) {
+                        if (custMarked !== place) {
+                            custMarked = place;
+                        }
+                        stroke(200, 50, 50);
+                        strokeWeight(4);
+                        noFill();
+                        rect(x - 2, y - 2, 204, 204);
+                    }, false);
+                } else {
+                    img3.elt.addEventListener('mouseenter', function (event) {
+                        if (custMarked !== place) {
+                            custMarked = place;
+                        }
+                        stroke(0);
+                        strokeWeight(4);
+                        noFill();
+                        rect(x - 2, y - 2, 204, 204);
+                    }, false);
+                }
+            }
+            
             img3.elt.addEventListener('mouseleave', function (event) {
                 if (custMarked !== place) {
                     custMarked = -1;
