@@ -2082,8 +2082,8 @@ function showCustomItem(place, img, caption, look) {
     if (row >= maxCustRows || row < 0) {
         return;
     }
-    if (look.hasOwnProperty('inputs')) {
-        if (look.inputs === 0 && look.outputs === 0) {
+    if (look.hasOwnProperty('outputs')) {
+        if (look.outputs === 0) {
             return;
         }
     }
