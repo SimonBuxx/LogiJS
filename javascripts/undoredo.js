@@ -177,6 +177,7 @@ function redo() {
                 break;
             case 'addCust':
                 customs.push(act.actionObject);
+                setLoading(true);
                 customs[customs.length - 1].parsed = false;
                 loadCustomFile(customs[customs.length - 1].filename, customs.length - 1, customs.length - 1);
                 actionUndo.push(act);

@@ -264,12 +264,12 @@ function setup() { // jshint ignore:line
 
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
-    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return importStandard('rsNoWhobble.json'); });
+    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return importCustom('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.className = "buttonLeft";
     rsFlipFlopButton.parent(leftSideButtons);
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
-    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return importStandard('d-flipflop.json'); });
+    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return importCustom('d-flipflop.json'); });
     dFlipFlopButton.elt.className = "buttonLeft";
     dFlipFlopButton.parent(leftSideButtons);
     // Adds a counter
@@ -294,17 +294,17 @@ function setup() { // jshint ignore:line
     demuxButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
-    reg4Button.mousePressed(function () { setActive(reg4Button, true); return importStandard('4BitReg.json'); });
+    reg4Button.mousePressed(function () { setActive(reg4Button, true); return importCustom('4BitReg.json'); });
     reg4Button.elt.className = "buttonLeft";
     reg4Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return importStandard('halbadd.json'); });
+    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return importCustom('halbadd.json'); });
     halfaddButton.elt.className = "buttonLeft";
     halfaddButton.parent(leftSideButtons);
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return importStandard('volladd.json'); });
+    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return importCustom('volladd.json'); });
     fulladdButton.elt.className = "buttonLeft";
     fulladdButton.parent(leftSideButtons);
 
@@ -572,10 +572,10 @@ function setup() { // jshint ignore:line
     pageUpButton.style('padding-left', '10px');
     pageUpButton.style('padding-right', '10px');
     pageUpButton.mousePressed(function () {
-        custPage--;
-        if (custPage < 0) {
-            custPage = 0;
+        if (custPage <= 0) {
+            return;
         } else {
+            custPage--;
             closeCustomDialog();
             customClicked();
         }
@@ -589,10 +589,10 @@ function setup() { // jshint ignore:line
     pageDownButton.style('padding-left', '10px');
     pageDownButton.style('padding-right', '10px');
     pageDownButton.mousePressed(function () {
-        custPage++;
-        if (custPage > maxPage) {
-            custPage = maxPage;
+        if (custPage >= maxPage) {
+            return;
         } else {
+            custPage++;
             closeCustomDialog();
             customClicked();
         }
@@ -796,7 +796,7 @@ function urlParam(name, w) {
     return !val ? '' : val[1];
 }
 
-function importStandard(filename) {
+function importCustom(filename) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
         setControlMode('none');
@@ -922,7 +922,6 @@ function closeCustomDialog() {
     pageUpButton.hide();
     pageDownButton.hide();
     cancelButton.hide();
-    reDraw();
 }
 
 // Triggered when a sketch should be loaded
@@ -957,6 +956,7 @@ function newClicked() {
     clearItems();
     clearActionStacks();
     hideAllOptions();
+    closeCustomDialog();
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
     gateInputCount = 2;
@@ -1457,6 +1457,7 @@ function addCustom(file, direction) {
             }
         }
     }
+    setLoading(true);
     let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     customs.push(newCustom);
@@ -2048,15 +2049,17 @@ function showSaveDialog() {
 }
 
 function showCustomDialog() {
-    maxCustCols = Math.floor((window.width - 480) / 240);
+    maxCustCols = Math.floor((window.width - window.width / 4) / 240);
     maxCustRows = Math.floor((window.height - 180) / 240);
+    pageUpButton.position(maxCustCols * 240 + 10, window.height - 90);
+    pageDownButton.position(maxCustCols * 240 + 220, window.height - 90);
     custMarked = -1;
     fill(50);
     noStroke();
-    rect(240, 90, window.width - 480, window.height - 140);
+    rect(Math.round(window.width / 8), 90, window.width - Math.round(window.width / 4), window.height - 140);
     pageUpButton.show();
     pageDownButton.show();
-    cancelButton.position(420, window.height - 90);
+    cancelButton.position(Math.round(window.width / 8) + 180, window.height - 90);
     cancelButton.show();
     socket.emit('getImportSketches', { access_token: getCookieValue('access_token') });
     socket.on('importSketches', (data) => {
@@ -2070,11 +2073,17 @@ function showCustomDialog() {
 
 function showCustomItem(place, img, caption, look) {
     console.log(custPage);
+    console.log('Max: ' + maxPage);
     let row = Math.ceil(place / maxCustCols - 1) - (custPage * maxCustRows);
-    let x = ((place - 1) % maxCustCols) * 240 + 280;
+    let x = ((place - 1) % maxCustCols) * 240 + Math.round(window.width / 8) + 40;
     let y = (row * 240) + 90 + 40;
     if (row >= maxCustRows || row < 0) {
         return;
+    }
+    if (look.hasOwnProperty('inputs')) {
+        if (look.inputs === 0 && look.outputs === 0) {
+            return;
+        }
     }
     if (img !== '') {
         img = 'data:image/png;base64,' + img;
@@ -2094,7 +2103,7 @@ function showCustomItem(place, img, caption, look) {
             img3.elt.style.cursor = 'pointer';
             img3.mousePressed(function () {
                 setActive(customButton, true);
-                importStandard(caption + '.json');
+                importCustom(caption + '.json');
                 closeCustomDialog();
             });
             img3.elt.addEventListener('mouseenter', function (event) {
