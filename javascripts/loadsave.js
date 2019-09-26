@@ -323,7 +323,7 @@ function getLookData(json) {
     look.inputs = json.inputs.length;
     look.outputs = json.outputs.length;
     for (let i = 0; i < json.inputs.length; i++) {
-        if (json.inputs[i].isTop) {
+        if (json.inputs[i].istop) {
             look.tops.push(i);
         }
         if (json.inputs[i].hasOwnProperty('lbl')) {

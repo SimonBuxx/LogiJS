@@ -70,6 +70,12 @@ let simRunning = false;
 let propMode = false;
 
 let saveDialog = false;
+let customDialog = false;
+let maxCustCols = 0;
+let muxCustRows = 0;
+let custMarked = -1;
+let custPage = 0;
+let maxPage = 0;
 
 let syncFramerate = true;
 
@@ -92,12 +98,12 @@ let diodePreviewShown = false;
 let conpointPreviewShown = false;
 
 // GUI Elements
-let textInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton; // Right hand side
+let textInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
-    muxButton, demuxButton, halfaddButton, fulladdButton, ascustomButton;
+    muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
 let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 // Elements for the properties menu
@@ -258,12 +264,12 @@ function setup() { // jshint ignore:line
 
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
-    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return customClicked('rsNoWhobble.json'); });
+    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return importStandard('rsNoWhobble.json'); });
     rsFlipFlopButton.elt.className = "buttonLeft";
     rsFlipFlopButton.parent(leftSideButtons);
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D-FlipFlop');
-    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return customClicked('d-flipflop.json'); });
+    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return importStandard('d-flipflop.json'); });
     dFlipFlopButton.elt.className = "buttonLeft";
     dFlipFlopButton.parent(leftSideButtons);
     // Adds a counter
@@ -288,19 +294,27 @@ function setup() { // jshint ignore:line
     demuxButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
-    reg4Button.mousePressed(function () { setActive(reg4Button, true); return customClicked('4BitReg.json'); });
+    reg4Button.mousePressed(function () { setActive(reg4Button, true); return importStandard('4BitReg.json'); });
     reg4Button.elt.className = "buttonLeft";
     reg4Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return customClicked('halbadd.json'); });
+    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return importStandard('halbadd.json'); });
     halfaddButton.elt.className = "buttonLeft";
     halfaddButton.parent(leftSideButtons);
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return customClicked('volladd.json'); });
+    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return importStandard('volladd.json'); });
     fulladdButton.elt.className = "buttonLeft";
     fulladdButton.parent(leftSideButtons);
+
+    customButton = createButton('Sketch Import');
+    customButton.mousePressed(customClicked);
+    customButton.elt.className = "buttonLeft";
+    customButton.parent(leftSideButtons);
+    if (getCookieValue('access_token') === '') {
+        customButton.elt.disabled = true;
+    }
 
     // Adds text 'Gate inputs'
     labelGateInputs = createP('Gate inputs');
@@ -552,6 +566,40 @@ function setup() { // jshint ignore:line
     cancelButton.elt.className = "btn btn-lg btn-red";
     cancelButton.hide();
 
+    pageUpButton = createButton('Previous Page');
+    pageUpButton.position(window.width - 545, window.height - 90);
+    pageUpButton.elt.style.width = '200px';
+    pageUpButton.style('padding-left', '10px');
+    pageUpButton.style('padding-right', '10px');
+    pageUpButton.mousePressed(function () {
+        custPage--;
+        if (custPage < 0) {
+            custPage = 0;
+        } else {
+            closeCustomDialog();
+            customClicked();
+        }
+    });
+    pageUpButton.elt.className = "btn btn-lg btn-red";
+    pageUpButton.hide();
+
+    pageDownButton = createButton('Next Page');
+    pageDownButton.position(window.width - 335, window.height - 90);
+    //pageDownButton.elt.style.width = '200px';
+    pageDownButton.style('padding-left', '10px');
+    pageDownButton.style('padding-right', '10px');
+    pageDownButton.mousePressed(function () {
+        custPage++;
+        if (custPage > maxPage) {
+            custPage = maxPage;
+        } else {
+            closeCustomDialog();
+            customClicked();
+        }
+    });
+    pageDownButton.elt.className = "btn btn-lg btn-red";
+    pageDownButton.hide();
+
     // Button to load a sketch
     loadButton = createButton('Load');
     loadButton.position(windowWidth - 138, 3);
@@ -563,13 +611,6 @@ function setup() { // jshint ignore:line
     saveDialogButton.position(windowWidth - 167, 3);
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = "button";
-
-    // Button to import as custom
-    ascustomButton = createButton('Import');
-    ascustomButton.position(windowWidth - 75, 3);
-    ascustomButton.mousePressed(function () { setActive(ascustomButton); return customClicked(textInput.value() + '.json'); });
-    ascustomButton.elt.className = "button";
-    ascustomButton.hide();
 
     if (getCookieValue('access_token') !== '') {
         dashboardButton = createButton('Dashboard');
@@ -755,7 +796,7 @@ function urlParam(name, w) {
     return !val ? '' : val[1];
 }
 
-function customClicked(filename) {
+function importStandard(filename) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
         setControlMode('none');
@@ -768,6 +809,12 @@ function customClicked(filename) {
         labelDirection.show();
         custFile = filename;
     }
+}
+
+function customClicked() {
+    customDialog = true;
+    setUnactive();
+    setLoading(true);
 }
 
 function counterClicked() {
@@ -845,13 +892,36 @@ function saveClicked() {
 }
 
 function cancelClicked() {
-    saveDialog = false;
-    saveButton.hide();
-    cancelButton.hide();
-    textInput.hide();
-    descInput.hide();
-    saveDialogText.hide();
+    if (saveDialog) {
+        saveDialog = false;
+        saveButton.hide();
+        textInput.hide();
+        descInput.hide();
+        saveDialogText.hide();
+        setLoading(false);
+        cancelButton.hide();
+        reDraw();
+    } else if (customDialog) {
+        closeCustomDialog();
+    }
+}
+
+function closeCustomDialog() {
+    customDialog = false;
+    let gradients = document.getElementsByClassName('gradient');
+
+    while (gradients[0]) {
+        gradients[0].parentNode.removeChild(gradients[0]);
+    }
+    let captions = document.getElementsByClassName('capt');
+
+    while (captions[0]) {
+        captions[0].parentNode.removeChild(captions[0]);
+    }
     setLoading(false);
+    pageUpButton.hide();
+    pageDownButton.hide();
+    cancelButton.hide();
     reDraw();
 }
 
@@ -872,6 +942,7 @@ function saveDialogClicked() {
     endSimulation();
     saveDialog = true;
     saveButton.show();
+    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 150);
     cancelButton.show();
     textInput.show();
     descInput.show();
@@ -991,7 +1062,7 @@ function setUnactive() {
     demuxButton.elt.className = 'buttonLeft';
     halfaddButton.elt.className = 'buttonLeft';
     fulladdButton.elt.className = 'buttonLeft';
-    ascustomButton.elt.className = 'button';
+    customButton.elt.className = 'buttonLeft';
 }
 
 function deleteClicked() {
@@ -1675,7 +1746,7 @@ function disableButtons(status) {
     rsFlipFlopButton.elt.disabled = status;
     halfaddButton.elt.disabled = status;
     fulladdButton.elt.disabled = status;
-    ascustomButton.elt.disabled = status;
+    customButton.elt.disabled = status;
     propertiesButton.elt.disabled = status;
     labelButton.elt.disabled = status;
     // Sets the colors of the labels
@@ -1816,7 +1887,7 @@ function reDraw() {
         showTutorial();
     }
 
-    if (loading && !saveDialog) {
+    if (loading && !saveDialog && !customDialog) {
         showMessage('Loading...', loadFile.split('.json')[0]);
     }
 
@@ -1824,6 +1895,12 @@ function reDraw() {
         stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
         showSaveDialog();
         showPreviewImage();
+    }
+
+    if (customDialog) {
+        stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
+        showCustomDialog();
+        textFont('Gudea');
     }
 
     // Draw the zoom and framerate labels
@@ -1968,6 +2045,83 @@ function showSaveDialog() {
     fill('rgba(50, 50, 50, 0.95)');
     noStroke();
     rect(window.width / 2 - 365, window.height / 2 - 188, 580, 400);
+}
+
+function showCustomDialog() {
+    maxCustCols = Math.floor((window.width - 480) / 240);
+    maxCustRows = Math.floor((window.height - 180) / 240);
+    custMarked = -1;
+    fill(50);
+    noStroke();
+    rect(240, 90, window.width - 480, window.height - 140);
+    pageUpButton.show();
+    pageDownButton.show();
+    cancelButton.position(420, window.height - 90);
+    cancelButton.show();
+    socket.emit('getImportSketches', { access_token: getCookieValue('access_token') });
+    socket.on('importSketches', (data) => {
+        socket.off('importSketches');
+        maxPage = Math.ceil(Math.ceil(data.sketches.length / maxCustCols) / maxCustRows) - 1;
+        for (let i = 0; i < data.sketches.length; i++) {
+            showCustomItem(i + 1, data.images[i], data.sketches[i], data.looks[i]);
+        }
+    });
+}
+
+function showCustomItem(place, img, caption, look) {
+    console.log(custPage);
+    let row = Math.ceil(place / maxCustCols - 1) - (custPage * maxCustRows);
+    let x = ((place - 1) % maxCustCols) * 240 + 280;
+    let y = (row * 240) + 90 + 40;
+    if (row >= maxCustRows || row < 0) {
+        return;
+    }
+    if (img !== '') {
+        img = 'data:image/png;base64,' + img;
+        let raw = new Image(200, 200);
+        raw.src = img;
+        raw.onload = function () {
+            let imag = createImage(200, 200);
+            imag.drawingContext.drawImage(raw, 0, 0);
+            image(imag, x, y);
+            if (look.hasOwnProperty('caption')) {
+                showImportPreview(look, x, y);
+            }
+        };
+        let img3 = createImg('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', function () {
+            img3.elt.className = 'gradient';
+            img3.position(x + 150, y + 30);
+            img3.elt.style.cursor = 'pointer';
+            img3.mousePressed(function () {
+                setActive(customButton, true);
+                importStandard(caption + '.json');
+                closeCustomDialog();
+            });
+            img3.elt.addEventListener('mouseenter', function (event) {
+                if (custMarked !== place) {
+                    custMarked = place;
+                }
+                stroke(200, 50, 50);
+                strokeWeight(4);
+                noFill();
+                rect(x - 2, y - 2, 204, 204);
+            }, false);
+            img3.elt.addEventListener('mouseleave', function (event) {
+                if (custMarked !== place) {
+                    custMarked = -1;
+                }
+                stroke(50);
+                strokeWeight(4);
+                noFill();
+                rect(x - 2, y - 2, 204, 204);
+            }, false);
+            let capt = createP(caption.slice(0, 25).toUpperCase());
+            capt.style('font-family', 'Open Sans');
+            capt.position(x + 160, y + 185);
+            capt.style('color', 'white');
+            capt.elt.className = 'capt';
+        });
+    }
 }
 
 function showPreviewImage() {
@@ -2169,6 +2323,7 @@ function setLoading(l) {
     disableButtons(l);
     simButton.elt.disabled = l;
     saveDialogButton.elt.disabled = l;
+    customButton.elt.disabled = l;
     if (!l) {
         saveButton.elt.disabled = false;
     }
@@ -2184,166 +2339,86 @@ function setLoading(l) {
 
 function showImportPreview(item, x, y) {
     let x1, x2, y1, y2;
-    let w = Math.max((item.tops - 1), 0) * 30 + 60;
-    let h = Math.max(item.inputs, item.outputs) * 30;
+    let w = Math.max((item.tops.length - 1), 0) * 30 + 60;
+    let h = (Math.max(item.inputs - item.tops.length, item.outputs) + 1) * 30;
+    let scaling = 1;
+    if (h >= 120) {
+        scaling = 120 / h;
+        x += 180 - w * scaling;
+        scale(scaling);
+    } else {
+        x += 180 - w;
+    }
+    y += 20 * scaling;
     stroke(0);
     strokeWeight(3);
     fill(255);
+    textFont('Open Sans');
 
     // Draw the body
-    if (item.tops === 0) {
-        rect(x, y + GRIDSIZE / 2, w, h - GRIDSIZE);
+    if (item.tops.length === 0) {
+        rect(x / scaling, (y / scaling) + GRIDSIZE / 2, w, h - GRIDSIZE);
     } else {
-        rect(x, y, w, h);
+        rect(x / scaling, y / scaling, w, h);
     }
 
     noStroke();
-    textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
-    text(this.caption, x + w / 2, y + h / 2); // Draw text
-    /*
-        // Draw inputs
-        for (let i = 1; i <= item.inputs; i++) {
-            // Draw inputs
-            stroke(0);
-            strokeWeight(3);
-    
-            if (!item.inputTop[i - 1]) {
-                x1 = x - 6;
-                y1 = y + (h * (i - item.tops)) / Math.max(item.inputs, item.outputs);
-                x2 = x;
-                y2 = y + (h * (i - item.tops)) / Math.max(item.inputs, item.outputs);
+    textSize(10);
+    text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2);
+    textSize(14);
+    let tops = 0;
+    for (let i = 1; i <= item.inputs; i++) {
+        stroke(0);
+        strokeWeight(2);
+        if (item.tops.includes(i - 1)) {
+            tops++;
+            x1 = (x / scaling) + (30 * tops);
+            y1 = (y / scaling) - 6;
+            x2 = (x / scaling) + (30 * tops);
+            y2 = (y / scaling);
+            if (item.inputLabels[i - 1] === ">") {
+                line(x1, y2 + 14, x1 - 6, y2);
+                line(x1, y2 + 14, x1 + 6, y2);
             } else {
-                tops++;
-                x1 = x + (h * item.tops) / height;
-                y1 = y - 6;
-                x2 = x + (h * item.tops) / height;
-                y2 = y;
-            }
-            line(x1, y1, x2, y2);
-    
-            fill(0);
-    
-            if (this.objects[INPNUM][i - 1].lbl === ">") {
-                stroke(0);
-                if (!this.objects[INPNUM][i - 1].isTop) {
-                    switch (this.direction) {
-                        case 0:
-                            line(x2 + 14, y1, x2, y1 - 6);
-                            line(x2 + 14, y1, x2, y1 + 6);
-                            break;
-                        case 1:
-                            line(x1, y2 + 14, x1 - 6, y2);
-                            line(x1, y2 + 14, x1 + 6, y2);
-                            break;
-                        case 2:
-                            line(x1 - 14, y1, x1, y1 - 6);
-                            line(x1 - 14, y1, x1, y1 + 6);
-                            break;
-                        case 3:
-                            line(x1, y1 - 14, x1 - 6, y1);
-                            line(x1, y1 - 14, x1 + 6, y1);
-                            break;
-                    }
-                } else {
-                    switch (this.direction) {
-                        case 0:
-                            line(x1, y2 + 14, x1 - 6, y2);
-                            line(x1, y2 + 14, x1 + 6, y2);
-                            break;
-                        case 1:
-                            line(x2 - 14, y1, x2, y1 - 6);
-                            line(x2 - 14, y1, x2, y1 + 6);
-                            break;
-                        case 2:
-                            line(x1, y1 - 14, x1 - 6, y1);
-                            line(x1, y1 - 14, x1 + 6, y1);
-                            break;
-                        case 3:
-                            line(x1 + 14, y1, x1, y1 - 6);
-                            line(x1 + 14, y1, x1, y1 + 6);
-                            break;
-                    }
-                }
-            } else if (this.objects[INPNUM][i - 1].lbl !== '') {
                 noStroke();
-                textSize(14);
-                if (!this.objects[INPNUM][i - 1].isTop) {
-                    switch (this.direction) {
-                        case 0: text(this.objects[INPNUM][i - 1].lbl, x2 + 10, y1); break;
-                        case 1: text(this.objects[INPNUM][i - 1].lbl, x1, y2 + 10); break;
-                        case 2: text(this.objects[INPNUM][i - 1].lbl, x1 - 10, y1); break;
-                        case 3: text(this.objects[INPNUM][i - 1].lbl, x1, y1 - 10); break;
-                    }
-                } else {
-                    switch (this.direction) {
-                        case 0: text(this.objects[INPNUM][i - 1].lbl, x1, y2 + 10); break;
-                        case 1: text(this.objects[INPNUM][i - 1].lbl, x2 - 10, y1); break;
-                        case 2: text(this.objects[INPNUM][i - 1].lbl, x1, y1 - 10); break;
-                        case 3: text(this.objects[INPNUM][i - 1].lbl, x1 + 10, y1); break;
-                    }
-                }
+                text(item.inputLabels[i - 1], x1, y2 + 10);
+            }
+        } else {
+            x1 = (x / scaling) - 6;
+            y1 = (y / scaling) + (30 * (i - tops));
+            x2 = (x / scaling);
+            y2 = (y / scaling) + (30 * (i - tops));
+            if (item.inputLabels[i - 1] === ">") {
+                line(x2 + 14, y1, x2, y1 - 6);
+                line(x2 + 14, y1, x2, y1 + 6);
+            } else {
+                noStroke();
+                text(item.inputLabels[i - 1], x2 + 10, y1);
             }
         }
-    
-        // Draw outputs
-        for (let i = 1; i <= this.outputCount; i++) {
-            // Draw outputs
-            if (this.marked) {
-                stroke(MRED, MGREEN, MBLUE);
-                strokeWeight(3);
-            } else if (this.outputs[i - 1] === true) {
-                stroke(HRED, HGREEN, HBLUE);
-                strokeWeight(5);
-            } else {
-                stroke(LRED, LGREEN, LBLUE);
-                strokeWeight(3);
-            }
-    
-            switch (this.direction) {
-                case 0:
-                    x1 = this.x + this.w;
-                    y1 = this.y + (this.h * i) / this.height;
-                    x2 = this.x + this.w + 6;
-                    y2 = this.y + (this.h * i) / this.height;
-                    break;
-                case 1:
-                    x1 = this.x + (this.w * i) / this.height;
-                    y1 = this.y + this.h;
-                    x2 = this.x + (this.w * i) / this.height;
-                    y2 = this.y + this.h + 6;
-                    break;
-                case 2:
-                    x1 = this.x - 6;
-                    y1 = this.y + (this.h * i) / this.height;
-                    x2 = this.x;
-                    y2 = this.y + (this.h * i) / this.height;
-                    break;
-                case 3:
-                    x1 = this.x + (this.w * i) / this.height;
-                    y1 = this.y;
-                    x2 = this.x + (this.w * i) / this.height;
-                    y2 = this.y - 6;
-                    break;
-                default:
-                    console.log('Gate direction doesn\'t exist!');
-            }
-            line(x1, y1, x2, y2);
-    
-            fill(0);
-            noStroke();
-            textSize(14);
-            if (this.objects[OUTPNUM][i - 1].lbl !== "") {
-                switch (this.direction) {
-                    case 0: text(this.objects[OUTPNUM][i - 1].lbl, x1 - 10, y1); break;
-                    case 1: text(this.objects[OUTPNUM][i - 1].lbl, x1, y1 - 10); break;
-                    case 2: text(this.objects[OUTPNUM][i - 1].lbl, x1 + 16, y1); break;
-                    case 3: text(this.objects[OUTPNUM][i - 1].lbl, x1, y1 + 10); break;
-                }
-            }
-        }*/
+        stroke(0);
+        strokeWeight(3);
+        line(x1, y1, x2, y2);
+    }
 
+    for (let i = 1; i <= item.outputs; i++) {
+        stroke(0);
+        strokeWeight(3);
+        x1 = (x / scaling) + w;
+        y1 = (y / scaling) + (30 * i);
+        x2 = (x / scaling) + w + 6;
+        y2 = (y / scaling) + (30 * i);
+        noStroke();
+        text(item.outputLabels[i - 1], x1 - 10, y1);
+        stroke(0);
+        strokeWeight(3);
+        line(x1, y1, x2, y2);
+    }
+
+    scale(1 / scaling);
+    textAlign(LEFT, TOP);
 }
 
 /*

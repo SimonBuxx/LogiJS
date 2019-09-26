@@ -230,6 +230,75 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('getImportSketches', (data) => {
+        let userPath = '';
+        if (data.access_token === '') {
+            io.sockets.emit('importSketches', {
+                sketches: {},
+                images: {},
+                looks: {},
+                success: false
+            });
+            return;
+        } else {
+            let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+            userPath = './userSketches/' + user;
+        }
+        let sketchList = [];
+        let images = [];
+        let looks = [];
+        try {
+            glob(userPath + '/*.json', { nodir: true }, function (err, files) {
+                for (let i = 0; i < files.length; i++) {
+                    sketchList.push(path.basename(files[i], '.json'));
+                    try {
+                        if (fs.existsSync(userPath + '/' + path.basename(files[i], '.json') + '.png')) {
+                            images.push(fs.readFileSync(userPath + '/' + path.basename(files[i], '.json') + '.png'));
+                            images[i] = new Buffer(images[i], "binary").toString("base64");
+                        } else {
+                            images.push('');
+                        }
+                    } catch (e) {
+                        images.push('');
+                    }
+                    if (fs.existsSync(userPath + '/' + path.basename(files[i], '.json') + '.txt')) {
+                        try {
+                            let look = fs.readFileSync(userPath + '/' + path.basename(files[i], '.json') + '.txt');
+                            try {
+                                look = JSON.parse(look);
+                                console.log(look);
+                                looks.push(look);
+                            } catch (e) {
+                                console.log('[MINOR] Couldn\'t parse JSON!');
+                                console.log(userPath + '/' + path.basename(files[i], '.json') + '.txt');
+                                looks.push({});
+                            }
+                        } catch (e) {
+                            console.log('[MINOR] File loading error!');
+                            console.log(userPath + '/' + path.basename(files[i], '.json') + '.txt');
+                            looks.push({});
+                        }
+                    } else {
+                        looks.push({});
+                    }
+                }
+                io.sockets.emit('importSketches', {
+                    sketches: sketchList,
+                    images: images,
+                    looks: looks,
+                    success: true
+                });
+            });
+        } catch (e) {
+            io.sockets.emit('importSketches', {
+                sketches: {},
+                images: {},
+                looks: {},
+                success: false
+            });
+        }
+    });
+
     socket.on('savePreview', (data) => {
         if (data.access_token === '') {
             return;
@@ -253,7 +322,7 @@ io.on('connection', (socket) => {
                     console.log('./userSketches/' + user + '/' + data.name + '.txt');
                 });
             } catch (e) {
-        
+
             }
         }
     });
