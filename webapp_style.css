@@ -341,9 +341,10 @@ body{
 }
 .scrollBoxLeft{
 	width :150px;
-	overflow-y : scroll;
+	overflow-y : auto;
 	overflow-x : hidden;
-	margin-top : 74px;
+    margin-top : 74px;
+    scrollbar-width: none;
 }
 ::-webkit-scrollbar { 
     display: none; 
