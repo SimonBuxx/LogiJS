@@ -164,7 +164,7 @@
       "x": "510",
       "y": "120",
       "direction": "0",
-      "filename": "\"rsNoWhobble.json\"",
+      "filename": "\"rs-flipflop.json\"",
       "outputsInv": "[]",
       "inputsInv": "[]"
     },
@@ -172,7 +172,7 @@
       "x": "150",
       "y": "120",
       "direction": "0",
-      "filename": "\"delay.json\"",
+      "filename": "\"3-buffer.json\"",
       "outputsInv": "[]",
       "inputsInv": "[]"
     }

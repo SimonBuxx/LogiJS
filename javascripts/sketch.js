@@ -264,7 +264,7 @@ function setup() { // jshint ignore:line
 
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS-FlipFlop');
-    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return importCustom('rsNoWhobble.json'); });
+    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return importCustom('rs-flipflop.json'); });
     rsFlipFlopButton.elt.className = "buttonLeft";
     rsFlipFlopButton.parent(leftSideButtons);
     // Adds a d-flipflop
@@ -294,17 +294,17 @@ function setup() { // jshint ignore:line
     demuxButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
-    reg4Button.mousePressed(function () { setActive(reg4Button, true); return importCustom('4BitReg.json'); });
+    reg4Button.mousePressed(function () { setActive(reg4Button, true); return importCustom('4-register.json'); });
     reg4Button.elt.className = "buttonLeft";
     reg4Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return importCustom('halbadd.json'); });
+    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return importCustom('half_add.json'); });
     halfaddButton.elt.className = "buttonLeft";
     halfaddButton.parent(leftSideButtons);
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return importCustom('volladd.json'); });
+    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return importCustom('full_add.json'); });
     fulladdButton.elt.className = "buttonLeft";
     fulladdButton.parent(leftSideButtons);
 
@@ -825,7 +825,7 @@ function counterClicked() {
     labelDirection.show();
     counterBitSelect.show();
     labelOutputWidth.show();
-    custFile = counterBitWidth + 'BitCounter.json';
+    custFile = counterBitWidth + '-counter.json';
 }
 
 function decoderClicked() {
@@ -836,7 +836,7 @@ function decoderClicked() {
     labelDirection.show();
     decoderBitSelect.show();
     labelInputWidth.show();
-    custFile = decoderBitWidth + 'BitDec.json';
+    custFile = decoderBitWidth + '-decoder.json';
 }
 
 function muxClicked() {

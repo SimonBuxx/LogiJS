@@ -220,7 +220,7 @@
       "x": "330",
       "y": "120",
       "direction": "0",
-      "filename": "\"2BitDec.json\"",
+      "filename": "\"2-decoder.json\"",
       "outputsInv": "[false,false,false,false]",
       "inputsInv": "[false,false]"
     },
@@ -228,7 +228,7 @@
       "x": "240",
       "y": "120",
       "direction": "0",
-      "filename": "\"2BitCounter.json\"",
+      "filename": "\"2-counter.json\"",
       "outputsInv": "[false,false]",
       "inputsInv": "[false]"
     }

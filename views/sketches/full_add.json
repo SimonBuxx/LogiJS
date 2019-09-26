@@ -94,7 +94,7 @@
       "x": "900",
       "y": "270",
       "direction": "0",
-      "filename": "\"halbadd.json\"",
+      "filename": "\"half_add.json\"",
       "outputsInv": "[false,false]",
       "inputsInv": "[false,false]"
     },
@@ -102,7 +102,7 @@
       "x": "990",
       "y": "300",
       "direction": "0",
-      "filename": "\"halbadd.json\"",
+      "filename": "\"half_add.json\"",
       "outputsInv": "[false,false]",
       "inputsInv": "[false,false]"
     }

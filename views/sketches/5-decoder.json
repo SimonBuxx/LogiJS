@@ -786,7 +786,7 @@
       "x": "690",
       "y": "90",
       "direction": "0",
-      "filename": "\"4BitDec.json\"",
+      "filename": "\"4-decoder.json\"",
       "outputsInv": "[]",
       "inputsInv": "[]"
     },
@@ -794,7 +794,7 @@
       "x": "690",
       "y": "570",
       "direction": "0",
-      "filename": "\"4BitDec.json\"",
+      "filename": "\"4-decoder.json\"",
       "outputsInv": "[]",
       "inputsInv": "[]"
     }
