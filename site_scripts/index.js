@@ -116,7 +116,13 @@ router.get('/dashboard', function (req, res) {
 });
 
 router.get('/download', (req, res) => {
-    res.download('./userSketches/' + getUser(req) + '/' + req.query.file + '.json');
+    try {
+        res.download('./userSketches/' + getUser(req) + '/' + req.query.file + '.json', function (err) {
+            //return res.sendStatus('200');
+        });
+    } catch (e) {
+        return res.sendStatus('200');
+    }
 });
 
 router.post('/login', (req, res) => {

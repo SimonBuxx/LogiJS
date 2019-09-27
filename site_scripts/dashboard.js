@@ -26,6 +26,13 @@ for (const button of openButtons) {
     });
 }
 
+const openImages = document.querySelectorAll(".preview");
+for (const image of openImages) {
+    image.addEventListener('click', function (event) { //jshint ignore:line
+        window.location = '/editor?sketch=' + event.target.id;
+    });
+}
+
 const deleteButtons = document.querySelectorAll(".btn.delete");
 for (const button of deleteButtons) {
     button.addEventListener('click', function (event) { //jshint ignore:line

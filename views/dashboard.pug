@@ -61,7 +61,9 @@ head
 - for(var i = 0; i < sketchData.sketches.length; i++) {
   #dashboard_item_back.carousel
     img.preview(src='data:image/png;base64,' + images[i], style='height: 200px; width: 200px; float:left; margin-right: 20px;', alt=sketchData.sketches[i])
-    h1(style="text-align: left; margin: 0;") #{sketchData.sketches[i].toUpperCase()}
+    img.preview.gradient(src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', style='height: 200px; width: 200px; float:left; margin-left: -220px; margin-right: 20px;', id=sketchData.sketches[i], alt=sketchData.sketches[i])
+    h1(style="text-align: left; position: absolute; top: 10px; left: 230px; margin: 0;") #{sketchData.sketches[i].toUpperCase()}
+    p(style="text-align: left; position: absolute; bottom: 15px; left: 20px; margin: 0; font-size: 16px;") #{sketchData.sketches[i].toUpperCase()}
     p(style="text-align: left; margin: 10px; margin-right: 200px; position: absolute; top: 50px; left: 220px; font-size: 14px; white-space: pre-line; line-height: 25px;") #{descriptions[i]}
     p(style="text-align: left; margin: 10px; position: absolute; bottom: 0; left: 220px; font-size: 14px;") CREATED: #{sketchData.birthtimes[i]} | LAST EDITED: #{sketchData.modified[i]} | FILE SIZE: #{sketchData.sizes[i]} KB
     input.btn.btn-lg.btn-orange.download(type='submit', id=sketchData.sketches[i], role='button' value="Download" style="position: absolute; right: 0; top: 0; padding: 10px 40px; margin: 10px; float:right; width: 170px;")
