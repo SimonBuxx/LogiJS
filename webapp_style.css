@@ -69,6 +69,64 @@ body {
     user-select: none;
   }
 
+.base_layer {
+    width: 200px;
+    height: 200px;
+    outline: 4px solid rgb(200, 50, 50);
+}
+
+.black_layer {
+    width: 200px;
+    height: 200px;
+    outline: 4px solid black;
+}
+
+.stay_black {
+    width: 200px;
+    height: 200px;
+    outline: 4px solid black;
+}
+
+.darker {
+    filter: brightness(30%);
+}
+
+.top_layer {
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+}
+
+.ease_in {
+    opacity: 0.0;
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -ms-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+}
+
+.ease_out {
+    opacity: 1.0;
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -ms-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+}
+
+.sketch_item:hover > .ease_in {
+    opacity: 1.0;
+}
+
+.sketch_item:hover > .ease_out {
+    opacity: 0.0;
+}
+
+.sketch_item:hover > .black_layer {
+    opacity: 0.0;
+}
+
 .label {
     -ms-user-select: none;
     -webkit-user-select: none;

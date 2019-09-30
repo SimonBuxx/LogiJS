@@ -73,7 +73,6 @@ let saveDialog = false;
 let customDialog = false;
 let maxCustCols = 0;
 let muxCustRows = 0;
-let custMarked = -1;
 let custPage = 0;
 let maxPage = 0;
 
@@ -471,7 +470,7 @@ function setup() { // jshint ignore:line
     //Upper left
 
     // Activates the edit mode
-    propertiesButton = createButton('Edit');
+    propertiesButton = createButton('<i class="fa fa-pen"></i> Edit');
     propertiesButton.position(152, 3);
     propertiesButton.mousePressed(function () {
         setActive(propertiesButton);
@@ -482,21 +481,21 @@ function setup() { // jshint ignore:line
 
 
     // Activates the delete mode (objects and wires)
-    deleteButton = createButton('Delete');
-    deleteButton.position(207, 3);
+    deleteButton = createButton('<i class="far fa-trash-alt"></i> Delete');
+    deleteButton.position(226, 3);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
 
     // Starts and stops the simulation
-    simButton = createButton('Start');
-    simButton.elt.style.width = '34px';
-    simButton.position(280, 3);
+    simButton = createButton('<i class="fa fa-play"></i> Start');
+    simButton.elt.style.width = '52px';
+    simButton.position(316, 3);
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
 
     // Undos the last action
-    undoButton = createButton('Undo');
-    undoButton.position(342, 3);
+    undoButton = createButton('<i class="fa fa-undo"></i> Undo');
+    undoButton.position(396, 3);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -504,8 +503,8 @@ function setup() { // jshint ignore:line
     undoButton.elt.className = "button";
 
     // Redos the last action
-    redoButton = createButton('Redo');
-    redoButton.position(408, 3);
+    redoButton = createButton('<i class="fa fa-redo"></i> Redo');
+    redoButton.position(481, 3);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -513,8 +512,8 @@ function setup() { // jshint ignore:line
     redoButton.elt.className = "button";
 
     // Activates the mode for area selecting
-    selectButton = createButton('Select');
-    selectButton.position(472, 3);
+    selectButton = createButton('<i class="fas fa-object-group"></i> Select');
+    selectButton.position(564, 3);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
@@ -540,7 +539,7 @@ function setup() { // jshint ignore:line
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(windowWidth - 236, 3);
+    newButton.position(windowWidth - 270, 3);
     newButton.elt.style.width = '40px';
     newButton.mousePressed(function () {
         if (newButton.html() === 'SURE?') {
@@ -607,26 +606,26 @@ function setup() { // jshint ignore:line
     loadButton.elt.className = "button";
     loadButton.hide();
 
-    saveDialogButton = createButton('Save');
-    saveDialogButton.position(windowWidth - 167, 3);
+    saveDialogButton = createButton('<i class="fas fa-save"></i> Save');
+    saveDialogButton.position(windowWidth - 202, 3);
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = "button";
 
     if (getCookieValue('access_token') !== '') {
-        dashboardButton = createButton('Dashboard');
+        dashboardButton = createButton('<i class="fas fa-th"></i> Dashboard');
     } else {
-        dashboardButton = createButton('Login');
+        dashboardButton = createButton('<i class="fa fa-sign-in-alt"></i> Login');
     }
-    dashboardButton.elt.style.width = '78px';
+    dashboardButton.elt.style.width = '98px';
     dashboardButton.mousePressed(function () {
         if (dashboardButton.html() === 'SURE?') {
             window.location = '/dashboard';
         } else {
             dashboardButton.html('SURE?');
-            setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('Dashboard'); } else { dashboardButton.html('Login'); } }, 3000);
+            setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('<i class="fas fa-th"></i> Dashboard'); } else { dashboardButton.html('<i class="fa fa-sign-in-alt"></i> Login'); } }, 3000);
         }
     });
-    dashboardButton.position(windowWidth - 105, 3);
+    dashboardButton.position(windowWidth - 124, 3);
     dashboardButton.elt.className = "button";
 
     // Button to close the hints
@@ -909,14 +908,32 @@ function cancelClicked() {
 function closeCustomDialog() {
     customDialog = false;
     let gradients = document.getElementsByClassName('gradient');
-
     while (gradients[0]) {
         gradients[0].parentNode.removeChild(gradients[0]);
     }
     let captions = document.getElementsByClassName('capt');
-
     while (captions[0]) {
         captions[0].parentNode.removeChild(captions[0]);
+    }
+    let darker = document.getElementsByClassName('darker');
+    while (darker[0]) {
+        darker[0].parentNode.removeChild(darker[0]);
+    }
+    let base_layers = document.getElementsByClassName('base_layer');
+    while (base_layers[0]) {
+        base_layers[0].parentNode.removeChild(base_layers[0]);
+    }
+    let black_layers = document.getElementsByClassName('black_layer');
+    while (black_layers[0]) {
+        black_layers[0].parentNode.removeChild(black_layers[0]);
+    }
+    let top_layers = document.getElementsByClassName('top_layer');
+    while (top_layers[0]) {
+        top_layers[0].parentNode.removeChild(top_layers[0]);
+    }
+    let stay_blacks = document.getElementsByClassName('stay_black');
+    while (stay_blacks[0]) {
+        stay_blacks[0].parentNode.removeChild(stay_blacks[0]);
     }
     setLoading(false);
     pageUpButton.hide();
@@ -1625,7 +1642,7 @@ function startSimulation() {
         updater = setInterval(updateTick, 0);
     }
 
-    setSimButtonText('Stop'); // Alter the caption of the Start/Stop button
+    setSimButtonText('<i class="fa fa-stop"></i> Stop'); // Alter the caption of the Start/Stop button
     setControlMode('none');
     setUnactive();
     disableButtons(true);
@@ -1663,7 +1680,7 @@ function startSimulation() {
 */
 function endSimulation(reset = true) {
     clearInterval(updater); // Stop the unsynced simulation updater
-    setSimButtonText('Start'); // Set the button caption to 'Start'
+    setSimButtonText('<i class="fa fa-play"></i> Start'); // Set the button caption to 'Start'
     if (reset) {
         setControlMode('none');
         setPropMode(true);
@@ -2055,7 +2072,6 @@ function showCustomDialog() {
     maxCustRows = Math.floor((window.height - 180) / 240);
     pageUpButton.position(maxCustCols * 240 + 10, window.height - 90);
     pageDownButton.position(maxCustCols * 240 + 220, window.height - 90);
-    custMarked = -1;
     fill('rgba(50, 50, 50, 0.95)');
     noStroke();
     rect(Math.round(window.width / 8), 90, window.width - Math.round(window.width / 4), window.height - 140);
@@ -2081,76 +2097,70 @@ function showCustomItem(place, img, caption, look) {
         return;
     }
     if (img !== '') {
+        let sketch_item = createDiv('');
+        sketch_item.elt.className = 'sketch_item';
+        let base_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
+            base_layer.position(x + 150, y + 30);
+            base_layer.elt.className = 'base_layer';
+            base_layer.parent(sketch_item);
+        });
+        let black_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
+            black_layer.position(x + 150, y + 30);
+            if (look.hasOwnProperty('outputs')) {
+                if (look.outputs > 0) {
+                    black_layer.elt.className = 'black_layer';
+                } else {
+                    black_layer.elt.className = 'stay_black';
+                }
+            }
+            black_layer.parent(sketch_item);
+        });
         img = 'data:image/png;base64,' + img;
         let raw = new Image(200, 200);
         raw.src = img;
         raw.onload = function () {
-            let imag = createImage(200, 200);
-            imag.drawingContext.drawImage(raw, 0, 0);
-            image(imag, x, y);
+            let normal_img = createImage(200, 200);
+            normal_img.drawingContext.drawImage(raw, 0, 0);
+            image(normal_img, x, y);
             if (look.hasOwnProperty('outputs')) {
                 if (look.outputs > 0) {
                     showImportPreview(look, x, y);
                 }
             }
         };
-        let img3 = createImg('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', function () {
-            img3.elt.className = 'gradient';
-            img3.position(x + 150, y + 30);
-            stroke(0);
-            strokeWeight(4);
-            noFill();
-            rect(x - 2, y - 2, 204, 204);
-            if (look.hasOwnProperty('outputs')) {
-                if (look.outputs > 0) {
-                    img3.elt.style.cursor = 'pointer';
-                    img3.mousePressed(function () {
-                        setActive(customButton, true);
-                        importCustom(caption + '.json');
-                        closeCustomDialog();
-                    });
-                } else {
-                    img3.elt.style.cursor = 'not-allowed';
-                }
+        let darker_img = createImg(img, function () {
+            darker_img.position(x + 150, y + 30);
+            darker_img.elt.className = 'darker ease_in';
+            darker_img.parent(sketch_item);
+        });
+        if (look.hasOwnProperty('outputs')) {
+            if (look.outputs > 0) {
+                showImportPreview(look, x, y);
             }
-            if (look.hasOwnProperty('outputs')) {
-                if (look.outputs > 0) {
-                    img3.elt.addEventListener('mouseenter', function (event) {
-                        if (custMarked !== place) {
-                            custMarked = place;
-                        }
-                        stroke(200, 50, 50);
-                        strokeWeight(4);
-                        noFill();
-                        rect(x - 2, y - 2, 204, 204);
-                    }, false);
-                } else {
-                    img3.elt.addEventListener('mouseenter', function (event) {
-                        if (custMarked !== place) {
-                            custMarked = place;
-                        }
-                        stroke(0);
-                        strokeWeight(4);
-                        noFill();
-                        rect(x - 2, y - 2, 204, 204);
-                    }, false);
-                }
+        }
+        let gradient = createImg('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', function () {
+            gradient.position(x + 150, y + 30);
+            gradient.elt.className = 'gradient';
+            gradient.parent(sketch_item);
+        });
+        let capt = createP(caption.slice(0, 25).toUpperCase());
+        capt.style('font-family', 'Open Sans');
+        capt.position(x + 160, y + 185);
+        capt.style('color', 'white');
+        capt.elt.className = 'capt';
+        let top_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
+            top_layer.position(x + 150, y + 30);
+            top_layer.elt.className = 'top_layer';
+            top_layer.parent(sketch_item);
+            if (look.outputs === 0) {
+                top_layer.elt.style.cursor = 'not-allowed';
+            } else {
+                top_layer.mousePressed(function () {
+                    setActive(customButton, true);
+                    importCustom(caption + '.json');
+                    closeCustomDialog();
+                });
             }
-
-            img3.elt.addEventListener('mouseleave', function (event) {
-                if (custMarked !== place) {
-                    custMarked = -1;
-                }
-                stroke(0);
-                strokeWeight(4);
-                noFill();
-                rect(x - 2, y - 2, 204, 204);
-            }, false);
-            let capt = createP(caption.slice(0, 25).toUpperCase());
-            capt.style('font-family', 'Open Sans');
-            capt.position(x + 160, y + 185);
-            capt.style('color', 'white');
-            capt.elt.className = 'capt';
         });
     }
 }
