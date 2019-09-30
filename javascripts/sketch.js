@@ -1202,12 +1202,12 @@ function newBitLength() {
 
 function newCounterBitLength() {
     counterBitWidth = parseInt(counterBitSelect.value());
-    custFile = counterBitWidth + 'BitCounter.json';
+    custFile = counterBitWidth + '-counter.json';
 }
 
 function newDecoderBitLength() {
     decoderBitWidth = parseInt(decoderBitSelect.value());
-    custFile = decoderBitWidth + 'BitDec.json';
+    custFile = decoderBitWidth + '-decoder.json';
 }
 
 function newMuxBitLength() {
