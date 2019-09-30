@@ -12,6 +12,7 @@ head
     include css/index_style.css
   link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
   link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
   script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
   script.
     window.addEventListener("load", function () {
@@ -48,28 +49,46 @@ head
               a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
             li
               a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
-            li
-              a.external-link(rel='nofollow', href='https://www.twitter.com/logi_js', target='_parent') TWITTER
             li.active
-              a(href='#', style="margin-left: 30px;") #{user.toUpperCase()}
+              a(href='#', style="margin-left: 60px;") #{user.toUpperCase()}
 #blur
 #dashboard_wc_back.carousel
   form.Logout
     input.btn.btn-lg.btn-orange(type='submit', role='button' value="Sign out" style="margin: 10px; float:left;")
   input.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' value="New sketch" style="margin: 10px; float:right; width: 170px;")
   h1(style="padding: 10px;") WELCOME, #{user.toUpperCase()}!
-- for(var i = 0; i < sketchData.sketches.length; i++) {
-  #dashboard_item_back.carousel
-    img.preview(src='data:image/png;base64,' + images[i], style='height: 200px; width: 200px; float:left; margin-right: 20px;', alt=sketchData.sketches[i])
-    img.preview.gradient(src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', style='height: 200px; width: 200px; float:left; margin-left: -220px; margin-right: 20px;', id=sketchData.sketches[i], alt=sketchData.sketches[i])
-    h1(style="text-align: left; position: absolute; top: 10px; left: 230px; margin: 0;") #{sketchData.sketches[i].toUpperCase()}
-    p(style="text-align: left; position: absolute; bottom: 15px; left: 20px; margin: 0; font-size: 16px;") #{sketchData.sketches[i].toUpperCase()}
-    p(style="text-align: left; margin: 10px; margin-right: 200px; position: absolute; top: 50px; left: 220px; font-size: 14px; white-space: pre-line; line-height: 25px;") #{descriptions[i]}
-    p(style="text-align: left; margin: 10px; position: absolute; bottom: 0; left: 220px; font-size: 14px;") CREATED: #{sketchData.birthtimes[i]} | LAST EDITED: #{sketchData.modified[i]} | FILE SIZE: #{sketchData.sizes[i]} KB
-    input.btn.btn-lg.btn-orange.download(type='submit', id=sketchData.sketches[i], role='button' value="Download" style="position: absolute; right: 0; top: 0; padding: 10px 40px; margin: 10px; float:right; width: 170px;")
-    input.btn.btn-lg.btn-orange.delete(type='submit', id=sketchData.sketches[i], role='button' value="Delete" style="position: absolute; right: 0; top: 55px; padding: 10px 40px; margin: 10px; float:right; width: 170px;")
-    input.btn.btn-lg.btn-green.open(type='submit', id=sketchData.sketches[i], role='button' value="Open" style="position: absolute; right: 0; bottom: 0; padding: 10px 40px; margin: 10px; float:right; width: 170px;")
-- }
+  #dashboard_item_back.carousel(style={height: Math.ceil(sketchData.sketches.length / 4) * 250 + 50 + 'px', 'margin-bottom': '100px'})
+    - var r = 0;
+    while r < Math.ceil(sketchData.sketches.length / 4)
+      - var n = 0;
+      while n < 4
+        if r*4+n < sketchData.sketches.length
+          .sketch_item
+            img.base_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='')
+            img.black_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='')
+            img.normal(src='data:image/png;base64,' + images[r*4+n], style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
+            .ease_in
+              img.darker(src='data:image/png;base64,' + images[r*4+n], style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
+            img(src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r * 250 + 50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
+            //h1(style="text-align: left; position: absolute; top: 10px; left: 230px; margin: 0;") #{sketchData.sketches[i].toUpperCase()}
+            .ease_out
+              p(style={'text-align': 'left', position: 'absolute', left: (n*250 + 60) + 'px', top: (r*250+220) + 'px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchData.sketches[r*4+n].toUpperCase()}
+            .ease_in
+              a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'center', width: '200px', position: 'absolute', left: (n*250+50) + 'px', top: (r*250+80) + 'px', 'font-size': '16px', 'white-space': 'nowrap', 'padding-left': '10px', 'padding-right': '10px'}) #{sketchData.sketches[r*4+n].slice(0, 20).toUpperCase()}
+              a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'left', width: '200px', position: 'absolute', left: (n*250+60) + 'px', top: (r*250+220) + 'px', 'font-size': '14px'}) #{sketchData.modified[r*4+n]}
+              a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'right', width: '50px', position: 'absolute', left: (n*250+190) + 'px', top: (r*250+220) + 'px', 'font-size': '14px'}) #{sketchData.sizes[r*4+n]} KB
+              if (descriptions[r*4+n].length <= 120)
+                a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'center', padding: '10px', width: '200px', position: 'absolute', left: (n*250+50) + 'px', top: (r*250+100) + 'px', 'font-size': '14px'}) #{descriptions[r*4+n].slice(0, 120)}
+              else
+                a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'center', padding: '10px', width: '200px', position: 'absolute', left: (n*250+50) + 'px', top: (r*250+100) + 'px', 'font-size': '14px'}) #{descriptions[r*4+n].slice(0, 120) + '...'}
+            img.top_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='', id='tl' + sketchData.sketches[r*4+n])
+            .ease_in
+              button.btn.btn-lg.download(type='submit', id='dl' + sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+115) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px', height: '46px'}) 
+                i(class="fa fa-download")
+              button.btn.btn-lg.delete(type='submit', id=sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+145) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px'})
+                i(class="fa fa-trash-o")
+        - n++;
+      - r++;
 div(style="height: 70px;")
 .footer_bottom
   .text-center

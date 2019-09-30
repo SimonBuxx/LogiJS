@@ -2056,7 +2056,7 @@ function showCustomDialog() {
     pageUpButton.position(maxCustCols * 240 + 10, window.height - 90);
     pageDownButton.position(maxCustCols * 240 + 220, window.height - 90);
     custMarked = -1;
-    fill(50);
+    fill('rgba(50, 50, 50, 0.95)');
     noStroke();
     rect(Math.round(window.width / 8), 90, window.width - Math.round(window.width / 4), window.height - 140);
     pageUpButton.show();
@@ -2097,6 +2097,10 @@ function showCustomItem(place, img, caption, look) {
         let img3 = createImg('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', function () {
             img3.elt.className = 'gradient';
             img3.position(x + 150, y + 30);
+            stroke(0);
+            strokeWeight(4);
+            noFill();
+            rect(x - 2, y - 2, 204, 204);
             if (look.hasOwnProperty('outputs')) {
                 if (look.outputs > 0) {
                     img3.elt.style.cursor = 'pointer';
@@ -2132,12 +2136,12 @@ function showCustomItem(place, img, caption, look) {
                     }, false);
                 }
             }
-            
+
             img3.elt.addEventListener('mouseleave', function (event) {
                 if (custMarked !== place) {
                     custMarked = -1;
                 }
-                stroke(50);
+                stroke(0);
                 strokeWeight(4);
                 noFill();
                 rect(x - 2, y - 2, 204, 204);

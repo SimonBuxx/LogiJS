@@ -25,12 +25,74 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 	height: 30px;
 }
 
-.preview {
+.top_layer {
     cursor: pointer;
 }
 
-.gradient:hover {
+.base_layer {
     outline: 4px solid rgb(200, 50, 50);
+}
+
+.black_layer {
+    outline: 4px solid black;
+}
+
+.darker {
+    filter: brightness(30%);
+}
+
+.ease_in {
+    opacity: 0.0;
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -ms-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+}
+
+.ease_in > a {
+    text-decoration: none;
+    color: white;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ease_out {
+    opacity: 1.0;
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -ms-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+}
+
+.ease_out > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    font-size: 16px;
+    width: 200px;
+}
+
+.sketch_item:hover > .ease_in {
+    opacity: 1.0;
+}
+
+.sketch_item:hover > .ease_out {
+    opacity: 0.0;
+}
+
+.sketch_item:hover > .black_layer {
+    opacity: 0.0;
+}
+
+.fa-trash-o:hover {
+    color: rgb(200, 50, 50);
+}
+
+.fa-download:hover {
+    color: rgb(40, 180, 40);
 }
 
 .top-menu {
@@ -133,23 +195,23 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 
 #dashboard_wc_back {
     max-width: 95%;
-    width: 1000px;
+    width: 1050px;
     margin-right: auto;
     margin-left: auto;
     padding: 0;
     height: 65px;
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(50, 50, 50, 0.9);
 }
 
 #dashboard_item_back {
-    max-width: 95%;
-    width: 1000px;
-    margin-top: 25px;
+    /*max-width: 95%;*/
+    width: 1050px;
+    margin-top: 30px;
     margin-right: auto;
     margin-left: auto;
     padding: 10px;
-    height: 220px;
-    background-color: rgb(50, 50, 50);
+    /*height: 220px;*/
+    background-color: rgba(50, 50, 50, 0.9);
 }
 
 #carousel p, #login_back p {

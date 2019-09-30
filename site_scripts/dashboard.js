@@ -26,29 +26,29 @@ for (const button of openButtons) {
     });
 }
 
-const openImages = document.querySelectorAll(".preview");
+const openImages = document.querySelectorAll(".top_layer");
 for (const image of openImages) {
     image.addEventListener('click', function (event) { //jshint ignore:line
-        window.location = '/editor?sketch=' + event.target.id;
+        window.location = '/editor?sketch=' + event.target.id.substring(2);
     });
 }
 
 const deleteButtons = document.querySelectorAll(".btn.delete");
 for (const button of deleteButtons) {
     button.addEventListener('click', function (event) { //jshint ignore:line
-        if (confButton !== event.target.id) {
+        /*if (confButton !== event.target.id) {
             button.value = 'SURE?';
             if (confButton !== '') {
                 document.querySelector('.delete#' + confButton).value = 'Delete';
             }
             confButton = event.target.id;
-        } else {
-            confButton = '';
+        } else {*/
+            //((confButton = '';
             post('/delete', {
-                sketch: event.target.id
+                sketch: event.currentTarget.id
             });
             location.reload();
-        }
+        //}
     });
 }
 
@@ -56,7 +56,7 @@ const downloadButtons = document.querySelectorAll(".btn.download");
 for (const button of downloadButtons) {
     button.addEventListener('click', function (event) { //jshint ignore:line
         event.preventDefault();
-        window.location = '/download?file=' + event.target.id;
+        window.location = '/download?file=' + event.currentTarget.id.substring(2);
     });
 }
 

@@ -15,7 +15,7 @@ module.exports = {
                 sketches.push(path.basename(files[i], '.json'));
                 sketchSizes.push(getFilesize(files[i]));
                 sketchBirthtimes.push(getBirthtime(files[i]));
-                sketchModified.push(getModifiedTime(files[i]));
+                sketchModified.push(getModifiedDate(files[i]));
                 if (fs.existsSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.png')) {
                     images.push(fs.readFileSync('./userSketches/' + user + '/' + path.basename(files[i], '.json') + '.png'));
                     images[i] = new Buffer(images[i], "binary").toString("base64");
@@ -72,9 +72,9 @@ function getBirthtime(filename) {
     return newDate.toLocaleDateString("de-DE") + ' ' + newDate.toLocaleTimeString("de-DE");
 }
 
-function getModifiedTime(filename) {
+function getModifiedDate(filename) {
     const stats = fs.statSync(filename);
     let millis = stats.mtime;
     let newDate = new Date(millis);
-    return newDate.toLocaleDateString("de-DE") + ' ' + newDate.toLocaleTimeString("de-DE");
+    return newDate.toLocaleDateString("de-DE") /*+ ' ' + newDate.toLocaleTimeString("de-DE")*/;
 }
