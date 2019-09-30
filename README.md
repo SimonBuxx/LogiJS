@@ -3,6 +3,9 @@
 
 This is a project that I'm working on in my spare time. It is a logic circuit editor written in JavaScript that focuses on 
 ease of use and a streamlined design. Please notice that this is not a professionally developed piece of software. Altough I've crushed a lot of bugs by now, there might be some left.
+
+## Most of the stuff below is outdated by now!
+
 #### If you find any bugs or have ideas for improvement, please let me know!
 #### Interesting Sketches to give you an overview of the possibilities:
 * **https://logijs.netlify.com/logijs.html?sketch=4BitFromScratch**
