@@ -76,6 +76,9 @@ let muxCustRows = 0;
 let custPage = 0;
 let maxPage = 0;
 
+let error = '';
+let errordesc = '';
+
 let syncFramerate = true;
 
 let segIndizees = [];
@@ -782,6 +785,13 @@ function setup() { // jshint ignore:line
         closeTutorialButton.hide();
         nextStepButton.hide();
     }
+
+    socket.on('demousererror', function () {
+        error = 'Saving failed: No permissions!';
+        errordesc = 'This is a demo account.';
+        reDraw();
+        setTimeout(function () { error = ''; errordesc = ''; reDraw(); }, 3000);
+    });
 
     reDraw();
     setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
@@ -1909,6 +1919,10 @@ function reDraw() {
 
     if (loading && !saveDialog && !customDialog) {
         showMessage('Loading...', loadFile.split('.json')[0]);
+    }
+
+    if (error !== '') {
+        showMessage(error, errordesc);
     }
 
     if (saveDialog) {

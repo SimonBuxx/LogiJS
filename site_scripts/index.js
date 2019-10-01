@@ -310,6 +310,10 @@ io.on('connection', (socket) => {
             return;
         }
         let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+        if (user === 'demouser') {
+            io.sockets.emit('demousererror');
+            return;
+        }
         let img = data.img;
         let desc = data.desc;
         img = img.replace(/^data:image\/\w+;base64,/, "");

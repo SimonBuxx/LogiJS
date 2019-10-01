@@ -91,8 +91,12 @@ head
               .ease_in
                 button.btn.btn-lg.download(type='submit', id='dl' + sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+115) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px', height: '46px'}) 
                   i(class="fa fa-download")
-                button.btn.btn-lg.delete(type='submit', id=sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+145) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px'})
-                  i(class="fa fa-trash-o")
+                if (user !== 'demouser')
+                  button.btn.btn-lg.delete(type='submit', id=sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+145) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px'})
+                    i(class="fa fa-trash-o")
+                else 
+                  button.btn.btn-lg(type='submit', onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+145) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px'})
+                    i(class="fa fa-trash-o")
           - n++;
         - r++;
 div(style="height: 70px;")
