@@ -198,14 +198,14 @@ io.on('connection', (socket) => {
         try {
             let raw = fs.readFileSync(path);
             let sketchData = JSON.parse(raw);
-            io.sockets.emit('userSketchData', {
+            socket.emit('userSketchData', {
                 data: sketchData,
                 success: true
             });
         } catch (e) {
             console.log('[MAJOR] File loading error!');
             console.log(path);
-            io.sockets.emit('userSketchData', {
+            socket.emit('userSketchData', {
                 data: {},
                 success: false
             });
@@ -222,14 +222,14 @@ io.on('connection', (socket) => {
         }
         try {
             let desc = fs.readFileSync(path, 'utf8');
-            io.sockets.emit('sketchDescription', {
+            socket.emit('sketchDescription', {
                 data: desc,
                 success: true
             });
         } catch (e) {
             console.log('[MINOR] File loading error!');
             console.log(path);
-            io.sockets.emit('sketchDescription', {
+            socket.emit('sketchDescription', {
                 data: {},
                 success: false
             });
@@ -239,7 +239,7 @@ io.on('connection', (socket) => {
     socket.on('getImportSketches', (data) => {
         let userPath = '';
         if (data.access_token === '') {
-            io.sockets.emit('importSketches', {
+            socket.emit('importSketches', {
                 sketches: {},
                 images: {},
                 looks: {},
@@ -272,7 +272,6 @@ io.on('connection', (socket) => {
                             let look = fs.readFileSync(userPath + '/' + path.basename(files[i], '.json') + '.txt');
                             try {
                                 look = JSON.parse(look);
-                                console.log(look);
                                 looks.push(look);
                             } catch (e) {
                                 console.log('[MINOR] Couldn\'t parse JSON!');
@@ -288,7 +287,7 @@ io.on('connection', (socket) => {
                         looks.push({});
                     }
                 }
-                io.sockets.emit('importSketches', {
+                socket.emit('importSketches', {
                     sketches: sketchList,
                     images: images,
                     looks: looks,
@@ -296,7 +295,7 @@ io.on('connection', (socket) => {
                 });
             });
         } catch (e) {
-            io.sockets.emit('importSketches', {
+            socket.emit('importSketches', {
                 sketches: {},
                 images: {},
                 looks: {},
@@ -311,7 +310,6 @@ io.on('connection', (socket) => {
         }
         let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
         if (user === 'demouser') {
-            io.sockets.emit('demousererror');
             return;
         }
         let img = data.img;
@@ -342,6 +340,10 @@ io.on('connection', (socket) => {
             return;
         }
         let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+        if (user === 'demouser') {
+            socket.emit('demousererror');
+            return;
+        }
         fs.writeFile('./userSketches/' + user + '/' + data.file, JSON.stringify(data.json), 'utf8', function (err) {
 
         });
