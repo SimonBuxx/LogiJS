@@ -1,0 +1,123 @@
+doctype html
+<html style="position: relative; min-height: 100%;">
+head
+  title LogiJS: Legal Notice
+  meta(name='keywords', content='')
+  meta(name='description', content='')
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='shortcut icon', href='images/favicon.ico')
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  style
+    include css/bootstrap.css
+    include css/index_style.css
+<body style="margin: 0 0 100px;">
+.top-menu
+  .container
+    .navbar.navbar-default.navbar-fixed-top(style='background: rgb(50, 50, 50);', role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/')
+            img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+        #nav-bar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
+            li
+              a.internal-link(rel='nofollow', href='/', target='_parent') HOME
+            li
+              a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
+            li
+              a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
+            li
+              if user !== ''
+                a.internal-link(rel='nofollow', href='/dashboard', target='_parent', style="margin-left: 60px; color: rgb(40, 180, 40);") #{user.toUpperCase()}
+              else
+                a.internal-link(rel='nofollow', href='/login', target='_parent', style="margin-left: 60px;") LOGIN
+            if user == ''
+                li
+                    a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
+div
+  #blur_dark
+  #caption(style='color: white; text-align: center; margin: 0;')
+    h2 Angaben gem&auml;&szlig; &sect; 5 TMG
+  div(style='color: white; text-align: justify; margin: 0; margin-left: 20%; margin-right: 20%; margin-top: 30px; font-size: 20px;')
+    h3(style='text-align: center;') Kontakt
+    p(style='text-align: center;')
+      | Simon Buchholz
+      br
+      |  Grace-Hopper-Str. 15
+      br
+      |  23562 L&uuml;beck
+    p(style='text-align: center;')
+      | Telefon: 0176 43344340
+      br
+      |  E-Mail: logijs(at)outlook.com
+    h3(style='text-align: center; margin-top: 30px;') Haftung f&uuml;r Inhalte
+    p
+      | Als Diensteanbieter sind wir gem&auml;&szlig; &sect; 7 Abs.1 TMG f&uuml;r eigene Inhalte auf diesen
+      | Seiten
+      | nach den allgemeinen Gesetzen verantwortlich. Nach &sect;&sect; 8 bis 10 TMG sind wir als
+      | Diensteanbieter
+      | jedoch nicht verpflichtet, &uuml;bermittelte oder gespeicherte fremde Informationen zu &uuml;berwachen
+      | oder
+      | nach Umst&auml;nden zu forschen, die auf eine rechtswidrige T&auml;tigkeit hinweisen.
+    p
+      | Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen
+      | bleiben
+      | hiervon unber&uuml;hrt. Eine diesbez&uuml;gliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis
+      | einer
+      | konkreten Rechtsverletzung m&ouml;glich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden
+      | wir
+      | diese Inhalte umgehend entfernen.
+    h3(style='text-align: center;') Haftung f&uuml;r Links
+    p
+      | Unser Angebot enth&auml;lt Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss
+      | haben.
+      | Deshalb k&ouml;nnen wir f&uuml;r diese fremden Inhalte auch keine Gew&auml;hr &uuml;bernehmen. F&uuml;r
+      | die
+      | Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
+      | Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf m&ouml;gliche Rechtsverst&ouml;&szlig;e
+      | &uuml;berpr&uuml;ft.
+      | Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.
+    p
+      | Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer
+      | Rechtsverletzung
+      | nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
+    h3(style='text-align: center;') Urheberrecht
+    p
+      | Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen
+      | Urheberrecht.
+      | Die Vervielf&auml;ltigung, Bearbeitung, Verbreitung und jede Art der Verwertung au&szlig;erhalb der
+      | Grenzen
+      | des Urheberrechtes bed&uuml;rfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+      | Downloads
+      | und Kopien dieser Seite sind nur f&uuml;r den privaten, nicht kommerziellen Gebrauch gestattet.
+    p
+      | Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter
+      | beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine
+      | Urheberrechtsverletzung
+      | aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen
+      | werden
+      | wir derartige Inhalte umgehend entfernen.
+    p(style='text-align: center;')
+      | Quelle: 
+      a(href='https://www.e-recht24.de') e-recht24.de
+.footer_bottom
+  .text-center
+    .footer_bottom_content
+      span#footer-line
+        | Copyright &copy; 2019 
+        a(href='https://www.github.com/SimonBuxx') Simon Buchholz
+        |  | 
+      span(style="text-align: right;")
+        a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js
+  include ../libraries/stickUp.min.js
+</body>
+</html>

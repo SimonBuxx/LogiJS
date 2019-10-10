@@ -1,0 +1,56 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  link(rel='shortcut icon', type='image/x-icon', href='images/favicon.ico')
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans|Gudea|PT+Mono', rel='stylesheet')
+  link(rel="stylesheet", type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css')
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
+  script
+    include ../libraries/p5.min.js
+    include ../libraries/p5.dom.js
+    include ../libraries/lodash.js
+    include ../libraries/StackBlur.js
+    include ../javascripts/constants.js
+    include ../javascripts/classes/action.js
+    include ../javascripts/classes/transformation.js
+    include ../javascripts/classes/clickBox.js
+    include ../javascripts/classes/logicGate.js
+    include ../javascripts/classes/segmentDisplay.js
+    include ../javascripts/classes/customSketch.js
+    include ../javascripts/classes/output.js
+    include ../javascripts/classes/input.js
+    include ../javascripts/classes/wire.js
+    include ../javascripts/classes/label.js
+    include ../javascripts/classes/diode.js
+    include ../javascripts/classes/conpoint.js
+    include ../javascripts/classes/group.js
+    include ../javascripts/selectionHandling.js
+    include ../javascripts/properties.js
+    include ../javascripts/sketch.js
+    include ../javascripts/mouse.js
+    include ../javascripts/loadsave.js
+    include ../javascripts/cpdiodes.js
+    include ../javascripts/parsing.js
+    include ../javascripts/undoredo.js
+  style
+    include ../webapp_style.css
+a(href='https://github.com/SimonBuxx/LogiJS')
+  img#github(src='images/github.png', alt='Fork me on GitHub')
+  a(href='/')
+    img#logo(src='images/logo.png', alt='LogiJS Logo')
+// Start of Survicate (www.survicate.com) code
+script(type='text/javascript').
+  if (window.location.href.includes('.com')) {
+  console.log('Loading Survicate script');
+  (function (w) {
+  var s = document.createElement('script');
+  s.src = 'https://survey.survicate.com/workspaces/01d22f9eb05bc4fcdd73eb6342cb3480/web_surveys.js';
+  s.async = true;
+  var e = document.getElementsByTagName('script')[0];
+  e.parentNode.insertBefore(s, e);
+  })(window);
+  }
+// End of Survicate code
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js

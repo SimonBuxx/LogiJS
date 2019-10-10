@@ -17,6 +17,7 @@ let segDisplays = []; // List of 7-segment displays
 let segBits = 4; // Number of bits for new 7-segment displays
 let counterBitWidth = 4; // Output width of counter objects
 let decoderBitWidth = 4; // Input width of decoder objects
+let muxBitWidth = 1; // In/output width for (de-) multiplexers
 
 let selection = []; // List of all selected elements
 
@@ -68,6 +69,16 @@ let showSClickBox = false;
 let simRunning = false;
 let propMode = false;
 
+let saveDialog = false;
+let customDialog = false;
+let maxCustCols = 0;
+let muxCustRows = 0;
+let custPage = 0;
+let maxPage = 0;
+
+let error = '';
+let errordesc = '';
+
 let syncFramerate = true;
 
 let segIndizees = [];
@@ -81,20 +92,22 @@ let next = 0;
 let loading = false;
 let loadFile = '';
 
+let previewImg;
+
 let showTooltip = true;
 let negPreviewShown = false;
 let diodePreviewShown = false;
 let conpointPreviewShown = false;
 
 // GUI Elements
-let textInput, saveButton, loadButton, newButton; // Right hand side
+let textInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
-    add4BitButton, mux1Button, mux2Button, mux3Button, demux1Button, demux2Button, demux3Button, halfaddButton, fulladdButton, ascustomButton;
-let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelCounterBits,
-    decoderBitSelect, labelDecoderBits;
+    muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
+let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
+    decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
 let outputCaptionBox, outputColorBox;
@@ -111,6 +124,7 @@ let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
     hintPic12, hintPic13, hintPic14, hintPic15, hintPic16, hintPic17,
     hintPic19, hintPic20, hintPic21, hintPic22, hintPic23, hintPic24,
     hintPic25, hintPic26;
+let socket;
 // Hide right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 let cnv; // Canvas variable
@@ -158,6 +172,7 @@ function setup() { // jshint ignore:line
     // Creates the canvas in full window size
     cnv = createCanvas(windowWidth - 150, windowHeight - 30);
     cnv.position(150, 30);
+    cnv.id('mainCanvas');
 
     // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -166,7 +181,7 @@ function setup() { // jshint ignore:line
         }
     }, false);
 
-    document.title = 'New Sketch - LogiJS';
+    document.title = 'LogiJS: New Sketch';
 
 
     //Div for the Left Side Buttons
@@ -249,76 +264,59 @@ function setup() { // jshint ignore:line
     labelAdvanced.elt.className = 'label';
     labelAdvanced.parent(leftSideButtons);
 
+    // Adds an rs-flipflop
+    rsFlipFlopButton = createButton('RS-FlipFlop');
+    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return importCustom('rs-flipflop.json'); });
+    rsFlipFlopButton.elt.className = "buttonLeft";
+    rsFlipFlopButton.parent(leftSideButtons);
+    // Adds a d-flipflop
+    dFlipFlopButton = createButton('D-FlipFlop');
+    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return importCustom('d-flipflop.json'); });
+    dFlipFlopButton.elt.className = "buttonLeft";
+    dFlipFlopButton.parent(leftSideButtons);
     // Adds a counter
     counterButton = createButton('Counter');
     counterButton.mousePressed(function () { setActive(counterButton, true); return counterClicked(); });
     counterButton.elt.className = "buttonLeft";
     counterButton.parent(leftSideButtons);
-    // Adds a decoder (2Bit)
+    // Adds a decoder
     decoderButton = createButton('Decoder');
     decoderButton.mousePressed(function () { setActive(decoderButton, true); return decoderClicked(); });
     decoderButton.elt.className = "buttonLeft";
     decoderButton.parent(leftSideButtons);
-    // Adds an adder (4Bit)
-    add4BitButton = createButton('4Bit-Adder');
-    add4BitButton.mousePressed(function () { setActive(add4BitButton, true); return customClicked('4BitNeu.json'); });
-    add4BitButton.elt.className = "buttonLeft";
-    add4BitButton.parent(leftSideButtons);
-    // Adds a d-flipflop
-    dFlipFlopButton = createButton('D-FlipFlop');
-    dFlipFlopButton.mousePressed(function () { setActive(dFlipFlopButton, true); return customClicked('d-flipflop.json'); });
-    dFlipFlopButton.elt.className = "buttonLeft";
-    dFlipFlopButton.parent(leftSideButtons);
-    // Adds an rs-flipflop
-    rsFlipFlopButton = createButton('RS-FlipFlop');
-    rsFlipFlopButton.mousePressed(function () { setActive(rsFlipFlopButton, true); return customClicked('rsNoWhobble.json'); });
-    rsFlipFlopButton.elt.className = "buttonLeft";
-    rsFlipFlopButton.parent(leftSideButtons);
+    // Adds a multiplexer
+    muxButton = createButton('Multiplexer');
+    muxButton.mousePressed(function () { setActive(muxButton, true); return muxClicked(); });
+    muxButton.elt.className = "buttonLeft";
+    muxButton.parent(leftSideButtons);
+    // Adds a demultiplexer
+    demuxButton = createButton('Demultiplexer');
+    demuxButton.mousePressed(function () { setActive(demuxButton, true); return demuxClicked(); });
+    demuxButton.elt.className = "buttonLeft";
+    demuxButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
-    reg4Button.mousePressed(function () { setActive(reg4Button, true); return customClicked('4BitReg.json'); });
+    reg4Button.mousePressed(function () { setActive(reg4Button, true); return importCustom('4-register.json'); });
     reg4Button.elt.className = "buttonLeft";
     reg4Button.parent(leftSideButtons);
-    // Adds a 1-multiplexer
-    mux1Button = createButton('1-Multiplexer');
-    mux1Button.mousePressed(function () { setActive(mux1Button, true); return customClicked('1-mux.json'); });
-    mux1Button.elt.className = "buttonLeft";
-    mux1Button.parent(leftSideButtons);
-    // Adds a 2-multiplexer
-    mux2Button = createButton('2-Multiplexer');
-    mux2Button.mousePressed(function () { setActive(mux2Button, true); return customClicked('2-mux.json'); });
-    mux2Button.elt.className = "buttonLeft";
-    mux2Button.parent(leftSideButtons);
-    // Adds a 3-multiplexer
-    mux3Button = createButton('3-Multiplexer');
-    mux3Button.mousePressed(function () { setActive(mux3Button, true); return customClicked('3-mux.json'); });
-    mux3Button.elt.className = "buttonLeft";
-    mux3Button.parent(leftSideButtons);
-    // Adds a 1-demultiplexer
-    demux1Button = createButton('1-Demultiplexer');
-    demux1Button.mousePressed(function () { setActive(demux1Button, true); return customClicked('1-demux.json'); });
-    demux1Button.elt.className = "buttonLeft";
-    demux1Button.parent(leftSideButtons);
-    // Adds a 2-demultiplexer
-    demux2Button = createButton('2-Demultiplexer');
-    demux2Button.mousePressed(function () { setActive(demux2Button, true); return customClicked('2-demux.json'); });
-    demux2Button.elt.className = "buttonLeft";
-    demux2Button.parent(leftSideButtons);
-    // Adds a 3-demultiplexer
-    demux3Button = createButton('3-Demultiplexer');
-    demux3Button.mousePressed(function () { setActive(demux3Button, true); return customClicked('3-demux.json'); });
-    demux3Button.elt.className = "buttonLeft";
-    demux3Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
-    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return customClicked('halbadd.json'); });
+    halfaddButton.mousePressed(function () { setActive(halfaddButton, true); return importCustom('half_add.json'); });
     halfaddButton.elt.className = "buttonLeft";
     halfaddButton.parent(leftSideButtons);
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
-    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return customClicked('volladd.json'); });
+    fulladdButton.mousePressed(function () { setActive(fulladdButton, true); return importCustom('full_add.json'); });
     fulladdButton.elt.className = "buttonLeft";
     fulladdButton.parent(leftSideButtons);
+
+    customButton = createButton('Sketch Import');
+    customButton.mousePressed(customClicked);
+    customButton.elt.className = "buttonLeft";
+    customButton.parent(leftSideButtons);
+    if (getCookieValue('access_token') === '') {
+        customButton.elt.disabled = true;
+    }
 
     // Adds text 'Gate inputs'
     labelGateInputs = createP('Gate inputs');
@@ -373,24 +371,24 @@ function setup() { // jshint ignore:line
     labelBits.parent(leftSideButtons);
 
     // Adds text 'Output width'
-    labelCounterBits = createP('Output width');
-    labelCounterBits.hide();
-    labelCounterBits.elt.style.color = 'white';
-    labelCounterBits.elt.style.fontFamily = 'Open Sans';
-    labelCounterBits.elt.style.textAlign = 'center';
-    labelCounterBits.elt.style.margin = '3px 0px 0px 0px';
-    labelCounterBits.elt.className = 'label';
-    labelCounterBits.parent(leftSideButtons);
+    labelOutputWidth = createP('Output width');
+    labelOutputWidth.hide();
+    labelOutputWidth.elt.style.color = 'white';
+    labelOutputWidth.elt.style.fontFamily = 'Open Sans';
+    labelOutputWidth.elt.style.textAlign = 'center';
+    labelOutputWidth.elt.style.margin = '3px 0px 0px 0px';
+    labelOutputWidth.elt.className = 'label';
+    labelOutputWidth.parent(leftSideButtons);
 
     // Adds text 'Input width'
-    labelDecoderBits = createP('Input width');
-    labelDecoderBits.hide();
-    labelDecoderBits.elt.style.color = 'white';
-    labelDecoderBits.elt.style.fontFamily = 'Open Sans';
-    labelDecoderBits.elt.style.textAlign = 'center';
-    labelDecoderBits.elt.style.margin = '3px 0px 0px 0px';
-    labelDecoderBits.elt.className = 'label';
-    labelDecoderBits.parent(leftSideButtons);
+    labelInputWidth = createP('Input width');
+    labelInputWidth.hide();
+    labelInputWidth.elt.style.color = 'white';
+    labelInputWidth.elt.style.fontFamily = 'Open Sans';
+    labelInputWidth.elt.style.textAlign = 'center';
+    labelInputWidth.elt.style.margin = '3px 0px 0px 0px';
+    labelInputWidth.elt.className = 'label';
+    labelInputWidth.parent(leftSideButtons);
 
 
     bitSelect = createSelect();
@@ -426,6 +424,16 @@ function setup() { // jshint ignore:line
     decoderBitSelect.value('4');
 
 
+    multiplexerBitSelect = createSelect();
+    multiplexerBitSelect.hide();
+    for (let i = 1; i <= 3; i++) {
+        multiplexerBitSelect.option(i);
+    }
+    multiplexerBitSelect.changed(newMuxBitLength);
+    multiplexerBitSelect.elt.className = "selectLeft";
+    multiplexerBitSelect.parent(leftSideButtons);
+    multiplexerBitSelect.value('1');
+
     sfcheckbox = createCheckbox('Sync Ticks', true);
     sfcheckbox.hide();
     sfcheckbox.changed(function () {
@@ -457,7 +465,7 @@ function setup() { // jshint ignore:line
     clockspeedSlider = createSlider(1, 60, 30, 1);
     clockspeedSlider.hide();
     clockspeedSlider.changed(newClockspeed);
-    clockspeedSlider.style('width', '178px');
+    clockspeedSlider.style('width', '180px');
     clockspeedSlider.style('margin', '5px');
     clockspeedSlider.elt.className = 'slider';
     clockspeedSlider.position(windowWidth - 195, 203);
@@ -465,8 +473,8 @@ function setup() { // jshint ignore:line
     //Upper left
 
     // Activates the edit mode
-    propertiesButton = createButton('Edit');
-    propertiesButton.position(152, 4);
+    propertiesButton = createButton('<i class="fa fa-pen"></i> Edit');
+    propertiesButton.position(152, 3);
     propertiesButton.mousePressed(function () {
         setActive(propertiesButton);
         setControlMode('none');
@@ -476,21 +484,21 @@ function setup() { // jshint ignore:line
 
 
     // Activates the delete mode (objects and wires)
-    deleteButton = createButton('Delete');
-    deleteButton.position(207, 4);
+    deleteButton = createButton('<i class="far fa-trash-alt"></i> Delete');
+    deleteButton.position(226, 3);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = "button";
 
     // Starts and stops the simulation
-    simButton = createButton('Start');
-    simButton.elt.style.width = '34px';
-    simButton.position(280, 4);
+    simButton = createButton('<i class="fa fa-play"></i> Start');
+    simButton.elt.style.width = '52px';
+    simButton.position(316, 3);
     simButton.mousePressed(simClicked);
     simButton.elt.className = "button";
 
     // Undos the last action
-    undoButton = createButton('Undo');
-    undoButton.position(342, 4);
+    undoButton = createButton('<i class="fa fa-undo"></i> Undo');
+    undoButton.position(396, 3);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -498,8 +506,8 @@ function setup() { // jshint ignore:line
     undoButton.elt.className = "button";
 
     // Redos the last action
-    redoButton = createButton('Redo');
-    redoButton.position(408, 4);
+    redoButton = createButton('<i class="fa fa-redo"></i> Redo');
+    redoButton.position(481, 3);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -507,43 +515,121 @@ function setup() { // jshint ignore:line
     redoButton.elt.className = "button";
 
     // Activates the mode for area selecting
-    selectButton = createButton('Select');
-    selectButton.position(472, 4);
+    selectButton = createButton('<i class="fas fa-object-group"></i> Select');
+    selectButton.position(564, 3);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
-    // Upper right
-    // Input field for the file name
     textInput = createInput('');
-    textInput.attribute('placeholder', 'New Sketch');
-    textInput.size(200, 16);
-    textInput.position(windowWidth - textInput.width - 206, 4);
+    textInput.attribute('placeholder', 'SKETCH NAME');
+    textInput.position(windowWidth / 2 - 63, windowHeight / 2 - 104);
     textInput.elt.style.fontFamily = 'Open Sans';
-    textInput.elt.className = "textInput";
+    textInput.elt.className = "textInput saveInput";
+    textInput.hide();
+
+    descInput = createElement('textarea');
+    descInput.attribute('placeholder', 'SKETCH DESCRIPTION');
+    descInput.position(windowWidth / 2 - 43, windowHeight / 2 - 25);
+    descInput.size(280, 153);
+    descInput.elt.style.fontFamily = 'Open Sans';
+    descInput.elt.style.fontSize = '15px';
+    descInput.elt.className = "textInput descInput";
+    if (getCookieValue('access_token') === '') {
+        descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(LOG IN TO GIVE A DESCRIPTION)');
+        descInput.elt.disabled = true;
+    }
+    descInput.hide();
 
     // Clears the canvas and resets the view
     newButton = createButton('New');
-    newButton.position(windowWidth - textInput.width - 265, 4);
-    newButton.mousePressed(newClicked);
+    newButton.position(windowWidth - 270, 3);
+    newButton.elt.style.width = '40px';
+    newButton.mousePressed(function () {
+        if (newButton.html() === 'SURE?') {
+            newButton.html('New');
+            newClicked();
+        } else {
+            newButton.html('SURE?');
+            setTimeout(function () { newButton.html('New'); }, 3000);
+        }
+    });
     newButton.elt.className = "button";
 
     // Button to save the sketch
     saveButton = createButton('Save');
-    saveButton.position(windowWidth - 198, 4);
+    saveButton.position(windowWidth / 2 + 102, windowHeight / 2 + 150);
     saveButton.mousePressed(saveClicked);
-    saveButton.elt.className = "button";
+    saveButton.elt.className = "btn btn-lg btn-red";
+    saveButton.hide();
+
+    cancelButton = createButton('Cancel');
+    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 150);
+    cancelButton.mousePressed(cancelClicked);
+    cancelButton.elt.className = "btn btn-lg btn-red";
+    cancelButton.hide();
+
+    pageUpButton = createButton('Previous Page');
+    pageUpButton.position(window.width - 545, window.height - 90);
+    pageUpButton.elt.style.width = '200px';
+    pageUpButton.style('padding-left', '10px');
+    pageUpButton.style('padding-right', '10px');
+    pageUpButton.mousePressed(function () {
+        if (custPage <= 0) {
+            return;
+        } else {
+            custPage--;
+            closeCustomDialog();
+            customClicked();
+        }
+    });
+    pageUpButton.elt.className = "btn btn-lg btn-red";
+    pageUpButton.hide();
+
+    pageDownButton = createButton('Next Page');
+    pageDownButton.position(window.width - 335, window.height - 90);
+    //pageDownButton.elt.style.width = '200px';
+    pageDownButton.style('padding-left', '10px');
+    pageDownButton.style('padding-right', '10px');
+    pageDownButton.mousePressed(function () {
+        if (custPage >= maxPage) {
+            return;
+        } else {
+            custPage++;
+            closeCustomDialog();
+            customClicked();
+        }
+    });
+    pageDownButton.elt.className = "btn btn-lg btn-red";
+    pageDownButton.hide();
 
     // Button to load a sketch
     loadButton = createButton('Load');
-    loadButton.position(windowWidth - 136, 4);
+    loadButton.position(windowWidth - 138, 3);
     loadButton.mousePressed(loadClicked);
     loadButton.elt.className = "button";
+    loadButton.hide();
 
-    // Button to import as custom
-    ascustomButton = createButton('Import');
-    ascustomButton.position(windowWidth - 73, 4);
-    ascustomButton.mousePressed(function () { setActive(ascustomButton); return customClicked(textInput.value() + '.json'); });
-    ascustomButton.elt.className = "button";
+    saveDialogButton = createButton('<i class="fas fa-save"></i> Save');
+    saveDialogButton.position(windowWidth - 202, 3);
+    saveDialogButton.mousePressed(saveDialogClicked);
+    saveDialogButton.elt.className = "button";
+
+    if (getCookieValue('access_token') !== '') {
+        dashboardButton = createButton('<i class="fas fa-th"></i> Dashboard');
+    } else {
+        dashboardButton = createButton('<i class="fa fa-sign-in-alt"></i> Login');
+    }
+    dashboardButton.elt.style.width = '98px';
+    dashboardButton.mousePressed(function () {
+        if (dashboardButton.html() === 'SURE?') {
+            window.location = '/dashboard';
+        } else {
+            dashboardButton.html('SURE?');
+            setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('<i class="fas fa-th"></i> Dashboard'); } else { dashboardButton.html('<i class="fa fa-sign-in-alt"></i> Login'); } }, 3000);
+        }
+    });
+    dashboardButton.position(windowWidth - 124, 3);
+    dashboardButton.elt.className = "button";
 
     // Button to close the hints
     closeTutorialButton = createButton('Close Tutorial');
@@ -580,6 +666,14 @@ function setup() { // jshint ignore:line
     propBoxLabel.position(windowWidth - 190, 30);
     propBoxLabel.style('font-size', '30px');
 
+    saveDialogText = createP('Save Sketch');
+    saveDialogText.hide();
+    saveDialogText.elt.style.color = 'white';
+    saveDialogText.elt.style.fontFamily = 'Open Sans';
+    saveDialogText.elt.style.margin = '3px 0px 0px 0px';
+    saveDialogText.position(windowWidth / 2 - 105, windowHeight / 2 - 160);
+    saveDialogText.style('font-size', '36px');
+
     inputIsTopBox = createCheckbox('Pin input to the top', false);
     inputIsTopBox.hide();
     inputIsTopBox.position(windowWidth - 190, 90);
@@ -600,6 +694,7 @@ function setup() { // jshint ignore:line
     inputCaptionBox.size(170, 15);
     inputCaptionBox.position(windowWidth - 190, 150);
     inputCaptionBox.input(newInputCaption);
+    inputCaptionBox.elt.className = "textInput";
 
     colNameLabel = createP('Color:');
     colNameLabel.hide();
@@ -627,6 +722,7 @@ function setup() { // jshint ignore:line
     outputCaptionBox.hide();
     outputCaptionBox.size(170, 15);
     outputCaptionBox.position(windowWidth - 190, 150);
+    outputCaptionBox.elt.className = 'textInput';
     outputCaptionBox.input(newOutputCaption);
 
     outputColorBox = createSelect();
@@ -660,17 +756,43 @@ function setup() { // jshint ignore:line
         guiLabels[i].style.fontSize = "16px";
     }
 
+    socket = io.connect();
+
     let loadfile = urlParam('sketch');
-    if (loadfile !== "") {
-        document.title = loadfile + ' - LogiJS';
+    if (loadfile !== '') {
+        textInput.value(loadfile);
+        setLoading(true);
         loadSketch(loadfile + '.json');
+        socket.emit('getDescription', { file: loadfile, access_token: getCookieValue('access_token') });
+        socket.on('sketchDescription', (data) => {
+            try {
+                let d = JSON.parse(data.data);
+                if (data.success === true) {
+                    descInput.value(d.desc);
+                }
+            } catch (e) {
+                if (data.success === true) {
+                    descInput.value(data.data);
+                }
+            }
+            socket.off('sketchDescription');
+        });
     }
+
     //Hide hints if there is a cookie 
     if ((getCookieValue("ClosedHint") === "true")) {
         showHints = false;
         closeTutorialButton.hide();
         nextStepButton.hide();
     }
+
+    socket.on('demousererror', function () {
+        error = 'Saving failed: No permissions!';
+        errordesc = 'This is a demo account.';
+        reDraw();
+        setTimeout(function () { error = ''; errordesc = ''; reDraw(); }, 3000);
+    });
+
     reDraw();
     setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
 }
@@ -683,7 +805,7 @@ function urlParam(name, w) {
     return !val ? '' : val[1];
 }
 
-function customClicked(filename) {
+function importCustom(filename) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
         setControlMode('none');
@@ -698,6 +820,12 @@ function customClicked(filename) {
     }
 }
 
+function customClicked() {
+    customDialog = true;
+    setUnactive();
+    setLoading(true);
+}
+
 function counterClicked() {
     hideAllOptions();
     setControlMode('addObject');
@@ -705,8 +833,8 @@ function counterClicked() {
     directionSelect.show();
     labelDirection.show();
     counterBitSelect.show();
-    labelCounterBits.show();
-    custFile = counterBitWidth + 'BitCounter.json';
+    labelOutputWidth.show();
+    custFile = counterBitWidth + '-counter.json';
 }
 
 function decoderClicked() {
@@ -716,16 +844,111 @@ function decoderClicked() {
     directionSelect.show();
     labelDirection.show();
     decoderBitSelect.show();
-    labelDecoderBits.show();
-    custFile = decoderBitWidth + 'BitDec.json';
+    labelInputWidth.show();
+    custFile = decoderBitWidth + '-decoder.json';
+}
+
+function muxClicked() {
+    hideAllOptions();
+    setControlMode('addObject');
+    addType = 10;
+    directionSelect.show();
+    labelDirection.show();
+    multiplexerBitSelect.show();
+    labelInputWidth.show();
+    custFile = muxBitWidth + '-mux.json';
+}
+
+function demuxClicked() {
+    hideAllOptions();
+    setControlMode('addObject');
+    addType = 10;
+    directionSelect.show();
+    labelDirection.show();
+    multiplexerBitSelect.show();
+    labelInputWidth.show();
+    custFile = muxBitWidth + '-demux.json';
 }
 
 // Triggered when a sketch should be saved
 function saveClicked() {
-    selectMode = 'none';
-    showSClickBox = false;
-    saveSketch(textInput.value() + '.json');
-    document.title = textInput.value() + ' - LogiJS';
+    if (textInput.value().includes(' ')) {
+        saveDialogText.position(windowWidth / 2 - 165, windowHeight / 2 - 160);
+        saveDialogText.elt.style.color = 'red';
+        saveDialogText.html('No spaces allowed!');
+        setTimeout(function () {
+            saveDialogText.elt.style.color = '#fff';
+            saveDialogText.position(windowWidth / 2 - 105, windowHeight / 2 - 160);
+            saveDialogText.html('Save Sketch');
+        }, 3000);
+        return;
+    }
+    saveSketch(textInput.value() + '.json', function (look) {
+        console.log(look);
+        document.title = 'LogiJS: ' + textInput.value();
+        saveDialog = false;
+        saveButton.hide();
+        cancelButton.hide();
+        textInput.hide();
+        descInput.hide();
+        saveDialogText.hide();
+        setLoading(false);
+        reDraw();
+        look.desc = descInput.value();
+        socket.emit('savePreview', { name: textInput.value(), img: previewImg, desc: JSON.stringify(look), access_token: getCookieValue('access_token') });
+    });
+    reDraw();
+}
+
+function cancelClicked() {
+    if (saveDialog) {
+        saveDialog = false;
+        saveButton.hide();
+        textInput.hide();
+        descInput.hide();
+        saveDialogText.hide();
+        setLoading(false);
+        cancelButton.hide();
+        reDraw();
+    } else if (customDialog) {
+        closeCustomDialog();
+    }
+}
+
+function closeCustomDialog() {
+    customDialog = false;
+    let gradients = document.getElementsByClassName('gradient');
+    while (gradients[0]) {
+        gradients[0].parentNode.removeChild(gradients[0]);
+    }
+    let captions = document.getElementsByClassName('capt');
+    while (captions[0]) {
+        captions[0].parentNode.removeChild(captions[0]);
+    }
+    let darker = document.getElementsByClassName('darker');
+    while (darker[0]) {
+        darker[0].parentNode.removeChild(darker[0]);
+    }
+    let base_layers = document.getElementsByClassName('base_layer');
+    while (base_layers[0]) {
+        base_layers[0].parentNode.removeChild(base_layers[0]);
+    }
+    let black_layers = document.getElementsByClassName('black_layer');
+    while (black_layers[0]) {
+        black_layers[0].parentNode.removeChild(black_layers[0]);
+    }
+    let top_layers = document.getElementsByClassName('top_layer');
+    while (top_layers[0]) {
+        top_layers[0].parentNode.removeChild(top_layers[0]);
+    }
+    let stay_blacks = document.getElementsByClassName('stay_black');
+    while (stay_blacks[0]) {
+        stay_blacks[0].parentNode.removeChild(stay_blacks[0]);
+    }
+    setLoading(false);
+    pageUpButton.hide();
+    pageDownButton.hide();
+    cancelButton.hide();
 }
 
 // Triggered when a sketch should be loaded
@@ -736,8 +959,22 @@ function loadClicked() {
     setActive(propertiesButton);
     setPropMode(true);
     showSClickBox = false;
-    document.title = textInput.value() + ' - LogiJS';
+    document.title = 'LogiJS: ' + textInput.value();
     loadSketch(textInput.value() + '.json');
+    reDraw();
+}
+
+function saveDialogClicked() {
+    endSimulation();
+    saveDialog = true;
+    saveButton.show();
+    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 150);
+    cancelButton.show();
+    textInput.show();
+    descInput.show();
+    saveDialogText.show();
+    previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
+    setLoading(true);
     reDraw();
 }
 
@@ -746,6 +983,7 @@ function newClicked() {
     clearItems();
     clearActionStacks();
     hideAllOptions();
+    closeCustomDialog();
     transform = new Transformation(0, 0, 1);
     gridSize = GRIDSIZE;
     gateInputCount = 2;
@@ -762,9 +1000,9 @@ function newClicked() {
     wireMode = 'none';
     selectMode = 'none';
     showSClickBox = false;
-    document.title = 'New Sketch - LogiJS';
+    document.title = 'LogiJS: New Sketch';
     textInput.value('');
-    textInput.attribute('placeholder', 'New Sketch');
+    textInput.attribute('placeholder', 'SKETCH NAME');
     findLines();
     reDraw();
 }
@@ -777,9 +1015,10 @@ function hideAllOptions() {
     gateInputSelect.hide();
     labelGateInputs.hide();
     counterBitSelect.hide();
-    labelCounterBits.hide();
+    labelOutputWidth.hide();
     decoderBitSelect.hide();
-    labelDecoderBits.hide();
+    multiplexerBitSelect.hide();
+    labelInputWidth.hide();
 }
 
 /*
@@ -846,16 +1085,11 @@ function setUnactive() {
     dFlipFlopButton.elt.className = 'buttonLeft';
     rsFlipFlopButton.elt.className = 'buttonLeft';
     reg4Button.elt.className = 'buttonLeft';
-    add4BitButton.elt.className = 'buttonLeft';
-    mux1Button.elt.className = 'buttonLeft';
-    mux2Button.elt.className = 'buttonLeft';
-    mux3Button.elt.className = 'buttonLeft';
-    demux1Button.elt.className = 'buttonLeft';
-    demux2Button.elt.className = 'buttonLeft';
-    demux3Button.elt.className = 'buttonLeft';
+    muxButton.elt.className = 'buttonLeft';
+    demuxButton.elt.className = 'buttonLeft';
     halfaddButton.elt.className = 'buttonLeft';
     fulladdButton.elt.className = 'buttonLeft';
-    ascustomButton.elt.className = 'button';
+    customButton.elt.className = 'buttonLeft';
 }
 
 function deleteClicked() {
@@ -978,12 +1212,21 @@ function newBitLength() {
 
 function newCounterBitLength() {
     counterBitWidth = parseInt(counterBitSelect.value());
-    custFile = counterBitWidth + 'BitCounter.json';
+    custFile = counterBitWidth + '-counter.json';
 }
 
 function newDecoderBitLength() {
     decoderBitWidth = parseInt(decoderBitSelect.value());
-    custFile = decoderBitWidth + 'BitDec.json';
+    custFile = decoderBitWidth + '-decoder.json';
+}
+
+function newMuxBitLength() {
+    muxBitWidth = parseInt(multiplexerBitSelect.value());
+    if (isActive(muxButton)) {
+        custFile = muxBitWidth + '-mux.json';
+    } else if (isActive(demuxButton)) {
+        custFile = muxBitWidth + '-demux.json';
+    }
 }
 
 function newDirection() {
@@ -1241,6 +1484,7 @@ function addCustom(file, direction) {
             }
         }
     }
+    setLoading(true);
     let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     customs.push(newCustom);
@@ -1408,7 +1652,7 @@ function startSimulation() {
         updater = setInterval(updateTick, 0);
     }
 
-    setSimButtonText('Stop'); // Alter the caption of the Start/Stop button
+    setSimButtonText('<i class="fa fa-stop"></i> Stop'); // Alter the caption of the Start/Stop button
     setControlMode('none');
     setUnactive();
     disableButtons(true);
@@ -1446,7 +1690,7 @@ function startSimulation() {
 */
 function endSimulation(reset = true) {
     clearInterval(updater); // Stop the unsynced simulation updater
-    setSimButtonText('Start'); // Set the button caption to 'Start'
+    setSimButtonText('<i class="fa fa-play"></i> Start'); // Set the button caption to 'Start'
     if (reset) {
         setControlMode('none');
         setPropMode(true);
@@ -1524,18 +1768,15 @@ function disableButtons(status) {
     reg4Button.elt.disabled = status;
     decoderButton.elt.disabled = status;
     counterButton.elt.disabled = status;
-    mux1Button.elt.disabled = status;
-    mux2Button.elt.disabled = status;
-    mux3Button.elt.disabled = status;
-    demux1Button.elt.disabled = status;
-    demux2Button.elt.disabled = status;
-    demux3Button.elt.disabled = status;
+    muxButton.elt.disabled = status;
+    demuxButton.elt.disabled = status;
     dFlipFlopButton.elt.disabled = status;
     rsFlipFlopButton.elt.disabled = status;
-    add4BitButton.elt.disabled = status;
     halfaddButton.elt.disabled = status;
     fulladdButton.elt.disabled = status;
-    ascustomButton.elt.disabled = status;
+    if (getCookieValue('access_token') !== '') {
+        customButton.elt.disabled = status;
+    }
     propertiesButton.elt.disabled = status;
     labelButton.elt.disabled = status;
     // Sets the colors of the labels
@@ -1665,13 +1906,6 @@ function reDraw() {
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 
-    // Draw the zoom and framerate labels
-    textSize(12);
-    fill(0);
-    noStroke();
-    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
-    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
-
     // If the prop mode is active and an object was selected, show the config menu background
     if (propMode && propInput + propOutput + propLabel >= -2) {
         fill(50);
@@ -1683,9 +1917,32 @@ function reDraw() {
         showTutorial();
     }
 
-    if (loading) {
+    if (loading && !saveDialog && !customDialog) {
         showMessage('Loading...', loadFile.split('.json')[0]);
     }
+
+    if (error !== '') {
+        showMessage(error, errordesc);
+    }
+
+    if (saveDialog) {
+        stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
+        showSaveDialog();
+        showPreviewImage();
+    }
+
+    if (customDialog) {
+        stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
+        showCustomDialog();
+        textFont('Gudea');
+    }
+
+    // Draw the zoom and framerate labels
+    textSize(12);
+    fill(0);
+    noStroke();
+    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
+    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
 }
 
 /*
@@ -1759,50 +2016,34 @@ function showTutorial() {
                 'sketch. This list is just a selection of custom components that are pre-built by us.');
             break;
         case 16:
-            displayHint(600, hintPic16, 'Loading and saving', 'To save a sketch, type in a name in the top right corner and hit save.',
-                'You can then choose a folder on your hard drive to save it locally.');
-            break;
-        case 17:
-            displayHint(400, hintPic17, 'Loading and saving', 'To load sketches, you must have a local',
-                'LogiJS version on your computer. ');
-            break;
-        case 18:
-            displayHint(700, hintPic16, 'Loading and saving', 'Make sure, your sketch file is in the \'sketches\' folder of your LogiJS version.',
-                'Type the file name into the input field and hit \'Load\' or the enter key.');
-            break;
-        case 19:
             displayHint(650, hintPic19, 'Diodes', 'Diodes are components that join two crossing wires in the horizontal',
                 'but not in the vertical direction. They can be used for diode matrices.');
             break;
-        case 20:
+        case 17:
             displayHint(550, hintPic20, 'Diodes', 'Please load the sketch called \'traffic\'. As you can see,',
                 'there is an area with multiple diodes (little triangles) on it.');
             break;
-        case 21:
+        case 18:
             displayHint(750, hintPic21, 'Diodes', 'In edit mode, you can toggle diodes and connection points by clicking on them or on',
                 'empty wire crossings. Start the simulation to see how they are used in this example!');
             break;
-        case 22:
-            displayHint(700, hintPic22, 'Custom components', 'If instead of hitting \'Load\' you click on \'Import\', your sketch will be',
-                'imported as a custom component. Click anywhere on the sketch to place it.');
-            break;
-        case 23:
+        case 19:
             displayHint(650, hintPic23, 'Custom components', 'You can name in- and outputs and set inputs to the top of the component',
                 'by altering these settings in the properties menu of the sketch to import.');
             break;
-        case 24:
+        case 20:
             displayHint(450, hintPic24, 'Custom components', 'Inputs labeled with \'>\' will appear as',
                 'clock inputs with an arrow drawn on them.');
             break;
-        case 25:
+        case 21:
             displayHint(600, hintPic25, 'Labels', 'You can add text labels using the \'Label\' button. The text can',
                 'be changed in the properties menu after clicking on them.');
             break;
-        case 26:
+        case 22:
             displayHint(650, hintPic26, '\'New\' and \'Select\'', 'Click on \'New\' to start a new sketch. When clicking on \'Select\' you can',
                 'select parts of your sketch to move them on the canvas or delete them.');
             break;
-        case 27:
+        case 23:
             displayHint(600, hintPic0, 'Thank you!', 'You\'ve reached the end of this little tutorial on LogiJS.',
                 'We hope that you like our work and we value any feedback from you.');
             nextStepButton.hide();
@@ -1818,10 +2059,13 @@ function showMessage(msg, subline = '') {
     rect(0, 0, window.width, window.height);
 
     fill(200, 50, 50);
-    stroke(50);
-    strokeWeight(3);
+    noStroke();
     rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150);
-
+    stroke(0);
+    strokeWeight(4);
+    strokeCap(SQUARE);
+    line(window.width / 2 - 300, window.height / 2 + 75, window.width / 2 + 300, window.height / 2 + 75);
+    strokeCap(ROUND);
     fill(255);
     noStroke();
     textSize(30);
@@ -1829,6 +2073,123 @@ function showMessage(msg, subline = '') {
     text(msg, window.width / 2, window.height / 2);
     textSize(20);
     text(subline, window.width / 2, window.height / 2 + 30);
+}
+
+function showSaveDialog() {
+    fill('rgba(50, 50, 50, 0.95)');
+    noStroke();
+    rect(window.width / 2 - 365, window.height / 2 - 188, 580, 400);
+}
+
+function showCustomDialog() {
+    maxCustCols = Math.floor((window.width - window.width / 4) / 240);
+    maxCustRows = Math.floor((window.height - 180) / 240);
+    pageUpButton.position(maxCustCols * 240 + 10, window.height - 90);
+    pageDownButton.position(maxCustCols * 240 + 220, window.height - 90);
+    fill('rgba(50, 50, 50, 0.95)');
+    noStroke();
+    rect(Math.round(window.width / 8), 90, window.width - Math.round(window.width / 4), window.height - 140);
+    pageUpButton.show();
+    pageDownButton.show();
+    cancelButton.position(Math.round(window.width / 8) + 180, window.height - 90);
+    cancelButton.show();
+    socket.emit('getImportSketches', { access_token: getCookieValue('access_token') });
+    socket.on('importSketches', (data) => {
+        socket.off('importSketches');
+        maxPage = Math.ceil(Math.ceil(data.sketches.length / maxCustCols) / maxCustRows) - 1;
+        for (let i = 0; i < data.sketches.length; i++) {
+            showCustomItem(i + 1, data.images[i], data.sketches[i], data.looks[i]);
+        }
+    });
+}
+
+function showCustomItem(place, img, caption, look) {
+    let row = Math.ceil(place / maxCustCols - 1) - (custPage * maxCustRows);
+    let x = ((place - 1) % maxCustCols) * 240 + Math.round(window.width / 8) + 40;
+    let y = (row * 240) + 90 + 40;
+    if (row >= maxCustRows || row < 0) {
+        return;
+    }
+    if (img !== '') {
+        let sketch_item = createDiv('');
+        sketch_item.elt.className = 'sketch_item';
+        let base_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
+            base_layer.position(x + 150, y + 30);
+            base_layer.elt.className = 'base_layer';
+            base_layer.parent(sketch_item);
+        });
+        let black_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
+            black_layer.position(x + 150, y + 30);
+            if (look.hasOwnProperty('outputs')) {
+                if (look.outputs > 0) {
+                    black_layer.elt.className = 'black_layer';
+                } else {
+                    black_layer.elt.className = 'stay_black';
+                }
+            }
+            black_layer.parent(sketch_item);
+        });
+        img = 'data:image/png;base64,' + img;
+        let raw = new Image(200, 200);
+        raw.src = img;
+        raw.onload = function () {
+            let normal_img = createImage(200, 200);
+            normal_img.drawingContext.drawImage(raw, 0, 0);
+            image(normal_img, x, y);
+            if (look.hasOwnProperty('outputs')) {
+                if (look.outputs > 0) {
+                    showImportPreview(look, x, y);
+                }
+            }
+        };
+        let darker_img = createImg(img, function () {
+            darker_img.position(x + 150, y + 30);
+            darker_img.elt.className = 'darker ease_in';
+            darker_img.parent(sketch_item);
+        });
+        if (look.hasOwnProperty('outputs')) {
+            if (look.outputs > 0) {
+                showImportPreview(look, x, y);
+            }
+        }
+        let gradient = createImg('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', function () {
+            gradient.position(x + 150, y + 30);
+            gradient.elt.className = 'gradient';
+            gradient.parent(sketch_item);
+        });
+        let capt = createP(caption.slice(0, 25).toUpperCase());
+        capt.style('font-family', 'Open Sans');
+        capt.position(x + 160, y + 185);
+        capt.style('color', 'white');
+        capt.elt.className = 'capt';
+        let top_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
+            top_layer.position(x + 150, y + 30);
+            top_layer.elt.className = 'top_layer';
+            top_layer.parent(sketch_item);
+            if (look.outputs === 0) {
+                top_layer.elt.style.cursor = 'not-allowed';
+            } else {
+                top_layer.mousePressed(function () {
+                    setActive(customButton, true);
+                    importCustom(caption + '.json');
+                    closeCustomDialog();
+                });
+            }
+        });
+    }
+}
+
+function showPreviewImage() {
+    let raw = new Image();
+    raw.src = previewImg;
+    raw.onload = function () {
+        let img = createImage(raw.width, raw.height);
+        img.drawingContext.drawImage(raw, 0, 0, window.height, window.height, 0, 0, window.height, window.height);
+        img.resize(0, window.height / 1.5);
+        img.resize(0, window.height / 3);
+        img.resize(0, 200);
+        image(img, window.width / 2 - 330, window.height / 2 - 99);
+    };
 }
 
 /*
@@ -2016,7 +2377,13 @@ function setLoading(l) {
     loading = l;
     disableButtons(l);
     simButton.elt.disabled = l;
-    saveButton.elt.disabled = l;
+    saveDialogButton.elt.disabled = l;
+    if (getCookieValue('access_token') !== '') {
+        customButton.elt.disabled = l;
+    }
+    if (!l) {
+        saveButton.elt.disabled = false;
+    }
     closeTutorialButton.elt.disabled = l;
     nextStepButton.elt.disabled = l;
     updateUndoButtons();
@@ -2025,6 +2392,90 @@ function setLoading(l) {
         redoButton.elt.disabled = true;
     }
     reDraw();
+}
+
+function showImportPreview(item, x, y) {
+    let x1, x2, y1, y2;
+    let w = Math.max((item.tops.length - 1), 0) * 30 + 60;
+    let h = (Math.max(item.inputs - item.tops.length, item.outputs) + 1) * 30;
+    let scaling = 1;
+    if (h >= 120) {
+        scaling = 120 / h;
+        x += 180 - w * scaling;
+        scale(scaling);
+    } else {
+        x += 180 - w;
+    }
+    y += 20 * scaling;
+    stroke(0);
+    strokeWeight(3);
+    fill(255);
+    textFont('Open Sans');
+
+    // Draw the body
+    if (item.tops.length === 0) {
+        rect(x / scaling, (y / scaling) + GRIDSIZE / 2, w, h - GRIDSIZE);
+    } else {
+        rect(x / scaling, y / scaling, w, h);
+    }
+
+    noStroke();
+    textAlign(CENTER, CENTER);
+    fill(0);
+    textSize(10);
+    text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2);
+    textSize(14);
+    let tops = 0;
+    for (let i = 1; i <= item.inputs; i++) {
+        stroke(0);
+        strokeWeight(2);
+        if (item.tops.includes(i - 1)) {
+            tops++;
+            x1 = (x / scaling) + (30 * tops);
+            y1 = (y / scaling) - 6;
+            x2 = (x / scaling) + (30 * tops);
+            y2 = (y / scaling);
+            if (item.inputLabels[i - 1] === ">") {
+                line(x1, y2 + 14, x1 - 6, y2);
+                line(x1, y2 + 14, x1 + 6, y2);
+            } else {
+                noStroke();
+                text(item.inputLabels[i - 1], x1, y2 + 10);
+            }
+        } else {
+            x1 = (x / scaling) - 6;
+            y1 = (y / scaling) + (30 * (i - tops));
+            x2 = (x / scaling);
+            y2 = (y / scaling) + (30 * (i - tops));
+            if (item.inputLabels[i - 1] === ">") {
+                line(x2 + 14, y1, x2, y1 - 6);
+                line(x2 + 14, y1, x2, y1 + 6);
+            } else {
+                noStroke();
+                text(item.inputLabels[i - 1], x2 + 10, y1);
+            }
+        }
+        stroke(0);
+        strokeWeight(3);
+        line(x1, y1, x2, y2);
+    }
+
+    for (let i = 1; i <= item.outputs; i++) {
+        stroke(0);
+        strokeWeight(3);
+        x1 = (x / scaling) + w;
+        y1 = (y / scaling) + (30 * i);
+        x2 = (x / scaling) + w + 6;
+        y2 = (y / scaling) + (30 * i);
+        noStroke();
+        text(item.outputLabels[i - 1], x1 - 10, y1);
+        stroke(0);
+        strokeWeight(3);
+        line(x1, y1, x2, y2);
+    }
+
+    scale(1 / scaling);
+    textAlign(LEFT, TOP);
 }
 
 /*

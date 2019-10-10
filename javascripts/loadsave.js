@@ -1,6 +1,6 @@
 // File: loadsave.js
 
-function saveSketch(filename) {
+function saveSketch(filename, callback) {
     // Create a new json object to store all elements in
     let json = {};
     // New elements should have the filename as their caption (for now)
@@ -44,7 +44,12 @@ function saveSketch(filename) {
             json.customs.push(customs[i].getData());
         }
     }
-    saveJSON(json, filename); // Save the file as json (asks for directory...)
+    if (getCookieValue('access_token') !== '') {
+        socket.emit('saveUserSketch', { file: filename, json: json, access_token: getCookieValue('access_token') });
+    } else {
+        saveJSON(json, filename); // Save the file as json (asks for directory...)
+    }
+    callback(getLookData(json));
 }
 
 function loadSketch(file) {
@@ -52,14 +57,34 @@ function loadSketch(file) {
     queue = [];
     loading = true;
     loadFile = file;
-    loadJSON('sketches/' + file, load, fileNotFoundError);
+    document.title = 'LogiJS: ' + loadFile.split('.')[0];
+    loadJSON('sketches/' + file, load, function () {
+        socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
+        socket.on('userSketchData', (data) => {
+            if (data.success === true) {
+                load(data.data);
+            } else {
+                fileNotFoundError();
+            }
+            socket.off('userSketchData');
+        });
+    });
+}
+
+function loadSketchFromJSON(data, file) {
+    next = 0;
+    queue = [];
+    loading = true;
+    loadFile = file;
+    document.title = 'LogiJS: ' + file;
+    load(data);
 }
 
 function fileNotFoundError() {
     // Change the site's title to the error message
-    document.title = "Sketch not found! - LogiJS";
+    document.title = 'LogiJS: Sketch not found!';
     showMessage('Sketch not found!', 'Please use a local copy of LogiJS to open local files.');
-    setTimeout(function() {setLoading(false);}, 3000);
+    setTimeout(function () { setLoading(false); }, 3000);
 }
 
 function load(loadData) {
@@ -176,6 +201,19 @@ function loadCustomFile(file, num, hlparent) {
                 cachedData.push(loadData);
             }
             loadCallback(loadData, num, hlparent);
+        }, function () {
+            socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
+            socket.on('userSketchData', (data) => {
+                let loadData = data.data;
+                if (data.success === true) {
+                    if (cachedFiles.indexOf(file) < 0) {
+                        cachedFiles.push(file);
+                        cachedData.push(loadData);
+                    }
+                    loadCallback(loadData, num, hlparent);
+                }
+                socket.off('userSketchData');
+            });
         });
     }
 }
@@ -274,4 +312,32 @@ function loadNext() {
 function loadCallback(loadData, num, hlparent) {
     loadCustom(loadData, num, hlparent);
     loadNext();
+}
+
+function getLookData(json) {
+    let look = {};
+    look.tops = [];
+    look.inputLabels = [];
+    look.outputLabels = [];
+    look.caption = json.caption;
+    look.inputs = json.inputs.length;
+    look.outputs = json.outputs.length;
+    for (let i = 0; i < json.inputs.length; i++) {
+        if (json.inputs[i].istop) {
+            look.tops.push(i);
+        }
+        if (json.inputs[i].hasOwnProperty('lbl')) {
+            look.inputLabels.push(json.inputs[i].lbl);
+        } else {
+            look.inputLabels.push('');
+        }
+    }
+    for (let i = 0; i < json.outputs.length; i++) {
+        if (json.outputs[i].hasOwnProperty('lbl')) {
+            look.outputLabels.push(json.outputs[i].lbl);
+        } else {
+            look.outputLabels.push('');
+        }
+    }
+    return look;
 }

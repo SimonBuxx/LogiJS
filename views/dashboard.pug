@@ -1,0 +1,116 @@
+doctype html
+head
+  title LogiJS: Dashboard
+  meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
+  computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
+  meta(name='description', content='LogiJS is a logic circuit simulator built for educational use. Easy to use, yet powerful.')
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='shortcut icon', href='images/favicon.ico')
+  style
+    include css/bootstrap.css
+    include css/index_style.css
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
+  script.
+    window.addEventListener("load", function () {
+    window.cookieconsent.initialise({
+    "palette": {
+    "popup": {
+    "background": "#323232",
+    "text": "#ffffff"
+    },
+    "button": {
+    "background": "#c83232",
+    "text": "#ffffff"
+    }
+    }
+    })
+    });
+.top-menu
+  .container
+    .navbar.navbar-default.navbar-fixed-top(style='background: rgb(50, 50, 50);', role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/')
+            img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+        #nav-bar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
+            li
+              a.internal-link(rel='nofollow', href='/', target='_parent') HOME
+            li
+              a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
+            li
+              a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
+            li.active
+              a(href='#', style="margin-left: 60px;") #{user.toUpperCase()}
+#blur
+#dashboard_wc_back.carousel
+  form.Logout
+    button.btn.btn-lg.btn-orange(type='submit', role='button' style="margin: 10px; float:left; position: absolute;")
+      <i class="fa fa-sign-out"></i> Logout
+  button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 10px; float:right; position: absolute; right: 0;")
+    <i class="fa fa-plus-square"></i> New Sketch
+  h1(style="padding: 10px;") Welcome, #{user}!
+  if sketchData.sketches.length === 0
+    #dashboard_item_back.carousel(style={height: 110 + 'px', 'margin-bottom': '100px'})
+      h1(style="padding: 10px; font-size: 24px;") You don't have any sketches.
+  else
+    #dashboard_item_back.carousel(style={height: Math.ceil(sketchData.sketches.length / 4) * 250 + 50 + 'px', 'margin-bottom': '65px'})
+      - var r = 0;
+      while r < Math.ceil(sketchData.sketches.length / 4)
+        - var n = 0;
+        while n < 4
+          if r*4+n < sketchData.sketches.length
+            .sketch_item
+              img.base_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='')
+              img.black_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='')
+              img.normal(src='data:image/png;base64,' + images[r*4+n], style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
+              .ease_in
+                img.darker(src='data:image/png;base64,' + images[r*4+n], style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
+              img(src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r * 250 + 50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
+              //h1(style="text-align: left; position: absolute; top: 10px; left: 230px; margin: 0;") #{sketchData.sketches[i].toUpperCase()}
+              .ease_out
+                p(style={'text-align': 'left', position: 'absolute', left: (n*250 + 60) + 'px', top: (r*250+220) + 'px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchData.sketches[r*4+n].toUpperCase()}
+              .ease_in
+                a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'center', width: '200px', position: 'absolute', left: (n*250+50) + 'px', top: (r*250+80) + 'px', 'font-size': '16px', 'white-space': 'nowrap', 'padding-left': '10px', 'padding-right': '10px'}) #{sketchData.sketches[r*4+n].slice(0, 20).toUpperCase()}
+                a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'left', width: '200px', position: 'absolute', left: (n*250+60) + 'px', top: (r*250+220) + 'px', 'font-size': '14px'}) #{sketchData.modified[r*4+n]}
+                a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'right', width: '50px', position: 'absolute', left: (n*250+190) + 'px', top: (r*250+220) + 'px', 'font-size': '14px'}) #{sketchData.sizes[r*4+n]} KB
+                if (descriptions[r*4+n].length <= 120)
+                  a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'center', padding: '10px', width: '200px', position: 'absolute', left: (n*250+50) + 'px', top: (r*250+100) + 'px', 'font-size': '14px'}) #{descriptions[r*4+n].slice(0, 120)}
+                else
+                  a(href='/editor?sketch='+sketchData.sketches[r*4+n], style={'text-align': 'center', padding: '10px', width: '200px', position: 'absolute', left: (n*250+50) + 'px', top: (r*250+100) + 'px', 'font-size': '14px'}) #{descriptions[r*4+n].slice(0, 120) + '...'}
+              img.top_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='', id='tl' + sketchData.sketches[r*4+n])
+              .ease_in
+                button.btn.btn-lg.download(type='submit', id='dl' + sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+115) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px', height: '46px'}) 
+                  i(class="fa fa-download")
+                if (user !== 'demouser')
+                  button.btn.btn-lg.delete(type='submit', id=sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+145) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px'})
+                    i(class="fa fa-trash-o")
+                else 
+                  button.btn.btn-lg(type='submit', onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+145) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px'})
+                    i(class="fa fa-trash-o")
+          - n++;
+        - r++;
+div(style="height: 70px;")
+.footer_bottom
+  .text-center
+    .footer_bottom_content
+      span#footer-line
+        | Copyright &copy; 2019 
+        a(href='https://www.github.com/SimonBuxx') Simon Buchholz
+        |  | 
+      span(style="text-align: right;")
+        a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js
+  include ../site_scripts/dashboard.js

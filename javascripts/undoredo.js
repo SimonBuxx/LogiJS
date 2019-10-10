@@ -76,6 +76,8 @@ function undo() {
                 break;
             case 'delCust':
                 customs.splice(act.actionObject[1], 0, act.actionObject[0][0]);
+                setLoading(true);
+                customs[act.actionObject[1]].parsed = false;
                 loadCustomFile(customs[act.actionObject[1]].filename, act.actionObject[1], act.actionObject[1]);
                 actionRedo.push(act);
                 break;
@@ -175,6 +177,7 @@ function redo() {
                 break;
             case 'addCust':
                 customs.push(act.actionObject);
+                setLoading(true);
                 customs[customs.length - 1].parsed = false;
                 loadCustomFile(customs[customs.length - 1].filename, customs.length - 1, customs.length - 1);
                 actionUndo.push(act);
