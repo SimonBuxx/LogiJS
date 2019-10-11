@@ -1,0 +1,134 @@
+{
+  "caption": "first_steps",
+  "gates": [
+    {
+      "x": "660",
+      "y": "330",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    },
+    {
+      "x": "780",
+      "y": "300",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"xor\"",
+      "outputsInv": "[false]",
+      "inputsInv": "[false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "900",
+      "y": "330",
+      "colr": "0"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "585",
+      "y": "315",
+      "framecount": "-1",
+      "clock": "false"
+    },
+    {
+      "x": "585",
+      "y": "375",
+      "framecount": "-1",
+      "clock": "false"
+    }
+  ],
+  "segments": [],
+  "wires": [
+    {
+      "x1": "630",
+      "y1": "330",
+      "y2": "360"
+    },
+    {
+      "x1": "630",
+      "y1": "360",
+      "x2": "660"
+    },
+    {
+      "x1": "150",
+      "y1": "0",
+      "y2": "30"
+    },
+    {
+      "x1": "0",
+      "y1": "60",
+      "x2": "30"
+    },
+    {
+      "x1": "0",
+      "y1": "300",
+      "x2": "30"
+    },
+    {
+      "x1": "30",
+      "y1": "180",
+      "x2": "60"
+    },
+    {
+      "x1": "720",
+      "y1": "360",
+      "x2": "780"
+    },
+    {
+      "x1": "600",
+      "y1": "390",
+      "x2": "660"
+    },
+    {
+      "x1": "840",
+      "y1": "330",
+      "x2": "900"
+    },
+    {
+      "x1": "600",
+      "y1": "330",
+      "x2": "780"
+    },
+    {
+      "x1": "30",
+      "y1": "60",
+      "y2": "300"
+    }
+  ],
+  "conpoints": [
+    {
+      "x": "630",
+      "y": "330"
+    },
+    {
+      "x": "30",
+      "y": "180"
+    }
+  ],
+  "diodes": [],
+  "customs": [],
+  "labels": [
+    {
+      "x": "360",
+      "y": "150",
+      "txt": "Hey there! Welcome to LogiJS.\nThis is a little circuit you can use as a starting point for experimenting with the software.\nThe tutorial in the box below will help you with your first steps. Have fun!"
+    },
+    {
+      "x": "150",
+      "y": "60",
+      "txt": "Click here to start the simulation!"
+    },
+    {
+      "x": "60",
+      "y": "180",
+      "txt": "These are your standard\nobjects you will need to\nbuild sketches."
+    }
+  ],
+  "segDisplays": []
+}

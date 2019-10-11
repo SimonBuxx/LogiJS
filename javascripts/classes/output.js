@@ -10,10 +10,12 @@ function Output(x, y, transform, colr) {
     this.lbl = '';
     this.colr = colr; // 0 = red, 1 = yellow, 2 = green, 3 = blue
     this.marked = false;
-    this.alpha = 255;
-    this.highColor = color(HRED, HGREEN, HBLUE); // Color for high outputs (red)
-    this.lowColor = color(50, 50, 50); // Color for low outputs (dark grey)
-    this.markColor = color(150, 30, 30);   // Color for marked outputs
+    this.highColor = color(HRED, HGREEN, HBLUE); // Color for high outputs
+    this.accentColor = color(HARED, HAGREEN, HABLUE);
+    //this.lowColor = color(LRED, LGREEN, LBLUE); // Color for low outputs
+    //this.markColor = color(MRED, MGREEN, MBLUE);   // Color for marked outputs
+
+    this.id = 'o' + Date.now() + Math.random();
 
     // ClickBox is used for input and global
     this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
@@ -35,7 +37,6 @@ Output.prototype.getData = function () {
     data.y = JSON.stringify(this.y);
     data.colr = JSON.stringify(this.colr);
     if (this.lbl !== '') {
-        console.log('adding label');
         data.lbl = this.lbl;
     }
     return data;
@@ -47,13 +48,6 @@ Output.prototype.getData = function () {
 Output.prototype.setCoordinates = function (nx, ny) {
     this.x = Math.round(nx / GRIDSIZE) * GRIDSIZE;
     this.y = Math.round(ny / GRIDSIZE) * GRIDSIZE;
-    // Check bounds
-    /*if (this.x < 30) {
-        this.x = 30;
-    }
-    if (this.y < 30) {
-        this.y = 30;
-    }*/
 };
 
 Output.prototype.updateClickBox = function () {
@@ -86,18 +80,23 @@ Output.prototype.updateColor = function () {
     switch (this.colr) {
         case 0:
             this.highColor = color(HRED, HGREEN, HBLUE);
+            this.accentColor = color(HARED, HAGREEN, HABLUE);
             break;
         case 1:
             this.highColor = color(YRED, YGREEN, YBLUE);
+            this.accentColor = color(YARED, YAGREEN, YABLUE);
             break;
         case 2:
             this.highColor = color(GRED, GGREEN, GBLUE);
+            this.accentColor = color(GARED, GAGREEN, GABLUE);
             break;
         case 3:
             this.highColor = color(BRED, BGREEN, BBLUE);
+            this.accentColor = color(BARED, BAGREEN, BABLUE);
             break;
         default:
             this.highColor = color(HRED, HGREEN, HBLUE);
+            this.accentColor = color(HARED, HAGREEN, HABLUE);
             console.log('Notice: Output color is invalid, setting to red');
             break;
     }
@@ -112,12 +111,28 @@ Output.prototype.show = function () {
     if (this.state) {
         fill(this.highColor);
     } else if (this.marked) {
-        fill(this.markColor);
+        fill(MRED, MGREEN, MBLUE);
     } else {
-        fill(this.lowColor);
+        fill(50);
     }
     // Draw the circle that represents the output
     ellipse(this.x, this.y, this.w, this.h);
+    if (this.state) {
+        fill(this.accentColor);
+    } else if (this.marked) {
+        fill(MARED, MAGREEN, MABLUE);
+    } else {
+        fill(LARED, LAGREEN, LABLUE);
+    }
+    arc(this.x, this.y, GRIDSIZE, GRIDSIZE, HALF_PI + QUARTER_PI, PI + HALF_PI + QUARTER_PI, OPEN);
+    /*if (!this.state) {
+        stroke(200);
+    } else {
+        stroke(255);
+    }*/
+    //strokeWeight(3);
+    //noFill();
+    //arc(this.x, this.y, 20, 20, PI, PI + HALF_PI);
     //this.clickBox.markClickBox();
 };
 

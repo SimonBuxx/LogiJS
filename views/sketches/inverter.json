@@ -1,0 +1,66 @@
+{
+  "caption": "NOT",
+  "gates": [
+    {
+      "x": "690",
+      "y": "300",
+      "direction": "0",
+      "inputCount": "2",
+      "outputCount": "1",
+      "logicFunction": "\"and\"",
+      "caption": "\"&\"",
+      "outputsInv": "[true]",
+      "inputsInv": "[false,false]"
+    }
+  ],
+  "outputs": [
+    {
+      "x": "840",
+      "y": "330",
+      "colr": "0"
+    }
+  ],
+  "inputs": [
+    {
+      "x": "525",
+      "y": "315",
+      "framecount": "-1",
+      "clock": "false"
+    }
+  ],
+  "segments": [],
+  "wires": [
+    {
+      "x1": "630",
+      "y1": "330",
+      "x2": "630",
+      "y2": "360"
+    },
+    {
+      "x1": "630",
+      "y1": "360",
+      "x2": "690",
+      "y2": "360"
+    },
+    {
+      "x1": "750",
+      "y1": "330",
+      "x2": "840",
+      "y2": "330"
+    },
+    {
+      "x1": "540",
+      "y1": "330",
+      "x2": "690",
+      "y2": "330"
+    }
+  ],
+  "conpoints": [
+    {
+      "x": "630",
+      "y": "330"
+    }
+  ],
+  "diodes": [],
+  "customs": []
+}

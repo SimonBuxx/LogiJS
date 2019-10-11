@@ -12,7 +12,7 @@ function handleSelection(x1, y1, x2, y2) {
     showSClickBox = true;
     selection = [];
     segIndizees = [];
-    wireIndizees = [];
+    wireIndices = [];
     for (let i = 0; i < gates.length; i++) {
         if (gates[i].x >= x1 && gates[i].x <= x2 && gates[i].y >= y1 && gates[i].y <= y2) {
             gates[i].marked = true;
@@ -66,17 +66,17 @@ function handleSelection(x1, y1, x2, y2) {
         if ((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) && (wires[i].startX <= x2 || x2 >= wires[i].endX)) && (wires[i].startY >= y1 && wires[i].endY <= y2)) {
             wires[i].marked = true;
             wireSelection.push(wires[i]);
-            wireIndizees.push(i);
+            //wireIndices.push(i);
         } else if ((wires[i].direction === 1) && ((wires[i].startY >= y1 || y1 <= wires[i].endY) && (wires[i].startY <= y2 || y2 >= wires[i].endY)) && (wires[i].startX >= x1 && wires[i].endX <= x2)) {
             wires[i].marked = true;
             wireSelection.push(wires[i]);
-            wireIndizees.push(i);
+            //wireIndices.push(i);
         }
     }
-    wireIndizees.reverse();
+    //wireIndices.reverse();
     //console.log('Selection:');
     //console.log(wireSelection);
-    let segsInWires = [];
+    /*let segsInWires = [];
     for (let i = wireSelection.length - 1; i >= 0; i--) {
         if (wireSelection[i].startX === wireSelection[i].endX) {
             // Vertical wire, split in n vertical segments | Assuming startY < endY, can always be saved in that form
@@ -91,29 +91,24 @@ function handleSelection(x1, y1, x2, y2) {
                     false, transform));
             }
         }
-    }
-    //console.log(segsInWires);
-    let segSelection = [];
+    }*/
+    /*let segSelection = [];
     for (let i = 0; i < segments.length; i++) {
         // This is genius
-        if (segsInWires.findIndex(function(a) { // jshint ignore:line
+        if (segsInWires.findIndex(function (a) { // jshint ignore:line
             return ((a.startX === segments[i].startX) && (a.endX === segments[i].endX) && (a.startY === segments[i].startY) && (a.endY === segments[i].endY));
         }) >= 0) {
-        //if ((segments[i].direction === 0) && ((segments[i].startX >= x1 || x1 <= segments[i].endX) && (segments[i].startX <= x2 || x2 >= segments[i].endX)) && (segments[i].startY >= y1 && segments[i].endY <= y2)) {
             segSelection.push(segments[i]);
             segIndizees.push(i);
-        }/* else if ((segments[i].direction === 1) && ((segments[i].startY >= y1 || y1 <= segments[i].endY) && (segments[i].startY <= y2 || y2 >= segments[i].endY)) && (segments[i].startX >= x1 && segments[i].endX <= x2)) {
-            segSelection.push(segments[i]);
-            segIndizees.push(i);
-        }*/
+        }
     }
-    segIndizees.reverse();
+    segIndizees.reverse();*/
     let preLength = selection.length;
     selection = selection.concat(wireSelection);
-    selection = selection.concat(segSelection);
-    selection.push(wireSelection.length + preLength);
-    //console.log(segSelection);
-    //console.log(segIndizees);
+    //selection = selection.concat(wireIndices);
+    //selection = selection.concat(segSelection);
+    selection.push(preLength);
+    selection.push(wireSelection.length);
 }
 
 function compWires(a, b) {
@@ -125,8 +120,73 @@ function compWires(a, b) {
 */
 function moveSelection(dx, dy) {
     sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
-    for (let i = 0; i < selection[selection.length - 1]; i++) {
-        selection[i].alterPosition(dx, dy);
+    let wireCount = selection[selection.length - 1];
+    let preLength = selection[selection.length - 2];
+    for (let i = 0; i < preLength; i++) {
+        if (selection[i].id.charAt(0) === 'o') {
+            for (let j = 0; j < outputs.length; j++) { 
+                if (outputs[j].id === selection[i].id) {
+                    outputs[j].alterPosition(dx, dy);
+                    break;
+                }
+            }
+        } else if (selection[i].id.charAt(0) === 'i') {
+            for (let j = 0; j < inputs.length; j++) { 
+                if (inputs[j].id === selection[i].id) {
+                    inputs[j].alterPosition(dx, dy);
+                    break;
+                }
+            }
+        } else if (selection[i].id.charAt(0) === 's') {
+            for (let j = 0; j < segDisplays.length; j++) { 
+                if (segDisplays[j].id === selection[i].id) {
+                    segDisplays[j].alterPosition(dx, dy);
+                    break;
+                }
+            }
+        } else if (selection[i].id.charAt(0) === 'l') {
+            for (let j = 0; j < labels.length; j++) { 
+                if (labels[j].id === selection[i].id) {
+                    labels[j].alterPosition(dx, dy);
+                    break;
+                }
+            }
+        } else if (selection[i].id.charAt(0) === 'd') {
+            for (let j = 0; j < diodes.length; j++) { 
+                if (diodes[j].id === selection[i].id) {
+                    diodes[j].alterPosition(dx, dy);
+                    break;
+                }
+            }
+        } else if (selection[i].id.charAt(0) === 'p') {
+            for (let j = 0; j < conpoints.length; j++) { 
+                if (conpoints[j].id === selection[i].id) {
+                    conpoints[j].alterPosition(dx, dy);
+                    break;
+                }
+            }
+        } else if (selection[i].id.charAt(0) === 'c') {
+            for (let j = 0; j < customs.length; j++) { 
+                if (customs[j].id === selection[i].id) {
+                    customs[j].alterPosition(dx, dy);
+                    break;
+                }
+            }
+        } else if (selection[i].id.charAt(0) === 'g') {
+            for (let j = 0; j < gates.length; j++) { 
+                if (gates[j].id === selection[i].id) {
+                    gates[j].alterPosition(dx, dy);
+                    break;
+                }
+            }
+        }
+    }
+    for (let i = preLength; i < preLength + wireCount; i++) {
+        for (let j = 0; j < wires.length; j++) {
+            if (wires[j].id === selection[i].id) {
+                wires[j].alterPosition(dx, dy);
+            }
+        }
     }
 }
 
@@ -139,12 +199,12 @@ function finishSelection() {
         if (wires[i].startX === wires[i].endX) {
             // Vertical wire, split in n vertical segments
             for (let j = 0; j < (wires[i].endY - wires[i].startY) / GRIDSIZE; j++) {
-                segments.push(new WSeg(1, wires[i].startX, (wires[i].startY + j * GRIDSIZE), false, transform));
+                segments.push(new Wire(1, wires[i].startX, (wires[i].startY + j * GRIDSIZE), false, transform));
             }
         } else if (wires[i].startY === wires[i].endY) {
             // Horizontal wire, split in n horizontal segments
             for (let j = 0; j < (wires[i].endX - wires[i].startX) / GRIDSIZE; j++) {
-                segments.push(new WSeg(0, wires[i].startX + j * GRIDSIZE, wires[i].startY, false, transform));
+                segments.push(new Wire(0, wires[i].startX + j * GRIDSIZE, wires[i].startY, false, transform));
             }
         }
     }

@@ -1,79 +1,69 @@
 // File: logicGate.js
 
-class LogicGate {
+function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFunction) {
+    this.x = x; // X-Position of the Gate (translated)
+    this.y = y; // Y-Position
 
-    constructor(x, y, transform, direction, inputCount, outputCount, logicFunction){
+    this.transform = transform;     // Transformation (Zoom and Translation)
+    this.direction = direction;     // Gate direction (0 = inputs left)
+    this.inputCount = inputCount;   // # of inputs
+    this.outputCount = outputCount; // # of outputs
 
-        this.x = x; // X-Position of the Gate (translated)
-        this.y = y; // Y-Position
-        
-        this.transform = transform;     // Transformation (Zoom and Translation)
-        this.direction = direction;     // Gate direction (0 = inputs left)
-        this.inputCount = inputCount;   // # of inputs
-        this.outputCount = outputCount; // # of outputs
-        this.alpha = 255;
-        
-        this.w = 2 * GRIDSIZE; // Width of the gate
-        this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1, this.outputCount - 1); // Height of the gate
-        
-        this.logicFunction = logicFunction;  // Applied logic function
-        
-        this.highColor = color(HRED, HGREEN, HBLUE); // Color for high in-/outputs (red)
-        this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low in-/outputs (black)
-        
-        this.caption = '';    // Caption of the logic gate
-        this.textSize = 40;   // Text size of the caption
-        
-        this.inputs = [];     // Vector of the input states
-        this.ipset = [];      // set to true if the input was set
-        this.outputs = [];    // Vector of the output state
-        this.inputsInv = [];  // true, if input is inverted
-        this.outputsInv = []; // true, if output is inverted
-        
-        this.id = '_' + Math.random().toString(36).substr(2, 9);
-        
-        // The height (or length) of the gate, determined by the input/output count
-        this.height = Math.max(this.outputCount + 1, this.inputCount + 1);
-        
-        // These contain the ClickBoxes of the inputs and outputs and the global ClickBox
-        this.inputClickBoxes = [];
-        this.outputClickBoxes = [];
-        
-        switch(this.logicFunction) {
-            case 'and': this.caption = '&'; break;
-            case 'or': this.caption = '≥1'; break;
-            case 'xor': this.caption = '=1'; break;
-            default: this.caption = '';
-        }
-        
-        this.marked = false;
-        this.markColor = color(150, 30, 30);   // Color for marked gates
-        
-        if (this.direction % 2 === 0) {
-            this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, this.transform);
-        } else {
-            this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, this.transform);
-        }
-        
-        // Initialize the inputs
-        for (let i = 0; i < this.inputCount; i++) {
-            this.inputs.push(false); // Set all inputs to low
-            this.ipset.push(false);
-            this.inputsInv.push(false); // Set all inputs to not inverted
-            this.inputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every input
-        }
-        
-        // Initialize the outputs
-        for (let i = 0; i < this.outputCount; i++) {
-            this.outputs.push(false); // Set all outputs to low
-            this.outputsInv.push(false); // Set all outputs to not inverted
-            this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every output
-        }
-        
-        this.setCoordinates(this.x, this.y);
-        this.setDirection(direction); // Set the direction at the beginning
-        this.updateClickBoxes();
-        }
+    this.w = 2 * GRIDSIZE; // Width of the gate
+    this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1, this.outputCount - 1); // Height of the gate
+
+    this.logicFunction = logicFunction;  // Applied logic function
+
+    this.highColor = color(HRED, HGREEN, HBLUE); // Color for high in-/outputs (red)
+    this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low in-/outputs (black)
+
+    this.caption = '';    // Caption of the logic gate
+    this.textSize = 40;   // Text size of the caption
+
+    this.inputs = [];     // Vector of the input states
+    this.ipset = [];      // set to true if the input was set
+    this.outputs = [];    // Vector of the output state
+    this.inputsInv = [];  // true, if input is inverted
+    this.outputsInv = []; // true, if output is inverted
+
+    //this.id = '_' + Math.random().toString(36).substr(2, 9);
+    this.id = 'g' + Date.now() + Math.random();
+
+    // The height (or length) of the gate, determined by the input/output count
+    this.height = Math.max(this.outputCount + 1, this.inputCount + 1);
+
+    // These contain the ClickBoxes of the inputs and outputs and the global ClickBox
+    this.inputClickBoxes = [];
+    this.outputClickBoxes = [];
+
+    switch(this.logicFunction) {
+        case 'and': this.caption = '&'; break;
+        case 'or': this.caption = '≥1'; break;
+        case 'xor': this.caption = '=1'; break;
+        default: this.caption = '';
+    }
+
+    this.marked = false;
+
+    if (this.direction % 2 === 0) {
+        this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, this.transform);
+    } else {
+        this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, this.transform);
+    }
+
+    // Initialize the inputs
+    for (let i = 0; i < this.inputCount; i++) {
+        this.inputs.push(false); // Set all inputs to low
+        this.ipset.push(false);
+        this.inputsInv.push(false); // Set all inputs to not inverted
+        this.inputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every input
+    }
+
+    // Initialize the outputs
+    for (let i = 0; i < this.outputCount; i++) {
+        this.outputs.push(false); // Set all outputs to low
+        this.outputsInv.push(false); // Set all outputs to not inverted
+        this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every output
     }
     
     LogicGate.prototype.setInvertions = function (ipinv, opinv) {
@@ -288,7 +278,7 @@ LogicGate.prototype.show = function () {
     }
     stroke(0);
     if (this.marked) {
-        fill(this.markColor);
+        fill(MRED, MGREEN, MBLUE);
     } else {
         fill(255, this.alpha);
     }
@@ -310,7 +300,7 @@ LogicGate.prototype.show = function () {
     for (let i = 1; i <= this.inputCount; i++) {
         // Draw inputs
         if (this.marked) {
-            stroke(this.markColor);
+            stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.inputs[i - 1] === true) {
             stroke(this.highColor);
@@ -367,7 +357,7 @@ LogicGate.prototype.show = function () {
     for (let i = 1; i <= this.outputCount; i++) {
         // Draw outputs
         if (this.marked) {
-            stroke(this.markColor);
+            stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.outputs[i - 1] === true) {
             stroke(this.highColor);

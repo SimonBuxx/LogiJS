@@ -16,7 +16,8 @@ function Diode(x, y, state, transform) {
     this.clickBox = new ClickBox(this.x, this.y, 20, 20, this.transform);
 
     this.marked = false;
-    this.markColor = color(150, 30, 30);
+
+    this.id = 'd' + Date.now() + Math.random();
 
     this.getData = function () {
         var data = {};
@@ -49,13 +50,6 @@ function Diode(x, y, state, transform) {
     this.setCoordinates = function (nx, ny) {
         this.x = Math.round(nx / GRIDSIZE) * GRIDSIZE;
         this.y = Math.round(ny / GRIDSIZE) * GRIDSIZE;
-        // Check bounds
-        /*if (this.x < 0) {
-            this.x = 0;
-        }
-        if (this.y < 0) {
-            this.y = 0;
-        }*/
     };
 
     this.updateClickBox = function () {
@@ -82,7 +76,7 @@ function Diode(x, y, state, transform) {
     this.show = function () {
         noStroke();
         if (this.marked) {
-            fill(this.markColor);
+            fill(MRED, MGREEN, MBLUE);
         } else if (this.state) {
             fill(this.highColor);
         } else {

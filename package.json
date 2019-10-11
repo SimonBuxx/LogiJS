@@ -1,20 +1,30 @@
 {
-  "name": "LogiJS",
+  "name": "logijs",
   "version": "1.0.0",
-  "description": "**https://logijs.netlify.com/**",
-  "main": "index.js",
+  "description": "",
+  "main": "site_scripts/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/crisbbi/LogiJS.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/crisbbi/LogiJS/issues"
-  },
-  "homepage": "https://github.com/crisbbi/LogiJS#readme"
+  "author": "Simon Buchholz",
+  "license": "gpl-3.0",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "config": "^3.2.2",
+    "cookie-parser": "^1.4.4",
+    "crypto": "^1.0.1",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5",
+    "express-session": "^1.16.2",
+    "fs": "0.0.1-security",
+    "glob": "^7.1.4",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.19.3",
+    "mysql": "^2.17.1",
+    "nodemon": "^1.19.1",
+    "pug": "^2.0.4",
+    "sharp": "^0.23.0",
+    "socket.io": "^2.2.0"
+  }
 }

@@ -1,0 +1,86 @@
+doctype html
+head
+  title LogiJS: Sign In
+  meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
+  computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
+  meta(name='description', content='LogiJS is a logic circuit simulator built for educational use. Easy to use, yet powerful.')
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='shortcut icon', href='images/favicon.ico')
+  style
+    include css/bootstrap.css
+    include css/index_style.css
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
+  script.
+    window.addEventListener("load", function () {
+    window.cookieconsent.initialise({
+    "palette": {
+    "popup": {
+    "background": "#323232",
+    "text": "#ffffff"
+    },
+    "button": {
+    "background": "#c83232",
+    "text": "#ffffff"
+    }
+    }
+    })
+    });
+.top-menu
+  .container
+    .navbar.navbar-default.navbar-fixed-top(style='background: rgb(50, 50, 50);', role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/')
+            img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+        #nav-bar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
+            li
+              a.internal-link(rel='nofollow', href='/', target='_parent') HOME
+            li
+              a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
+            li
+              a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
+            li.active
+              a(href='#', style="margin-left: 60px;") LOGIN
+            li
+              a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
+#blur
+#login_back.carousel
+  form.Login
+    if tooLong
+      h1(style='padding-top: 20px; color: red; font-size: 20px;') Username or password are too long!
+    else if failed
+      h1(style='padding-top: 20px; color: red; font-size: 20px;') Login failed!
+    else
+      h1(style='padding-top: 20px;') Login
+    p
+      input.username(type='text', placeholder='USERNAME')
+      br
+      input.password(type='password', placeholder='PASSWORD')
+      br
+      input.btn.btn-lg.btn-orange(style='width: 300px; margin-top: 10px;', type='submit', value='Login', role='button')
+    p(style='font-size: 15px;')
+      | DON&apos;T HAVE AN ACCOUNT? 
+      a(href='/signup') REGISTER
+    br
+.footer_bottom
+  .text-center
+    .footer_bottom_content
+      span#footer-line
+        | Copyright &copy; 2019 
+        a(href='https://www.github.com/SimonBuxx') Simon Buchholz
+        |  | 
+      span(style="text-align: right;")
+        a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js
+  include ../site_scripts/login.js

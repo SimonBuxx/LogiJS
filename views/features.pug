@@ -1,0 +1,101 @@
+doctype html
+<html style="position: relative; min-height: 100%;">
+head
+  title LogiJS: Features
+  meta(name='keywords', content='')
+  meta(name='description', content='')
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='shortcut icon', href='images/favicon.ico')
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  style
+    include css/bootstrap.css
+    include css/index_style.css
+<body style="margin: 0 0 100px;">
+.top-menu
+  .container
+    .navbar.navbar-default.navbar-fixed-top(style='background: rgb(50, 50, 50);', role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/')
+            img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+        #nav-bar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
+            li
+              a.internal-link(rel='nofollow', href='/', target='_parent') HOME
+            li.active
+              a(href='#') FEATURES
+            li
+              a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
+            li
+              if user !== ''
+                a.internal-link(rel='nofollow', href='/dashboard', target='_parent' style="margin-left: 60px; color: rgb(40, 180, 40);") #{user.toUpperCase()}
+              else
+                a.internal-link(rel='nofollow', href='/login', target='_parent' style="margin-left: 60px;") LOGIN
+            if user == ''
+                li
+                    a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
+div
+  #blur_dark
+  #caption(style='color: white; text-align: center; margin: 0;')
+    h2(style='font-size: 40px; margin-bottom: 50px;') Planned Features
+  div(style='color: white; text-align: justify; margin: 0; margin-left: 20%; margin-right: 20%; font-size: 20px;')
+    p
+      | The LogiJS project is in a state where many important features of a logic simulator are integrated but
+      | we&apos;re
+      | planning to implement a lot of new stuff to make LogiJS more powerful and easier to use. These are some
+      | features
+      | that we want to integrate in the future, in no specific order:
+      ul
+        li
+          b Copying parts of a sketch:
+          |  At the moment, LogiJS gives you the ability to select parts of
+          |                         a sketch.
+          |                         These parts can be dragged to another place or be deleted from the sketch. We want to extend
+          |                         this features
+          |                         to enable the user to copy parts of a sketch and paste it multiple times.
+        br
+        li
+          b Support for the VHDL hardware description language:
+          |  VHDL is a language to describe
+          |                         logical circuits, like the one you can create in LogiJS, in a standardized form, for example to
+          |                         execute them on an FPGA. Having an option to im- and export VHDL code may be an important
+          |                         feature for the use of LogiJS in education.
+        br
+        li
+          b Reorganize the components in the toolbox:
+          |  The toolbox on the left side may be confusing
+          |                         for beginners and some similar components could be accessed with just one button, for example
+          |                         components that exist with various bit widths. Also, some basic components are missing and
+          |                         should be added as standard components. It would be nice to have a selection of your own
+          |                         components under the standard ones. This requires having individual user accounts.
+        br
+    p(style='text-align: center;')
+      b Got ideas for upcoming features?
+    p(style='text-align: center;')
+      b
+        | Just open an issue on 
+        a(href='https://www.github.com/SimonBuxx/LogiJS') GitHub
+        |  or 
+        a(href='mailto:logijs@outlook.com') get in contact
+        |  with us directly!
+.footer_bottom
+  .text-center
+    .footer_bottom_content
+      span#footer-line
+        | Copyright &copy; 2019 
+        a(href='https://www.github.com/SimonBuxx') Simon Buchholz
+        |  | 
+      span(style="text-align: right;")
+        a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js
+  include ../libraries/stickUp.min.js
+</body>
+</html>

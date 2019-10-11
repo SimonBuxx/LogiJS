@@ -2,39 +2,29 @@
 
 const GRIDSIZE = 30;   // Standard grid size (plz don't change)
 const WIRECBSIZE = 20; // Size of the wire ClickBoxes
-const IOCBSIZE = 20;
+const IOCBSIZE = 20;   // Size of the in-/outputs ClickBoxes
 
-/*
-    Colors of the high and low logic parts (wires, in-/outputs etc.) + delete color
-*/
-const HRED = 200;
-const HGREEN = 50;
-const HBLUE = 50;
-
-const LRED = 0;
-const LGREEN = 0;
-const LBLUE = 0;
-
-const YRED = 240;
-const YGREEN = 240;
-const YBLUE = 50;
-
-const GRED = 40;
-const GGREEN = 180;
-const GBLUE = 40;
-
-const BRED = 10;
-const BGREEN = 100;
-const BBLUE = 190;
+const HRED = 200,  HGREEN = 50,   HBLUE = 50;   // Color for high wires, in- and outputs (red)
+const LRED = 0,    LGREEN = 0,    LBLUE = 0;    // Color for low wires (black)
+const MRED = 169,  MGREEN = 8,    MBLUE = 28;   // Color for marked elements (darker red)
+const YRED = 240,  YGREEN = 240,  YBLUE = 50;   // Color for yellow outputs
+const GRED = 40,   GGREEN = 180,  GBLUE = 40;   // Color for green outputs
+const BRED = 10,   BGREEN = 100,  BBLUE = 190;  // Color for blue outputs
+const HARED = 209, HAGREEN = 71,  HABLUE = 71;  // Accent color for high in- and outputs (red)
+const LARED = 70,  LAGREEN = 70,  LABLUE = 70;  // Accent color for low elements (dark grey)
+const MARED = 200, MAGREEN = 50,  MABLUE = 50;  // Accent color for marked elements (red)
+const YARED = 255, YAGREEN = 255, YABLUE = 83;  // Accent color for yellow outputs
+const GARED = 78,  GAGREEN = 208, GABLUE = 69;  // Accent color for green outputs
+const BARED = 63,  BAGREEN = 125, BABLUE = 218; // Accent color for blue outputs
 
 // Array indizees for the param array
-const CPNUM = 4; // Index of the conPoints
-const SEGNUM = 3; // Index of the segments
 const GATENUM = 0; // Index of the gates
-const CUSTNUM = 5; // Index of the customs
-const INPNUM = 2; // Index of the inputs
 const OUTPNUM = 1; // Index of the outputs
-const DINUM = 6; // Index of the diodes
+const INPNUM  = 2; // Index of the inputs
+const SEGNUM  = 3; // Index of the segments
+const CPNUM   = 4; // Index of the conPoints
+const CUSTNUM = 5; // Index of the customs
+const DINUM   = 6; // Index of the diodes
 
 const BUTCOUNT = 10; // Number of frames the button should be high
 

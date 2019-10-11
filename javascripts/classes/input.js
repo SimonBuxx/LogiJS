@@ -16,14 +16,14 @@ function Input(x, y, transform) {
 
     this.transform = transform;
 
-    this.alpha = 255;
-    this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs (red)
+    this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs
     this.lowColor = color(50, 50, 50);   // Color for low inputs (dark grey)
-    this.markColor = color(150, 30, 30);   // Color for marked inputs
 
     this.isTop = false;
     this.lbl = '';
     this.marked = false;
+
+    this.id = 'i' + Date.now() + Math.random();
 
     // ClickBox is used for output and global
     this.clickBox = new ClickBox(this.x - GRIDSIZE / 2, this.y - GRIDSIZE / 2, this.w, this.h, this.transform);
@@ -144,21 +144,23 @@ Input.prototype.show = function () {
     if (this.state) {
         fill(this.highColor);
     } else if (this.marked) {
-        fill(this.markColor);
-    } else if (!this.state && !this.marked && mouseIsPressed){
+        fill(MRED, MGREEN, MBLUE);
+    } else {
         fill(this.lowColor);
-    } else{
-        fill(50,50,50, this.alpha);
-        // Make the preview symbol of button look the same as the clicked version
-        if(previewSymbol !== null && addType === '5' && newIsButton === true){
-            rect(this.x + 10, this.y + 10, this.w / 3, this.h / 3);
-        }
-        // Make the preview symbol of clock look the same as the clicked version
-        else if(previewSymbol !== null && addType === '6' && newIsClock === true){
-            ellipse(this.x + 15, this.y + 15, this.w / 2, this.h / 2);
-        }
     }
     // Draw the rectangle that represents the input
+    rect(this.x, this.y, this.w, this.h);
+    noStroke();
+    if (this.state) {
+        fill(HARED, HAGREEN, HABLUE);
+    } else if (this.marked) {
+        fill(MARED, MAGREEN, MABLUE);
+    } else {
+        fill(LARED, LAGREEN, LABLUE);
+    }
+    triangle(this.x + 2, this.y + 2, this.x + GRIDSIZE - 2, this.y + 2, this.x + 2, this.y + GRIDSIZE - 2);
+    noFill();
+    stroke(0);
     rect(this.x, this.y, this.w, this.h);
 
     if (this.framecount >= 0 && !this.clock) {
@@ -170,9 +172,10 @@ Input.prototype.show = function () {
     }
 
     if (this.clock) {
-        fill(0);
-        noStroke();
-        ellipse(this.x + 15, this.y + 15, this.w / 2, this.h / 2);
+        stroke(0);
+        strokeWeight(3);
+        line(this.x + 15, this.y + 6, this.x + 15, this.y + 15);
+        line(this.x + 15, this.y + 15, this.x + 22, this.y + 20);
     }
 
     //this.clickBox.markClickBox();

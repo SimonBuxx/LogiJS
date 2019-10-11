@@ -1,0 +1,93 @@
+doctype html
+head
+  title LogiJS: Logic Circuit Simulation
+  meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
+  computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
+  meta(name='description', content='LogiJS is a logic circuit simulator built for educational use. Easy to use, yet powerful.')
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='shortcut icon', href='images/favicon.ico')
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  style
+    include css/bootstrap.css
+    include css/index_style.css
+  link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
+  script.
+    window.addEventListener("load", function () {
+    window.cookieconsent.initialise({
+    "palette": {
+    "popup": {
+    "background": "#323232",
+    "text": "#ffffff"
+    },
+    "button": {
+    "background": "#c83232",
+    "text": "#ffffff"
+    }
+    }
+    })
+    });
+.top-menu
+  .container
+    .navbar.navbar-default.navbar-fixed-top(style='background: rgb(50, 50, 50);', role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#')
+            img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+        #nav-bar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
+            li.active
+              a(href='#') HOME
+            li
+              a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
+            li
+              a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
+            li
+              if user !== ''
+                a.internal-link(rel='nofollow', href='/dashboard', target='_parent', style="margin-left: 60px; color: rgb(40, 180, 40);") #{user.toUpperCase()}
+              else
+                a.internal-link(rel='nofollow', href='/login', target='_parent', style="margin-left: 60px;") LOGIN
+            if user == ''
+              li
+                a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
+#blur
+#carousel.carousel
+  #caption
+    if user !== ''
+      h1 WELCOME, #{user.toUpperCase()}!
+    else
+      h1 WELCOME TO LOGIJS
+    p Logic circuit simulation. Easy to use, yet powerful.
+  p
+    a.btn.btn-lg.btn-orange(href='/editor', role='button' style="margin-right: 6px;") 
+      <i class="fa fa-plus-square"></i> NEW SKETCH
+    if user !== ''
+      a.btn.btn-lg.btn-green(href='/dashboard', role='button')
+        <i class="fa fa-th"></i> DASHBOARD
+    else
+      a.btn.btn-lg.btn-green(href='/signup', role='button')
+        <i class="fa fa-sign-in"></i> REGISTER
+a(href='/editor?sketch=first_steps')
+  img(title='Click here to open this sketch in LogiJS!', style='display: block; margin: 5% auto;', src='images/circuit.png', alt='Circuit example')
+.text-center(style='margin: 20px auto; position: fixed; bottom: 30px; width: 100%; display: block;')
+  a(href="https://twitter.com/logi_js?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-screen-name="true" data-show-count="true") Follow @logi_js
+.footer_bottom
+  .text-center
+    .footer_bottom_content
+      span#footer-line
+        | Copyright &copy; 2019 
+        a(href='https://www.github.com/SimonBuxx') Simon Buchholz
+        |  | 
+      span(style="text-align: right;")
+        a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+script(async src="https://platform.twitter.com/widgets.js" charset="utf-8")
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js

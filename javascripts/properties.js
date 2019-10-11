@@ -30,6 +30,9 @@ function hidePropMenu() {
     labelTextBox.hide();
     clockspeedLabel.hide();
     clockspeedSlider.hide();
+    propInput = -1;
+    propLabel = -1;
+    propOutput = -1;
 }
 
 /*

@@ -6,8 +6,7 @@ let minZoom = 0.2;
 let origX = 0;
 let origY = 0;
 
-let lockElements = false; // For delete mode, ensures that wires can be deleted without
-// accidentally deleting other elements
+let lockElements = false; // For delete mode, ensures that wires can be deleted without accidentally deleting other elements
 
 let previewSymbol = null;
 
@@ -15,10 +14,10 @@ let previewSymbol = null;
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-    if (keyIsDown(18) && !simRunning) {
-        wheel = Math.sign(event.deltaY); // -1 for zoom in, +1 for zoom out
+    if (loading || mouseOverGUI()) { return; }
+    if (keyIsDown(18) && !simRunning) { // If the alt key is pressed => scroll trough basic elements
+        wheel = Math.sign(event.deltaY);
         addType = Math.max(1, Math.min(9, addType + wheel));
-        console.log(addType);
         switch (addType) {
             case 1:
                 andClicked(true);
@@ -55,18 +54,6 @@ function mouseWheel(event) {
         if (ctrlMode !== 'none' && selectMode === 'none') {
             setPropMode(false);
         }
-        if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
-            gateInputSelect.hide();
-            labelGateInputs.hide();
-        }
-        if (ctrlMode !== 'addObject' || ((addType > 3 || addType === 0) && addType !== 10)) {
-            directionSelect.hide();
-            labelDirection.hide();
-        }
-        if (ctrlMode !== 'addObject' || addType !== 8) {
-            bitSelect.hide();
-            labelBits.hide();
-        }
         return;
     }
 
@@ -90,6 +77,7 @@ function mouseWheel(event) {
 }
 
 function mouseMoved() {
+    if (loading) { return; }
     updateCursors();
 }
 
@@ -180,7 +168,7 @@ function updateCursors() {
                 hand = true;
                 cursor(HAND);
                 if (isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) < 0 ||
-                isDiode(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) >= 0) {
+                    isDiode(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) >= 0) {
                     showDPreview = true;
                 } else {
                     showCPPreview = true;
@@ -232,7 +220,7 @@ function updateCursors() {
     }
     if (showDPreview) {
         reDraw();
-        showDiodePreview(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+        showPreview('diode', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
         diodePreviewShown = true;
     } else if (diodePreviewShown) {
         reDraw();
@@ -240,7 +228,7 @@ function updateCursors() {
     }
     if (showCPPreview) {
         reDraw();
-        showConPointPreview(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+        showPreview('conpoint', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
         conpointPreviewShown = true;
     } else if (conpointPreviewShown) {
         reDraw();
@@ -257,11 +245,13 @@ function updateCursors() {
 }
 
 function mouseDragged() {
+    if (loading) { return; }
     if (ctrlMode === 'select' && selectMode === 'drag') {
         if (sDragX2 !== Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE ||
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
             moveSelection(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE - sDragX2,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE - sDragY2);
+            finishSelection();
             sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
             sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
         }
@@ -272,6 +262,7 @@ function mouseDragged() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
+    if (loading) { return; }
     if (ctrlMode !== 'select') {
         showSClickBox = false;
     }
@@ -288,6 +279,51 @@ function mousePressed() {
                         pwstartY = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
                         break;
                     default:
+                }
+                let noValidTarget = true;
+                for (let i = 0; i < inputs.length; i++) {
+                    if (Boolean(inputs[i].mouseOver()) && propMode) {
+                        noValidTarget = false;
+                        // If the propMode is active, give options to name and make top
+                        if (propInput !== i) {
+                            if (propInput >= 0) {
+                                inputs[propInput].mark(false);
+                            }
+                            inputs[i].mark(true);
+                            propInput = i;
+                            showInputPropMenu();
+                        }
+                    }
+                }
+                for (let i = 0; i < outputs.length; i++) {
+                    if (Boolean(outputs[i].mouseOver()) && propMode) {
+                        noValidTarget = false;
+                        if (propOutput !== i) {
+                            if (propOutput >= 0) {
+                                outputs[propOutput].mark(false);
+                            }
+                            outputs[i].mark(true);
+                            propOutput = i;
+                            showOutputPropMenu();
+                        }
+                    }
+                }
+                for (let i = 0; i < labels.length; i++) {
+                    if (Boolean(labels[i].mouseOver()) && propMode) {
+                        noValidTarget = false;
+                        if (propLabel !== i) {
+                            if (propLabel >= 0) {
+                                labels[propLabel].mark(false);
+                            }
+                            labels[i].mark(true);
+                            propLabel = i;
+                            showLabelPropMenu();
+                        }
+                    }
+                }
+                if (noValidTarget && propMode) {
+                    hidePropMenu();
+                    unmarkPropTargets();
                 }
                 break;
             case 'addObject':
@@ -310,14 +346,10 @@ function mousePressed() {
                     case 'none':
                         selectStartX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
                         selectStartY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
-                        selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
-                        selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectMode = 'start';
                         reDraw();
                         break;
                     case 'end':
-                        selectStartX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
-                        selectStartY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
                         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectMode = 'start';
@@ -336,7 +368,7 @@ function mousePressed() {
                             setControlMode('none');
                             setActive(propertiesButton);
                             pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
-                                sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.w / 2);
+                                sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.h / 2);
                             initX = 0;
                             initY = 0;
                         }
@@ -351,21 +383,7 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (ctrlMode !== 'none' && selectMode === 'none') {
-        setPropMode(false);
-    }
-    if (ctrlMode !== 'addObject' || (addType > 3 || addType === 0)) {
-        gateInputSelect.hide();
-        labelGateInputs.hide();
-    }
-    if (ctrlMode !== 'addObject' || ((addType > 3 || addType === 0) && addType !== 10)) {
-        directionSelect.hide();
-        labelDirection.hide();
-    }
-    if (ctrlMode !== 'addObject' || addType !== 8) {
-        bitSelect.hide();
-        labelBits.hide();
-    }
+    if (loading) { return; }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
@@ -437,6 +455,7 @@ function mouseClicked() {
           Finishing the selection process by invoking handleSelection
 */
 function mouseReleased() {
+    if (loading) { return; }
     if (!simRunning && !mouseOverGUI()) {
         if (mouseButton === LEFT) {
             switch (ctrlMode) {
@@ -449,11 +468,19 @@ function mouseReleased() {
                             }
                         }
                         if (pushed) {
+                            let oldWires = [];
+                            for (let i = wires.length - 1; i >= 0; i--) {
+                                oldWires[i] = new Wire(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
+                                oldWires[i].endX = wires[i].endX;
+                                oldWires[i].endY = wires[i].endY;
+                                oldWires[i].id = wires[i].id;
+                            }
                             let oldSegments = [];
                             for (let i = segments.length - 1; i >= 0; i--) {
-                                oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                                oldSegments[i] = new Wire(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                                oldSegments[i].id = segments[i].id;
                             }
-                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
+                            pushUndoAction('reWire', 0, [_.cloneDeep(oldSegments), _.cloneDeep(oldWires), _.cloneDeep(conpoints)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
                             if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
@@ -480,11 +507,19 @@ function mouseReleased() {
                             }
                         }
                         if (pushed) {
+                            let oldWires = [];
+                            for (let i = wires.length - 1; i >= 0; i--) {
+                                oldWires[i] = new Wire(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
+                                oldWires[i].endX = wires[i].endX;
+                                oldWires[i].endY = wires[i].endY;
+                                oldWires[i].id = wires[i].id;
+                            }
                             let oldSegments = [];
                             for (let i = segments.length - 1; i >= 0; i--) {
-                                oldSegments[i] = new WSeg(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                                oldSegments[i] = new Wire(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
+                                oldSegments[i].id = segments[i].id;
                             }
-                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // push the action for undoing
+                            pushUndoAction('reWire', 0, [_.cloneDeep(oldSegments), _.cloneDeep(oldWires), _.cloneDeep(conpoints)]); // push the action for undoing
                         }
                         for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
                             if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
@@ -546,51 +581,6 @@ function mouseReleased() {
                                 }
                             }
                         }
-                        let noValidTarget = true;
-                        for (let i = 0; i < inputs.length; i++) {
-                            if (Boolean(inputs[i].mouseOver()) && propMode) {
-                                noValidTarget = false;
-                                // If the propMode is active, give options to name and make top
-                                if (propInput !== i) {
-                                    if (propInput >= 0) {
-                                        inputs[propInput].mark(false);
-                                    }
-                                    inputs[i].mark(true);
-                                    propInput = i;
-                                    showInputPropMenu();
-                                }
-                            }
-                        }
-                        for (let i = 0; i < outputs.length; i++) {
-                            if (Boolean(outputs[i].mouseOver()) && propMode) {
-                                noValidTarget = false;
-                                if (propOutput !== i) {
-                                    if (propOutput >= 0) {
-                                        outputs[propOutput].mark(false);
-                                    }
-                                    outputs[i].mark(true);
-                                    propOutput = i;
-                                    showOutputPropMenu();
-                                }
-                            }
-                        }
-                        for (let i = 0; i < labels.length; i++) {
-                            if (Boolean(labels[i].mouseOver()) && propMode) {
-                                noValidTarget = false;
-                                if (propLabel !== i) {
-                                    if (propLabel >= 0) {
-                                        labels[propLabel].mark(false);
-                                    }
-                                    labels[i].mark(true);
-                                    propLabel = i;
-                                    showLabelPropMenu();
-                                }
-                            }
-                        }
-                        if (noValidTarget && propMode) {
-                            hidePropMenu();
-                            unmarkPropTargets();
-                        }
                         if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                             toggleDiodeAndConpoint();
                         }
@@ -629,7 +619,8 @@ function mouseReleased() {
                         }
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
-                        let oldSegments = segments.slice(0);
+                        let oldWires = _.cloneDeep(wires);
+                        let oldSegments = _.cloneDeep(segments);
                         let existing = false;
                         for (let i = pwSegments.length - 1; i >= 0; i--) {
                             let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
@@ -639,7 +630,7 @@ function mouseReleased() {
                             }
                         }
                         if (existing) {
-                            pushUndoAction('reWire', 0, [oldSegments.slice(0), conpoints.slice(0)]); // Push the action, if more than 0 segments were deleted
+                            pushUndoAction('reWire', 0, [oldSegments, oldWires, _.cloneDeep(conpoints)]); // Push the action, if more than 0 segments were deleted
                             findLines();
                         }
                         pwSegments = [];
@@ -657,7 +648,6 @@ function mouseReleased() {
                             selectMode = 'end';
                             break;
                         case 'drag':
-                            finishSelection();
                             selectMode = 'end';
                             break;
                         default:
@@ -764,7 +754,7 @@ function mouseOverGUI() {
     if (propInput + propOutput + propLabel < -2) {
         return (mouseY < 0) || (mouseX < 0);
     } else {
-        return (mouseY < 0) || (mouseX < 0) || (mouseY > window.height - 300 && mouseX > window.width - 215);
+        return (mouseY < 0) || (mouseX < 0) || (mouseX > window.width - 203);
 
     }
 }
@@ -774,7 +764,8 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (mouseIsPressed && mouseButton === CENTER && mouseX > 0 && mouseY > 0) {
+    if (loading) { return; }
+    if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);
         }

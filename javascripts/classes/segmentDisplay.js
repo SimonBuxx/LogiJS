@@ -11,8 +11,6 @@ function SegmentDisplay(x, y, transform, bits) {
     this.marked = false;
     this.lowColor = color(50, 50, 50); // dark grey color
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs (red)
-    this.markColor = color(150, 30, 30);   // Color for marked displays
-    this.alpha = 255;
 
     this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, this.transform);
     this.inputClickBoxes = [];
@@ -22,6 +20,8 @@ function SegmentDisplay(x, y, transform, bits) {
     this.inputsInv = [];  // true, if input is inverted
 
     this.value = 0; // Decimal input value
+
+    this.id = 's' + Date.now() + Math.random();
 
     // Initialize the inputs
     for (let i = 0; i < this.inputCount; i++) {
@@ -139,7 +139,7 @@ Draws the gate on the screen
 SegmentDisplay.prototype.show = function () {
     stroke(0);
     if (this.marked) {
-        fill(this.markColor);
+        fill(MRED, MGREEN, MBLUE);
     } else {
         fill(255, 255);
     }
@@ -166,7 +166,7 @@ SegmentDisplay.prototype.show = function () {
     for (let i = 1; i <= this.inputCount; i++) {
         // Draw inputs
         if (this.marked) {
-            stroke(this.markColor);
+            stroke(MRED, MGREEN, MBLUE);
             strokeWeight(3);
         } else if (this.inputs[i - 1]) {
             stroke(this.highColor);

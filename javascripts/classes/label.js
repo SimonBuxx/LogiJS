@@ -7,8 +7,10 @@ function Label(x, y, txt, transform) {
     this.w = 0;
     this.transform = transform;
     this.txt = txt; // Label text
+    this.lines = [];
     this.marked = false;
-    this.markColor = color(150, 30, 30);
+
+    this.id = 'l' + Date.now() + Math.random();
 
     this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
 
@@ -26,13 +28,6 @@ function Label(x, y, txt, transform) {
     this.setCoordinates = function (nx, ny) {
         this.x = Math.round(nx / GRIDSIZE) * GRIDSIZE;
         this.y = Math.round(ny / GRIDSIZE) * GRIDSIZE;
-        // Check bounds
-        /*if (this.x < 0) {
-            this.x = 0;
-        }
-        if (this.y < 0) {
-            this.y = 0;
-        }*/
     };
 
     this.setCoordinates(x, y);
@@ -55,8 +50,11 @@ function Label(x, y, txt, transform) {
 
     this.alterText = function (txt) {
         this.txt = txt;
+        //this.lines = txt.split('\n');
+        this.lines = txt.split('\n').filter(e => e !== '');
         textSize(20);
-        this.w = Math.ceil((textWidth(this.txt) + 10) / 30 + 1) * 30;
+        this.w = Math.ceil((textWidth(this.lines.reduce(function (a, b) { return a.length > b.length ? a : b; })) + 10) / 30 + 1) * 30;
+        this.h = 30 * this.lines.length - 10;
         this.updateClickBox();
     };
 
@@ -73,7 +71,7 @@ function Label(x, y, txt, transform) {
         strokeWeight(3);
         stroke(140);
         if (this.marked) {
-            fill(this.markColor);
+            fill(MRED, MGREEN, MBLUE);
         } else {
             fill(150, 200);
         }
@@ -81,26 +79,10 @@ function Label(x, y, txt, transform) {
         noStroke();
         fill(0);
         rect(this.x - 5, this.y - 5, 10, 10);
-        text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
-    };
-
-    this.showPreview = function () {
-        strokeWeight(3);
-        stroke(140);
-        fill(150, 100);
-        rect(this.x - 15, this.y - 15, this.w, this.h + 10);
-        noStroke();
-        fill(0);
-        rect(this.x - 5, this.y - 5, 10, 10);
-        /*  
-        lines below are needed for reformatting, as the preview 
-        for a label is drawn before the settings are set in the 
-        showElements() function in sketch.js
-        */
-        textFont('Gudea');
-        textSize(20);
-        textAlign(LEFT, TOP);
-        fill(75);
-        text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
+        for (let i = 0; i < this.lines.length; i++) {
+            text(this.lines[i], this.x + 15, this.y - 11 + i * 30, this.w, this.h);
+        }
+        //text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
+        //this.clickBox.markClickBox();
     };
 }

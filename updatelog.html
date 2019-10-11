@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de" style="position: relative; min-height: 100%;">
+
+<head>
+    <title>LogiJS</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap.css" rel='stylesheet' type='text/css'>
+    <link href="css/index_style.css" rel='stylesheet' type='text/css'>
+</head>
+
+<body style="margin: 0 0 100px;">
+    <div class="top-menu">
+        <div class="container">
+            <div class="navbar navbar-default navbar-fixed-top" style="background: rgb(50, 50, 50);" role="navigation">
+                <a href="https://www.github.com/SimonBuxx/LogiJS"><img
+                        style="position: absolute; top: 0; right: 0; border: 0;"
+                        src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"
+                        alt="Fork me on GitHub"></a>
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a href="index.html" class="navbar-brand">
+                            <img src="images/logo_index.png" style="width: 200px;" alt="LogiJS" title="LogiJS" />
+                        </a>
+                    </div>
+                    <div class="navbar-collapse collapse" id="nav-bar">
+                        <ul class="nav navbar-nav navbar-right" style="margin-top: 40px;">
+                            <li>
+                                <a rel="nofollow" href="index.html" class="internal-link" target="_parent">HOME</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="features.html" class="internal-link"
+                                    target="_parent">FEATURES</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="https://www.github.com/SimonBuxx/LogiJS" class="external-link"
+                                    target="_parent">GITHUB</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="https://www.twitter.com/logi_js" class="external-link"
+                                    target="_parent">TWITTER</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="mailto:logijs@outlook.com" class="external-link"
+                                    target="_parent">E-MAIL</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="imprint.html" class="internal-link" target="_parent">IMPRINT</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div id="blur_dark"></div>
+        <div id="caption" style="color: white; text-align: center; margin: 0;">
+            <h2 style="font-size: 40px; margin-bottom: 50px;">Update History</h2>
+        </div>
+        <div
+            style="color: white; text-align: justify; margin: 0; margin-left: 20%; margin-right: 20%; font-size: 20px;">
+            <h3 style="text-align: center">2019-08-21: Decreased simulation loading time</h3>
+            <p>When clicking on the "Start" button to simulate a sketch in LogiJS, multiple things have to be
+                done in the background. These include grouping the individual wires into logical structures and
+                "sticking" the other elements to those wire groups.
+                I managed to decrease the workload and time to execute these tasks to a fraction of what it was before.
+                Therefore, even relatively big sketches can now be executed almost instantly.</p>
+            <h3 style="text-align: center">2019-08-15: Added support for multi-line labels</h3>
+            <p>Text labels are a nice way to keep your sketch organized and to include messages as a guidance on how to
+                use the sketch.
+                Since the last update, labels can include multiple lines of text instead of just one line. When clicking
+                on the label,
+                the properties menu now includes a text area where you can enter as much text as you want. The label
+                will adjust it's height
+                and width according to the number of lines and the length of the longest line.
+            </p>
+            <h3 style="text-align: center">2019-08-13: New designs for inputs and outputs</h3>
+            <p>I have added a glare effect to the input and output elements. I was experimenting with different effects
+                and
+                this one convinced me because it's simple and fast to apply and it fits both in- and output elements.
+                Also, the clock now has a clock finger symbol on it. This makes it easier to identify and looks better
+                than
+                the circle symbol in my opinion. I've acted very careful when adding those effects to not harm the
+                simplified
+                look of LogiJS but I think they are subtle enough the way they are now.
+            </p>
+            <h3 style="text-align: center">2019-08-07: Cache for loaded elements and new loading screen</h3>
+            <p>When you are loading a LogiJS sketch from file, this file may contain other files that are included as
+                custom objects. Those files may also have custom objects and so on.
+                This hierarchy of dependencies can grow to a tree like structure where the same component
+                is used very often in more complex custom objects. Before today, those components would be loaded from
+                file every time. This is highly inefficient and therefore I built a cache for components that have
+                already
+                been loaded. The catch is though, that I had to serialize the loading process, meaning that one
+                component
+                is loaded after the other, instead of multiple things happening at once. Therefore, the loading speed
+                isn't
+                that much higher but the amount of data transferred from the server is much smaller.
+            </p>
+            <p>
+                The upside of the serialized loading is that I had the chance to integrate a loading screen that shows
+                up
+                when a sketch is loading and vanishes afterwards. Because of the tree like dependencies I spoke of, I
+                can't
+                really tell how much of the sketch still has to load. Therefore, I can't show a loading percentage at
+                the moment.
+            </p><br/>
+            <p style="text-align: center;"><b>This is the end of this update log we started in August 2019.</b></p>
+            <p style="text-align: center;"><b>If you found a bug, just open an issue on <a
+                href="https://www.github.com/SimonBuxx/LogiJS">GitHub</a> or <a
+                href="mailto:logijs@outlook.com">get in contact</a> with us directly. Thank you!</b></p>
+        </div>
+    </div>
+    <div class="footer_bottom">
+        <div class="text-center">
+            <div class="footer_bottom_content">
+                <span id="footer-line">Copyright © 2019
+                    <a href="https://www.github.com/SimonBuxx">Simon Buchholz</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script src="javascripts/libraries/jquery.min.js" type="text/javascript"></script>
+    <script src="javascripts/libraries/bootstrap.min.js" type="text/javascript"></script>
+    <script src="javascripts/libraries/stickUp.min.js" type="text/javascript"></script>
+    </div>
+</body>
+
+</html>
