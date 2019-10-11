@@ -171,7 +171,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 }
 
 #carousel {
-    margin-top: 200px;
+    margin-top: 10%;
     min-width: 400px;
     padding: 0;
     height: 260px;
@@ -183,13 +183,13 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 }
 
 #login_back {
-    margin-top: 200px;
+    margin: 10% auto 0 auto;
     max-width: 400px;
     padding: 0;
     height: 400px;
     display: block;
-    margin-right: auto;
-    margin-left: auto;
+    /*margin-right: auto;
+    margin-left: auto;*/
     background-color: rgba(50, 50, 50, 0.9);
 }
 
