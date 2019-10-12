@@ -2,35 +2,35 @@
 
 p5.disableFriendlyErrors = true; // jshint ignore:line
 
-let gates = []; // List of gates (and, or, xor)
-let outputs = []; // List of outputs
-let inputs = []; // List of inputs (buttons, switches)
-let segments = []; // List of fixed wire segments
-let pwSegments = []; // List of preview wire segments
-let conpoints = []; // List of wire connection points
-let diodes = []; // List of diodes
-let customs = []; // List of custom objects
-let wires = []; // List of wires (aggregated wire segments)
-let labels = []; // List of text labels
-let segDisplays = []; // List of 7-segment displays
+let gatesList = []; // List of gates (and, or, xor)
+let outputsList = []; // List of outputs
+let inputsList = []; // List of inputs (buttons, switches)
+let wireSegmentsList = []; // List of fixed wire segments
+let previewWireSegmentsList = []; // List of preview wire segments
+let wireConnectionPointsList = []; // List of wire connection points
+let diodesList = []; // List of diodes
+let customObjectsList = []; // List of custom objects
+let wiresList = []; // List of wires (aggregated wire segments)
+let labelsList = []; // List of text labels
+let segmentDisplaysList = []; // List of 7-segment displays
 
-let segBits = 4; // Number of bits for new 7-segment displays
-let counterBitWidth = 4; // Output width of counter objects
-let decoderBitWidth = 4; // Input width of decoder objects
+let segmentDisplayBits = 4; // Number of bits for new 7-segment displays
+let counterOutputBitWidth = 4; // Output width of counter objects
+let decoderInputBitWidth = 4; // Input width of decoder objects
 let muxBitWidth = 1; // In/output width for (de-) multiplexers
 
-let selection = []; // List of all selected elements
+let selectedElementsList = []; // List of all selected elements
 
-let pwstartX = 0; // Start point (x, y) of the preview segments
-let pwstartY = 0;
+let previewSegmentStartX = 0; // Start point (x, y) of the preview segments
+let previewSegmentStartY = 0;
 
-let groups = []; // List of all logical wire groups
+let wireGroupsList = []; // List of all logical wire groups
 
 //let caption = []; // Name of the sketch, displayed on customs
 
 let gridSize = GRIDSIZE; // Size of the grid
 
-let ctrlMode = 'none'; // Possible modes: none, delete, addObject, select ...
+let controlMode = 'none'; // Possible modes: none, delete, addObject, select ...
 let addType = 0; // Possible modes: none, and, output, input, ...
 let wireMode = 'none'; // Possible modes: none, hold, preview, delete ...
 let selectMode = 'start';
@@ -40,10 +40,10 @@ let gateDirection = 0;  // Direction for new gates
 let newIsButton = false;
 let newIsClock = false;
 
-let custFile = '';
+let customFile = '';
 
-let actionUndo = [];
-let actionRedo = [];
+let actionUndoList = [];
+let actionRedoList = [];
 
 let selectStartX = 0;
 let selectStartY = 0;
@@ -58,8 +58,8 @@ let initX = 0;
 let initY = 0;
 
 // Variables for dragging
-let lastX = 0; 
-var lastY = 0; // last mouse position
+let lastMousePositionX = 0; 
+var lastMousePositionY = 0; // last mouse position
 let dragSpeed = 1;
 
 let transform = new Transformation(0, 0, 1);
@@ -67,7 +67,7 @@ let transform = new Transformation(0, 0, 1);
 let sClickBox = new ClickBox(0, 0, 0, 0, transform);
 let showSClickBox = false;
 
-let simRunning = false;
+let simulationIsRunning = false;
 let propMode = false;
 
 let saveDialog = false;
@@ -438,7 +438,7 @@ function setup() { // jshint ignore:line
     sfcheckbox.hide();
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
-        if (!sfcheckbox.checked() && simRunning) {
+        if (!sfcheckbox.checked() && simulationIsRunning) {
             updater = setInterval(updateTick, 1);
         } else {
             clearInterval(updater);
@@ -809,7 +809,7 @@ function urlParam(name, w) {
 
 function importCustom(filename) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
+    if (controlMode === 'addObject' && addType === 10 && filename === customFile) {
         setControlMode('none');
         setActive(propertiesButton);
         setPropMode(true);
@@ -818,7 +818,7 @@ function importCustom(filename) {
         addType = 10; // custom
         directionSelect.show();
         labelDirection.show();
-        custFile = filename;
+        customFile = filename;
     }
 }
 
@@ -836,7 +836,7 @@ function counterClicked() {
     labelDirection.show();
     counterBitSelect.show();
     labelOutputWidth.show();
-    custFile = counterBitWidth + '-counter.json';
+    customFile = counterOutputBitWidth + '-counter.json';
 }
 
 function decoderClicked() {
@@ -847,7 +847,7 @@ function decoderClicked() {
     labelDirection.show();
     decoderBitSelect.show();
     labelInputWidth.show();
-    custFile = decoderBitWidth + '-decoder.json';
+    customFile = decoderInputBitWidth + '-decoder.json';
 }
 
 function muxClicked() {
@@ -858,7 +858,7 @@ function muxClicked() {
     labelDirection.show();
     multiplexerBitSelect.show();
     labelInputWidth.show();
-    custFile = muxBitWidth + '-mux.json';
+    customFile = muxBitWidth + '-mux.json';
 }
 
 function demuxClicked() {
@@ -869,7 +869,7 @@ function demuxClicked() {
     labelDirection.show();
     multiplexerBitSelect.show();
     labelInputWidth.show();
-    custFile = muxBitWidth + '-demux.json';
+    customFile = muxBitWidth + '-demux.json';
 }
 
 // Triggered when a sketch should be saved
@@ -1030,29 +1030,29 @@ function hideAllOptions() {
     drawn individually
 */
 function clearItems() {
-    gates = [];
-    outputs = [];
-    inputs = [];
-    segments = [];
-    conpoints = [];
-    customs = [];
-    diodes = [];
-    labels = [];
-    wires = [];
-    segDisplays = [];
+    gatesList = [];
+    outputsList = [];
+    inputsList = [];
+    wireSegmentsList = [];
+    wireConnectionPointsList = [];
+    customObjectsList = [];
+    diodesList = [];
+    labelsList = [];
+    wiresList = [];
+    segmentDisplaysList = [];
 }
 
 /*
     This clears the undo and redo stacks
 */
 function clearActionStacks() {
-    actionUndo = [];
-    actionRedo = [];
+    actionUndoList = [];
+    actionRedoList = [];
 }
 
 function pushSelectAction(dx, dy, x1, y1, x2, y2) {
-    if ((Math.abs(dx) >= GRIDSIZE || Math.abs(dy) >= GRIDSIZE) && selection.length > 0) {
-        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], _.cloneDeep(selection));
+    if ((Math.abs(dx) >= GRIDSIZE || Math.abs(dy) >= GRIDSIZE) && selectedElementsList.length > 0) {
+        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], _.cloneDeep(selectedElementsList));
     }
 }
 
@@ -1097,10 +1097,10 @@ function setUnactive() {
 
 function deleteClicked() {
     // If the button was clicked at the end of a select process
-    if (ctrlMode === 'select' && selectMode === 'end') {
+    if (controlMode === 'select' && selectMode === 'end') {
         setActive(propertiesButton);
         setPropMode(true); // The select process is finished, go back to prop mode
-        ctrlMode = 'none';
+        controlMode = 'none';
         selectMode = 'end';
         showSClickBox = false;
         unmarkAll();
@@ -1112,32 +1112,32 @@ function deleteClicked() {
         let delWires = [[], []];
         let delSegments = [[], []];
         let delSegDisplays = [[], []];
-        for (let i = 0; i < selection.length; i++) {
-            if (selection[i] instanceof LogicGate) {
-                delGates[0].push(selection[i]);
-                delGates[1].push(gates.indexOf(selection[i]));
-            } else if (selection[i] instanceof CustomSketch) {
-                for (const elem of selection[i].responsibles) {
-                    customs.splice(customs.indexOf(elem), 1);
+        for (let i = 0; i < selectedElementsList.length; i++) {
+            if (selectedElementsList[i] instanceof LogicGate) {
+                delGates[0].push(selectedElementsList[i]);
+                delGates[1].push(gatesList.indexOf(selectedElementsList[i]));
+            } else if (selectedElementsList[i] instanceof CustomSketch) {
+                for (const elem of selectedElementsList[i].responsibles) {
+                    customObjectsList.splice(customObjectsList.indexOf(elem), 1);
                 }
-                delCustoms[0].push(selection[i]);
-                delCustoms[1].push(customs.indexOf(selection[i]));
+                delCustoms[0].push(selectedElementsList[i]);
+                delCustoms[1].push(customObjectsList.indexOf(selectedElementsList[i]));
             }
-            else if (selection[i] instanceof Input) {
-                delInputs[0].push(selection[i]);
-                delInputs[1].push(inputs.indexOf(selection[i]));
+            else if (selectedElementsList[i] instanceof Input) {
+                delInputs[0].push(selectedElementsList[i]);
+                delInputs[1].push(inputsList.indexOf(selectedElementsList[i]));
             }
-            else if (selection[i] instanceof Label) {
-                delLabels[0].push(selection[i]);
-                delLabels[1].push(labels.indexOf(selection[i]));
+            else if (selectedElementsList[i] instanceof Label) {
+                delLabels[0].push(selectedElementsList[i]);
+                delLabels[1].push(labelsList.indexOf(selectedElementsList[i]));
             }
-            else if (selection[i] instanceof Output) {
-                delOutputs[0].push(selection[i]);
-                delOutputs[1].push(outputs.indexOf(selection[i]));
+            else if (selectedElementsList[i] instanceof Output) {
+                delOutputs[0].push(selectedElementsList[i]);
+                delOutputs[1].push(outputsList.indexOf(selectedElementsList[i]));
             }
-            else if (selection[i] instanceof SegmentDisplay) {
-                delSegDisplays[0].push(selection[i]);
-                delSegDisplays[1].push(segDisplays.indexOf(selection[i]));
+            else if (selectedElementsList[i] instanceof SegmentDisplay) {
+                delSegDisplays[0].push(selectedElementsList[i]);
+                delSegDisplays[1].push(segmentDisplaysList.indexOf(selectedElementsList[i]));
             }
             // Filtering out wires and segments and pushing them into their arrays
             /*else if (selection[i] instanceof Wire) {
@@ -1154,19 +1154,19 @@ function deleteClicked() {
             }*/
         }
         for (let j = delGates[1].length - 1; j >= 0; j--) {
-            gates.splice(delGates[1][j], 1);
+            gatesList.splice(delGates[1][j], 1);
         }
         for (let j = delCustoms[1].length - 1; j >= 0; j--) {
-            customs.splice(delCustoms[1][j], 1);
+            customObjectsList.splice(delCustoms[1][j], 1);
         }
         for (let j = delInputs[1].length - 1; j >= 0; j--) {
-            inputs.splice(delInputs[1][j], 1);
+            inputsList.splice(delInputs[1][j], 1);
         }
         for (let j = delLabels[1].length - 1; j >= 0; j--) {
-            labels.splice(delLabels[1][j], 1);
+            labelsList.splice(delLabels[1][j], 1);
         }
         for (let j = delOutputs[1].length - 1; j >= 0; j--) {
-            outputs.splice(delOutputs[1][j], 1);
+            outputsList.splice(delOutputs[1][j], 1);
         }
         /*for (let j = delWires[1].length - 1; j >= 0; j--) {
             //console.log('Deleting wire No. ' + delWires[1][j]);
@@ -1177,17 +1177,17 @@ function deleteClicked() {
             segments.splice(delSegments[1][j], 1);
         }*/
         for (let j = delSegDisplays[1].length - 1; j >= 0; j--) {
-            segDisplays.splice(delSegDisplays[1][j], 1);
+            segmentDisplaysList.splice(delSegDisplays[1][j], 1);
         }
-        pwSegments = [];
+        previewWireSegmentsList = [];
         wireMode = 'none';
         lockElements = false;
-        if (selection.length > 0) {
-            pushUndoAction('delSel', 0, [_.cloneDeep(delGates), _.cloneDeep(delCustoms), _.cloneDeep(diodes), _.cloneDeep(delInputs), _.cloneDeep(delLabels), _.cloneDeep(delOutputs), _.cloneDeep(delWires), _.cloneDeep(delSegDisplays), _.cloneDeep(conpoints), _.cloneDeep(delSegments)]);
+        if (selectedElementsList.length > 0) {
+            pushUndoAction('delSel', 0, [_.cloneDeep(delGates), _.cloneDeep(delCustoms), _.cloneDeep(diodesList), _.cloneDeep(delInputs), _.cloneDeep(delLabels), _.cloneDeep(delOutputs), _.cloneDeep(delWires), _.cloneDeep(delSegDisplays), _.cloneDeep(wireConnectionPointsList), _.cloneDeep(delSegments)]);
         }
         doConpoints();
     } else {
-        if (ctrlMode === 'delete') {
+        if (controlMode === 'delete') {
             setControlMode('none');
             setActive(propertiesButton);
             setPropMode(true);
@@ -1202,7 +1202,7 @@ function deleteClicked() {
     This triggers when a label text was altered
 */
 function labelChanged() {
-    labels[propLabel].alterText(labelTextBox.value()); // Alter the text of the selected label
+    labelsList[propLabel].alterText(labelTextBox.value()); // Alter the text of the selected label
 }
 
 function newGateInputNumber() {
@@ -1220,26 +1220,26 @@ function newGateInputNumber() {
 }
 
 function newBitLength() {
-    segBits = parseInt(bitSelect.value());
-    previewSymbol = new CreatePreviewSymbol(new SegmentDisplay(mouseX, mouseY, transform, segBits));
+    segmentDisplayBits = parseInt(bitSelect.value());
+    previewSymbol = new CreatePreviewSymbol(new SegmentDisplay(mouseX, mouseY, transform, segmentDisplayBits));
 }
 
 function newCounterBitLength() {
-    counterBitWidth = parseInt(counterBitSelect.value());
-    custFile = counterBitWidth + '-counter.json';
+    counterOutputBitWidth = parseInt(counterBitSelect.value());
+    customFile = counterOutputBitWidth + '-counter.json';
 }
 
 function newDecoderBitLength() {
-    decoderBitWidth = parseInt(decoderBitSelect.value());
-    custFile = decoderBitWidth + '-decoder.json';
+    decoderInputBitWidth = parseInt(decoderBitSelect.value());
+    customFile = decoderInputBitWidth + '-decoder.json';
 }
 
 function newMuxBitLength() {
     muxBitWidth = parseInt(multiplexerBitSelect.value());
     if (isActive(muxButton)) {
-        custFile = muxBitWidth + '-mux.json';
+        customFile = muxBitWidth + '-mux.json';
     } else if (isActive(demuxButton)) {
-        custFile = muxBitWidth + '-demux.json';
+        customFile = muxBitWidth + '-demux.json';
     }
 }
 
@@ -1263,8 +1263,8 @@ function newDirection() {
 
 function newClockspeed() {
     if (propInput >= 0) {
-        if (inputs[propInput].clock) {
-            inputs[propInput].speed = 60 - clockspeedSlider.value();
+        if (inputsList[propInput].clock) {
+            inputsList[propInput].speed = 60 - clockspeedSlider.value();
         }
     }
 }
@@ -1275,7 +1275,7 @@ function newClockspeed() {
 */
 function simClicked() {
     previewSymbol = null;
-    if (!simRunning) {
+    if (!simulationIsRunning) {
         reDraw();
         startSimulation();
     } else {
@@ -1288,7 +1288,7 @@ function simClicked() {
 */
 function andClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 1 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 1 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1307,7 +1307,7 @@ function andClicked(dontToggle = false) {
 
 function orClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 2 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 2 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1326,7 +1326,7 @@ function orClicked(dontToggle = false) {
 
 function xorClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 3 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 3 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1345,7 +1345,7 @@ function xorClicked(dontToggle = false) {
 
 function inputClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 4 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 4 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1362,7 +1362,7 @@ function inputClicked(dontToggle = false) {
 
 function buttonClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 5 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 5 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1379,7 +1379,7 @@ function buttonClicked(dontToggle = false) {
 
 function clockClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 6 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 6 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1396,7 +1396,7 @@ function clockClicked(dontToggle = false) {
 
 function outputClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 7 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 7 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1411,7 +1411,7 @@ function outputClicked(dontToggle = false) {
 
 function segDisplayClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 8 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 8 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1429,7 +1429,7 @@ function segDisplayClicked(dontToggle = false) {
 // Starts the selection process
 function startSelect() {
     previewSymbol = null;
-    if (ctrlMode === 'select') {
+    if (controlMode === 'select') {
         setControlMode('none');
         setActive(propertiesButton);
         setPropMode(true);
@@ -1443,7 +1443,7 @@ function startSelect() {
 // Triggered when a label should be added
 function labelButtonClicked(dontToggle = false) {
     hideAllOptions();
-    if (ctrlMode === 'addObject' && addType === 9 && !dontToggle) {
+    if (controlMode === 'addObject' && addType === 9 && !dontToggle) {
         setControlMode('none');
         setActive(propertiesButton);
         previewSymbol = null;
@@ -1462,16 +1462,16 @@ function labelButtonClicked(dontToggle = false) {
     when it's set to 'select'
 */
 function setControlMode(mode) {
-    if (ctrlMode === 'select') {
+    if (controlMode === 'select') {
         selectMode = 'start';
         unmarkAll();
         showSClickBox = false;
     }
     if (mode === 'addObject' || mode === 'select' || mode === 'delete') {
         setPropMode(false);
-        ctrlMode = mode;
+        controlMode = mode;
     } else if (mode === 'none') {
-        ctrlMode = mode;
+        controlMode = mode;
     } else {
         console.log('Control mode not supported!');
     }
@@ -1481,9 +1481,9 @@ function setControlMode(mode) {
     Adds a new gate with given type, input count and direction
 */
 function addGate(type, inputs, direction) {
-    for (let i = 0; i < gates.length; i++) {
-        if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+    for (let i = 0; i < gatesList.length; i++) {
+        if ((gatesList[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (gatesList[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
             return;
         }
     }
@@ -1493,21 +1493,21 @@ function addGate(type, inputs, direction) {
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
-            gates.push(newGate);
+            gatesList.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
         case 2:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
-            gates.push(newGate);
+            gatesList.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
         case 3:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
-            gates.push(newGate);
+            gatesList.push(newGate);
             pushUndoAction('addGate', [], newGate);
             break;
         default:
@@ -1520,10 +1520,10 @@ function addGate(type, inputs, direction) {
     Adds a custom element and loads it file and sub-customs
 */
 function addCustom(file, direction) {
-    for (let i = 0; i < customs.length; i++) {
-        if (customs[i].visible) {
-            if ((customs[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-                (customs[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+    for (let i = 0; i < customObjectsList.length; i++) {
+        if (customObjectsList[i].visible) {
+            if ((customObjectsList[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+                (customObjectsList[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
                 return;
             }
         }
@@ -1531,8 +1531,8 @@ function addCustom(file, direction) {
     setLoading(true);
     let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    customs.push(newCustom);
-    loadCustomFile(newCustom.filename, customs.length - 1, customs.length - 1);
+    customObjectsList.push(newCustom);
+    loadCustomFile(newCustom.filename, customObjectsList.length - 1, customObjectsList.length - 1);
     pushUndoAction('addCust', [], newCustom);
 }
 
@@ -1540,16 +1540,16 @@ function addCustom(file, direction) {
     Adds a new output (lamp)
 */
 function addOutput() {
-    for (var i = 0; i < outputs.length; i++) {
-        if ((outputs[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (outputs[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+    for (var i = 0; i < outputsList.length; i++) {
+        if ((outputsList[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (outputsList[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
             return;
         }
     }
     var newOutput = new Output(mouseX, mouseY, transform, 0);
     newOutput.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newOutput.updateClickBox();
-    outputs.push(newOutput);
+    outputsList.push(newOutput);
     pushUndoAction('addOut', [], newOutput);
     reDraw();
 }
@@ -1558,16 +1558,16 @@ function addOutput() {
     Adds a new 7-segment display
 */
 function addSegDisplay(bits) {
-    for (var i = 0; i < segDisplays.length; i++) {
-        if ((segDisplays[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (segDisplays[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+    for (var i = 0; i < segmentDisplaysList.length; i++) {
+        if ((segmentDisplaysList[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (segmentDisplaysList[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
             return;
         }
     }
     var newDisplay = new SegmentDisplay(mouseX, mouseY, transform, bits);
     newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newDisplay.updateClickBoxes();
-    segDisplays.push(newDisplay);
+    segmentDisplaysList.push(newDisplay);
     pushUndoAction('addSegDis', [], newDisplay);
     reDraw();
 }
@@ -1576,9 +1576,9 @@ function addSegDisplay(bits) {
     Adds a new input (switch, button or clock)
 */
 function addInput() {
-    for (var i = 0; i < inputs.length; i++) {
-        if ((inputs[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2) &&
-            (inputs[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)) {
+    for (var i = 0; i < inputsList.length; i++) {
+        if ((inputsList[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2) &&
+            (inputsList[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)) {
             return;
         }
     }
@@ -1593,7 +1593,7 @@ function addInput() {
         newInput.framecount = -1;
     }
     newInput.clock = newIsClock;
-    inputs.push(newInput);
+    inputsList.push(newInput);
     pushUndoAction('addIn', [], newInput);
     reDraw();
 }
@@ -1602,16 +1602,16 @@ function addInput() {
     Adds a new label
 */
 function addLabel() {
-    for (var i = 0; i < labels.length; i++) {
-        if ((labels[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)) &&
-            (labels[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE))) {
+    for (var i = 0; i < labelsList.length; i++) {
+        if ((labelsList[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)) &&
+            (labelsList[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE))) {
             return;
         }
     }
     var newLabel = new Label(mouseX, mouseY, 'New label', transform);
     newLabel.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newLabel.updateClickBox();
-    labels.push(newLabel);
+    labelsList.push(newLabel);
     pushUndoAction('addLabel', [], newLabel);
     reDraw();
 }
@@ -1620,7 +1620,7 @@ function addLabel() {
     Deletes the given gate
 */
 function deleteGate(gateNumber) {
-    pushUndoAction('delGate', [], [gates.splice(gateNumber, 1), gateNumber]);
+    pushUndoAction('delGate', [], [gatesList.splice(gateNumber, 1), gateNumber]);
     reDraw();
 }
 
@@ -1628,12 +1628,12 @@ function deleteGate(gateNumber) {
     Deletes the given custom
 */
 function deleteCustom(customNumber) {
-    for (let i = customs.length - 1; i >= 0; i--) {
-        if (customs[i].pid === customs[customNumber].id) {
-            customs.splice(i, 1);
+    for (let i = customObjectsList.length - 1; i >= 0; i--) {
+        if (customObjectsList[i].pid === customObjectsList[customNumber].id) {
+            customObjectsList.splice(i, 1);
         }
     }
-    pushUndoAction('delCust', [], [customs.splice(customNumber, 1), customNumber]);
+    pushUndoAction('delCust', [], [customObjectsList.splice(customNumber, 1), customNumber]);
     reDraw();
 }
 
@@ -1641,7 +1641,7 @@ function deleteCustom(customNumber) {
     Deletes the given output (lamp)
 */
 function deleteOutput(outputNumber) {
-    pushUndoAction('delOut', [], outputs.splice(outputNumber, 1));
+    pushUndoAction('delOut', [], outputsList.splice(outputNumber, 1));
     reDraw();
 }
 
@@ -1649,7 +1649,7 @@ function deleteOutput(outputNumber) {
     Deletes the given input (switch)
 */
 function deleteInput(inputNumber) {
-    pushUndoAction('delIn', [], inputs.splice(inputNumber, 1));
+    pushUndoAction('delIn', [], inputsList.splice(inputNumber, 1));
     reDraw();
 }
 
@@ -1657,14 +1657,14 @@ function deleteInput(inputNumber) {
     Deletes the given diode
 */
 function deleteDiode(diodeNumber) {
-    if (diodes[diodeNumber].cp) {
-        let x = diodes[diodeNumber].x;
-        let y = diodes[diodeNumber].y;
-        pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+    if (diodesList[diodeNumber].cp) {
+        let x = diodesList[diodeNumber].x;
+        let y = diodesList[diodeNumber].y;
+        pushUndoAction('delDi', [], diodesList.splice(diodeNumber, 1));
         createConpoint(x, y, false, -1);
     }
     else {
-        pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
+        pushUndoAction('delDi', [], diodesList.splice(diodeNumber, 1));
     }
     doConpoints(); // Conpoints under diodes should appear again
     reDraw();
@@ -1674,7 +1674,7 @@ function deleteDiode(diodeNumber) {
     Deletes the given label
 */
 function deleteLabel(labelNumber) {
-    pushUndoAction('delLabel', [], labels.splice(labelNumber, 1));
+    pushUndoAction('delLabel', [], labelsList.splice(labelNumber, 1));
     reDraw();
 }
 
@@ -1682,7 +1682,7 @@ function deleteLabel(labelNumber) {
     Deletes the given 7-segment display
 */
 function deleteSegDisplay(segDisNumber) {
-    pushUndoAction('delSegDis', [], segDisplays.splice(segDisNumber, 1));
+    pushUndoAction('delSegDis', [], segmentDisplaysList.splice(segDisNumber, 1));
     reDraw();
 }
 
@@ -1708,21 +1708,21 @@ function startSimulation() {
     integrateElements();
 
     // Reset all clocks
-    for (const elem of inputs) {
+    for (const elem of inputsList) {
         if (elem.getIsClock()) {
             elem.resetFramecount();
         }
     }
 
     // Tell all customs that the simulation started
-    for (let i = 0; i < customs.length; i++) {
-        customs[i].setSimRunning(true);
+    for (let i = 0; i < customObjectsList.length; i++) {
+        customObjectsList[i].setSimRunning(true);
     }
 
     sfcheckbox.show();
 
     // Start the simulation and exit the properties mode
-    simRunning = true;
+    simulationIsRunning = true;
     propMode = false;
 }
 
@@ -1744,33 +1744,33 @@ function endSimulation(reset = true) {
     updateUndoButtons();
     sfcheckbox.hide();
 
-    groups = []; // Reset the groups, as they are regenerated when starting again
-    for (const elem of gates) {
+    wireGroupsList = []; // Reset the groups, as they are regenerated when starting again
+    for (const elem of gatesList) {
         elem.shutdown(); // Tell all the gates to leave the simulation mode
     }
-    for (const elem of customs) {
+    for (const elem of customObjectsList) {
         elem.setSimRunning(false); // Shutdown all custom elements
     }
-    for (const elem of segDisplays) {
+    for (const elem of segmentDisplaysList) {
         elem.shutdown();
     }
     // Set all item states to zero
-    for (const elem of conpoints) {
+    for (const elem of wireConnectionPointsList) {
         elem.state = false;
     }
-    for (const elem of outputs) {
+    for (const elem of outputsList) {
         elem.state = false;
     }
-    for (const elem of inputs) {
+    for (const elem of inputsList) {
         elem.setState(false);
     }
-    for (const elem of diodes) {
+    for (const elem of diodesList) {
         elem.setState(false);
     }
-    for (const elem of wires) {
+    for (const elem of wiresList) {
         elem.state = false;
     }
-    simRunning = false;
+    simulationIsRunning = false;
     reDraw();
 }
 
@@ -1783,8 +1783,8 @@ function setSimButtonText(text) {
     depending on the state of the stack
 */
 function updateUndoButtons() {
-    redoButton.elt.disabled = (actionRedo.length === 0);
-    undoButton.elt.disabled = (actionUndo.length === 0);
+    redoButton.elt.disabled = (actionRedoList.length === 0);
+    undoButton.elt.disabled = (actionUndoList.length === 0);
     if (loading) {
         redoButton.elt.disabled = true;
         undoButton.elt.disabled = true;
@@ -1837,17 +1837,17 @@ function disableButtons(status) {
     Executes in every frame, draws everything and updates the sketch logic
 */
 function draw() {
-    if (simRunning) {
+    if (simulationIsRunning) {
         updateTick(); // Updates the circuit logic
         reDraw(); // Redraw all elements of the sketch
     } else {
         if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI()) {
-            generateSegmentSet(pwstartX, pwstartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
+            generateSegmentSet(previewSegmentStartX, previewSegmentStartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
             reDraw();
         }
 
-        if (ctrlMode === 'select') {
+        if (controlMode === 'select') {
             reDraw();
         }
 
@@ -1861,13 +1861,13 @@ function draw() {
 */
 function updateTick() {
     // Tell all gates to update
-    for (const value of gates) {
+    for (const value of gatesList) {
         value.update();
     }
 
     // Tell all visible customs to update
     // (they will update all of their gates and customs by themselves)
-    for (const value of customs) {
+    for (const value of customObjectsList) {
         if (value.visible) {
             value.update();
         }
@@ -1877,12 +1877,12 @@ function updateTick() {
     updateGroups();
 
     // Update all connection points to adopt the state of their wire group
-    for (const value of conpoints) {
-        value.state = groups[value.group].state;
+    for (const value of wireConnectionPointsList) {
+        value.state = wireGroupsList[value.group].state;
     }
 
     // Update all self-toggling input elements (buttons and clocks)
-    for (const value of inputs) {
+    for (const value of inputsList) {
         if (value.framecount === 0) {
             if (value.getIsClock()) {
                 value.toggle();
@@ -1897,17 +1897,17 @@ function updateTick() {
     }
 
     // Update all segments displays
-    for (const value of segDisplays) {
+    for (const value of segmentDisplaysList) {
         value.update();
     }
 
     // Update the states of all diodes
     // They adopt the state of their group A (horizontal wire)
     // and if they are high, they pass that event to group B
-    for (const value of diodes) {
-        value.state = groups[value.gA].state;
+    for (const value of diodesList) {
+        value.state = wireGroupsList[value.gA].state;
         if (value.state) {
-            groups[value.gB].diodeHigh();
+            wireGroupsList[value.gB].diodeHigh();
         }
     }
 }
@@ -1930,12 +1930,12 @@ function reDraw() {
 
     // Display the preview wire segment set
     if (wireMode === 'preview' || wireMode === 'delete') {
-        for (const elem of pwSegments) { // Display preview segments
+        for (const elem of previewWireSegmentsList) { // Display preview segments
             elem.show(wireMode === 'delete');
         }
     }
 
-    if (ctrlMode === 'select' && selectMode === 'start') {
+    if (controlMode === 'select' && selectMode === 'start') {
         fill(0, 0, 0, 100); // Set the fill color to a semi-transparent black
         noStroke();
         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
@@ -2259,51 +2259,51 @@ function displayHint(width, img, caption, line1, line2) {
 }
 
 function showElements() {
-    if (simRunning) {
-        for (const elem of groups) {
+    if (simulationIsRunning) {
+        for (const elem of wireGroupsList) {
             elem.show();
         }
     } else {
-        for (const elem of wires) {
+        for (const elem of wiresList) {
             elem.show();
         }
     }
 
-    if (gates.length > 0) {
+    if (gatesList.length > 0) {
         textFont('monospace');
-        for (const elem of gates) {
+        for (const elem of gatesList) {
             elem.show();
         }
     }
 
-    if (customs.length > 0) {
+    if (customObjectsList.length > 0) {
         textFont('Open Sans');
-        for (const elem of customs) {
+        for (const elem of customObjectsList) {
             if (elem.visible) {
                 elem.show();
             }
         }
     }
 
-    for (const elem of conpoints) {
+    for (const elem of wireConnectionPointsList) {
         elem.show();
     }
 
-    for (const elem of outputs) {
+    for (const elem of outputsList) {
         elem.show();
     }
 
-    for (const elem of inputs) {
+    for (const elem of inputsList) {
         elem.show();
     }
 
-    for (const elem of diodes) {
+    for (const elem of diodesList) {
         elem.show();
     }
 
-    if (segDisplays.length > 0) {
+    if (segmentDisplaysList.length > 0) {
         textFont('PT Mono');
-        for (const elem of segDisplays) {
+        for (const elem of segmentDisplaysList) {
             elem.show();
         }
     }
@@ -2311,7 +2311,7 @@ function showElements() {
     textFont('Gudea');
     textSize(20);
     textAlign(LEFT, TOP);
-    for (const elem of labels) {
+    for (const elem of labelsList) {
         elem.show();
     }
 
@@ -2324,8 +2324,8 @@ function showElements() {
     Updates all group states
 */
 function updateGroups() {
-    for (var i = 0; i < groups.length; i++) {
-        groups[i].updateAll();
+    for (var i = 0; i < wireGroupsList.length; i++) {
+        wireGroupsList[i].updateAll();
     }
 }
 
@@ -2357,7 +2357,7 @@ function keyPressed() {
                 startSelect();
                 break;
             case 32: // Space
-                if (ctrlMode !== 'delete') {
+                if (controlMode !== 'delete') {
                     deleteClicked();
                 } else {
                     setActive(propertiesButton);
