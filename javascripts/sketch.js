@@ -310,8 +310,8 @@ function setup() { // jshint ignore:line
     fulladdButton.elt.className = "buttonLeft";
     fulladdButton.parent(leftSideButtons);
 
-    customButton = createButton('Sketch Import');
-    customButton.mousePressed(customClicked);
+    customButton = createButton('<i class="fa fa-file-import"></i> Import Sketch');
+    customButton.mousePressed(function () { custPage = 0; customClicked(); });
     customButton.elt.className = "buttonLeft";
     customButton.parent(leftSideButtons);
     if (getCookieValue('access_token') === '') {
@@ -568,36 +568,32 @@ function setup() { // jshint ignore:line
     cancelButton.elt.className = "btn btn-lg btn-red";
     cancelButton.hide();
 
-    pageUpButton = createButton('Previous Page');
-    pageUpButton.position(window.width - 545, window.height - 90);
-    pageUpButton.elt.style.width = '200px';
+    pageUpButton = createButton('<i class="fas fa-arrow-up"></i> Up');
+    pageUpButton.position(window.width - 545, window.height - window.height / 5);
     pageUpButton.style('padding-left', '10px');
     pageUpButton.style('padding-right', '10px');
     pageUpButton.mousePressed(function () {
         if (custPage <= 0) {
             return;
-        } else {
-            custPage--;
-            closeCustomDialog();
-            customClicked();
         }
+        custPage--;
+        closeCustomDialog();
+        customClicked();
     });
     pageUpButton.elt.className = "btn btn-lg btn-red";
     pageUpButton.hide();
 
-    pageDownButton = createButton('Next Page');
-    pageDownButton.position(window.width - 335, window.height - 90);
-    //pageDownButton.elt.style.width = '200px';
+    pageDownButton = createButton('<i class="fas fa-arrow-down"></i> Down');
+    pageDownButton.position(window.width - 335, window.height - window.height / 5 + 50);
     pageDownButton.style('padding-left', '10px');
     pageDownButton.style('padding-right', '10px');
     pageDownButton.mousePressed(function () {
         if (custPage >= maxPage) {
             return;
-        } else {
-            custPage++;
-            closeCustomDialog();
-            customClicked();
         }
+        custPage++;
+        closeCustomDialog();
+        customClicked();
     });
     pageDownButton.elt.className = "btn btn-lg btn-red";
     pageDownButton.hide();
@@ -813,7 +809,11 @@ function importCustom(filename) {
         setPropMode(true);
     } else {
         setControlMode('addObject');
-        addType = 10; // custom
+        if (customDialog) {
+            addType = 11; // external custom
+        } else {
+            addType = 10; // internal custom
+        }
         directionSelect.show();
         labelDirection.show();
         custFile = filename;
@@ -2083,15 +2083,13 @@ function showSaveDialog() {
 
 function showCustomDialog() {
     maxCustCols = Math.floor((window.width - window.width / 4) / 240);
-    maxCustRows = Math.floor((window.height - 180) / 240);
-    pageUpButton.position(maxCustCols * 240 + 10, window.height - 90);
-    pageDownButton.position(maxCustCols * 240 + 220, window.height - 90);
+    maxCustRows = Math.floor((window.height - window.height / 10) / 240);
+    pageUpButton.position(Math.round(window.width / 8) + maxCustCols * 240 + 180, maxCustRows * 240 - 85);
+    pageDownButton.position(Math.round(window.width / 8) + maxCustCols * 240 + 180, maxCustRows * 240 - 30);
     fill('rgba(50, 50, 50, 0.95)');
     noStroke();
-    rect(Math.round(window.width / 8), 90, window.width - Math.round(window.width / 4), window.height - 140);
-    pageUpButton.show();
-    pageDownButton.show();
-    cancelButton.position(Math.round(window.width / 8) + 180, window.height - 90);
+    rect(Math.round(window.width / 8), 50, maxCustCols * 240 + 220, maxCustRows * 240 + 40);
+    cancelButton.position(Math.round(window.width / 8) + maxCustCols * 240 + 180, maxCustRows * 240 + 25);
     cancelButton.show();
     socket.emit('getImportSketches', { access_token: getCookieValue('access_token') });
     socket.on('importSketches', (data) => {
@@ -2100,13 +2098,19 @@ function showCustomDialog() {
         for (let i = 0; i < data.sketches.length; i++) {
             showCustomItem(i + 1, data.images[i], data.sketches[i], data.looks[i]);
         }
+        if (maxPage > 0 && custPage < maxPage) {
+            pageDownButton.show();
+        }
+        if (custPage > 0) {
+            pageUpButton.show();
+        }
     });
 }
 
 function showCustomItem(place, img, caption, look) {
     let row = Math.ceil(place / maxCustCols - 1) - (custPage * maxCustRows);
     let x = ((place - 1) % maxCustCols) * 240 + Math.round(window.width / 8) + 40;
-    let y = (row * 240) + 90 + 40;
+    let y = (row * 240) + 90;
     if (row >= maxCustRows || row < 0) {
         return;
     }
