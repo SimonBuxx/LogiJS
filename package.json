@@ -13,6 +13,7 @@
     "config": "^3.2.2",
     "cookie-parser": "^1.4.4",
     "crypto": "^1.0.1",
+    "email-validator": "^2.0.4",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.5",
     "express-session": "^1.16.2",
@@ -23,6 +24,7 @@
     "knex": "^0.19.3",
     "mysql": "^2.17.1",
     "nodemon": "^1.19.1",
+    "password-validator": "^5.0.2",
     "pug": "^2.0.4",
     "sharp": "^0.23.0",
     "socket.io": "^2.2.0"

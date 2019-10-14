@@ -2,22 +2,23 @@ const crypto = require('crypto');
 const knex = require('knex')(require('./knexfile'));
 
 module.exports = {
-    createUser({ username, password }) {
-        console.log(`Add user ${username}`);
+    createUser({ username, email, password }) {
+        console.log(`Add user ${username} with email ${email}`);
         const { salt, hash } = saltHashPassword({ password });
         return knex('user').where({ username })
             .then(([user]) => {
                 if (user) {
-                    console.log('Failure');
-                    return { success: false };
+                    console.log('Failure: username already exists!');
+                    return { success: false, reason: 'username' };
                 } else {
                     return knex('user').insert({
                         salt,
                         encrypted_password: hash,
-                        username
+                        username,
+                        email
                     }).then(function () {
                         console.log('Success');
-                        return { success: true };
+                        return { success: true, reason: '' };
                     });
                 }
             });
@@ -41,13 +42,6 @@ module.exports = {
                 return { success: false };
             });
     },
-    save({ owner, filename }) {
-        console.log(`Add file ${filename} by ${owner}`);
-        return knex('files').insert({
-            owner,
-            filename
-        });
-    }
 };
 
 function saltHashPassword({

@@ -53,16 +53,24 @@ head
             li.active
                a(href='#') REGISTER
 #blur
-#login_back.carousel
+#login_back.carousel(style='height: 450px;')
   form.SignUp
-    if invalid
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Username or password are too long<br/>or too short!
-    else if failed
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Name already taken!
+    if username_length
+      h1(style='padding-top: 20px; color: red; font-size: 20px;') Username too long!
+    else if email_length
+      h1(style='padding-top: 20px; color: red; font-size: 20px;') Email address too long!
+    else if email_invalid
+      h1(style='padding-top: 20px; color: red; font-size: 20px;') Email address format invalid!
+    else if password_invalid
+      h1(style='padding-top: 20px; color: red; font-size: 20px;') Password invalid! Please enter 6 to 50 upper- AND lowercase characters, containing at least one digit.
+    else if username_taken
+      h1(style='padding-top: 20px; color: red; font-size: 20px;') Username already taken!
     else
       h1(style='padding-top: 20px;') Register
     p
       input.username(type='text', placeholder='USERNAME')
+      br
+      input.email(type='text', placeholder='E-MAIL')
       br
       input.password(type='password', placeholder='PASSWORD')
       br

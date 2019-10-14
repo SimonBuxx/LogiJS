@@ -6,6 +6,8 @@ const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
 const glob = require('glob');
+const validator = require('email-validator');
+const passwordValidator = require('password-validator');
 const app = express();
 
 const PORT = 8080;
@@ -35,6 +37,15 @@ app.set('view engine', 'pug');
 var i = 'LogiJS';                    // Issuer 
 var s = 'logijs@outlook.com';        // Subject 
 var a = 'http://logijs.com'; // Audience
+
+var pwSchema = new passwordValidator();
+pwSchema
+    .is().min(6)                                    // Minimum length 6
+    .is().max(50)                                   // Maximum length 50
+    .has().uppercase()                              // Must have uppercase letters
+    .has().lowercase()                              // Must have lowercase letters
+    .has().digits()                                 // Must have digits
+    .has().not().spaces();                          // Should not have spaces
 
 app.use('/', router);
 
@@ -97,10 +108,14 @@ router.get('/login', function (req, res) {
 });
 
 router.get('/signup', function (req, res) {
-    res.render('signup', {
-        failed: req.query.failed,
-        invalid: req.query.invalid
-    });
+    res.render('signup',
+        {
+            username_length: req.query.username_length,
+            email_length: req.query.email_length,
+            email_invalid: req.query.email_invalid,
+            password_invalid: req.query.password_invalid,
+            username_taken: req.query.username_taken
+        });
 });
 
 router.get('/dashboard', function (req, res) {
@@ -125,6 +140,102 @@ router.get('/download', (req, res) => {
     }
 });
 
+router.post('/createUser', (req, res) => {
+    if (req.body.username.length > 50) {
+        console.log('Failure: username too long!');
+        res.status(401).send(
+            {
+                success: false, // overall success
+                username_length: false, // username <= 50 chars
+                email_length: true, // email <= 50 chars
+                email_valid: true, // email valid (syntax check)
+                password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
+                username_unused: true // false, if the username is already in use
+            });
+        res.end();
+        return;
+    }
+
+    if (req.body.email.length > 50) {
+        console.log('Failure: email too long!');
+        res.status(401).send(
+            {
+                success: false, // overall success
+                username_length: true, // username <= 50 chars
+                email_length: false, // email <= 50 chars
+                email_valid: true, // email valid (syntax check)
+                password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
+                username_unused: true // false, if the username is already in use
+            });
+        res.end();
+        return;
+    }
+
+    if (!validator.validate(req.body.email)) {
+        console.log('Failure: email invalid!');
+        res.status(401).send(
+            {
+                success: false, // overall success
+                username_length: true, // username <= 50 chars
+                email_length: true, // email <= 50 chars
+                email_valid: false, // email valid (syntax check)
+                password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
+                username_unused: true // false, if the username is already in use
+            });
+        res.end();
+        return;
+    }
+
+    if (!pwSchema.validate(req.body.password)) {
+        console.log('Failure: password invalid!');
+        res.status(401).send(
+            {
+                success: false, // overall success
+                username_length: true, // username <= 50 chars
+                email_length: true, // email <= 50 chars
+                email_valid: true, // email valid (syntax check)
+                password_valid: false, // password valid (strong enough) + <= 50 chars (checked by password-validator)
+                username_unused: true // false, if the username is already in use
+            });
+        res.end();
+        return;
+    }
+
+    store
+        .createUser({
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password
+        })
+        .then(({ success }) => {
+            if (success) {
+                console.log('Success!');
+                res.status(200).send(
+                    {
+                        success: true, // overall success
+                        username_length: true, // username <= 50 chars
+                        email_length: true, // email <= 50 chars
+                        email_valid: true, // email valid (syntax check)
+                        password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
+                        username_unused: true // false, if the username is already in use
+                    });
+                res.end();
+            } else {
+                console.log('Failure: username taken!');
+                res.status(401).send(
+                    {
+                        success: false, // overall success
+                        username_length: true, // username <= 50 chars
+                        email_length: true, // email <= 50 chars
+                        email_valid: true, // email valid (syntax check)
+                        password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
+                        username_unused: false // false, if the username is already in use
+                    });
+                res.end();
+            }
+        });
+});
+
 router.post('/login', (req, res) => {
     store
         .authenticate({
@@ -142,10 +253,16 @@ router.post('/login', (req, res) => {
         });
 });
 
-router.post('/createUser', (req, res) => {
+/*router.post('/createUser', (req, res) => {
+    if (!validator.validate(req.body.email)) {
+        console.log('Failure: email invalid!');
+        res.status(401).send('email');
+        return;
+    }
     store
         .createUser({
             username: req.body.username,
+            email: req.body.email,
             password: req.body.password
         })
         .then(({ success }) => {
@@ -155,7 +272,7 @@ router.post('/createUser', (req, res) => {
                 res.sendStatus(401);
             }
         });
-});
+});*/
 
 router.post('/delete', (req, res) => {
     let user = getUser(req);
