@@ -979,6 +979,7 @@ function importCustom(filename) {
 
 function customClicked() {
     customDialog = true;
+    setPreviewElement(false, {}, 'none');
     setUnactive();
     setLoading(true);
 }
@@ -2654,10 +2655,6 @@ function setLoading(l) {
     closeTutorialButton.elt.disabled = l;
     nextStepButton.elt.disabled = l;
     updateUndoButtons();
-    if (l) {
-        undoButton.elt.disabled = true;
-        redoButton.elt.disabled = true;
-    }
     reDraw();
 }
 
