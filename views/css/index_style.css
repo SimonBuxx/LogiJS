@@ -168,7 +168,12 @@ input {
 }
 
 #carousel {
-    margin-top: 10%;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    -ms-transform: translate(0%, -50%);
+    transform: translate(0%, -50%);
+    /*margin-top: 10%;*/
     min-width: 400px;
     padding: 0;
     height: 260px;
@@ -232,6 +237,11 @@ input {
 
 #demopic {
     display: block; 
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    -ms-transform: translate(-50%, 0%);
+    transform: translate(-50%, 0%);
     margin: 5% auto;
 }
 
