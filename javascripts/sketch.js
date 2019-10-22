@@ -1268,7 +1268,7 @@ function deleteClicked() {
         let delSegments = [[], []];
         let delSegDisplays = [[], []];
         for (let i = 0; i < selection.length; i++) {
-            if (selection[i] instanceof LogicGate) {
+            /*if (selection[i] instanceof LogicGate) {
                 delGates[0].push(selection[i]);
                 delGates[1].push(gates.indexOf(selection[i]));
             } else if (selection[i] instanceof CustomSketch) {
@@ -1307,6 +1307,9 @@ function deleteClicked() {
                     delSegments[1].push(segIndizees.pop());
                 }
             }*/
+            error = 'This feature is coming soon!';
+            errordesc = '';
+            setTimeout(function () {error = '';}, 3000); //jshint ignore:line
         }
         for (let j = delGates[1].length - 1; j >= 0; j--) {
             gates.splice(delGates[1][j], 1);

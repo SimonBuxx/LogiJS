@@ -56,17 +56,17 @@ head
 #login_back.carousel(style='height: 450px;')
   form.SignUp
     if username_length
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Username too long!
+      h1(style='color: red; font-size: 20px;') Username too long!
     else if email_length
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Email address too long!
+      h1(style='color: red; font-size: 20px;') Email address too long!
     else if email_invalid
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Email address format invalid!
+      h1(style='color: red; font-size: 20px;') Email address format invalid!
     else if password_invalid
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Password invalid! Please enter 6 to 50 upper- AND lowercase characters, containing at least one digit.
+      h1(style='color: red; font-size: 20px;') Password invalid! Please enter 6 to 50 upper- AND lowercase characters, containing at least one digit.
     else if username_taken
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Username already taken!
+      h1(style='color: red; font-size: 20px;') Username already taken!
     else
-      h1(style='padding-top: 20px;') Register
+      h1 Register
     p
       input.username(type='text', placeholder='USERNAME')
       br

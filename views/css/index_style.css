@@ -180,9 +180,14 @@ input {
 }
 
 #login_back {
-    margin: 10% auto 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 20px 0 0 0;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     max-width: 400px;
-    padding: 0;
+    padding: 20px;
     height: 400px;
     display: block;
     background-color: rgba(50, 50, 50, 0.9);

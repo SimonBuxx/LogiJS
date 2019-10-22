@@ -56,11 +56,11 @@ head
 #login_back.carousel
   form.Login
     if tooLong
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Username or password are too long!
+      h1(style='color: red; font-size: 20px;') Username or password are too long!
     else if failed
-      h1(style='padding-top: 20px; color: red; font-size: 20px;') Login failed!
+      h1(style='color: red; font-size: 20px;') Login failed!
     else
-      h1(style='padding-top: 20px;') Login
+      h1 Login
     p
       input.username(type='text', placeholder='USERNAME')
       br
