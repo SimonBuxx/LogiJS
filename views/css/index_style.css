@@ -181,11 +181,11 @@ input {
 
 #login_back {
     position: absolute;
-    top: 50%;
+    top: 20%;
     left: 50%;
     margin: 20px 0 0 0;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -0%);
+    transform: translate(-50%, -0%);
     max-width: 400px;
     padding: 20px;
     height: 400px;
