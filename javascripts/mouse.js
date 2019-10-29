@@ -75,7 +75,7 @@ function mouseWheel(event) {
 }
 
 function mouseMoved() {
-    if (loading) { return; }
+    //if (loading) { return; }
     updateCursors();
 }
 
@@ -181,6 +181,18 @@ function updateCursors() {
             }
         }
     }
+    if (customDialog) {
+        let pos = mouseOverImport(Math.round(window.width / 8) + 40, 90, maxCustRows, maxCustCols);
+        let place = maxCustCols * pos.row + pos.col + custPage * maxCustCols * maxCustRows;
+        if (pos.col >= 0 && pos.row >= 0 && place < importSketchData.sketches.length) {
+            hand = true;
+            cursor(HAND);
+            if (importSketchData.looks[place].outputs === 0) {
+                hand = true;
+                cursor('not-allowed');
+            }
+        }
+    }
     if (ctrlMode === 'select' && sClickBox.mouseOver() && showSClickBox) {
         hand = true;
         cursor(MOVE);
@@ -232,7 +244,7 @@ function mouseDragged() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
-    if (loading) { return; }
+    if (loading || customDialog) { return; }
     if (ctrlMode !== 'select') {
         showSClickBox = false;
     }
@@ -353,7 +365,14 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (loading) { return; }
+    if (customDialog) {
+        let pos = mouseOverImport(Math.round(window.width / 8) + 40, 90, maxCustRows, maxCustCols);
+        if (pos.row >= 0 && pos.col >= 0) {
+            importItemClicked(pos.row, pos.col);
+        }
+        return;
+    }
+    if (loading || customDialog) { return; }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
@@ -715,6 +734,32 @@ function mouseOverSegDisplay() {
         }
     }
     return -1;
+}
+
+/*
+    baseX, baseY: Top left corner where the first preview image starts
+*/
+function mouseOverImport(baseX, baseY, rows, cols) {
+    let mx = mouseX - baseX;
+    let my = mouseY - baseY;
+    if (mx % 240 > 200 || my % 240 > 200) {
+        return {
+            row: -1,
+            col: -1
+        };
+    }
+    mx = Math.floor(mx / 240);
+    my = Math.floor(my / 240);
+    if (my >= rows || mx >= cols || mx < 0 || my < 0) {
+        return {
+            row: -1,
+            col: -1
+        };
+    }
+    return {
+        row: my,
+        col: mx
+    };
 }
 
 //Checks if the mouse hovers over the GUI(true) or the grid(false)

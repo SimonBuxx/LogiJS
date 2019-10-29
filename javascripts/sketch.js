@@ -85,6 +85,8 @@ let previewData = {
     type: 'none'
 };
 
+let importSketchData = {}; // Contains look and caption of all user sketches that can be imported
+
 let syncFramerate = true;
 
 let segIndizees = [];
@@ -1075,34 +1077,6 @@ function cancelClicked() {
 
 function closeCustomDialog() {
     customDialog = false;
-    let gradients = document.getElementsByClassName('gradient');
-    while (gradients[0]) {
-        gradients[0].parentNode.removeChild(gradients[0]);
-    }
-    let captions = document.getElementsByClassName('capt');
-    while (captions[0]) {
-        captions[0].parentNode.removeChild(captions[0]);
-    }
-    let darker = document.getElementsByClassName('darker');
-    while (darker[0]) {
-        darker[0].parentNode.removeChild(darker[0]);
-    }
-    let base_layers = document.getElementsByClassName('base_layer');
-    while (base_layers[0]) {
-        base_layers[0].parentNode.removeChild(base_layers[0]);
-    }
-    let black_layers = document.getElementsByClassName('black_layer');
-    while (black_layers[0]) {
-        black_layers[0].parentNode.removeChild(black_layers[0]);
-    }
-    let top_layers = document.getElementsByClassName('top_layer');
-    while (top_layers[0]) {
-        top_layers[0].parentNode.removeChild(top_layers[0]);
-    }
-    let stay_blacks = document.getElementsByClassName('stay_black');
-    while (stay_blacks[0]) {
-        stay_blacks[0].parentNode.removeChild(stay_blacks[0]);
-    }
     setLoading(false);
     pageUpButton.hide();
     pageDownButton.hide();
@@ -1309,7 +1283,7 @@ function deleteClicked() {
             }*/
             error = 'This feature is coming soon!';
             errordesc = '';
-            setTimeout(function () {error = '';}, 3000); //jshint ignore:line
+            setTimeout(function () { error = ''; }, 3000); //jshint ignore:line
         }
         for (let j = delGates[1].length - 1; j >= 0; j--) {
             gates.splice(delGates[1][j], 1);
@@ -2354,6 +2328,7 @@ function showCustomDialog() {
     socket.emit('getImportSketches', { access_token: getCookieValue('access_token') });
     socket.on('importSketches', (data) => {
         socket.off('importSketches');
+        importSketchData = data;
         maxPage = Math.ceil(Math.ceil(data.sketches.length / maxCustCols) / maxCustRows) - 1;
         for (let i = 0; i < data.sketches.length; i++) {
             showCustomItem(i + 1, data.images[i], data.sketches[i], data.looks[i]);
@@ -2375,72 +2350,29 @@ function showCustomItem(place, img, caption, look) {
         return;
     }
     if (img !== '') {
-        let sketch_item = createDiv('');
-        sketch_item.elt.className = 'sketch_item';
-        let base_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
-            base_layer.position(x + 150, y + 30);
-            base_layer.elt.className = 'base_layer';
-            base_layer.parent(sketch_item);
-        });
-        let black_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
-            black_layer.position(x + 150, y + 30);
-            if (look.hasOwnProperty('outputs')) {
-                if (look.outputs > 0) {
-                    black_layer.elt.className = 'black_layer';
-                } else {
-                    black_layer.elt.className = 'stay_black';
-                }
-            }
-            black_layer.parent(sketch_item);
-        });
         img = 'data:image/png;base64,' + img;
         let raw = new Image(200, 200);
         raw.src = img;
+        img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==';
+        let gradientRaw = new Image(200, 200);
+        gradientRaw.src = img;
         raw.onload = function () {
             let normal_img = createImage(200, 200);
             normal_img.drawingContext.drawImage(raw, 0, 0);
+            normal_img.drawingContext.drawImage(gradientRaw, 0, 0);
+            fill(0);
+            rect(x-4, y-4, 208, 208);
             image(normal_img, x, y);
             if (look.hasOwnProperty('outputs')) {
                 if (look.outputs > 0) {
                     showImportPreview(look, x, y);
                 }
             }
+            noStroke();
+            fill(255);
+            textSize(16);
+            text(caption.toUpperCase(), x + 10, y + 170);
         };
-        let darker_img = createImg(img, function () {
-            darker_img.position(x + 150, y + 30);
-            darker_img.elt.className = 'darker ease_in';
-            darker_img.parent(sketch_item);
-        });
-        if (look.hasOwnProperty('outputs')) {
-            if (look.outputs > 0) {
-                showImportPreview(look, x, y);
-            }
-        }
-        let gradient = createImg('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', function () {
-            gradient.position(x + 150, y + 30);
-            gradient.elt.className = 'gradient';
-            gradient.parent(sketch_item);
-        });
-        let capt = createP(caption.slice(0, 25).toUpperCase());
-        capt.style('font-family', 'Open Sans');
-        capt.position(x + 160, y + 185);
-        capt.style('color', 'white');
-        capt.elt.className = 'capt';
-        let top_layer = createImg('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', function () {
-            top_layer.position(x + 150, y + 30);
-            top_layer.elt.className = 'top_layer';
-            top_layer.parent(sketch_item);
-            if (look.outputs === 0) {
-                top_layer.elt.style.cursor = 'not-allowed';
-            } else {
-                top_layer.mousePressed(function () {
-                    setActive(customButton, true);
-                    setPreviewElement(true, look);
-                    importCustom(caption + '.json');
-                    closeCustomDialog();
-                });
-            }
-        });
     }
 }
 
@@ -2455,6 +2387,20 @@ function showPreviewImage() {
         img.resize(0, 200);
         image(img, window.width / 2 - 330, window.height / 2 - 99);
     };
+}
+
+function importItemClicked(row, col) {
+    let place = maxCustCols * row + col + custPage * maxCustCols * maxCustRows;
+    if (place >= importSketchData.sketches.length) {
+        return;
+    }
+    if (importSketchData.looks[place].outputs === 0) {
+        return;
+    }
+    setActive(customButton, true);
+    setPreviewElement(true, importSketchData.looks[place]);
+    importCustom(importSketchData.sketches[place] + '.json');
+    closeCustomDialog();
 }
 
 /*
