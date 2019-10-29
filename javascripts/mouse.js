@@ -67,7 +67,7 @@ function mouseWheel(event) {
         }
         transform.zoom = (gridSize / GRIDSIZE);
         dragSpeed = 1 / transform.zoom;
-        if (!simRunning) {
+        if (!simRunning && !customDialog) {
             reDraw();
         }
     }
@@ -200,6 +200,9 @@ function updateCursors() {
     if (!hand) {
         cursor(ARROW);
     }
+    if (customDialog) {
+        return;
+    }
     if (showDPreview) {
         reDraw();
         showPreview('diode', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
@@ -227,7 +230,7 @@ function updateCursors() {
 }
 
 function mouseDragged() {
-    if (loading) { return; }
+    if (loading || customDialog || loading) { return; }
     if (ctrlMode === 'select' && selectMode === 'drag') {
         if (sDragX2 !== Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE ||
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
@@ -372,7 +375,7 @@ function mouseClicked() {
         }
         return;
     }
-    if (loading || customDialog) { return; }
+    if (loading) { return; }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
@@ -445,7 +448,7 @@ function mouseClicked() {
           Finishing the selection process by invoking handleSelection
 */
 function mouseReleased() {
-    if (loading) { return; }
+    if (loading || customDialog) { return; }
     if (!simRunning && !mouseOverGUI()) {
         if (mouseButton === LEFT) {
             switch (ctrlMode) {
@@ -780,7 +783,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (loading) { return; }
+    if (loading || customDialog) { return; }
     if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);

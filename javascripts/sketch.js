@@ -736,7 +736,6 @@ function setup() { // jshint ignore:line
             return;
         }
         custPage--;
-        closeCustomDialog();
         customClicked();
     });
     pageUpButton.elt.className = "btn btn-lg btn-red";
@@ -751,7 +750,6 @@ function setup() { // jshint ignore:line
             return;
         }
         custPage++;
-        closeCustomDialog();
         customClicked();
     });
     pageDownButton.elt.className = "btn btn-lg btn-red";
@@ -948,6 +946,8 @@ function setup() { // jshint ignore:line
         setTimeout(function () { error = ''; errordesc = ''; reDraw(); }, 3000);
     });
 
+    fetchImportData();
+
     reDraw();
     setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
 }
@@ -970,6 +970,7 @@ function importCustom(filename) {
         setControlMode('addObject');
         if (customDialog) {
             addType = 11; // external custom
+            closeCustomDialog();
         } else {
             addType = 10; // internal custom
         }
@@ -983,7 +984,14 @@ function customClicked() {
     customDialog = true;
     setPreviewElement(false, {}, 'none');
     setUnactive();
-    setLoading(true);
+    disableButtons(true);
+    setControlMode('none');
+    simButton.elt.disabled = true;
+    saveDialogButton.elt.disabled = true;
+    closeTutorialButton.elt.disabled = true;
+    nextStepButton.elt.disabled = true;
+    reDraw();
+    showCustomDialog();
 }
 
 function counterClicked() {
@@ -1077,7 +1085,15 @@ function cancelClicked() {
 
 function closeCustomDialog() {
     customDialog = false;
-    setLoading(false);
+    disableButtons(false);
+    simButton.elt.disabled = false;
+    saveDialogButton.elt.disabled = false;
+    if (getCookieValue('access_token') !== '') {
+        customButton.elt.disabled = false;
+    }
+    closeTutorialButton.elt.disabled = false;
+    nextStepButton.elt.disabled = false;
+    updateUndoButtons();
     pageUpButton.hide();
     pageDownButton.hide();
     cancelButton.hide();
@@ -2025,7 +2041,7 @@ function disableButtons(status) {
     Executes in every frame, draws everything and updates the sketch logic
 */
 function draw() {
-    if (simRunning) {
+    if (simRunning && !customDialog) {
         updateTick(); // Updates the circuit logic
         reDraw(); // Redraw all elements of the sketch
     } else {
@@ -2164,7 +2180,6 @@ function reDraw() {
 
     if (customDialog) {
         stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
-        showCustomDialog();
         textFont('Gudea');
     }
 
@@ -2316,8 +2331,6 @@ function showSaveDialog() {
 }
 
 function showCustomDialog() {
-    maxCustCols = Math.floor((window.width - window.width / 4) / 240);
-    maxCustRows = Math.floor((window.height - window.height / 10) / 240);
     pageUpButton.position(Math.round(window.width / 8) + maxCustCols * 240 + 180, maxCustRows * 240 - 85);
     pageDownButton.position(Math.round(window.width / 8) + maxCustCols * 240 + 180, maxCustRows * 240 - 30);
     fill('rgba(50, 50, 50, 0.95)');
@@ -2325,20 +2338,29 @@ function showCustomDialog() {
     rect(Math.round(window.width / 8), 50, maxCustCols * 240 + 220, maxCustRows * 240 + 40);
     cancelButton.position(Math.round(window.width / 8) + maxCustCols * 240 + 180, maxCustRows * 240 + 25);
     cancelButton.show();
+    for (let i = 0; i < importSketchData.sketches.length; i++) {
+        showCustomItem(i + 1, importSketchData.images[i], importSketchData.sketches[i], importSketchData.looks[i]);
+    }
+    if (maxPage > 0 && custPage < maxPage) {
+        pageDownButton.show();
+    } else {
+        pageDownButton.hide();
+    }
+    if (custPage > 0) {
+        pageUpButton.show();
+    } else {
+        pageUpButton.hide();
+    }
+}
+
+function fetchImportData() {
+    maxCustCols = Math.floor((window.width - window.width / 4) / 240);
+    maxCustRows = Math.floor((window.height - window.height / 10) / 240);
     socket.emit('getImportSketches', { access_token: getCookieValue('access_token') });
     socket.on('importSketches', (data) => {
         socket.off('importSketches');
         importSketchData = data;
         maxPage = Math.ceil(Math.ceil(data.sketches.length / maxCustCols) / maxCustRows) - 1;
-        for (let i = 0; i < data.sketches.length; i++) {
-            showCustomItem(i + 1, data.images[i], data.sketches[i], data.looks[i]);
-        }
-        if (maxPage > 0 && custPage < maxPage) {
-            pageDownButton.show();
-        }
-        if (custPage > 0) {
-            pageUpButton.show();
-        }
     });
 }
 
@@ -2361,7 +2383,7 @@ function showCustomItem(place, img, caption, look) {
             normal_img.drawingContext.drawImage(raw, 0, 0);
             normal_img.drawingContext.drawImage(gradientRaw, 0, 0);
             fill(0);
-            rect(x-4, y-4, 208, 208);
+            rect(x - 4, y - 4, 208, 208);
             image(normal_img, x, y);
             if (look.hasOwnProperty('outputs')) {
                 if (look.outputs > 0) {
@@ -2400,7 +2422,6 @@ function importItemClicked(row, col) {
     setActive(customButton, true);
     setPreviewElement(true, importSketchData.looks[place]);
     importCustom(importSketchData.sketches[place] + '.json');
-    closeCustomDialog();
 }
 
 /*
