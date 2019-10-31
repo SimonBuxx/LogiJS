@@ -2026,6 +2026,25 @@ function disableButtons(status) {
     undoButton.elt.disabled = status;
     redoButton.elt.disabled = status;
     andButton.elt.disabled = status;
+    if (status) {
+        andButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/and-gate.png">';
+        orButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/or-gate.png">';
+        xorButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/xor-gate.png">';
+        inputButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/switch.png">';
+        outputButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/output.png">';
+        segDisplayButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/segments.png">';
+        buttonButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/button.png">';
+        clockButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/clock.png">';
+    } else {
+        andButton.elt.innerHTML = '<img src="images/and-gate.png">';
+        orButton.elt.innerHTML = '<img src="images/or-gate.png">';
+        xorButton.elt.innerHTML = '<img src="images/xor-gate.png">';
+        inputButton.elt.innerHTML = '<img src="images/switch.png">';
+        outputButton.elt.innerHTML = '<img src="images/output.png">';
+        segDisplayButton.elt.innerHTML = '<img src="images/segments.png">';
+        buttonButton.elt.innerHTML = '<img src="images/button.png">';
+        clockButton.elt.innerHTML = '<img src="images/clock.png">';
+    }
     orButton.elt.disabled = status;
     xorButton.elt.disabled = status;
     inputButton.elt.disabled = status;
