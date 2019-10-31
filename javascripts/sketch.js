@@ -210,55 +210,71 @@ function setup() { // jshint ignore:line
 
     // Left Side Buttons
     // Adds and-gates
-    andButton = createButton('And-Gate');
+    andButton = createButton('');
     andButton.mousePressed(function () { andClicked(false); });
-    andButton.elt.className = "buttonLeft";
+    andButton.elt.className = "previewButton";
+    andButton.elt.innerHTML = '<img src="images/and-gate.png">';
+    andButton.elt.title = 'AND-Gate';
     andButton.parent(leftSideButtons);
 
     // Adds or-gates
-    orButton = createButton('Or-Gate');
+    orButton = createButton('');
     orButton.mousePressed(function () { orClicked(false); });
-    orButton.elt.className = "buttonLeft";
+    orButton.elt.className = "previewButton";
+    orButton.elt.innerHTML = '<img src="images/or-gate.png">';
+    orButton.elt.title = 'OR-Gate';
     orButton.parent(leftSideButtons);
 
     // Adds xor-gates
-    xorButton = createButton('Xor-Gate');
+    xorButton = createButton('');
     xorButton.mousePressed(function () { xorClicked(false); });
-    xorButton.elt.className = "buttonLeft";
+    xorButton.elt.className = "previewButton";
+    xorButton.elt.innerHTML = '<img src="images/xor-gate.png">';
+    xorButton.elt.title = 'XOR-Gate';
     xorButton.parent(leftSideButtons);
 
     // Adds switches
-    inputButton = createButton('Switch');
+    inputButton = createButton('');
     inputButton.mousePressed(function () { inputClicked(false); });
-    inputButton.elt.className = "buttonLeft";
+    inputButton.elt.className = "previewButton";
+    inputButton.elt.innerHTML = '<img src="images/switch.png">';
+    inputButton.elt.title = 'Switch';
     inputButton.parent(leftSideButtons);
 
     // Adds buttons (short impulse)
-    buttonButton = createButton('Button');
+    buttonButton = createButton('');
     buttonButton.mousePressed(function () { buttonClicked(false); });
-    buttonButton.elt.className = "buttonLeft";
+    buttonButton.elt.className = "previewButton";
+    buttonButton.elt.innerHTML = '<img src="images/button.png">';
+    buttonButton.elt.title = 'Button';
     buttonButton.parent(leftSideButtons);
 
     // Adds clocks (variable impulse)
-    clockButton = createButton('Clock');
+    clockButton = createButton('');
     clockButton.mousePressed(function () { clockClicked(false); });
-    clockButton.elt.className = "buttonLeft";
+    clockButton.elt.className = "previewButton";
+    clockButton.elt.innerHTML = '<img src="images/clock.png">';
+    clockButton.elt.title = 'Clock';
     clockButton.parent(leftSideButtons);
 
     // Adds outputs (lamps)
-    outputButton = createButton('Lamp');
+    outputButton = createButton('');
     outputButton.mousePressed(function () { outputClicked(false); });
-    outputButton.elt.className = "buttonLeft";
+    outputButton.elt.className = "previewButton";
+    outputButton.elt.innerHTML = '<img src="images/output.png">';
+    outputButton.elt.title = 'Lamp';
     outputButton.parent(leftSideButtons);
 
     // Adds 7-segment displays
-    segDisplayButton = createButton('7-Segment');
+    segDisplayButton = createButton('');
     segDisplayButton.mousePressed(function () { segDisplayClicked(false); });
-    segDisplayButton.elt.className = "buttonLeft";
+    segDisplayButton.elt.className = "previewButton";
+    segDisplayButton.elt.innerHTML = '<img src="images/segments.png">';
+    segDisplayButton.elt.title = '7-Segment Display';
     segDisplayButton.parent(leftSideButtons);
 
     // Adds labels
-    labelButton = createButton('Label');
+    labelButton = createButton('Text Label');
     labelButton.mousePressed(function () { labelButtonClicked(false); });
     labelButton.elt.className = "buttonLeft";
     labelButton.parent(leftSideButtons);
@@ -1210,14 +1226,10 @@ function pushSelectAction(dx, dy, x1, y1, x2, y2) {
     }
 }
 
-function setActive(btn, left) {
+function setActive(btn) {
     setUnactive();
     hideAllOptions();
-    if (left) {
-        btn.elt.className = 'buttonLeft active';
-    } else {
-        btn.elt.className = 'button active';
-    }
+    btn.elt.className += ' active';
 }
 
 function isActive(btn) {
@@ -1225,15 +1237,15 @@ function isActive(btn) {
 }
 
 function setUnactive() {
-    andButton.elt.className = 'buttonLeft';
-    orButton.elt.className = 'buttonLeft';
-    xorButton.elt.className = 'buttonLeft';
-    inputButton.elt.className = 'buttonLeft';
-    buttonButton.elt.className = 'buttonLeft';
-    clockButton.elt.className = 'buttonLeft';
-    outputButton.elt.className = 'buttonLeft';
+    andButton.elt.className = 'previewButton';
+    orButton.elt.className = 'previewButton';
+    xorButton.elt.className = 'previewButton';
+    inputButton.elt.className = 'previewButton';
+    buttonButton.elt.className = 'previewButton';
+    clockButton.elt.className = 'previewButton';
+    outputButton.elt.className = 'previewButton';
     labelButton.elt.className = 'buttonLeft';
-    segDisplayButton.elt.className = 'buttonLeft';
+    segDisplayButton.elt.className = 'previewButton';
     counterButton.elt.className = 'buttonLeft';
     decoderButton.elt.className = 'buttonLeft';
     dFlipFlopButton.elt.className = 'buttonLeft';
