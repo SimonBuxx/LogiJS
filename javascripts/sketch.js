@@ -736,6 +736,7 @@ function setup() { // jshint ignore:line
             return;
         }
         custPage--;
+        customDialog = false;
         customClicked();
     });
     pageUpButton.elt.className = "btn btn-lg btn-red";
@@ -750,6 +751,7 @@ function setup() { // jshint ignore:line
             return;
         }
         custPage++;
+        customDialog = false;
         customClicked();
     });
     pageDownButton.elt.className = "btn btn-lg btn-red";
@@ -981,15 +983,22 @@ function importCustom(filename) {
 }
 
 function customClicked() {
+    if (customDialog) {
+        closeCustomDialog();
+        return;
+    }
     customDialog = true;
     setPreviewElement(false, {}, 'none');
     setUnactive();
     disableButtons(true);
-    setControlMode('none');
     simButton.elt.disabled = true;
     saveDialogButton.elt.disabled = true;
     closeTutorialButton.elt.disabled = true;
     nextStepButton.elt.disabled = true;
+    customButton.elt.disabled = false;
+
+    setActive(customButton, true);
+    setControlMode('none');
     reDraw();
     showCustomDialog();
 }
@@ -1216,7 +1225,6 @@ function isActive(btn) {
 }
 
 function setUnactive() {
-    deleteButton.elt.className = 'button';
     andButton.elt.className = 'buttonLeft';
     orButton.elt.className = 'buttonLeft';
     xorButton.elt.className = 'buttonLeft';
@@ -1224,9 +1232,7 @@ function setUnactive() {
     buttonButton.elt.className = 'buttonLeft';
     clockButton.elt.className = 'buttonLeft';
     outputButton.elt.className = 'buttonLeft';
-    propertiesButton.elt.className = 'button';
     labelButton.elt.className = 'buttonLeft';
-    selectButton.elt.className = 'button';
     segDisplayButton.elt.className = 'buttonLeft';
     counterButton.elt.className = 'buttonLeft';
     decoderButton.elt.className = 'buttonLeft';
@@ -1238,6 +1244,10 @@ function setUnactive() {
     halfaddButton.elt.className = 'buttonLeft';
     fulladdButton.elt.className = 'buttonLeft';
     customButton.elt.className = 'buttonLeft';
+
+    deleteButton.elt.className = 'button';
+    selectButton.elt.className = 'button';
+    propertiesButton.elt.className = 'button';
 }
 
 function deleteClicked() {
