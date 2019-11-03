@@ -12,7 +12,7 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-    if (loading || mouseOverGUI()) { return; }
+    if (loading || mouseOverGUI() || modifierMenuDisplayed()) { return; }
     if (keyIsDown(18) && !simRunning) { // If the alt key is pressed => scroll trough basic elements
         wheel = Math.sign(event.deltaY);
         addType = Math.max(1, Math.min(9, addType + wheel));
@@ -75,7 +75,7 @@ function mouseWheel(event) {
 }
 
 function mouseMoved() {
-    //if (loading) { return; }
+    if (loading || modifierMenuDisplayed()) { return; }
     updateCursors();
 }
 
@@ -87,7 +87,7 @@ function updateCursors() {
     let hand = false;
     let showDPreview = false;
     let showCPPreview = false;
-    if (simRunning || modifierModeActive) {
+    if ((simRunning || modifierModeActive) && !customDialog) {
         if (!simRunning) {
             for (const elem of outputs) {
                 if (elem.mouseOver()) {
@@ -222,7 +222,7 @@ function updateCursors() {
 }
 
 function mouseDragged() {
-    if (loading || customDialog || loading) { return; }
+    if (loading || customDialog || modifierMenuDisplayed()) { return; }
     if (ctrlMode === 'select' && selectMode === 'drag') {
         if (sDragX2 !== Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE ||
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
@@ -240,6 +240,16 @@ function mouseDragged() {
 */
 function mousePressed() {
     if (loading || customDialog) { return; }
+    if (modifierMenuDisplayed()) {
+        if (!mouseOverGUI()) {
+            closedModifierMenu = true;
+            closeModifierMenu();
+            unmarkPropTargets();
+            return;
+        } else {
+            return;
+        }
+    }
     if (ctrlMode !== 'select') {
         showSClickBox = false;
     }
@@ -261,44 +271,44 @@ function mousePressed() {
                 for (let i = 0; i < inputs.length; i++) {
                     if (inputs[i].mouseOver() && modifierModeActive) {
                         noValidTarget = false;
-                        if (propInput !== i) {
-                            if (propInput >= 0) {
-                                inputs[propInput].mark(false);
+                        if (inputToModify !== i) {
+                            if (inputToModify >= 0) {
+                                inputs[inputToModify].mark(false);
                             }
                             inputs[i].mark(true);
-                            propInput = i;
-                            showInputPropMenu();
+                            inputToModify = i;
+                            reDraw();
                         }
                     }
                 }
                 for (let i = 0; i < outputs.length; i++) {
                     if (outputs[i].mouseOver() && modifierModeActive) {
                         noValidTarget = false;
-                        if (propOutput !== i) {
-                            if (propOutput >= 0) {
-                                outputs[propOutput].mark(false);
+                        if (outputToModify !== i) {
+                            if (outputToModify >= 0) {
+                                outputs[outputToModify].mark(false);
                             }
                             outputs[i].mark(true);
-                            propOutput = i;
-                            showOutputPropMenu();
+                            outputToModify = i;
+                            reDraw();
                         }
                     }
                 }
                 for (let i = 0; i < labels.length; i++) {
                     if (labels[i].mouseOver() && modifierModeActive) {
                         noValidTarget = false;
-                        if (propLabel !== i) {
-                            if (propLabel >= 0) {
-                                labels[propLabel].mark(false);
+                        if (labelToModify !== i) {
+                            if (labelToModify >= 0) {
+                                labels[labelToModify].mark(false);
                             }
                             labels[i].mark(true);
-                            propLabel = i;
-                            showLabelPropMenu();
+                            labelToModify = i;
+                            reDraw();
                         }
                     }
                 }
                 if (noValidTarget && modifierModeActive) {
-                    hidePropMenu();
+                    closeModifierMenu();
                     unmarkPropTargets();
                 }
                 break;
@@ -365,7 +375,9 @@ function mouseClicked() {
         }
         return;
     }
-    if (loading) { return; }
+    if (loading || modifierMenuDisplayed()) {
+        return;
+    }
     if (!simRunning && !mouseOverGUI()) {
         switch (ctrlMode) {
             case 'addObject':
@@ -439,6 +451,10 @@ function mouseClicked() {
 */
 function mouseReleased() {
     if (loading || customDialog) { return; }
+    if (closedModifierMenu) {
+        closedModifierMenu = false;
+        return;
+    }
     if (!simRunning && !mouseOverGUI()) {
         if (mouseButton === LEFT) {
             switch (ctrlMode) {
@@ -760,11 +776,10 @@ function mouseOverGUI() {
     if (mouseY > window.height - 220 && mouseX < 970 && showHints) {
         return true;
     }
-    if (propInput + propOutput + propLabel < -2) {
-        return (mouseY < 0) || (mouseX < 0);
+    if (modifierModeActive && inputToModify + outputToModify + labelToModify >= -2) {
+        return (mouseY < 0) || (mouseX < 0) || /*(mouseX > window.width - 203)*/ mouseX >= modifierMenuX && mouseX <= modifierMenuX + 250 && mouseY >= modifierMenuY && mouseY <= modifierMenuY + 150;
     } else {
-        return (mouseY < 0) || (mouseX < 0) || (mouseX > window.width - 203);
-
+        return (mouseY < 0) || (mouseX < 0);
     }
 }
 
@@ -773,7 +788,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (loading || customDialog) { return; }
+    if (loading || customDialog || modifierMenuDisplayed()) { return; }
     if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);

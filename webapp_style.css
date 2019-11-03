@@ -245,9 +245,24 @@ body {
 
 .textInput {
     border: 0;
-    border-bottom: 2px solid black;
-    font-size: 15px;
-    padding: 5px;
+    border: 3px solid black;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.topBox {
+    background: #969696;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 3px solid black;
+    padding: 3px 10px;
+}
+
+.topBox > label {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
 }
 
 .descInput {
@@ -329,12 +344,19 @@ body {
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
+.labelTextBox {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    padding: 3px 5px;
+    border: 3px solid black;
+}
+
 .slider {
     -webkit-appearance: none;
     appearance: none;
-    height: 20px;
-    border: 0;
-    border-bottom: 2px solid black;
+    height: 30px;
+    width: 160px;
+    border: 3px solid black;
     background: #969696;
     outline: none;
     -webkit-transition: .2s;
@@ -344,15 +366,15 @@ body {
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 10px;
-    height: 20px;
+    width: 20px;
+    height: 30px;
     background: #292929;
     cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
-    width: 10px;
-    height: 20px;
+    width: 20px;
+    height: 30px;
     background: #292929;
     cursor: pointer;
 }

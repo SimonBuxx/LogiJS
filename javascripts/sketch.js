@@ -87,6 +87,9 @@ let previewData = {
 
 let importSketchData = {}; // Contains look and caption of all user sketches that can be imported
 
+/*
+    If this is deactivated, the simulation will run as fast as possible, not synced to the framerate.
+*/
 let syncFramerate = true;
 
 let segIndizees = [];
@@ -101,51 +104,68 @@ let loading = false;
 let loadFile = '';
 
 /*
-    This variable contains a preview of the sketch, a snapshot is taken every time, 'Save' is clicked
+    This variable contains a preview of the sketch, a snapshot is taken every time, 'Save' is clicked.
 */
 let previewImg;
 
 /*
     These variable is set, if a negation, connection point or diode preview was added to the last drawn frame.
-    In this case, the canvas will be redrawn with the next mouse movement
+    In this case, the canvas will be redrawn with the next mouse movement.
 */
 let removeOldPreview = false;
 
-// GUI Elements
+/*
+    When an element is selected in modifier mode, it's number is saved in the respective variable.
+    The other variables should be -1, indicating no element of this type is selected.
+*/
+let inputToModify = -1;
+let outputToModify = -1;
+let labelToModify = -1;
+
+let modifierMenuX, modifierMenuY;
+
+let closedModifierMenu = false;
+
+/*
+    These are the modifier elements and their descriptional labels.
+*/
+let inputIsTopBox, captionInput, minusLabel, plusLabel; // Input elements
+let redButton, yellowButton, greenButton, blueButton; // Output elements
+let labelTextBox; // Label elements
+
 let textInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
-let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
+let deleteButton, simButton, labelBasic, labelAdvanced,
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
+
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
-let redButton, yellowButton, greenButton, blueButton; // With these you can change the color of outputs
+
 let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
-// Elements for the properties menu
-let inputIsTopBox, inputCaptionBox;
-let outputCaptionBox;
-let ipNameLabel, propBoxLabel, opNameLabel, labCaptLabel;
-let propInput = -1;
-let propOutput = -1;
-let propLabel = -1;
 
-let showHints = true;
-let hintNum = 0;
-let closeTutorialButton, nextStepButton;
-let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
+//let showHints = true;
+//let hintNum = 0;
+//let closeTutorialButton, nextStepButton;
+/*let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
     hintPic6, hintPic7, hintPic8, hintPic9, hintPic10, hintPic11,
     hintPic12, hintPic13, hintPic14, hintPic15, hintPic16, hintPic17,
     hintPic19, hintPic20, hintPic21, hintPic22, hintPic23, hintPic24,
-    hintPic25, hintPic26;
+    hintPic25, hintPic26;*/
+
 let socket;
-// Hide right click menu
-document.addEventListener('contextmenu', event => event.preventDefault());
+
 let cnv; // Canvas variable
+
+/*
+    This line prevents the browser default right-click menu from appearing.
+*/
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 /*
     Executed before setup(), loads all hint images
 */
-function preload() {
+/*function preload() {
     if (!window.location.href.includes('.com')) {
         showHints = false;
         return;
@@ -176,7 +196,7 @@ function preload() {
     hintPic24 = loadImage('images/hint24.png');
     hintPic25 = loadImage('images/hint25.png');
     hintPic26 = loadImage('images/hint26.png');
-}
+}*/
 
 /*
     Sets up the canvas and caps the framerate
@@ -632,24 +652,6 @@ function setup() { // jshint ignore:line
     sfcheckbox.elt.className = 'checkbox';
     sfcheckbox.parent(leftSideButtons);
 
-    // Adds text 'Clock speed'
-    clockspeedLabel = createP('Clock speed:');
-    clockspeedLabel.hide();
-    clockspeedLabel.elt.style.color = 'white';
-    clockspeedLabel.elt.style.fontFamily = 'Open Sans';
-    clockspeedLabel.elt.style.textAlign = 'center';
-    clockspeedLabel.elt.style.margin = '3px 0px 0px 0px';
-    clockspeedLabel.position(windowWidth - 190, 180);
-
-    // A slider for adjusting the clock speed
-    clockspeedSlider = createSlider(1, 60, 30, 1);
-    clockspeedSlider.hide();
-    clockspeedSlider.changed(newClockspeed);
-    clockspeedSlider.style('width', '180px');
-    clockspeedSlider.style('margin', '5px');
-    clockspeedSlider.elt.className = 'slider';
-    clockspeedSlider.position(windowWidth - 195, 203);
-
     //Upper left
 
     // Activates the edit mode
@@ -806,7 +808,7 @@ function setup() { // jshint ignore:line
     dashboardButton.elt.className = "button";
 
     // Button to close the hints
-    closeTutorialButton = createButton('Close Tutorial');
+    /*closeTutorialButton = createButton('Close Tutorial');
     closeTutorialButton.position(370, windowHeight - 65);
     closeTutorialButton.mousePressed(function () {
         document.cookie = "ClosedHint=true";
@@ -827,7 +829,7 @@ function setup() { // jshint ignore:line
     if (!showHints) {
         closeTutorialButton.hide();
         nextStepButton.hide();
-    }
+    }*/
 
     saveDialogText = createP('Save Sketch');
     saveDialogText.hide();
@@ -873,11 +875,11 @@ function setup() { // jshint ignore:line
     }
 
     //Hide hints if there is a cookie 
-    if ((getCookieValue("ClosedHint") === "true")) {
+    /*if ((getCookieValue("ClosedHint") === "true")) {
         showHints = false;
         closeTutorialButton.hide();
         nextStepButton.hide();
-    }
+    }*/
 
     socket.on('demousererror', function () {
         error = 'Saving failed: No permissions!';
@@ -929,8 +931,8 @@ function customClicked() {
     disableButtons(true);
     simButton.elt.disabled = true;
     saveDialogButton.elt.disabled = true;
-    closeTutorialButton.elt.disabled = true;
-    nextStepButton.elt.disabled = true;
+    //closeTutorialButton.elt.disabled = true;
+    //nextStepButton.elt.disabled = true;
     customButton.elt.disabled = false;
 
     setActive(customButton, true);
@@ -1036,8 +1038,8 @@ function closeCustomDialog() {
     if (getCookieValue('access_token') !== '') {
         customButton.elt.disabled = false;
     }
-    closeTutorialButton.elt.disabled = false;
-    nextStepButton.elt.disabled = false;
+    //closeTutorialButton.elt.disabled = false;
+    //nextStepButton.elt.disabled = false;
     updateUndoButtons();
     pageUpButton.hide();
     pageDownButton.hide();
@@ -1047,7 +1049,7 @@ function closeCustomDialog() {
 // Triggered when a sketch should be loaded
 function loadClicked() {
     selectMode = 'none';
-    hidePropMenu();
+    closeModifierMenu();
     enterModifierMode();
     showSClickBox = false;
     document.title = 'LogiJS: ' + textInput.value();
@@ -1289,7 +1291,7 @@ function deleteClicked() {
     This triggers when a label text was altered
 */
 function labelChanged() {
-    labels[propLabel].alterText(labelTextBox.value()); // Alter the text of the selected label
+    labels[labelToModify].alterText(labelTextBox.value()); // Alter the text of the selected label
 }
 
 function newGateInputNumber() {
@@ -1417,9 +1419,9 @@ function newDirection() {
 }
 
 function newClockspeed() {
-    if (propInput >= 0) {
-        if (inputs[propInput].clock) {
-            inputs[propInput].speed = 60 - clockspeedSlider.value();
+    if (inputToModify >= 0) {
+        if (inputs[inputToModify].clock) {
+            inputs[inputToModify].speed = 60 - clockspeedSlider.value();
         }
     }
 }
@@ -1844,7 +1846,7 @@ function startSimulation() {
 
     sfcheckbox.show();
 
-    // Start the simulation and exit the properties mode
+    // Start the simulation and exit the modifier mode
     simRunning = true;
     leaveModifierMode();
 }
@@ -2084,17 +2086,28 @@ function reDraw() {
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 
-    // If the prop mode is active and an object was selected, show the config menu background
-    if (modifierModeActive && propInput + propOutput + propLabel >= -2) {
-        fill(50);
-        noStroke();
-        rect(window.width - 203, 0, 203, window.height);
+    // If the modifier mode is active and an object was selected, show the modifier menu background
+    if (modifierMenuDisplayed()) {
+        stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
+        scale(transform.zoom);
+        translate(transform.dx, transform.dy);
+        if (inputToModify >= 0) {
+            inputs[inputToModify].show();
+        } else if (outputToModify >= 0) {
+            outputs[outputToModify].show();
+        } else if (labelToModify >= 0) {
+            labels[labelToModify].show();
+        }
+        scale(1 / transform.zoom);
+        translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
+        showModifierMenu();
+        cursor(ARROW);
     }
 
     // If the tutorial should be shown, display it on screen
-    if (showHints) {
+    /*if (showHints) {
         showTutorial();
-    }
+    }*/
 
     if (loading && !saveDialog && !customDialog) {
         showMessage('Loading...', loadFile.split('.json')[0]);
@@ -2128,7 +2141,7 @@ function reDraw() {
 /*
     Displays the hint with number hintNum in a box in the bottom left corner
 */
-function showTutorial() {
+/*function showTutorial() {
     textFont('Gudea');
     switch (hintNum) {
         case 0:
@@ -2231,7 +2244,7 @@ function showTutorial() {
         default:
             break;
     }
-}
+}*/
 
 function showMessage(msg, subline = '') {
     textFont('Open Sans');
@@ -2442,7 +2455,7 @@ function updateGroups() {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
-    if (inputCaptionBox.elt === document.activeElement || outputCaptionBox.elt === document.activeElement || labelTextBox.elt === document.activeElement || loading) {
+    if (captionInput.elt === document.activeElement || labelTextBox.elt === document.activeElement || loading) {
         return;
     }
     if (textInput.elt !== document.activeElement) {
@@ -2510,8 +2523,8 @@ function setLoading(l) {
     if (!l) {
         saveButton.elt.disabled = false;
     }
-    closeTutorialButton.elt.disabled = l;
-    nextStepButton.elt.disabled = l;
+    //closeTutorialButton.elt.disabled = l;
+    //nextStepButton.elt.disabled = l;
     updateUndoButtons();
     reDraw();
 }
