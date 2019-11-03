@@ -114,12 +114,13 @@ let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
+let redButton, yellowButton, greenButton, blueButton; // With these you can change the color of outputs
 let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 // Elements for the properties menu
 let inputIsTopBox, inputCaptionBox;
-let outputCaptionBox, outputColorBox;
-let ipNameLabel, propBoxLabel, opNameLabel, colNameLabel, labCaptLabel;
+let outputCaptionBox;
+let ipNameLabel, propBoxLabel, opNameLabel, labCaptLabel;
 let propInput = -1;
 let propOutput = -1;
 let propLabel = -1;
@@ -867,13 +868,6 @@ function setup() { // jshint ignore:line
     inputCaptionBox.input(newInputCaption);
     inputCaptionBox.elt.className = "textInput";
 
-    colNameLabel = createP('Color:');
-    colNameLabel.hide();
-    colNameLabel.elt.style.color = 'white';
-    colNameLabel.elt.style.fontFamily = 'Open Sans';
-    colNameLabel.elt.style.margin = '3px 0px 0px 0px';
-    colNameLabel.position(windowWidth - 190, 90);
-
     opNameLabel = createP('Output name:');
     opNameLabel.hide();
     opNameLabel.elt.style.color = 'white';
@@ -896,17 +890,7 @@ function setup() { // jshint ignore:line
     outputCaptionBox.elt.className = 'textInput';
     outputCaptionBox.input(newOutputCaption);
 
-    outputColorBox = createSelect();
-    outputColorBox.hide();
-    outputColorBox.elt.style.fontFamily = 'Open Sans';
-    outputColorBox.position(windowWidth - 140, 88);
-    outputColorBox.size(100, 20);
-    outputColorBox.option('red');
-    outputColorBox.option('yellow');
-    outputColorBox.option('green');
-    outputColorBox.option('blue');
-    outputColorBox.changed(newOutputColor);
-    outputColorBox.elt.className = "selectLeft";
+    createColorButtons();
 
     labelTextBox = createElement('textarea');
     labelTextBox.elt.style.fontFamily = 'Open Sans';
@@ -2197,6 +2181,7 @@ function reDraw() {
     // If the prop mode is active and an object was selected, show the config menu background
     if (propMode && propInput + propOutput + propLabel >= -2) {
         fill(50);
+        noStroke();
         rect(window.width - 203, 0, 203, window.height);
     }
 

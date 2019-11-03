@@ -11,34 +11,6 @@ body {
     background-attachment: fixed;
 }
 
-/*.button {
-    display: inline-block;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-    cursor: pointer;
-    padding: 0px 10px;
-    border: 1px solid #6e6e6e;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
-    color: rgb(255, 255, 255);
-    -o-text-overflow: clip;
-    text-overflow: clip;
-    background: #6e6e6e;
-    -webkit-box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
-    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
-    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -ms-user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-  }*/
-
 .button {
     display: inline-block;
     -webkit-box-sizing: content-box;
@@ -46,7 +18,6 @@ body {
     box-sizing: content-box;
     cursor: pointer;
     padding: 1px 12px;
-    /*border: 1px solid #6e6e6e;*/
     border: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
@@ -57,8 +28,6 @@ body {
     -o-text-overflow: clip;
     text-overflow: clip;
     background: #6e6e6e;
-    /*-webkit-box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
-    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);*/
     -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -68,6 +37,66 @@ body {
     -moz-user-select: none;
     user-select: none;
   }
+
+.colorButton {
+    display: inline-block;
+    cursor: pointer;
+    border: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    border-bottom: 2px solid black;
+    padding: 0;
+}
+
+.redButton {
+    background: rgb(200, 50, 50);
+}
+
+.yellowButton {
+    background: rgb(240, 240, 50);
+}
+
+.greenButton {
+    background: rgb(40, 180, 40);
+}
+
+.blueButton {
+    background: rgb(10, 100, 190);
+}
+
+.colorButton:hover {
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.redButton:hover {
+    background: rgb(209, 71, 71);
+}
+
+.yellowButton:hover {
+    background: rgb(255, 255, 83);
+}
+
+.greenButton:hover {
+    background: rgb(78, 208, 69);
+}
+
+.blueButton:hover {
+    background: rgb(63, 125, 218);
+}
+
+.colorButton:active {
+    -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.colorButton.active {
+    border-bottom: 2px solid white;
+}
 
 .ease_in {
     opacity: 0.0;
@@ -87,18 +116,6 @@ body {
     transition: all 500ms ease-in-out;
 }
 
-.sketch_item:hover > .ease_in {
-    opacity: 1.0;
-}
-
-.sketch_item:hover > .ease_out {
-    opacity: 0.0;
-}
-
-.sketch_item:hover > .black_layer {
-    opacity: 0.0;
-}
-
 .label {
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -115,9 +132,6 @@ body {
 }
 
 .button:hover {
-    border: 0;
-    border-bottom:2px solid black;
-    padding: 1px 12px;
     background: #c83232;
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -126,9 +140,6 @@ body {
 }
 
 .button:active {
-    border: 0;
-    border-bottom:2px solid black;
-    padding: 1px 12px;
     background: #961e1e;
     -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -137,9 +148,6 @@ body {
 }
 
 .button:disabled {
-    border: 0;
-    border-bottom:2px solid black;
-    padding: 1px 12px;
     background: #292929;
     color: #969696;
     -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -259,7 +267,6 @@ body {
     -webkit-border-radius: 0;
     border-radius: 0;
     border-bottom:2px solid black;
-    /*font: normal medium/normal Arial, Helvetica, sans-serif;*/
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
