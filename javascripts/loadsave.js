@@ -101,7 +101,7 @@ function load(loadData) {
     gridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
     actionRedo = [];
-    endSimulation(false); // End ongoing simulations
+    endSimulation(); // End ongoing simulations
     disableButtons(true);
     simButton.elt.disabled = true;
     saveButton.elt.disabled = true;

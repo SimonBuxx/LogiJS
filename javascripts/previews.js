@@ -426,3 +426,127 @@ function showElementPreview() {
         }
     }
 }
+
+function showNegationPreview(clickBox, isOutput, direction, isTop) {
+    fill(150);
+    stroke(0);
+    strokeWeight(2 * transform.zoom);
+    let offset;
+    if (isOutput) {
+        offset = 3;
+    } else {
+        offset = -3;
+    }
+    if (isTop) {
+        direction += 1;
+        if (direction > 3) {
+            direction = 0;
+        }
+    }
+    if (direction === 0) {
+        ellipse((transform.zoom * (clickBox.x + transform.dx + offset)), (transform.zoom * (clickBox.y + transform.dy)), 10 * transform.zoom, 10 * transform.zoom);
+    } else if (direction === 1) {
+        ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy + offset)), 10 * transform.zoom, 10 * transform.zoom);
+    } else if (direction === 2) {
+        ellipse((transform.zoom * (clickBox.x + transform.dx - offset)), (transform.zoom * (clickBox.y + transform.dy)), 10 * transform.zoom, 10 * transform.zoom);
+    } else if (direction === 3) {
+        ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy - offset)), 10 * transform.zoom, 10 * transform.zoom);
+    }
+}
+
+function showImportPreview(item, x, y) {
+    let x1, x2, y1, y2;
+    let w = Math.max((item.tops.length - 1), 0) * 30 + 60;
+    let h = (Math.max(item.inputs - item.tops.length, item.outputs) + 1) * 30;
+    let scaling = 1;
+    if (h >= 120) {
+        scaling = 120 / h;
+        x += 180 - w * scaling;
+        scale(scaling);
+    } else {
+        x += 180 - w;
+    }
+    y += 20 * scaling;
+    stroke(0);
+    strokeWeight(3);
+    fill(255);
+    textFont('Open Sans');
+
+    // Draw the body
+    if (item.tops.length === 0) {
+        rect(x / scaling, (y / scaling) + GRIDSIZE / 2, w, h - GRIDSIZE);
+    } else {
+        rect(x / scaling, y / scaling, w, h);
+    }
+
+    noStroke();
+    textAlign(CENTER, CENTER);
+    fill(0);
+    textSize(10);
+    text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2);
+    textSize(14);
+    let tops = 0;
+    for (let i = 1; i <= item.inputs; i++) {
+        stroke(0);
+        strokeWeight(2);
+        if (item.tops.includes(i - 1)) {
+            tops++;
+            x1 = (x / scaling) + (30 * tops);
+            y1 = (y / scaling) - 6;
+            x2 = (x / scaling) + (30 * tops);
+            y2 = (y / scaling);
+            if (item.inputLabels[i - 1] === ">") {
+                line(x1, y2 + 14, x1 - 6, y2);
+                line(x1, y2 + 14, x1 + 6, y2);
+            } else {
+                noStroke();
+                text(item.inputLabels[i - 1], x1, y2 + 10);
+            }
+        } else {
+            x1 = (x / scaling) - 6;
+            y1 = (y / scaling) + (30 * (i - tops));
+            x2 = (x / scaling);
+            y2 = (y / scaling) + (30 * (i - tops));
+            if (item.inputLabels[i - 1] === ">") {
+                line(x2 + 14, y1, x2, y1 - 6);
+                line(x2 + 14, y1, x2, y1 + 6);
+            } else {
+                noStroke();
+                text(item.inputLabels[i - 1], x2 + 10, y1);
+            }
+        }
+        stroke(0);
+        strokeWeight(3);
+        line(x1, y1, x2, y2);
+    }
+
+    for (let i = 1; i <= item.outputs; i++) {
+        stroke(0);
+        strokeWeight(3);
+        x1 = (x / scaling) + w;
+        y1 = (y / scaling) + (30 * i);
+        x2 = (x / scaling) + w + 6;
+        y2 = (y / scaling) + (30 * i);
+        noStroke();
+        text(item.outputLabels[i - 1], x1 - 10, y1);
+        stroke(0);
+        strokeWeight(3);
+        line(x1, y1, x2, y2);
+    }
+
+    scale(1 / scaling);
+    textAlign(LEFT, TOP);
+}
+
+function showPreviewImage() {
+    let raw = new Image();
+    raw.src = previewImg;
+    raw.onload = function () {
+        let img = createImage(raw.width, raw.height);
+        img.drawingContext.drawImage(raw, 0, 0, window.height, window.height, 0, 0, window.height, window.height);
+        img.resize(0, window.height / 1.5);
+        img.resize(0, window.height / 3);
+        img.resize(0, 200);
+        image(img, window.width / 2 - 330, window.height / 2 - 99);
+    };
+}

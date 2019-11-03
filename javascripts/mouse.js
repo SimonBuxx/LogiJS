@@ -50,7 +50,7 @@ function mouseWheel(event) {
 
         }
         if (ctrlMode !== 'none' && selectMode === 'none') {
-            setPropMode(false);
+            leaveModifierMode();
         }
         return;
     }
@@ -87,7 +87,7 @@ function updateCursors() {
     let hand = false;
     let showDPreview = false;
     let showCPPreview = false;
-    if (simRunning || propMode) {
+    if (simRunning || modifierModeActive) {
         if (!simRunning) {
             for (const elem of outputs) {
                 if (elem.mouseOver()) {
@@ -203,29 +203,21 @@ function updateCursors() {
     if (customDialog) {
         return;
     }
+    if (removeOldPreview) {
+        reDraw();
+        removeOldPreview = false;
+    }
     if (showDPreview) {
-        reDraw();
         showPreview('diode', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
-        diodePreviewShown = true;
-    } else if (diodePreviewShown) {
-        reDraw();
-        diodePreviewShown = false;
+        removeOldPreview = true;
     }
     if (showCPPreview) {
-        reDraw();
         showPreview('conpoint', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
-        conpointPreviewShown = true;
-    } else if (conpointPreviewShown) {
-        reDraw();
-        conpointPreviewShown = false;
+        removeOldPreview = true;
     }
     if (negPort !== null) {
-        reDraw();
         showNegationPreview(negPort, isOutput, negDir, isTop);
-        negPreviewShown = true;
-    } else if (negPreviewShown) {
-        reDraw();
-        negPreviewShown = false;
+        removeOldPreview = true;
     }
 }
 
@@ -267,9 +259,8 @@ function mousePressed() {
                 }
                 let noValidTarget = true;
                 for (let i = 0; i < inputs.length; i++) {
-                    if (Boolean(inputs[i].mouseOver()) && propMode) {
+                    if (inputs[i].mouseOver() && modifierModeActive) {
                         noValidTarget = false;
-                        // If the propMode is active, give options to name and make top
                         if (propInput !== i) {
                             if (propInput >= 0) {
                                 inputs[propInput].mark(false);
@@ -281,7 +272,7 @@ function mousePressed() {
                     }
                 }
                 for (let i = 0; i < outputs.length; i++) {
-                    if (Boolean(outputs[i].mouseOver()) && propMode) {
+                    if (outputs[i].mouseOver() && modifierModeActive) {
                         noValidTarget = false;
                         if (propOutput !== i) {
                             if (propOutput >= 0) {
@@ -294,7 +285,7 @@ function mousePressed() {
                     }
                 }
                 for (let i = 0; i < labels.length; i++) {
-                    if (Boolean(labels[i].mouseOver()) && propMode) {
+                    if (labels[i].mouseOver() && modifierModeActive) {
                         noValidTarget = false;
                         if (propLabel !== i) {
                             if (propLabel >= 0) {
@@ -306,7 +297,7 @@ function mousePressed() {
                         }
                     }
                 }
-                if (noValidTarget && propMode) {
+                if (noValidTarget && modifierModeActive) {
                     hidePropMenu();
                     unmarkPropTargets();
                 }
@@ -350,8 +341,7 @@ function mousePressed() {
                             }
                             selectMode = 'drag';
                         } else {
-                            setControlMode('none');
-                            setActive(propertiesButton);
+                            enterModifierMode();
                             pushSelectAction(sDragX2 - initX, sDragY2 - initY, sClickBox.x - sClickBox.w / 2, sClickBox.y - sClickBox.h / 2,
                                 sClickBox.x + sClickBox.w / 2, sClickBox.y + sClickBox.h / 2);
                             initX = 0;

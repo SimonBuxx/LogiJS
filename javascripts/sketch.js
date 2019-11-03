@@ -67,7 +67,7 @@ let sClickBox = new ClickBox(0, 0, 0, 0, transform);
 let showSClickBox = false;
 
 let simRunning = false;
-let propMode = false;
+let modifierModeActive = false;
 
 let saveDialog = false;
 let customDialog = false;
@@ -100,18 +100,22 @@ let next = 0;
 let loading = false;
 let loadFile = '';
 
+/*
+    This variable contains a preview of the sketch, a snapshot is taken every time, 'Save' is clicked
+*/
 let previewImg;
 
-let showTooltip = true;
-let negPreviewShown = false;
-let diodePreviewShown = false;
-let conpointPreviewShown = false;
+/*
+    These variable is set, if a negation, connection point or diode preview was added to the last drawn frame.
+    In this case, the canvas will be redrawn with the next mouse movement
+*/
+let removeOldPreview = false;
 
 // GUI Elements
 let textInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
 let deleteButton, simButton, labelBasic, labelAdvanced, // Left hand side
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, propertiesButton, labelButton, segDisplayButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
 let redButton, yellowButton, greenButton, blueButton; // With these you can change the color of outputs
@@ -649,14 +653,12 @@ function setup() { // jshint ignore:line
     //Upper left
 
     // Activates the edit mode
-    propertiesButton = createButton('<i class="fa fa-pen"></i> Edit');
-    propertiesButton.position(152, 3);
-    propertiesButton.mousePressed(function () {
-        setActive(propertiesButton);
-        setControlMode('none');
-        setPropMode(true);
+    modifierModeButton = createButton('<i class="fa fa-pen"></i> Edit');
+    modifierModeButton.position(152, 3);
+    modifierModeButton.mousePressed(function () {
+        enterModifierMode();
     });
-    propertiesButton.elt.className = "button active";
+    modifierModeButton.elt.className = "button active";
 
 
     // Activates the delete mode (objects and wires)
@@ -827,17 +829,6 @@ function setup() { // jshint ignore:line
         nextStepButton.hide();
     }
 
-    /*
-        Elements for the properties mode
-    */
-    propBoxLabel = createP('Properties');
-    propBoxLabel.hide();
-    propBoxLabel.elt.style.color = 'white';
-    propBoxLabel.elt.style.fontFamily = 'Open Sans';
-    propBoxLabel.elt.style.margin = '3px 0px 0px 0px';
-    propBoxLabel.position(windowWidth - 190, 30);
-    propBoxLabel.style('font-size', '30px');
-
     saveDialogText = createP('Save Sketch');
     saveDialogText.hide();
     saveDialogText.elt.style.color = 'white';
@@ -846,64 +837,11 @@ function setup() { // jshint ignore:line
     saveDialogText.position(windowWidth / 2 - 105, windowHeight / 2 - 160);
     saveDialogText.style('font-size', '36px');
 
-    inputIsTopBox = createCheckbox('Pin input to the top', false);
-    inputIsTopBox.hide();
-    inputIsTopBox.position(windowWidth - 190, 90);
-    inputIsTopBox.changed(newIsTopState);
-    inputIsTopBox.elt.style.color = 'white';
-    inputIsTopBox.elt.style.fontFamily = 'Open Sans';
-
-    ipNameLabel = createP('Input name:');
-    ipNameLabel.hide();
-    ipNameLabel.elt.style.color = 'white';
-    ipNameLabel.elt.style.fontFamily = 'Open Sans';
-    ipNameLabel.elt.style.margin = '3px 0px 0px 0px';
-    ipNameLabel.position(windowWidth - 190, 120);
-
-    inputCaptionBox = createInput('');
-    inputCaptionBox.elt.style.fontFamily = 'Open Sans';
-    inputCaptionBox.hide();
-    inputCaptionBox.size(170, 15);
-    inputCaptionBox.position(windowWidth - 190, 150);
-    inputCaptionBox.input(newInputCaption);
-    inputCaptionBox.elt.className = "textInput";
-
-    opNameLabel = createP('Output name:');
-    opNameLabel.hide();
-    opNameLabel.elt.style.color = 'white';
-    opNameLabel.elt.style.fontFamily = 'Open Sans';
-    opNameLabel.elt.style.margin = '3px 0px 0px 0px';
-    opNameLabel.position(windowWidth - 190, 120);
-
-    labCaptLabel = createP('Label text:');
-    labCaptLabel.hide();
-    labCaptLabel.elt.style.color = 'white';
-    labCaptLabel.elt.style.fontFamily = 'Open Sans';
-    labCaptLabel.elt.style.margin = '3px 0px 0px 0px';
-    labCaptLabel.position(windowWidth - 190, 90);
-
-    outputCaptionBox = createInput('');
-    outputCaptionBox.elt.style.fontFamily = 'Open Sans';
-    outputCaptionBox.hide();
-    outputCaptionBox.size(170, 15);
-    outputCaptionBox.position(windowWidth - 190, 150);
-    outputCaptionBox.elt.className = 'textInput';
-    outputCaptionBox.input(newOutputCaption);
-
-    createColorButtons();
-
-    labelTextBox = createElement('textarea');
-    labelTextBox.elt.style.fontFamily = 'Open Sans';
-    labelTextBox.elt.style.fontSize = '15px';
-    labelTextBox.hide();
-    labelTextBox.size(170, 200);
-    labelTextBox.position(windowWidth - 190, 120);
-    labelTextBox.input(labelChanged);
+    createModifierElements();
 
     frameRate(60); // Caps the framerate at 60 FPS
 
-    setControlMode('none');
-    setPropMode(true);
+    enterModifierMode();
 
     //sets font-size for all label elements
     let guiLabels = document.getElementsByClassName('label');
@@ -965,9 +903,7 @@ function urlParam(name, w) {
 function importCustom(filename) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 10 && filename === custFile) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setControlMode('addObject');
         if (customDialog) {
@@ -1111,10 +1047,8 @@ function closeCustomDialog() {
 // Triggered when a sketch should be loaded
 function loadClicked() {
     selectMode = 'none';
-    setControlMode('none');
     hidePropMenu();
-    setActive(propertiesButton);
-    setPropMode(true);
+    enterModifierMode();
     showSClickBox = false;
     document.title = 'LogiJS: ' + textInput.value();
     loadSketch(textInput.value() + '.json');
@@ -1123,6 +1057,7 @@ function loadClicked() {
 
 function saveDialogClicked() {
     endSimulation();
+    enterModifierMode();
     saveDialog = true;
     saveButton.show();
     cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 150);
@@ -1151,9 +1086,8 @@ function newClicked() {
     simButton.elt.disabled = false;
     saveButton.elt.disabled = false;
     endSimulation(); // End the simulation, if started
-    setPropMode(false); // Restarting PropMode so that the menu hides
-    setPropMode(true); // when new is clicked while it's open
-    setControlMode('none'); // Clears the control mode
+    leaveModifierMode();
+    enterModifierMode();
     wireMode = 'none';
     selectMode = 'none';
     showSClickBox = false;
@@ -1210,8 +1144,10 @@ function pushSelectAction(dx, dy, x1, y1, x2, y2) {
     }
 }
 
-function setActive(btn) {
-    setUnactive();
+function setActive(btn, clear = true) {
+    if (clear) {
+        setUnactive();
+    }
     hideAllOptions();
     btn.elt.className += ' active';
 }
@@ -1243,14 +1179,13 @@ function setUnactive() {
 
     deleteButton.elt.className = 'button';
     selectButton.elt.className = 'button';
-    propertiesButton.elt.className = 'button';
+    modifierModeButton.elt.className = 'button';
 }
 
 function deleteClicked() {
     // If the button was clicked at the end of a select process
     if (ctrlMode === 'select' && selectMode === 'end') {
-        setActive(propertiesButton);
-        setPropMode(true); // The select process is finished, go back to prop mode
+        enterModifierMode();
         ctrlMode = 'none';
         selectMode = 'end';
         showSClickBox = false;
@@ -1342,9 +1277,7 @@ function deleteClicked() {
         doConpoints();
     } else {
         if (ctrlMode === 'delete') {
-            setControlMode('none');
-            setActive(propertiesButton);
-            setPropMode(true);
+            enterModifierMode();
         } else {
             setActive(deleteButton);
             setControlMode('delete');
@@ -1500,6 +1433,7 @@ function simClicked() {
         startSimulation();
     } else {
         endSimulation();
+        enterModifierMode();
     }
 }
 
@@ -1509,9 +1443,7 @@ function simClicked() {
 function andClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 1 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(andButton, true);
         setControlMode('addObject');
@@ -1527,9 +1459,7 @@ function andClicked(dontToggle = false) {
 function orClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 2 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(orButton, true);
         setControlMode('addObject');
@@ -1545,9 +1475,7 @@ function orClicked(dontToggle = false) {
 function xorClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 3 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(xorButton, true);
         setControlMode('addObject');
@@ -1563,9 +1491,7 @@ function xorClicked(dontToggle = false) {
 function inputClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 4 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(inputButton, true);
         newIsButton = false;
@@ -1579,9 +1505,7 @@ function inputClicked(dontToggle = false) {
 function buttonClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 5 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(buttonButton, true);
         newIsButton = true;
@@ -1595,9 +1519,7 @@ function buttonClicked(dontToggle = false) {
 function clockClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 6 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(clockButton, true);
         newIsButton = false;
@@ -1611,9 +1533,7 @@ function clockClicked(dontToggle = false) {
 function outputClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 7 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(outputButton, true);
         setControlMode('addObject');
@@ -1625,9 +1545,7 @@ function outputClicked(dontToggle = false) {
 function segDisplayClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 8 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(segDisplayButton, true);
         setControlMode('addObject');
@@ -1641,9 +1559,7 @@ function segDisplayClicked(dontToggle = false) {
 // Starts the selection process
 function startSelect() {
     if (ctrlMode === 'select') {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(selectButton);
         setControlMode('select');
@@ -1655,9 +1571,7 @@ function startSelect() {
 function labelButtonClicked(dontToggle = false) {
     hideAllOptions();
     if (ctrlMode === 'addObject' && addType === 9 && !dontToggle) {
-        setControlMode('none');
-        setActive(propertiesButton);
-        setPropMode(true);
+        enterModifierMode();
     } else {
         setActive(labelButton, true);
         setControlMode('addObject');
@@ -1678,7 +1592,7 @@ function setControlMode(mode) {
         showSClickBox = false;
     }
     if (mode === 'addObject' || mode === 'select' || mode === 'delete') {
-        setPropMode(false);
+        leaveModifierMode();
         ctrlMode = mode;
     } else if (mode === 'none') {
         ctrlMode = mode;
@@ -1910,7 +1824,6 @@ function startSimulation() {
     setControlMode('none');
     setUnactive();
     disableButtons(true);
-    setPropMode(false);
     hideAllOptions();
     showSClickBox = false; // Hide the selection click box
 
@@ -1933,7 +1846,7 @@ function startSimulation() {
 
     // Start the simulation and exit the properties mode
     simRunning = true;
-    propMode = false;
+    leaveModifierMode();
 }
 
 /*
@@ -1942,15 +1855,9 @@ function startSimulation() {
     - Objects are set to low state
     - simRunning is cleared so that the sketch can be altered
 */
-function endSimulation(reset = true) {
+function endSimulation() {
     clearInterval(updater); // Stop the unsynced simulation updater
     setSimButtonText('<i class="fa fa-play"></i> Start'); // Set the button caption to 'Start'
-    if (reset) {
-        setControlMode('none');
-        setPropMode(true);
-        setActive(propertiesButton);
-    }
-    disableButtons(false); // Enable all buttons
     updateUndoButtons();
     sfcheckbox.hide();
 
@@ -2007,9 +1914,6 @@ function updateUndoButtons() {
     Also alters the color of the labels on the left
 */
 function disableButtons(status) {
-    undoButton.elt.disabled = status;
-    redoButton.elt.disabled = status;
-    andButton.elt.disabled = status;
     if (status) {
         andButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/and-gate.png">';
         orButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/or-gate.png">';
@@ -2028,7 +1932,9 @@ function disableButtons(status) {
         segDisplayButton.elt.innerHTML = '<img src="images/segments.png">';
         buttonButton.elt.innerHTML = '<img src="images/button.png">';
         clockButton.elt.innerHTML = '<img src="images/clock.png">';
+        updateUndoButtons();
     }
+    andButton.elt.disabled = status;
     orButton.elt.disabled = status;
     xorButton.elt.disabled = status;
     inputButton.elt.disabled = status;
@@ -2050,7 +1956,7 @@ function disableButtons(status) {
     if (getCookieValue('access_token') !== '') {
         customButton.elt.disabled = status;
     }
-    propertiesButton.elt.disabled = status;
+    modifierModeButton.elt.disabled = status;
     labelButton.elt.disabled = status;
     // Sets the colors of the labels
     if (status) {
@@ -2179,7 +2085,7 @@ function reDraw() {
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 
     // If the prop mode is active and an object was selected, show the config menu background
-    if (propMode && propInput + propOutput + propLabel >= -2) {
+    if (modifierModeActive && propInput + propOutput + propLabel >= -2) {
         fill(50);
         noStroke();
         rect(window.width - 203, 0, 203, window.height);
@@ -2424,19 +2330,6 @@ function showCustomItem(place, img, caption, look) {
     }
 }
 
-function showPreviewImage() {
-    let raw = new Image();
-    raw.src = previewImg;
-    raw.onload = function () {
-        let img = createImage(raw.width, raw.height);
-        img.drawingContext.drawImage(raw, 0, 0, window.height, window.height, 0, 0, window.height, window.height);
-        img.resize(0, window.height / 1.5);
-        img.resize(0, window.height / 3);
-        img.resize(0, 200);
-        image(img, window.width / 2 - 330, window.height / 2 - 99);
-    };
-}
-
 function importItemClicked(row, col) {
     let place = maxCustCols * row + col + custPage * maxCustCols * maxCustRows;
     if (place >= importSketchData.sketches.length) {
@@ -2560,13 +2453,11 @@ function keyPressed() {
         }
         switch (keyCode) {
             case ESCAPE:
-                setControlMode('none');
-                setActive(propertiesButton);
-                setPropMode(true);
+                enterModifierMode();
                 reDraw();
                 break;
             case RETURN:
-                setPropMode(false);
+                leaveModifierMode();
                 hideAllOptions();
                 simClicked();
                 break;
@@ -2577,9 +2468,7 @@ function keyPressed() {
                 if (ctrlMode !== 'delete') {
                     deleteClicked();
                 } else {
-                    setActive(propertiesButton);
-                    setControlMode('none');
-                    setPropMode(true);
+                    enterModifierMode();
                 }
                 break;
             case 48: // 0
@@ -2610,33 +2499,6 @@ function keyPressed() {
     }
 }
 
-function showNegationPreview(clickBox, isOutput, direction, isTop) {
-    fill(150);
-    stroke(0);
-    strokeWeight(2 * transform.zoom);
-    let offset;
-    if (isOutput) {
-        offset = 3;
-    } else {
-        offset = -3;
-    }
-    if (isTop) {
-        direction += 1;
-        if (direction > 3) {
-            direction = 0;
-        }
-    }
-    if (direction === 0) {
-        ellipse((transform.zoom * (clickBox.x + transform.dx + offset)), (transform.zoom * (clickBox.y + transform.dy)), 10 * transform.zoom, 10 * transform.zoom);
-    } else if (direction === 1) {
-        ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy + offset)), 10 * transform.zoom, 10 * transform.zoom);
-    } else if (direction === 2) {
-        ellipse((transform.zoom * (clickBox.x + transform.dx - offset)), (transform.zoom * (clickBox.y + transform.dy)), 10 * transform.zoom, 10 * transform.zoom);
-    } else if (direction === 3) {
-        ellipse((transform.zoom * (clickBox.x + transform.dx)), (transform.zoom * (clickBox.y + transform.dy - offset)), 10 * transform.zoom, 10 * transform.zoom);
-    }
-}
-
 function setLoading(l) {
     loading = l;
     disableButtons(l);
@@ -2652,90 +2514,6 @@ function setLoading(l) {
     nextStepButton.elt.disabled = l;
     updateUndoButtons();
     reDraw();
-}
-
-function showImportPreview(item, x, y) {
-    let x1, x2, y1, y2;
-    let w = Math.max((item.tops.length - 1), 0) * 30 + 60;
-    let h = (Math.max(item.inputs - item.tops.length, item.outputs) + 1) * 30;
-    let scaling = 1;
-    if (h >= 120) {
-        scaling = 120 / h;
-        x += 180 - w * scaling;
-        scale(scaling);
-    } else {
-        x += 180 - w;
-    }
-    y += 20 * scaling;
-    stroke(0);
-    strokeWeight(3);
-    fill(255);
-    textFont('Open Sans');
-
-    // Draw the body
-    if (item.tops.length === 0) {
-        rect(x / scaling, (y / scaling) + GRIDSIZE / 2, w, h - GRIDSIZE);
-    } else {
-        rect(x / scaling, y / scaling, w, h);
-    }
-
-    noStroke();
-    textAlign(CENTER, CENTER);
-    fill(0);
-    textSize(10);
-    text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2);
-    textSize(14);
-    let tops = 0;
-    for (let i = 1; i <= item.inputs; i++) {
-        stroke(0);
-        strokeWeight(2);
-        if (item.tops.includes(i - 1)) {
-            tops++;
-            x1 = (x / scaling) + (30 * tops);
-            y1 = (y / scaling) - 6;
-            x2 = (x / scaling) + (30 * tops);
-            y2 = (y / scaling);
-            if (item.inputLabels[i - 1] === ">") {
-                line(x1, y2 + 14, x1 - 6, y2);
-                line(x1, y2 + 14, x1 + 6, y2);
-            } else {
-                noStroke();
-                text(item.inputLabels[i - 1], x1, y2 + 10);
-            }
-        } else {
-            x1 = (x / scaling) - 6;
-            y1 = (y / scaling) + (30 * (i - tops));
-            x2 = (x / scaling);
-            y2 = (y / scaling) + (30 * (i - tops));
-            if (item.inputLabels[i - 1] === ">") {
-                line(x2 + 14, y1, x2, y1 - 6);
-                line(x2 + 14, y1, x2, y1 + 6);
-            } else {
-                noStroke();
-                text(item.inputLabels[i - 1], x2 + 10, y1);
-            }
-        }
-        stroke(0);
-        strokeWeight(3);
-        line(x1, y1, x2, y2);
-    }
-
-    for (let i = 1; i <= item.outputs; i++) {
-        stroke(0);
-        strokeWeight(3);
-        x1 = (x / scaling) + w;
-        y1 = (y / scaling) + (30 * i);
-        x2 = (x / scaling) + w + 6;
-        y2 = (y / scaling) + (30 * i);
-        noStroke();
-        text(item.outputLabels[i - 1], x1 - 10, y1);
-        stroke(0);
-        strokeWeight(3);
-        line(x1, y1, x2, y2);
-    }
-
-    scale(1 / scaling);
-    textAlign(LEFT, TOP);
 }
 
 /*
