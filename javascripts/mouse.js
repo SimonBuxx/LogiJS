@@ -245,10 +245,8 @@ function mousePressed() {
             closedModifierMenu = true;
             closeModifierMenu();
             unmarkPropTargets();
-            return;
-        } else {
-            return;
         }
+        return;
     }
     if (ctrlMode !== 'select') {
         showSClickBox = false;
@@ -277,6 +275,11 @@ function mousePressed() {
                             }
                             inputs[i].mark(true);
                             inputToModify = i;
+                            sequencerAdjusted = false;
+                            showModifierMenu();
+                            showInputPropMenu();
+                            positionModifierElements();
+                            wireMode = 'none';
                             reDraw();
                         }
                     }
@@ -290,6 +293,11 @@ function mousePressed() {
                             }
                             outputs[i].mark(true);
                             outputToModify = i;
+                            sequencerAdjusted = false;
+                            showModifierMenu();
+                            showOutputPropMenu();
+                            positionModifierElements();
+                            wireMode = 'none';
                             reDraw();
                         }
                     }
@@ -303,6 +311,11 @@ function mousePressed() {
                             }
                             labels[i].mark(true);
                             labelToModify = i;
+                            sequencerAdjusted = false;
+                            showModifierMenu();
+                            showLabelPropMenu();
+                            positionModifierElements();
+                            wireMode = 'none';
                             reDraw();
                         }
                     }
@@ -450,7 +463,7 @@ function mouseClicked() {
           Finishing the selection process by invoking handleSelection
 */
 function mouseReleased() {
-    if (loading || customDialog) { return; }
+    if (loading || customDialog || modifierMenuDisplayed()) { return; }
     if (closedModifierMenu) {
         closedModifierMenu = false;
         return;
@@ -773,11 +786,11 @@ function mouseOverImport(baseX, baseY, rows, cols) {
 
 //Checks if the mouse hovers over the GUI(true) or the grid(false)
 function mouseOverGUI() {
-    if (mouseY > window.height - 220 && mouseX < 970 && showHints) {
+    /*if (mouseY > window.height - 220 && mouseX < 970 && showHints) {
         return true;
-    }
+    }*/
     if (modifierModeActive && inputToModify + outputToModify + labelToModify >= -2) {
-        return (mouseY < 0) || (mouseX < 0) || /*(mouseX > window.width - 203)*/ mouseX >= modifierMenuX && mouseX <= modifierMenuX + 250 && mouseY >= modifierMenuY && mouseY <= modifierMenuY + 150;
+        return (mouseY < 0) || (mouseX < 0) || mouseX >= modifierMenuX && mouseX <= modifierMenuX + 250 && mouseY >= modifierMenuY - 100 && mouseY <= modifierMenuY + 150;
     } else {
         return (mouseY < 0) || (mouseX < 0);
     }

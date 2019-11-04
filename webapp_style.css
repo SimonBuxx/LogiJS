@@ -299,6 +299,29 @@ body {
     user-select: none;
 }
 
+.sequencer {
+    margin-top : 3px;
+    margin-left : 5px;
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    cursor: pointer;
+    padding: 1px 10px;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    user-select: none;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    color: rgb(255, 255, 255);
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    background: #6e6e6e;
+    border: 3px solid black;
+}
+
 .buttonLeft:hover {
     border: 0;
     border-bottom: 2px solid black;

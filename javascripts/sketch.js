@@ -26,7 +26,7 @@ let pwstartY = 0;
 
 let groups = []; // List of all logical wire groups
 
-//let caption = []; // Name of the sketch, displayed on customs
+let caption = []; // Name of the sketch, displayed on customs
 
 let gridSize = GRIDSIZE; // Size of the grid
 
@@ -126,14 +126,17 @@ let modifierMenuX, modifierMenuY;
 
 let closedModifierMenu = false;
 
+let sequencerAdjusted = false;
+
 /*
     These are the modifier elements and their descriptional labels.
 */
 let inputIsTopBox, captionInput, minusLabel, plusLabel; // Input elements
 let redButton, yellowButton, greenButton, blueButton; // Output elements
 let labelTextBox; // Label elements
+let sequencer;
 
-let textInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
+let textInput, captInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
 let deleteButton, simButton, labelBasic, labelAdvanced,
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
@@ -700,20 +703,35 @@ function setup() { // jshint ignore:line
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = "button";
 
+    captInput = createInput('');
+    captInput.attribute('placeholder', 'MODULE NAME');
+    captInput.position(windowWidth / 2 - 278, windowHeight / 2 - 104);
+    captInput.elt.style.fontFamily = 'Open Sans';
+    captInput.elt.className = "textInput saveInput";
+    captInput.size(180, 27);
+    captInput.changed(function() {
+        showImportPreview(getThisLook(), window.width / 2 - 330, window.height / 2 - 36);
+    });
+    captInput.hide();
+
     textInput = createInput('');
     textInput.attribute('placeholder', 'SKETCH NAME');
     textInput.position(windowWidth / 2 - 63, windowHeight / 2 - 104);
     textInput.elt.style.fontFamily = 'Open Sans';
     textInput.elt.className = "textInput saveInput";
+    textInput.changed(function() {
+        captInput.value(textInput.value());
+        showImportPreview(getThisLook(), window.width / 2 - 330, window.height / 2 - 36);
+    });
     textInput.hide();
 
     descInput = createElement('textarea');
     descInput.attribute('placeholder', 'SKETCH DESCRIPTION');
     descInput.position(windowWidth / 2 - 43, windowHeight / 2 - 25);
-    descInput.size(280, 153);
+    descInput.size(280, 122);
     descInput.elt.style.fontFamily = 'Open Sans';
     descInput.elt.style.fontSize = '15px';
-    descInput.elt.className = "textInput descInput";
+    descInput.elt.className = 'textInput descInput';
     if (getCookieValue('access_token') === '') {
         descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(LOG IN TO GIVE A DESCRIPTION)');
         descInput.elt.disabled = true;
@@ -737,13 +755,13 @@ function setup() { // jshint ignore:line
 
     // Button to save the sketch
     saveButton = createButton('Save');
-    saveButton.position(windowWidth / 2 + 102, windowHeight / 2 + 150);
+    saveButton.position(windowWidth / 2 + 106, windowHeight / 2 + 122);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = "btn btn-lg btn-red";
     saveButton.hide();
 
     cancelButton = createButton('Cancel');
-    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 150);
+    cancelButton.position(windowWidth / 2 - 52, windowHeight / 2 + 122);
     cancelButton.mousePressed(cancelClicked);
     cancelButton.elt.className = "btn btn-lg btn-red";
     cancelButton.hide();
@@ -864,6 +882,7 @@ function setup() { // jshint ignore:line
                 let d = JSON.parse(data.data);
                 if (data.success === true) {
                     descInput.value(d.desc);
+                    captInput.value(d.caption);
                 }
             } catch (e) {
                 if (data.success === true) {
@@ -1005,6 +1024,7 @@ function saveClicked() {
         saveButton.hide();
         cancelButton.hide();
         textInput.hide();
+        captInput.hide();
         descInput.hide();
         saveDialogText.hide();
         setLoading(false);
@@ -1020,6 +1040,7 @@ function cancelClicked() {
         saveDialog = false;
         saveButton.hide();
         textInput.hide();
+        captInput.hide();
         descInput.hide();
         saveDialogText.hide();
         setLoading(false);
@@ -1062,9 +1083,10 @@ function saveDialogClicked() {
     enterModifierMode();
     saveDialog = true;
     saveButton.show();
-    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 150);
+    cancelButton.position(windowWidth / 2 - 52, windowHeight / 2 + 122);
     cancelButton.show();
     textInput.show();
+    captInput.show();
     descInput.show();
     saveDialogText.show();
     previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
@@ -1095,6 +1117,7 @@ function newClicked() {
     showSClickBox = false;
     document.title = 'LogiJS: New Sketch';
     textInput.value('');
+    captInput.value('');
     textInput.attribute('placeholder', 'SKETCH NAME');
     findLines();
     reDraw();
@@ -1925,6 +1948,8 @@ function disableButtons(status) {
         segDisplayButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/segments.png">';
         buttonButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/button.png">';
         clockButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/clock.png">';
+        undoButton.elt.disabled = true;
+        redoButton.elt.disabled = true;
     } else {
         andButton.elt.innerHTML = '<img src="images/and-gate.png">';
         orButton.elt.innerHTML = '<img src="images/or-gate.png">';
@@ -1978,11 +2003,11 @@ function draw() {
         updateTick(); // Updates the circuit logic
         reDraw(); // Redraw all elements of the sketch
     } else {
-        if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI()) {
+        if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI() && !modifierMenuDisplayed()) {
             generateSegmentSet(pwstartX, pwstartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
             reDraw();
-        } else if (ctrlMode === 'select' || ctrlMode === 'addObject' && !mouseIsPressed) {
+        } else if (ctrlMode === 'select' || ctrlMode === 'addObject' && !mouseIsPressed && !modifierMenuDisplayed()) {
             reDraw();
         }
 
@@ -2088,7 +2113,10 @@ function reDraw() {
 
     // If the modifier mode is active and an object was selected, show the modifier menu background
     if (modifierMenuDisplayed()) {
-        stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
+        //stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 3);
+        fill('rgba(0, 0, 0, 0.6)');
+        noStroke();
+        rect(0, 0, window.width, window.height);
         scale(transform.zoom);
         translate(transform.dx, transform.dy);
         if (inputToModify >= 0) {
@@ -2118,13 +2146,19 @@ function reDraw() {
     }
 
     if (saveDialog) {
-        stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
+        //stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 3);
+        fill('rgba(0, 0, 0, 0.6)');
+        noStroke();
+        rect(0, 0, window.width, window.height);
         showSaveDialog();
         showPreviewImage();
     }
 
     if (customDialog) {
-        stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 12);
+        //stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 3);
+        fill('rgba(0, 0, 0, 0.6)');
+        noStroke();
+        rect(0, 0, window.width, window.height);
         textFont('Gudea');
     }
 
@@ -2272,7 +2306,7 @@ function showMessage(msg, subline = '') {
 function showSaveDialog() {
     fill('rgba(50, 50, 50, 0.95)');
     noStroke();
-    rect(window.width / 2 - 365, window.height / 2 - 188, 580, 400);
+    rect(window.width / 2 - 365, window.height / 2 - 188, 580, 385);
 }
 
 function showCustomDialog() {

@@ -22,6 +22,7 @@ function closeModifierMenu() {
     setOutputModifierVisibility(false);
     setLabelModifierVisibility(false);
     captionInput.hide();
+    sequencer.hide();
     inputToModify = -1;
     labelToModify = -1;
     outputToModify = -1;
@@ -98,6 +99,7 @@ function showInputPropMenu() {
     }
     inputIsTopBox.checked(inputs[inputToModify].isTop);
     captionInput.value(inputs[inputToModify].lbl);
+    sequencer.value(inputToModify + 1);
 
     outputToModify = -1;
     labelToModify = -1;
@@ -119,6 +121,7 @@ function showOutputPropMenu() {
     setLabelModifierVisibility(false);
     setOutputColor(outputs[outputToModify].colr);
     captionInput.value(outputs[outputToModify].lbl);
+    sequencer.value(outputToModify + 1);
 
     inputToModify = -1;
     labelToModify = -1;
@@ -161,30 +164,26 @@ function showModifierMenu() {
         } else {
             rect(modifierMenuX, modifierMenuY, 250, 150);
         }
-        positionModifierElements();
-        showInputPropMenu();
     } else if (outputToModify >= 0) {
         modifierMenuX = (outputs[outputToModify].x + transform.dx - GRIDSIZE / 2) * transform.zoom;
         modifierMenuY = (outputs[outputToModify].y + transform.dy + GRIDSIZE / 2) * transform.zoom;
         rect(modifierMenuX, modifierMenuY, 250, 100);
-        positionModifierElements();
-        showOutputPropMenu();
     } else if (labelToModify >= 0) {
         modifierMenuX = (labels[labelToModify].x + transform.dx - GRIDSIZE / 2) * transform.zoom;
         modifierMenuY = (labels[labelToModify].y + transform.dy + GRIDSIZE / 2 + GRIDSIZE * (labels[labelToModify].lines.length - 1)) * transform.zoom;
         rect(modifierMenuX, modifierMenuY, 250, 150);
-        positionModifierElements();
-        showLabelPropMenu();
     }
 }
 
 function positionModifierElements() {
+    sequencer.position(modifierMenuX + 308, modifierMenuY + 27);
+
     captionInput.position(modifierMenuX + 150, modifierMenuY + 30);
     inputIsTopBox.position(modifierMenuX + 160, modifierMenuY + 80);
     clockspeedSlider.position(modifierMenuX + 190, modifierMenuY + 130);
     minusLabel.position(modifierMenuX + 168, modifierMenuY + 121);
     plusLabel.position(modifierMenuX + 365, modifierMenuY + 125);
-    
+
     redButton.position(modifierMenuX + 195, modifierMenuY + 90);
     yellowButton.position(modifierMenuX + 235, modifierMenuY + 90);
     greenButton.position(modifierMenuX + 275, modifierMenuY + 90);
@@ -204,6 +203,23 @@ function newCaption() {
         outputs[outputToModify].lbl = captionInput.value();
     }
 }
+
+function sequencerChanged() {
+    if (inputToModify >= 0) {
+        inputs[parseInt(sequencer.value()) - 1] = inputs.splice(inputToModify, 1, inputs[parseInt(sequencer.value()) - 1])[0];
+    } else {
+        outputs[parseInt(sequencer.value()) - 1] = outputs.splice(outputToModify, 1, outputs[parseInt(sequencer.value()) - 1])[0];
+    }
+}
+
+function fillSequencer(max) {
+    sequencer.elt.innerHTML = '';
+    for (let i = 1; i <= max; i++) {
+        sequencer.option(i);
+    }
+    sequencer.value('1');
+}
+
 
 /*
     Updates the color of the marked output according to the
@@ -238,6 +254,10 @@ function setOutputModifierVisibility(show) {
     setColorButtonVisibility(show);
     if (show) {
         captionInput.show();
+        if (!sequencerAdjusted) {
+            adjustSequencer(true);
+        }
+        sequencer.show();
     }
 }
 
@@ -245,6 +265,10 @@ function setInputModifierVisibility(show) {
     if (show) {
         inputIsTopBox.show();
         captionInput.show();
+        if (!sequencerAdjusted) {
+            adjustSequencer(false);
+        }
+        sequencer.show();
     } else {
         inputIsTopBox.hide();
         minusLabel.hide();
@@ -277,6 +301,15 @@ function setColorButtonVisibility(show) {
 
 function modifierMenuDisplayed() {
     return (modifierModeActive && (inputToModify + outputToModify + labelToModify >= -2));
+}
+
+function adjustSequencer(io) {
+    if (io) {
+        fillSequencer(outputs.length);
+    } else {
+        fillSequencer(inputs.length);
+    }
+    sequencerAdjusted = true;
 }
 
 function setColorButtonsUnactive() {
@@ -360,6 +393,12 @@ function createModifierElements() {
     labelTextBox.size(215, 118);
     labelTextBox.input(labelChanged);
 
+    sequencer = createSelect();
+    sequencer.hide();
+    sequencer.size(63, 33);
+    sequencer.changed(sequencerChanged);
+    fillSequencer(1);
+    sequencer.elt.className = 'sequencer';
 
     createColorButtons();
 }

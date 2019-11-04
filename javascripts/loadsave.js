@@ -341,3 +341,23 @@ function getLookData(json) {
     }
     return look;
 }
+
+function getThisLook() {
+    let look = {};
+    look.tops = [];
+    look.inputLabels = [];
+    look.outputLabels = [];
+    look.caption = captInput.value();
+    look.inputs = inputs.length;
+    look.outputs = outputs.length;
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].isTop) {
+            look.tops.push(i);
+        }
+        look.inputLabels.push(inputs[i].lbl);
+    }
+    for (let i = 0; i < outputs.length; i++) {
+        look.outputLabels.push(outputs[i].lbl);
+    }
+    return look;
+}
