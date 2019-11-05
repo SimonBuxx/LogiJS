@@ -207,8 +207,17 @@ function newCaption() {
 function sequencerChanged() {
     if (inputToModify >= 0) {
         inputs[parseInt(sequencer.value()) - 1] = inputs.splice(inputToModify, 1, inputs[parseInt(sequencer.value()) - 1])[0];
+        inputToModify = parseInt(sequencer.value()) - 1;
+        inputIsTopBox.checked(inputs[inputToModify].isTop);
+        captionInput.value(inputs[inputToModify].lbl);
+        if (inputs[inputToModify].clock) {
+            clockspeedSlider.value(60 - inputs[inputToModify].speed);
+        }
     } else {
         outputs[parseInt(sequencer.value()) - 1] = outputs.splice(outputToModify, 1, outputs[parseInt(sequencer.value()) - 1])[0];
+        outputToModify = parseInt(sequencer.value()) - 1;
+        captionInput.value(inputs[inputToModify].lbl);
+        setOutputColor(outputs[outputToModify].colr);
     }
 }
 
