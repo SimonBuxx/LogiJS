@@ -213,18 +213,25 @@ function sequencerChanged() {
         if (inputs[inputToModify].clock) {
             clockspeedSlider.value(60 - inputs[inputToModify].speed);
         }
+        adjustSequencer(false, inputToModify + 1);
+        sequencer.value(inputToModify + 1);
     } else {
         outputs[parseInt(sequencer.value()) - 1] = outputs.splice(outputToModify, 1, outputs[parseInt(sequencer.value()) - 1])[0];
         outputToModify = parseInt(sequencer.value()) - 1;
-        captionInput.value(inputs[inputToModify].lbl);
+        captionInput.value(outputs[outputToModify].lbl);
         setOutputColor(outputs[outputToModify].colr);
+        adjustSequencer(true, outputToModify + 1);
+        sequencer.value(outputToModify + 1);
     }
 }
 
-function fillSequencer(max) {
+function fillSequencer(max, top) {
     sequencer.elt.innerHTML = '';
+    sequencer.option(top);
     for (let i = 1; i <= max; i++) {
-        sequencer.option(i);
+        if (i !== top) {
+            sequencer.option(i);
+        }
     }
     sequencer.value('1');
 }
@@ -264,7 +271,7 @@ function setOutputModifierVisibility(show) {
     if (show) {
         captionInput.show();
         if (!sequencerAdjusted) {
-            adjustSequencer(true);
+            adjustSequencer(true, outputToModify + 1);
         }
         sequencer.show();
     }
@@ -275,7 +282,7 @@ function setInputModifierVisibility(show) {
         inputIsTopBox.show();
         captionInput.show();
         if (!sequencerAdjusted) {
-            adjustSequencer(false);
+            adjustSequencer(false, inputToModify + 1);
         }
         sequencer.show();
     } else {
@@ -312,11 +319,11 @@ function modifierMenuDisplayed() {
     return (modifierModeActive && (inputToModify + outputToModify + labelToModify >= -2));
 }
 
-function adjustSequencer(io) {
+function adjustSequencer(io, top) {
     if (io) {
-        fillSequencer(outputs.length);
+        fillSequencer(outputs.length, top);
     } else {
-        fillSequencer(inputs.length);
+        fillSequencer(inputs.length, top);
     }
     sequencerAdjusted = true;
 }

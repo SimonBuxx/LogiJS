@@ -306,6 +306,9 @@ body {
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
     cursor: pointer;
     padding: 1px 10px;
     -ms-user-select: none;
@@ -315,12 +318,22 @@ body {
     user-select: none;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
-    color: rgb(255, 255, 255);
+    color: white;
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: #6e6e6e;
+    background-color: #6e6e6e;
     border: 3px solid black;
+    outline: none;
 }
+
+.sequencer::-ms-expand {
+    display: none;
+  }
+
+.sequencer option {
+    background:#6e6e6e;
+    padding: 1px 10px;
+  }
 
 .buttonLeft:hover {
     border: 0;
@@ -391,6 +404,8 @@ body {
     appearance: none;
     width: 20px;
     height: 30px;
+    border-radius: 0;
+    border: 3px solid black;
     background: #292929;
     cursor: pointer;
 }
@@ -398,6 +413,8 @@ body {
 .slider::-moz-range-thumb {
     width: 20px;
     height: 30px;
+    border-radius: 0;
+    border: 3px solid black;
     background: #292929;
     cursor: pointer;
 }

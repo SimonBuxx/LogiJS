@@ -790,10 +790,9 @@ function mouseOverGUI() {
         return true;
     }*/
     if (modifierModeActive && inputToModify + outputToModify + labelToModify >= -2) {
-        return (mouseY < 0) || (mouseX < 0) || mouseX >= modifierMenuX && mouseX <= modifierMenuX + 250 && mouseY >= modifierMenuY - 100 && mouseY <= modifierMenuY + 150;
-    } else {
-        return (mouseY < 0) || (mouseX < 0);
+        return (mouseY < 0) || (mouseX < 0) || mouseX >= modifierMenuX && mouseX <= modifierMenuX + 250 && mouseY >= modifierMenuY && mouseY <= modifierMenuY + 150;
     }
+    return (mouseY < 0) || (mouseX < 0);
 }
 
 /*
