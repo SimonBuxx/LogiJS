@@ -709,9 +709,7 @@ function setup() { // jshint ignore:line
     captInput.elt.style.fontFamily = 'Open Sans';
     captInput.elt.className = "textInput saveInput";
     captInput.size(180, 27);
-    captInput.changed(function() {
-        showImportPreview(getThisLook(), window.width / 2 - 330, window.height / 2 - 36);
-    });
+    captInput.changed(showPreviewImage);
     captInput.hide();
 
     textInput = createInput('');
