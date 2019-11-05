@@ -332,6 +332,7 @@ function createColorButtons() {
     redButton = createButton('');
     redButton.size(40, 25);
     redButton.elt.className = 'colorButton redButton';
+    redButton.elt.title = 'Make this output red';
     redButton.mousePressed(function () {
         newOutputColor(0);
     });
@@ -339,6 +340,7 @@ function createColorButtons() {
     yellowButton = createButton('');
     yellowButton.size(40, 25);
     yellowButton.elt.className = 'colorButton yellowButton';
+    yellowButton.elt.title = 'Make this output yellow';
     yellowButton.mousePressed(function () {
         newOutputColor(1);
     });
@@ -346,6 +348,7 @@ function createColorButtons() {
     greenButton = createButton('');
     greenButton.size(40, 25);
     greenButton.elt.className = 'colorButton greenButton';
+    greenButton.elt.title = 'Make this output green';
     greenButton.mousePressed(function () {
         newOutputColor(2);
     });
@@ -353,6 +356,7 @@ function createColorButtons() {
     blueButton = createButton('');
     blueButton.size(40, 25);
     blueButton.elt.className = 'colorButton blueButton';
+    blueButton.elt.title = 'Make this output blue';
     blueButton.mousePressed(function () {
         newOutputColor(3);
     });
@@ -365,6 +369,7 @@ function createModifierElements() {
     inputIsTopBox.hide();
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.className = 'topBox';
+    inputIsTopBox.elt.title = 'Select this to fix the pin of this input on top of this sketch\'s custom module';
 
     minusLabel = createP('-');
     minusLabel.hide();
@@ -380,6 +385,7 @@ function createModifierElements() {
     captionInput.attribute('placeholder', 'Name');
     captionInput.input(newCaption);
     captionInput.elt.className = "textInput";
+    captionInput.elt.title = 'This is the name that will appear on the corresponding pin on the custom module.';
 
     plusLabel = createP('+');
     plusLabel.hide();
@@ -394,6 +400,7 @@ function createModifierElements() {
         newClockspeed();
     });
     clockspeedSlider.elt.className = 'slider';
+    clockspeedSlider.elt.title = 'Clock speed';
 
     labelTextBox = createElement('textarea');
     labelTextBox.elt.className = 'labelTextBox';
@@ -408,6 +415,7 @@ function createModifierElements() {
     sequencer.changed(sequencerChanged);
     fillSequencer(1);
     sequencer.elt.className = 'sequencer';
+    sequencer.elt.title = 'Change order';
 
     createColorButtons();
 }

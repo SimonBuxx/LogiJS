@@ -72,6 +72,7 @@ function Label(x, y, txt, transform) {
         stroke(140);
         if (this.marked) {
             fill(MRED, MGREEN, MBLUE);
+            stroke(0);
         } else {
             fill(150, 200);
         }
