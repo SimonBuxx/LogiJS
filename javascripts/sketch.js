@@ -124,8 +124,6 @@ let labelToModify = -1;
 
 let modifierMenuX, modifierMenuY;
 
-let closedModifierMenu = false;
-
 let sequencerAdjusted = false;
 
 /*
@@ -1203,6 +1201,7 @@ function setUnactive() {
     deleteButton.elt.className = 'button';
     selectButton.elt.className = 'button';
     modifierModeButton.elt.className = 'button';
+    simButton.elt.className = 'button';
 }
 
 function deleteClicked() {
@@ -1997,7 +1996,7 @@ function disableButtons(status) {
     Executes in every frame, draws everything and updates the sketch logic
 */
 function draw() {
-    if (simRunning && !customDialog) {
+    if (simRunning) {
         updateTick(); // Updates the circuit logic
         reDraw(); // Redraw all elements of the sketch
     } else {
