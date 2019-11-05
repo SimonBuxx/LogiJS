@@ -3,8 +3,7 @@
 function saveSketch(filename, callback) {
     // Create a new json object to store all elements in
     let json = {};
-    // New elements should have the filename as their caption (for now)
-    json.caption = filename.substring(0, filename.indexOf('.'));
+    json.caption = captInput.value();
     json.gates = [];
     json.outputs = [];
     json.inputs = [];

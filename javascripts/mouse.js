@@ -265,65 +265,6 @@ function mousePressed() {
                         break;
                     default:
                 }
-                let noValidTarget = true;
-                for (let i = 0; i < inputs.length; i++) {
-                    if (inputs[i].mouseOver() && modifierModeActive) {
-                        noValidTarget = false;
-                        if (inputToModify !== i) {
-                            if (inputToModify >= 0) {
-                                inputs[inputToModify].mark(false);
-                            }
-                            inputs[i].mark(true);
-                            inputToModify = i;
-                            sequencerAdjusted = false;
-                            showModifierMenu();
-                            showInputPropMenu();
-                            positionModifierElements();
-                            wireMode = 'none';
-                            reDraw();
-                        }
-                    }
-                }
-                for (let i = 0; i < outputs.length; i++) {
-                    if (outputs[i].mouseOver() && modifierModeActive) {
-                        noValidTarget = false;
-                        if (outputToModify !== i) {
-                            if (outputToModify >= 0) {
-                                outputs[outputToModify].mark(false);
-                            }
-                            outputs[i].mark(true);
-                            outputToModify = i;
-                            sequencerAdjusted = false;
-                            showModifierMenu();
-                            showOutputPropMenu();
-                            positionModifierElements();
-                            wireMode = 'none';
-                            reDraw();
-                        }
-                    }
-                }
-                for (let i = 0; i < labels.length; i++) {
-                    if (labels[i].mouseOver() && modifierModeActive) {
-                        noValidTarget = false;
-                        if (labelToModify !== i) {
-                            if (labelToModify >= 0) {
-                                labels[labelToModify].mark(false);
-                            }
-                            labels[i].mark(true);
-                            labelToModify = i;
-                            sequencerAdjusted = false;
-                            showModifierMenu();
-                            showLabelPropMenu();
-                            positionModifierElements();
-                            wireMode = 'none';
-                            reDraw();
-                        }
-                    }
-                }
-                if (noValidTarget && modifierModeActive) {
-                    closeModifierMenu();
-                    unmarkPropTargets();
-                }
                 break;
             case 'addObject':
                 switch (wireMode) {
@@ -595,6 +536,65 @@ function mouseReleased() {
                         }
                         if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                             toggleDiodeAndConpoint();
+                        }
+                        let noValidTarget = true;
+                        for (let i = 0; i < inputs.length; i++) {
+                            if (inputs[i].mouseOver() && modifierModeActive) {
+                                noValidTarget = false;
+                                if (inputToModify !== i) {
+                                    if (inputToModify >= 0) {
+                                        inputs[inputToModify].mark(false);
+                                    }
+                                    inputs[i].mark(true);
+                                    inputToModify = i;
+                                    sequencerAdjusted = false;
+                                    showModifierMenu();
+                                    showInputPropMenu();
+                                    positionModifierElements();
+                                    wireMode = 'none';
+                                    reDraw();
+                                }
+                            }
+                        }
+                        for (let i = 0; i < outputs.length; i++) {
+                            if (outputs[i].mouseOver() && modifierModeActive) {
+                                noValidTarget = false;
+                                if (outputToModify !== i) {
+                                    if (outputToModify >= 0) {
+                                        outputs[outputToModify].mark(false);
+                                    }
+                                    outputs[i].mark(true);
+                                    outputToModify = i;
+                                    sequencerAdjusted = false;
+                                    showModifierMenu();
+                                    showOutputPropMenu();
+                                    positionModifierElements();
+                                    wireMode = 'none';
+                                    reDraw();
+                                }
+                            }
+                        }
+                        for (let i = 0; i < labels.length; i++) {
+                            if (labels[i].mouseOver() && modifierModeActive) {
+                                noValidTarget = false;
+                                if (labelToModify !== i) {
+                                    if (labelToModify >= 0) {
+                                        labels[labelToModify].mark(false);
+                                    }
+                                    labels[i].mark(true);
+                                    labelToModify = i;
+                                    sequencerAdjusted = false;
+                                    showModifierMenu();
+                                    showLabelPropMenu();
+                                    positionModifierElements();
+                                    wireMode = 'none';
+                                    reDraw();
+                                }
+                            }
+                        }
+                        if (noValidTarget && modifierModeActive) {
+                            closeModifierMenu();
+                            unmarkPropTargets();
                         }
                     }
                     break;
