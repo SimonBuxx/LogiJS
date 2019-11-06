@@ -6,10 +6,10 @@
     It selects all underlying items 
 */
 function handleSelection(x1, y1, x2, y2) {
-    sClickBox.updatePosition(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
-    sClickBox.updateSize(x2 - x1, y2 - y1);
-    sClickBox.setTransform(transform);
-    showSClickBox = true;
+    selectionBox.updatePosition(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+    selectionBox.updateSize(x2 - x1, y2 - y1);
+    selectionBox.setTransform(transform);
+    showSelectionBox = true;
     selection = [];
     segIndizees = [];
     wireIndices = [];
@@ -119,7 +119,7 @@ function compWires(a, b) {
     Moves the selected items by dx, dy
 */
 function moveSelection(dx, dy) {
-    sClickBox.updatePosition(sClickBox.x + dx, sClickBox.y + dy);
+    selectionBox.updatePosition(selectionBox.x + dx, selectionBox.y + dy);
     let wireCount = selection[selection.length - 1];
     let preLength = selection[selection.length - 2];
     for (let i = 0; i < preLength; i++) {

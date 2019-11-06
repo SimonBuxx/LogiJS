@@ -97,13 +97,14 @@ function load(loadData) {
     labels = [];
     segDisplays = [];
     transform = new Transformation(0, 0, 1);
-    gridSize = GRIDSIZE;
+    currentGridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
     actionRedo = [];
     endSimulation(); // End ongoing simulations
     disableButtons(true);
     simButton.elt.disabled = true;
     saveButton.elt.disabled = true;
+    captInput.value(loadData.caption);
     // Load all gate parameters and create new gates based on that information
     for (let i = 0; i < loadData.gates.length; i++) {
         gates[i] = new LogicGate(JSON.parse(loadData.gates[i].x), JSON.parse(loadData.gates[i].y), transform, JSON.parse(loadData.gates[i].direction),

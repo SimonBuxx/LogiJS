@@ -108,14 +108,12 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'moveSel':
-                ctrlMode = "select";
-                showSClickBox = false;
+                setControlMode('select');
                 selection = _.cloneDeep(act.actionObject);
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
                 finishSelection();
-                ctrlMode = "none";
+                setControlMode('modify');
                 selection = [];
-                unmarkAll();
                 actionRedo.push(act);
                 break;
             case 'delSel':
@@ -276,14 +274,12 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'moveSel':
-                ctrlMode = "select";
-                showSClickBox = false;
+                setControlMode('select');
                 selection = _.cloneDeep(act.actionObject);
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
                 finishSelection();
-                ctrlMode = "none";
+                setControlMode('modify');
                 selection = [];
-                unmarkAll();
                 actionUndo.push(act);
                 break;
             case 'delSel': // TODO

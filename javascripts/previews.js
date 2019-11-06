@@ -385,20 +385,20 @@ function showElementPreview() {
                 fill(255);
                 strokeWeight(3);
 
-                rect(mx + GRIDSIZE / 2, my, GRIDSIZE * Math.max(Math.max((segBits + 1), Math.pow(2, segBits).toString().length * 2), 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
+                rect(mx + GRIDSIZE / 2, my, GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
 
                 noStroke();
                 textSize(80);
                 textAlign(CENTER, CENTER);
                 fill(0);
                 let txt = '';
-                for (let i = 0; i < Math.pow(2, segBits).toString().length; i++) {
+                for (let i = 0; i < Math.pow(2, sevenSegmentBits).toString().length; i++) {
                     txt += '0';
                 }
-                text(txt, mx + GRIDSIZE * Math.max(Math.max((segBits + 1), Math.pow(2, segBits).toString().length * 2), 3) / 2, my + (GRIDSIZE * 3) / 2);
+                text(txt, mx + GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) / 2, my + (GRIDSIZE * 3) / 2);
 
                 // Draw inputs
-                for (let i = 1; i <= segBits; i++) {
+                for (let i = 1; i <= sevenSegmentBits; i++) {
                     // Draw inputs
                     stroke(0);
                     strokeWeight(3);

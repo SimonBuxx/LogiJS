@@ -2,15 +2,13 @@
 // Contains functions for the modifier mode
 
 function enterModifierMode() {
-    modifierModeActive = true;
-    setControlMode('none');
+    setControlMode('modify');
     setActive(modifierModeButton);
     disableButtons(false);
     addType = 0;
 }
 
 function leaveModifierMode() {
-    modifierModeActive = false;
     closeModifierMenu();
     unmarkPropTargets();
 }
@@ -316,7 +314,7 @@ function setColorButtonVisibility(show) {
 }
 
 function modifierMenuDisplayed() {
-    return (modifierModeActive && (inputToModify + outputToModify + labelToModify >= -2));
+    return (controlMode === 'modify' && (inputToModify + outputToModify + labelToModify >= -2));
 }
 
 function adjustSequencer(io, top) {
