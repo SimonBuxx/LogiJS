@@ -56,7 +56,7 @@
       "x2": "660"
     },
     {
-      "x1": "150",
+      "x1": "210",
       "y1": "0",
       "y2": "30"
     },
@@ -67,7 +67,7 @@
     },
     {
       "x1": "0",
-      "y1": "300",
+      "y1": "360",
       "x2": "30"
     },
     {
@@ -98,7 +98,7 @@
     {
       "x1": "30",
       "y1": "60",
-      "y2": "300"
+      "y2": "360"
     }
   ],
   "conpoints": [
@@ -117,17 +117,17 @@
     {
       "x": "360",
       "y": "150",
-      "txt": "Hey there! Welcome to LogiJS.\nThis is a little circuit you can use as a starting point for experimenting with the software.\nThe tutorial in the box below will help you with your first steps. Have fun!"
+      "txt": "Hello! Welcome to LogiJS.\nYou can use this sketch as a starting point for experimenting with LogiJS.\nHave fun!"
     },
     {
-      "x": "150",
+      "x": "210",
       "y": "60",
       "txt": "Click here to start the simulation!"
     },
     {
       "x": "60",
       "y": "180",
-      "txt": "These are your standard\nobjects you will need to\nbuild sketches."
+      "txt": "These are the standard\nobjects you will need to\nbuild sketches."
     }
   ],
   "segDisplays": []

@@ -125,6 +125,7 @@ let labelToModify = -1;
 let modifierMenuX, modifierMenuY;
 
 let sequencerAdjusted = false;
+let clickedOutOfGUI = false;
 
 /*
     These are the modifier elements and their descriptional labels.
@@ -2420,7 +2421,7 @@ function showElements() {
         }
     }
 
-    textFont('monospace');
+    textFont('Consolas');
     if (gates.length > 0) {
         for (const elem of gates) {
             elem.show();
@@ -2464,7 +2465,7 @@ function showElements() {
     }
 
     if (ctrlMode === 'addObject') {
-        textFont('monospace');
+        textFont('Consolas');
         showElementPreview();
     }
 

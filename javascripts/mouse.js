@@ -239,6 +239,12 @@ function mouseDragged() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
+    if (modifierMenuDisplayed() && !mouseOverGUI()) {
+        clickedOutOfGUI = true;
+    } else {
+        clickedOutOfGUI = false;
+    }
+    console.log(clickedOutOfGUI);
     if (loading || customDialog || modifierMenuDisplayed()) { return; }
 
     if (ctrlMode !== 'select') {
@@ -400,7 +406,7 @@ function mouseReleased() {
     if (loading || customDialog) { return; }
     let justClosedMenu = false;
     if (modifierMenuDisplayed()) {
-        if (!mouseOverGUI()) {
+        if (!mouseOverGUI() && clickedOutOfGUI) {
             closeModifierMenu();
             unmarkPropTargets();
             justClosedMenu = true;
@@ -535,10 +541,8 @@ function mouseReleased() {
                             if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                                 toggleDiodeAndConpoint();
                             }
-                            let noValidTarget = true;
                             for (let i = 0; i < inputs.length; i++) {
                                 if (inputs[i].mouseOver() && modifierModeActive) {
-                                    noValidTarget = false;
                                     if (inputToModify !== i) {
                                         if (inputToModify >= 0) {
                                             inputs[inputToModify].mark(false);
@@ -556,7 +560,6 @@ function mouseReleased() {
                             }
                             for (let i = 0; i < outputs.length; i++) {
                                 if (outputs[i].mouseOver() && modifierModeActive) {
-                                    noValidTarget = false;
                                     if (outputToModify !== i) {
                                         if (outputToModify >= 0) {
                                             outputs[outputToModify].mark(false);
@@ -574,7 +577,6 @@ function mouseReleased() {
                             }
                             for (let i = 0; i < labels.length; i++) {
                                 if (labels[i].mouseOver() && modifierModeActive) {
-                                    noValidTarget = false;
                                     if (labelToModify !== i) {
                                         if (labelToModify >= 0) {
                                             labels[labelToModify].mark(false);
@@ -589,10 +591,6 @@ function mouseReleased() {
                                         reDraw();
                                     }
                                 }
-                            }
-                            if (noValidTarget && modifierModeActive) {
-                                closeModifierMenu();
-                                unmarkPropTargets();
                             }
                         }
                     }
