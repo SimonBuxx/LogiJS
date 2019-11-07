@@ -735,6 +735,7 @@ function setup() { // jshint ignore:line
 
     sfcheckbox = createCheckbox('Sync Ticks', true);
     sfcheckbox.hide();
+    sfcheckbox.elt.title = 'If this is deactivated, the simulation is executed as fast as possible. Otherwise, the speed is synced to the frame rate.';
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
         if (!sfcheckbox.checked() && simRunning) {
@@ -2151,9 +2152,9 @@ function updateTick() {
     // They adopt the state of their group A (horizontal wire)
     // and if they are high, they pass that event to group B
     for (const value of diodes) {
-        value.state = groups[value.gA].state;
+        value.state = groups[value.groupA].state;
         if (value.state) {
-            groups[value.gB].diodeHigh();
+            groups[value.groupB].diodeHigh();
         }
     }
 }

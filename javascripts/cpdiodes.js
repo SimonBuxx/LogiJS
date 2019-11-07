@@ -63,11 +63,6 @@ function deleteDiode(diodeNumber) {
     reDraw();
 }
 
-/*
-    Creates a new diode if the point meets the requirements
-    gA: Group A (horizontal, not influenced by the vertical wire)
-    gB: Group B (vertical, synced to group A)
-*/
 function createDiode(x, y, state) {
     diodes.push(new Diode(x, y, state, transform));
     diodes[diodes.length - 1].updateClickBox();

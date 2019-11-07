@@ -443,10 +443,10 @@ CustomSketch.prototype.update = function () {
     }
 
     for (let i = 0; i < this.objects[DINUM].length; i++) {
-        if (this.groups[this.objects[DINUM][i].gA].state) {
-            this.groups[this.objects[DINUM][i].gB].diodeHigh();
+        if (this.groups[this.objects[DINUM][i].groupA].state) {
+            this.groups[this.objects[DINUM][i].groupB].diodeHigh();
         }
-        this.objects[DINUM][i].state = this.groups[this.objects[DINUM][i].gA].state;
+        this.objects[DINUM][i].state = this.groups[this.objects[DINUM][i].groupA].state;
     }
 };
 

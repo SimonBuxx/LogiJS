@@ -5,13 +5,12 @@ function Diode(x, y, state, transform) {
     this.y = y; // Y position
     this.transform = transform;
     this.state = state; // State of the diode
-    this.cp = false; // True, if the diode was placed on a ConPoint
 
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
 
-    this.gA = -1; // Group A (Horizontal crossing)
-    this.gB = -1; // Group B (Vertical Crossing)
+    this.groupA = -1; // Group A (Horizontal crossing)
+    this.groupB = -1; // Group B (Vertical Crossing)
 
     this.clickBox = new ClickBox(this.x, this.y, 20, 20, this.transform);
 
@@ -40,8 +39,8 @@ function Diode(x, y, state, transform) {
     };
 
     this.setGroups = function (a, b) {
-        this.gA = a;
-        this.gB = b;
+        this.groupA = a;
+        this.groupB = b;
     };
 
     /*
@@ -64,13 +63,6 @@ function Diode(x, y, state, transform) {
     */
     this.mouseOver = function () {
         return this.clickBox.mouseOver();
-    };
-
-    /*
-        Checks if a certain point is in the diode
-    */
-    this.pointInDiode = function (dummy, px, py) {
-        return this.clickBox.checkPoint(px, py);
     };
 
     this.show = function () {
