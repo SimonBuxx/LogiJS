@@ -12,7 +12,7 @@ function CustomSketch(x, y, transform, direction, file) {
     this.w = 2 * GRIDSIZE;      // Width of the custom object in pixels
     this.h = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1, this.outputCount - 1); // Height in pixels
 
-    this.height = Math.max(this.outputCount + 1, this.inputCount + 1); // Height of the custom object in grid cells
+    this.gridHeight = Math.max(this.outputCount + 1, this.inputCount + 1); // Height of the custom object in grid cells
 
     this.objects = [];    // Contains all objects (gates, wires, etc.) the custom object consists of
     this.filename = file; // The name of the json file the custom object is loaded from
@@ -100,7 +100,7 @@ CustomSketch.prototype.reSize = function () {
         this.w = 2 * GRIDSIZE + GRIDSIZE * Math.max(this.inputCount - 1 - this.tops, this.outputCount - 1);
         this.h = 2 * GRIDSIZE + Math.max(this.tops - 1, 0) * GRIDSIZE;
     }
-    this.height = Math.max(this.inputCount - this.tops, this.outputCount) + 1;
+    this.gridHeight = Math.max(this.inputCount - this.tops, this.outputCount) + 1;
     this.updateClickBoxes();
 };
 
@@ -126,9 +126,8 @@ CustomSketch.prototype.setInput = function (i, s) {
 CustomSketch.prototype.alterPosition = function (x1, y1) {
     this.x += x1;
     this.y += y1;
-    this.reSize();
     this.setCoordinates(this.x, this.y);
-    this.reSize();
+    this.updateClickBoxes();
 };
 
 /*
@@ -165,13 +164,6 @@ CustomSketch.prototype.setSketchParams = function (params) {
 */
 CustomSketch.prototype.setCaption = function (caption) {
     this.caption = caption;
-};
-
-/*
-    Returns the filename for sketch.js to load the sketch
-*/
-CustomSketch.prototype.getFilename = function () {
-    return this.filename;
 };
 
 /*
@@ -477,18 +469,18 @@ CustomSketch.prototype.updateClickBoxes = function () {
     for (let i = 0; i < this.inputClickBoxes.length; i++) {
         if (!this.objects[INPNUM][i].isTop) {
             switch (this.direction) {
-                case 0: this.inputClickBoxes[i].updatePosition(this.x, this.y + (this.h * ((i - tops) + 1)) / this.height); break;
-                case 1: this.inputClickBoxes[i].updatePosition(this.x + (this.w * ((i - tops) + 1)) / this.height, this.y); break;
-                case 2: this.inputClickBoxes[i].updatePosition(this.x + this.w, this.y + (this.h * ((i - tops) + 1)) / this.height); break;
-                case 3: this.inputClickBoxes[i].updatePosition(this.x + (this.w * ((i - tops) + 1)) / this.height, this.y + this.h); break;
+                case 0: this.inputClickBoxes[i].updatePosition(this.x, this.y + (this.h * ((i - tops) + 1)) / this.gridHeight); break;
+                case 1: this.inputClickBoxes[i].updatePosition(this.x + (this.w * ((i - tops) + 1)) / this.gridHeight, this.y); break;
+                case 2: this.inputClickBoxes[i].updatePosition(this.x + this.w, this.y + (this.h * ((i - tops) + 1)) / this.gridHeight); break;
+                case 3: this.inputClickBoxes[i].updatePosition(this.x + (this.w * ((i - tops) + 1)) / this.gridHeight, this.y + this.h); break;
             }
         } else {
             tops++;
             switch (this.direction) {
-                case 0: this.inputClickBoxes[i].updatePosition(this.x + (this.h * tops) / this.height, this.y); break;
-                case 1: this.inputClickBoxes[i].updatePosition(this.x + this.w, this.y + (this.w * tops) / this.height); break;
-                case 2: this.inputClickBoxes[i].updatePosition(this.x + (this.h * tops) / this.height, this.y + this.h); break;
-                case 3: this.inputClickBoxes[i].updatePosition(this.x, this.y + (this.w * tops) / this.height); break;
+                case 0: this.inputClickBoxes[i].updatePosition(this.x + (this.h * tops) / this.gridHeight, this.y); break;
+                case 1: this.inputClickBoxes[i].updatePosition(this.x + this.w, this.y + (this.w * tops) / this.gridHeight); break;
+                case 2: this.inputClickBoxes[i].updatePosition(this.x + (this.h * tops) / this.gridHeight, this.y + this.h); break;
+                case 3: this.inputClickBoxes[i].updatePosition(this.x, this.y + (this.w * tops) / this.gridHeight); break;
             }
         }
         this.inputClickBoxes[i].setTransform(this.transform);
@@ -497,10 +489,10 @@ CustomSketch.prototype.updateClickBoxes = function () {
     // Update output clickBoxes
     for (let i = 0; i < this.outputClickBoxes.length; i++) {
         switch (this.direction) {
-            case 0: this.outputClickBoxes[i].updatePosition(this.x + this.w, this.y + (this.h * (i + 1)) / this.height); break;
-            case 1: this.outputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.height, this.y + this.h); break;
-            case 2: this.outputClickBoxes[i].updatePosition(this.x, this.y + (this.h * (i + 1)) / this.height); break;
-            case 3: this.outputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.height, this.y); break;
+            case 0: this.outputClickBoxes[i].updatePosition(this.x + this.w, this.y + (this.h * (i + 1)) / this.gridHeight); break;
+            case 1: this.outputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.gridHeight, this.y + this.h); break;
+            case 2: this.outputClickBoxes[i].updatePosition(this.x, this.y + (this.h * (i + 1)) / this.gridHeight); break;
+            case 3: this.outputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.gridHeight, this.y); break;
         }
 
         this.outputClickBoxes[i].setTransform(this.transform);
@@ -603,26 +595,26 @@ CustomSketch.prototype.show = function () {
             switch (this.direction) {
                 case 0:
                     x1 = this.x - 6;
-                    y1 = this.y + (this.h * (i - tops)) / this.height;
+                    y1 = this.y + (this.h * (i - tops)) / this.gridHeight;
                     x2 = this.x;
-                    y2 = this.y + (this.h * (i - tops)) / this.height;
+                    y2 = this.y + (this.h * (i - tops)) / this.gridHeight;
                     break;
                 case 1:
-                    x1 = this.x + (this.w * (i - tops)) / this.height;
+                    x1 = this.x + (this.w * (i - tops)) / this.gridHeight;
                     y1 = this.y - 6;
-                    x2 = this.x + (this.w * (i - tops)) / this.height;
+                    x2 = this.x + (this.w * (i - tops)) / this.gridHeight;
                     y2 = this.y;
                     break;
                 case 2:
                     x1 = this.x + this.w;
-                    y1 = this.y + (this.h * (i - tops)) / this.height;
+                    y1 = this.y + (this.h * (i - tops)) / this.gridHeight;
                     x2 = this.x + this.w + 6;
-                    y2 = this.y + (this.h * (i - tops)) / this.height;
+                    y2 = this.y + (this.h * (i - tops)) / this.gridHeight;
                     break;
                 case 3:
-                    x1 = this.x + (this.w * (i - tops)) / this.height;
+                    x1 = this.x + (this.w * (i - tops)) / this.gridHeight;
                     y1 = this.y + this.h;
-                    x2 = this.x + (this.w * (i - tops)) / this.height;
+                    x2 = this.x + (this.w * (i - tops)) / this.gridHeight;
                     y2 = this.y + this.h + 6;
                     break;
                 default:
@@ -632,28 +624,28 @@ CustomSketch.prototype.show = function () {
             tops++;
             switch (this.direction) {
                 case 0:
-                    x1 = this.x + (this.h * tops) / this.height;
+                    x1 = this.x + (this.h * tops) / this.gridHeight;
                     y1 = this.y - 6;
-                    x2 = this.x + (this.h * tops) / this.height;
+                    x2 = this.x + (this.h * tops) / this.gridHeight;
                     y2 = this.y;
                     break;
                 case 1:
                     x1 = this.x + this.w + 6;
-                    y1 = this.y + (this.w * tops) / this.height;
+                    y1 = this.y + (this.w * tops) / this.gridHeight;
                     x2 = this.x + this.w;
-                    y2 = this.y + (this.w * tops) / this.height;
+                    y2 = this.y + (this.w * tops) / this.gridHeight;
                     break;
                 case 2:
-                    x1 = this.x + (this.h * tops) / this.height;
+                    x1 = this.x + (this.h * tops) / this.gridHeight;
                     y1 = this.y + this.h;
-                    x2 = this.x + (this.h * tops) / this.height;
+                    x2 = this.x + (this.h * tops) / this.gridHeight;
                     y2 = this.y + this.h + 6;
                     break;
                 case 3:
                     x1 = this.x;
-                    y1 = this.y + (this.w * tops) / this.height;
+                    y1 = this.y + (this.w * tops) / this.gridHeight;
                     x2 = this.x - 6;
-                    y2 = this.y + (this.w * tops) / this.height;
+                    y2 = this.y + (this.w * tops) / this.gridHeight;
                     break;
                 default:
                     console.log('Gate direction doesn\'t exist!');
@@ -763,26 +755,26 @@ CustomSketch.prototype.show = function () {
         switch (this.direction) {
             case 0:
                 x1 = this.x + this.w;
-                y1 = this.y + (this.h * i) / this.height;
+                y1 = this.y + (this.h * i) / this.gridHeight;
                 x2 = this.x + this.w + 6;
-                y2 = this.y + (this.h * i) / this.height;
+                y2 = this.y + (this.h * i) / this.gridHeight;
                 break;
             case 1:
-                x1 = this.x + (this.w * i) / this.height;
+                x1 = this.x + (this.w * i) / this.gridHeight;
                 y1 = this.y + this.h;
-                x2 = this.x + (this.w * i) / this.height;
+                x2 = this.x + (this.w * i) / this.gridHeight;
                 y2 = this.y + this.h + 6;
                 break;
             case 2:
                 x1 = this.x - 6;
-                y1 = this.y + (this.h * i) / this.height;
+                y1 = this.y + (this.h * i) / this.gridHeight;
                 x2 = this.x;
-                y2 = this.y + (this.h * i) / this.height;
+                y2 = this.y + (this.h * i) / this.gridHeight;
                 break;
             case 3:
-                x1 = this.x + (this.w * i) / this.height;
+                x1 = this.x + (this.w * i) / this.gridHeight;
                 y1 = this.y;
-                x2 = this.x + (this.w * i) / this.height;
+                x2 = this.x + (this.w * i) / this.gridHeight;
                 y2 = this.y - 6;
                 break;
             default:

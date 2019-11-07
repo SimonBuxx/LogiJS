@@ -111,10 +111,6 @@ function handleSelection(x1, y1, x2, y2) {
     selection.push(wireSelection.length);
 }
 
-function compWires(a, b) {
-    return ((a.startX === b.startX) && (a.endX === b.endX) && (a.startY === b.startY) && (a.endY === b.endY));
-}
-
 /*
     Moves the selected items by dx, dy
 */

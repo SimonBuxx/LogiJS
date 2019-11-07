@@ -30,7 +30,7 @@ function showElementPreview() {
             w = (Math.max(item.inputs - item.tops.length, item.outputs) + 1) * 30;
         }
 
-        let grid_height = (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
+        let gridHeight = (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
 
         stroke(0);
         strokeWeight(3);
@@ -65,26 +65,26 @@ function showElementPreview() {
                 switch (gateDirection) {
                     case 0:
                         x1 = mx - 6;
-                        y1 = my + (h * (i - tops)) / grid_height;
+                        y1 = my + (h * (i - tops)) / gridHeight;
                         x2 = mx;
-                        y2 = my + (h * (i - tops)) / grid_height;
+                        y2 = my + (h * (i - tops)) / gridHeight;
                         break;
                     case 1:
-                        x1 = mx + (w * (i - tops)) / grid_height;
+                        x1 = mx + (w * (i - tops)) / gridHeight;
                         y1 = my - 6;
-                        x2 = mx + (w * (i - tops)) / grid_height;
+                        x2 = mx + (w * (i - tops)) / gridHeight;
                         y2 = my;
                         break;
                     case 2:
                         x1 = mx + w;
-                        y1 = my + (h * (i - tops)) / grid_height;
+                        y1 = my + (h * (i - tops)) / gridHeight;
                         x2 = mx + w + 6;
-                        y2 = my + (h * (i - tops)) / grid_height;
+                        y2 = my + (h * (i - tops)) / gridHeight;
                         break;
                     case 3:
-                        x1 = mx + (w * (i - tops)) / grid_height;
+                        x1 = mx + (w * (i - tops)) / gridHeight;
                         y1 = my + h;
-                        x2 = mx + (w * (i - tops)) / grid_height;
+                        x2 = mx + (w * (i - tops)) / gridHeight;
                         y2 = my + h + 6;
                         break;
                     default:
@@ -94,28 +94,28 @@ function showElementPreview() {
                 tops++;
                 switch (gateDirection) {
                     case 0:
-                        x1 = mx + (h * tops) / grid_height;
+                        x1 = mx + (h * tops) / gridHeight;
                         y1 = my - 6;
-                        x2 = mx + (h * tops) / grid_height;
+                        x2 = mx + (h * tops) / gridHeight;
                         y2 = my;
                         break;
                     case 1:
                         x1 = mx + w + 6;
-                        y1 = my + (w * tops) / grid_height;
+                        y1 = my + (w * tops) / gridHeight;
                         x2 = mx + w;
-                        y2 = my + (w * tops) / grid_height;
+                        y2 = my + (w * tops) / gridHeight;
                         break;
                     case 2:
-                        x1 = mx + (h * tops) / grid_height;
+                        x1 = mx + (h * tops) / gridHeight;
                         y1 = my + h;
-                        x2 = mx + (h * tops) / grid_height;
+                        x2 = mx + (h * tops) / gridHeight;
                         y2 = my + h + 6;
                         break;
                     case 3:
                         x1 = mx;
-                        y1 = my + (w * tops) / grid_height;
+                        y1 = my + (w * tops) / gridHeight;
                         x2 = mx - 6;
-                        y2 = my + (w * tops) / grid_height;
+                        y2 = my + (w * tops) / gridHeight;
                         break;
                     default:
                         console.log('Gate direction doesn\'t exist!');
