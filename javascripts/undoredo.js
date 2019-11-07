@@ -5,45 +5,37 @@ function undo() {
     if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
-                gates.pop();
+                gates.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
                 break;
             case 'addCust':
-                let toDelete = -1;
                 for (let i = customs.length - 1; i >= 0; i--) {
-                    if (customs[i].visible) {
-                        toDelete = i;
-                        break;
-                    }
-                }
-                for (let i = customs.length - 1; i >= 0; i--) {
-                    if (customs[i].pid === customs[toDelete].id) {
+                    if (customs[i].pid === customs[act.actionIndizes[0]].id) {
                         customs.splice(i, 1);
                     }
                 }
-                customs.splice(toDelete, 1);
+                customs.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
                 break;
             case 'addOut':
-                outputs.pop();
+                outputs.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
                 break;
             case 'addIn':
-                inputs.pop();
+                inputs.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
                 break;
             case 'addSegDis':
-                segDisplays.pop();
+                segDisplays.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
                 break;
             case 'addDi':
+                diodes.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
-                diodes.pop();
-                doConpoints();
                 break;
             case 'addLabel':
+                labels.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
-                labels.pop();
                 break;
             case 'invGIP':
                 gates[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
@@ -66,47 +58,44 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'delGate':
-                gates.splice(act.actionObject[1], 0, act.actionObject[0][0]);
+                gates.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionRedo.push(act);
                 break;
             case 'delCust':
-                customs.splice(act.actionObject[1], 0, act.actionObject[0][0]);
+                customs.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 setLoading(true);
-                customs[act.actionObject[1]].parsed = false;
-                loadCustomFile(customs[act.actionObject[1]].filename, act.actionObject[1], act.actionObject[1]);
+                customs[act.actionIndizes[0]].parsed = false;
+                loadCustomFile(customs[act.actionIndizes[0]].filename, act.actionIndizes[0], act.actionIndizes[0]);
                 actionRedo.push(act);
                 break;
             case 'delOut':
-                outputs.push(act.actionObject[0]);
+                outputs.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionRedo.push(act);
                 break;
             case 'delSegDis':
-                segDisplays.push(act.actionObject[0]);
+                segDisplays.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionRedo.push(act);
                 break;
             case 'delIn':
-                inputs.push(act.actionObject[0]);
+                inputs.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionRedo.push(act);
                 break;
             case 'delDi':
-                diodes.push(act.actionObject[0]);
+                diodes.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionRedo.push(act);
-                doConpoints();
                 break;
             case 'delCp':
                 actionRedo.push(act);
                 conpoints.splice(act.actionIndizes[0], 0, act.actionObject[0]);
-                doConpoints();
                 break;
             case 'delLabel':
-                labels.push(act.actionObject[0]);
+                labels.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionRedo.push(act);
                 break;
             case 'swiDi':
                 diodes.splice(act.actionIndizes[0], 0, act.actionObject[0][0]);
                 conpoints.splice(act.actionIndizes[1], 1);
                 actionRedo.push(act);
-                doConpoints();
                 break;
             case 'moveSel':
                 setControlMode('select');
@@ -171,89 +160,77 @@ function redo() {
     if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
-                gates.push(act.actionObject);
+                gates.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionUndo.push(act);
                 break;
             case 'addCust':
-                customs.push(act.actionObject);
+                customs.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 setLoading(true);
-                customs[customs.length - 1].parsed = false;
-                loadCustomFile(customs[customs.length - 1].filename, customs.length - 1, customs.length - 1);
+                customs[act.actionIndizes[0]].parsed = false;
+                loadCustomFile(customs[act.actionIndizes[0]].filename, act.actionIndizes[0], act.actionIndizes[0]);
                 actionUndo.push(act);
                 break;
             case 'addOut':
-                outputs.push(act.actionObject);
+                outputs.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionUndo.push(act);
                 break;
             case 'addIn':
-                inputs.push(act.actionObject);
+                inputs.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionUndo.push(act);
                 break;
             case 'addSegDis':
-                segDisplays.push(act.actionObject);
+                segDisplays.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionUndo.push(act);
                 break;
             case 'addDi':
-                diodes.push(act.actionObject);
+                diodes.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionUndo.push(act);
-                doConpoints();
                 break;
             case 'addLabel':
-                labels.push(act.actionObject);
+                labels.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 actionUndo.push(act);
                 break;
             case 'delGate':
-                gates.splice(act.actionObject[1], 1);
+                gates.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
                 break;
             case 'delCust':
-                let toDelete = act.actionObject[0][0];
                 for (let i = customs.length - 1; i >= 0; i--) {
-                    if (customs[i].pid === toDelete.id) {
+                    if (customs[i].pid === act.actionObject[0].id) {
                         customs.splice(i, 1);
                     }
                 }
-                customs.splice(customs.indexOf(toDelete), 1);
+                customs.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
                 break;
             case 'delOut':
-                outputs.pop();
+                outputs.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
                 break;
             case 'delIn':
-                inputs.pop();
+                inputs.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
                 break;
             case 'delSegDis':
-                segDisplays.pop();
+                segDisplays.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
                 break;
             case 'delDi':
+                diodes.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
-                let x = diodes[diodes.length - 1].x;
-                let y = diodes[diodes.length - 1].y;
-                if (diodes[diodes.length - 1].cp) {
-                    diodes.pop();
-                    createConpoint(x, y, false, -1);
-                } else {
-                    diodes.pop();
-                }
-                doConpoints();
                 break;
             case 'delCp':
                 conpoints.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
-                doConpoints();
                 break;
             case 'delLabel':
-                labels.pop();
-                actionUndo.push(act[0]);
+                labels.splice(act.actionIndizes[0], 1);
+                actionUndo.push(act);
                 break;
             case 'swiDi':
                 diodes.splice(act.actionIndizes[0], 1);
                 conpoints.splice(act.actionIndizes[1], 0, act.actionObject[1]);
                 actionUndo.push(act);
-                doConpoints();
                 break;
             case 'invGIP':
                 gates[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);

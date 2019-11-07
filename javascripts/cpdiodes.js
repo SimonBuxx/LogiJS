@@ -66,7 +66,7 @@ function deleteDiode(diodeNumber) {
 function createDiode(x, y, state) {
     diodes.push(new Diode(x, y, state, transform));
     diodes[diodes.length - 1].updateClickBox();
-    pushUndoAction('addDi', [], diodes[diodes.length - 1]);
+    pushUndoAction('addDi', [diodes.length - 1], [diodes[diodes.length - 1]]);
 }
 
 /*

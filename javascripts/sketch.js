@@ -1714,21 +1714,21 @@ function addGate(type, inputs, direction) {
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
-            pushUndoAction('addGate', [], newGate);
+            pushUndoAction('addGate', [gates.length - 1], [newGate]);
             break;
         case 2:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
-            pushUndoAction('addGate', [], newGate);
+            pushUndoAction('addGate', [gates.length - 1], [newGate]);
             break;
         case 3:
             newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
-            pushUndoAction('addGate', [], newGate);
+            pushUndoAction('addGate', [gates.length - 1], [newGate]);
             break;
         default:
             console.log('Gate type \'' + type + '\' not found!');
@@ -1753,7 +1753,7 @@ function addCustom(file, direction) {
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     customs.push(newCustom);
     loadCustomFile(newCustom.filename, customs.length - 1, customs.length - 1);
-    pushUndoAction('addCust', [], newCustom);
+    pushUndoAction('addCust', [customs.length - 1], [newCustom]);
 }
 
 /*
@@ -1770,7 +1770,7 @@ function addOutput() {
     newOutput.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newOutput.updateClickBox();
     outputs.push(newOutput);
-    pushUndoAction('addOut', [], newOutput);
+    pushUndoAction('addOut', [outputs.length - 1], [newOutput]);
     reDraw();
 }
 
@@ -1788,7 +1788,7 @@ function addSegDisplay(bits) {
     newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newDisplay.updateClickBoxes();
     segDisplays.push(newDisplay);
-    pushUndoAction('addSegDis', [], newDisplay);
+    pushUndoAction('addSegDis', [segDisplays.length - 1], [newDisplay]);
     reDraw();
 }
 
@@ -1814,7 +1814,7 @@ function addInput() {
     }
     newInput.clock = newIsClock;
     inputs.push(newInput);
-    pushUndoAction('addIn', [], newInput);
+    pushUndoAction('addIn', [inputs.length - 1], [newInput]);
     reDraw();
 }
 
@@ -1832,7 +1832,7 @@ function addLabel() {
     newLabel.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newLabel.updateClickBox();
     labels.push(newLabel);
-    pushUndoAction('addLabel', [], newLabel);
+    pushUndoAction('addLabel', [labels.length - 1], [newLabel]);
     reDraw();
 }
 
@@ -1840,7 +1840,7 @@ function addLabel() {
     Deletes the given gate
 */
 function deleteGate(gateNumber) {
-    pushUndoAction('delGate', [], [gates.splice(gateNumber, 1), gateNumber]);
+    pushUndoAction('delGate', [gateNumber], gates.splice(gateNumber, 1));
     reDraw();
 }
 
@@ -1853,7 +1853,7 @@ function deleteCustom(customNumber) {
             customs.splice(i, 1);
         }
     }
-    pushUndoAction('delCust', [], [customs.splice(customNumber, 1), customNumber]);
+    pushUndoAction('delCust', [customNumber], customs.splice(customNumber, 1));
     reDraw();
 }
 
@@ -1861,7 +1861,7 @@ function deleteCustom(customNumber) {
     Deletes the given output (lamp)
 */
 function deleteOutput(outputNumber) {
-    pushUndoAction('delOut', [], outputs.splice(outputNumber, 1));
+    pushUndoAction('delOut', [outputNumber], outputs.splice(outputNumber, 1));
     reDraw();
 }
 
@@ -1869,7 +1869,7 @@ function deleteOutput(outputNumber) {
     Deletes the given input (switch)
 */
 function deleteInput(inputNumber) {
-    pushUndoAction('delIn', [], inputs.splice(inputNumber, 1));
+    pushUndoAction('delIn', [inputNumber], inputs.splice(inputNumber, 1));
     reDraw();
 }
 
@@ -1877,7 +1877,7 @@ function deleteInput(inputNumber) {
     Deletes the given label
 */
 function deleteLabel(labelNumber) {
-    pushUndoAction('delLabel', [], labels.splice(labelNumber, 1));
+    pushUndoAction('delLabel', [labelNumber], labels.splice(labelNumber, 1));
     reDraw();
 }
 
@@ -1885,7 +1885,7 @@ function deleteLabel(labelNumber) {
     Deletes the given 7-segment display
 */
 function deleteSegDisplay(segDisNumber) {
-    pushUndoAction('delSegDis', [], segDisplays.splice(segDisNumber, 1));
+    pushUndoAction('delSegDis', [segDisNumber], segDisplays.splice(segDisNumber, 1));
     reDraw();
 }
 
