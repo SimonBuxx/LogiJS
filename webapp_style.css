@@ -250,6 +250,10 @@ body {
     padding: 10px;
 }
 
+.textInput:disabled {
+    background-color: rgb(200, 200, 200);
+}
+
 .topBox {
     appearance: none;
     -webkit-appearance: none;

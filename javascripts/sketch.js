@@ -201,6 +201,8 @@ let justClosedMenu = false;
 */
 let previewImg;
 
+let moduleNameChanged = false;
+
 /*
     These variable is set, if a negation, connection point or diode preview was added to the last drawn frame.
     In this case, the canvas will be redrawn with the next mouse movement.
@@ -806,7 +808,10 @@ function setup() { // jshint ignore:line
     captInput.elt.style.fontFamily = 'Open Sans';
     captInput.elt.className = 'textInput saveInput';
     captInput.size(180, 27);
-    captInput.changed(showPreviewImage);
+    captInput.elt.onkeyup = function () {
+        moduleNameChanged = true;
+        reDraw();
+    };
     captInput.hide();
 
     sketchNameInput = createInput('');
@@ -814,10 +819,12 @@ function setup() { // jshint ignore:line
     sketchNameInput.position(windowWidth / 2 - 63, windowHeight / 2 - 104);
     sketchNameInput.elt.style.fontFamily = 'Open Sans';
     sketchNameInput.elt.className = 'textInput saveInput';
-    sketchNameInput.changed(function() {
-        captInput.value(sketchNameInput.value());
-        showImportPreview(getThisLook(), window.width / 2 - 330, window.height / 2 - 36);
-    });
+    sketchNameInput.elt.onkeyup = function() {
+        if (!captInput.elt.disabled && !moduleNameChanged) {
+            captInput.value(sketchNameInput.value());
+        }
+        reDraw();
+    };
     sketchNameInput.hide();
 
     descInput = createElement('textarea');
@@ -1196,6 +1203,16 @@ function saveDialogClicked() {
     saveDialogText.show();
     previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
     setLoading(true);
+
+    moduleNameChanged = (captInput.value() !== sketchNameInput.value()) && (captInput.value() !== '');
+
+    captInput.elt.disabled = (outputs.length <= 0);
+    if (outputs.length <= 0) {
+        captInput.value('');
+    } else if (!moduleNameChanged) {
+        captInput.value(sketchNameInput.value());
+    }
+
     reDraw();
 }
 
@@ -1223,7 +1240,6 @@ function newClicked() {
     document.title = 'LogiJS: New Sketch';
     sketchNameInput.value('');
     captInput.value('');
-    sketchNameInput.attribute('placeholder', 'SKETCH NAME');
     findLines();
     reDraw();
 }
@@ -2230,7 +2246,6 @@ function reDraw() {
 
     if (saveDialog) {
         showSaveDialog();
-        showPreviewImage();
     }
 
     if (showCustomDialog) {
@@ -2382,6 +2397,7 @@ function showSaveDialog() {
     fill('rgba(50, 50, 50, 0.95)');
     noStroke();
     rect(window.width / 2 - 365, window.height / 2 - 208, 580, 400);
+    showPreviewImage();
 }
 
 function displayCustomDialog() {
