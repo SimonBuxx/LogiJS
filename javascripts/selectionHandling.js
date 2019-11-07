@@ -11,7 +11,7 @@ function handleSelection(x1, y1, x2, y2) {
     selectionBox.setTransform(transform);
     showSelectionBox = true;
     selection = [];
-    segIndizees = [];
+    segIndices = [];
     wireIndices = [];
     for (let i = 0; i < gates.length; i++) {
         if (gates[i].x >= x1 && gates[i].x <= x2 && gates[i].y >= y1 && gates[i].y <= y2) {
@@ -99,10 +99,10 @@ function handleSelection(x1, y1, x2, y2) {
             return ((a.startX === segments[i].startX) && (a.endX === segments[i].endX) && (a.startY === segments[i].startY) && (a.endY === segments[i].endY));
         }) >= 0) {
             segSelection.push(segments[i]);
-            segIndizees.push(i);
+            segIndices.push(i);
         }
     }
-    segIndizees.reverse();*/
+    segIndices.reverse();*/
     let preLength = selection.length;
     selection = selection.concat(wireSelection);
     //selection = selection.concat(wireIndices);

@@ -108,7 +108,7 @@ let initY = 0;
 /*
     If these aren't zero, the canvas offset has changed
 */
-let lastX = 0; 
+let lastX = 0;
 var lastY = 0;
 
 /*
@@ -170,11 +170,11 @@ let customDialogPages = 0;
 let error = '';
 let errordesc = '';
 
-let previewData = {
-    isCustom: false,
-    customData: {},
-    type: 'none'
-};
+/*
+    This object indicates if and what object preview should be drawn on screen.
+*/
+
+let previewData = {};
 
 let importSketchData = {}; // Contains look and caption of all user sketches that can be imported
 
@@ -183,15 +183,35 @@ let importSketchData = {}; // Contains look and caption of all user sketches tha
 */
 let syncFramerate = true;
 
-let segIndizees = [];
+let segIndices = [];
 let wireIndices = [];
 
+/*
+    These arrays contain the data of custom modules that have already been loaded from server once.
+*/
 let cachedFiles = [];
 let cachedData = [];
-let queue = [];
-let next = 0;
 
+/*
+    This array contains all custom modules that have yet to be loaded to complete the loading of the entire module.
+    It contains file names and index positions in which module to load the data. When loading one module,
+    new submodules will be added to the main queue.
+*/
+let customsToLoadQueue = [];
+
+/*
+    This is the index for the customsToLoadQueue that indicates which module will be loaded next
+*/
+let nextCustomToLoadIndex = 0;
+
+/*
+    This variable is true, when the system is loading a sketch or module. Prevents button clicking, canvas movements etc.
+*/
 let loading = false;
+
+/*
+    This contains the file name of the sketch or module that is currently being loaded.
+*/
 let loadFile = '';
 
 let justClosedMenu = false;
@@ -201,10 +221,14 @@ let justClosedMenu = false;
 */
 let previewImg;
 
+/*
+    This variable indicates whether the user changed the module name of the current sketch. If this is the case,
+    it shouldn't be reset to the sketch name when editing it.
+*/
 let moduleNameChanged = false;
 
 /*
-    These variable is set, if a negation, connection point or diode preview was added to the last drawn frame.
+    These variable is set if a negation, connection point or diode preview was added to the last drawn frame.
     In this case, the canvas will be redrawn with the next mouse movement.
 */
 let removeOldPreview = false;
@@ -228,9 +252,14 @@ let clickedOutOfGUI = false;
 let inputIsTopBox, captionInput, minusLabel, plusLabel; // Input elements
 let redButton, yellowButton, greenButton, blueButton; // Output elements
 let labelTextBox; // Label elements
+
+/*
+    This is a select element that allows the user to alter the in- and output order.
+    It's displayed in the modifier menu of in- and outputs.
+*/
 let sequencer;
 
-let sketchNameInput, captInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
+let sketchNameInput, moduleNameInput, saveDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
 let deleteButton, simButton, labelBasic, labelAdvanced,
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
@@ -241,18 +270,15 @@ let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
 let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 
-//let showHints = true;
-//let hintNum = 0;
-//let closeTutorialButton, nextStepButton;
-/*let hintPic0, hintPic1, hintPic2, hintPic3, hintPic4, hintPic5,
-    hintPic6, hintPic7, hintPic8, hintPic9, hintPic10, hintPic11,
-    hintPic12, hintPic13, hintPic14, hintPic15, hintPic16, hintPic17,
-    hintPic19, hintPic20, hintPic21, hintPic22, hintPic23, hintPic24,
-    hintPic25, hintPic26;*/
-
+/*
+    This is the socket element used for socket communication with the server
+*/
 let socket;
 
-let mainCanvas; // Canvas variable
+/*
+    This is the main HTML5 canvas variable for the sketch area
+*/
+let mainCanvas;
 
 /*
     Disable some error messages from p5
@@ -263,42 +289,6 @@ p5.disableFriendlyErrors = true; // jshint ignore:line
     This line prevents the browser default right-click menu from appearing.
 */
 document.addEventListener('contextmenu', event => event.preventDefault());
-
-/*
-    Executed before setup(), loads all hint images
-*/
-/*function preload() {
-    if (!window.location.href.includes('.com')) {
-        showHints = false;
-        return;
-    }
-    hintPic0 = loadImage('images/hint0.png');
-    hintPic1 = loadImage('images/hint1.png');
-    hintPic2 = loadImage('images/hint2.png');
-    hintPic3 = loadImage('images/hint3.png');
-    hintPic4 = loadImage('images/hint4.png');
-    hintPic5 = loadImage('images/hint5.png');
-    hintPic6 = loadImage('images/hint6.png');
-    hintPic7 = loadImage('images/hint7.png');
-    hintPic8 = loadImage('images/hint8.png');
-    hintPic9 = loadImage('images/hint9.png');
-    hintPic10 = loadImage('images/hint10.png');
-    hintPic11 = loadImage('images/hint11.png');
-    hintPic12 = loadImage('images/hint12.png');
-    hintPic13 = loadImage('images/hint13.png');
-    hintPic14 = loadImage('images/hint14.png');
-    hintPic15 = loadImage('images/hint15.png');
-    hintPic16 = loadImage('images/hint16.png');
-    hintPic17 = loadImage('images/hint17.png');
-    hintPic19 = loadImage('images/hint19.png');
-    hintPic20 = loadImage('images/hint20.png');
-    hintPic21 = loadImage('images/hint21.png');
-    hintPic22 = loadImage('images/hint22.png');
-    hintPic23 = loadImage('images/hint23.png');
-    hintPic24 = loadImage('images/hint24.png');
-    hintPic25 = loadImage('images/hint25.png');
-    hintPic26 = loadImage('images/hint26.png');
-}*/
 
 /*
     Sets up the canvas and caps the framerate
@@ -802,26 +792,26 @@ function setup() { // jshint ignore:line
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = 'button';
 
-    captInput = createInput('');
-    captInput.attribute('placeholder', 'MODULE NAME');
-    captInput.position(windowWidth / 2 - 278, windowHeight / 2 - 104);
-    captInput.elt.style.fontFamily = 'Open Sans';
-    captInput.elt.className = 'textInput saveInput';
-    captInput.size(180, 27);
-    captInput.elt.onkeyup = function () {
+    moduleNameInput = createInput('');
+    moduleNameInput.attribute('placeholder', 'MODULE NAME');
+    moduleNameInput.position(windowWidth / 2 - 278, windowHeight / 2 - 104);
+    moduleNameInput.elt.style.fontFamily = 'Open Sans';
+    moduleNameInput.elt.className = 'textInput saveInput';
+    moduleNameInput.size(180, 27);
+    moduleNameInput.elt.onkeyup = function () {
         moduleNameChanged = true;
         reDraw();
     };
-    captInput.hide();
+    moduleNameInput.hide();
 
     sketchNameInput = createInput('');
     sketchNameInput.attribute('placeholder', 'SKETCH NAME');
     sketchNameInput.position(windowWidth / 2 - 63, windowHeight / 2 - 104);
     sketchNameInput.elt.style.fontFamily = 'Open Sans';
     sketchNameInput.elt.className = 'textInput saveInput';
-    sketchNameInput.elt.onkeyup = function() {
-        if (!captInput.elt.disabled && !moduleNameChanged) {
-            captInput.value(sketchNameInput.value());
+    sketchNameInput.elt.onkeyup = function () {
+        if (!moduleNameInput.elt.disabled && !moduleNameChanged) {
+            moduleNameInput.value(sketchNameInput.value());
         }
         reDraw();
     };
@@ -927,30 +917,6 @@ function setup() { // jshint ignore:line
     dashboardButton.position(windowWidth - 124, 3);
     dashboardButton.elt.className = 'button';
 
-    // Button to close the hints
-    /*closeTutorialButton = createButton('Close Tutorial');
-    closeTutorialButton.position(370, windowHeight - 65);
-    closeTutorialButton.mousePressed(function () {
-        document.cookie = 'ClosedHint=true';
-        showHints = false;
-        hintNum = 0;
-        closeTutorialButton.hide();
-        nextStepButton.hide();
-    });
-    closeTutorialButton.elt.className = 'button';
-
-    // Button to open the next hint
-    nextStepButton = createButton('Next Step');
-    nextStepButton.position(494, windowHeight - 65);
-    nextStepButton.mousePressed(function () {
-        hintNum++;
-    });
-    nextStepButton.elt.className = 'button';
-    if (!showHints) {
-        closeTutorialButton.hide();
-        nextStepButton.hide();
-    }*/
-
     saveDialogText = createP('Save Sketch');
     saveDialogText.hide();
     saveDialogText.elt.style.color = 'white';
@@ -984,7 +950,7 @@ function setup() { // jshint ignore:line
                 let d = JSON.parse(data.data);
                 if (data.success === true) {
                     descInput.value(d.desc);
-                    captInput.value(d.caption);
+                    moduleNameInput.value(d.caption);
                 }
             } catch (e) {
                 if (data.success === true) {
@@ -994,13 +960,6 @@ function setup() { // jshint ignore:line
             socket.off('sketchDescription');
         });
     }
-
-    //Hide hints if there is a cookie 
-    /*if ((getCookieValue('ClosedHint') === 'true')) {
-        showHints = false;
-        closeTutorialButton.hide();
-        nextStepButton.hide();
-    }*/
 
     socket.on('demousererror', function () {
         error = 'Saving failed: No permissions!';
@@ -1041,7 +1000,7 @@ function importCustom(filename) {
     }
 }
 
-function customClicked() { 
+function customClicked() {
     if (showCustomDialog) {
         closeCustomDialog();
         return;
@@ -1119,39 +1078,34 @@ function saveClicked() {
         }, 3000);
         return;
     }
+
     saveSketch(sketchNameInput.value() + '.json', function (look) {
-        console.log(look);
-        document.title = 'LogiJS: ' + sketchNameInput.value();
-        saveDialog = false;
-        saveButton.hide();
-        cancelButton.hide();
-        sketchNameInput.hide();
-        captInput.hide();
-        descInput.hide();
-        saveDialogText.hide();
-        setLoading(false);
-        reDraw();
+        closeSaveDialog();
         look.desc = descInput.value();
+        document.title = 'LogiJS: ' + sketchNameInput.value();
         socket.emit('savePreview', { name: sketchNameInput.value(), img: previewImg, desc: JSON.stringify(look), access_token: getCookieValue('access_token') });
     });
-    justClosedMenu = true;
-    reDraw();
 }
 
 function cancelClicked() {
     if (saveDialog) {
-        saveDialog = false;
-        saveButton.hide();
-        sketchNameInput.hide();
-        captInput.hide();
-        descInput.hide();
-        saveDialogText.hide();
-        setLoading(false);
-        cancelButton.hide();
-        reDraw();
+        closeSaveDialog();
     } else if (showCustomDialog) {
         closeCustomDialog();
     }
+}
+
+function closeSaveDialog() {
+    saveDialog = false;
+    saveButton.hide();
+    sketchNameInput.hide();
+    moduleNameInput.hide();
+    descInput.hide();
+    saveDialogText.hide();
+    cancelButton.hide();
+    disableButtons(false);
+    simButton.elt.disabled = false;
+    saveDialogButton.elt.disabled = false;
     justClosedMenu = true;
 }
 
@@ -1161,17 +1115,12 @@ function closeCustomDialog() {
     simButton.elt.disabled = false;
     saveDialogButton.elt.disabled = false;
     if (controlMode === 'modify') {
-        setActive(modifierModeButton);
+        setActive(modifierModeButton, true);
     }
-    if (getCookieValue('access_token') !== '') {
-        customButton.elt.disabled = false;
-    }
-    //closeTutorialButton.elt.disabled = false;
-    //nextStepButton.elt.disabled = false;
-    updateUndoButtons();
     pageUpButton.hide();
     pageDownButton.hide();
     cancelButton.hide();
+    justClosedMenu = true;
 }
 
 // Triggered when a sketch should be loaded
@@ -1198,19 +1147,22 @@ function saveDialogClicked() {
     cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 118);
     cancelButton.show();
     sketchNameInput.show();
-    captInput.show();
+    moduleNameInput.show();
     descInput.show();
     saveDialogText.show();
     previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
-    setLoading(true);
+    disableButtons(true);
+    simButton.elt.disabled = true;
+    saveDialogButton.elt.disabled = true;
+    customButton.elt.disabled = true;
 
-    moduleNameChanged = (captInput.value() !== sketchNameInput.value()) && (captInput.value() !== '');
+    moduleNameChanged = (moduleNameInput.value() !== sketchNameInput.value()) && (moduleNameInput.value() !== '');
 
-    captInput.elt.disabled = (outputs.length <= 0);
+    moduleNameInput.elt.disabled = (outputs.length <= 0);
     if (outputs.length <= 0) {
-        captInput.value('');
+        moduleNameInput.value('');
     } else if (!moduleNameChanged) {
-        captInput.value(sketchNameInput.value());
+        moduleNameInput.value(sketchNameInput.value());
     }
 
     reDraw();
@@ -1228,9 +1180,7 @@ function newClicked() {
     gateInputSelect.value('2');
     gateDirection = 0;
     directionSelect.value('Right');
-    loading = false;
-    simButton.elt.disabled = false;
-    saveButton.elt.disabled = false;
+    setLoading(false);
     endSimulation(); // End the simulation, if started
     leaveModifierMode();
     enterModifierMode();
@@ -1239,7 +1189,7 @@ function newClicked() {
     showSelectionBox = false;
     document.title = 'LogiJS: New Sketch';
     sketchNameInput.value('');
-    captInput.value('');
+    moduleNameInput.value('');
     findLines();
     reDraw();
 }
@@ -1380,7 +1330,7 @@ function deleteClicked() {
                     delWires[1].push(wireIndizees.pop());
                 } else {
                     delSegments[0].push(selection[i]);
-                    delSegments[1].push(segIndizees.pop());
+                    delSegments[1].push(segIndices.pop());
                 }
             }*/
             error = 'This feature is coming soon!';
@@ -1424,7 +1374,7 @@ function deleteClicked() {
         if (controlMode === 'delete') {
             enterModifierMode();
         } else {
-            setActive(deleteButton);
+            setActive(deleteButton, true);
             setControlMode('delete');
         }
     }
@@ -1708,7 +1658,7 @@ function startSelect() {
     if (controlMode === 'select') {
         enterModifierMode();
     } else {
-        setActive(selectButton);
+        setActive(selectButton, true);
         setControlMode('select');
         setSelectMode('none');
     }
@@ -1951,7 +1901,7 @@ function startSimulation() {
 
     setSimButtonText('<i class="fa fa-stop"></i> Stop'); // Alter the caption of the Start/Stop button
     setControlMode('modify');
-    setUnactive();
+    setActive(simButton, true);
     disableButtons(true);
     hideAllOptions();
 
@@ -2231,12 +2181,7 @@ function reDraw() {
         cursor(ARROW);
     }
 
-    // If the tutorial should be shown, display it on screen
-    /*if (showHints) {
-        showTutorial();
-    }*/
-
-    if (loading && !saveDialog && !showCustomDialog) {
+    if (loading && !showCustomDialog) {
         showMessage('Loading...', loadFile.split('.json')[0]);
     }
 
@@ -2261,114 +2206,6 @@ function reDraw() {
     text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
     text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
 }
-
-/*
-    Displays the hint with number hintNum in a box in the bottom left corner
-*/
-/*function showTutorial() {
-    textFont('Gudea');
-    switch (hintNum) {
-        case 0:
-            displayHint(450, hintPic0, 'Welcome!', 'If this is your first time using LogiJS,',
-                'we suggest you to go through this quick tutorial.');
-            break;
-        case 1:
-            displayHint(600, hintPic1, 'Navigation', 'You can drag the sketch area by dragging with the right',
-                'mouse button pressed. To zoom in and out, use the mouse wheel.');
-            break;
-        case 2:
-            displayHint(500, hintPic2, 'Basic components', 'You can add the standard gate types by clicking on',
-                'the buttons on the left and then clicking on the canvas.');
-            break;
-        case 3:
-            displayHint(450, hintPic3, 'Basic components', 'Placing in- and outputs is just as easy.',
-                'Try adding switches and a lamp next to a gate!');
-            break;
-        case 4:
-            displayHint(600, hintPic4, 'Connecting the dots', 'You can always add wires by simply dragging with the left',
-                'mouse button pressed. Go ahead and connect your components!');
-            break;
-        case 5:
-            displayHint(500, hintPic5, 'Starting the simulation', 'By clicking on the \'Start\' button in the top left corner,',
-                'you can start the simulation. Clicking it again will stop it.');
-            break;
-        case 6:
-            displayHint(500, hintPic6, 'Simulation mode', 'During simulation, you can left-click on the inputs',
-                'you\'ve placed to see your logic circuit act accordingly.');
-            break;
-        case 7:
-            displayHint(650, hintPic7, 'Deleting components', 'Click the \'Delete\' button in the top left corner. Now you can delete',
-                'components by left-clicking on them. To delete wires, just drag over them.');
-            break;
-        case 8:
-            displayHint(500, hintPic8, 'Undo and Redo', 'If you want to undo any change you\'ve made',
-                'to the sketch, just use the \'Undo\' and \'Redo\' buttons.');
-            break;
-        case 9:
-            displayHint(650, hintPic9, 'Switches, Buttons and Clocks', 'In contrast to the switch component you\'ve already used, buttons are ',
-                'only activated for a short period of time when clicked on them.');
-            break;
-        case 10:
-            displayHint(650, hintPic10, 'Switches, Buttons and Clocks', 'Clocks are switches that turn on and off automatically, you can change',
-                'their speed in the properties menu that we\'ll show you in a bit.');
-            break;
-        case 11:
-            displayHint(700, hintPic11, 'Additional settings', 'Some components have properties like input width and direction, that appear',
-                'in the bottom left when clicking on the corresponding component button.');
-            break;
-        case 12:
-            displayHint(700, hintPic12, 'Edit mode', 'By clicking \'Edit\' or using the escape key, you enter the edit mode. You can now',
-                'invert in- and outputs of gates and custom components by clicking on them. ');
-            break;
-        case 13:
-            displayHint(700, hintPic13, 'Edit mode', 'When clicking on in- or output components (eg. switches or lamps),',
-                'you can change various properties of these components in the appearing menu.');
-            break;
-        case 14:
-            displayHint(750, hintPic14, '7-Segment displays', 'These take a variable number of input bits and display their binary value in decimal',
-                'form. You can change the bit width in the additional settings before placing them.');
-            break;
-        case 15:
-            displayHint(750, hintPic15, 'Advanced components', 'These are more complex components that are each made out of another',
-                'sketch. This list is just a selection of custom components that are pre-built by us.');
-            break;
-        case 16:
-            displayHint(650, hintPic19, 'Diodes', 'Diodes are components that join two crossing wires in the horizontal',
-                'but not in the vertical direction. They can be used for diode matrices.');
-            break;
-        case 17:
-            displayHint(550, hintPic20, 'Diodes', 'Please load the sketch called \'traffic\'. As you can see,',
-                'there is an area with multiple diodes (little triangles) on it.');
-            break;
-        case 18:
-            displayHint(750, hintPic21, 'Diodes', 'In edit mode, you can toggle diodes and connection points by clicking on them or on',
-                'empty wire crossings. Start the simulation to see how they are used in this example!');
-            break;
-        case 19:
-            displayHint(650, hintPic23, 'Custom components', 'You can name in- and outputs and set inputs to the top of the component',
-                'by altering these settings in the properties menu of the sketch to import.');
-            break;
-        case 20:
-            displayHint(450, hintPic24, 'Custom components', 'Inputs labeled with \'>\' will appear as',
-                'clock inputs with an arrow drawn on them.');
-            break;
-        case 21:
-            displayHint(600, hintPic25, 'Labels', 'You can add text labels using the \'Label\' button. The text can',
-                'be changed in the properties menu after clicking on them.');
-            break;
-        case 22:
-            displayHint(650, hintPic26, '\'New\' and \'Select\'', 'Click on \'New\' to start a new sketch. When clicking on \'Select\' you can',
-                'select parts of your sketch to move them on the canvas or delete them.');
-            break;
-        case 23:
-            displayHint(600, hintPic0, 'Thank you!', 'You\'ve reached the end of this little tutorial on LogiJS.',
-                'We hope that you like our work and we value any feedback from you.');
-            nextStepButton.hide();
-            break;
-        default:
-            break;
-    }
-}*/
 
 function showMessage(msg, subline = '') {
     textFont('Open Sans');
@@ -2481,28 +2318,6 @@ function importItemClicked(row, col) {
     importCustom(importSketchData.sketches[place] + '.json');
 }
 
-/*
-    Displays the given hint text (two lines + caption) and an image in a box in the bottom left corner
-*/
-function displayHint(width, img, caption, line1, line2) {
-    fill(200, 50, 50);
-    stroke(50);
-    strokeWeight(3);
-    rect(20, window.height - 220, width + 200, 200);
-    // Display the given image in the bottom left
-    strokeWeight(6);
-    rect(40, window.height - 200, 160, 160);
-    image(img, 40, window.height - 200);
-    // Set the text attributes and draw caption and text lines
-    fill(255);
-    noStroke();
-    textSize(30);
-    text(caption, 220, window.height - 190);
-    textSize(20);
-    text(line1, 220, window.height - 135);
-    text(line2, 220, window.height - 105);
-}
-
 function showElements() {
     if (simRunning) {
         for (const elem of groups) {
@@ -2580,7 +2395,7 @@ function updateGroups() {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
-    if (captionInput.elt === document.activeElement || labelTextBox.elt === document.activeElement || loading) {
+    if (captionInput.elt === document.activeElement || labelTextBox.elt === document.activeElement || loading || saveDialog) {
         return;
     }
     if (sketchNameInput.elt !== document.activeElement) {
@@ -2644,9 +2459,6 @@ function setLoading(l) {
     saveDialogButton.elt.disabled = l;
     if (getCookieValue('access_token') !== '') {
         customButton.elt.disabled = l;
-    }
-    if (!l) {
-        saveButton.elt.disabled = false;
     }
     //closeTutorialButton.elt.disabled = l;
     //nextStepButton.elt.disabled = l;

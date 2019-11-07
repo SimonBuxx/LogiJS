@@ -12,7 +12,7 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-    if (loading || mouseOverGUI() || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || mouseOverGUI() || modifierMenuDisplayed()) { return; }
     if (keyIsDown(18) && !simRunning) { // If the alt key is pressed => scroll trough basic elements
         wheel = Math.sign(event.deltaY);
         addType = Math.max(1, Math.min(9, addType + wheel));
@@ -75,7 +75,7 @@ function mouseWheel(event) {
 }
 
 function mouseMoved() {
-    if (loading || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || modifierMenuDisplayed()) { return; }
     updateCursors();
 }
 
@@ -222,7 +222,7 @@ function updateCursors() {
 }
 
 function mouseDragged() {
-    if (loading || showCustomDialog || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
     if (controlMode === 'select' && selectMode === 'drag') {
         if (sDragX2 !== Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE ||
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
@@ -244,7 +244,7 @@ function mousePressed() {
     } else {
         clickedOutOfGUI = false;
     }
-    if (loading || showCustomDialog || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
 
     if (controlMode !== 'select') {
         showSelectionBox = false;
@@ -327,7 +327,7 @@ function mouseClicked() {
         }
         return;
     }
-    if (loading || modifierMenuDisplayed()) {
+    if (loading || saveDialog || modifierMenuDisplayed()) {
         return;
     }
     if (!simRunning && !mouseOverGUI()) {
@@ -400,7 +400,7 @@ function mouseClicked() {
           Finishing the selection process by invoking handleSelection
 */
 function mouseReleased() {
-    if (loading || showCustomDialog) { return; }
+    if (loading || showCustomDialog || saveDialog) { return; }
     if (modifierMenuDisplayed()) {
         if (!mouseOverGUI() && clickedOutOfGUI) {
             closeModifierMenu();
@@ -796,7 +796,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (loading || showCustomDialog || modifierMenuDisplayed()) { return; }
+    if (loading  || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
     if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);
