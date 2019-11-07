@@ -539,7 +539,7 @@ function showImportPreview(item, x, y) {
 }
 
 function showPreviewImage() {
-    let raw = new Image();
+    let raw = new Image(window.height, window.height);
     raw.src = previewImg;
     let gradImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==';
     let gradientRaw = new Image(200, 200);
@@ -552,8 +552,7 @@ function showPreviewImage() {
         img.resize(0, 200);
         img.drawingContext.drawImage(gradientRaw, 0, 0);
         fill(0);
-        rect(window.width / 2 - 332, window.height / 2 - 38, 203, 202);
-        image(img, window.width / 2 - 330, window.height / 2 - 36);
+        image(img, window.width / 2 - 333, window.height / 2 - 39);
         let look = getThisLook();
         if (look.outputs > 0) {
             showImportPreview(look, window.width / 2 - 330, window.height / 2 - 36);

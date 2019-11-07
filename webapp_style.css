@@ -245,16 +245,14 @@ body {
 
 .textInput {
     border: 0;
-    border: 3px solid black;
+    border-bottom: 3px solid black;
     font-size: 18px;
     padding: 10px;
 }
 
 .topBox {
-    background: #969696;
     appearance: none;
     -webkit-appearance: none;
-    border: 3px solid black;
     padding: 3px 10px;
 }
 
@@ -322,7 +320,8 @@ body {
     -o-text-overflow: clip;
     text-overflow: clip;
     background-color: #6e6e6e;
-    border: 3px solid black;
+    border: 0;
+    border-bottom: 3px solid black;
     outline: none;
 }
 
@@ -333,6 +332,7 @@ body {
 .sequencer option {
     background:#6e6e6e;
     padding: 1px 10px;
+    border: 0;
   }
 
 .buttonLeft:hover {
@@ -383,8 +383,9 @@ body {
 .labelTextBox {
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
-    padding: 3px 5px;
-    border: 3px solid black;
+    padding: 7px;
+    border: 0;
+    border-bottom: 3px solid black;
 }
 
 .slider {
@@ -392,7 +393,7 @@ body {
     appearance: none;
     height: 30px;
     width: 160px;
-    border: 3px solid black;
+    border-bottom: 3px solid black;
     background: #969696;
     outline: none;
     -webkit-transition: .2s;
@@ -405,7 +406,7 @@ body {
     width: 20px;
     height: 30px;
     border-radius: 0;
-    border: 3px solid black;
+    /*border: 3px solid black;*/
     background: #292929;
     cursor: pointer;
 }
@@ -414,7 +415,7 @@ body {
     width: 20px;
     height: 30px;
     border-radius: 0;
-    border: 3px solid black;
+    /*border: 3px solid black;*/
     background: #292929;
     cursor: pointer;
 }

@@ -287,16 +287,20 @@ router.post('/delete', (req, res) => {
     }
     try {
         fs.unlink('./userSketches/' + user + '/' + req.body.sketch + '.png', (err) => {
-            console.log('[MINOR] File delete error!');
-            console.log('./userSketches/' + user + '/' + req.body.sketch + '.png');
+            if (err) {
+                console.log('[MINOR] File delete error!');
+                console.log('./userSketches/' + user + '/' + req.body.sketch + '.png');
+            }
         });
     } catch (e) {
 
     }
     try {
         fs.unlink('./userSketches/' + user + '/' + req.body.sketch + '.txt', (err) => {
-            console.log('[MINOR] File delete error!');
-            console.log('./userSketches/' + user + '/' + req.body.sketch + '.txt');
+            if (err) {
+                console.log('[MINOR] File delete error!');
+                console.log('./userSketches/' + user + '/' + req.body.sketch + '.txt');
+            }
         });
     } catch (e) {
 

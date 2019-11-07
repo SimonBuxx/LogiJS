@@ -152,29 +152,30 @@ function showLabelPropMenu() {
 
 function showModifierMenu() {
     fill('rgba(50, 50, 50, 0.9)');
-    stroke(0);
-    strokeWeight(3);
+    noStroke();
+    strokeCap(SQUARE);
     if (inputToModify >= 0) {
-        modifierMenuX = (inputs[inputToModify].x + transform.dx) * transform.zoom;
-        modifierMenuY = (inputs[inputToModify].y + transform.dy + GRIDSIZE) * transform.zoom;
+        modifierMenuX = (inputs[inputToModify].x + transform.dx - 1) * transform.zoom;
+        modifierMenuY = (inputs[inputToModify].y + transform.dy + GRIDSIZE + 2) * transform.zoom;
         if (!inputs[inputToModify].clock) {
             rect(modifierMenuX, modifierMenuY, 250, 100);
         } else {
             rect(modifierMenuX, modifierMenuY, 250, 150);
         }
     } else if (outputToModify >= 0) {
-        modifierMenuX = (outputs[outputToModify].x + transform.dx - GRIDSIZE / 2) * transform.zoom;
-        modifierMenuY = (outputs[outputToModify].y + transform.dy + GRIDSIZE / 2) * transform.zoom;
+        modifierMenuX = (outputs[outputToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
+        modifierMenuY = (outputs[outputToModify].y + transform.dy + GRIDSIZE / 2 + 2) * transform.zoom;
         rect(modifierMenuX, modifierMenuY, 250, 100);
     } else if (labelToModify >= 0) {
-        modifierMenuX = (labels[labelToModify].x + transform.dx - GRIDSIZE / 2) * transform.zoom;
-        modifierMenuY = (labels[labelToModify].y + transform.dy + GRIDSIZE / 2 + GRIDSIZE * (labels[labelToModify].lines.length - 1)) * transform.zoom;
+        modifierMenuX = (labels[labelToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
+        modifierMenuY = (labels[labelToModify].y + transform.dy + GRIDSIZE / 2 + GRIDSIZE * (labels[labelToModify].lines.length - 1) + 2) * transform.zoom;
         rect(modifierMenuX, modifierMenuY, 250, 150);
     }
+    strokeCap(ROUND);
 }
 
 function positionModifierElements() {
-    sequencer.position(modifierMenuX + 308, modifierMenuY + 27);
+    sequencer.position(modifierMenuX + 332, modifierMenuY + 27);
 
     captionInput.position(modifierMenuX + 150, modifierMenuY + 30);
     inputIsTopBox.position(modifierMenuX + 160, modifierMenuY + 80);
@@ -386,8 +387,8 @@ function createModifierElements() {
     captionInput = createInput('');
     captionInput.elt.style.fontFamily = 'Open Sans';
     captionInput.hide();
-    captionInput.size(140, 15);
-    captionInput.attribute('placeholder', 'Name');
+    captionInput.size(167, 15);
+    captionInput.attribute('placeholder', 'Pin name');
     captionInput.input(newCaption);
     captionInput.elt.className = "textInput";
     captionInput.elt.title = 'This is the name that will appear on the corresponding pin on the custom module.';
@@ -411,12 +412,12 @@ function createModifierElements() {
     labelTextBox.elt.className = 'labelTextBox';
     labelTextBox.attribute('placeholder', 'New Label');
     labelTextBox.hide();
-    labelTextBox.size(215, 118);
-    labelTextBox.input(labelChanged);
+    labelTextBox.size(215, 115);
+    labelTextBox.elt.onkeyup = labelChanged;
 
     sequencer = createSelect();
     sequencer.hide();
-    sequencer.size(63, 33);
+    sequencer.size(43, 33);
     sequencer.changed(sequencerChanged);
     fillSequencer(1);
     sequencer.elt.className = 'sequencer';

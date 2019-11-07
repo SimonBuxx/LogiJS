@@ -41,11 +41,6 @@ function undo() {
                 diodes.pop();
                 doConpoints();
                 break;
-            case 'addCp':
-                conpoints.pop();
-                actionRedo.push(act);
-                doConpoints();
-                break;
             case 'addLabel':
                 actionRedo.push(act);
                 labels.pop();
@@ -99,13 +94,19 @@ function undo() {
                 doConpoints();
                 break;
             case 'delCp':
-                conpoints.push(act.actionObject[0]);
                 actionRedo.push(act);
+                conpoints.splice(act.actionIndizes[0], 0, act.actionObject[0]);
                 doConpoints();
                 break;
             case 'delLabel':
                 labels.push(act.actionObject[0]);
                 actionRedo.push(act);
+                break;
+            case 'swiDi':
+                diodes.splice(act.actionIndizes[0], 0, act.actionObject[0][0]);
+                conpoints.splice(act.actionIndizes[1], 1);
+                actionRedo.push(act);
+                doConpoints();
                 break;
             case 'moveSel':
                 setControlMode('select');
@@ -197,11 +198,6 @@ function redo() {
                 actionUndo.push(act);
                 doConpoints();
                 break;
-            case 'addCp':
-                conpoints.push(act.actionObject);
-                actionUndo.push(act);
-                doConpoints();
-                break;
             case 'addLabel':
                 labels.push(act.actionObject);
                 actionUndo.push(act);
@@ -245,13 +241,19 @@ function redo() {
                 doConpoints();
                 break;
             case 'delCp':
-                conpoints.pop();
+                conpoints.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
                 doConpoints();
                 break;
             case 'delLabel':
                 labels.pop();
                 actionUndo.push(act[0]);
+                break;
+            case 'swiDi':
+                diodes.splice(act.actionIndizes[0], 1);
+                conpoints.splice(act.actionIndizes[1], 0, act.actionObject[1]);
+                actionUndo.push(act);
+                doConpoints();
                 break;
             case 'invGIP':
                 gates[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);

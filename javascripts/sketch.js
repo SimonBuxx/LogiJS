@@ -194,6 +194,8 @@ let next = 0;
 let loading = false;
 let loadFile = '';
 
+let justClosedMenu = false;
+
 /*
     This variable contains a preview of the sketch, a snapshot is taken every time, 'Save' is clicked.
 */
@@ -831,29 +833,29 @@ function setup() { // jshint ignore:line
     descInput.hide();
 
     // Clears the canvas and resets the view
-    newButton = createButton('New');
-    newButton.position(windowWidth - 270, 3);
-    newButton.elt.style.width = '40px';
+    newButton = createButton('<i class="fas fa-file"></i> New');
+    newButton.position(windowWidth - 280, 3);
+    newButton.elt.style.width = '50px';
     newButton.mousePressed(function () {
         if (newButton.html() === 'SURE?') {
-            newButton.html('New');
+            newButton.html('<i class="fas fa-file"></i> New');
             newClicked();
         } else {
             newButton.html('SURE?');
-            setTimeout(function () { newButton.html('New'); }, 3000);
+            setTimeout(function () { newButton.html('<i class="fas fa-file"></i> New'); }, 3000);
         }
     });
     newButton.elt.className = 'button';
 
     // Button to save the sketch
     saveButton = createButton('Save');
-    saveButton.position(windowWidth / 2 + 106, windowHeight / 2 + 122);
+    saveButton.position(windowWidth / 2 + 102, windowHeight / 2 + 118);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = 'btn btn-lg btn-red';
     saveButton.hide();
 
     cancelButton = createButton('Cancel');
-    cancelButton.position(windowWidth / 2 - 52, windowHeight / 2 + 122);
+    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 118);
     cancelButton.mousePressed(cancelClicked);
     cancelButton.elt.className = 'btn btn-lg btn-red';
     cancelButton.hide();
@@ -1031,7 +1033,7 @@ function importCustom(filename) {
     }
 }
 
-function customClicked() {
+function customClicked() { 
     if (showCustomDialog) {
         closeCustomDialog();
         return;
@@ -1124,6 +1126,7 @@ function saveClicked() {
         look.desc = descInput.value();
         socket.emit('savePreview', { name: sketchNameInput.value(), img: previewImg, desc: JSON.stringify(look), access_token: getCookieValue('access_token') });
     });
+    justClosedMenu = true;
     reDraw();
 }
 
@@ -1141,6 +1144,7 @@ function cancelClicked() {
     } else if (showCustomDialog) {
         closeCustomDialog();
     }
+    justClosedMenu = true;
 }
 
 function closeCustomDialog() {
@@ -1148,6 +1152,9 @@ function closeCustomDialog() {
     disableButtons(false);
     simButton.elt.disabled = false;
     saveDialogButton.elt.disabled = false;
+    if (controlMode === 'modify') {
+        setActive(modifierModeButton);
+    }
     if (getCookieValue('access_token') !== '') {
         customButton.elt.disabled = false;
     }
@@ -1172,10 +1179,15 @@ function loadClicked() {
 
 function saveDialogClicked() {
     endSimulation();
+    if (modifierMenuDisplayed()) {
+        closeModifierMenu();
+        unmarkPropTargets();
+    }
     enterModifierMode();
+    reDraw();
     saveDialog = true;
     saveButton.show();
-    cancelButton.position(windowWidth / 2 - 52, windowHeight / 2 + 122);
+    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 118);
     cancelButton.show();
     sketchNameInput.show();
     captInput.show();
@@ -1406,6 +1418,8 @@ function deleteClicked() {
 */
 function labelChanged() {
     labels[labelToModify].alterText(labelTextBox.value()); // Alter the text of the selected label
+    reDraw();
+    positionModifierElements();
 }
 
 function newGateInputNumber() {
@@ -1893,23 +1907,6 @@ function deleteInput(inputNumber) {
 }
 
 /*
-    Deletes the given diode
-*/
-function deleteDiode(diodeNumber) {
-    if (diodes[diodeNumber].cp) {
-        let x = diodes[diodeNumber].x;
-        let y = diodes[diodeNumber].y;
-        pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
-        createConpoint(x, y, false, -1);
-    }
-    else {
-        pushUndoAction('delDi', [], diodes.splice(diodeNumber, 1));
-    }
-    doConpoints(); // Conpoints under diodes should appear again
-    reDraw();
-}
-
-/*
     Deletes the given label
 */
 function deleteLabel(labelNumber) {
@@ -2202,10 +2199,6 @@ function reDraw() {
 
     // If the modifier mode is active and an object was selected, show the modifier menu background
     if (modifierMenuDisplayed()) {
-        //stackBlurCanvasRGB('mainCanvas', 0, 0, window.width, window.height, 3);
-        fill('rgba(0, 0, 0, 0.6)');
-        noStroke();
-        rect(0, 0, window.width, window.height);
         scale(transform.zoom);
         translate(transform.dx, transform.dy);
         if (inputToModify >= 0) {
@@ -2235,17 +2228,11 @@ function reDraw() {
     }
 
     if (saveDialog) {
-        fill('rgba(0, 0, 0, 0.6)');
-        noStroke();
-        rect(0, 0, window.width, window.height);
         showSaveDialog();
         showPreviewImage();
     }
 
     if (showCustomDialog) {
-        fill('rgba(0, 0, 0, 0.6)');
-        noStroke();
-        rect(0, 0, window.width, window.height);
         textFont('Gudea');
     }
 
@@ -2393,7 +2380,7 @@ function showMessage(msg, subline = '') {
 function showSaveDialog() {
     fill('rgba(50, 50, 50, 0.95)');
     noStroke();
-    rect(window.width / 2 - 365, window.height / 2 - 188, 580, 385);
+    rect(window.width / 2 - 365, window.height / 2 - 208, 580, 400);
 }
 
 function displayCustomDialog() {

@@ -244,7 +244,6 @@ function mousePressed() {
     } else {
         clickedOutOfGUI = false;
     }
-    console.log(clickedOutOfGUI);
     if (loading || showCustomDialog || modifierMenuDisplayed()) { return; }
 
     if (controlMode !== 'select') {
@@ -402,7 +401,6 @@ function mouseClicked() {
 */
 function mouseReleased() {
     if (loading || showCustomDialog) { return; }
-    let justClosedMenu = false;
     if (modifierMenuDisplayed()) {
         if (!mouseOverGUI() && clickedOutOfGUI) {
             closeModifierMenu();
@@ -591,6 +589,8 @@ function mouseReleased() {
                                 }
                             }
                         }
+                    } else {
+                        wireMode = 'none';
                     }
                     break;
                 case 'delete': // If the delete mode is active
@@ -672,6 +672,7 @@ function mouseReleased() {
         wireMode = 'none';
         lockElements = false;
     }
+    justClosedMenu = false;
     reDraw();
 }
 

@@ -22,24 +22,6 @@ function deleteInvalidConpoints() {
     }
 }
 
-function segmentStartsIn(x, y) {
-    for (let i = 0; i < segments.length; i++) {
-        if (segments[i].startX === x && segments[i].startY === y) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-function segmentEndsIn(x, y) {
-    for (let i = 0; i < segments.length; i++) {
-        if (segments[i].endX === x && segments[i].endY === y) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 /*
     Creates a new connection point for group g at position x, y
     Only creates if not existing and no diode at the point
@@ -47,7 +29,9 @@ function segmentEndsIn(x, y) {
 function createConpoint(x, y, state, g) {
     if (isConPoint(x, y) < 0) {
         conpoints.push(new ConPoint(x, y, state, g));
+        return conpoints.length - 1;
     }
+    return -1;
 }
 
 function fullCrossing(x, y) {
@@ -66,20 +50,28 @@ function fullCrossing(x, y) {
     return (horCount >= 2 && verCount >= 2);
 }
 
+function deleteConpoint(conpointNumber) {
+    console.log('delCp');
+    pushUndoAction('delCp', [conpointNumber], conpoints.splice(conpointNumber, 1));
+    doConpoints();
+    reDraw();
+}
+
+function deleteDiode(diodeNumber) {
+    pushUndoAction('delDi', [diodeNumber], diodes.splice(diodeNumber, 1));
+    doConpoints();
+    reDraw();
+}
+
 /*
     Creates a new diode if the point meets the requirements
     gA: Group A (horizontal, not influenced by the vertical wire)
     gB: Group B (vertical, synced to group A)
 */
-function createDiode(x, y, state, restore) {
+function createDiode(x, y, state) {
     diodes.push(new Diode(x, y, state, transform));
     diodes[diodes.length - 1].updateClickBox();
     pushUndoAction('addDi', [], diodes[diodes.length - 1]);
-    let cp = isConPoint(x, y);
-    if (cp >= 0) {
-        conpoints.splice(cp, 1);
-    }
-    diodes[diodes.length - 1].cp = ((restore) && (cp >= 0));
 }
 
 /*
@@ -161,50 +153,23 @@ function showPreview(type, x, y) {
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 }
 
-function toggleDiode(restore) {
-    for (let i = 0; i < diodes.length; i++) {
-        if ((diodes[i].x === Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
-            (diodes[i].y === Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
-            diodes[i].cp = true;
-            deleteDiode(i);
-            return;
-        }
+function switchDiodeForConpoint(diodeNumber) {
+    let newCp = createConpoint(diodes[diodeNumber].x, diodes[diodeNumber].y, false, -1);
+    if (newCp >= 0) {
+        pushUndoAction('swiDi', [diodeNumber, newCp], [diodes.splice(diodeNumber, 1), conpoints[newCp]]);
     }
-    createDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
-        Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, restore);
-    reDraw();
-}
-
-function toggleConpoint(undoable) {
-    for (var i = 0; i < conpoints.length; i++) {
-        if ((conpoints[i].x === Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) &&
-            (conpoints[i].y === Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
-            let cp = conpoints.splice(i, 1);
-            let before = conpoints.slice(0);
-            doConpoints();
-            if (JSON.stringify(conpoints) === JSON.stringify(before) && undoable) {
-                pushUndoAction('delCp', [], cp);
-            }
-            return;
-        }
-    }
-    conpoints.push(new ConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, -1));
-    let before = conpoints.slice(0);
-    doConpoints();
-    if ((JSON.stringify(conpoints) === JSON.stringify(before)) && undoable) {
-        pushUndoAction('addCp', [], conpoints[conpoints.length - 1]);
-    }
-    reDraw();
 }
 
 function toggleDiodeAndConpoint() {
-    if (isDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) >= 0) {
-        toggleDiode(false);
+    let diode = isDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+    if (diode >= 0) {
+        switchDiodeForConpoint(diode);
     } else {
-        if (isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) >= 0) {
-            toggleConpoint(true);
+        let conpoint = isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+        if (conpoint >= 0) {
+            deleteConpoint(conpoint);
         } else {
-            toggleDiode(false);
+            createDiode(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
         }
     }
     reDraw();
