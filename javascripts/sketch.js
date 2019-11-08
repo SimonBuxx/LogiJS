@@ -2267,10 +2267,6 @@ function reDraw() {
         cursor(ARROW);
     }
 
-    if (showSelectionBox) {
-        selectionBox.markClickBox();
-    }
-
     if (loading && !showCustomDialog) {
         showMessage('Loading...', loadFile.split('.json')[0]);
     }
@@ -2469,6 +2465,10 @@ function showElements() {
     if (controlMode === 'addObject') {
         textFont('Consolas');
         showElementPreview();
+    }
+
+    if (showSelectionBox) {
+        selectionBox.markClickBox();
     }
 }
 
