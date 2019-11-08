@@ -1697,6 +1697,37 @@ function setSelectMode(mode) {
     selectMode = mode;
 }
 
+function addWires() {
+    let pushed = false;
+    for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
+        if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
+            pushed = true;
+        }
+    }
+    if (pushed) {
+        let newSegments = [];
+        let newSegmentIndices = [];
+        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
+            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
+                segments.push(pwSegments[i]);
+                newSegmentIndices.push(segments.length - 1);
+                newSegments.push(pwSegments[i]);
+            }
+        }
+
+        let conpointsBefore = _.cloneDeep(conpoints);
+        doConpoints();
+        let conpointsAfter = _.cloneDeep(conpoints);
+        console.log(newSegmentIndices);
+        pushUndoAction('addWire', [newSegmentIndices], [newSegments, conpointsBefore, conpointsAfter]); // push the action for undoing
+        console.log(segments);
+        findLines();
+    }
+    wireMode = 'none';
+    lockElements = false;
+    pwSegments = []; // delete the preview segments
+}
+
 /*
     Adds a new gate with given type, input count and direction
 */
@@ -1834,6 +1865,57 @@ function addLabel() {
     labels.push(newLabel);
     pushUndoAction('addLabel', [labels.length - 1], [newLabel]);
     reDraw();
+}
+
+function deleteWires() {
+    let segmentsExist = false;
+    let deletedDiodesIndices = [];
+    let deletedDiodes = [];
+    let deletedSegmentsIndices = [];
+    let deletedSegments = [];
+    for (let i = pwSegments.length - 1; i >= 0; i--) {
+        let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
+        if (exists >= 0) {
+            let startDiode = isDiode(pwSegments[i].startX, pwSegments[i].startY);
+            let endDiode = isDiode(pwSegments[i].endX, pwSegments[i].endY);
+            if ((startDiode >= 0)) {
+                if (!deletedDiodesIndices.includes(startDiode)) {
+                    deletedDiodesIndices.push(startDiode);
+                }
+            }
+            if ((endDiode >= 0)) {
+                if (!deletedDiodesIndices.includes(endDiode)) {
+                    deletedDiodesIndices.push(endDiode);
+                }
+            }
+            segmentsExist = true;
+            deletedSegmentsIndices.push(exists);
+        }
+    }
+    if (segmentsExist) {
+        deletedDiodesIndices.sort(function (a, b) {
+            return a - b;
+        });
+        for (let i = deletedDiodesIndices.length - 1; i >= 0; i--) {
+            deletedDiodes.push(diodes.splice(deletedDiodesIndices[i], 1));
+        }
+        deletedDiodes.reverse();
+        deletedSegmentsIndices.sort(function (a, b) {
+            return a - b;
+        });
+        for (let i = deletedSegmentsIndices.length - 1; i >= 0; i--) {
+            deletedSegments.push(segments.splice(deletedSegmentsIndices[i], 1));
+        }
+        deletedSegments.reverse();
+        let conpointsBefore = _.cloneDeep(conpoints);
+        doConpoints();
+        let conpointsAfter = _.cloneDeep(conpoints);
+        pushUndoAction('delWire', [deletedSegmentsIndices, deletedDiodesIndices], [deletedSegments, conpointsBefore, conpointsAfter, deletedDiodes]); // Push the action, if more than 0 segments were deleted
+        findLines();
+    }
+    pwSegments = [];
+    wireMode = 'none';
+    lockElements = false;
 }
 
 /*

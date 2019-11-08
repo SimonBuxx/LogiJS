@@ -413,81 +413,13 @@ function mouseReleased() {
             switch (controlMode) {
                 case 'addObject':
                     if (wireMode === 'preview') { // If the preview wire mode is active
-                        let pushed = false;
-                        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
-                            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
-                                pushed = true;
-                            }
-                        }
-                        if (pushed) {
-                            let oldWires = [];
-                            for (let i = wires.length - 1; i >= 0; i--) {
-                                oldWires[i] = new Wire(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
-                                oldWires[i].endX = wires[i].endX;
-                                oldWires[i].endY = wires[i].endY;
-                                oldWires[i].id = wires[i].id;
-                            }
-                            let oldSegments = [];
-                            for (let i = segments.length - 1; i >= 0; i--) {
-                                oldSegments[i] = new Wire(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
-                                oldSegments[i].id = segments[i].id;
-                            }
-                            pushUndoAction('reWire', 0, [_.cloneDeep(oldSegments), _.cloneDeep(oldWires), _.cloneDeep(conpoints)]); // push the action for undoing
-                        }
-                        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
-                            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
-                                segments.push(pwSegments[i]);
-                            }
-                        }
-                        findLines();
-                        lockElements = false;
-                        pwSegments = []; // delete the preview segments
-                        if (pushed) {
-                            wireMode = 'hold'; // wiring done, reset wireMode
-                        } else {
-                            wireMode = 'none';
-                        }
-                        doConpoints(); // Update all conpoints and diodes
+                        addWires();
                     }
                     break;
                 case 'modify':
                     if (!justClosedMenu) {
                         if (wireMode === 'preview') { // If the preview wire mode is active
-                            let pushed = false;
-                            for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
-                                if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
-                                    pushed = true;
-                                }
-                            }
-                            if (pushed) {
-                                let oldWires = [];
-                                for (let i = wires.length - 1; i >= 0; i--) {
-                                    oldWires[i] = new Wire(wires[i].direction, wires[i].startX, wires[i].startY, false, wires[i].transform);
-                                    oldWires[i].endX = wires[i].endX;
-                                    oldWires[i].endY = wires[i].endY;
-                                    oldWires[i].id = wires[i].id;
-                                }
-                                let oldSegments = [];
-                                for (let i = segments.length - 1; i >= 0; i--) {
-                                    oldSegments[i] = new Wire(segments[i].direction, segments[i].startX, segments[i].startY, false, segments[i].transform);
-                                    oldSegments[i].id = segments[i].id;
-                                }
-                                pushUndoAction('reWire', 0, [_.cloneDeep(oldSegments), _.cloneDeep(oldWires), _.cloneDeep(conpoints)]); // push the action for undoing
-                            }
-                            for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
-                                if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
-                                    segments.push(pwSegments[i]);
-                                }
-                            }
-                            findLines();
-                            lockElements = false;
-                            pwSegments = []; // delete the preview segments
-                            if (pushed) {
-                                wireMode = 'hold'; // wiring done, reset wireMode
-                            } else {
-                                wireMode = 'none';
-                            }
-                            doConpoints(); // Update all conpoints and diodes
+                            addWires();
                         }
                         if (wireMode === 'none') {
                             // Invert In-/Outputs
@@ -626,24 +558,7 @@ function mouseReleased() {
                         }
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
-                        let oldWires = _.cloneDeep(wires);
-                        let oldSegments = _.cloneDeep(segments);
-                        let existing = false;
-                        for (let i = pwSegments.length - 1; i >= 0; i--) {
-                            let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
-                            if (exists >= 0) {
-                                existing = true;
-                                segments.splice(exists, 1);
-                            }
-                        }
-                        if (existing) {
-                            pushUndoAction('reWire', 0, [oldSegments, oldWires, _.cloneDeep(conpoints)]); // Push the action, if more than 0 segments were deleted
-                            findLines();
-                        }
-                        pwSegments = [];
-                        wireMode = 'none';
-                        lockElements = false;
-                        doConpoints();
+                        deleteWires();
                     }
                     break;
                 case 'select':

@@ -141,11 +141,25 @@ function undo() {
                 doConpoints();
                 actionRedo.push(act);
                 break;
-            case 'reWire':
-                actionRedo.push(new Action('reWire', 0, [_.cloneDeep(segments), _.cloneDeep(wires), _.cloneDeep(conpoints)]));
-                conpoints = _.cloneDeep(act.actionObject[2]);
-                wires = _.cloneDeep(act.actionObject[1]);
-                segments = _.cloneDeep(act.actionObject[0]);
+            case 'addWire':
+                conpoints = act.actionObject[1];
+                for (let i = act.actionIndizes[0].length - 1; i >= 0; i--) {
+                    segments.splice(act.actionIndizes[0][i], 1);
+                }
+                deleteInvalidDiodes();
+                findLines();
+                actionRedo.push(act);
+                break;
+            case 'delWire':
+                conpoints = act.actionObject[1];
+                for (let i = 0; i < act.actionIndizes[0].length; i++) {
+                    segments.splice(act.actionIndizes[0][i], 0, act.actionObject[0][i][0]);
+                }
+                for (let i = 0; i < act.actionIndizes[1].length; i++) {
+                    diodes.splice(act.actionIndizes[1][i], 0, act.actionObject[3][i][0]);
+                }
+                findLines();
+                actionRedo.push(act);
                 break;
             default:
                 break;
@@ -297,11 +311,22 @@ function redo() {
                 doConpoints();
                 actionUndo.push(act);
                 break;
-            case 'reWire':
-                actionUndo.push(new Action('reWire', 0, [_.cloneDeep(segments), _.cloneDeep(wires), _.cloneDeep(conpoints)]));
-                wires = _.cloneDeep(act.actionObject[1]);
-                conpoints = _.cloneDeep(act.actionObject[2]);
-                segments = _.cloneDeep(act.actionObject[0]);
+            case 'addWire':
+                conpoints = act.actionObject[2];
+                for (let i = 0; i < act.actionIndizes[0].length; i++) {
+                    segments.splice(act.actionIndizes[0][i], 0, act.actionObject[0][i]);
+                }
+                findLines();
+                actionUndo.push(act);
+                break;
+            case 'delWire':
+                conpoints = act.actionObject[2];
+                for (let i = act.actionIndizes[0].length - 1; i >= 0; i--) {
+                    segments.splice(act.actionIndizes[0][i], 1);
+                }
+                deleteInvalidDiodes();
+                findLines();
+                actionUndo.push(act);
                 break;
             default:
                 break;
