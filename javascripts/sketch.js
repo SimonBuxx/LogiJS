@@ -2263,6 +2263,10 @@ function reDraw() {
         cursor(ARROW);
     }
 
+    if (showSelectionBox) {
+        selectionBox.markClickBox();
+    }
+
     if (loading && !showCustomDialog) {
         showMessage('Loading...', loadFile.split('.json')[0]);
     }
@@ -2387,19 +2391,23 @@ function showCustomItem(place, img, caption, look) {
     }
 }
 
+/*
+    This is executed when the user clicks on an item in the custom dialog
+    row, col: row and column of the item the user clicked on
+*/
 function importItemClicked(row, col) {
-    let place = customDialogColumns * row + col + customDialogPage * customDialogColumns * customDialogRows;
-    if (place >= importSketchData.sketches.length) {
-        return;
+    let place = customDialogColumns * row + col + customDialogPage * customDialogColumns * customDialogRows; // Calculate the array position of the custom module
+    if (place >= importSketchData.sketches.length || importSketchData.looks[place].outputs === 0) {
+        return; // If the place should be greater than the number of available modules or the module has no outputs, return.
     }
-    if (importSketchData.looks[place].outputs === 0) {
-        return;
-    }
-    setActive(customButton, true);
-    setPreviewElement(true, importSketchData.looks[place]);
-    importCustom(importSketchData.sketches[place] + '.json');
+    setActive(customButton, true); // Set the custom modules button as activated
+    setPreviewElement(true, importSketchData.looks[place]); // Show a preview of the module at the users mouse position
+    importCustom(importSketchData.sketches[place] + '.json'); // Import the module on mouse click
 }
 
+/*
+    This function displays all compoments of the sketch as well as preview elements
+*/
 function showElements() {
     if (simRunning) {
         for (const elem of groups) {
@@ -2457,10 +2465,6 @@ function showElements() {
     if (controlMode === 'addObject') {
         textFont('Consolas');
         showElementPreview();
-    }
-
-    if (showSelectionBox) {
-        selectionBox.markClickBox();
     }
 }
 
