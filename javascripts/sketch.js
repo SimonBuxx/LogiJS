@@ -1723,7 +1723,11 @@ function addWires() {
         console.log(segments);
         findLines();
     }
-    wireMode = 'none';
+    if (pushed) {
+        wireMode = 'hold';
+    } else {
+        wireMode = 'none';
+    }
     lockElements = false;
     pwSegments = []; // delete the preview segments
 }
