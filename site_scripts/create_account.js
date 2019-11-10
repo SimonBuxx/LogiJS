@@ -24,7 +24,7 @@ CreateUser.addEventListener('submit', (e) => {
             window.location = '/signup?password_invalid=true';
         } else if (!data.username_unused) {
             window.location = '/signup?username_taken=true';
-        } else if (status === 200) {
+        } else if (data.success) {
             window.location = '/login';
         }
     });
