@@ -55,10 +55,10 @@ head
 #blur
 #login_back.carousel
   form.Login
-    if tooLong
-      h1(style='color: red; font-size: 20px;') Username or password are too long!
-    else if failed
-      h1(style='color: red; font-size: 20px;') Login failed!
+    if failed
+      h1(style='color: red; font-size: 25px;') Login failed!
+    else if signup_success
+      h1(style='color: green; font-size: 25px;') Registration successful! 
     else
       h1 Login
     p

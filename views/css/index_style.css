@@ -204,11 +204,12 @@ input {
     margin-right: auto;
     margin-left: auto;
     padding: 0;
-    height: 65px;
+    height: 75px;
     background-color: rgba(50, 50, 50, 0.9);
 }
 
 #dashboard_item_back {
+    max-width: 95%;
     width: 1050px;
     margin-top: 30px;
     margin-right: auto;
