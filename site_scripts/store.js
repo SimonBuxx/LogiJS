@@ -8,7 +8,6 @@ module.exports = {
         return knex('user').where({ username })
             .then(([user]) => {
                 if (user) {
-                    console.log('Failure: username already exists!');
                     return { success: false, reason: 'username' };
                 } else {
                     return knex('user').insert({

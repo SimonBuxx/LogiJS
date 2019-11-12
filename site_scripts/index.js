@@ -103,7 +103,8 @@ router.get('/legal', function (req, res) {
 
 router.get('/login', function (req, res) {
     res.render('login', {
-        failed: req.query.failed
+        failed: req.query.failed,
+        signup_success: req.query.signup_success
     });
 });
 
@@ -209,7 +210,6 @@ router.post('/createUser', (req, res) => {
         })
         .then(({ success }) => {
             if (success) {
-                console.log('Success!');
                 res.status(200).send(
                     {
                         success: true, // overall success
@@ -220,8 +220,11 @@ router.post('/createUser', (req, res) => {
                         username_unused: true // false, if the username is already in use
                     });
                 res.end();
+                if (!fs.existsSync('./userSketches/' + req.body.username + '/')){
+                    fs.mkdirSync('./userSketches/' + req.body.username + '/');
+                }
             } else {
-                console.log('Failure: username taken!');
+                console.log('Failure: username already exists!');
                 res.status(401).send(
                     {
                         success: false, // overall success

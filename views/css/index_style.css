@@ -58,6 +58,14 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
     text-overflow: ellipsis;
 }
 
+.ease_in > p > a {
+    text-decoration: none;
+    color: white;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .ease_out {
     opacity: 1.0;
     -webkit-transition: all 500ms ease-in-out;
@@ -92,6 +100,10 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 }
 
 .fa-download:hover {
+    color: rgb(40, 180, 40);
+}
+
+.fa-pencil:hover {
     color: rgb(40, 180, 40);
 }
 

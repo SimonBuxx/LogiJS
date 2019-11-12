@@ -4,11 +4,6 @@ CreateUser.addEventListener('submit', (e) => {
     const username = CreateUser.querySelector('.username').value;
     const email = CreateUser.querySelector('.email').value;
     const password = CreateUser.querySelector('.password').value;
-    let invalid = (username.length >= 50 || password.length >= 50 || email.length >= 50 ||
-        username.length < 5 || password.length < 6 || email.length < 6) && false;
-    //if (invalid) {
-    //window.location = '/signup?invalid=true';
-    //} else {
     post('/createUser', {
         username: username,
         email: email,
@@ -25,7 +20,7 @@ CreateUser.addEventListener('submit', (e) => {
         } else if (!data.username_unused) {
             window.location = '/signup?username_taken=true';
         } else if (data.success) {
-            window.location = '/login';
+            window.location = '/login?signup_success=true';
         }
     });
 });
