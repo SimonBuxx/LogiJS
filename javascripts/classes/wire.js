@@ -23,7 +23,7 @@ function Wire(dir, startX, startY, state, transform) {
 
     this.group = -1;
 
-    this.id = Date.now() + Math.random();
+    this.id = 'w' + Date.now() + Math.random();
 
     this.changePosition(startX, startY); // Initialize the start point
 }
@@ -41,8 +41,8 @@ Wire.prototype.getData = function () {
 };
 
 Wire.prototype.alterPosition = function (x1, y1) {
-    this.endX +=  x1;
-    this.endY +=  y1;
+    this.endX += x1;
+    this.endY += y1;
     this.startX += x1;
     this.startY += y1;
 };
@@ -82,7 +82,7 @@ Wire.prototype.getOutput = function () {
     return this.state;
 };
 
-Wire.prototype.show = function (del) {
+Wire.prototype.show = function (del = false) {
     if (this.state || del) {
         strokeWeight(5);
     } else {
@@ -96,4 +96,11 @@ Wire.prototype.show = function (del) {
         stroke(this.lowColor);
     }
     line(this.startX, this.startY, this.endX, this.endY);
+    /*noStroke();
+    fill(0);
+    if (this.direction === 0) {
+        text(num, this.startX + 10, this.startY - 15);
+    } else {
+        text(num, this.startX + 10, this.startY + 15);
+    }*/
 };

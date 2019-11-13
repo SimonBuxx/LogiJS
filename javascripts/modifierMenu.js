@@ -3,6 +3,7 @@
 
 function enterModifierMode() {
     setControlMode('modify');
+    setSelectMode('none');
     setActive(modifierModeButton, true);
     disableButtons(false);
     addType = 0;

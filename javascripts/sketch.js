@@ -22,6 +22,10 @@ let muxBitWidth = 1; // In/output width for (de-) multiplexers
 */
 let selection = [];
 
+let selectionConpoints = [];
+let selectionWires = [];
+let selectionSegments = [];
+
 /*
     These are the start coordinates for the wire preview elements
 */
@@ -1125,10 +1129,8 @@ function closeCustomDialog() {
 
 // Triggered when a sketch should be loaded
 function loadClicked() {
-    setSelectMode('none');
     closeModifierMenu();
     enterModifierMode();
-    showSelectionBox = false;
     document.title = 'LogiJS: ' + sketchNameInput.value();
     loadSketch(sketchNameInput.value() + '.json');
     reDraw();
@@ -1185,12 +1187,9 @@ function newClicked() {
     leaveModifierMode();
     enterModifierMode();
     wireMode = 'none';
-    setSelectMode('none');
-    showSelectionBox = false;
     document.title = 'LogiJS: New Sketch';
     sketchNameInput.value('');
     moduleNameInput.value('');
-    findLines();
     reDraw();
 }
 
@@ -1234,9 +1233,9 @@ function clearActionStacks() {
     actionRedo = [];
 }
 
-function pushSelectAction(dx, dy, x1, y1, x2, y2) {
+function pushMoveSelectionAction(dx, dy, x1, y1, x2, y2) {
     if ((Math.abs(dx) >= GRIDSIZE || Math.abs(dy) >= GRIDSIZE) && selection.length > 0) {
-        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], _.cloneDeep(selection));
+        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], [_.cloneDeep(selection), _.cloneDeep(selectionConpoints), _.cloneDeep(selectionWires), _.cloneDeep(selectionSegments)]);
     }
 }
 
@@ -1679,9 +1678,7 @@ function labelButtonClicked(dontToggle = false) {
 
 function setControlMode(mode) {
     if (controlMode === 'select') { // If the select mode is leaved, clean up
-        setSelectMode('start');
-        unmarkAll();
-        showSelectionBox = false;
+        setSelectMode('none');
     }
     if (mode === 'addObject' || mode === 'select' || mode === 'delete') {
         leaveModifierMode();
@@ -1695,6 +1692,27 @@ function setControlMode(mode) {
 
 function setSelectMode(mode) {
     selectMode = mode;
+    switch (selectMode) {
+        case 'none':
+            unmarkAll();
+            selection = [];
+            selectionConpoints = [];
+            selectionWires = [];
+            selectionSegments = [];
+            showSelectionBox = false;
+        break;
+        case 'start':
+            showSelectionBox = false;
+            break;
+        case 'drag':
+            showSelectionBox = true;
+            break;
+        case 'end':
+            showSelectionBox = true;
+            break;
+        default:
+    }
+    reDraw();
 }
 
 function addWires() {
@@ -1716,12 +1734,10 @@ function addWires() {
         }
 
         let conpointsBefore = _.cloneDeep(conpoints);
+        findLines();
         doConpoints();
         let conpointsAfter = _.cloneDeep(conpoints);
-        console.log(newSegmentIndices);
         pushUndoAction('addWire', [newSegmentIndices], [newSegments, conpointsBefore, conpointsAfter]); // push the action for undoing
-        console.log(segments);
-        findLines();
     }
     if (pushed) {
         wireMode = 'hold';
@@ -1912,10 +1928,10 @@ function deleteWires() {
         }
         deletedSegments.reverse();
         let conpointsBefore = _.cloneDeep(conpoints);
+        findLines();
         doConpoints();
         let conpointsAfter = _.cloneDeep(conpoints);
         pushUndoAction('delWire', [deletedSegmentsIndices, deletedDiodesIndices], [deletedSegments, conpointsBefore, conpointsAfter, deletedDiodes]); // Push the action, if more than 0 segments were deleted
-        findLines();
     }
     pwSegments = [];
     wireMode = 'none';
@@ -2414,8 +2430,17 @@ function showElements() {
             elem.show();
         }
     } else {
-        for (const elem of wires) {
-            elem.show();
+        if (selection.length > 0) {
+            for (const elem of wires) {
+                elem.show();
+            }
+            for (const elem of selection) {
+                elem[0].show();
+            }
+        } else {
+            for (let i = 0; i < wires.length; i++) {
+                wires[i].show();
+            }
         }
     }
 

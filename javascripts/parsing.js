@@ -7,13 +7,36 @@ let traced = []; // List of all traced segments (needed by parseGroups)
     Gives a list of all segments that have an end in x, y, except segment j
 */
 function segmentPoints(x, y, j) {
-    let indexList = [];
+    let points = 0;
+    for (let i = 0; i < wires.length; i++) {
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && wires[i].startY === y && (i !== j)) {
+            points += 2;
+        }
+        if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) > y && wires[i].startX === x && (i !== j)) {
+            points += 2;
+        }
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) === x && wires[i].startY === y && (i !== j)) {
+            points++;
+        }
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) === x && Math.max(wires[i].startX, wires[i].endX) > x && wires[i].startY === y && (i !== j)) {
+            points++;
+        }
+        if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) === y && wires[i].startX === x && (i !== j)) {
+            points++;
+        }
+        if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) === y && Math.max(wires[i].startY, wires[i].endY) > y && wires[i].startX === x && (i !== j)) {
+            points++;
+        }
+    }
+    return points;
+    
+    /*let indexList = [];
     for (let i = 0; i < segments.length; i++) {
         if ((segments[i].endX === x && segments[i].endY === y) || (segments[i].startX === x && segments[i].startY === y) && (i !== j)) {
             indexList.push(i);
         }
     }
-    return indexList;
+    return indexList;*/
 }
 
 /*
@@ -264,8 +287,27 @@ function integrateElements() {
 /*
     Takes all segments and bundles them into wires (straight lines that are potentially longer than one segment)
 */
-function findLines() {
-    let seg = segments.slice(0);
+function findLines(newSegments) {
+    let seg = _.cloneDeep(segments);
+    for (let i = 0; i < seg.length; i++) {
+        for (let j = 0; j < seg.length; j++) {
+            if (i !== j && seg[i] !== null && seg[j] !== null) {
+                if (((seg[i].startX === seg[j].startX) && (seg[i].endX === seg[j].endX) &&
+                    (seg[i].startY === seg[j].startY) && (seg[i].endY === seg[j].endY)) ||
+                    ((seg[i].startX === seg[j].endX) && (seg[i].endX === seg[j].startX) &&
+                        (seg[i].startY === seg[j].endY) && (seg[i].endY === seg[j].startY))) {
+                    seg[j] = null;
+                }
+            }
+        }
+    }
+    for (let i = seg.length - 1; i >= 0; i--) {
+        if (seg[i] === null) {
+            seg.splice(i, 1);
+        }
+    }
+    segments = _.cloneDeep(seg);
+    //segments.concat(_.cloneDeep(seg));
     for (let i = 0; i < seg.length; i++) {
         for (let j = 0; j < seg.length; j++) {
             if (i !== j && seg[i] !== null && seg[j] !== null) {
@@ -302,4 +344,96 @@ function findLines() {
         }
     }
     wires = seg;
+    //wires = wires.concat(seg);
+    //console.log(wires);
 }
+/*
+function deleteFromWires(deletedSegments) {
+    console.log(deletedSegments);
+    let cloneWires = _.cloneDeep(wires);
+    for (let i = 0; i < deletedSegments.length; i++) {
+        for (let j = 0; j < cloneWires.length; j++) {
+            if (deletedSegments[i][0].direction === cloneWires[j].direction && deletedSegments[i][0].direction === 0) {
+                if (deletedSegments[i][0].startY === cloneWires[j].startY &&
+                    Math.min(deletedSegments[i][0].startX, deletedSegments[i][0].endX) >= Math.min(cloneWires[j].startX, cloneWires[j].endX) &&
+                    Math.max(deletedSegments[i][0].startX, deletedSegments[i][0].endX) <= Math.max(cloneWires[j].startX, cloneWires[j].endX)) {
+                    console.log('Deleting from ' + j);
+                    removeFromWire(cloneWires[j], deletedSegments, j);
+                }
+            }
+        }
+    }
+}
+
+function removeFromWire(w, seg, wireIndex) {
+    let newWires = [];
+    let minX = seg[0][0].startX;
+    let minY = seg[0][0].startY;
+    let maxX = seg[0][0].endX;
+    let maxY = seg[0][0].endY;
+
+    for (let i = 0; i < seg.length; i++) {
+        minX = Math.min(minX, seg[i][0].startX, seg[i][0].endX);
+        minY = Math.min(minY, seg[i][0].startY, seg[i][0].endY);
+        maxX = Math.max(maxX, seg[i][0].startX, seg[i][0].endX);
+        maxY = Math.max(maxY, seg[i][0].startX, seg[i][0].endY);
+    }
+
+    if (w.direction === 0 && Math.min(w.startX, w.endX) < minX) {
+        let wire1 = new Wire(0, Math.min(w.startX, w.endX), w.startY, false, transform);
+        wire1.endX = minX;
+        wire1.endY = wire1.startY;
+        newWires.push(wire1);
+    }
+
+    if (w.direction === 0 && Math.max(w.startX, w.endX) > maxX) {
+        let wire2 = new Wire(0, maxX, w.startY, false, transform);
+        wire2.endX = Math.max(w.startX, w.endX);
+        wire2.endY = wire2.startY;
+        newWires.push(wire2);
+    }
+
+    if (w.direction === 1 && Math.min(w.startY, w.endY) < minY) {
+        let wire1 = new Wire(0, w.startX, Math.min(w.startY, w.endY), false, transform);
+        wire1.endX = wire1.startX;
+        wire1.endY = minY;
+        newWires.push(wire1);
+    }
+
+    if (w.direction === 1 && Math.max(w.startY, w.endY) > maxY) {
+        let wire2 = new Wire(0, w.startX, maxY, false, transform);
+        wire2.endX = wire2.startX;
+        wire2.endY = Math.max(w.startY, w.endY);
+        newWires.push(wire2);
+    }
+    console.log(newWires);
+    wires.splice(wireIndex, 1);
+    for (let i = 0; i < newWires.length; i++) {
+        wires.splice(wireIndex + i, 0, newWires[i]);
+    }
+}*/
+
+/*function mergeWires() {
+    let cloneWires = _.cloneDeep(wires);
+    let deleteList = [];
+    for (let i = 0; i < cloneWires.length; i++) {
+        for (let j = 0; j < cloneWires.length; j++) {
+            if (cloneWires[i].direction === cloneWires[j].direction && i !== j && deleteList.indexOf(i) < 0) {
+                if ((cloneWires[i].startX === cloneWires[j].startX || cloneWires[i].startX === cloneWires[j].endX || cloneWires[i].endX === cloneWires[j].startX || cloneWires[i].endX === cloneWires[j].endX) &&
+                    (cloneWires[i].startY === cloneWires[j].startY || cloneWires[i].startY === cloneWires[j].endY || cloneWires[i].endY === cloneWires[j].startY || cloneWires[i].endY === cloneWires[j].endY)) {
+                    console.log('Merging ' + i + ' and ' + j);
+                    cloneWires[i] = new Wire(cloneWires[i].direction,
+                        Math.min(cloneWires[i].startX, cloneWires[j].startX, cloneWires[i].endX, cloneWires[j].endX),
+                        Math.min(cloneWires[i].startY, cloneWires[j].startY, cloneWires[i].endY, cloneWires[j].endY), false, transform);
+                    cloneWires[i].endX = Math.max(cloneWires[i].startX, cloneWires[j].startX, cloneWires[i].endX, cloneWires[j].endX);
+                    cloneWires[i].endY = Math.max(cloneWires[i].startY, cloneWires[j].startY, cloneWires[i].endY, cloneWires[j].endY);
+                    deleteList.push(j);
+                }
+            }
+        }
+    }
+    for (let i = deleteList.length - 1; i >= 0; i--) {
+        cloneWires.splice(deleteList[i], 1);
+    }
+    wires = cloneWires;
+}*/

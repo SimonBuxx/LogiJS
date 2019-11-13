@@ -99,13 +99,17 @@ function undo() {
                 break;
             case 'moveSel':
                 setControlMode('select');
-                selection = _.cloneDeep(act.actionObject);
-                moveSelection(-act.actionIndizes[0], -act.actionIndizes[1]);
+                selection = _.cloneDeep(act.actionObject[0]);
+                conpoints = _.cloneDeep(act.actionObject[1]);
+                wires = _.cloneDeep(act.actionObject[2]);
+                segments = _.cloneDeep(act.actionObject[3]);
+                moveSelection(-act.actionIndizes[0], -act.actionIndizes[1], false);
                 finishSelection();
                 setControlMode('modify');
-                selection = [];
+                setSelectMode('none');
                 actionRedo.push(act);
                 break;
+            /*
             case 'delSel':
                 for (let i = 0; i < act.actionObject[0][0].length; i++) {
                     gates.splice(act.actionObject[0][1][i], 0, act.actionObject[0][0][i]);
@@ -133,14 +137,14 @@ function undo() {
                 /*for (let i = 0; i < act.actionObject[6][0].length; i++) {
                     wires.splice(act.actionObject[6][1][i], 0, act.actionObject[6][0][i]);
                 }*/
-                diodes = _.cloneDeep(act.actionObject[2]);
-                conpoints = _.cloneDeep(act.actionObject[8]);
-                /*for (let i = 0; i < act.actionObject[9][0].length; i++) {
-                    segments.splice(act.actionObject[9][1][i], 0, act.actionObject[9][0][i]);
-                }*/
-                doConpoints();
-                actionRedo.push(act);
-                break;
+            //diodes = _.cloneDeep(act.actionObject[2]);
+            //conpoints = _.cloneDeep(act.actionObject[8]);
+            /*for (let i = 0; i < act.actionObject[9][0].length; i++) {
+                segments.splice(act.actionObject[9][1][i], 0, act.actionObject[9][0][i]);
+            }*/
+            //doConpoints();
+            //actionRedo.push(act);
+            //break;
             case 'addWire':
                 conpoints = act.actionObject[1];
                 for (let i = act.actionIndizes[0].length - 1; i >= 0; i--) {
@@ -268,13 +272,17 @@ function redo() {
                 break;
             case 'moveSel':
                 setControlMode('select');
-                selection = _.cloneDeep(act.actionObject);
-                moveSelection(act.actionIndizes[0], act.actionIndizes[1]);
+                selection = _.cloneDeep(act.actionObject[0]);
+                conpoints = _.cloneDeep(act.actionObject[1]);
+                wires = _.cloneDeep(act.actionObject[2]);
+                segments = _.cloneDeep(act.actionObject[3]);
+                moveSelection(act.actionIndizes[0], act.actionIndizes[1], true);
                 finishSelection();
                 setControlMode('modify');
-                selection = [];
+                setSelectMode('none');
                 actionUndo.push(act);
                 break;
+            /*
             case 'delSel': // TODO
                 for (let i = act.actionObject[0][0].length - 1; i >= 0; i--) {
                     gates.splice(act.actionObject[0][1][i], 1);
@@ -303,14 +311,14 @@ function redo() {
                 /*for (let i = 0; i < act.actionObject[6][0].length; i++) {
                     wires.splice(act.actionObject[6][1][i], 0, act.actionObject[6][0][i]);
                 }*/
-                diodes = act.actionObject[2].slice(0);
-                conpoints = act.actionObject[8].slice(0);
-                /*for (let i = 0; i < act.actionObject[9][0].length; i++) {
-                    segments.splice(act.actionObject[9][1][i], 0, act.actionObject[9][0][i]);
-                }*/
-                doConpoints();
-                actionUndo.push(act);
-                break;
+            //diodes = act.actionObject[2].slice(0);
+            //conpoints = act.actionObject[8].slice(0);
+            /*for (let i = 0; i < act.actionObject[9][0].length; i++) {
+                segments.splice(act.actionObject[9][1][i], 0, act.actionObject[9][0][i]);
+            }*/
+            //doConpoints();
+            //actionUndo.push(act);
+            //break;
             case 'addWire':
                 conpoints = act.actionObject[2];
                 for (let i = 0; i < act.actionIndizes[0].length; i++) {

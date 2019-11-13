@@ -16,7 +16,7 @@ function deleteInvalidDiodes() {
 */
 function deleteInvalidConpoints() {
     for (let j = conpoints.length - 1; j >= 0; j--) {
-        if (segmentPoints(conpoints[j].x, conpoints[j].y, -1).length < 3) {
+        if (segmentPoints(conpoints[j].x, conpoints[j].y, -1) < 3) {
             conpoints.splice(j, 1);
         }
     }
@@ -35,19 +35,37 @@ function createConpoint(x, y, state, g) {
 }
 
 function fullCrossing(x, y) {
-    let horCount = 0;
-    let verCount = 0;
-    for (let i = 0; i < segments.length; i++) {
-        if ((segments[i].startX === x && segments[i].startY === y) || (segments[i].endX === x && segments[i].endY === y)) {
-            if (segments[i].direction === 0) {
-                horCount++;
-            }
-            if (segments[i].direction === 1) {
-                verCount++;
-            }
+    let horFound = false;
+    let verFound = false;
+    for (let i = 0; i < wires.length; i++) {
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && Math.min(wires[i].startY, wires[i].endY) === y) {
+            horFound = true;
+        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) > y && Math.min(wires[i].startX, wires[i].endX) === x) {
+            verFound = true;
         }
     }
-    return (horCount >= 2 && verCount >= 2);
+    return (horFound && verFound);
+}
+
+function tCrossing(x, y) {
+    let horLooseFound = false;
+    let verLooseFound = false;
+    let horTightFound = false;
+    let verTightFound = false;
+    for (let i = 0; i < wires.length; i++) {
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) <= x && Math.max(wires[i].startX, wires[i].endX) >= x && Math.min(wires[i].startY, wires[i].endY) === y) {
+            horLooseFound = true;
+        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) > y && Math.min(wires[i].startX, wires[i].endX) === x) {
+            verTightFound = true;
+        }
+
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && Math.min(wires[i].startY, wires[i].endY) === y) {
+            horTightFound = true;
+        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) <= y && Math.max(wires[i].startY, wires[i].endY) >= y && Math.min(wires[i].startX, wires[i].endX) === x) {
+            verLooseFound = true;
+        }
+    }
+    return ((horLooseFound && verTightFound) || (horTightFound && verLooseFound)) && !(horTightFound && verTightFound);
 }
 
 function deleteConpoint(conpointNumber) {
@@ -112,18 +130,12 @@ function isDiode(x, y) {
     Updates all ConPoints, including deleting
 */
 function doConpoints() {
-    for (let i = 0; i < segments.length; i++) {
-        // Get all segments starting or ending in the point
-        let wp1 = segmentPoints(segments[i].startX, segments[i].startY, -1);
-        let wp2 = segmentPoints(segments[i].endX, segments[i].endY, -1);
-
-        // If there are 3 segments connecting
-        if (wp1.length === 3) {
-            createConpoint(segments[i].startX, segments[i].startY, false, -1);
+    for (let i = 0; i < wires.length; i++) {
+        if (tCrossing(wires[i].startX, wires[i].startY)) {
+            createConpoint(wires[i].startX, wires[i].startY, false, -1);
         }
-        // Same thing for the other direction
-        if (wp2.length === 3) {
-            createConpoint(segments[i].endX, segments[i].endY, false, -1);
+        if (tCrossing(wires[i].endX, wires[i].endY)) {
+            createConpoint(wires[i].endX, wires[i].endY, false, -1);
         }
     }
     deleteInvalidDiodes();

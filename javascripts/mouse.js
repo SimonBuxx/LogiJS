@@ -228,7 +228,6 @@ function mouseDragged() {
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
             moveSelection(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE - sDragX2,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE - sDragY2);
-            finishSelection();
             sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
             sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
         }
@@ -246,9 +245,6 @@ function mousePressed() {
     }
     if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
 
-    if (controlMode !== 'select') {
-        showSelectionBox = false;
-    }
     if (wireMode === 'hold') {
         wireMode = 'none';
     }
@@ -290,7 +286,6 @@ function mousePressed() {
                     case 'end':
                         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
-                        setSelectMode('start');
                         if (selectionBox.mouseOver()) {
                             // Start dragging
                             sDragX1 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
@@ -303,9 +298,10 @@ function mousePressed() {
                             }
                             setSelectMode('drag');
                         } else {
-                            enterModifierMode();
-                            pushSelectAction(sDragX2 - initX, sDragY2 - initY, selectionBox.x - selectionBox.w / 2, selectionBox.y - selectionBox.h / 2,
+                            pushMoveSelectionAction(sDragX2 - initX, sDragY2 - initY, selectionBox.x - selectionBox.w / 2, selectionBox.y - selectionBox.h / 2,
                                 selectionBox.x + selectionBox.w / 2, selectionBox.y + selectionBox.h / 2);
+                            finishSelection();
+                            enterModifierMode();
                             initX = 0;
                             initY = 0;
                         }
@@ -563,20 +559,25 @@ function mouseReleased() {
                     break;
                 case 'select':
                     switch (selectMode) {
+                        case 'none':
+                            break;
                         case 'start':
                             // Selection done, give the rectangle coordinates and dimensions to the handling function
                             handleSelection(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
                                 Math.max(selectStartX, selectEndX), Math.max(selectStartY, selectEndY));
-                                setSelectMode('end');
+                            setSelectMode('end');
+                            break;
+                        case 'end':
                             break;
                         case 'drag':
                             setSelectMode('end');
                             break;
                         default:
+                            console.log('[MOUSE RELEASED] Select mode ' + selectMode + ' not supported!');
                     }
                     break;
                 default:
-                    console.log('Control Mode not supported!');
+                    console.log('Control mode not supported!');
             }
         }
         // Enable or disable the Undo-Redo buttons
@@ -711,7 +712,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (loading  || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
     if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);
