@@ -51,7 +51,7 @@ head
               a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
             li
               if user !== ''
-                a.internal-link(rel='nofollow', href='/dashboard', target='_parent', style="margin-left: 60px; color: rgb(40, 180, 40);") #{user.toUpperCase()}
+                a.internal-link.user-button(rel='nofollow', href='/dashboard', target='_parent') #{user.toUpperCase()}
               else
                 a.internal-link(rel='nofollow', href='/login', target='_parent', style="margin-left: 60px;") LOGIN
             if user == ''

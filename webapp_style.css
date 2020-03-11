@@ -18,16 +18,14 @@ body {
     box-sizing: content-box;
     cursor: pointer;
     padding: 1px 12px;
-    border: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
-    border-bottom:2px solid black;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: #6e6e6e;
+    background: rgb(110, 110, 110);
     -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -36,15 +34,19 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
   }
 
 .colorButton {
     display: inline-block;
     cursor: pointer;
-    border: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
-    border-bottom: 2px solid black;
+    border: 1px solid transparent;
+    box-shadow: inset 5px 5px 15px #2b2b2b, 
+                inset -5px -5px 15px #3a3a3a;
     padding: 0;
 }
 
@@ -95,7 +97,7 @@ body {
 }
 
 .colorButton.active {
-    border-bottom: 2px solid white;
+    box-shadow: none;
 }
 
 .ease_in {
@@ -132,29 +134,38 @@ body {
 }
 
 .button:hover {
-    background: #c83232;
+    background: rgb(255, 87, 87);
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .button:active {
-    background: #961e1e;
+    background: rgb(200,50,50);
     -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .button:disabled {
-    background: #292929;
+    background: rgb(110,110,110);
     color: #969696;
     -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     cursor: default;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .buttonLeft{
@@ -166,17 +177,17 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    padding: 2px 11px;
-    border: 0;
+    padding: 3px 10px;
+    /*border: 0;*/
     -webkit-border-radius: 0;
     border-radius: 0;
-    border-bottom:2px solid black;
+    /*border-bottom:2px solid black;*/
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: #6e6e6e;
+    background: rgb(110, 110, 110);
     -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -185,12 +196,15 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .previewButton {
     width: 63px;
     height: 55px;
-    padding: 4px 2px;
+    padding: 4px 1px;
     margin-top : 3px;
 	margin-left : 5px;
     display: inline-block;
@@ -198,10 +212,10 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    border: 0;
+    /*border: 0;*/
     -webkit-border-radius: 0;
     border-radius: 0;
-    border-bottom:2px solid black;
+    /*border-bottom:2px solid black;*/
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
@@ -216,42 +230,57 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    box-shadow: inset 15px 15px 45px #2b2b2b, 
+                inset -15px -15px 45px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .previewButton:active, .previewButton.active {
-    background: #961e1e;
+    background: rgb(200, 50, 50);
     -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    box-shadow: inset 15px 15px 45px #2b2b2b, 
+                inset -15px -15px 45px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .previewButton:hover {
-    background: #c83232;
+    background: rgb(255, 87, 87);
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    box-shadow: inset 15px 15px 45px #2b2b2b, 
+                inset -15px -15px 45px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .previewButton:disabled {
-    background: #292929;
+    background: rgb(110,110,110);
     -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     cursor: default;
+    box-shadow: inset 15px 15px 45px #2b2b2b, 
+                inset -15px -15px 45px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .textInput {
-    border: 0;
-    border-bottom: 3px solid black;
     font-size: 18px;
     padding: 10px;
+    background: #646464;
+    color: white;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .textInput:disabled {
-    background-color: rgb(200, 200, 200);
+    background-color: #323232;
 }
 
 .topBox {
@@ -268,7 +297,10 @@ body {
 }
 
 .descInput {
+    background: #646464;
     padding: 10px;
+    box-shadow: inset 30px 30px 90px #2b2b2b, 
+                inset -30px -30px 90px #3a3a3a;
 }
 
 .selectLeft{
@@ -283,7 +315,6 @@ body {
     padding: 1px 10px;
     -webkit-border-radius: 0;
     border-radius: 0;
-    border-bottom:2px solid black;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
@@ -299,6 +330,9 @@ body {
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     user-select: none;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .sequencer {
@@ -323,10 +357,10 @@ body {
     color: white;
     -o-text-overflow: clip;
     text-overflow: clip;
-    background-color: #6e6e6e;
-    border: 0;
-    border-bottom: 3px solid black;
-    outline: none;
+    background-color: #646464;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .sequencer::-ms-expand {
@@ -336,47 +370,47 @@ body {
 .sequencer option {
     background:#6e6e6e;
     padding: 1px 10px;
-    border: 0;
   }
 
 .buttonLeft:hover {
-    border: 0;
-    border-bottom: 2px solid black;
-    padding: 2px 11px;
-    background: #c83232;
+    border: 1px solid transparent;
+    padding: 3px 10px;
+    background: rgb(255, 87, 87);
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
 }
 
 .buttonLeft:active, .buttonLeft.active {
-    border: 0;
-    border-bottom: 2px solid black;
-    padding: 2px 11px;
-    background: #961e1e;
+    border: 1px solid transparent;
+    padding: 3px 10px;
+    background: rgb(200,50,50);
     -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
 }
 
 .buttonLeft:disabled {
-    border: 0;
-    border-bottom: 2px solid black;
-    padding: 2px 11px;
-    background: #292929;
+    border: 1px solid transparent;
+    padding: 3px 10px;
+    background: rgb(110, 110, 110);
     color: #969696;
     -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
     cursor: default;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
 }
 
 .button.active {
-    border: 0;
-    border-bottom: 2px solid black;
     padding: 1px 12px;
     background: #961e1e;
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -388,8 +422,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     padding: 7px;
-    border: 0;
-    border-bottom: 3px solid black;
+    border: 1px solid transparent;
 }
 
 .slider {
@@ -397,11 +430,13 @@ body {
     appearance: none;
     height: 30px;
     width: 160px;
-    border-bottom: 3px solid black;
-    background: #969696;
+    background: #646464;
     outline: none;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+    inset -10px -10px 30px #3a3a3a;
+    border: 1px solid transparent;
 }
 
 .slider::-webkit-slider-thumb {
@@ -410,7 +445,6 @@ body {
     width: 20px;
     height: 30px;
     border-radius: 0;
-    /*border: 3px solid black;*/
     background: #292929;
     cursor: pointer;
 }
@@ -419,7 +453,6 @@ body {
     width: 20px;
     height: 30px;
     border-radius: 0;
-    /*border: 3px solid black;*/
     background: #292929;
     cursor: pointer;
 }
@@ -433,12 +466,12 @@ input[type=range]::-ms-tooltip {
     margin: 20px;
     font-size: 20px;
     width: 280px;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
 }
 
 .btn-red {
     background-color: rgb(200, 50, 50);
-    border: 0;
-    border-bottom:2px solid black;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
@@ -453,10 +486,14 @@ input[type=range]::-ms-tooltip {
     -webkit-text-size-adjust: 100%;
     cursor: pointer;
     width: 145px;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
+    border: 1px solid transparent;
+    outline: none;
 }
 
 .btn-red:hover {
-    background-color: rgb(209, 71, 71);
+    background-color: rgb(255, 87, 87);
     color:#ffffff;
 }
 

@@ -418,7 +418,7 @@ function createModifierElements() {
 
     sequencer = createSelect();
     sequencer.hide();
-    sequencer.size(43, 33);
+    sequencer.size(42, 33);
     sequencer.changed(sequencerChanged);
     fillSequencer(1);
     sequencer.elt.className = 'sequencer';

@@ -30,11 +30,11 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 }
 
 .base_layer {
-    outline: 4px solid rgb(200, 50, 50);
+    outline: 1px solid rgb(200, 50, 50);
 }
 
 .black_layer {
-    outline: 4px solid black;
+    outline: 1px solid black;
 }
 
 .darker {
@@ -129,10 +129,15 @@ input {
     font-size: 20px;
     padding: 10px;
     border: none;
-    border-bottom: 2px solid black;
+    background-color: rgb(100, 100, 100);
+    color: #fff;
+    /*border-bottom: 2px solid black;*/
+    border: 1px solid transparent;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
 }
 
 .password {
@@ -207,6 +212,7 @@ input {
     padding: 20px;
     height: 400px;
     display: block;
+    border: 1px solid transparent;
     background-color: rgba(50, 50, 50, 0.9);
 }
 
@@ -266,52 +272,62 @@ input {
 
 .btn-orange {
     background-color: rgb(200, 50, 50);
-    border-bottom:2px solid black;
+    /*border-bottom:2px solid black;*/
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
     color:#ffffff;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
 }
 
 .btn-green {
     background-color: rgb(40, 180, 40);
-    border-bottom:2px solid black;
+    /*border-bottom:2px solid black;*/
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
     color:#ffffff;
+    /*border-radius: 10px;
+    background: #323232;*/
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
 }
 
 .btn-orange:hover, .btn-orange:focus, .btn-orange:active, .btn-orange.active, .open .dropdown-toggle.btn-orange {
-    background-color: rgb(209, 71, 71);
+    background-color: rgb(255, 87, 87);
     color:#ffffff;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
 }
 
 .btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
-    background-color: rgb(78, 208, 69);
+    background-color: rgb(95, 255, 84);
     color:#ffffff;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
 }
 
 .nav > li > a {
     padding: 10px 20px;
+    border: 1px solid transparent;
 }
 
 .nav > li > a:hover,
 .nav > li > a:focus {
     background-color: rgb(100, 100, 100);
     color:#fff;
+    border: 1px solid transparent;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-    background-color: rgb(100, 100, 100);
+    background-color: rgb(179, 179, 179);
     color:#fff;
 }
 
-
-.nav > li > a {
-    color: #ffffff;
-}
 .navbar-default {
     background-color:#fff;
     border:none;
@@ -322,10 +338,45 @@ input {
 .navbar-default .navbar-nav > .active > a:focus {
     background-color: rgb(200, 50, 50);
     color:#fff;
+    border: 1px solid transparent;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
+}
+
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    background-color: rgb(255, 87, 87);
+}
+
+.navbar-default .navbar-nav > .active > .user-button {
+    background-color: rgb(40, 180, 40);
+    color: rgb(40, 180, 40);
+}
+
+.navbar-default .navbar-nav > .active > .user-button:hover,
+.navbar-default .navbar-nav > .active > .user-button:focus {
+    background-color: rgb(95, 255, 84);
+    color: rgb(40, 180, 40);
 }
 
 .navbar {
     margin-bottom: 0px;
+}
+
+.user-button {
+    margin-left: 60px; 
+}
+
+.navbar-default .navbar-nav > li > .user-button {
+    color: rgb(40, 180, 40);
+}
+
+.navbar-default .navbar-nav > li > .user-button:hover {
+    background: rgb(95, 255, 84);
+    color: rgb(40, 180, 40);
+    border: 1px solid transparent;
+    box-shadow: inset 20px 20px 60px #2b2b2b, 
+                inset -20px -20px 60px #3a3a3a;
 }
 
 .footer_bottom {
