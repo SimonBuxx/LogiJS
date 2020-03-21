@@ -212,10 +212,8 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    /*border: 0;*/
     -webkit-border-radius: 0;
     border-radius: 0;
-    /*border-bottom:2px solid black;*/
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
@@ -420,9 +418,13 @@ body {
 
 .labelTextBox {
     font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
+    font-size: 18px;
     padding: 7px;
     border: 1px solid transparent;
+    background: #646464;
+    color: white;
+    box-shadow: inset 10px 10px 30px #2b2b2b, 
+                inset -10px -10px 30px #3a3a3a;
 }
 
 .slider {

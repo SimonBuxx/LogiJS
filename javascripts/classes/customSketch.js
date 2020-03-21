@@ -200,11 +200,11 @@ CustomSketch.prototype.updateGroups = function () {
 */
 CustomSketch.prototype.wirePoints = function (x, y, j) {
     let indexList = [];
-    for (let i = 0; i < this.objects[SEGNUM].length; i++) {
-        if (((this.objects[SEGNUM][i].direction === 0 && this.objects[SEGNUM][i].endX <= x && this.objects[SEGNUM][i].startX >= x && this.objects[SEGNUM][i].startY === y) ||
-            (this.objects[SEGNUM][i].direction === 1 && this.objects[SEGNUM][i].endY <= y && this.objects[SEGNUM][i].startY >= y && this.objects[SEGNUM][i].startX === x) ||
-            (this.objects[SEGNUM][i].direction === 0 && this.objects[SEGNUM][i].startX <= x && this.objects[SEGNUM][i].endX >= x && this.objects[SEGNUM][i].startY === y) ||
-            (this.objects[SEGNUM][i].direction === 1 && this.objects[SEGNUM][i].startY <= y && this.objects[SEGNUM][i].endY >= y && this.objects[SEGNUM][i].startX === x)) &&
+    for (let i = 0; i < this.objects[WIRENUM].length; i++) {
+        if (((this.objects[WIRENUM][i].direction === 0 && this.objects[WIRENUM][i].endX <= x && this.objects[WIRENUM][i].startX >= x && this.objects[WIRENUM][i].startY === y) ||
+            (this.objects[WIRENUM][i].direction === 1 && this.objects[WIRENUM][i].endY <= y && this.objects[WIRENUM][i].startY >= y && this.objects[WIRENUM][i].startX === x) ||
+            (this.objects[WIRENUM][i].direction === 0 && this.objects[WIRENUM][i].startX <= x && this.objects[WIRENUM][i].endX >= x && this.objects[WIRENUM][i].startY === y) ||
+            (this.objects[WIRENUM][i].direction === 1 && this.objects[WIRENUM][i].startY <= y && this.objects[WIRENUM][i].endY >= y && this.objects[WIRENUM][i].startX === x)) &&
             (i !== j)) {
             indexList.push(i);
         }
@@ -214,19 +214,19 @@ CustomSketch.prototype.wirePoints = function (x, y, j) {
 
 CustomSketch.prototype.wireConnect = function (wire) {
     let indexList = [];
-    for (let i = 0; i < this.objects[SEGNUM].length; i++) {
-        if (wire.direction === 0 && this.objects[SEGNUM][i].direction === 1) {
-            if ((this.objects[SEGNUM][i].startY <= wire.startY && this.objects[SEGNUM][i].endY === wire.startY && this.objects[SEGNUM][i].startX >= wire.startX && this.objects[SEGNUM][i].startX <= wire.endX) ||
-                (this.objects[SEGNUM][i].startY === wire.startY && this.objects[SEGNUM][i].endY >= wire.startY && this.objects[SEGNUM][i].startX >= wire.startX && this.objects[SEGNUM][i].startX <= wire.endX) ||
-                (this.objects[SEGNUM][i].startY <= wire.startY && this.objects[SEGNUM][i].endY >= wire.startY && this.objects[SEGNUM][i].startX >= wire.startX && this.objects[SEGNUM][i].startX === wire.endX) ||
-                (this.objects[SEGNUM][i].startY <= wire.startY && this.objects[SEGNUM][i].endY >= wire.startY && this.objects[SEGNUM][i].startX === wire.startX && this.objects[SEGNUM][i].startX <= wire.endX)) {
+    for (let i = 0; i < this.objects[WIRENUM].length; i++) {
+        if (wire.direction === 0 && this.objects[WIRENUM][i].direction === 1) {
+            if ((this.objects[WIRENUM][i].startY <= wire.startY && this.objects[WIRENUM][i].endY === wire.startY && this.objects[WIRENUM][i].startX >= wire.startX && this.objects[WIRENUM][i].startX <= wire.endX) ||
+                (this.objects[WIRENUM][i].startY === wire.startY && this.objects[WIRENUM][i].endY >= wire.startY && this.objects[WIRENUM][i].startX >= wire.startX && this.objects[WIRENUM][i].startX <= wire.endX) ||
+                (this.objects[WIRENUM][i].startY <= wire.startY && this.objects[WIRENUM][i].endY >= wire.startY && this.objects[WIRENUM][i].startX >= wire.startX && this.objects[WIRENUM][i].startX === wire.endX) ||
+                (this.objects[WIRENUM][i].startY <= wire.startY && this.objects[WIRENUM][i].endY >= wire.startY && this.objects[WIRENUM][i].startX === wire.startX && this.objects[WIRENUM][i].startX <= wire.endX)) {
                 indexList.push(i);
             }
-        } else if (wire.direction === 1 && this.objects[SEGNUM][i].direction === 0) {
-            if ((wire.startY <= this.objects[SEGNUM][i].startY && wire.endY === this.objects[SEGNUM][i].startY && wire.startX >= this.objects[SEGNUM][i].startX && wire.startX <= this.objects[SEGNUM][i].endX) ||
-                (wire.startY === this.objects[SEGNUM][i].startY && wire.endY >= this.objects[SEGNUM][i].startY && wire.startX >= this.objects[SEGNUM][i].startX && wire.startX <= this.objects[SEGNUM][i].endX) ||
-                (wire.startY <= this.objects[SEGNUM][i].startY && wire.endY >= this.objects[SEGNUM][i].startY && wire.startX >= this.objects[SEGNUM][i].startX && wire.startX === this.objects[SEGNUM][i].endX) ||
-                (wire.startY <= this.objects[SEGNUM][i].startY && wire.endY >= this.objects[SEGNUM][i].startY && wire.startX === this.objects[SEGNUM][i].startX && wire.startX <= this.objects[SEGNUM][i].endX)) {
+        } else if (wire.direction === 1 && this.objects[WIRENUM][i].direction === 0) {
+            if ((wire.startY <= this.objects[WIRENUM][i].startY && wire.endY === this.objects[WIRENUM][i].startY && wire.startX >= this.objects[WIRENUM][i].startX && wire.startX <= this.objects[WIRENUM][i].endX) ||
+                (wire.startY === this.objects[WIRENUM][i].startY && wire.endY >= this.objects[WIRENUM][i].startY && wire.startX >= this.objects[WIRENUM][i].startX && wire.startX <= this.objects[WIRENUM][i].endX) ||
+                (wire.startY <= this.objects[WIRENUM][i].startY && wire.endY >= this.objects[WIRENUM][i].startY && wire.startX >= this.objects[WIRENUM][i].startX && wire.startX === this.objects[WIRENUM][i].endX) ||
+                (wire.startY <= this.objects[WIRENUM][i].startY && wire.endY >= this.objects[WIRENUM][i].startY && wire.startX === this.objects[WIRENUM][i].startX && wire.startX <= this.objects[WIRENUM][i].endX)) {
                 indexList.push(i);
             }
         }
@@ -255,11 +255,11 @@ CustomSketch.prototype.listConpoints = function (x1, y1, x2, y2) {
 
 CustomSketch.prototype.wiresTrough = function (x, y, j) {
     let indexList = [];
-    for (let i = 0; i < this.objects[SEGNUM].length; i++) {
-        if (((this.objects[SEGNUM][i].direction === 0 && this.objects[SEGNUM][i].endX < x && this.objects[SEGNUM][i].startX > x && this.objects[SEGNUM][i].startY === y) ||
-            (this.objects[SEGNUM][i].direction === 1 && this.objects[SEGNUM][i].endY < y && this.objects[SEGNUM][i].startY > y && this.objects[SEGNUM][i].startX === x) ||
-            (this.objects[SEGNUM][i].direction === 0 && this.objects[SEGNUM][i].startX < x && this.objects[SEGNUM][i].endX > x && this.objects[SEGNUM][i].startY === y) ||
-            (this.objects[SEGNUM][i].direction === 1 && this.objects[SEGNUM][i].startY < y && this.objects[SEGNUM][i].endY > y && this.objects[SEGNUM][i].startX === x)) &&
+    for (let i = 0; i < this.objects[WIRENUM].length; i++) {
+        if (((this.objects[WIRENUM][i].direction === 0 && this.objects[WIRENUM][i].endX < x && this.objects[WIRENUM][i].startX > x && this.objects[WIRENUM][i].startY === y) ||
+            (this.objects[WIRENUM][i].direction === 1 && this.objects[WIRENUM][i].endY < y && this.objects[WIRENUM][i].startY > y && this.objects[WIRENUM][i].startX === x) ||
+            (this.objects[WIRENUM][i].direction === 0 && this.objects[WIRENUM][i].startX < x && this.objects[WIRENUM][i].endX > x && this.objects[WIRENUM][i].startY === y) ||
+            (this.objects[WIRENUM][i].direction === 1 && this.objects[WIRENUM][i].startY < y && this.objects[WIRENUM][i].endY > y && this.objects[WIRENUM][i].startX === x)) &&
             (i !== j)) {
             indexList.push(i);
         }
@@ -270,7 +270,7 @@ CustomSketch.prototype.wiresTrough = function (x, y, j) {
 CustomSketch.prototype.parseGroups = function () {
     this.traced = [];
     this.groups = [];
-    for (let i = 0; i < this.objects[SEGNUM].length; i++) {
+    for (let i = 0; i < this.objects[WIRENUM].length; i++) {
         if (this.traced.indexOf(i) < 0) { // If the segment wasn't included in a group yet
             this.exploreGroup(i); // Explore a new group starting at this segment
         }
@@ -283,13 +283,13 @@ CustomSketch.prototype.exploreGroup = function (wire) {
 };
 
 CustomSketch.prototype.exGroup = function (j, g) {
-    this.objects[SEGNUM][j].setGroup(g);
-    this.groups[g].addSegment(this.objects[SEGNUM][j]);
+    this.objects[WIRENUM][j].setGroup(g);
+    this.groups[g].addWire(this.objects[WIRENUM][j]);
     this.traced.push(j);
 
-    let connected = this.wireConnect(this.objects[SEGNUM][j]); // Gives all connected wires (no full crossings)
+    let connected = this.wireConnect(this.objects[WIRENUM][j]); // Gives all connected wires (no full crossings)
 
-    for (let elem of this.listConpoints(this.objects[SEGNUM][j].startX, this.objects[SEGNUM][j].startY, this.objects[SEGNUM][j].endX, this.objects[SEGNUM][j].endY)) {
+    for (let elem of this.listConpoints(this.objects[WIRENUM][j].startX, this.objects[WIRENUM][j].startY, this.objects[WIRENUM][j].endX, this.objects[WIRENUM][j].endY)) {
         this.objects[CPNUM][elem].setGroup(g);
         let troughWire = this.wiresTrough(this.objects[CPNUM][elem].x, this.objects[CPNUM][elem].y, j);
         if (troughWire.length === 1) {
@@ -313,13 +313,13 @@ CustomSketch.prototype.integrateElements = function () {
         for (let k = 0; k < this.objects[GATENUM][j].outputCount; k++) {
             let outputWires = this.wirePoints(this.objects[GATENUM][j].outputClickBoxes[k].x, this.objects[GATENUM][j].outputClickBoxes[k].y, -1);
             if (outputWires.length > 0) {
-                this.groups[this.objects[SEGNUM][outputWires[0]].group].addOutput(this.objects[GATENUM][j], k);
+                this.groups[this.objects[WIRENUM][outputWires[0]].group].addOutput(this.objects[GATENUM][j], k);
             }
         }
         for (let k = 0; k < this.objects[GATENUM][j].inputCount; k++) {
             let inputWires = this.wirePoints(this.objects[GATENUM][j].inputClickBoxes[k].x, this.objects[GATENUM][j].inputClickBoxes[k].y, -1);
             if (inputWires.length > 0) {
-                this.groups[this.objects[SEGNUM][inputWires[0]].group].addInput(this.objects[GATENUM][j], k);
+                this.groups[this.objects[WIRENUM][inputWires[0]].group].addInput(this.objects[GATENUM][j], k);
             }
         }
     }
@@ -328,13 +328,13 @@ CustomSketch.prototype.integrateElements = function () {
         for (let k = 0; k < this.objects[CUSTNUM][j].outputCount; k++) {
             let outputWires = this.wirePoints(this.objects[CUSTNUM][j].outputClickBoxes[k].x, this.objects[CUSTNUM][j].outputClickBoxes[k].y, -1);
             if (outputWires.length > 0) {
-                this.groups[this.objects[SEGNUM][outputWires[0]].group].addOutput(this.objects[CUSTNUM][j], k);
+                this.groups[this.objects[WIRENUM][outputWires[0]].group].addOutput(this.objects[CUSTNUM][j], k);
             }
         }
         for (let k = 0; k < this.objects[CUSTNUM][j].inputCount; k++) {
             let inputWires = this.wirePoints(this.objects[CUSTNUM][j].inputClickBoxes[k].x, this.objects[CUSTNUM][j].inputClickBoxes[k].y, -1);
             if (inputWires.length > 0) {
-                this.groups[this.objects[SEGNUM][inputWires[0]].group].addInput(this.objects[CUSTNUM][j], k);
+                this.groups[this.objects[WIRENUM][inputWires[0]].group].addInput(this.objects[CUSTNUM][j], k);
             }
         }
     }
@@ -342,24 +342,24 @@ CustomSketch.prototype.integrateElements = function () {
     for (let j = 0; j < this.objects[INPNUM].length; j++) {
         let outputWires = this.wirePoints(this.objects[INPNUM][j].clickBox.x, this.objects[INPNUM][j].clickBox.y, -1);
         if (outputWires.length > 0) {
-            this.groups[this.objects[SEGNUM][outputWires[0]].group].addOutput(this.objects[INPNUM][j], 0);
+            this.groups[this.objects[WIRENUM][outputWires[0]].group].addOutput(this.objects[INPNUM][j], 0);
         }
     }
 
     for (let j = 0; j < this.objects[OUTPNUM].length; j++) {
         let inputWires = this.wirePoints(this.objects[OUTPNUM][j].clickBox.x, this.objects[OUTPNUM][j].clickBox.y, -1);
         if (inputWires.length > 0) {
-            this.groups[this.objects[SEGNUM][inputWires[0]].group].addInput(this.objects[OUTPNUM][j], 0);
+            this.groups[this.objects[WIRENUM][inputWires[0]].group].addInput(this.objects[OUTPNUM][j], 0);
         }
     }
 
     for (let j = 0; j < this.objects[DINUM].length; j++) {
         let diodeWires = this.wiresTrough(this.objects[DINUM][j].clickBox.x, this.objects[DINUM][j].clickBox.y, -1);
         if (diodeWires.length > 1) {
-            if (this.objects[SEGNUM][diodeWires[0]].direction === 0 && this.objects[SEGNUM][diodeWires[1]].direction === 1) {
-                this.objects[DINUM][j].setGroups(this.objects[SEGNUM][diodeWires[0]].group, this.objects[SEGNUM][diodeWires[1]].group);
-            } else if (this.objects[SEGNUM][diodeWires[0]].direction === 1 && this.objects[SEGNUM][diodeWires[1]].direction === 0) {
-                this.objects[DINUM][j].setGroups(this.objects[SEGNUM][diodeWires[1]].group, this.objects[SEGNUM][diodeWires[0]].group);
+            if (this.objects[WIRENUM][diodeWires[0]].direction === 0 && this.objects[WIRENUM][diodeWires[1]].direction === 1) {
+                this.objects[DINUM][j].setGroups(this.objects[WIRENUM][diodeWires[0]].group, this.objects[WIRENUM][diodeWires[1]].group);
+            } else if (this.objects[WIRENUM][diodeWires[0]].direction === 1 && this.objects[WIRENUM][diodeWires[1]].direction === 0) {
+                this.objects[DINUM][j].setGroups(this.objects[WIRENUM][diodeWires[1]].group, this.objects[WIRENUM][diodeWires[0]].group);
             }
         }
     }

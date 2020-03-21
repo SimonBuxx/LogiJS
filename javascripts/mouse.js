@@ -584,7 +584,8 @@ function mouseReleased() {
         redoButton.elt.disabled = (actionRedo.length === 0);
         undoButton.elt.disabled = (actionUndo.length === 0);
     } else {
-        pwSegments = [];
+        pwWireX = null;
+        pwWireY = null;
         wireMode = 'none';
         lockElements = false;
     }
@@ -702,7 +703,7 @@ function mouseOverGUI() {
         return true;
     }*/
     if (controlMode === 'modify' && inputToModify + outputToModify + labelToModify >= -2) {
-        return (mouseY < 0) || (mouseX < 0) || mouseX >= modifierMenuX && mouseX <= modifierMenuX + 250 && mouseY >= modifierMenuY && mouseY <= modifierMenuY + 150;
+        return (mouseY < 0) || (mouseX < 0) || mouseX >= modifierMenuX && mouseX <= modifierMenuX + 300 && mouseY >= modifierMenuY && mouseY <= modifierMenuY + 170;
     }
     return (mouseY < 0) || (mouseX < 0);
 }

@@ -21,7 +21,7 @@ const BARED = 63,  BAGREEN = 125, BABLUE = 218; // Accent color for blue outputs
 const GATENUM = 0; // Index of the gates
 const OUTPNUM = 1; // Index of the outputs
 const INPNUM  = 2; // Index of the inputs
-const SEGNUM  = 3; // Index of the segments
+const WIRENUM  = 3; // Index of the wires
 const CPNUM   = 4; // Index of the conPoints
 const CUSTNUM = 5; // Index of the customs
 const DINUM   = 6; // Index of the diodes

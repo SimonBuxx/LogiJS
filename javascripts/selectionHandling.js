@@ -12,7 +12,6 @@ function handleSelection(x1, y1, x2, y2) {
     selection = [];
     selectionConpoints = _.cloneDeep(conpoints);
     selectionWires = _.cloneDeep(wires);
-    selectionSegments = _.cloneDeep(segments);
     for (let i = 0; i < gates.length; i++) {
         if (gates[i].x >= x1 && gates[i].x <= x2 && gates[i].y >= y1 && gates[i].y <= y2) {
             gates[i].marked = true;
@@ -71,7 +70,8 @@ function handleSelection(x1, y1, x2, y2) {
             selection.push([wires[i], i]);
         }
     }*/
-    greySegments = [];
+    
+    /*greySegments = [];
     for (let i = 0; i < segments.length; i++) {
         if (((segments[i].direction === 0) && ((segments[i].startX >= x1 || x1 <= segments[i].endX) &&
             (segments[i].startX <= x2 || x2 >= segments[i].endX)) && (segments[i].startY >= y1 && segments[i].endY <= y2)) ||
@@ -82,7 +82,7 @@ function handleSelection(x1, y1, x2, y2) {
             segments[i].wireFlag = false;
             selection.push([segments[i], i]);
         }
-    }
+    }*/
 }
 
 /*
@@ -120,11 +120,11 @@ function moveSelection(dx, dy, moveConpointsAndWires = true) {
                 break;
             case 'w':
                 if (moveConpointsAndWires) {
-                    if (selection[i][0].wireFlag) {
+                    //if (selection[i][0].wireFlag) {
                         wires[selection[i][1]].alterPosition(dx, dy);
-                    } else {
-                        segments[selection[i][1]].alterPosition(dx, dy);
-                    }
+                    //} else {
+                    //    segments[selection[i][1]].alterPosition(dx, dy);
+                    //}
                 }
                 break;
             default:
@@ -150,6 +150,6 @@ function finishSelection() {
             }
         }
     }*/
-    findLines();
+    //findLines();
     doConpoints();
 }

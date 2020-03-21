@@ -152,44 +152,44 @@ function showLabelPropMenu() {
 }
 
 function showModifierMenu() {
-    fill('rgba(50, 50, 50, 0.9)');
+    fill('rgba(0, 0, 0, 0.8)');
     noStroke();
     strokeCap(SQUARE);
     if (inputToModify >= 0) {
         modifierMenuX = (inputs[inputToModify].x + transform.dx - 1) * transform.zoom;
         modifierMenuY = (inputs[inputToModify].y + transform.dy + GRIDSIZE + 2) * transform.zoom;
         if (!inputs[inputToModify].clock) {
-            rect(modifierMenuX, modifierMenuY, 250, 100);
+            rect(modifierMenuX, modifierMenuY, 300, 120, 0, 20);
         } else {
-            rect(modifierMenuX, modifierMenuY, 250, 150);
+            rect(modifierMenuX, modifierMenuY, 300, 170, 0, 20);
         }
     } else if (outputToModify >= 0) {
         modifierMenuX = (outputs[outputToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
         modifierMenuY = (outputs[outputToModify].y + transform.dy + GRIDSIZE / 2 + 2) * transform.zoom;
-        rect(modifierMenuX, modifierMenuY, 250, 100);
+        rect(modifierMenuX, modifierMenuY, 300, 130, 0, 20);
     } else if (labelToModify >= 0) {
         modifierMenuX = (labels[labelToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
         modifierMenuY = (labels[labelToModify].y + transform.dy + GRIDSIZE / 2 + GRIDSIZE * (labels[labelToModify].lines.length - 1) + 2) * transform.zoom;
-        rect(modifierMenuX, modifierMenuY, 250, 150);
+        rect(modifierMenuX, modifierMenuY, 300, 170, 0, 20);
     }
     strokeCap(ROUND);
 }
 
 function positionModifierElements() {
-    sequencer.position(modifierMenuX + 332, modifierMenuY + 27);
+    sequencer.position(modifierMenuX + 362, modifierMenuY + 47);
 
-    captionInput.position(modifierMenuX + 150, modifierMenuY + 30);
-    inputIsTopBox.position(modifierMenuX + 160, modifierMenuY + 80);
-    clockspeedSlider.position(modifierMenuX + 190, modifierMenuY + 130);
-    minusLabel.position(modifierMenuX + 168, modifierMenuY + 121);
-    plusLabel.position(modifierMenuX + 365, modifierMenuY + 125);
+    captionInput.position(modifierMenuX + 170, modifierMenuY + 50);
+    inputIsTopBox.position(modifierMenuX + 190, modifierMenuY + 100);
+    clockspeedSlider.position(modifierMenuX + 220, modifierMenuY + 150);
+    minusLabel.position(modifierMenuX + 198, modifierMenuY + 141);
+    plusLabel.position(modifierMenuX + 395, modifierMenuY + 145);
 
-    redButton.position(modifierMenuX + 195, modifierMenuY + 90);
-    yellowButton.position(modifierMenuX + 235, modifierMenuY + 90);
-    greenButton.position(modifierMenuX + 275, modifierMenuY + 90);
-    blueButton.position(modifierMenuX + 315, modifierMenuY + 90);
+    redButton.position(modifierMenuX + 170, modifierMenuY + 110);
+    yellowButton.position(modifierMenuX + 236, modifierMenuY + 110);
+    greenButton.position(modifierMenuX + 302, modifierMenuY + 110);
+    blueButton.position(modifierMenuX + 368, modifierMenuY + 110);
 
-    labelTextBox.position(modifierMenuX + 160, modifierMenuY + 40);
+    labelTextBox.position(modifierMenuX + 170, modifierMenuY + 50);
 }
 
 function newIsTopState() {
@@ -337,7 +337,7 @@ function setColorButtonsUnactive() {
 
 function createColorButtons() {
     redButton = createButton('');
-    redButton.size(40, 25);
+    redButton.size(60, 30);
     redButton.elt.className = 'colorButton redButton';
     redButton.elt.title = 'Make this output red';
     redButton.mousePressed(function () {
@@ -345,7 +345,7 @@ function createColorButtons() {
     });
 
     yellowButton = createButton('');
-    yellowButton.size(40, 25);
+    yellowButton.size(60, 30);
     yellowButton.elt.className = 'colorButton yellowButton';
     yellowButton.elt.title = 'Make this output yellow';
     yellowButton.mousePressed(function () {
@@ -353,7 +353,7 @@ function createColorButtons() {
     });
 
     greenButton = createButton('');
-    greenButton.size(40, 25);
+    greenButton.size(60, 30);
     greenButton.elt.className = 'colorButton greenButton';
     greenButton.elt.title = 'Make this output green';
     greenButton.mousePressed(function () {
@@ -361,7 +361,7 @@ function createColorButtons() {
     });
 
     blueButton = createButton('');
-    blueButton.size(40, 25);
+    blueButton.size(60, 30);
     blueButton.elt.className = 'colorButton blueButton';
     blueButton.elt.title = 'Make this output blue';
     blueButton.mousePressed(function () {
@@ -413,7 +413,7 @@ function createModifierElements() {
     labelTextBox.elt.className = 'labelTextBox';
     labelTextBox.attribute('placeholder', 'New Label');
     labelTextBox.hide();
-    labelTextBox.size(215, 115);
+    labelTextBox.size(245, 115);
     labelTextBox.elt.onkeyup = labelChanged;
 
     sequencer = createSelect();

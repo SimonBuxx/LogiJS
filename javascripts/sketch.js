@@ -3,12 +3,12 @@
 let gates = []; // List of gates (and, or, xor)
 let outputs = []; // List of outputs
 let inputs = []; // List of inputs (buttons, switches)
-let segments = []; // List of fixed wire segments
-let pwSegments = []; // List of preview wire segments
+let pwWireX = null;
+let pwWireY = null;
 let conpoints = []; // List of wire connection points
 let diodes = []; // List of diodes
 let customs = []; // List of custom objects
-let wires = []; // List of wires (aggregated wire segments)
+let wires = []; // List of wires
 let labels = []; // List of text labels
 let segDisplays = []; // List of 7-segment displays
 
@@ -17,6 +17,9 @@ let counterBitWidth = 4; // Output width of counter objects
 let decoderBitWidth = 4; // Input width of decoder objects
 let muxBitWidth = 1; // In/output width for (de-) multiplexers
 
+let startDirection = 0; // Start direction for the current wire preview
+let traced = []; // List of all traced wires (needed by parseGroups)
+
 /*
     This is a list of all elements that are currently selected with the selection tool
 */
@@ -24,7 +27,6 @@ let selection = [];
 
 let selectionConpoints = [];
 let selectionWires = [];
-let selectionSegments = [];
 
 /*
     These are the start coordinates for the wire preview elements
@@ -795,6 +797,7 @@ function setup() { // jshint ignore:line
     selectButton.position(564, 3);
     selectButton.mousePressed(startSelect);
     selectButton.elt.className = 'button';
+    selectButton.elt.title = 'Coming soon!';
 
     moduleNameInput = createInput('');
     moduleNameInput.attribute('placeholder', 'MODULE NAME');
@@ -1209,14 +1212,11 @@ function hideAllOptions() {
 
 /*
     Deletes all items that are drawn on screen
-    and also the wire segments that are no longer
-    drawn individually
 */
 function clearItems() {
     gates = [];
     outputs = [];
     inputs = [];
-    segments = [];
     conpoints = [];
     customs = [];
     diodes = [];
@@ -1235,7 +1235,7 @@ function clearActionStacks() {
 
 function pushMoveSelectionAction(dx, dy, x1, y1, x2, y2) {
     if ((Math.abs(dx) >= GRIDSIZE || Math.abs(dy) >= GRIDSIZE) && selection.length > 0) {
-        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], [_.cloneDeep(selection), _.cloneDeep(selectionConpoints), _.cloneDeep(selectionWires), _.cloneDeep(selectionSegments)]);
+        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], [_.cloneDeep(selection), _.cloneDeep(selectionConpoints), _.cloneDeep(selectionWires)]);
     }
 }
 
@@ -1290,7 +1290,6 @@ function deleteClicked() {
         let delLabels = [[], []];
         let delOutputs = [[], []];
         let delWires = [[], []];
-        let delSegments = [[], []];
         let delSegDisplays = [[], []];
         for (let i = 0; i < selection.length; i++) {
             /*if (selection[i] instanceof LogicGate) {
@@ -1362,11 +1361,12 @@ function deleteClicked() {
         for (let j = delSegDisplays[1].length - 1; j >= 0; j--) {
             segDisplays.splice(delSegDisplays[1][j], 1);
         }
-        pwSegments = [];
+        pwWireX = null;
+        pwWireY = null;
         wireMode = 'none';
         lockElements = false;
         if (selection.length > 0) {
-            pushUndoAction('delSel', 0, [_.cloneDeep(delGates), _.cloneDeep(delCustoms), _.cloneDeep(diodes), _.cloneDeep(delInputs), _.cloneDeep(delLabels), _.cloneDeep(delOutputs), _.cloneDeep(delWires), _.cloneDeep(delSegDisplays), _.cloneDeep(conpoints), _.cloneDeep(delSegments)]);
+            pushUndoAction('delSel', 0, [_.cloneDeep(delGates), _.cloneDeep(delCustoms), _.cloneDeep(diodes), _.cloneDeep(delInputs), _.cloneDeep(delLabels), _.cloneDeep(delOutputs), _.cloneDeep(delWires), _.cloneDeep(delSegDisplays), _.cloneDeep(conpoints)]);
         }
         doConpoints();
     } else {
@@ -1698,9 +1698,8 @@ function setSelectMode(mode) {
             selection = [];
             selectionConpoints = [];
             selectionWires = [];
-            selectionSegments = [];
             showSelectionBox = false;
-        break;
+            break;
         case 'start':
             showSelectionBox = false;
             break;
@@ -1717,35 +1716,101 @@ function setSelectMode(mode) {
 
 function addWires() {
     let pushed = false;
-    for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
-        if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
-            pushed = true;
-        }
-    }
-    if (pushed) {
-        let newSegments = [];
-        let newSegmentIndices = [];
-        for (let i = 0; i < pwSegments.length; i++) { // Push all preview segments to the existing segments
-            if (segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY) < 0) {
-                segments.push(pwSegments[i]);
-                newSegmentIndices.push(segments.length - 1);
-                newSegments.push(pwSegments[i]);
+
+    let xIndex = -1;
+    let yIndex = -1;
+
+    let deletedIndices = [];
+
+    let editLog = [];
+
+    if (pwWireX !== null) {
+        for (let i = 0; i < wires.length; i++) {
+            let overlap = wireOverlap(pwWireX, wires[i]);
+            if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 0 && pwWireX.startY === wires[i].startY &&
+                (pwWireX.startX == wires[i].endX || pwWireX.startX == wires[i].startX || pwWireX.endX == wires[i].startX || pwWireX.endX == wires[i].endX))) { //jshint ignore:line
+                if (xIndex >= 0) {
+                    let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY, false, transform);
+                    newWire.endX = Math.max(wires[xIndex].endX, wires[i].endX);
+                    newWire.endY = wires[xIndex].startY;
+                    editLog.push(['r', xIndex, wires[xIndex], newWire]);
+                    wires.splice(xIndex, 1, newWire);
+                    pushed = true;
+                    deletedIndices.push(i);
+                } else {
+                    let newWire = new Wire(0, Math.min(pwWireX.startX, wires[i].startX), pwWireX.startY, false, transform);
+                    newWire.endX = Math.max(pwWireX.endX, wires[i].endX);
+                    newWire.endY = pwWireX.startY;
+                    editLog.push(['r', i, wires[i], newWire]);
+                    wires.splice(i, 1, newWire);
+                    pushed = true;
+                    xIndex = i;
+                }
             }
         }
 
+        if (xIndex < 0) {
+            let newWire = new Wire(0, pwWireX.startX, pwWireX.startY, false, transform);
+            newWire.endX = pwWireX.endX;
+            newWire.endY = pwWireX.startY;
+            editLog.push(['a', wires.length, newWire]);
+            wires.push(newWire);
+            pushed = true;
+        }
+    }
+
+    if (pwWireY !== null) {
+        for (let i = 0; i < wires.length; i++) {
+            let overlap = wireOverlap(pwWireY, wires[i]);
+            if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 1 && pwWireY.startX === wires[i].startX &&
+                (pwWireY.startY == wires[i].endY || pwWireY.startY == wires[i].startY || pwWireY.endY == wires[i].startY || pwWireY.endY == wires[i].endY))) { //jshint ignore:line
+                if (yIndex >= 0) {
+                    let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false, transform);
+                    newWire.endX = wires[yIndex].startX;
+                    newWire.endY = Math.max(wires[yIndex].endY, wires[i].endY);
+                    editLog.push(['r', yIndex, wires[yIndex], newWire]);
+                    wires.splice(yIndex, 1, newWire);
+                    pushed = true;
+                    deletedIndices.push(i);
+                } else {
+                    let newWire = new Wire(1, pwWireY.startX, Math.min(pwWireY.startY, wires[i].startY), false, transform);
+                    newWire.endX = pwWireY.startX;
+                    newWire.endY = Math.max(pwWireY.endY, wires[i].endY);
+                    editLog.push(['r', i, wires[i], newWire]);
+                    wires.splice(i, 1, newWire);
+                    pushed = true;
+                    yIndex = i;
+                }
+            }
+        }
+
+        if (yIndex < 0) {
+            let newWire = new Wire(1, pwWireY.startX, pwWireY.startY, false, transform);
+            newWire.endX = pwWireY.startX;
+            newWire.endY = pwWireY.endY;
+            editLog.push(['a', wires.length, newWire]);
+            wires.push(newWire);
+            pushed = true;
+        }
+    }
+
+    for (let i = deletedIndices.length - 1; i >= 0; i--) {
+        editLog.push(['d', deletedIndices[i], wires.splice(deletedIndices[i], 1)[0]]);
+    }
+
+    if (pushed) {
         let conpointsBefore = _.cloneDeep(conpoints);
-        findLines();
         doConpoints();
         let conpointsAfter = _.cloneDeep(conpoints);
-        pushUndoAction('addWire', [newSegmentIndices], [newSegments, conpointsBefore, conpointsAfter]); // push the action for undoing
-    }
-    if (pushed) {
+        pushUndoAction('addWire', [], [_.cloneDeep(editLog), conpointsBefore, conpointsAfter]); // push the action for undoing
         wireMode = 'hold';
     } else {
         wireMode = 'none';
     }
+
     lockElements = false;
-    pwSegments = []; // delete the preview segments
+    pwWireX = null;
+    pwWireY = null;
 }
 
 /*
@@ -1888,52 +1953,102 @@ function addLabel() {
 }
 
 function deleteWires() {
-    let segmentsExist = false;
     let deletedDiodesIndices = [];
     let deletedDiodes = [];
-    let deletedSegmentsIndices = [];
-    let deletedSegments = [];
-    for (let i = pwSegments.length - 1; i >= 0; i--) {
-        let exists = segmentExists(pwSegments[i].startX, pwSegments[i].startY, pwSegments[i].endX, pwSegments[i].endY);
-        if (exists >= 0) {
-            let startDiode = isDiode(pwSegments[i].startX, pwSegments[i].startY);
-            let endDiode = isDiode(pwSegments[i].endX, pwSegments[i].endY);
-            if ((startDiode >= 0)) {
-                if (!deletedDiodesIndices.includes(startDiode)) {
-                    deletedDiodesIndices.push(startDiode);
+
+    let changes = false;
+
+    let newWiresList = [];
+    let replaceIndices = [];
+    let deletedIndices = [];
+
+    let editLog = [];
+
+    if (pwWireX !== null) {
+        for (let i = 0; i < wires.length; i++) {
+            let overlap = wireOverlap(pwWireX, wires[i]);
+            let newWires = removeFromWire(wires[i], overlap, i);
+            if (newWires !== false) {
+                deletedIndices.push(i);
+                changes = true;
+                if (newWires.length >= 1) {
+                    newWiresList.push(newWires);
+                    replaceIndices.push(i);
                 }
             }
-            if ((endDiode >= 0)) {
-                if (!deletedDiodesIndices.includes(endDiode)) {
-                    deletedDiodesIndices.push(endDiode);
-                }
-            }
-            segmentsExist = true;
-            deletedSegmentsIndices.push(exists);
         }
     }
-    if (segmentsExist) {
-        deletedDiodesIndices.sort(function (a, b) {
+
+    if (pwWireY !== null) {
+        for (let i = 0; i < wires.length; i++) {
+            let overlap = wireOverlap(pwWireY, wires[i]);
+            let newWires = removeFromWire(wires[i], overlap, i);
+            if (newWires !== false) {
+                deletedIndices.push(i);
+                changes = true;
+                if (newWires.length >= 1) {
+                    newWiresList.push(newWires);
+                    replaceIndices.push(i);
+                }
+            }
+        }
+    }
+
+    /*
+        delete all wires that should be removed
+    */
+    for (let i = wires.length - 1; i >= 0; i--) {
+        if (deletedIndices.indexOf(i) >= 0) {
+            editLog.push(['d', i, wires.splice(i, 1)[0]]);
+        }
+    }
+
+    /*
+        Add all newly created wires
+    */
+    for (let i = wires.length - 1; i >= 0; i--) {
+        if (deletedIndices.indexOf(i) >= 0) {
+            if (replaceIndices.indexOf(i) >= 0) {
+                let newWires = newWiresList.pop();
+                for (let j = 0; j < newWires.length; j++) {
+                    if (newWires[j].startX !== newWires[j].endX || newWires[j].startY !== newWires[j].endY) {
+                        editLog.push(['a', i + j, newWires[j]]);
+                        wires.splice(i + j, 0, newWires[j]);
+                    }
+                }
+            }
+        }
+    }
+
+    /*
+        Note all indices of diodes that are placed on the preview wires
+    */
+    if (pwWireX !== null) {
+        deletedDiodesIndices = deletedDiodesIndices.concat(diodesOnWire(pwWireX));
+    }
+
+    if (pwWireY !== null) {
+        deletedDiodesIndices = deletedDiodesIndices.concat(diodesOnWire(pwWireY));
+    }
+
+
+    if (changes) { // only push an undo action when changes have been made to the wires
+        deletedDiodesIndices.sort(function (a, b) { // sort the diode indices to remove them in the right order
             return a - b;
         });
+        deletedDiodesIndices = _.uniq(deletedDiodesIndices); // Remove duplicate indices in case a diode is on both wires
         for (let i = deletedDiodesIndices.length - 1; i >= 0; i--) {
-            deletedDiodes.push(diodes.splice(deletedDiodesIndices[i], 1));
+            deletedDiodes.push(diodes.splice(deletedDiodesIndices[i], 1)); // remove the diodes and save them in an array
         }
         deletedDiodes.reverse();
-        deletedSegmentsIndices.sort(function (a, b) {
-            return a - b;
-        });
-        for (let i = deletedSegmentsIndices.length - 1; i >= 0; i--) {
-            deletedSegments.push(segments.splice(deletedSegmentsIndices[i], 1));
-        }
-        deletedSegments.reverse();
         let conpointsBefore = _.cloneDeep(conpoints);
-        findLines();
         doConpoints();
         let conpointsAfter = _.cloneDeep(conpoints);
-        pushUndoAction('delWire', [deletedSegmentsIndices, deletedDiodesIndices], [deletedSegments, conpointsBefore, conpointsAfter, deletedDiodes]); // Push the action, if more than 0 segments were deleted
+        pushUndoAction('delWire', [deletedDiodesIndices], [editLog, conpointsBefore, conpointsAfter, deletedDiodes]);
     }
-    pwSegments = [];
+
+    pwWireX = null; // reset the preview wires
+    pwWireY = null;
     wireMode = 'none';
     lockElements = false;
 }
@@ -2125,7 +2240,7 @@ function disableButtons(status) {
     buttonButton.elt.disabled = status;
     clockButton.elt.disabled = status;
     deleteButton.elt.disabled = status;
-    selectButton.elt.disabled = status;
+    selectButton.elt.disabled = true; // !!!
     reg4Button.elt.disabled = status;
     decoderButton.elt.disabled = status;
     counterButton.elt.disabled = status;
@@ -2159,8 +2274,8 @@ function draw() {
         reDraw(); // Redraw all elements of the sketch
     } else {
         if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI() && !modifierMenuDisplayed()) {
-            generateSegmentSet(wirePreviewStartX, wirePreviewStartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
-                Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false);
+            generatePreviewWires(wirePreviewStartX, wirePreviewStartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
+                Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
             reDraw();
         } else if (controlMode === 'select' || controlMode === 'addObject' && !mouseIsPressed && !modifierMenuDisplayed()) {
             reDraw();
@@ -2245,8 +2360,12 @@ function reDraw() {
 
     // Display the preview wire segment set
     if (wireMode === 'preview' || wireMode === 'delete') {
-        for (const elem of pwSegments) { // Display preview segments
-            elem.show(wireMode === 'delete');
+        if (pwWireX !== null) {
+            pwWireX.show(wireMode === 'delete');
+        }
+
+        if (pwWireY !== null) {
+            pwWireY.show(wireMode === 'delete');
         }
     }
 
@@ -2316,18 +2435,20 @@ function showMessage(msg, subline = '') {
     rect(0, 0, window.width, window.height);
 
     fill(200, 50, 50);
-    noStroke();
-    rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150);
+    strokeWeight(5);
+    stroke(0);
+    //noStroke();
+    rect(window.width / 2 - 250, window.height / 2 - 75, 500, 150);
     stroke(0);
     strokeWeight(4);
     strokeCap(SQUARE);
-    line(window.width / 2 - 300, window.height / 2 + 75, window.width / 2 + 300, window.height / 2 + 75);
+    //line(window.width / 2 - 300, window.height / 2 + 75, window.width / 2 + 300, window.height / 2 + 75);
     strokeCap(ROUND);
-    fill(255);
+    fill(0);
     noStroke();
     textSize(30);
     textAlign(CENTER, CENTER);
-    text(msg, window.width / 2, window.height / 2);
+    text(msg, window.width / 2, window.height / 2 - 20);
     textSize(20);
     text(subline, window.width / 2, window.height / 2 + 30);
 }
@@ -2439,7 +2560,7 @@ function showElements() {
             }
         } else {
             for (let i = 0; i < wires.length; i++) {
-                wires[i].show();
+                wires[i].show(false, i);
             }
         }
     }
@@ -2530,7 +2651,8 @@ function keyPressed() {
                 simClicked();
                 break;
             case CONTROL:
-                startSelect();
+                //startSelect();
+                console.log(wires.length);
                 break;
             case 32: // Space
                 if (controlMode !== 'delete') {

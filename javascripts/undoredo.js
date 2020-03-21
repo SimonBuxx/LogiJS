@@ -102,7 +102,6 @@ function undo() {
                 selection = _.cloneDeep(act.actionObject[0]);
                 conpoints = _.cloneDeep(act.actionObject[1]);
                 wires = _.cloneDeep(act.actionObject[2]);
-                segments = _.cloneDeep(act.actionObject[3]);
                 moveSelection(-act.actionIndizes[0], -act.actionIndizes[1], false);
                 finishSelection();
                 setControlMode('modify');
@@ -147,22 +146,29 @@ function undo() {
             //break;
             case 'addWire':
                 conpoints = act.actionObject[1];
-                for (let i = act.actionIndizes[0].length - 1; i >= 0; i--) {
-                    segments.splice(act.actionIndizes[0][i], 1);
+                for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
+                    if (act.actionObject[0][i][0] === 'a') {
+                        wires.splice(act.actionObject[0][i][1], 1);
+                    } else if (act.actionObject[0][i][0] === 'd') {
+                        wires.splice(act.actionObject[0][i][1], 0, act.actionObject[0][i][2]);
+                    } else if (act.actionObject[0][i][0] === 'r') {
+                        wires.splice(act.actionObject[0][i][1], 1, act.actionObject[0][i][2]);
+                    } 
                 }
-                deleteInvalidDiodes();
-                findLines();
                 actionRedo.push(act);
                 break;
             case 'delWire':
                 conpoints = act.actionObject[1];
+                for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
+                    if (act.actionObject[0][i][0] === 'a') {
+                        wires.splice(act.actionObject[0][i][1], 1);
+                    } else if (act.actionObject[0][i][0] === 'd') {
+                        wires.splice(act.actionObject[0][i][1], 0, act.actionObject[0][i][2]);
+                    }
+                }
                 for (let i = 0; i < act.actionIndizes[0].length; i++) {
-                    segments.splice(act.actionIndizes[0][i], 0, act.actionObject[0][i][0]);
+                    diodes.splice(act.actionIndizes[0][i], 0, act.actionObject[3][i][0]);
                 }
-                for (let i = 0; i < act.actionIndizes[1].length; i++) {
-                    diodes.splice(act.actionIndizes[1][i], 0, act.actionObject[3][i][0]);
-                }
-                findLines();
                 actionRedo.push(act);
                 break;
             default:
@@ -275,7 +281,6 @@ function redo() {
                 selection = _.cloneDeep(act.actionObject[0]);
                 conpoints = _.cloneDeep(act.actionObject[1]);
                 wires = _.cloneDeep(act.actionObject[2]);
-                segments = _.cloneDeep(act.actionObject[3]);
                 moveSelection(act.actionIndizes[0], act.actionIndizes[1], true);
                 finishSelection();
                 setControlMode('modify');
@@ -321,19 +326,31 @@ function redo() {
             //break;
             case 'addWire':
                 conpoints = act.actionObject[2];
-                for (let i = 0; i < act.actionIndizes[0].length; i++) {
-                    segments.splice(act.actionIndizes[0][i], 0, act.actionObject[0][i]);
+                for (let i = 0; i < act.actionObject[0].length; i++) {
+                    if (act.actionObject[0][i][0] === 'a') {
+                        wires.splice(act.actionObject[0][i][1], 0, act.actionObject[0][i][2]);
+                    } else if (act.actionObject[0][i][0] === 'd') {
+                        wires.splice(act.actionObject[0][i][1], 1);
+                    } else if (act.actionObject[0][i][0] === 'r') {
+                        wires.splice(act.actionObject[0][i][1], 1, act.actionObject[0][i][3]);
+                    } 
                 }
-                findLines();
                 actionUndo.push(act);
                 break;
             case 'delWire':
                 conpoints = act.actionObject[2];
-                for (let i = act.actionIndizes[0].length - 1; i >= 0; i--) {
-                    segments.splice(act.actionIndizes[0][i], 1);
+                for (let i = 0; i < act.actionObject[0].length; i++) {
+                    if (act.actionObject[0][i][0] === 'a') {
+                        console.log('redoing add');
+                        wires.splice(act.actionObject[0][i][1], 0, act.actionObject[0][i][2]);
+                    } else if (act.actionObject[0][i][0] === 'd') {
+                        console.log('redoing delete');
+                        wires.splice(act.actionObject[0][i][1], 1);
+                    }
                 }
-                deleteInvalidDiodes();
-                findLines();
+                for (let i = act.actionIndizes[0].length - 1; i >= 0; i--) {
+                    diodes.splice(act.actionIndizes[0][i], 1);
+                }
                 actionUndo.push(act);
                 break;
             default:

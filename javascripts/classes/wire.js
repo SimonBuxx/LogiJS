@@ -82,7 +82,7 @@ Wire.prototype.getOutput = function () {
     return this.state;
 };
 
-Wire.prototype.show = function (del = false) {
+Wire.prototype.show = function (del = false, num='') {
     if (this.state || del) {
         strokeWeight(5);
     } else {
@@ -99,8 +99,8 @@ Wire.prototype.show = function (del = false) {
     /*noStroke();
     fill(0);
     if (this.direction === 0) {
-        text(num, this.startX + 10, this.startY - 15);
+        text(num, Math.min(this.startX, this.endX) + 10, this.startY - 15);
     } else {
-        text(num, this.startX + 10, this.startY + 15);
+        text(num, this.startX + 10, Math.min(this.startY, this.endY) + 15);
     }*/
 };

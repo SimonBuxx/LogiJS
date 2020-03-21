@@ -7,7 +7,6 @@ function saveSketch(filename, callback) {
     json.gates = [];
     json.outputs = [];
     json.inputs = [];
-    json.segments = [];
     json.wires = [];
     json.conpoints = [];
     json.diodes = [];
@@ -90,7 +89,7 @@ function load(loadData) {
     gates = []; // Reset all elements and the view before loading
     outputs = [];
     inputs = [];
-    segments = [];
+    wires = [];
     conpoints = [];
     customs = [];
     diodes = [];
@@ -139,22 +138,16 @@ function load(loadData) {
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
             if (loadData.wires[i].hasOwnProperty("y2")) {
-                if (JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) { // For compability
-                    // Vertical wire, split in n vertical segments | Assuming y1 < y2, can always be saved in that form
-                    for (let j = 0; j < (JSON.parse(loadData.wires[i].y2) - JSON.parse(loadData.wires[i].y1)) / GRIDSIZE; j++) {
-                        segments.push(new Wire(1, JSON.parse(loadData.wires[i].x1), (JSON.parse(loadData.wires[i].y1) + j * GRIDSIZE),
-                            false, transform));
-                    }
-                }
+                let w = new Wire(1, loadData.wires[i].x1, loadData.wires[i].y1, false, transform);
+                w.endX = loadData.wires[i].x1;
+                w.endY = loadData.wires[i].y2;
+                wires.push(w);
             }
             if (loadData.wires[i].hasOwnProperty("x2")) {
-                if (JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) { // For compability
-                    // Horizontal wire, split in n horizontal segments | Assuming x1 < x2, can always be saved in that form
-                    for (let j = 0; j < (JSON.parse(loadData.wires[i].x2) - JSON.parse(loadData.wires[i].x1)) / GRIDSIZE; j++) {
-                        segments.push(new Wire(0, JSON.parse(loadData.wires[i].x1) + j * GRIDSIZE, (JSON.parse(loadData.wires[i].y1)),
-                            false, transform));
-                    }
-                }
+                let w = new Wire(0, loadData.wires[i].x1, loadData.wires[i].y1, false, transform);
+                w.endX = loadData.wires[i].x2;
+                w.endY = loadData.wires[i].y1;
+                wires.push(w);
             }
         }
     }
@@ -180,7 +173,6 @@ function load(loadData) {
         customs[i].setCoordinates(JSON.parse(loadData.customs[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.customs[i].y) / transform.zoom - transform.dy);
     }
     loadCustomSketches(); // Load all custom sketches from file
-    findLines();
     reDraw();
 }
 
@@ -252,13 +244,13 @@ function loadCustom(loadData, num, hlparent) {
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
             if (loadData.wires[i].hasOwnProperty("y2") && JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) {
-                params[SEGNUM][i] = new Wire(1, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1), false, trans);
-                params[SEGNUM][i].endX = JSON.parse(loadData.wires[i].x1);
-                params[SEGNUM][i].endY = JSON.parse(loadData.wires[i].y2);
+                params[WIRENUM][i] = new Wire(1, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1), false, trans);
+                params[WIRENUM][i].endX = JSON.parse(loadData.wires[i].x1);
+                params[WIRENUM][i].endY = JSON.parse(loadData.wires[i].y2);
             } else if (loadData.wires[i].hasOwnProperty("x2") && JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) {
-                params[SEGNUM][i] = new Wire(0, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1), false, trans);
-                params[SEGNUM][i].endX = JSON.parse(loadData.wires[i].x2);
-                params[SEGNUM][i].endY = JSON.parse(loadData.wires[i].y1);
+                params[WIRENUM][i] = new Wire(0, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1), false, trans);
+                params[WIRENUM][i].endX = JSON.parse(loadData.wires[i].x2);
+                params[WIRENUM][i].endY = JSON.parse(loadData.wires[i].y1);
             }
         }
     } else {

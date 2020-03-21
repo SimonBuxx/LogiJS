@@ -7,15 +7,15 @@ function Group() {
     this.outputPorts = [];
     this.outputStates = [];
 
-    this.segments = [];
+    this.wires = [];
 
     this.state = false;
     this.diodeState = false;
     this.dstateset = false;
 }
 
-Group.prototype.addSegment = function (s) {
-    this.segments.push(s);
+Group.prototype.addWire = function (s) {
+    this.wires.push(s);
 };
 
 Group.prototype.addInput = function (gate, port) {
@@ -62,19 +62,19 @@ Group.prototype.updateAll = function () {
         this.inputGates[j].setInput(this.inputPorts[j], this.state);
     }
 
-    if (this.segments[0].state !== this.state) {
-        this.propagateState(); // Propagate the state to all segments/wires
+    if (this.wires[0].state !== this.state) {
+        this.propagateState(); // Propagate the state to all wires
     }
 };
 
 Group.prototype.show = function () {
-    for (let i = 0; i < this.segments.length; i++) {
-        this.segments[i].show(false);
+    for (let i = 0; i < this.wires.length; i++) {
+        this.wires[i].show(false);
     }
 };
 
 Group.prototype.propagateState = function () {
-    for (let i = 0; i < this.segments.length; i++) {
-        this.segments[i].state = this.state;
+    for (let i = 0; i < this.wires.length; i++) {
+        this.wires[i].state = this.state;
     }
 };

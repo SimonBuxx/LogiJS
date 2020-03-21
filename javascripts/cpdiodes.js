@@ -16,7 +16,7 @@ function deleteInvalidDiodes() {
 */
 function deleteInvalidConpoints() {
     for (let j = conpoints.length - 1; j >= 0; j--) {
-        if (segmentPoints(conpoints[j].x, conpoints[j].y, -1) < 3) {
+        if (!tCrossing(conpoints[j].x, conpoints[j].y) && !fullCrossing(conpoints[j].x, conpoints[j].y)) {
             conpoints.splice(j, 1);
         }
     }
@@ -38,9 +38,9 @@ function fullCrossing(x, y) {
     let horFound = false;
     let verFound = false;
     for (let i = 0; i < wires.length; i++) {
-        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && Math.min(wires[i].startY, wires[i].endY) === y) {
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && Math.min(wires[i].startY, wires[i].endY) == y) { // jshint ignore:line
             horFound = true;
-        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) > y && Math.min(wires[i].startX, wires[i].endX) === x) {
+        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) > y && Math.min(wires[i].startX, wires[i].endX) == x) { // jshint ignore:line
             verFound = true;
         }
     }
@@ -53,15 +53,15 @@ function tCrossing(x, y) {
     let horTightFound = false;
     let verTightFound = false;
     for (let i = 0; i < wires.length; i++) {
-        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) <= x && Math.max(wires[i].startX, wires[i].endX) >= x && Math.min(wires[i].startY, wires[i].endY) === y) {
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) <= x && Math.max(wires[i].startX, wires[i].endX) >= x && Math.min(wires[i].startY, wires[i].endY) == y) { // jshint ignore:line
             horLooseFound = true;
-        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) > y && Math.min(wires[i].startX, wires[i].endX) === x) {
+        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) > y && Math.min(wires[i].startX, wires[i].endX) == x) { // jshint ignore:line
             verTightFound = true;
         }
 
-        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && Math.min(wires[i].startY, wires[i].endY) === y) {
+        if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && Math.min(wires[i].startY, wires[i].endY) == y) { // jshint ignore:line
             horTightFound = true;
-        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) <= y && Math.max(wires[i].startY, wires[i].endY) >= y && Math.min(wires[i].startX, wires[i].endX) === x) {
+        } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) <= y && Math.max(wires[i].startY, wires[i].endY) >= y && Math.min(wires[i].startX, wires[i].endX) == x) { // jshint ignore:line
             verLooseFound = true;
         }
     }
@@ -69,7 +69,6 @@ function tCrossing(x, y) {
 }
 
 function deleteConpoint(conpointNumber) {
-    console.log('delCp');
     pushUndoAction('delCp', [conpointNumber], conpoints.splice(conpointNumber, 1));
     doConpoints();
     reDraw();
@@ -101,15 +100,15 @@ function isConPoint(x, y) {
 
 function listConpoints(x1, y1, x2, y2) {
     let cps = [];
-    if (y1 === y2) {
+    if (y1 == y2) { // jshint ignore:line
         for (let i = 0; i < conpoints.length; i++) {
-            if (conpoints[i].x > x1 && conpoints[i].x < x2 && conpoints[i].y === y1) {
+            if (conpoints[i].x > x1 && conpoints[i].x < x2 && conpoints[i].y == y1) { // jshint ignore:line
                 cps.push(i);
             }
         }
     } else {
         for (let i = 0; i < conpoints.length; i++) {
-            if (conpoints[i].y > y1 && conpoints[i].y < y2 && conpoints[i].x === x1) {
+            if (conpoints[i].y > y1 && conpoints[i].y < y2 && conpoints[i].x == x1) { // jshint ignore:line
                 cps.push(i);
             }
         }
@@ -124,6 +123,24 @@ function isDiode(x, y) {
         }
     }
     return -1;
+}
+
+function diodesOnWire(wire) {
+    let result = [];
+    if (wire.direction === 0) {
+        for (let i = 0; i < diodes.length; i++) {
+            if (diodes[i].y === wire.startY && diodes[i].x >= wire.startX && diodes[i].x <= wire.endX) {
+                result.push(i);
+            }
+        }
+    } else { 
+        for (let i = 0; i < diodes.length; i++) {
+            if (diodes[i].x === wire.startX && diodes[i].y >= wire.startY && diodes[i].y <= wire.endY) {
+                result.push(i);
+            }
+        }
+    }
+    return result;
 }
 
 /*
