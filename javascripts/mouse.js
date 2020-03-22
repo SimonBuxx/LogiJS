@@ -677,14 +677,14 @@ function mouseOverSegDisplay() {
 function mouseOverImport(baseX, baseY, rows, cols) {
     let mx = mouseX - baseX;
     let my = mouseY - baseY;
-    if (mx % 240 > 200 || my % 240 > 200) {
+    if (mx % 220 > 200 || my % 220 > 200) {
         return {
             row: -1,
             col: -1
         };
     }
-    mx = Math.floor(mx / 240);
-    my = Math.floor(my / 240);
+    mx = Math.floor(mx / 220);
+    my = Math.floor(my / 220);
     if (my >= rows || mx >= cols || mx < 0 || my < 0) {
         return {
             row: -1,

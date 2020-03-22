@@ -138,15 +138,15 @@ function load(loadData) {
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
             if (loadData.wires[i].hasOwnProperty("y2")) {
-                let w = new Wire(1, loadData.wires[i].x1, loadData.wires[i].y1, false, transform);
-                w.endX = loadData.wires[i].x1;
-                w.endY = loadData.wires[i].y2;
+                let w = new Wire(1, parseInt(loadData.wires[i].x1), parseInt(loadData.wires[i].y1), false, transform);
+                w.endX = parseInt(loadData.wires[i].x1);
+                w.endY = parseInt(loadData.wires[i].y2);
                 wires.push(w);
             }
             if (loadData.wires[i].hasOwnProperty("x2")) {
-                let w = new Wire(0, loadData.wires[i].x1, loadData.wires[i].y1, false, transform);
-                w.endX = loadData.wires[i].x2;
-                w.endY = loadData.wires[i].y1;
+                let w = new Wire(0, parseInt(loadData.wires[i].x1), parseInt(loadData.wires[i].y1), false, transform);
+                w.endX = parseInt(loadData.wires[i].x2);
+                w.endY = parseInt(loadData.wires[i].y1);
                 wires.push(w);
             }
         }

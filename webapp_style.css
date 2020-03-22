@@ -8,7 +8,12 @@ body {
     height: 100%;
     overflow: hidden;
     background: linear-gradient(to bottom, #323232, black);
+    background: #323232;
     background-attachment: fixed;
+	user-select: none;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 
 .button {
@@ -17,37 +22,79 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    padding: 1px 12px;
-    -webkit-border-radius: 0;
-    border-radius: 0;
+    padding: 0 14px;
+    margin-top: 4px;
+    height: 35px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: rgb(110, 110, 110);
-    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    text-transform: uppercase;
+    background: none;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
+    border: none;
   }
+
+  .button > .icon, .buttonLeft > .icon {
+    color: rgb(200, 50, 50);
+  }
+
+  .button.active > .icon, .buttonLeft.active > .icon {
+    color: rgb(255, 255, 255);
+  }
+
+  .button:hover {
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    color: #969696;
+}
+
+.button.active:hover {
+    color: white;
+}
+
+.button.active:disabled {
+    color: #969696;
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.button:active, .button.active {
+    background: linear-gradient(145deg, #b42d2d, #d63636);
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
+}
+
+.button:disabled {
+    color: #969696;
+    background: none;
+    box-shadow: none;
+}
+
+.button:disabled > .icon {
+    color: #969696;
+}
 
 .colorButton {
     display: inline-block;
     cursor: pointer;
     -webkit-border-radius: 0;
-    border-radius: 0;
-    border: 1px solid transparent;
-    box-shadow: inset 5px 5px 15px #2b2b2b, 
-                inset -5px -5px 15px #3a3a3a;
+    border-radius: 10px;
+    border: none;
     padding: 0;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
 }
 
 .redButton {
@@ -89,15 +136,12 @@ body {
     background: rgb(63, 125, 218);
 }
 
-.colorButton:active {
-    -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-}
-
-.colorButton.active {
-    box-shadow: none;
+.colorButton:active, .colorButton.active {
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    border: 2px solid white;
 }
 
 .ease_in {
@@ -123,6 +167,11 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    color: #969696;
+    margin: 10px 0 5px 0;
+    font-size: 15px;
 }
 
 .checkbox {
@@ -131,154 +180,131 @@ body {
     -moz-user-select: none;
     user-select: none;
     cursor: pointer;
-}
-
-.button:hover {
-    background: rgb(255, 87, 87);
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    text-align: center;
+    margin: 10px 0 0 0;
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
-}
-
-.button:active {
-    background: rgb(200,50,50);
-    -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
-}
-
-.button:disabled {
-    background: rgb(110,110,110);
-    color: #969696;
-    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    cursor: default;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
 }
 
 .buttonLeft{
-	margin-top : 3px;
-	margin-left : 5px;
-	width: 117px;
+	margin-top : 5px;
+	margin-left : 4px;
+	width: 130px;
     display: inline-block;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    padding: 3px 10px;
-    /*border: 0;*/
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    /*border-bottom:2px solid black;*/
+    padding: 5px 6px;
+    border-radius: 10px;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: rgb(110, 110, 110);
-    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    text-transform: uppercase;
+    background: none;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
+    border: none;
+}
+
+.buttonLeft:hover {
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    color: #969696;
+}
+
+.buttonLeft:active, .buttonLeft.active {
+    background: linear-gradient(145deg, #b42d2d, #d63636);
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
+}
+
+.buttonLeft.active:hover {
+    color: white;
+}
+
+.buttonLeft:disabled {
+    color: #969696;
+    cursor: default;
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .previewButton {
     width: 63px;
     height: 55px;
-    padding: 4px 1px;
-    margin-top : 3px;
-	margin-left : 5px;
+    padding: 5px 2px 5px 2px;
+    margin: 2px 4px 0 4px;
     display: inline-block;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    -webkit-border-radius: 0;
-    border-radius: 0;
+    border-radius: 10px;
+    border: none;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: #6e6e6e;
-    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    background: none;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    box-shadow: inset 15px 15px 45px #2b2b2b, 
-                inset -15px -15px 45px #3a3a3a;
-    border: 1px solid transparent;
 }
 
-.previewButton:active, .previewButton.active {
-    background: rgb(200, 50, 50);
-    -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    box-shadow: inset 15px 15px 45px #2b2b2b, 
-                inset -15px -15px 45px #3a3a3a;
-    border: 1px solid transparent;
-}
-
-.previewButton:hover {
-    background: rgb(255, 87, 87);
+.previewButton:hover > .preview {
+    filter: brightness(80%);
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    box-shadow: inset 15px 15px 45px #2b2b2b, 
-                inset -15px -15px 45px #3a3a3a;
-    border: 1px solid transparent;
+}
+
+.previewButton:active, .previewButton.active {
+    -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
+    background: linear-gradient(145deg, #b42d2d, #d63636);
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
+}
+
+.previewButton.active > .preview {
+    filter: brightness(100%);
 }
 
 .previewButton:disabled {
-    background: rgb(110,110,110);
-    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     cursor: default;
-    box-shadow: inset 15px 15px 45px #2b2b2b, 
-                inset -15px -15px 45px #3a3a3a;
-    border: 1px solid transparent;
+    background: none;
+    box-shadow: none;
 }
 
-.textInput {
-    font-size: 18px;
-    padding: 10px;
-    background: #646464;
-    color: white;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
-}
-
-.textInput:disabled {
-    background-color: #323232;
+.previewButton:disabled >  .preview {
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    filter: brightness(50%);
 }
 
 .topBox {
@@ -310,27 +336,25 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    padding: 1px 10px;
-    -webkit-border-radius: 0;
-    border-radius: 0;
+    padding: 3px 12px;
+    border-radius: 10px;
+    border: none;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: #6e6e6e;
-    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    text-transform: uppercase;
+    background: #323232;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     user-select: none;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
+    background: linear-gradient(145deg, #b42d2d, #d63636);
+    background-color: #323232;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
 }
 
 .sequencer {
@@ -356,9 +380,10 @@ body {
     -o-text-overflow: clip;
     text-overflow: clip;
     background-color: #646464;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
 }
 
 .sequencer::-ms-expand {
@@ -370,61 +395,17 @@ body {
     padding: 1px 10px;
   }
 
-.buttonLeft:hover {
-    border: 1px solid transparent;
-    padding: 3px 10px;
-    background: rgb(255, 87, 87);
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-}
-
-.buttonLeft:active, .buttonLeft.active {
-    border: 1px solid transparent;
-    padding: 3px 10px;
-    background: rgb(200,50,50);
-    -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-}
-
-.buttonLeft:disabled {
-    border: 1px solid transparent;
-    padding: 3px 10px;
-    background: rgb(110, 110, 110);
-    color: #969696;
-    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
-    cursor: default;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
-}
-
-.button.active {
-    padding: 1px 12px;
-    background: #961e1e;
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-}
-
 .labelTextBox {
     font-family: 'Open Sans', sans-serif;
     font-size: 18px;
     padding: 7px;
-    border: 1px solid transparent;
-    background: #646464;
-    color: white;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-                inset -10px -10px 30px #3a3a3a;
+    border: none;
+    background: white;
+    border-radius: 10px;
+    color: black;
+    border: none;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
 }
 
 .slider {
@@ -436,9 +417,9 @@ body {
     outline: none;
     -webkit-transition: .2s;
     transition: opacity .2s;
-    box-shadow: inset 10px 10px 30px #2b2b2b, 
-    inset -10px -10px 30px #3a3a3a;
-    border: 1px solid transparent;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
 }
 
 .slider::-webkit-slider-thumb {
@@ -468,43 +449,51 @@ input[type=range]::-ms-tooltip {
     margin: 20px;
     font-size: 20px;
     width: 280px;
-    box-shadow: inset 20px 20px 60px #2b2b2b, 
-                inset -20px -20px 60px #3a3a3a;
+    border: none;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
+}
+
+.textInput {
+    font-size: 18px;
+    padding: 10px;
+    border: none;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
+}
+
+.textInput:disabled {
+    background: #323232;
 }
 
 .btn-red {
-    background-color: rgb(200, 50, 50);
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
+    background: linear-gradient(145deg, #b42d2d, #d63636);
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
+    border-radius: 10px;
+    border: none;
     padding: 10px 40px;
     margin: 10px;
     font-family:  'Open Sans', Arial, sans-serif;
     font-size: 20px;
     color:#ffffff;
-    font-weight: 300; 
-	font-style: normal; 
+    text-align: center;
 	-webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
     cursor: pointer;
     width: 145px;
-    box-shadow: inset 20px 20px 60px #2b2b2b, 
-                inset -20px -20px 60px #3a3a3a;
-    border: 1px solid transparent;
     outline: none;
 }
 
 .btn-red:hover {
-    background-color: rgb(255, 87, 87);
+    background: linear-gradient(145deg, #d63636, #b42d2d);
     color:#ffffff;
-}
-
-textarea {
-    border: none;
-    border-bottom: 2px solid black;
-    padding-left: 7px;
-    padding-top: 3px;
-    padding-bottom: 3px;
 }
 
 #github {
@@ -522,13 +511,6 @@ textarea {
     padding: 0;
 }
 
-body{
-	overflow:hidden;
-	user-select: none;
-	-webkit-user-drag: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-}
 .scrollBoxLeft{
 	width :150px;
 	overflow-y : auto;

@@ -152,44 +152,44 @@ function showLabelPropMenu() {
 }
 
 function showModifierMenu() {
-    fill('rgba(0, 0, 0, 0.8)');
+    fill(50);
     noStroke();
     strokeCap(SQUARE);
     if (inputToModify >= 0) {
         modifierMenuX = (inputs[inputToModify].x + transform.dx - 1) * transform.zoom;
         modifierMenuY = (inputs[inputToModify].y + transform.dy + GRIDSIZE + 2) * transform.zoom;
         if (!inputs[inputToModify].clock) {
-            rect(modifierMenuX, modifierMenuY, 300, 120, 0, 20);
+            rect(modifierMenuX, modifierMenuY, 300, 120, 0, 10);
         } else {
-            rect(modifierMenuX, modifierMenuY, 300, 170, 0, 20);
+            rect(modifierMenuX, modifierMenuY, 300, 170, 0, 10);
         }
     } else if (outputToModify >= 0) {
         modifierMenuX = (outputs[outputToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
         modifierMenuY = (outputs[outputToModify].y + transform.dy + GRIDSIZE / 2 + 2) * transform.zoom;
-        rect(modifierMenuX, modifierMenuY, 300, 130, 0, 20);
+        rect(modifierMenuX, modifierMenuY, 300, 130, 0, 10);
     } else if (labelToModify >= 0) {
         modifierMenuX = (labels[labelToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
         modifierMenuY = (labels[labelToModify].y + transform.dy + GRIDSIZE / 2 + GRIDSIZE * (labels[labelToModify].lines.length - 1) + 2) * transform.zoom;
-        rect(modifierMenuX, modifierMenuY, 300, 170, 0, 20);
+        rect(modifierMenuX, modifierMenuY, 300, 170, 0, 10);
     }
     strokeCap(ROUND);
 }
 
 function positionModifierElements() {
-    sequencer.position(modifierMenuX + 362, modifierMenuY + 47);
+    sequencer.position(modifierMenuX + 362, modifierMenuY + 67);
 
-    captionInput.position(modifierMenuX + 170, modifierMenuY + 50);
-    inputIsTopBox.position(modifierMenuX + 190, modifierMenuY + 100);
-    clockspeedSlider.position(modifierMenuX + 220, modifierMenuY + 150);
-    minusLabel.position(modifierMenuX + 198, modifierMenuY + 141);
-    plusLabel.position(modifierMenuX + 395, modifierMenuY + 145);
+    captionInput.position(modifierMenuX + 170, modifierMenuY + 70);
+    inputIsTopBox.position(modifierMenuX + 190, modifierMenuY + 120);
+    clockspeedSlider.position(modifierMenuX + 220, modifierMenuY + 170);
+    minusLabel.position(modifierMenuX + 198, modifierMenuY + 161);
+    plusLabel.position(modifierMenuX + 395, modifierMenuY + 165);
 
-    redButton.position(modifierMenuX + 170, modifierMenuY + 110);
-    yellowButton.position(modifierMenuX + 236, modifierMenuY + 110);
-    greenButton.position(modifierMenuX + 302, modifierMenuY + 110);
-    blueButton.position(modifierMenuX + 368, modifierMenuY + 110);
+    redButton.position(modifierMenuX + 170, modifierMenuY + 130);
+    yellowButton.position(modifierMenuX + 236, modifierMenuY + 130);
+    greenButton.position(modifierMenuX + 302, modifierMenuY + 130);
+    blueButton.position(modifierMenuX + 368, modifierMenuY + 130);
 
-    labelTextBox.position(modifierMenuX + 170, modifierMenuY + 50);
+    labelTextBox.position(modifierMenuX + 170, modifierMenuY + 70);
 }
 
 function newIsTopState() {
@@ -372,7 +372,7 @@ function createColorButtons() {
 }
 
 function createModifierElements() {
-    inputIsTopBox = createCheckbox('Pin this to the top', false);
+    inputIsTopBox = createCheckbox('PIN TO THE TOP', false);
     inputIsTopBox.hide();
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.className = 'topBox';
@@ -389,7 +389,7 @@ function createModifierElements() {
     captionInput.elt.style.fontFamily = 'Open Sans';
     captionInput.hide();
     captionInput.size(167, 15);
-    captionInput.attribute('placeholder', 'Pin name');
+    captionInput.attribute('placeholder', 'PIN NAME');
     captionInput.input(newCaption);
     captionInput.elt.className = "textInput";
     captionInput.elt.title = 'This is the name that will appear on the corresponding pin on the custom module.';

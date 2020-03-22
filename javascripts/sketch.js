@@ -300,8 +300,8 @@ document.addEventListener('contextmenu', event => event.preventDefault());
     Sets up the canvas and caps the framerate
 */
 function setup() { // jshint ignore:line
-    mainCanvas = createCanvas(windowWidth - 150, windowHeight - 30);     // Creates the canvas in full window size
-    mainCanvas.position(150, 30);
+    mainCanvas = createCanvas(windowWidth - 150, windowHeight - 50);     // Creates the canvas in full window size
+    mainCanvas.position(150, 50);
     mainCanvas.id('mainCanvas');
 
     // Prevents the input field from being focused when clicking in the canvas
@@ -322,12 +322,8 @@ function setup() { // jshint ignore:line
     leftSideButtons.elt.style.margin = '55px 0px';
 
     // Adds text 'Basic'
-    labelBasic = createP('Basic');
-    labelBasic.elt.style.color = 'white';
-    labelBasic.elt.style.fontFamily = 'Open Sans';
+    labelBasic = createP('BASIC ELEMENTS');
     labelBasic.elt.className = 'label';
-    labelBasic.elt.style.textAlign = 'center';
-    labelBasic.elt.style.margin = '3px 0px 0px 0px';
     labelBasic.parent(leftSideButtons);
 
     // Left Side Buttons
@@ -335,7 +331,7 @@ function setup() { // jshint ignore:line
     andButton = createButton('');
     andButton.mousePressed(function () { andClicked(false); });
     andButton.elt.className = 'previewButton';
-    andButton.elt.innerHTML = '<img src="images/and-gate.png">';
+    andButton.elt.innerHTML = '<img class="preview" src="images/and-gate.png">';
     andButton.elt.title = 'AND-Gate';
     andButton.parent(leftSideButtons);
 
@@ -343,7 +339,7 @@ function setup() { // jshint ignore:line
     orButton = createButton('');
     orButton.mousePressed(function () { orClicked(false); });
     orButton.elt.className = 'previewButton';
-    orButton.elt.innerHTML = '<img src="images/or-gate.png">';
+    orButton.elt.innerHTML = '<img class="preview" src="images/or-gate.png">';
     orButton.elt.title = 'OR-Gate';
     orButton.parent(leftSideButtons);
 
@@ -351,7 +347,7 @@ function setup() { // jshint ignore:line
     xorButton = createButton('');
     xorButton.mousePressed(function () { xorClicked(false); });
     xorButton.elt.className = 'previewButton';
-    xorButton.elt.innerHTML = '<img src="images/xor-gate.png">';
+    xorButton.elt.innerHTML = '<img class="preview" src="images/xor-gate.png">';
     xorButton.elt.title = 'XOR-Gate';
     xorButton.parent(leftSideButtons);
 
@@ -359,7 +355,7 @@ function setup() { // jshint ignore:line
     inputButton = createButton('');
     inputButton.mousePressed(function () { inputClicked(false); });
     inputButton.elt.className = 'previewButton';
-    inputButton.elt.innerHTML = '<img src="images/switch.png">';
+    inputButton.elt.innerHTML = '<img class="preview" src="images/switch.png">';
     inputButton.elt.title = 'Switch';
     inputButton.parent(leftSideButtons);
 
@@ -367,7 +363,7 @@ function setup() { // jshint ignore:line
     buttonButton = createButton('');
     buttonButton.mousePressed(function () { buttonClicked(false); });
     buttonButton.elt.className = 'previewButton';
-    buttonButton.elt.innerHTML = '<img src="images/button.png">';
+    buttonButton.elt.innerHTML = '<img class="preview" src="images/button.png">';
     buttonButton.elt.title = 'Button';
     buttonButton.parent(leftSideButtons);
 
@@ -375,7 +371,7 @@ function setup() { // jshint ignore:line
     clockButton = createButton('');
     clockButton.mousePressed(function () { clockClicked(false); });
     clockButton.elt.className = 'previewButton';
-    clockButton.elt.innerHTML = '<img src="images/clock.png">';
+    clockButton.elt.innerHTML = '<img class="preview" src="images/clock.png">';
     clockButton.elt.title = 'Clock';
     clockButton.parent(leftSideButtons);
 
@@ -383,7 +379,7 @@ function setup() { // jshint ignore:line
     outputButton = createButton('');
     outputButton.mousePressed(function () { outputClicked(false); });
     outputButton.elt.className = 'previewButton';
-    outputButton.elt.innerHTML = '<img src="images/output.png">';
+    outputButton.elt.innerHTML = '<img class="preview" src="images/output.png">';
     outputButton.elt.title = 'Lamp';
     outputButton.parent(leftSideButtons);
 
@@ -391,7 +387,7 @@ function setup() { // jshint ignore:line
     segDisplayButton = createButton('');
     segDisplayButton.mousePressed(function () { segDisplayClicked(false); });
     segDisplayButton.elt.className = 'previewButton';
-    segDisplayButton.elt.innerHTML = '<img src="images/segments.png">';
+    segDisplayButton.elt.innerHTML = '<img class="preview" src="images/segments.png">';
     segDisplayButton.elt.title = '7-Segment Display';
     segDisplayButton.parent(leftSideButtons);
 
@@ -402,16 +398,12 @@ function setup() { // jshint ignore:line
     labelButton.parent(leftSideButtons);
 
     // Adds text 'Advanced'
-    labelAdvanced = createP('Advanced');
-    labelAdvanced.elt.style.color = 'white';
-    labelAdvanced.elt.style.fontFamily = 'Open Sans';
-    labelAdvanced.elt.style.textAlign = 'center';
-    labelAdvanced.elt.style.margin = '3px 0px 0px 0px';
+    labelAdvanced = createP('ADVANCED');
     labelAdvanced.elt.className = 'label';
     labelAdvanced.parent(leftSideButtons);
 
     // Adds an rs-flipflop
-    rsFlipFlopButton = createButton('RS-FlipFlop');
+    rsFlipFlopButton = createButton('RS Flip-Flop');
     rsFlipFlopButton.mousePressed(function () {
         setActive(rsFlipFlopButton, true);
         setPreviewElement(true, {
@@ -427,7 +419,7 @@ function setup() { // jshint ignore:line
     rsFlipFlopButton.elt.className = 'buttonLeft';
     rsFlipFlopButton.parent(leftSideButtons);
     // Adds a d-flipflop
-    dFlipFlopButton = createButton('D-FlipFlop');
+    dFlipFlopButton = createButton('D Flip-Flop');
     dFlipFlopButton.mousePressed(function () {
         setActive(dFlipFlopButton, true);
         setPreviewElement(true, {
@@ -607,7 +599,7 @@ function setup() { // jshint ignore:line
     fulladdButton.elt.className = 'buttonLeft';
     fulladdButton.parent(leftSideButtons);
 
-    customButton = createButton('<i class="fa fa-file-import"></i> Import Sketch');
+    customButton = createButton('<i class="fa fa-file-import icon"></i> Import');
     customButton.mousePressed(function () { customDialogPage = 0; customClicked(); });
     customButton.elt.className = 'buttonLeft';
     customButton.parent(leftSideButtons);
@@ -616,7 +608,7 @@ function setup() { // jshint ignore:line
     }
 
     // Adds text 'Gate inputs'
-    labelGateInputs = createP('Gate inputs');
+    labelGateInputs = createP('GATE INPUTS');
     labelGateInputs.hide();
     labelGateInputs.elt.style.color = 'white';
     labelGateInputs.elt.style.fontFamily = 'Open Sans';
@@ -636,7 +628,7 @@ function setup() { // jshint ignore:line
     gateInputSelect.value('2');
 
     // Adds text 'Direction'
-    labelDirection = createP('Direction');
+    labelDirection = createP('DIRECTION');
     labelDirection.hide();
     labelDirection.elt.style.color = 'white';
     labelDirection.elt.style.fontFamily = 'Open Sans';
@@ -658,7 +650,7 @@ function setup() { // jshint ignore:line
     directionSelect.value('Right');
 
     // Adds text 'Input width'
-    labelBits = createP('Input width');
+    labelBits = createP('INPUT WIDTH');
     labelBits.hide();
     labelBits.elt.style.color = 'white';
     labelBits.elt.style.fontFamily = 'Open Sans';
@@ -668,7 +660,7 @@ function setup() { // jshint ignore:line
     labelBits.parent(leftSideButtons);
 
     // Adds text 'Output width'
-    labelOutputWidth = createP('Output width');
+    labelOutputWidth = createP('OUTPUT WIDTH');
     labelOutputWidth.hide();
     labelOutputWidth.elt.style.color = 'white';
     labelOutputWidth.elt.style.fontFamily = 'Open Sans';
@@ -678,7 +670,7 @@ function setup() { // jshint ignore:line
     labelOutputWidth.parent(leftSideButtons);
 
     // Adds text 'Input width'
-    labelInputWidth = createP('Input width');
+    labelInputWidth = createP('INPUT WIDTH');
     labelInputWidth.hide();
     labelInputWidth.elt.style.color = 'white';
     labelInputWidth.elt.style.fontFamily = 'Open Sans';
@@ -731,7 +723,7 @@ function setup() { // jshint ignore:line
     multiplexerBitSelect.parent(leftSideButtons);
     multiplexerBitSelect.value('1');
 
-    sfcheckbox = createCheckbox('Sync Ticks', true);
+    sfcheckbox = createCheckbox('SYNC TICKS', true);
     sfcheckbox.hide();
     sfcheckbox.elt.title = 'If this is deactivated, the simulation is executed as fast as possible. Otherwise, the speed is synced to the frame rate.';
     sfcheckbox.changed(function () {
@@ -742,18 +734,13 @@ function setup() { // jshint ignore:line
             clearInterval(updater);
         }
     });
-    sfcheckbox.elt.style.color = 'white';
-    sfcheckbox.elt.style.fontFamily = 'Open Sans';
-    sfcheckbox.elt.style.textAlign = 'center';
-    sfcheckbox.elt.style.margin = '10px 0 0 0';
-    //sfcheckbox.position(946, 4);
     sfcheckbox.elt.className = 'checkbox';
     sfcheckbox.parent(leftSideButtons);
 
     //Upper left
 
     // Activates the edit mode
-    modifierModeButton = createButton('<i class="fa fa-pen"></i> Edit');
+    modifierModeButton = createButton('<i class="fa fa-pen icon"></i> Edit');
     modifierModeButton.position(152, 3);
     modifierModeButton.mousePressed(function () {
         enterModifierMode();
@@ -762,20 +749,19 @@ function setup() { // jshint ignore:line
 
 
     // Activates the delete mode (objects and wires)
-    deleteButton = createButton('<i class="far fa-trash-alt"></i> Delete');
+    deleteButton = createButton('<i class="far fa-trash-alt icon"></i> Delete');
     deleteButton.position(226, 3);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = 'button';
 
     // Starts and stops the simulation
-    simButton = createButton('<i class="fa fa-play"></i> Start');
-    simButton.elt.style.width = '52px';
+    simButton = createButton('<i class="fa fa-play icon"></i> Start');
     simButton.position(316, 3);
     simButton.mousePressed(simClicked);
     simButton.elt.className = 'button';
 
     // Undos the last action
-    undoButton = createButton('<i class="fa fa-undo"></i> Undo');
+    undoButton = createButton('<i class="fa fa-undo icon"></i> Undo');
     undoButton.position(396, 3);
     undoButton.mousePressed(() => {
         undo();
@@ -784,7 +770,7 @@ function setup() { // jshint ignore:line
     undoButton.elt.className = 'button';
 
     // Redos the last action
-    redoButton = createButton('<i class="fa fa-redo"></i> Redo');
+    redoButton = createButton('<i class="fa fa-redo icon"></i> Redo');
     redoButton.position(481, 3);
     redoButton.mousePressed(() => {
         redo();
@@ -793,9 +779,10 @@ function setup() { // jshint ignore:line
     redoButton.elt.className = 'button';
 
     // Activates the mode for area selecting
-    selectButton = createButton('<i class="fas fa-object-group"></i> Select');
+    selectButton = createButton('<i class="fas fa-object-group icon"></i> Select');
     selectButton.position(564, 3);
     selectButton.mousePressed(startSelect);
+    selectButton.elt.style.cursor = 'default';
     selectButton.elt.className = 'button';
     selectButton.elt.title = 'Coming soon!';
 
@@ -827,7 +814,7 @@ function setup() { // jshint ignore:line
     descInput = createElement('textarea');
     descInput.attribute('placeholder', 'SKETCH DESCRIPTION');
     descInput.position(windowWidth / 2 - 43, windowHeight / 2 - 25);
-    descInput.size(280, 122);
+    descInput.size(280, 114);
     descInput.elt.style.fontFamily = 'Open Sans';
     descInput.elt.style.fontSize = '15px';
     descInput.elt.className = 'textInput descInput';
@@ -838,29 +825,31 @@ function setup() { // jshint ignore:line
     descInput.hide();
 
     // Clears the canvas and resets the view
-    newButton = createButton('<i class="fas fa-file"></i> New');
-    newButton.position(windowWidth - 280, 3);
+    newButton = createButton('<i class="fas fa-file icon"></i> New');
+    newButton.position(windowWidth - 290, 3);
     newButton.elt.style.width = '50px';
     newButton.mousePressed(function () {
         if (newButton.html() === 'SURE?') {
-            newButton.html('<i class="fas fa-file"></i> New');
+            newButton.elt.className = "button";
+            newButton.html('<i class="fas fa-file icon"></i> New');
             newClicked();
         } else {
+            newButton.elt.className = "button active";
             newButton.html('SURE?');
-            setTimeout(function () { newButton.html('<i class="fas fa-file"></i> New'); }, 3000);
+            setTimeout(function () { newButton.html('<i class="fas fa-file icon"></i> New'); newButton.elt.className = "button"; }, 3000);
         }
     });
     newButton.elt.className = 'button';
 
     // Button to save the sketch
-    saveButton = createButton('Save');
-    saveButton.position(windowWidth / 2 + 102, windowHeight / 2 + 118);
+    saveButton = createButton('SAVE');
+    saveButton.position(windowWidth / 2 + 102, windowHeight / 2 + 110);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = 'btn btn-lg btn-red';
     saveButton.hide();
 
-    cancelButton = createButton('Cancel');
-    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 118);
+    cancelButton = createButton('CANCEL');
+    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 110);
     cancelButton.mousePressed(cancelClicked);
     cancelButton.elt.className = 'btn btn-lg btn-red';
     cancelButton.hide();
@@ -902,29 +891,30 @@ function setup() { // jshint ignore:line
     loadButton.elt.className = 'button';
     loadButton.hide();
 
-    saveDialogButton = createButton('<i class="fas fa-save"></i> Save');
-    saveDialogButton.position(windowWidth - 202, 3);
+    saveDialogButton = createButton('<i class="fas fa-save icon"></i> Save');
+    saveDialogButton.position(windowWidth - 216, 3);
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = 'button';
 
     if (getCookieValue('access_token') !== '') {
-        dashboardButton = createButton('<i class="fas fa-th"></i> Dashboard');
+        dashboardButton = createButton('<i class="fas fa-th icon"></i> Dashboard');
     } else {
-        dashboardButton = createButton('<i class="fa fa-sign-in-alt"></i> Login');
+        dashboardButton = createButton('<i class="fa fa-sign-in-alt icon"></i> Login');
     }
-    dashboardButton.elt.style.width = '98px';
+    dashboardButton.elt.style.width = '110px';
     dashboardButton.mousePressed(function () {
         if (dashboardButton.html() === 'SURE?') {
             window.location = '/dashboard';
         } else {
+            dashboardButton.elt.className = "button active";
             dashboardButton.html('SURE?');
-            setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('<i class="fas fa-th"></i> Dashboard'); } else { dashboardButton.html('<i class="fa fa-sign-in-alt"></i> Login'); } }, 3000);
+            setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('<i class="fas fa-th icon"></i> Dashboard'); } else { dashboardButton.html('<i class="fa fa-sign-in-alt icon"></i> Login'); } dashboardButton.elt.className = "button"; }, 3000);
         }
     });
-    dashboardButton.position(windowWidth - 124, 3);
+    dashboardButton.position(windowWidth - 142, 3);
     dashboardButton.elt.className = 'button';
 
-    saveDialogText = createP('Save Sketch');
+    saveDialogText = createP('SAVE SKETCH');
     saveDialogText.hide();
     saveDialogText.elt.style.color = 'white';
     saveDialogText.elt.style.fontFamily = 'Open Sans';
@@ -1149,7 +1139,7 @@ function saveDialogClicked() {
     reDraw();
     saveDialog = true;
     saveButton.show();
-    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 118);
+    cancelButton.position(windowWidth / 2 - 53, windowHeight / 2 + 110);
     cancelButton.show();
     sketchNameInput.show();
     moduleNameInput.show();
@@ -1179,6 +1169,7 @@ function newClicked() {
     clearActionStacks();
     hideAllOptions();
     closeCustomDialog();
+    closeSaveDialog();
     transform = new Transformation(0, 0, 1);
     currentGridSize = GRIDSIZE;
     gateInputCount = 2;
@@ -2116,7 +2107,7 @@ function startSimulation() {
         updater = setInterval(updateTick, 0);
     }
 
-    setSimButtonText('<i class="fa fa-stop"></i> Stop'); // Alter the caption of the Start/Stop button
+    setSimButtonText('<i class="fa fa-stop icon"></i> Stop'); // Alter the caption of the Start/Stop button
     setControlMode('modify');
     setActive(simButton, true);
     disableButtons(true);
@@ -2152,7 +2143,7 @@ function startSimulation() {
 */
 function endSimulation() {
     clearInterval(updater); // Stop the unsynced simulation updater
-    setSimButtonText('<i class="fa fa-play"></i> Start'); // Set the button caption to 'Start'
+    setSimButtonText('<i class="fa fa-play icon"></i> Start'); // Set the button caption to 'Start'
     updateUndoButtons();
     sfcheckbox.hide();
 
@@ -2210,25 +2201,25 @@ function updateUndoButtons() {
 */
 function disableButtons(status) {
     if (status) {
-        andButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/and-gate.png">';
-        orButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/or-gate.png">';
-        xorButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/xor-gate.png">';
-        inputButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/switch.png">';
-        outputButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/output.png">';
-        segDisplayButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/segments.png">';
-        buttonButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/button.png">';
-        clockButton.elt.innerHTML = '<img style="filter: brightness(50%);" src="images/clock.png">';
+        /*andButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/and-gate.png">';
+        orButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/or-gate.png">';
+        xorButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/xor-gate.png">';
+        inputButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/switch.png">';
+        outputButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/output.png">';
+        segDisplayButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/segments.png">';
+        buttonButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/button.png">';
+        clockButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/clock.png">';*/
         undoButton.elt.disabled = true;
         redoButton.elt.disabled = true;
     } else {
-        andButton.elt.innerHTML = '<img src="images/and-gate.png">';
-        orButton.elt.innerHTML = '<img src="images/or-gate.png">';
-        xorButton.elt.innerHTML = '<img src="images/xor-gate.png">';
-        inputButton.elt.innerHTML = '<img src="images/switch.png">';
-        outputButton.elt.innerHTML = '<img src="images/output.png">';
-        segDisplayButton.elt.innerHTML = '<img src="images/segments.png">';
-        buttonButton.elt.innerHTML = '<img src="images/button.png">';
-        clockButton.elt.innerHTML = '<img src="images/clock.png">';
+        /*andButton.elt.innerHTML = '<img class="preview" src="images/and-gate.png">';
+        orButton.elt.innerHTML = '<img class="preview" src="images/or-gate.png">';
+        xorButton.elt.innerHTML = '<img class="preview" src="images/xor-gate.png">';
+        inputButton.elt.innerHTML = '<img class="preview" src="images/switch.png">';
+        outputButton.elt.innerHTML = '<img class="preview" src="images/output.png">';
+        segDisplayButton.elt.innerHTML = '<img class="preview" src="images/segments.png">';
+        buttonButton.elt.innerHTML = '<img class="preview" src="images/button.png">';
+        clockButton.elt.innerHTML = '<img class="preview" src="images/clock.png">';*/
         updateUndoButtons();
     }
     andButton.elt.disabled = status;
@@ -2256,13 +2247,13 @@ function disableButtons(status) {
     modifierModeButton.elt.disabled = status;
     labelButton.elt.disabled = status;
     // Sets the colors of the labels
-    if (status) {
+    /*if (status) {
         labelBasic.elt.style.color = '#969696';
         labelAdvanced.elt.style.color = '#969696';
     } else {
-        labelBasic.elt.style.color = 'white';
-        labelAdvanced.elt.style.color = 'white';
-    }
+        labelBasic.elt.style.color = '#969696';
+        labelAdvanced.elt.style.color = '#969696';
+    }*/
 }
 
 /*
@@ -2454,19 +2445,19 @@ function showMessage(msg, subline = '') {
 }
 
 function showSaveDialog() {
-    fill('rgba(50, 50, 50, 0.95)');
+    fill('rgba(50, 50, 50, 1)');
     noStroke();
-    rect(window.width / 2 - 365, window.height / 2 - 208, 580, 400);
+    rect(window.width / 2 - 365, window.height / 2 - 208, 580, 400, 10);
     showPreviewImage();
 }
 
 function displayCustomDialog() {
-    pageUpButton.position(Math.round(window.width / 8) + customDialogColumns * 240 + 180, customDialogRows * 240 - 85);
-    pageDownButton.position(Math.round(window.width / 8) + customDialogColumns * 240 + 180, customDialogRows * 240 - 30);
-    fill('rgba(50, 50, 50, 0.95)');
+    pageUpButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 180, customDialogRows * 220 - 60);
+    pageDownButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 180, customDialogRows * 220);
+    fill(50, 50, 50);
     noStroke();
-    rect(Math.round(window.width / 8), 50, customDialogColumns * 240 + 220, customDialogRows * 240 + 40);
-    cancelButton.position(Math.round(window.width / 8) + customDialogColumns * 240 + 180, customDialogRows * 240 + 25);
+    rect(Math.round(window.width / 8), 50, customDialogColumns * 220 + 220, customDialogRows * 220 + 40, 10);
+    cancelButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 180, customDialogRows * 220 + 60);
     cancelButton.show();
     for (let i = 0; i < importSketchData.sketches.length; i++) {
         showCustomItem(i + 1, importSketchData.images[i], importSketchData.sketches[i], importSketchData.looks[i]);
@@ -2484,8 +2475,8 @@ function displayCustomDialog() {
 }
 
 function fetchImportData() {
-    customDialogColumns = Math.floor((window.width - window.width / 4) / 240);
-    customDialogRows = Math.floor((window.height - window.height / 10) / 240);
+    customDialogColumns = Math.floor((window.width - 150 - window.width / 4) / 220);
+    customDialogRows = Math.floor((window.height - window.height / 10) / 220);
     socket.emit('getImportSketches', { access_token: getCookieValue('access_token') });
     socket.on('importSketches', (data) => {
         socket.off('importSketches');
@@ -2496,8 +2487,8 @@ function fetchImportData() {
 
 function showCustomItem(place, img, caption, look) {
     let row = Math.ceil(place / customDialogColumns - 1) - (customDialogPage * customDialogRows);
-    let x = ((place - 1) % customDialogColumns) * 240 + Math.round(window.width / 8) + 40;
-    let y = (row * 240) + 90;
+    let x = ((place - 1) % customDialogColumns) * 220 + Math.round(window.width / 8) + 40;
+    let y = (row * 220) + 90;
     if (row >= customDialogRows || row < 0) {
         return;
     }
@@ -2513,13 +2504,16 @@ function showCustomItem(place, img, caption, look) {
             normal_img.drawingContext.drawImage(raw, 0, 0);
             normal_img.drawingContext.drawImage(gradientRaw, 0, 0);
             fill(0);
-            rect(x - 4, y - 4, 208, 208);
             image(normal_img, x, y);
             if (look.hasOwnProperty('outputs')) {
                 if (look.outputs > 0) {
                     showImportPreview(look, x, y);
                 }
             }
+            fill('rgba(0, 0, 0, 0)');
+            strokeWeight(10);
+            stroke(50, 50, 50);
+            rect(x, y, 200, 200, 10);
             noStroke();
             fill(255);
             textSize(16);

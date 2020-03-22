@@ -551,11 +551,14 @@ function showPreviewImage() {
         img.resize(0, window.height / 3);
         img.resize(0, 200);
         img.drawingContext.drawImage(gradientRaw, 0, 0);
-        fill(0);
-        image(img, window.width / 2 - 333, window.height / 2 - 39);
+        image(img, window.width / 2 - 333, window.height / 2 - 52);
+        fill('rgba(0, 0, 0, 0)');
+        strokeWeight(10);
+        stroke(50);
+        rect(window.width / 2 - 333, window.height / 2 - 52, 200, 200, 10);
         let look = getThisLook();
         if (look.outputs > 0) {
-            showImportPreview(look, window.width / 2 - 330, window.height / 2 - 36);
+            showImportPreview(look, window.width / 2 - 330, window.height / 2 - 56);
         }
     };
 }

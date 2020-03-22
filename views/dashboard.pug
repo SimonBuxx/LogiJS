@@ -75,13 +75,10 @@ else
       while n < 4
         if r*4+n < sketchData.sketches.length
           .sketch_item
-            img.base_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='')
-            img.black_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='')
+            img.shadow_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: (n*250+50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='')
             img.normal(src='data:image/png;base64,' + images[r*4+n], style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
             .ease_in
               img.darker(src='data:image/png;base64,' + images[r*4+n], style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
-            img(src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==', style={position: 'absolute', left: (n*250 + 50) + 'px', top: (r * 250 + 50) + 'px', height: '200px', width: '200px'}, alt=sketchData.sketches[r*4+n])
-            //h1(style="text-align: left; position: absolute; top: 10px; left: 230px; margin: 0;") #{sketchData.sketches[i].toUpperCase()}
             .ease_out
               p(style={'text-align': 'left', position: 'absolute', left: (n*250 + 60) + 'px', top: (r*250+220) + 'px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchData.sketches[r*4+n].toUpperCase()}
             .ease_in
