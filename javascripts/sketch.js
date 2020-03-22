@@ -2443,7 +2443,7 @@ function showMessage(msg, subline = '') {
 function showSaveDialog() {
     fill('rgba(50, 50, 50, 1)');
     noStroke();
-    rect(window.width / 2 - 365, window.height / 2 - 208, 580, 400, 10);
+    rect(window.width / 2 - 365, window.height / 2 - 208, 580, 385, 10);
     showPreviewImage();
 }
 

@@ -80,6 +80,7 @@ body {
     color: #969696;
     background: none;
     box-shadow: none;
+    cursor: default;
 }
 
 .button:disabled > .icon {
@@ -179,16 +180,11 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    cursor: pointer;
     color: white;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     text-align: center;
     margin: 10px 0 0 0;
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .buttonLeft{
@@ -237,6 +233,8 @@ body {
 .buttonLeft:disabled {
     color: #969696;
     cursor: default;
+    background: none;
+    border: none;
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
