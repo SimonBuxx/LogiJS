@@ -842,7 +842,11 @@ function setup() { // jshint ignore:line
     newButton.elt.className = 'button';
 
     // Button to save the sketch
-    saveButton = createButton('SAVE');
+    if (getCookieValue('access_token') !== '') {
+        saveButton = createButton('SAVE');
+    } else {
+        saveButton = createButton('DOWNLOAD');
+    }
     saveButton.position(windowWidth / 2 + 102, windowHeight / 2 + 110);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = 'btn btn-lg btn-red';
@@ -2394,7 +2398,7 @@ function reDraw() {
     }
 
     if (loading && !showCustomDialog) {
-        showMessage('Loading...', loadFile.split('.json')[0]);
+        showMessage('LOADING...', loadFile.split('.json')[0]);
     }
 
     if (error !== '') {
@@ -2425,18 +2429,10 @@ function showMessage(msg, subline = '') {
     noStroke();
     rect(0, 0, window.width, window.height);
 
-    fill(200, 50, 50);
-    strokeWeight(5);
-    stroke(0);
-    //noStroke();
-    rect(window.width / 2 - 250, window.height / 2 - 75, 500, 150);
-    stroke(0);
-    strokeWeight(4);
-    strokeCap(SQUARE);
-    //line(window.width / 2 - 300, window.height / 2 + 75, window.width / 2 + 300, window.height / 2 + 75);
-    strokeCap(ROUND);
-    fill(0);
+    fill(50);
     noStroke();
+    rect(window.width / 2 - 250, window.height / 2 - 75, 500, 150, 10);
+    fill(255);
     textSize(30);
     textAlign(CENTER, CENTER);
     text(msg, window.width / 2, window.height / 2 - 20);

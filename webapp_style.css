@@ -478,7 +478,7 @@ input[type=range]::-ms-tooltip {
                 -5px -5px 5px #3a3a3a;
     border-radius: 10px;
     border: none;
-    padding: 10px 40px;
+    padding: 10px 10px;
     margin: 10px;
     font-family:  'Open Sans', Arial, sans-serif;
     font-size: 20px;
