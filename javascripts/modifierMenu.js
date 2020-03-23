@@ -339,33 +339,53 @@ function createColorButtons() {
     redButton = createButton('');
     redButton.size(60, 30);
     redButton.elt.className = 'colorButton redButton';
-    redButton.elt.title = 'Make this output red';
     redButton.mousePressed(function () {
         newOutputColor(0);
+    });
+    redButton.mouseOver(function () {
+        setHelpText('Set the output color to red');
+    });
+    redButton.mouseOut(function () {
+        setHelpText('');
     });
 
     yellowButton = createButton('');
     yellowButton.size(60, 30);
     yellowButton.elt.className = 'colorButton yellowButton';
-    yellowButton.elt.title = 'Make this output yellow';
     yellowButton.mousePressed(function () {
         newOutputColor(1);
+    });
+    yellowButton.mouseOver(function () {
+        setHelpText('Set the output color to yellow');
+    });
+    yellowButton.mouseOut(function () {
+        setHelpText('');
     });
 
     greenButton = createButton('');
     greenButton.size(60, 30);
     greenButton.elt.className = 'colorButton greenButton';
-    greenButton.elt.title = 'Make this output green';
     greenButton.mousePressed(function () {
         newOutputColor(2);
+    });
+    greenButton.mouseOver(function () {
+        setHelpText('Set the output color to green');
+    });
+    greenButton.mouseOut(function () {
+        setHelpText('');
     });
 
     blueButton = createButton('');
     blueButton.size(60, 30);
     blueButton.elt.className = 'colorButton blueButton';
-    blueButton.elt.title = 'Make this output blue';
     blueButton.mousePressed(function () {
         newOutputColor(3);
+    });
+    blueButton.mouseOver(function () {
+        setHelpText('Set the output color to blue');
+    });
+    blueButton.mouseOut(function () {
+        setHelpText('');
     });
 
     setColorButtonVisibility(false);
@@ -376,7 +396,12 @@ function createModifierElements() {
     inputIsTopBox.hide();
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.className = 'topBox';
-    inputIsTopBox.elt.title = 'Select this to fix the pin of this input on top of this sketch\'s custom module';
+    inputIsTopBox.mouseOver(function () {
+        setHelpText('On an exported module, this input should appear on top of the element');
+    });
+    inputIsTopBox.mouseOut(function () {
+        setHelpText('');
+    });
 
     minusLabel = createP('-');
     minusLabel.hide();
@@ -392,7 +417,12 @@ function createModifierElements() {
     captionInput.attribute('placeholder', 'PIN NAME');
     captionInput.input(newCaption);
     captionInput.elt.className = "textInput";
-    captionInput.elt.title = 'This is the name that will appear on the corresponding pin on the custom module.';
+    captionInput.mouseOver(function () {
+        setHelpText('Caption of the corresponding pin on an exported module');
+    });
+    captionInput.mouseOut(function () {
+        setHelpText('');
+    });
 
     plusLabel = createP('+');
     plusLabel.hide();
@@ -407,7 +437,12 @@ function createModifierElements() {
         newClockspeed();
     });
     clockspeedSlider.elt.className = 'slider';
-    clockspeedSlider.elt.title = 'Clock speed';
+    clockspeedSlider.mouseOver(function () {
+        setHelpText('Sets the toggle speed of this clock element');
+    });
+    clockspeedSlider.mouseOut(function () {
+        setHelpText('');
+    });
 
     labelTextBox = createElement('textarea');
     labelTextBox.elt.className = 'labelTextBox';
@@ -415,6 +450,12 @@ function createModifierElements() {
     labelTextBox.hide();
     labelTextBox.size(245, 115);
     labelTextBox.elt.onkeyup = labelChanged;
+    labelTextBox.mouseOver(function () {
+        setHelpText('Edit the text of this label');
+    });
+    labelTextBox.mouseOut(function () {
+        setHelpText('');
+    });
 
     sequencer = createSelect();
     sequencer.hide();
@@ -422,7 +463,12 @@ function createModifierElements() {
     sequencer.changed(sequencerChanged);
     fillSequencer(1);
     sequencer.elt.className = 'sequencer';
-    sequencer.elt.title = 'Change order';
+    sequencer.mouseOver(function () {
+        setHelpText('Position of the corresponding pin on an exported module');
+    });
+    sequencer.mouseOut(function () {
+        setHelpText('');
+    });
 
     createColorButtons();
 }

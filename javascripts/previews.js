@@ -558,7 +558,7 @@ function showPreviewImage() {
         rect(window.width / 2 - 333, window.height / 2 - 52, 200, 200, 10);
         let look = getThisLook();
         if (look.outputs > 0) {
-            showImportPreview(look, window.width / 2 - 330, window.height / 2 - 56);
+            showImportPreview(look, window.width / 2 - 330, window.height / 2 - 46);
         }
     };
 }

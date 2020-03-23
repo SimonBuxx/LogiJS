@@ -265,7 +265,8 @@ let labelTextBox; // Label elements
 */
 let sequencer;
 
-let sketchNameInput, moduleNameInput, saveDialogText, customDialogText, saveButton, saveDialogButton, dashboardButton, cancelButton, descInput, loadButton, newButton, pageUpButton, pageDownButton;
+let sketchNameInput, moduleNameInput, saveButton, saveDialogText;
+let helpLabel, customDialogText, saveDialogButton, dashboardButton, cancelButton, descInput, newButton, pageUpButton, pageDownButton;
 let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions,
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
@@ -273,7 +274,9 @@ let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions,
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
 
-let updater, sfcheckbox, gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
+let updater, sfcheckbox;
+
+let gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 
 /*
@@ -332,7 +335,12 @@ function setup() { // jshint ignore:line
     andButton.mousePressed(function () { andClicked(false); });
     andButton.elt.className = 'previewButton';
     andButton.elt.innerHTML = '<img class="preview" src="images/and-gate.png">';
-    andButton.elt.title = 'AND-Gate';
+    andButton.mouseOver(function () {
+        setHelpText('AND-Gate');
+    });
+    andButton.mouseOut(function () {
+        setHelpText('');
+    });
     andButton.parent(leftSideButtons);
 
     // Adds or-gates
@@ -340,7 +348,12 @@ function setup() { // jshint ignore:line
     orButton.mousePressed(function () { orClicked(false); });
     orButton.elt.className = 'previewButton';
     orButton.elt.innerHTML = '<img class="preview" src="images/or-gate.png">';
-    orButton.elt.title = 'OR-Gate';
+    orButton.mouseOver(function () {
+        setHelpText('OR-Gate');
+    });
+    orButton.mouseOut(function () {
+        setHelpText('');
+    });
     orButton.parent(leftSideButtons);
 
     // Adds xor-gates
@@ -348,7 +361,12 @@ function setup() { // jshint ignore:line
     xorButton.mousePressed(function () { xorClicked(false); });
     xorButton.elt.className = 'previewButton';
     xorButton.elt.innerHTML = '<img class="preview" src="images/xor-gate.png">';
-    xorButton.elt.title = 'XOR-Gate';
+    xorButton.mouseOver(function () {
+        setHelpText('XOR-Gate');
+    });
+    xorButton.mouseOut(function () {
+        setHelpText('');
+    });
     xorButton.parent(leftSideButtons);
 
     // Adds switches
@@ -356,7 +374,12 @@ function setup() { // jshint ignore:line
     inputButton.mousePressed(function () { inputClicked(false); });
     inputButton.elt.className = 'previewButton';
     inputButton.elt.innerHTML = '<img class="preview" src="images/switch.png">';
-    inputButton.elt.title = 'Switch';
+    inputButton.mouseOver(function () {
+        setHelpText('Switch');
+    });
+    inputButton.mouseOut(function () {
+        setHelpText('');
+    });
     inputButton.parent(leftSideButtons);
 
     // Adds buttons (short impulse)
@@ -364,7 +387,12 @@ function setup() { // jshint ignore:line
     buttonButton.mousePressed(function () { buttonClicked(false); });
     buttonButton.elt.className = 'previewButton';
     buttonButton.elt.innerHTML = '<img class="preview" src="images/button.png">';
-    buttonButton.elt.title = 'Button';
+    buttonButton.mouseOver(function () {
+        setHelpText('Button');
+    });
+    buttonButton.mouseOut(function () {
+        setHelpText('');
+    });
     buttonButton.parent(leftSideButtons);
 
     // Adds clocks (variable impulse)
@@ -372,7 +400,12 @@ function setup() { // jshint ignore:line
     clockButton.mousePressed(function () { clockClicked(false); });
     clockButton.elt.className = 'previewButton';
     clockButton.elt.innerHTML = '<img class="preview" src="images/clock.png">';
-    clockButton.elt.title = 'Clock';
+    clockButton.mouseOver(function () {
+        setHelpText('Clock');
+    });
+    clockButton.mouseOut(function () {
+        setHelpText('');
+    });
     clockButton.parent(leftSideButtons);
 
     // Adds outputs (lamps)
@@ -380,7 +413,12 @@ function setup() { // jshint ignore:line
     outputButton.mousePressed(function () { outputClicked(false); });
     outputButton.elt.className = 'previewButton';
     outputButton.elt.innerHTML = '<img class="preview" src="images/output.png">';
-    outputButton.elt.title = 'Lamp';
+    outputButton.mouseOver(function () {
+        setHelpText('Lamp');
+    });
+    outputButton.mouseOut(function () {
+        setHelpText('');
+    });
     outputButton.parent(leftSideButtons);
 
     // Adds 7-segment displays
@@ -388,15 +426,25 @@ function setup() { // jshint ignore:line
     segDisplayButton.mousePressed(function () { segDisplayClicked(false); });
     segDisplayButton.elt.className = 'previewButton';
     segDisplayButton.elt.innerHTML = '<img class="preview" src="images/segments.png">';
-    segDisplayButton.elt.title = '7-Segment Display';
+    segDisplayButton.mouseOver(function () {
+        setHelpText('7-Segment Display');
+    });
+    segDisplayButton.mouseOut(function () {
+        setHelpText('');
+    });
     segDisplayButton.parent(leftSideButtons);
 
     // Adds labels
     labelButton = createButton('');
     labelButton.mousePressed(function () { labelButtonClicked(false); });
     labelButton.elt.className = 'previewButton';
-    labelButton.elt.title = 'Text Label';
     labelButton.elt.innerHTML = '<img class="preview" src="images/label.png">';
+    labelButton.mouseOver(function () {
+        setHelpText('Text Label');
+    });
+    labelButton.mouseOut(function () {
+        setHelpText('');
+    });
     labelButton.parent(leftSideButtons);
 
     // Adds text 'Advanced Elements'
@@ -420,6 +468,12 @@ function setup() { // jshint ignore:line
     });
     rsFlipFlopButton.elt.className = 'previewButton';
     rsFlipFlopButton.elt.innerHTML = '<img class="preview" src="images/rs-flipflop.png">';
+    rsFlipFlopButton.mouseOver(function () {
+        setHelpText('RS Flip-Flop');
+    });
+    rsFlipFlopButton.mouseOut(function () {
+        setHelpText('');
+    });
     rsFlipFlopButton.parent(leftSideButtons);
     // Adds a d-flipflop
     dFlipFlopButton = createButton('D Flip-Flop');
@@ -437,6 +491,12 @@ function setup() { // jshint ignore:line
     });
     dFlipFlopButton.elt.className = 'previewButton';
     dFlipFlopButton.elt.innerHTML = '<img class="preview" src="images/d-flipflop.png">';
+    dFlipFlopButton.mouseOver(function () {
+        setHelpText('D Flip-Flop');
+    });
+    dFlipFlopButton.mouseOut(function () {
+        setHelpText('');
+    });
     dFlipFlopButton.parent(leftSideButtons);
     // Adds a counter
     counterButton = createButton('Counter');
@@ -455,6 +515,12 @@ function setup() { // jshint ignore:line
     });
     counterButton.elt.className = 'previewButton';
     counterButton.elt.innerHTML = '<img class="preview" src="images/counter.png">';
+    counterButton.mouseOver(function () {
+        setHelpText('Counter');
+    });
+    counterButton.mouseOut(function () {
+        setHelpText('');
+    });
     counterButton.parent(leftSideButtons);
     // Adds a decoder
     decoderButton = createButton('Decoder');
@@ -477,6 +543,12 @@ function setup() { // jshint ignore:line
     });
     decoderButton.elt.className = 'previewButton';
     decoderButton.elt.innerHTML = '<img class="preview" src="images/decoder.png">';
+    decoderButton.mouseOver(function () {
+        setHelpText('Decoder');
+    });
+    decoderButton.mouseOut(function () {
+        setHelpText('');
+    });
     decoderButton.parent(leftSideButtons);
     // Adds a multiplexer
     muxButton = createButton('Multiplexer');
@@ -516,6 +588,12 @@ function setup() { // jshint ignore:line
     });
     muxButton.elt.className = 'previewButton';
     muxButton.elt.innerHTML = '<img class="preview" src="images/mux.png">';
+    muxButton.mouseOver(function () {
+        setHelpText('Multiplexer');
+    });
+    muxButton.mouseOut(function () {
+        setHelpText('');
+    });
     muxButton.parent(leftSideButtons);
     // Adds a demultiplexer
     demuxButton = createButton('Demultiplexer');
@@ -557,6 +635,12 @@ function setup() { // jshint ignore:line
     });
     demuxButton.elt.className = 'previewButton';
     demuxButton.elt.innerHTML = '<img class="preview" src="images/demux.png">';
+    demuxButton.mouseOver(function () {
+        setHelpText('Demultiplexer');
+    });
+    demuxButton.mouseOut(function () {
+        setHelpText('');
+    });
     demuxButton.parent(leftSideButtons);
     // Adds a register (4Bit)
     reg4Button = createButton('4Bit-Register');
@@ -574,6 +658,12 @@ function setup() { // jshint ignore:line
     });
     reg4Button.elt.className = 'previewButton';
     reg4Button.elt.innerHTML = '<img class="preview" src="images/register.png">';
+    reg4Button.mouseOver(function () {
+        setHelpText('4-bit Register');
+    });
+    reg4Button.mouseOut(function () {
+        setHelpText('');
+    });
     reg4Button.parent(leftSideButtons);
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
@@ -591,6 +681,12 @@ function setup() { // jshint ignore:line
     });
     halfaddButton.elt.className = 'previewButton';
     halfaddButton.elt.innerHTML = '<img class="preview" src="images/halfadd.png">';
+    halfaddButton.mouseOver(function () {
+        setHelpText('Half Adder');
+    });
+    halfaddButton.mouseOut(function () {
+        setHelpText('');
+    });
     halfaddButton.parent(leftSideButtons);
     // Adds a Full Adder
     fulladdButton = createButton('Full Adder');
@@ -608,11 +704,23 @@ function setup() { // jshint ignore:line
     });
     fulladdButton.elt.className = 'previewButton';
     fulladdButton.elt.innerHTML = '<img class="preview" src="images/fulladd.png">';
+    fulladdButton.mouseOver(function () {
+        setHelpText('Full Adder');
+    });
+    fulladdButton.mouseOut(function () {
+        setHelpText('');
+    });
     fulladdButton.parent(leftSideButtons);
 
     customButton = createButton('<i class="fa fa-file-import icon"></i> Import own element');
     customButton.mousePressed(function () { customDialogPage = 0; customClicked(); });
     customButton.elt.className = 'buttonLeft';
+    customButton.mouseOver(function () {
+        setHelpText('Import your own sketches as custom elements');
+    });
+    customButton.mouseOut(function () {
+        setHelpText('');
+    });
     customButton.parent(leftSideButtons);
     if (getCookieValue('access_token') === '') {
         customButton.elt.disabled = true;
@@ -623,6 +731,12 @@ function setup() { // jshint ignore:line
     labelOptions.elt.className = 'label';
     labelOptions.parent(leftSideButtons);
     labelOptions.hide();
+
+    helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
+    helpLabel.elt.className = 'label';
+    helpLabel.elt.style.color = 'white';
+    helpLabel.position(745, 5);
+    helpLabel.hide();
 
     // Adds text 'Gate inputs'
     labelGateInputs = createP('GATE INPUTS');
@@ -639,6 +753,12 @@ function setup() { // jshint ignore:line
     gateInputSelect.elt.className = 'selectLeft';
     gateInputSelect.parent(leftSideButtons);
     gateInputSelect.value('2');
+    gateInputSelect.mouseOver(function () {
+        setHelpText('Define the number of gate inputs');
+    });
+    gateInputSelect.mouseOut(function () {
+        setHelpText('');
+    });
 
     // Adds text 'Direction'
     labelDirection = createP('DIRECTION');
@@ -657,6 +777,12 @@ function setup() { // jshint ignore:line
     directionSelect.elt.className = 'selectLeft';
     directionSelect.parent(leftSideButtons);
     directionSelect.value('Right');
+    directionSelect.mouseOver(function () {
+        setHelpText('Define the direction of the element');
+    });
+    directionSelect.mouseOut(function () {
+        setHelpText('');
+    });
 
     // Adds text 'Input width'
     labelBits = createP('INPUT WIDTH');
@@ -688,6 +814,12 @@ function setup() { // jshint ignore:line
     bitSelect.elt.className = 'selectLeft';
     bitSelect.parent(leftSideButtons);
     bitSelect.value('4');
+    bitSelect.mouseOver(function () {
+        setHelpText('Define the number of input bits');
+    });
+    bitSelect.mouseOut(function () {
+        setHelpText('');
+    });
 
     counterBitSelect = createSelect();
     counterBitSelect.hide();
@@ -698,6 +830,12 @@ function setup() { // jshint ignore:line
     counterBitSelect.elt.className = 'selectLeft';
     counterBitSelect.parent(leftSideButtons);
     counterBitSelect.value('4');
+    counterBitSelect.mouseOver(function () {
+        setHelpText('Define the number of output bits');
+    });
+    counterBitSelect.mouseOut(function () {
+        setHelpText('');
+    });
 
     decoderBitSelect = createSelect();
     decoderBitSelect.hide();
@@ -708,7 +846,12 @@ function setup() { // jshint ignore:line
     decoderBitSelect.elt.className = 'selectLeft';
     decoderBitSelect.parent(leftSideButtons);
     decoderBitSelect.value('2');
-
+    decoderBitSelect.mouseOver(function () {
+        setHelpText('Define the number of input bits');
+    });
+    decoderBitSelect.mouseOut(function () {
+        setHelpText('');
+    });
 
     multiplexerBitSelect = createSelect();
     multiplexerBitSelect.hide();
@@ -719,10 +862,15 @@ function setup() { // jshint ignore:line
     multiplexerBitSelect.elt.className = 'selectLeft';
     multiplexerBitSelect.parent(leftSideButtons);
     multiplexerBitSelect.value('1');
+    multiplexerBitSelect.mouseOver(function () {
+        setHelpText('Define the address width of the element');
+    });
+    multiplexerBitSelect.mouseOut(function () {
+        setHelpText('');
+    });
 
     sfcheckbox = createCheckbox('SYNC TICKS TO FRAMES', true);
     sfcheckbox.hide();
-    sfcheckbox.elt.title = 'If this is deactivated, the simulation is executed as fast as possible. Otherwise, the speed is synced to the frame rate.';
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
         if (!sfcheckbox.checked() && simRunning) {
@@ -733,6 +881,12 @@ function setup() { // jshint ignore:line
     });
     sfcheckbox.elt.className = 'checkbox';
     sfcheckbox.parent(leftSideButtons);
+    sfcheckbox.mouseOver(function () {
+        setHelpText('Synchronize the simulation speed with the frame rate');
+    });
+    sfcheckbox.mouseOut(function () {
+        setHelpText('');
+    });
 
     //Upper left
 
@@ -743,6 +897,12 @@ function setup() { // jshint ignore:line
         enterModifierMode();
     });
     modifierModeButton.elt.className = 'button active';
+    modifierModeButton.mouseOver(function () {
+        setHelpText('Draws wires and changes element properties');
+    });
+    modifierModeButton.mouseOut(function () {
+        setHelpText('');
+    });
 
 
     // Activates the delete mode (objects and wires)
@@ -750,12 +910,24 @@ function setup() { // jshint ignore:line
     deleteButton.position(306, 3);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = 'button';
+    deleteButton.mouseOver(function () {
+        setHelpText('Deletes wires and elements');
+    });
+    deleteButton.mouseOut(function () {
+        setHelpText('');
+    });
 
     // Starts and stops the simulation
     simButton = createButton('<i class="fa fa-play icon"></i> Start');
     simButton.position(396, 3);
     simButton.mousePressed(simClicked);
     simButton.elt.className = 'button';
+    simButton.mouseOver(function () {
+        setHelpText('Starts and stops the simulation');
+    });
+    simButton.mouseOut(function () {
+        setHelpText('');
+    });
 
     // Undos the last action
     undoButton = createButton('<i class="fa fa-undo icon"></i> Undo');
@@ -794,6 +966,12 @@ function setup() { // jshint ignore:line
         reDraw();
     };
     moduleNameInput.hide();
+    moduleNameInput.mouseOver(function () {
+        setHelpText('This is the text written on the module');
+    });
+    moduleNameInput.mouseOut(function () {
+        setHelpText('');
+    });
 
     sketchNameInput = createInput('');
     sketchNameInput.attribute('placeholder', 'SKETCH NAME');
@@ -807,6 +985,12 @@ function setup() { // jshint ignore:line
         reDraw();
     };
     sketchNameInput.hide();
+    sketchNameInput.mouseOver(function () {
+        setHelpText('This is the file name of the sketch');
+    });
+    sketchNameInput.mouseOut(function () {
+        setHelpText('');
+    });
 
     descInput = createElement('textarea');
     descInput.attribute('placeholder', 'SKETCH DESCRIPTION');
@@ -820,6 +1004,12 @@ function setup() { // jshint ignore:line
         descInput.elt.disabled = true;
     }
     descInput.hide();
+    descInput.mouseOver(function () {
+        setHelpText('This is the description displayed in the dashboard');
+    });
+    descInput.mouseOut(function () {
+        setHelpText('');
+    });
 
     // Clears the canvas and resets the view
     newButton = createButton('<i class="fas fa-file icon"></i> New');
@@ -837,17 +1027,32 @@ function setup() { // jshint ignore:line
         }
     });
     newButton.elt.className = 'button';
+    newButton.mouseOver(function () {
+        setHelpText('Clears the sketch');
+    });
+    newButton.mouseOut(function () {
+        setHelpText('');
+    });
 
     // Button to save the sketch
     if (getCookieValue('access_token') !== '') {
         saveButton = createButton('SAVE');
+        saveButton.mouseOver(function () {
+            setHelpText('Save this sketch to the dashboard');
+        });
     } else {
         saveButton = createButton('DOWNLOAD');
+        saveButton.mouseOver(function () {
+            setHelpText('Download this sketch as a JSON file');
+        });
     }
     saveButton.position(windowWidth / 2 + 142, windowHeight / 2 + 110);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = 'btn btn-lg btn-red';
     saveButton.hide();
+    saveButton.mouseOut(function () {
+        setHelpText('');
+    });
 
     cancelButton = createButton('CANCEL');
     cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 110);
@@ -885,22 +1090,33 @@ function setup() { // jshint ignore:line
     pageDownButton.elt.className = 'btn btn-lg btn-red';
     pageDownButton.hide();
 
-    // Button to load a sketch
-    loadButton = createButton('Load');
-    loadButton.position(windowWidth - 138, 3);
-    loadButton.mousePressed(loadClicked);
-    loadButton.elt.className = 'button';
-    loadButton.hide();
-
     saveDialogButton = createButton('<i class="fas fa-save icon"></i> Save');
     saveDialogButton.position(windowWidth - 216, 3);
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = 'button';
+    saveDialogButton.mouseOver(function () {
+        setHelpText('Saves the sketch');
+    });
+    saveDialogButton.mouseOut(function () {
+        setHelpText('');
+    });
 
     if (getCookieValue('access_token') !== '') {
         dashboardButton = createButton('<i class="fas fa-th icon"></i> Dashboard');
+        dashboardButton.mouseOver(function () {
+            setHelpText('Brings you back to the dashboard');
+        });
+        dashboardButton.mouseOut(function () {
+            setHelpText('');
+        });
     } else {
         dashboardButton = createButton('<i class="fa fa-sign-in-alt icon"></i> Login');
+        dashboardButton.mouseOver(function () {
+            setHelpText('Log into your LogiJS account');
+        });
+        dashboardButton.mouseOut(function () {
+            setHelpText('');
+        });
     }
     dashboardButton.elt.style.width = '110px';
     dashboardButton.mousePressed(function () {
@@ -2730,6 +2946,16 @@ function keyPressed() {
         }
     } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
         loadClicked();
+    }
+}
+
+function setHelpText(str) {
+    if (str !== '') {
+        helpLabel.elt.innerHTML = '<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i> ' + str;
+        helpLabel.style('font-size', '15px');
+        helpLabel.show();
+    } else {
+        helpLabel.hide();
     }
 }
 
