@@ -176,20 +176,20 @@ function showModifierMenu() {
 }
 
 function positionModifierElements() {
-    sequencer.position(modifierMenuX + 362, modifierMenuY + 67);
+    sequencer.position(modifierMenuX + 442, modifierMenuY + 67);
 
-    captionInput.position(modifierMenuX + 170, modifierMenuY + 70);
-    inputIsTopBox.position(modifierMenuX + 190, modifierMenuY + 120);
-    clockspeedSlider.position(modifierMenuX + 220, modifierMenuY + 170);
-    minusLabel.position(modifierMenuX + 198, modifierMenuY + 161);
-    plusLabel.position(modifierMenuX + 395, modifierMenuY + 165);
+    captionInput.position(modifierMenuX + 250, modifierMenuY + 70);
+    inputIsTopBox.position(modifierMenuX + 270, modifierMenuY + 120);
+    clockspeedSlider.position(modifierMenuX + 300, modifierMenuY + 170);
+    minusLabel.position(modifierMenuX + 278, modifierMenuY + 161);
+    plusLabel.position(modifierMenuX + 475, modifierMenuY + 165);
 
-    redButton.position(modifierMenuX + 170, modifierMenuY + 130);
-    yellowButton.position(modifierMenuX + 236, modifierMenuY + 130);
-    greenButton.position(modifierMenuX + 302, modifierMenuY + 130);
-    blueButton.position(modifierMenuX + 368, modifierMenuY + 130);
+    redButton.position(modifierMenuX + 250, modifierMenuY + 130);
+    yellowButton.position(modifierMenuX + 316, modifierMenuY + 130);
+    greenButton.position(modifierMenuX + 382, modifierMenuY + 130);
+    blueButton.position(modifierMenuX + 448, modifierMenuY + 130);
 
-    labelTextBox.position(modifierMenuX + 170, modifierMenuY + 70);
+    labelTextBox.position(modifierMenuX + 250, modifierMenuY + 70);
 }
 
 function newIsTopState() {
