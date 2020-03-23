@@ -720,7 +720,7 @@ function setup() { // jshint ignore:line
     multiplexerBitSelect.parent(leftSideButtons);
     multiplexerBitSelect.value('1');
 
-    sfcheckbox = createCheckbox('SYNC TICKS', true);
+    sfcheckbox = createCheckbox('SYNC TICKS TO FRAMES', true);
     sfcheckbox.hide();
     sfcheckbox.elt.title = 'If this is deactivated, the simulation is executed as fast as possible. Otherwise, the speed is synced to the frame rate.';
     sfcheckbox.changed(function () {
@@ -2183,6 +2183,7 @@ function startSimulation() {
         customs[i].setSimRunning(true);
     }
 
+    labelOptions.show();
     sfcheckbox.show();
 
     // Start the simulation and exit the modifier mode
@@ -2200,6 +2201,7 @@ function endSimulation() {
     clearInterval(updater); // Stop the unsynced simulation updater
     setSimButtonText('<i class="fa fa-play icon"></i> Start'); // Set the button caption to 'Start'
     updateUndoButtons();
+    labelOptions.hide();
     sfcheckbox.hide();
 
     groups = []; // Reset the groups, as they are regenerated when starting again
