@@ -1104,7 +1104,7 @@ function setup() { // jshint ignore:line
     if (getCookieValue('access_token') !== '') {
         dashboardButton = createButton('<i class="fas fa-th icon"></i> Dashboard');
         dashboardButton.mouseOver(function () {
-            setHelpText('Brings you back to the dashboard');
+            setHelpText('Get back to the dashboard');
         });
         dashboardButton.mouseOut(function () {
             setHelpText('');
