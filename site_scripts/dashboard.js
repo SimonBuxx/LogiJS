@@ -1,4 +1,4 @@
-let socket = io.connect();
+//let socket = io.connect();
 let confButton = '';
 
 /*let sketchData = [];

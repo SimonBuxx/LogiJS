@@ -1,0 +1,1 @@
+{"tops":[],"inputLabels":["",""],"outputLabels":["","",""],"caption":"Basic gates","inputs":2,"outputs":3,"desc":"This sketch demonstrates the three basic logic gates, AND, OR and XOR. It also shows the usage of input and output elements. Logic gates are the fundamentals of every logic circuit."}

@@ -14,6 +14,7 @@ const PORT = 8080;
 
 let jwt_handler = require('./jwt_module.js');
 let user_data = require('./user_data.js');
+let library = require('./library.js');
 
 let server = app.listen(PORT, () => {
     console.log('Server running http://localhost:' + PORT);
@@ -131,9 +132,32 @@ router.get('/dashboard', function (req, res) {
     });
 });
 
+router.get('/library', function (req, res) {
+    let user = getUser(req);
+    library.getLibrarySketches(function (data) {
+        res.render('library', {
+            user: user,
+            sketches: data.sketches,
+            images: data.images,
+            descriptions: data.descriptions,
+            sketchNames: data.sketchNames
+        });
+    });
+});
+
 router.get('/download', (req, res) => {
     try {
         res.download('./userSketches/' + getUser(req) + '/' + req.query.file + '.json', function (err) {
+            //return res.sendStatus('200');
+        });
+    } catch (e) {
+        return res.sendStatus('200');
+    }
+});
+
+router.get('/libDownload', (req, res) => {
+    try {
+        res.download('./views/librarySketches/' + req.query.file + '.json', function (err) {
             //return res.sendStatus('200');
         });
     } catch (e) {
@@ -220,7 +244,7 @@ router.post('/createUser', (req, res) => {
                         username_unused: true // false, if the username is already in use
                     });
                 res.end();
-                if (!fs.existsSync('./userSketches/' + req.body.username + '/')){
+                if (!fs.existsSync('./userSketches/' + req.body.username + '/')) {
                     fs.mkdirSync('./userSketches/' + req.body.username + '/');
                 }
             } else {
@@ -327,12 +351,22 @@ io.on('connection', (socket) => {
                 success: true
             });
         } catch (e) {
-            console.log('[MAJOR] File loading error!');
-            console.log(path);
-            socket.emit('userSketchData', {
-                data: {},
-                success: false
-            });
+            try {
+                path = './views/librarySketches/' + data.file + '.json';
+                let raw = fs.readFileSync(path);
+                let sketchData = JSON.parse(raw);
+                socket.emit('userSketchData', {
+                    data: sketchData,
+                    success: true
+                });
+            } catch (e) {
+                console.log('[MAJOR] File loading error!');
+                console.log(path);
+                socket.emit('userSketchData', {
+                    data: {},
+                    success: false
+                });
+            }
         }
     });
 

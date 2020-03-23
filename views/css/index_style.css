@@ -86,6 +86,15 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
     text-shadow: 1px 1px 5px black;
 }
 
+.sketch_name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    font-size: 25px;
+    font-weight: normal;
+    color: white;
+}
+
 .sketch_item:hover > .ease_in {
     opacity: 1.0;
 }
@@ -98,15 +107,15 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
     opacity: 0.0;
 }
 
-.fa-trash-o:hover {
+.ease_in .fa-trash-o:hover {
     color: rgb(200, 50, 50);
 }
 
-.fa-download:hover {
+.ease_in .fa-download:hover {
     color: rgb(40, 180, 40);
 }
 
-.fa-pencil:hover {
+.ease_in .fa-pencil:hover {
     color: rgb(40, 180, 40);
 }
 
@@ -366,6 +375,24 @@ input {
 
 .navbar-default .navbar-nav > li > .user-button:hover {
     color: #969696;
+}
+
+.side_board {
+    width: 950px;
+    height: 200px;
+    background: #323232;
+    background: none;
+    /*border-radius: 10px;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;*/
+}
+
+.sketch_desc {
+    padding: 0;
+    padding-top: 20px;
+    width: 680px;
+    position: absolute;
+    left: 240px;
 }
 
 .footer_bottom {

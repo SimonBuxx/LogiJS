@@ -46,7 +46,9 @@ head
             li
               a.internal-link(rel='nofollow', href='/', target='_parent') HOME
             li
-              a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
+              a.internal-link(rel='nofollow', href='/library', target='_parent') LIBRARY
+            //li
+              //a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
             li
               a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
             li.active
@@ -55,18 +57,18 @@ head
 #dashboard_wc_back.carousel
   form.Logout
     button.btn.btn-lg.btn-orange(type='submit', role='button' style="margin: 15px; float:left; position: absolute;")
-      <i class="fa fa-sign-out"></i> Logout
+      <i class="fa fa-sign-out"></i> LOGOUT
   button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 15px; float:right; position: absolute; right: 0;")
-    <i class="fa fa-plus-square"></i> New Sketch
+    <i class="fa fa-plus-square"></i> NEW SKETCH
   h1(style="padding: 15px;") Welcome, #{user}!
 if sketchData.sketches.length === 0
   #dashboard_item_back.carousel(style={height: 180 + 'px', 'margin-bottom': '100px'})
     h1(style="padding: 10px; font-size: 24px;") You don't have any sketches.
     div(style="text-align: center;")
       button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
-        <i class="fa fa-plus-square"></i> New Sketch
+        <i class="fa fa-plus-square"></i> NEW SKETCH
       button.btn.btn-lg.btn-green(disabled="true", type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
-        <i class="fa fa-graduation-cap"></i> Coming soon!
+        <i class="fa fa-graduation-cap"></i> COMING SOON!
 else
   #dashboard_item_back.carousel(style={height: Math.ceil(sketchData.sketches.length / 4) * 250 + 50 + 'px', 'margin-bottom': '65px'})
     - var r = 0;

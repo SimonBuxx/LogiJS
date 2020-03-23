@@ -1,0 +1,109 @@
+doctype html
+head
+  title LogiJS: Library
+  meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
+  computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
+  meta(name='description', content='LogiJS is a logic circuit simulator built for educational use. Easy to use, yet powerful.')
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='shortcut icon', href='images/favicon.ico')
+  style
+    include css/bootstrap.css
+    include css/index_style.css
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
+  script.
+    window.addEventListener("load", function () {
+    window.cookieconsent.initialise({
+    "palette": {
+    "popup": {
+    "background": "#323232",
+    "text": "#ffffff"
+    },
+    "button": {
+    "background": "#c83232",
+    "text": "#ffffff"
+    }
+    }
+    })
+    });
+.top-menu
+  .container
+    .navbar.navbar-default.navbar-fixed-top(style='background: rgb(50, 50, 50);', role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/')
+            img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+        #nav-bar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
+            li
+              a.internal-link(rel='nofollow', href='/', target='_parent') HOME
+            li.active
+              a.internal-link(rel='nofollow', href='#', target='_parent') LIBRARY
+            //li
+              //a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
+            li
+              a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
+            li
+              if user !== ''
+                a.internal-link.user-button(rel='nofollow', href='/dashboard', target='_parent') #{user.toUpperCase()}
+              else
+                a.internal-link(rel='nofollow', href='/login', target='_parent', style="margin-left: 60px;") LOGIN
+            if user == ''
+              li
+                a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
+#blur
+#dashboard_wc_back.carousel
+  button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 15px; float:right; position: absolute; right: 0;")
+    <i class="fa fa-plus-square"></i> NEW SKETCH
+  h1(style="padding: 15px;") LOGIC CIRCUIT LIBRARY
+if sketches.length === 0
+  #dashboard_item_back.carousel(style={height: 180 + 'px', 'margin-bottom': '100px'})
+    h1(style="padding: 10px; font-size: 24px;") You don't have any sketches.
+    div(style="text-align: center;")
+      button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
+        <i class="fa fa-plus-square"></i> NEW SKETCH
+      button.btn.btn-lg.btn-green(disabled="true", type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
+        <i class="fa fa-graduation-cap"></i> COMING SOON!
+else
+  #dashboard_item_back.carousel(style={height: sketches.length * 250 + 50 + 'px', 'margin-bottom': '65px'})
+    - var r = 0;
+    while r < sketches.length
+      if r < sketches.length
+          div.side_board(style={position: 'absolute', left: '50px', top: (r*250+50) + 'px'})
+            p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchNames[r].toUpperCase()}
+            button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketches[r] + "'", role='button', style="margin: 10px; float:right; position: absolute; right: 0px; bottom: 0px; width: 100px;")
+              <i class="fa fa-play"></i> OPEN
+            button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketches[r], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', right: '110px', bottom: '0px', margin: '10px', float: 'right'}) 
+                <i class="fa fa-download"></i> DOWNLOAD
+            if (descriptions[r].length <= 300)
+              p.sketch_desc(style={'text-align': 'justify', top: '50px', 'font-size': '14px'}) #{descriptions[r].slice(0, 300)}
+            else
+              p.sketch_desc(style={'text-align': 'justify', top: '50px', 'font-size': '14px'}) #{descriptions[r].slice(0, 300) + '...'}
+            if r < sketches.length - 1
+              hr(style="color: white; margin-top: 225px; border-width: 1px;")
+          .sketch_item
+            img.shadow_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: '50px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt='')
+            img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '50px', top: (r*250+50) + 'px', height: '200px', width: '200px'}, alt=sketches[r])
+      - r++;
+.footer_bottom
+  .text-center
+    .footer_bottom_content
+      span#footer-line
+        | Copyright &copy; 2020 
+        a(href='https://www.github.com/SimonBuxx') Simon Buchholz
+        |  | 
+      span(style="text-align: right;")
+        a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js
+  include ../site_scripts/lib_front.js

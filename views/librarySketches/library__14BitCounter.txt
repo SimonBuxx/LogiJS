@@ -1,0 +1,1 @@
+{"tops":[],"inputLabels":[">"],"outputLabels":["","","",""],"caption":"4-Bit Counter","inputs":1,"outputs":4,"desc":"This sketch implements a simple counter made using D gates. It is connected to a clock, permanently increasing the binary output value. When the value passes the biggest possible value (fifteen in this case), the counter restarts from zero."}

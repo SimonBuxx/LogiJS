@@ -942,7 +942,11 @@ function setup() { // jshint ignore:line
 
     let loadfile = urlParam('sketch');
     if (loadfile !== '') {
-        sketchNameInput.value(loadfile);
+        if (loadfile.indexOf('lib') === 0) {
+            sketchNameInput.value(loadfile.substring(10));
+        } else {
+            sketchNameInput.value(loadfile);
+        }
         setLoading(true);
         loadSketch(loadfile + '.json');
         socket.emit('getDescription', { file: loadfile, access_token: getCookieValue('access_token') });
