@@ -50,6 +50,9 @@ pwSchema
 
 app.use('/', router);
 
+let usernameRegex = /^[A-Za-z0-9]+$/;
+let filenameRegex = /^[A-Za-z0-9]+$/;
+
 router.use(function (req, res, next) {
     if (req.url === '/dashboard') {
         if (!jwt_handler.verify(req.cookies.access_token, { issuer: i, subject: s, audience: a })) {
@@ -112,7 +115,7 @@ router.get('/login', function (req, res) {
 router.get('/signup', function (req, res) {
     res.render('signup',
         {
-            username_length: req.query.username_length,
+            username_valid: req.query.username_valid,
             email_length: req.query.email_length,
             email_invalid: req.query.email_invalid,
             password_invalid: req.query.password_invalid,
@@ -171,7 +174,22 @@ router.post('/createUser', (req, res) => {
         res.status(401).send(
             {
                 success: false, // overall success
-                username_length: false, // username <= 50 chars
+                username_valid: false, // username <= 50 chars
+                email_length: true, // email <= 50 chars
+                email_valid: true, // email valid (syntax check)
+                password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
+                username_unused: true // false, if the username is already in use
+            });
+        res.end();
+        return;
+    }
+
+    if (!req.body.username.match(usernameRegex)) {
+        console.log('Failure: username doesn\'t match regex!');
+        res.status(401).send(
+            {
+                success: false, // overall success
+                username_valid: false, // username <= 50 chars
                 email_length: true, // email <= 50 chars
                 email_valid: true, // email valid (syntax check)
                 password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
@@ -186,7 +204,7 @@ router.post('/createUser', (req, res) => {
         res.status(401).send(
             {
                 success: false, // overall success
-                username_length: true, // username <= 50 chars
+                username_valid: true, // username <= 50 chars
                 email_length: false, // email <= 50 chars
                 email_valid: true, // email valid (syntax check)
                 password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
@@ -201,7 +219,7 @@ router.post('/createUser', (req, res) => {
         res.status(401).send(
             {
                 success: false, // overall success
-                username_length: true, // username <= 50 chars
+                username_valid: true, // username <= 50 chars
                 email_length: true, // email <= 50 chars
                 email_valid: false, // email valid (syntax check)
                 password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
@@ -216,7 +234,7 @@ router.post('/createUser', (req, res) => {
         res.status(401).send(
             {
                 success: false, // overall success
-                username_length: true, // username <= 50 chars
+                username_valid: true, // username <= 50 chars
                 email_length: true, // email <= 50 chars
                 email_valid: true, // email valid (syntax check)
                 password_valid: false, // password valid (strong enough) + <= 50 chars (checked by password-validator)
@@ -237,7 +255,7 @@ router.post('/createUser', (req, res) => {
                 res.status(200).send(
                     {
                         success: true, // overall success
-                        username_length: true, // username <= 50 chars
+                        username_valid: true, // username <= 50 chars
                         email_length: true, // email <= 50 chars
                         email_valid: true, // email valid (syntax check)
                         password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
@@ -252,7 +270,7 @@ router.post('/createUser', (req, res) => {
                 res.status(401).send(
                     {
                         success: false, // overall success
-                        username_length: true, // username <= 50 chars
+                        username_valid: true, // username <= 50 chars
                         email_length: true, // email <= 50 chars
                         email_valid: true, // email valid (syntax check)
                         password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
@@ -280,29 +298,13 @@ router.post('/login', (req, res) => {
         });
 });
 
-/*router.post('/createUser', (req, res) => {
-    if (!validator.validate(req.body.email)) {
-        console.log('Failure: email invalid!');
-        res.status(401).send('email');
-        return;
-    }
-    store
-        .createUser({
-            username: req.body.username,
-            email: req.body.email,
-            password: req.body.password
-        })
-        .then(({ success }) => {
-            if (success) {
-                res.sendStatus(200);
-            } else {
-                res.sendStatus(401);
-            }
-        });
-});*/
-
 router.post('/delete', (req, res) => {
     let user = getUser(req);
+    if (!req.body.sketch.match(filenameRegex)) {
+        console.log('[MAJOR] File delete error!');
+        console.log('./userSketches/' + user + '/' + req.body.sketch + '.json');
+        return;
+    }
     try {
         fs.unlink('./userSketches/' + user + '/' + req.body.sketch + '.json', (err) => {
             if (err) {
@@ -343,6 +345,15 @@ io.on('connection', (socket) => {
             let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
             path = './userSketches/' + user + '/' + data.file + '.json';
         }
+        if (!data.file.match(filenameRegex)) {
+            console.log('[MAJOR] File loading error!');
+            console.log(path);
+            socket.emit('userSketchData', {
+                data: {},
+                success: false
+            });
+            return;
+        }
         try {
             let raw = fs.readFileSync(path);
             let sketchData = JSON.parse(raw);
@@ -377,6 +388,15 @@ io.on('connection', (socket) => {
         } else {
             let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
             path = './userSketches/' + user + '/' + data.file + '.txt';
+        }
+        if (!data.file.match(filenameRegex)) {
+            console.log('[MINOR] File loading error!');
+            console.log(path);
+            socket.emit('sketchDescription', {
+                data: {},
+                success: false
+            });
+            return;
         }
         try {
             let desc = fs.readFileSync(path, 'utf8');
@@ -498,6 +518,16 @@ io.on('connection', (socket) => {
             return;
         }
         let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+        if (data.file.length > 50) {
+            socket.emit('nametoolongerror');
+            return;
+        }
+        if (!data.file.substring(0, data.file.length - 5).match(filenameRegex)) {
+            console.log('[MAJOR] File saving error!');
+            console.log('./userSketches/' + user + '/' + data.file);
+            socket.emit('regexerror');
+            return;
+        }
         if (user === 'demouser') {
             socket.emit('demousererror');
             return;

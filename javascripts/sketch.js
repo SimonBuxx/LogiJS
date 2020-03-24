@@ -1194,6 +1194,20 @@ function setup() { // jshint ignore:line
         setTimeout(function () { error = ''; errordesc = ''; reDraw(); }, 3000);
     });
 
+    socket.on('regexerror', function () {
+        error = 'Saving failed: Forbidden characters!';
+        errordesc = 'Please use only letters and numbers.';
+        reDraw();
+        setTimeout(function () { error = ''; errordesc = ''; reDraw(); }, 3000);
+    });
+
+    socket.on('nametoolongerror', function () {
+        error = 'Saving failed: Sketch name too long!';
+        errordesc = 'Please keep your file names shorter than 50 characters.';
+        reDraw();
+        setTimeout(function () { error = ''; errordesc = ''; reDraw(); }, 3000);
+    });
+
     fetchImportData();
 
     reDraw();
@@ -2700,7 +2714,7 @@ function showMessage(msg, subline = '') {
 
     fill(50);
     noStroke();
-    rect(window.width / 2 - 250, window.height / 2 - 75, 500, 150, 10);
+    rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150, 10);
     fill(255);
     textSize(30);
     textAlign(CENTER, CENTER);

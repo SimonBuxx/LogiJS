@@ -9,8 +9,8 @@ CreateUser.addEventListener('submit', (e) => {
         email: email,
         password: password
     }).then(function (data) {
-        if (!data.username_length) {
-            window.location = '/signup?username_length=true';
+        if (!data.username_valid) {
+            window.location = '/signup?username_valid=true';
         } else if (!data.email_length) {
             window.location = '/signup?email_length=true';
         } else if (!data.email_valid) {

@@ -57,8 +57,8 @@ head
 #blur
 #login_back.carousel(style='height: 450px;')
   form.SignUp
-    if username_length
-      h1(style='color: red; font-size: 20px;') Username too long!
+    if username_valid
+      h1(style='color: red; font-size: 20px;') Username invalid!
     else if email_length
       h1(style='color: red; font-size: 20px;') Email address too long!
     else if email_invalid
