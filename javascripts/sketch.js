@@ -2929,6 +2929,9 @@ function keyPressed() {
                 console.log(wires.length);
                 break;
             case 32: // Space
+                if (simRunning) {
+                    return;
+                }
                 if (controlMode !== 'delete') {
                     deleteClicked();
                 } else {

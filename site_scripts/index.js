@@ -50,8 +50,8 @@ pwSchema
 
 app.use('/', router);
 
-let usernameRegex = /^[A-Za-z0-9]+$/;
-let filenameRegex = /^[A-Za-z0-9]+$/;
+let usernameRegex = /^[A-Za-z0-9\-\_]+$/;
+let filenameRegex = /^[A-Za-z0-9\-\_]+$/;
 
 router.use(function (req, res, next) {
     if (req.url === '/dashboard') {
