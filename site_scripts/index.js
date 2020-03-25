@@ -485,30 +485,34 @@ io.on('connection', (socket) => {
     socket.on('savePreview', (data) => {
         if (data.access_token === '') {
             return;
-        }
-        let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
-        if (user === 'demouser') {
-            return;
-        }
-        let img = data.img;
-        let desc = data.desc;
-        img = img.replace(/^data:image\/\w+;base64,/, "");
-        let buffer = new Buffer(img, 'base64');
-        sharp(buffer)
-            .resize({ height: 200, width: 200, position: 'left' })
-            .toFile('./userSketches/' + user + '/' + data.name + '.png');
-        if (desc.length > 0) {
-            fs.writeFile('./userSketches/' + user + '/' + data.name + '.txt', desc, 'utf8', function (err) {
-
-            });
+        } else if (!data.name.match(filenameRegex)) {
+            console.log('[MINOR] Preview saving error!');            
         } else {
-            try {
-                fs.unlink('./userSketches/' + user + '/' + data.name + '.txt', (err) => {
-                    console.log('[MINOR] File delete error!');
-                    console.log('./userSketches/' + user + '/' + data.name + '.txt');
-                });
-            } catch (e) {
+            let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+            if (user === 'demouser') {
+                return;
+            } else {
+                let img = data.img;
+                let desc = data.desc;
+                img = img.replace(/^data:image\/\w+;base64,/, "");
+                let buffer = new Buffer(img, 'base64');
+                sharp(buffer)
+                    .resize({ height: 200, width: 200, position: 'left' })
+                    .toFile('./userSketches/' + user + '/' + data.name + '.png');
+                if (desc.length > 0) {
+                    fs.writeFile('./userSketches/' + user + '/' + data.name + '.txt', desc, 'utf8', function (err) {
 
+                    });
+                } else {
+                    try {
+                        fs.unlink('./userSketches/' + user + '/' + data.name + '.txt', (err) => {
+                            console.log('[MINOR] File delete error!');
+                            console.log('./userSketches/' + user + '/' + data.name + '.txt');
+                        });
+                    } catch (e) {
+
+                    }
+                }
             }
         }
     });
@@ -516,25 +520,24 @@ io.on('connection', (socket) => {
     socket.on('saveUserSketch', (data) => {
         if (data.access_token === '') {
             return;
+        } else {
+            let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
+            if (data.file.length > 50) {
+                socket.emit('nametoolongerror');
+                return;
+            } else if (!data.file.substring(0, data.file.length - 5).match(filenameRegex)) {
+                console.log('[MAJOR] File saving error!');
+                console.log('./userSketches/' + user + '/' + data.file);
+                socket.emit('regexerror');
+                return;
+            } else if (user === 'demouser') {
+                socket.emit('demousererror');
+                return;
+            } else {
+                fs.writeFile('./userSketches/' + user + '/' + data.file, JSON.stringify(data.json), 'utf8', function (err) {
+                });
+            }
         }
-        let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
-        if (data.file.length > 50) {
-            socket.emit('nametoolongerror');
-            return;
-        }
-        if (!data.file.substring(0, data.file.length - 5).match(filenameRegex)) {
-            console.log('[MAJOR] File saving error!');
-            console.log('./userSketches/' + user + '/' + data.file);
-            socket.emit('regexerror');
-            return;
-        }
-        if (user === 'demouser') {
-            socket.emit('demousererror');
-            return;
-        }
-        fs.writeFile('./userSketches/' + user + '/' + data.file, JSON.stringify(data.json), 'utf8', function (err) {
-
-        });
     });
 });
 
