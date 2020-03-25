@@ -349,3 +349,31 @@ function getThisLook() {
     }
     return look;
 }
+
+function loadURLSketch() {
+    let loadfile = urlParam('sketch');
+    if (loadfile !== '') {
+        if (loadfile.indexOf('lib') === 0) {
+            sketchNameInput.value(loadfile.substring(10));
+        } else {
+            sketchNameInput.value(loadfile);
+        }
+        setLoading(true);
+        loadSketch(loadfile + '.json');
+        socket.emit('getDescription', { file: loadfile, access_token: getCookieValue('access_token') });
+        socket.on('sketchDescription', (data) => {
+            try {
+                let d = JSON.parse(data.data);
+                if (data.success === true) {
+                    descInput.value(d.desc);
+                    moduleNameInput.value(d.caption);
+                }
+            } catch (e) {
+                if (data.success === true) {
+                    descInput.value(data.data);
+                }
+            }
+            socket.off('sketchDescription');
+        });
+    }
+}
