@@ -1250,17 +1250,8 @@ function customClicked() {
     }
     showCustomDialog = true;
     setPreviewElement(false, {}, 'none');
-    setUnactive();
-    disableButtons(true);
-    simButton.elt.disabled = true;
-    saveDialogButton.elt.disabled = true;
-    //closeTutorialButton.elt.disabled = true;
-    //nextStepButton.elt.disabled = true;
-    customButton.elt.disabled = false;
-
     setActive(customButton, true);
     setControlMode('modify');
-    reDraw();
     displayCustomDialog();
 }
 
@@ -1330,18 +1321,6 @@ function demuxClicked() {
 
 // Triggered when a sketch should be saved
 function saveClicked() {
-    if (sketchNameInput.value().includes(' ')) {
-        saveDialogText.position(windowWidth / 2 - 105, windowHeight / 2 - 160);
-        saveDialogText.elt.style.color = 'red';
-        saveDialogText.html('No spaces allowed!');
-        setTimeout(function () {
-            saveDialogText.elt.style.color = '#fff';
-            saveDialogText.position(windowWidth / 2 - 65, windowHeight / 2 - 160);
-            saveDialogText.html('Save Sketch');
-        }, 3000);
-        return;
-    }
-
     saveSketch(sketchNameInput.value() + '.json', function (look) {
         closeSaveDialog();
         look.desc = descInput.value();
@@ -1358,78 +1337,6 @@ function cancelClicked() {
     }
 }
 
-function closeSaveDialog() {
-    saveDialog = false;
-    saveButton.hide();
-    sketchNameInput.hide();
-    moduleNameInput.hide();
-    descInput.hide();
-    saveDialogText.hide();
-    cancelButton.hide();
-    disableButtons(false);
-    simButton.elt.disabled = false;
-    saveDialogButton.elt.disabled = false;
-    justClosedMenu = true;
-}
-
-function closeCustomDialog() {
-    showCustomDialog = false;
-    disableButtons(false);
-    simButton.elt.disabled = false;
-    saveDialogButton.elt.disabled = false;
-    if (controlMode === 'modify') {
-        setActive(modifierModeButton, true);
-    }
-    pageUpButton.hide();
-    pageDownButton.hide();
-    cancelButton.hide();
-    customDialogText.hide();
-    justClosedMenu = true;
-}
-
-// Triggered when a sketch should be loaded
-function loadClicked() {
-    closeModifierMenu();
-    enterModifierMode();
-    document.title = 'LogiJS: ' + sketchNameInput.value();
-    loadSketch(sketchNameInput.value() + '.json');
-    reDraw();
-}
-
-function saveDialogClicked() {
-    endSimulation();
-    if (modifierMenuDisplayed()) {
-        closeModifierMenu();
-        unmarkPropTargets();
-    }
-    enterModifierMode();
-    reDraw();
-    saveDialog = true;
-    saveButton.show();
-    cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 110);
-    cancelButton.show();
-    sketchNameInput.show();
-    moduleNameInput.show();
-    descInput.show();
-    saveDialogText.show();
-    previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
-    disableButtons(true);
-    simButton.elt.disabled = true;
-    saveDialogButton.elt.disabled = true;
-    customButton.elt.disabled = true;
-
-    moduleNameChanged = (moduleNameInput.value() !== sketchNameInput.value()) && (moduleNameInput.value() !== '');
-
-    moduleNameInput.elt.disabled = (outputs.length <= 0);
-    if (outputs.length <= 0) {
-        moduleNameInput.value('');
-    } else if (!moduleNameChanged) {
-        moduleNameInput.value(sketchNameInput.value());
-    }
-
-    reDraw();
-}
-
 // Resets the canvas and the view / transformation
 function newClicked() {
     clearItems();
@@ -1444,7 +1351,9 @@ function newClicked() {
     gateDirection = 0;
     directionSelect.value('Right');
     setLoading(false);
-    endSimulation(); // End the simulation, if started
+    if (simRunning) {
+        endSimulation(); // End the simulation, if started
+    }
     leaveModifierMode();
     enterModifierMode();
     wireMode = 'none';
@@ -1551,45 +1460,6 @@ function deleteClicked() {
         let delWires = [[], []];
         let delSegDisplays = [[], []];
         for (let i = 0; i < selection.length; i++) {
-            /*if (selection[i] instanceof LogicGate) {
-                delGates[0].push(selection[i]);
-                delGates[1].push(gates.indexOf(selection[i]));
-            } else if (selection[i] instanceof CustomSketch) {
-                for (const elem of selection[i].responsibles) {
-                    customs.splice(customs.indexOf(elem), 1);
-                }
-                delCustoms[0].push(selection[i]);
-                delCustoms[1].push(customs.indexOf(selection[i]));
-            }
-            else if (selection[i] instanceof Input) {
-                delInputs[0].push(selection[i]);
-                delInputs[1].push(inputs.indexOf(selection[i]));
-            }
-            else if (selection[i] instanceof Label) {
-                delLabels[0].push(selection[i]);
-                delLabels[1].push(labels.indexOf(selection[i]));
-            }
-            else if (selection[i] instanceof Output) {
-                delOutputs[0].push(selection[i]);
-                delOutputs[1].push(outputs.indexOf(selection[i]));
-            }
-            else if (selection[i] instanceof SegmentDisplay) {
-                delSegDisplays[0].push(selection[i]);
-                delSegDisplays[1].push(segDisplays.indexOf(selection[i]));
-            }
-            // Filtering out wires and segments and pushing them into their arrays
-            /*else if (selection[i] instanceof Wire) {
-                // The last selection[] element is the # of wires, therefore
-                // all elements before that index are wires, the rest are segments
-                if (i < selection[selection.length - 1]) {
-                    delWires[0].push(selection[i]);
-                    // Find the index of the wire and push it
-                    delWires[1].push(wireIndizees.pop());
-                } else {
-                    delSegments[0].push(selection[i]);
-                    delSegments[1].push(segIndices.pop());
-                }
-            }*/
             error = 'This feature is coming soon!';
             errordesc = '';
             setTimeout(function () { error = ''; }, 3000); //jshint ignore:line
@@ -1609,14 +1479,6 @@ function deleteClicked() {
         for (let j = delOutputs[1].length - 1; j >= 0; j--) {
             outputs.splice(delOutputs[1][j], 1);
         }
-        /*for (let j = delWires[1].length - 1; j >= 0; j--) {
-            //console.log('Deleting wire No. ' + delWires[1][j]);
-            wires.splice(delWires[1][j], 1);
-        }
-        for (let j = delSegments[1].length - 1; j >= 0; j--) {
-            //console.log('Deleting segment No. ' + delSegments[1][j]);
-            segments.splice(delSegments[1][j], 1);
-        }*/
         for (let j = delSegDisplays[1].length - 1; j >= 0; j--) {
             segDisplays.splice(delSegDisplays[1][j], 1);
         }
@@ -2393,11 +2255,16 @@ function startSimulation() {
     }
 
     setSimButtonText('<i class="fa fa-stop icon"></i> Stop'); // Alter the caption of the Start/Stop button
+    
+    // Go to modify mode to hide previews etc.
     setControlMode('modify');
+
+    // Configure the DOMs for simulation mode
     setActive(simButton, true);
-    disableButtons(true);
+    configureButtons('simulation');
     hideAllOptions();
 
+    // Parse all wire groups and attach the components
     parseGroups();
     integrateElements();
 
@@ -2413,6 +2280,7 @@ function startSimulation() {
         customs[i].setSimRunning(true);
     }
 
+    // Show the checkbox
     labelOptions.show();
     sfcheckbox.show();
 
@@ -2430,7 +2298,9 @@ function startSimulation() {
 function endSimulation() {
     clearInterval(updater); // Stop the unsynced simulation updater
     setSimButtonText('<i class="fa fa-play icon"></i> Start'); // Set the button caption to 'Start'
-    updateUndoButtons();
+    configureButtons('edit');
+
+    // Hide the checkbox
     labelOptions.hide();
     sfcheckbox.hide();
 
@@ -2460,6 +2330,7 @@ function endSimulation() {
     for (const elem of wires) {
         elem.state = false;
     }
+    
     simRunning = false;
     reDraw();
 }
@@ -2473,74 +2344,76 @@ function setSimButtonText(text) {
     depending on the state of the stack
 */
 function updateUndoButtons() {
-    redoButton.elt.disabled = (actionRedo.length === 0);
-    undoButton.elt.disabled = (actionUndo.length === 0);
     if (loading) {
         redoButton.elt.disabled = true;
         undoButton.elt.disabled = true;
+    } else {
+        redoButton.elt.disabled = (actionRedo.length === 0);
+        undoButton.elt.disabled = (actionUndo.length === 0);
     }
 }
 
-/*
-    Enables or disables all buttons that should not be
-    clickable during simulation
-    Also alters the color of the labels on the left
-*/
-function disableButtons(status) {
-    if (status) {
-        /*andButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/and-gate.png">';
-        orButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/or-gate.png">';
-        xorButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/xor-gate.png">';
-        inputButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/switch.png">';
-        outputButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/output.png">';
-        segDisplayButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/segments.png">';
-        buttonButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/button.png">';
-        clockButton.elt.innerHTML = '<img style="filter: brightness(50%);" class="preview" src="images/clock.png">';*/
+function configureButtons(mode) {
+    let toolbox, modifiers, dialog, simulation;
+    if (mode === 'edit') {
+        toolbox = false;
+        modifiers = false;
+        dialog = false;
+        simulation = false;
+    } else if (mode === 'simulation') {
+        toolbox = true;
+        modifiers = true;
+        dialog = false;
+        simulation = false;
+    } else if (mode === 'dialog') {
+        toolbox = true;
+        modifiers = true;
+        dialog = true;
+        simulation = true;
+    } else if (mode === 'loading') {
+        toolbox = true;
+        modifiers = true;
+        dialog = true;
+        simulation = true;
+    } else {
+        toolbox = false;
+        modifiers = false;
+        dialog = false;
+        simulation = false;
+    }
+    andButton.elt.disabled = toolbox;
+    orButton.elt.disabled = toolbox;
+    xorButton.elt.disabled = toolbox;
+    inputButton.elt.disabled = toolbox;
+    outputButton.elt.disabled = toolbox;
+    segDisplayButton.elt.disabled = toolbox;
+    labelButton.elt.disabled = toolbox;
+    buttonButton.elt.disabled = toolbox;
+    clockButton.elt.disabled = toolbox;
+    
+    reg4Button.elt.disabled = toolbox;
+    decoderButton.elt.disabled = toolbox;
+    counterButton.elt.disabled = toolbox;
+    muxButton.elt.disabled = toolbox;
+    demuxButton.elt.disabled = toolbox;
+    dFlipFlopButton.elt.disabled = toolbox;
+    rsFlipFlopButton.elt.disabled = toolbox;
+    halfaddButton.elt.disabled = toolbox;
+    fulladdButton.elt.disabled = toolbox;
+
+    customButton.elt.disabled = (toolbox || (getCookieValue('access_token') === ''));
+
+    modifierModeButton.elt.disabled = modifiers;
+    deleteButton.elt.disabled = modifiers;
+    selectButton.elt.disabled = true;
+    if (!modifiers) {
+        updateUndoButtons();
+    } else {
         undoButton.elt.disabled = true;
         redoButton.elt.disabled = true;
-    } else {
-        /*andButton.elt.innerHTML = '<img class="preview" src="images/and-gate.png">';
-        orButton.elt.innerHTML = '<img class="preview" src="images/or-gate.png">';
-        xorButton.elt.innerHTML = '<img class="preview" src="images/xor-gate.png">';
-        inputButton.elt.innerHTML = '<img class="preview" src="images/switch.png">';
-        outputButton.elt.innerHTML = '<img class="preview" src="images/output.png">';
-        segDisplayButton.elt.innerHTML = '<img class="preview" src="images/segments.png">';
-        buttonButton.elt.innerHTML = '<img class="preview" src="images/button.png">';
-        clockButton.elt.innerHTML = '<img class="preview" src="images/clock.png">';*/
-        updateUndoButtons();
     }
-    andButton.elt.disabled = status;
-    orButton.elt.disabled = status;
-    xorButton.elt.disabled = status;
-    inputButton.elt.disabled = status;
-    outputButton.elt.disabled = status;
-    segDisplayButton.elt.disabled = status;
-    buttonButton.elt.disabled = status;
-    clockButton.elt.disabled = status;
-    deleteButton.elt.disabled = status;
-    selectButton.elt.disabled = true; // !!!
-    reg4Button.elt.disabled = status;
-    decoderButton.elt.disabled = status;
-    counterButton.elt.disabled = status;
-    muxButton.elt.disabled = status;
-    demuxButton.elt.disabled = status;
-    dFlipFlopButton.elt.disabled = status;
-    rsFlipFlopButton.elt.disabled = status;
-    halfaddButton.elt.disabled = status;
-    fulladdButton.elt.disabled = status;
-    if (getCookieValue('access_token') !== '') {
-        customButton.elt.disabled = status;
-    }
-    modifierModeButton.elt.disabled = status;
-    labelButton.elt.disabled = status;
-    // Sets the colors of the labels
-    /*if (status) {
-        labelBasic.elt.style.color = '#969696';
-        labelAdvanced.elt.style.color = '#969696';
-    } else {
-        labelBasic.elt.style.color = '#969696';
-        labelAdvanced.elt.style.color = '#969696';
-    }*/
+    simButton.elt.disabled = simulation;
+    saveDialogButton.elt.disabled = dialog;
 }
 
 /*
@@ -2706,54 +2579,6 @@ function reDraw() {
     text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
 }
 
-function showMessage(msg, subline = '') {
-    textFont('Open Sans');
-    fill(0, 0, 0, 80);
-    noStroke();
-    rect(0, 0, window.width, window.height);
-
-    fill(50);
-    noStroke();
-    rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150, 10);
-    fill(255);
-    textSize(30);
-    textAlign(CENTER, CENTER);
-    text(msg, window.width / 2, window.height / 2 - 20);
-    textSize(20);
-    text(subline, window.width / 2, window.height / 2 + 30);
-}
-
-function showSaveDialog() {
-    fill('rgba(50, 50, 50, 1)');
-    noStroke();
-    rect(window.width / 2 - 365, window.height / 2 - 208, 580, 385, 10);
-    showPreviewImage();
-}
-
-function displayCustomDialog() {
-    pageUpButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 260, customDialogRows * 220 - 10);
-    pageDownButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 260, customDialogRows * 220 + 50);
-    fill(50, 50, 50);
-    noStroke();
-    rect(Math.round(window.width / 8), 50, customDialogColumns * 220 + 220, customDialogRows * 220 + 90, 10);
-    cancelButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 260, customDialogRows * 220 + 110);
-    cancelButton.show();
-    customDialogText.show();
-    for (let i = 0; i < importSketchData.sketches.length; i++) {
-        showCustomItem(i + 1, importSketchData.images[i], importSketchData.sketches[i], importSketchData.looks[i]);
-    }
-    if (customDialogPages > 0 && customDialogPage < customDialogPages) {
-        pageDownButton.show();
-    } else {
-        pageDownButton.hide();
-    }
-    if (customDialogPage > 0) {
-        pageUpButton.show();
-    } else {
-        pageUpButton.hide();
-    }
-}
-
 function fetchImportData() {
     customDialogColumns = Math.floor((window.width - 150 - window.width / 4) / 220);
     customDialogRows = Math.floor((window.height - window.height / 10) / 220);
@@ -2763,57 +2588,6 @@ function fetchImportData() {
         importSketchData = data;
         customDialogPages = Math.ceil(Math.ceil(data.sketches.length / customDialogColumns) / customDialogRows) - 1;
     });
-}
-
-function showCustomItem(place, img, caption, look) {
-    let row = Math.ceil(place / customDialogColumns - 1) - (customDialogPage * customDialogRows);
-    let x = ((place - 1) % customDialogColumns) * 220 + Math.round(window.width / 8) + 40;
-    let y = (row * 220) + 140;
-    if (row >= customDialogRows || row < 0) {
-        return;
-    }
-    if (img !== '') {
-        img = 'data:image/png;base64,' + img;
-        let raw = new Image(200, 200);
-        raw.src = img;
-        img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==';
-        let gradientRaw = new Image(200, 200);
-        gradientRaw.src = img;
-        raw.onload = function () {
-            let normal_img = createImage(200, 200);
-            normal_img.drawingContext.drawImage(raw, 0, 0);
-            normal_img.drawingContext.drawImage(gradientRaw, 0, 0);
-            fill(0);
-            image(normal_img, x, y);
-            if (look.hasOwnProperty('outputs')) {
-                if (look.outputs > 0) {
-                    showImportPreview(look, x, y);
-                }
-            }
-            fill('rgba(0, 0, 0, 0)');
-            strokeWeight(10);
-            stroke(50, 50, 50);
-            rect(x, y, 200, 200, 10);
-            noStroke();
-            fill(255);
-            textSize(16);
-            text(caption.toUpperCase(), x + 10, y + 170);
-        };
-    }
-}
-
-/*
-    This is executed when the user clicks on an item in the custom dialog
-    row, col: row and column of the item the user clicked on
-*/
-function importItemClicked(row, col) {
-    let place = customDialogColumns * row + col + customDialogPage * customDialogColumns * customDialogRows; // Calculate the array position of the custom module
-    if (place >= importSketchData.sketches.length || importSketchData.looks[place].outputs === 0) {
-        return; // If the place should be greater than the number of available modules or the module has no outputs, return.
-    }
-    setActive(customButton, true); // Set the custom modules button as activated
-    setPreviewElement(true, importSketchData.looks[place]); // Show a preview of the module at the users mouse position
-    importCustom(importSketchData.sketches[place] + '.json'); // Import the module on mouse click
 }
 
 /*
@@ -2961,8 +2735,6 @@ function keyPressed() {
             default:
                 break;
         }
-    } else if (keyCode === RETURN) { // Load the sketch when the textInput is active
-        loadClicked();
     }
 }
 
@@ -2978,15 +2750,11 @@ function setHelpText(str) {
 
 function setLoading(l) {
     loading = l;
-    disableButtons(l);
-    simButton.elt.disabled = l;
-    saveDialogButton.elt.disabled = l;
-    if (getCookieValue('access_token') !== '') {
-        customButton.elt.disabled = l;
+    if (loading) {
+        configureButtons('loading');
+    } else {
+        configureButtons('edit');
     }
-    //closeTutorialButton.elt.disabled = l;
-    //nextStepButton.elt.disabled = l;
-    updateUndoButtons();
     reDraw();
 }
 

@@ -99,9 +99,6 @@ function load(loadData) {
     currentGridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
     actionRedo = [];
-    endSimulation(); // End ongoing simulations
-    disableButtons(true);
-    simButton.elt.disabled = true;
     moduleNameInput.value(loadData.caption);
     // Load all gate parameters and create new gates based on that information
     for (let i = 0; i < loadData.gates.length; i++) {

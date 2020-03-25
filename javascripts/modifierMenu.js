@@ -5,7 +5,7 @@ function enterModifierMode() {
     setControlMode('modify');
     setSelectMode('none');
     setActive(modifierModeButton, true);
-    disableButtons(false);
+    configureButtons('edit');
     addType = 0;
 }
 

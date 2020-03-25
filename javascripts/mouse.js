@@ -375,8 +375,7 @@ function mouseClicked() {
             default:
                 break;
         }
-        redoButton.elt.disabled = (actionRedo.length === 0);
-        undoButton.elt.disabled = (actionUndo.length === 0);
+        updateUndoButtons();
     } else {
         // Buttons should be operateable during simulation
         if (mouseButton === LEFT) {
@@ -580,9 +579,7 @@ function mouseReleased() {
                     console.log('Control mode not supported!');
             }
         }
-        // Enable or disable the Undo-Redo buttons
-        redoButton.elt.disabled = (actionRedo.length === 0);
-        undoButton.elt.disabled = (actionUndo.length === 0);
+        updateUndoButtons();
     } else {
         pwWireX = null;
         pwWireY = null;
