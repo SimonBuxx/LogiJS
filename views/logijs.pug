@@ -1,5 +1,12 @@
 doctype html
 head
+  |   <!-- Google Tag Manager -->
+  |   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  |   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  |   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  |   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  |   })(window,document,'script','dataLayer','GTM-WKSH2RQ');</script>
+  |   <!-- End Google Tag Manager -->
   meta(charset='UTF-8')
   link(rel='shortcut icon', type='image/x-icon', href='images/favicon.ico')
   link(href='https://fonts.googleapis.com/css?family=Open+Sans|Gudea|PT+Mono', rel='stylesheet')
@@ -34,23 +41,28 @@ head
     include ../javascripts/undoredo.js
   style
     include ../webapp_style.css
-a(href='https://github.com/SimonBuxx/LogiJS')
-  img#github(src='images/github.png', alt='Fork me on GitHub')
-  a(href='/')
-    img#logo(src='images/logo.png', alt='LogiJS Logo')
-// Start of Survicate (www.survicate.com) code
-script(type='text/javascript').
-  if (window.location.href.includes('.com')) {
-  console.log('Loading Survicate script');
-  (function (w) {
-  var s = document.createElement('script');
-  s.src = 'https://survey.survicate.com/workspaces/01d22f9eb05bc4fcdd73eb6342cb3480/web_surveys.js';
-  s.async = true;
-  var e = document.getElementsByTagName('script')[0];
-  e.parentNode.insertBefore(s, e);
-  })(window);
-  }
-// End of Survicate code
-script
-  include ../libraries/jquery.min.js
-  include ../libraries/bootstrap.min.js
+body
+  |   <!-- Google Tag Manager (noscript) -->
+  |   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKSH2RQ"
+  |   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  |   <!-- End Google Tag Manager (noscript) -->
+  a(href='https://github.com/SimonBuxx/LogiJS')
+    img#github(src='images/github.png', alt='Fork me on GitHub')
+    a(href='/')
+      img#logo(src='images/logo.png', alt='LogiJS Logo')
+  // Start of Survicate (www.survicate.com) code
+  script(type='text/javascript').
+    if (window.location.href.includes('.com')) {
+    console.log('Loading Survicate script');
+    (function (w) {
+    var s = document.createElement('script');
+    s.src = 'https://survey.survicate.com/workspaces/01d22f9eb05bc4fcdd73eb6342cb3480/web_surveys.js';
+    s.async = true;
+    var e = document.getElementsByTagName('script')[0];
+    e.parentNode.insertBefore(s, e);
+    })(window);
+    }
+  // End of Survicate code
+  script
+    include ../libraries/jquery.min.js
+    include ../libraries/bootstrap.min.js
