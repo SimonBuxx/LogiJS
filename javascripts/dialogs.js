@@ -45,7 +45,7 @@ function showSaveDialog() {
     rect(window.width / 2 - 365, window.height / 2 - 208, 580, 385, 10);
     
     showSaveDialogElements();
-    configureButtons('dialog');
+    configureButtons('savedialog');
 
     // If the module name was changed by hand, don't update it to be the sketch file name
     moduleNameChanged = (moduleNameInput.value() !== sketchNameInput.value()) && (moduleNameInput.value() !== '');
@@ -128,7 +128,7 @@ function displayCustomDialog() {
     }
 
     showCustomDialogElements();
-    configureButtons('dialog');
+    configureButtons('customdialog');
 }
 
 function closeCustomDialog() {

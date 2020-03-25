@@ -2354,32 +2354,43 @@ function updateUndoButtons() {
 }
 
 function configureButtons(mode) {
-    let toolbox, modifiers, dialog, simulation;
+    let toolbox, modifiers, simulation, customimport, savedialog;
     if (mode === 'edit') {
         toolbox = false;
         modifiers = false;
-        dialog = false;
+        savedialog = false;
         simulation = false;
+        customimport = false;
     } else if (mode === 'simulation') {
         toolbox = true;
         modifiers = true;
-        dialog = false;
+        savedialog = false;
         simulation = false;
-    } else if (mode === 'dialog') {
+        customimport = true;
+    } else if (mode === 'savedialog') {
         toolbox = true;
         modifiers = true;
-        dialog = true;
+        savedialog = true;
         simulation = true;
+        customimport = true;
+    } else if (mode === 'customdialog') {
+        toolbox = true;
+        modifiers = true;
+        savedialog = true;
+        simulation = true;
+        customimport = false;
     } else if (mode === 'loading') {
         toolbox = true;
         modifiers = true;
-        dialog = true;
+        savedialog = true;
         simulation = true;
+        customimport = true;
     } else {
         toolbox = false;
         modifiers = false;
-        dialog = false;
+        savedialog = false;
         simulation = false;
+        customimport = false;
     }
     andButton.elt.disabled = toolbox;
     orButton.elt.disabled = toolbox;
@@ -2401,7 +2412,7 @@ function configureButtons(mode) {
     halfaddButton.elt.disabled = toolbox;
     fulladdButton.elt.disabled = toolbox;
 
-    customButton.elt.disabled = (toolbox || (getCookieValue('access_token') === ''));
+    customButton.elt.disabled = (customimport || (getCookieValue('access_token') === ''));
 
     modifierModeButton.elt.disabled = modifiers;
     deleteButton.elt.disabled = modifiers;
@@ -2413,7 +2424,7 @@ function configureButtons(mode) {
         redoButton.elt.disabled = true;
     }
     simButton.elt.disabled = simulation;
-    saveDialogButton.elt.disabled = dialog;
+    saveDialogButton.elt.disabled = savedialog;
 }
 
 /*
@@ -2563,10 +2574,6 @@ function reDraw() {
 
     if (saveDialog) {
         showSaveDialog();
-    }
-
-    if (showCustomDialog) {
-        textFont('Gudea');
     }
 
     // Draw the zoom and framerate labels
