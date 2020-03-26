@@ -329,9 +329,9 @@ function setup() { // jshint ignore:line
 
     createBasicElements();
     createAdvancedElements();
-
-    createElementOptions();
+    
     createCustomImportButton();
+    createElementOptions();
 
     createHelpLabel();
     createDialogElements();
