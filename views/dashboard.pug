@@ -100,12 +100,18 @@ body
               <i class="fa fa-play"></i> OPEN
             button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketchData.sketches[r], role='button', style={color: 'white','background-color': 'transparent', margin: 0, position: 'absolute', left: '20px', bottom: '20px', float: 'left'}) 
                 <i class="fa fa-download"></i> DOWNLOAD
-            p.modified_date(style={'text-align': 'left', width: '100px', position: 'absolute', left: '270px', bottom: '20px'}) #{sketchData.modified[r]}
-            p.file_size(style={'text-align': 'right', width: '50px', position: 'absolute', left: '180px', bottom: '20px'}) #{sketchData.sizes[r]} KB
-            if (descriptions[r].length <= 300)
-              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 300)}
+            if (user !== 'demouser')
+              button.btn.btn-lg.btn-orange.delete(type='submit', id=sketchData.sketches[r], role='button', style={color: 'white', position: 'absolute', left: '180px', bottom: '20px', float: 'left'})
+                <i class="fa fa-trash-o"></i> DELETE
+            else 
+              button.btn.btn-lg(type='submit', onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r], role='button', style={color: 'white', position: 'absolute', left: '180px', bottom: '20px', float: 'left'})
+                i(class="fa fa-trash-o")
+            p.file_size(style={position: 'absolute', left: '240px', bottom: '90px'}) Size: #{sketchData.sizes[r]} KB
+            p.modified_date(style={position: 'absolute', left: '240px', bottom: '70px'}) Last modified: #{sketchData.modified[r]}
+            if (descriptions[r].length <= 150)
+              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 150)}
             else
-              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 300) + '...'}
+              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 150) + '...'}
         -r++;
   .footer_bottom
     .text-center
