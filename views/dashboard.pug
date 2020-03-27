@@ -72,7 +72,7 @@ body
         <i class="fa fa-sign-out"></i> LOGOUT
     button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 15px; float:right; position: absolute; right: 0;")
       <i class="fa fa-plus-square"></i> NEW SKETCH
-    h1(style="padding: 15px;") Welcome, #{user}!
+    h1(style="padding: 15px;") #{user.toUpperCase()}'S DASHBOARD
   if sketchData.sketches.length === 0
     #dashboard_item_back.carousel(style={height: 180 + 'px', 'margin-bottom': '100px'})
       h1(style="padding: 10px; font-size: 24px;") You don't have any sketches.
@@ -82,7 +82,7 @@ body
         button.btn.btn-lg.btn-green(disabled="true", type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
           <i class="fa fa-graduation-cap"></i> COMING SOON!
   else
-    #dashboard_item_back.carousel(style={height: Math.ceil(sketchData.sketches.length / 4) * 250 + 50 + 'px', 'margin-bottom': '65px'})
+    //-#dashboard_item_back.carousel(style={height: Math.ceil(sketchData.sketches.length / 4) * 250 + 50 + 'px', 'margin-bottom': '65px'})
       - var r = 0;
       while r < Math.ceil(sketchData.sketches.length / 4)
         - var n = 0;
@@ -116,7 +116,32 @@ body
                   button.btn.btn-lg(type='submit', onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r*4+n], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', left: (n*250+145) + 'px', top: (r*250+198) + 'px', padding: '10px', margin: '10px', float: 'left', border: 'none', width: '46px'})
                     i(class="fa fa-trash-o")
           - n++;
-        - r++;
+        - r++-
+    #dashboard_item_back.carousel(style={height: Math.ceil(sketchData.sketches.length / 2) * 330 - 30 + 'px', 'margin-bottom': '65px', padding: '20px'})
+      - var r = 0;
+      - var n = 1;
+      while r < sketchData.sketches.length
+        if n === 1
+          - n = 0;
+        else
+          - n = 1;
+        if r < sketchData.sketches.length
+          div.db_side_board
+            .sketch_item
+              img.shadow_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt='')
+              img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketchData.sketches[r])
+            p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchData.sketches[r].toUpperCase()}
+            button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', style={margin: 0, float: 'right', position: 'absolute', right: '20px', bottom: '20px', width: '100px'})
+              <i class="fa fa-play"></i> OPEN
+            button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketchData.sketches[r], role='button', style={color: 'white','background-color': 'transparent', margin: 0, position: 'absolute', left: '20px', bottom: '20px', float: 'left'}) 
+                <i class="fa fa-download"></i> DOWNLOAD
+            p.modified_date(style={'text-align': 'left', width: '100px', position: 'absolute', left: '270px', bottom: '20px'}) #{sketchData.modified[r]}
+            p.file_size(style={'text-align': 'right', width: '50px', position: 'absolute', left: '180px', bottom: '20px'}) #{sketchData.sizes[r]} KB
+            if (descriptions[r].length <= 300)
+              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 300)}
+            else
+              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 300) + '...'}
+        -r++;
   .footer_bottom
     .text-center
       .footer_bottom_content
