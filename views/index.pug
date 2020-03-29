@@ -73,11 +73,11 @@ body
                   a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
   #blur
   .grid-container
-    #welcome.carousel.ribbon.grid-item(style="grid-row: 1; grid-column: 1; margin-top: 20px; padding-top: 10px;")
+    #welcome.carousel.ribbon.grid-item(style="grid-row: 1; grid-column: 1; margin-top: 20px; max-height: 280px; padding-top: 10px;")
       #caption
         if user !== ''
           h1 WELCOME, #{user.toUpperCase()}!
-          p We're glad to have you here.
+          p Glad to have you here.
         else
           h1 Discover the world of logic circuits.
           p Get started today, for free.
@@ -99,37 +99,40 @@ body
         .sample-element
           img.grid-item(src='librarySketches/library__0gates.png')
           .grid-item(style="grid-row: 1; grid-column: 2;")
-            h3 Basic Gates
-            p.grid-item This sketch demonstrates the three basic logic gates, AND, OR and XOR. It also shows the usage of input and output elements. Logic gates are the fundamentals of every logic circuit.
-          .grid-item(style="grid-row: 1; grid-column: 3;")
+            h3(style="float: left; text-align: left;") Basic Gates 
+            a(style="float: right; text-align: right;" href="/editor?sketch=library__0gates") <i class="fa fa-play"></i> OPEN
+            p(style="clear: both;") This sketch demonstrates the three basic logic gates, AND, OR and XOR. It also shows the usage of input and output elements. Logic gates are the fundamentals of every logic circuit.
+          //.grid-item(style="grid-row: 1; grid-column: 3;")
             a.btn.btn-lg.btn-green(href="/editor?sketch=library__0gates", style="margin-left: 20px; display: block; float: right; width: 100px;")
                 <i class="fa fa-play"></i> OPEN
         .sample-element
           img.grid-item(src='librarySketches/library__14BitCounter.png')
           .grid-item(style="grid-row: 1; grid-column: 2;")
-            h3 4-bit Counter
-            p This sketch implements a simple counter made using D gates. It is connected to a clock, permanently increasing the binary output value. When the value passes the biggest possible value, the counter restarts from zero.
-          .grid-item(style="grid-row: 1; grid-column: 3;")
+            h3(style="float: left; text-align: left;") 4-bit Counter
+            a(style="float: right; text-align: right;" href="/editor?sketch=library__14BitCounter") <i class="fa fa-play"></i> OPEN
+            p(style="clear: both;") This sketch implements a simple counter made using D gates. It is connected to a clock, permanently increasing the binary output value. When the value passes the biggest possible value, the counter restarts from zero.
+          //.grid-item(style="grid-row: 1; grid-column: 3;")
             a.btn.btn-lg.btn-green(href="/editor?sketch=library__14BitCounter", style="margin-left: 20px; display: block; float: right; width: 100px;")
                 <i class="fa fa-play"></i> OPEN
         .sample-element
           img.grid-item(src='librarySketches/library__2traffic.png')
           .grid-item(style="grid-row: 1; grid-column: 2;")
-            h3 Traffic Lights
-            p This sketch simulates traffic lights using a counter and a diode matrix. There is a light for road traffic and one for crossing pedestrians.
-          .grid-item(style="grid-row: 1; grid-column: 3;")
+            h3(style="float: left; text-align: left;") Traffic Lights
+            a(style="float: right; text-align: right;" href="/editor?sketch=library__2traffic") <i class="fa fa-play"></i> OPEN
+            p(style="clear: both;") This sketch simulates traffic lights using a counter and a diode matrix. There is a light for road traffic and one for crossing pedestrians.
+          //.grid-item(style="grid-row: 1; grid-column: 3;")
             a.btn.btn-lg.btn-green(href="/editor?sketch=library__2traffic", style="margin-left: 20px; display: block; float: right; width: 100px;")
                 <i class="fa fa-play"></i> OPEN
-        a.btn.btn-lg.btn-green(href="/samples", style="display: block; margin: 0 auto;")
+        a.btn.btn-lg.btn-orange(href="/samples", style="display: block; margin: 0 auto;")
                 <i class="fas fa-stream"></i> VIEW ALL SAMPLES
 
-    .ribbon.grid-item(style="grid-row: 2; grid-column: 1; padding: 0;")
+    .ribbon.grid-item(style="grid-row: 2; grid-column: 1; padding: 0; align-self: start;")
       .carousel
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
           <!-- Wrapper for slides -->
           <div class="carousel-inner" style="border-radius: 10px; margin: 0;">
             <div class="item active">
-              <img src="images/slide_01.PNG" alt="">
+              <img src="images/slide_01.PNG" alt="" style="">
             </div>
 
             <div class="item">
@@ -158,7 +161,7 @@ body
         .feature-element
           //img(src='images/favicon.png')
           p.feature-icon <i class="fa fa-cloud-upload-alt fa-4x"></i>
-          h3 Save Sketches Online
+          h3 Save Your Sketches Online
           p <a href="/signup">Register for a free user account</a> that allows you to manage your circuits online! After registration, you get access to a dashboard where you can save your circuits. On top of that, you may import your circuits into other circuits as custom modules.
         .feature-element
           //img(src='images/favicon.png')

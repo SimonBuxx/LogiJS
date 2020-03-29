@@ -130,7 +130,7 @@ input {
     margin: 0 10%;
     gap: 20px;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
 }
 
 .ribbon {
@@ -160,6 +160,19 @@ input {
     display: grid;
 }
 
+.sample-element a {
+    text-decoration: none;
+    text-shadow: none;
+    color: rgb(200, 50, 50);
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.sample-element a:hover {
+    text-shadow: none;
+    color: #969696;
+}
+
 .sample-element h3 {
     grid-row: 1;
     grid-column: 2;
@@ -171,14 +184,14 @@ input {
 .sample-element p {
     grid-row: 2;
     grid-column: 2;
-    margin: 0 0 40px 20px;
+    margin: 0 10px 60px 20px;
     text-align: justify;
 }
 
 .feature-element p {
     margin: 0 20px;
     text-align: justify;
-    min-height: 120px;
+    min-height: 100px;
 }
 
 .feature-icon {
@@ -188,9 +201,7 @@ input {
 .feature-icon .fa {
     text-align: center;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding-bottom: 20px;
+    color: rgb(200, 50, 50);
 }
 
 
@@ -211,6 +222,10 @@ input {
     z-index: 10;
     color: #ffffff;
     text-align: center;
+    /*text-transform: uppercase;*/
+}
+
+.carousel h3 {
     text-transform: uppercase;
 }
 
