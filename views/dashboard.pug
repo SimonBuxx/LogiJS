@@ -82,19 +82,15 @@ body
         button.btn.btn-lg.btn-green(disabled="true", type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
           <i class="fa fa-graduation-cap"></i> COMING SOON!
   else
-    #dashboard_item_back.carousel(style={'margin-bottom': '65px', padding: '20px'})
-      - var r = 0;
-      - var n = 1;
-      while r < sketchData.sketches.length
-        if n === 1
-          - n = 0;
-        else
-          - n = 1;
-        if r < sketchData.sketches.length
-          div.db_side_board
-            .sketch_item
-              img.shadow_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt='')
-              img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketchData.sketches[r])
+      .carousel.item-container
+        - var r = 0;
+        - var n = 2;
+        while r < sketchData.sketches.length
+          - n++;
+          if n === 3
+            - n = 0;
+          .sketch_item.grid-item(style="grid-row: " + Math.ceil((r+1) / 3) + "; grid-column: " + (n+1) + ";")
+            img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketchData.sketches[r])
             if (sketchData.sketches[r].length <= 14)
               p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchData.sketches[r].toUpperCase().slice(0, 14)}
             else
@@ -110,13 +106,14 @@ body
             else 
               button.btn.btn-lg.btn-orange(type='submit', onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r], role='button', style={color: 'white', position: 'absolute', left: '180px', bottom: '20px', float: 'left'})
                 <i class="fa fa-trash-o"></i> DELETE
-            p.file_size(style={position: 'absolute', left: '240px', bottom: '90px'}) Size: #{sketchData.sizes[r]} KB
-            p.modified_date(style={position: 'absolute', left: '240px', bottom: '70px'}) Last modified: #{sketchData.modified[r]}
-            if (descriptions[r].length <= 150)
-              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 150)}
+            
+            p.file_size(style={position: 'absolute', left: '240px', bottom: '90px'}) FILE SIZE: #{sketchData.sizes[r]} KB
+            p.modified_date(style={position: 'absolute', left: '240px', bottom: '70px'}) LAST MODIFIED: #{sketchData.modified[r]}
+            if (descriptions[r].length <= 160)
+              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 160)}
             else
-              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 150) + '...'}
-        -r++;
+              p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r].slice(0, 160) + '...'}
+          -r++;
   .footer_bottom
     .text-center
       .footer_bottom_content

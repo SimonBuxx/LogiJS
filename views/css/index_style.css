@@ -23,67 +23,14 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 	height: 30px;
 }
 
-.top_layer {
-    cursor: pointer;
-}
-
 .shadow_layer {
     box-shadow: 5px 5px 5px #2b2b2b, 
                 -5px -5px 5px #3a3a3a;
 }
 
-.sketch_item > img {
-    border-radius: 10px;
-}
-
 .darker {
     border-radius: 8px;
     filter: brightness(30%);
-}
-
-.ease_in {
-    opacity: 0.0;
-    -webkit-transition: all 500ms ease-in-out;
-    -moz-transition: all 500ms ease-in-out;
-    -ms-transition: all 500ms ease-in-out;
-    -o-transition: all 500ms ease-in-out;
-    transition: all 500ms ease-in-out;
-}
-
-.ease_in > a {
-    text-decoration: none;
-    color: white;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.ease_in > p > a {
-    text-decoration: none;
-    color: white;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.ease_out {
-    opacity: 1.0;
-    -webkit-transition: all 500ms ease-in-out;
-    -moz-transition: all 500ms ease-in-out;
-    -ms-transition: all 500ms ease-in-out;
-    -o-transition: all 500ms ease-in-out;
-    transition: all 500ms ease-in-out;
-}
-
-.ease_out > p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0;
-    font-size: 16px;
-    width: 200px;
-    font-weight: normal;
-    color: white;
-    text-shadow: 1px 1px 5px black;
 }
 
 .sketch_name {
@@ -93,30 +40,6 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
     font-size: 25px;
     font-weight: normal;
     color: white;
-}
-
-.sketch_item:hover > .ease_in {
-    opacity: 1.0;
-}
-
-.sketch_item:hover > .ease_out {
-    opacity: 0.0;
-}
-
-.sketch_item:hover > .black_layer {
-    opacity: 0.0;
-}
-
-.ease_in .fa-trash-o:hover {
-    color: rgb(200, 50, 50);
-}
-
-.ease_in .fa-download:hover {
-    color: rgb(40, 180, 40);
-}
-
-.ease_in .fa-pencil:hover {
-    color: rgb(40, 180, 40);
 }
 
 .top-menu {
@@ -138,6 +61,11 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 .container .navbar {
     background: rgb(50, 50, 50); 
     box-shadow: 5px 0 5px black;
+}
+
+.container {
+    width: 100%;
+    padding: 0 calc(10% + 20px);
 }
 
 input {
@@ -306,33 +234,26 @@ input {
     padding: 20px;
     height: 400px;
     display: block;
-    background-color: rgba(50, 50, 50, 1);
+    background: #323232;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
 }
 
 #dashboard_wc_back {
-    max-width: 95%;
-    width: 1050px;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0 10%;
     padding: 0;
     height: 75px;
-    background-color: rgba(50, 50, 50, 1);
+    background: #323232;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
 }
 
 #dashboard_item_back {
-    max-width: 95%;
-    width: 1050px;
-    margin-top: 30px;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 30px 10%;
     padding: 10px;
-    background-color: rgba(50, 50, 50, 1);
+    background: #323232;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -486,23 +407,40 @@ input {
     font-size: 14px;
 }
 
-.db_side_board {
+.item-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 20px 10%;
+    margin-bottom: 70px;
+}
+
+.samples-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin: 20px 10%;
+    margin-bottom: 70px;
+}
+
+.sketch_item {
     position: relative;
-    display: inline-block;
-    width: 485px;
     height: 300px;
     background: #323232;
-    background: none;
+    border-radius: 10px;
+    margin: 0;
+}
+
+.sketch_item > img {
     border-radius: 10px;
     box-shadow: 5px 5px 5px #2b2b2b, 
                 -5px -5px 5px #3a3a3a;
-    margin: 10px;
 }
 
 .db_sketch_desc {
     padding: 0;
     padding-top: 20px;
-    width: 220px;
+    width: calc(100% - 260px);
     position: absolute;
     left: 240px;
     top: 40px;
@@ -511,11 +449,13 @@ input {
 .modified_date {
     font-size: 14px;
     color: white;
+    text-align: right;
 }
 
 .file_size {
     font-size: 14px;
     color: white;
+    text-align: right;
 }
 
 
