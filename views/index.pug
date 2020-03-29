@@ -19,7 +19,7 @@ head
     include css/bootstrap.css
     include css/index_style.css
   link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
-  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css")
   script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
   script.
     window.addEventListener("load", function () {
@@ -72,24 +72,105 @@ body
                 li
                   a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
   #blur
-  #carousel.carousel
-    #caption
-      if user !== ''
-        h1 WELCOME, #{user.toUpperCase()}!
-      else
-        h1 WELCOME TO LOGIJS
-      p Logic circuit simulation. Easy to use, yet powerful.
-    p
-      a.btn.btn-lg.btn-orange(href='/editor', role='button' style="margin-right: 6px;") 
-        <i class="fa fa-plus-square"></i> NEW SKETCH
-      if user !== ''
-        a.btn.btn-lg.btn-green(href='/dashboard', role='button')
-          <i class="fa fa-th"></i> DASHBOARD
-      else
-        a.btn.btn-lg.btn-green(href='/signup', role='button')
-          <i class="fa fa-sign-in"></i> REGISTER
-  a(href='/editor?sketch=first_steps')
-    img(title='Click here to open this sketch in LogiJS!', src='images/circuit.png', alt='Circuit example', id='demopic')
+  .grid-container
+    #welcome.carousel.ribbon.grid-item(style="grid-row: 1; grid-column: 1; margin-top: 20px; padding-top: 10px;")
+      #caption
+        if user !== ''
+          h1 WELCOME, #{user.toUpperCase()}!
+          p We're glad to have you here.
+        else
+          h1 Discover the world of logic circuits.
+          p Get started today, for free.
+      p
+        a.btn.btn-lg.btn-orange(href='/editor', role='button' style="margin-right: 6px;") 
+          <i class="fa fa-plus-square"></i> NEW SKETCH
+        if user !== ''
+          a.btn.btn-lg.btn-green(href='/dashboard', role='button')
+            <i class="fa fa-th"></i> DASHBOARD
+        else
+          a.btn.btn-lg.btn-green(href='/signup', role='button')
+            <i class="fa fa-sign-in-alt"></i> REGISTER
+    //a(href='/editor?sketch=first_steps')
+      img(title='Click here to open this sketch in LogiJS!', src='images/circuit.png', alt='Circuit example', id='demopic')
+    
+    .ribbon.grid-item(style="grid-row: 1 / 3; grid-column: 2; margin-top: 20px;")
+      .carousel
+        h2 Samples
+        .sample-element
+          img.grid-item(src='librarySketches/library__0gates.png')
+          .grid-item(style="grid-row: 1; grid-column: 2;")
+            h3 Basic Gates
+            p.grid-item This sketch demonstrates the three basic logic gates, AND, OR and XOR. It also shows the usage of input and output elements. Logic gates are the fundamentals of every logic circuit.
+          .grid-item(style="grid-row: 1; grid-column: 3;")
+            a.btn.btn-lg.btn-green(href="/editor?sketch=library__0gates", style="margin-left: 20px; display: block; float: right; width: 100px;")
+                <i class="fa fa-play"></i> OPEN
+        .sample-element
+          img.grid-item(src='librarySketches/library__14BitCounter.png')
+          .grid-item(style="grid-row: 1; grid-column: 2;")
+            h3 4-bit Counter
+            p This sketch implements a simple counter made using D gates. It is connected to a clock, permanently increasing the binary output value. When the value passes the biggest possible value, the counter restarts from zero.
+          .grid-item(style="grid-row: 1; grid-column: 3;")
+            a.btn.btn-lg.btn-green(href="/editor?sketch=library__14BitCounter", style="margin-left: 20px; display: block; float: right; width: 100px;")
+                <i class="fa fa-play"></i> OPEN
+        .sample-element
+          img.grid-item(src='librarySketches/library__2traffic.png')
+          .grid-item(style="grid-row: 1; grid-column: 2;")
+            h3 Traffic Lights
+            p This sketch simulates traffic lights using a counter and a diode matrix. There is a light for road traffic and one for crossing pedestrians.
+          .grid-item(style="grid-row: 1; grid-column: 3;")
+            a.btn.btn-lg.btn-green(href="/editor?sketch=library__2traffic", style="margin-left: 20px; display: block; float: right; width: 100px;")
+                <i class="fa fa-play"></i> OPEN
+        a.btn.btn-lg.btn-green(href="/samples", style="display: block; margin: 0 auto;")
+                <i class="fas fa-stream"></i> VIEW ALL SAMPLES
+
+    .ribbon.grid-item(style="grid-row: 2; grid-column: 1; padding: 0;")
+      .carousel
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner" style="border-radius: 10px; margin: 0;">
+            <div class="item active">
+              <img src="images/slide_01.png" alt="">
+            </div>
+
+            <div class="item">
+              <img src="images/slide_02.png" alt="">
+            </div>
+
+            <div class="item">
+              <img src="images/slide_03.png" alt="">
+            </div>
+          </div>
+
+          <!-- Left and right controls -->
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev" style="border-radius: 10px;">
+            <i class="fa fa-chevron-left" style="position: absolute; top: 50%;"></i>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next" style="border-radius: 10px;">
+            <i class="fa fa-chevron-right" style="position: absolute; top: 50%;"></i>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+
+    .ribbon.grid-item(style="grid-row: 3; grid-column: 1 / 3; margin-bottom: 90px;")
+      .carousel
+        h2 Features
+        .feature-element
+          //img(src='images/favicon.png')
+          p.feature-icon <i class="fa fa-cloud-upload-alt fa-4x"></i>
+          h3 Save Sketches Online
+          p <a href="/signup">Register for a free user account</a> that allows you to manage your circuits online! After registration, you get access to a dashboard where you can save your circuits. On top of that, you may import your circuits into other circuits as custom modules.
+        .feature-element
+          //img(src='images/favicon.png')
+          p.feature-icon <i class="fa fa-drafting-compass fa-4x"></i>
+          h3 Create Your Own Elements
+          p Many circuits contain the same logic structures multiple times. In LogiJS, you can build these structures in seperate sketches to load them into your projects. To use this feature, please <a href="/signup">register for a free account</a>. Feel free to build a library of modules for use in your projects! Have fun!
+        .feature-element
+          //img(src='images/favicon.png')
+          p.feature-icon <i class="fa fa-university fa-4x"></i>
+          h3 Focused on education
+          p LogiJS was built with education in mind. Its clear and distraction free design makes it a powerful tool for teaching the fundamentals of logic circuits. We believe that great software can spark interest and help to give students a deep understanding of electrical engineering basics.
+
   .text-center(style='margin: 20px auto; position: fixed; bottom: 30px; width: 100%; display: block;')
     a(href="https://twitter.com/logi_js?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-screen-name="true" data-show-count="true") Follow @logi_js
   .footer_bottom

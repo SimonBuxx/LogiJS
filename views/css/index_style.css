@@ -192,21 +192,102 @@ input {
     overflow-x: hidden;
 }
 
-#carousel {
-    position: absolute;
-    top: 50%;
+.grid-container {
+    display: grid;
+    margin: 0 10%;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+}
+
+.ribbon {
     width: 100%;
-    -ms-transform: translate(0%, -50%);
-    transform: translate(0%, -50%);
-    /*margin-top: 10%;*/
-    min-width: 400px;
-    padding: 0;
-    height: 260px;
-    background-color: rgba(50, 50, 50, 1);
+    border-radius: 10px;
+    padding: 20px;
+    background-color: rgb(50, 50, 50);
+}
+
+.ribbon h2 {
+    margin-bottom: 30px;
+}
+
+.feature-element {
+    flex: 1;
+    width: 33.33333%;
+    float: left;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.feature-element h3 {
+    font-size: 20px;
+}
+
+.sample-element {
+    display: grid;
+}
+
+.sample-element h3 {
+    grid-row: 1;
+    grid-column: 2;
+    font-size: 20px;
+    margin: 0 0 10px 20px;
+    text-align: left;
+}
+
+.sample-element p {
+    grid-row: 2;
+    grid-column: 2;
+    margin: 0 0 40px 20px;
+    text-align: justify;
+}
+
+.feature-element p {
+    margin: 0 20px;
+    text-align: justify;
+    min-height: 120px;
+}
+
+.feature-icon {
+    font-size: 20px;
+}
+
+.feature-icon .fa {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 20px;
+}
+
+
+.feature-element a {
+    text-decoration: none;
+    color: rgb(200, 50, 50);
+}
+
+.feature-element a:hover {
+    color: #969696;
 }
 
 .carousel {
     font-weight: normal;
+}
+
+.carousel h2, h3 {
+    z-index: 10;
+    color: #ffffff;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.sample-element img {
+    grid-row: 1;
+    grid-column: 1;
+    width: 100px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;
 }
 
 #login_back {
@@ -252,14 +333,14 @@ input {
     border-radius: 10px;
 }
 
-#carousel p, #login_back p {
+#welcome p, #login_back p {
     margin-bottom: 20px;
     line-height: 1.4;
     font-size: 21px;
 }
 
 #caption {
-    padding-top: 40px;
+    padding-top: 20px;
 }
 
 .subheader {
@@ -440,7 +521,7 @@ input {
     bottom: 0px;
 	margin: auto;
 	z-index: 20;
-	display: block;
+    display: block;
 }
 .footer_bottom_content {
 	padding-top: 10px;

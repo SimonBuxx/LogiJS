@@ -76,33 +76,24 @@ body
     button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 15px; float:right; position: absolute; right: 0;")
       <i class="fa fa-plus-square"></i> NEW SKETCH
     h1(style="padding: 15px;") LOGIC CIRCUIT SAMPLES
-  if sketches.length === 0
-    #dashboard_item_back.carousel(style={height: 180 + 'px', 'margin-bottom': '100px'})
-      h1(style="padding: 10px; font-size: 24px;") You don't have any sketches.
-      div(style="text-align: center;")
-        button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
-          <i class="fa fa-plus-square"></i> NEW SKETCH
-        button.btn.btn-lg.btn-green(disabled="true", type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
-          <i class="fa fa-graduation-cap"></i> COMING SOON!
-  else
-    #dashboard_item_back.carousel(style={height: sketches.length * 270 + 20 + 'px', 'margin-bottom': '65px'})
-      - var r = 0;
-      while r < sketches.length
-        if r < sketches.length
-            div.side_board
-              .sketch_item
-                img.shadow_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt='')
-                img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketches[r])
-              p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchNames[r].toUpperCase()}
-              button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketches[r] + "'", role='button', style="float:right; position: absolute; right: 15px; bottom: 20px; width: 100px;")
-                <i class="fa fa-play"></i> OPEN
-              //button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketches[r], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', right: '110px', bottom: '0px', margin: '10px', float: 'right'}) 
-                  <i class="fa fa-download"></i> DOWNLOAD
-              if (descriptions[r].length <= 300)
-                p.sketch_desc(style={'text-align': 'justify'}) #{descriptions[r].slice(0, 300)}
-              else
-                p.sketch_desc(style={'text-align': 'justify'}) #{descriptions[r].slice(0, 300) + '...'}
-        - r++;
+  #dashboard_item_back.carousel(style={height: sketches.length * 270 + 20 + 'px', 'margin-bottom': '65px'})
+    - var r = 0;
+    while r < sketches.length
+      if r < sketches.length
+          div.side_board
+            .sketch_item
+              img.shadow_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt='')
+              img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketches[r])
+            p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchNames[r].toUpperCase()}
+            button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketches[r] + "'", role='button', style="float:right; position: absolute; right: 15px; bottom: 20px; width: 100px;")
+              <i class="fa fa-play"></i> OPEN
+            //button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketches[r], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', right: '110px', bottom: '0px', margin: '10px', float: 'right'}) 
+                <i class="fa fa-download"></i> DOWNLOAD
+            if (descriptions[r].length <= 300)
+              p.sketch_desc(style={'text-align': 'justify'}) #{descriptions[r].slice(0, 300)}
+            else
+              p.sketch_desc(style={'text-align': 'justify'}) #{descriptions[r].slice(0, 300) + '...'}
+      - r++;
   .footer_bottom
     .text-center
       .footer_bottom_content
