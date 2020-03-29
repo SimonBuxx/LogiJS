@@ -82,7 +82,7 @@ body
         button.btn.btn-lg.btn-green(disabled="true", type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
           <i class="fa fa-graduation-cap"></i> COMING SOON!
   else
-    #dashboard_item_back.carousel(style={height: Math.ceil(sketchData.sketches.length / 2) * 330 - 30 + 'px', 'margin-bottom': '65px', padding: '20px'})
+    #dashboard_item_back.carousel(style={'margin-bottom': '65px', padding: '20px'})
       - var r = 0;
       - var n = 1;
       while r < sketchData.sketches.length
@@ -95,7 +95,11 @@ body
             .sketch_item
               img.shadow_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt='')
               img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketchData.sketches[r])
-            p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchData.sketches[r].toUpperCase()}
+            if (sketchData.sketches[r].length <= 14)
+              p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchData.sketches[r].toUpperCase().slice(0, 14)}
+            else
+              p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchData.sketches[r].toUpperCase().slice(0, 14) + '...'}
+            
             button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', style={margin: 0, float: 'right', position: 'absolute', right: '20px', bottom: '20px', width: '100px'})
               <i class="fa fa-play"></i> OPEN
             button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketchData.sketches[r], role='button', style={color: 'white','background-color': 'transparent', margin: 0, position: 'absolute', left: '20px', bottom: '20px', float: 'left'}) 
