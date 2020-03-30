@@ -50,8 +50,8 @@ pwSchema
 
 app.use('/', router);
 
-let usernameRegex = /^[A-Za-z0-9\-\_]+$/;
-let filenameRegex = /^[A-Za-z0-9\-\_]+$/;
+let usernameRegex = /^[A-Za-z0-9\-\_]{1,30}$/;
+let filenameRegex = /^[A-Za-z0-9\-\_]{1,30}$/;
 
 router.use(function (req, res, next) {
     if (req.url === '/dashboard') {
@@ -113,14 +113,7 @@ router.get('/login', function (req, res) {
 });
 
 router.get('/signup', function (req, res) {
-    res.render('signup',
-        {
-            username_valid: req.query.username_valid,
-            email_length: req.query.email_length,
-            email_invalid: req.query.email_invalid,
-            password_invalid: req.query.password_invalid,
-            username_taken: req.query.username_taken
-        });
+    res.render('signup', {error_code: req.query.error_code});
 });
 
 router.get('/dashboard', function (req, res) {
@@ -169,78 +162,21 @@ router.get('/libDownload', (req, res) => {
 });
 
 router.post('/createUser', (req, res) => {
-    if (req.body.username.length > 50) {
-        console.log('Failure: username too long!');
-        res.status(401).send(
-            {
-                success: false, // overall success
-                username_valid: false, // username <= 50 chars
-                email_length: true, // email <= 50 chars
-                email_valid: true, // email valid (syntax check)
-                password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
-                username_unused: true // false, if the username is already in use
-            });
-        res.end();
-        return;
-    }
-
     if (!req.body.username.match(usernameRegex)) {
         console.log('Failure: username doesn\'t match regex!');
-        res.status(401).send(
-            {
-                success: false, // overall success
-                username_valid: false, // username <= 50 chars
-                email_length: true, // email <= 50 chars
-                email_valid: true, // email valid (syntax check)
-                password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
-                username_unused: true // false, if the username is already in use
-            });
-        res.end();
+        res.status(401).send({error_code: 1}).end();
         return;
     }
 
-    if (req.body.email.length > 50) {
-        console.log('Failure: email too long!');
-        res.status(401).send(
-            {
-                success: false, // overall success
-                username_valid: true, // username <= 50 chars
-                email_length: false, // email <= 50 chars
-                email_valid: true, // email valid (syntax check)
-                password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
-                username_unused: true // false, if the username is already in use
-            });
-        res.end();
-        return;
-    }
-
-    if (!validator.validate(req.body.email)) {
+    if (req.body.email.length > 50 || !validator.validate(req.body.email)) {
         console.log('Failure: email invalid!');
-        res.status(401).send(
-            {
-                success: false, // overall success
-                username_valid: true, // username <= 50 chars
-                email_length: true, // email <= 50 chars
-                email_valid: false, // email valid (syntax check)
-                password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
-                username_unused: true // false, if the username is already in use
-            });
-        res.end();
+        res.status(401).send({error_code: 2}).end();
         return;
     }
 
     if (!pwSchema.validate(req.body.password)) {
         console.log('Failure: password invalid!');
-        res.status(401).send(
-            {
-                success: false, // overall success
-                username_valid: true, // username <= 50 chars
-                email_length: true, // email <= 50 chars
-                email_valid: true, // email valid (syntax check)
-                password_valid: false, // password valid (strong enough) + <= 50 chars (checked by password-validator)
-                username_unused: true // false, if the username is already in use
-            });
-        res.end();
+        res.status(401).send({error_code: 3}).end();
         return;
     }
 
@@ -252,31 +188,13 @@ router.post('/createUser', (req, res) => {
         })
         .then(({ success }) => {
             if (success) {
-                res.status(200).send(
-                    {
-                        success: true, // overall success
-                        username_valid: true, // username <= 50 chars
-                        email_length: true, // email <= 50 chars
-                        email_valid: true, // email valid (syntax check)
-                        password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
-                        username_unused: true // false, if the username is already in use
-                    });
-                res.end();
+                res.status(401).send({error_code: 0}).end();
                 if (!fs.existsSync('./userSketches/' + req.body.username + '/')) {
                     fs.mkdirSync('./userSketches/' + req.body.username + '/');
                 }
             } else {
                 console.log('Failure: username already exists!');
-                res.status(401).send(
-                    {
-                        success: false, // overall success
-                        username_valid: true, // username <= 50 chars
-                        email_length: true, // email <= 50 chars
-                        email_valid: true, // email valid (syntax check)
-                        password_valid: true, // password valid (strong enough) + <= 50 chars (checked by password-validator)
-                        username_unused: false // false, if the username is already in use
-                    });
-                res.end();
+                res.status(401).send({error_code: 4}).end();
             }
         });
 });

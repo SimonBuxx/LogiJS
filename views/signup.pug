@@ -68,19 +68,16 @@ body
                 a(href='#') REGISTER
   #blur
   #login_back.carousel(style='height: 450px;')
+    - var error = parseInt(error_code);
     form.SignUp
-      if username_valid
-        h1(style='color: red; font-size: 20px;') Username invalid!
-      else if email_length
-        h1(style='color: red; font-size: 20px;') Email address too long!
-      else if email_invalid
-        h1(style='color: red; font-size: 20px;') Email address format invalid!
-      else if password_invalid
-        h1(style='color: red; font-size: 20px;') Password invalid! Please enter 6 to 50 upper- AND lowercase characters, containing at least one digit.
-      else if username_taken
-        h1(style='color: red; font-size: 20px;') Username already taken!
-      else
-        h1 Register
+      case error
+        when 1: h1(style='color: red; font-size: 20px;') Username invalid!
+        when 2: h1(style='color: red; font-size: 20px;') Email address invalid!
+        when 3 
+          h1(style='color: red; font-size: 20px;') Password invalid! 
+          h2(style='color: red; font-size: 14px; margin: 0 10px;') Please enter 6 to 50 upper- AND lowercase characters, containing at least one digit.
+        when 4: h1(style='color: red; font-size: 20px;') Username already taken!
+        default: h1 Register
       p
         input.username(type='text', placeholder='USERNAME')
         br
