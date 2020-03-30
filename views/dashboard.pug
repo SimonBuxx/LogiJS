@@ -72,7 +72,7 @@ body
         <i class="fa fa-sign-out"></i> LOGOUT
     button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 15px; float:right; position: absolute; right: 0;")
       <i class="fa fa-plus-square"></i> NEW SKETCH
-    h1(style="padding: 15px;") #{user.toUpperCase()}'S DASHBOARD
+    h1(style="padding: 15px;") #{user}'s Dashboard
   if sketchData.sketches.length === 0
     #dashboard_item_back.carousel(style={height: 180 + 'px', 'margin-bottom': '100px'})
       h1(style="padding: 10px; font-size: 24px;") You don't have any sketches.

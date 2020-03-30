@@ -2,12 +2,13 @@ body {
     background-color: rgb(50, 50, 50);
     font-family:  'Open Sans', Arial, sans-serif;
     font-size: 16px;
+    font-weight: lighter;
 	font-style: normal; 
 	-webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
 }
 
-h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Neue', sans-serif; }
+h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Neue', sans-serif; font-weight: lighter; }
 
 * {
   -webkit-border-radius: 0;
@@ -90,7 +91,6 @@ input {
     margin-top: 0;
     margin-bottom: 20px;
 }
-
 
 #blur {
     background: url('/images/background.png') no-repeat center center; 
@@ -192,6 +192,7 @@ input {
     margin: 0 20px;
     text-align: justify;
     min-height: 100px;
+
 }
 
 .feature-icon {
@@ -205,12 +206,13 @@ input {
 }
 
 
-.feature-element a {
+.feature-element a, .red_link {
     text-decoration: none;
     color: rgb(200, 50, 50);
 }
 
-.feature-element a:hover {
+.feature-element a:hover, .red_link:hover {
+    text-decoration: none;
     color: #969696;
 }
 
@@ -225,9 +227,9 @@ input {
     /*text-transform: uppercase;*/
 }
 
-.carousel h3 {
+/*.carousel h3 {
     text-transform: uppercase;
-}
+}*/
 
 .sample-element img {
     grid-row: 1;

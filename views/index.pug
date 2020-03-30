@@ -76,7 +76,7 @@ body
     #welcome.carousel.ribbon.grid-item(style="grid-row: 1; grid-column: 1; margin-top: 20px; max-height: 280px; padding-top: 10px;")
       #caption
         if user !== ''
-          h1 WELCOME, #{user.toUpperCase()}!
+          h1 Welcome, #{user}!
           p Glad to have you here.
         else
           h1 Discover the world of logic circuits.
@@ -108,7 +108,7 @@ body
         .sample-element
           img.grid-item(src='librarySketches/library__14BitCounter.png')
           .grid-item(style="grid-row: 1; grid-column: 2;")
-            h3(style="float: left; text-align: left;") 4-bit Counter
+            h3(style="float: left; text-align: left;") 4-Bit Counter
             a(style="float: right; text-align: right;" href="/editor?sketch=library__14BitCounter") <i class="fa fa-play"></i> OPEN
             p(style="clear: both;") This sketch implements a simple counter made using D gates. It is connected to a clock, permanently increasing the binary output value. When the value passes the biggest possible value, the counter restarts from zero.
           //.grid-item(style="grid-row: 1; grid-column: 3;")
@@ -171,7 +171,7 @@ body
         .feature-element
           //img(src='images/favicon.png')
           p.feature-icon <i class="fa fa-university fa-4x"></i>
-          h3 Focused on education
+          h3 Focused On Education
           p LogiJS was built with education in mind. Its clear and distraction free design makes it a powerful tool for teaching the fundamentals of logic circuits. We believe that great software can spark interest and help to give students a deep understanding of electrical engineering basics.
 
   .text-center(style='margin: 0 auto 60px auto; width: 100%;')
