@@ -360,6 +360,33 @@ input {
     color: #969696;
 }
 
+.sidebar {
+    grid-column: 3;
+    height: 100%;
+}
+
+.sticky-bar {
+    background: #323232;
+    border-radius: 10px;
+    padding: 20px;
+    height: calc(100vh - 200px);
+    position: -webkit-sticky;
+    position: sticky;
+    top: 130px;
+}
+
+#editor-button {
+    top: 120px;
+}
+
+#profile-button {
+    top: 163px;
+}
+
+#logout-button {
+    top: 300px;
+}
+
 .sketch_desc {
     padding: 0;
     width: 720px;
@@ -371,7 +398,7 @@ input {
 
 .item-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 200px;
     gap: 20px;
     margin: 20px 10%;
     margin-bottom: 70px;
@@ -401,34 +428,35 @@ input {
 
 .db_sketch_desc {
     padding: 0;
-    padding-top: 20px;
+    margin-top: 20px;
     width: calc(100% - 260px);
+    height: calc(100% - 180px);
     position: absolute;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     left: 240px;
     top: 40px;
 }
 
+.db_sketch_desc::-webkit-scrollbar {
+    display: none;
+}
 
 .sketch_name {
     overflow: hidden;
+    width: calc(100% - 260px);
     text-overflow: ellipsis;
     margin: 0;
     font-size: 25px;
     color: white;
 }
 
-.modified_date {
+.modified_date, .file_size {
     font-size: 14px;
     color: white;
     text-align: right;
 }
-
-.file_size {
-    font-size: 14px;
-    color: white;
-    text-align: right;
-}
-
 
 .footer_bottom {
 	background: rgb(50, 50, 50);
