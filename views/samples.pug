@@ -19,7 +19,7 @@ head
     include css/index_style.css
   link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
   link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
-  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css")
   script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
   script.
     window.addEventListener("load", function () {
@@ -72,27 +72,39 @@ body
                 li
                   a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
   #blur
-  #dashboard_wc_back.carousel
-    button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 15px; float:right; position: absolute; right: 0;")
-      <i class="fa fa-plus-square"></i> NEW SKETCH
-    h1(style="padding: 15px;") Logic Circuit Samples
-  .carousel.samples-container
-    - var r = 0;
-    while r < sketches.length
-      if r < sketches.length
-          .sketch_item.grid-item(style="height: 240px;")
-            img.shadow_layer(src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt='')
-            img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketches[r])
-            p.sketch_name(style={'text-align': 'left', position: 'absolute', left: '240px', top: '20px', 'white-space': 'nowrap', 'padding-right': '10px'}) #{sketchNames[r].toUpperCase()}
-            button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketches[r] + "'", role='button', style="float:right; position: absolute; right: 15px; bottom: 20px; width: 100px;")
-              <i class="fa fa-play"></i> OPEN
-            //button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketches[r], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', right: '110px', bottom: '0px', margin: '10px', float: 'right'}) 
-                <i class="fa fa-download"></i> DOWNLOAD
-            if (descriptions[r].length <= 300)
-              p.sketch_desc(style={'text-align': 'justify'}) #{descriptions[r].slice(0, 300)}
-            else
-              p.sketch_desc(style={'text-align': 'justify'}) #{descriptions[r].slice(0, 300) + '...'}
-      - r++;
+  .outer-sample-container
+    #sample-title.carousel
+      button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 15px; float:right; position: absolute; right: 0; width: 170px;")
+        <i class="fa fa-plus-circle"></i> NEW SKETCH
+      h1(style="margin: 15px 85px 15px 0;") Logic Circuit Samples
+    .carousel.samples-container(style="grid-row: 2; grid-column: 1")
+      - var r = 0;
+      while r < sketches.length
+        if r < sketches.length
+            .sample_item
+              img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketches[r])
+              p.sample_sketch_name(style="float: left;") #{sketchNames[r]}
+              a.open_link(style="float: right; text-align: right; margin: 20px;" href="/editor?sketch=library__0gates") <i class="fa fa-play"></i> OPEN
+              //button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketches[r] + "'", role='button', style="float:right; position: absolute; right: 15px; bottom: 20px; width: 100px;")
+                <i class="fa fa-play"></i> OPEN
+              //button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketches[r], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', right: '110px', bottom: '0px', margin: '10px', float: 'right'}) 
+                  <i class="fa fa-download"></i> DOWNLOAD
+              p.sample_sketch_desc(style={'text-align': 'justify', 'clear': 'both'}) #{descriptions[r]}
+        - r++;
+    .sidebar.grid-item(style={"grid-row": "1 / 3", "grid-column": "2", 'margin-top': '20px'})
+      .sticky-bar
+        h1 What is LogiJS?
+        img(src='images/sample_sketch_1.png')
+        p 
+          | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
+        p 
+          | Our goal is to offer a software 
+          | that isn't only free for everybody, but also encourages students to get creative with logic circuits and develop a deep understanding of the basic concepts. Our goal is not to
+          | build a software for production use or for learning advanced techniques. Instead, we focuse on simplicity to create an experimenting playground free of distractions and frustrations.
+        p
+          | Please note that LogiJS is currently in active development. Changes may come rapidly and unanounced. Also, we can't guarantee for possible data loss or damage done trough use of our software.
+        p
+          | If you would like to learn more about the technical side of LogiJS or are interested in supporting us, please visit our project on <a href="https://www.github.com/SimonBuxx/LogiJS">GitHub</a>.
   .footer_bottom
     .text-center
       .footer_bottom_content

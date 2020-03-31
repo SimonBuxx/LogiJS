@@ -73,12 +73,15 @@ body
         div(style="text-align: center;")
           button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
             <i class="fa fa-plus-circle"></i> NEW SKETCH
-          button.btn.btn-lg.btn-green(disabled="true", type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
-            <i class="fa fa-graduation-cap"></i> COMING SOON!
+          button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/samples'", role='button' style="margin: 5px;")
+            <i class="fas fa-stream"></i> VIEW SAMPLES
       .sidebar.grid-item(style={"grid-row": "1", "grid-column": "2", 'margin-top': '20px'})
           .sticky-bar
             button#editor-button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 0; width: 100%;")
               <i class="fa fa-plus-circle"></i> NEW SKETCH
+            form#import-button.Profile(title="Coming soon!")
+              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
+                <i class="fa fa-file-upload"></i> IMPORT FILE
             form#profile-button.Profile(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
                 <i class="fa fa-user-circle"></i> PROFILE
@@ -91,6 +94,9 @@ body
           .sticky-bar
             button#editor-button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 0; width: 100%;")
               <i class="fa fa-plus-circle"></i> NEW SKETCH
+            form#import-button.Profile(title="Coming soon!")
+              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
+                <i class="fa fa-file-upload"></i> IMPORT FILE
             form#profile-button.Profile(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
                 <i class="fa fa-user-circle"></i> PROFILE
@@ -110,8 +116,8 @@ body
             p#sketch_name #{sketchData.sketches[r]}
             button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', style={position: 'absolute', margin: 0, left: '20px', top: '280px', width: '200px'})
               <i class="fa fa-play"></i> OPEN
-            p.file_size(style={position: 'absolute', top: '370px', left: '20px'}) FILE SIZE: #{sketchData.sizes[r]} KB
-            p.modified_date(style={position: 'absolute', left: '20px', top: '395px'}) LAST MODIFIED: #{sketchData.modified[r]}
+            p.file_size(style={position: 'absolute', top: '370px', left: '20px'}) File Size: #{sketchData.sizes[r]} KB
+            p.modified_date(style={position: 'absolute', left: '20px', top: '395px'}) Last Modified: #{sketchData.modified[r]}
             p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r]}
             a.download(id='dl' + sketchData.sketches[r]) 
                 <i class="fa fa-file-download"></i> DOWNLOAD
