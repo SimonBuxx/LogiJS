@@ -26,14 +26,7 @@ for (const button of openButtons) {
     });
 }
 
-const openImages = document.querySelectorAll(".top_layer");
-for (const image of openImages) {
-    image.addEventListener('click', function (event) { //jshint ignore:line
-        window.location = '/editor?sketch=' + event.target.id.substring(2);
-    });
-}
-
-const deleteButtons = document.querySelectorAll(".btn.delete");
+const deleteButtons = document.querySelectorAll(".delete");
 for (const button of deleteButtons) {
     button.addEventListener('click', function (event) { //jshint ignore:line
         /*if (confButton !== event.target.id) {
@@ -52,7 +45,7 @@ for (const button of deleteButtons) {
     });
 }
 
-const downloadButtons = document.querySelectorAll(".btn.download");
+const downloadButtons = document.querySelectorAll(".download");
 for (const button of downloadButtons) {
     button.addEventListener('click', function (event) { //jshint ignore:line
         event.preventDefault();

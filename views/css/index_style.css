@@ -361,7 +361,7 @@ input {
 }
 
 .sidebar {
-    grid-column: 3;
+    grid-column: 4;
     height: 100%;
 }
 
@@ -396,12 +396,19 @@ input {
     font-size: 14px;
 }
 
+.outer-dashboard-container {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    margin: 0 10%;
+    margin-bottom: 70px;
+}
+
 .item-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 200px;
+    /*grid-template-columns: 240px 240px 240px 200px;*/
+    grid-template-columns: repeat(auto-fit, 240px);
     gap: 20px;
-    margin: 20px 10%;
-    margin-bottom: 70px;
+    margin: 20px 0 0 0;
 }
 
 .samples-container {
@@ -414,10 +421,17 @@ input {
 
 .sketch_item {
     position: relative;
-    height: 300px;
+    height: 340px;
     background: #323232;
     border-radius: 10px;
     margin: 0;
+    overflow: hidden;
+    transition: all .2s ease-in-out;
+    transition-delay: .5s;
+}
+
+.sketch_item:hover {
+    height: 580px;
 }
 
 .sketch_item > img {
@@ -427,29 +441,56 @@ input {
 }
 
 .db_sketch_desc {
-    padding: 0;
-    margin-top: 20px;
-    width: calc(100% - 260px);
-    height: calc(100% - 180px);
+    padding: 20px;
+    width: 100%;
+    height: 160px;
     position: absolute;
-    overflow: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    left: 240px;
-    top: 40px;
-}
-
-.db_sketch_desc::-webkit-scrollbar {
-    display: none;
-}
-
-.sketch_name {
     overflow: hidden;
-    width: calc(100% - 260px);
+    left: 0;
+    top: 400px;
+}
+
+#sketch_name {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    padding: 0 20px;
+    white-space: nowrap;
+    text-align: left;
     text-overflow: ellipsis;
     margin: 0;
+    left: 0;
+    top: 20px;
     font-size: 25px;
     color: white;
+}
+
+.download, .del {
+    cursor: pointer;
+    margin-top: 340px;
+    text-decoration: none;
+    color: rgb(200, 50, 50);
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.download:hover, .del:hover {
+    color: #969696;
+    text-decoration: none;
+}
+
+.download {
+    float: left;
+    text-align: left;
+    margin-left: 20px;
+    width: 120px;
+}
+
+.del {
+    float: right;
+    text-align: right;
+    margin-right: 20px;
+    width: 80px;
 }
 
 .modified_date, .file_size {
