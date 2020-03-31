@@ -1,4 +1,5 @@
 doctype html
+<html lang="en">
 head
   |   <!-- Google Tag Manager -->
   |   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -10,7 +11,7 @@ head
   title LogiJS: Dashboard
   meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
   computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
-  meta(name='description', content='LogiJS is a logic circuit simulator built for educational use. Easy to use, yet powerful.')
+  meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
   meta(charset='UTF-8')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   link(rel='shortcut icon', href='images/favicon.ico')
@@ -52,7 +53,7 @@ body
               span.icon-bar
               span.icon-bar
             a.navbar-brand(href='/')
-              img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+              img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS logo', title='LogiJS')
           #nav-bar.navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
               li
@@ -71,13 +72,13 @@ body
       #dashboard_item_back.grid-item(style={height: '180px', 'margin': '20px 20px 0 0', 'grid-row': '1', 'grid-column': '1'})
         h1(style="padding: 10px; font-size: 24px;") You don't have any sketches.
         div(style="text-align: center;")
-          button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
+          button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
             <i class="fa fa-plus-circle"></i> NEW SKETCH
-          button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/samples'", role='button' style="margin: 5px;")
+          button.btn.btn-lg.btn-green(type='submit', rel="nofollow", onclick="window.location.href='/samples'", role='button' style="margin: 5px;")
             <i class="fas fa-stream"></i> VIEW SAMPLES
       .sidebar.grid-item(style={"grid-row": "1", "grid-column": "2", 'margin-top': '20px'})
           .sticky-bar
-            button#editor-button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 0; width: 100%;")
+            button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button' style="margin: 0; width: 100%;")
               <i class="fa fa-plus-circle"></i> NEW SKETCH
             form#import-button.Profile(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
@@ -86,13 +87,13 @@ body
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
                 <i class="fa fa-user-circle"></i> PROFILE
             form#logout-button.Logout
-              button.btn.btn-lg.btn-orange(type='submit', role='button' style="margin: 0; position: absolute; bottom: 20px; width: calc(100% - 40px);")
+              button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", role='button' style="margin: 0; position: absolute; bottom: 20px; width: calc(100% - 40px);")
                 <i class="fa fa-sign-out-alt"></i> LOGOUT
   else
     .outer-dashboard-container
       .sidebar.grid-item(style={"grid-row": "1", "grid-column": "2", 'margin-top': '20px'})
           .sticky-bar
-            button#editor-button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 0; width: 100%;")
+            button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button' style="margin: 0; width: 100%;")
               <i class="fa fa-plus-circle"></i> NEW SKETCH
             form#import-button.Profile(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
@@ -114,18 +115,18 @@ body
             //(style="grid-row: " + Math.ceil((r + 1) / 3) + "; grid-column: " + (n+1) + ";")
             img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '0', top: '50px', margin: '20px', width: '200px;'}, alt=sketchData.sketches[r])
             p#sketch_name #{sketchData.sketches[r]}
-            button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', style={position: 'absolute', margin: 0, left: '20px', top: '280px', width: '200px'})
+            button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', rel="nofollow", style={position: 'absolute', margin: 0, left: '20px', top: '280px', width: '200px'})
               <i class="fa fa-play"></i> OPEN
             p.file_size(style={position: 'absolute', top: '370px', left: '20px'}) File Size: #{sketchData.sizes[r]} KB
             p.modified_date(style={position: 'absolute', left: '20px', top: '395px'}) Last Modified: #{sketchData.modified[r]}
             p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r]}
-            a.download(id='dl' + sketchData.sketches[r]) 
+            a.download(id='dl' + sketchData.sketches[r], rel="nofollow") 
                 <i class="fa fa-file-download"></i> DOWNLOAD
             if (user !== 'demouser')
-              a.del.delete(id=sketchData.sketches[r])
+              a.del.delete(id=sketchData.sketches[r], rel="nofollow")
                 <i class="fa fa-trash-alt"></i> DELETE
             else 
-              a.del(onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r])
+              a.del(onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r], rel="nofollow")
                 <i class="fa fa-trash-alt"></i> DELETE
             div(style="clear:both;")
           -r++;

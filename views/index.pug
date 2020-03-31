@@ -1,4 +1,5 @@
 doctype html
+<html lang="en">
 head
   |   <!-- Google Tag Manager -->
   |   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -10,7 +11,7 @@ head
   title LogiJS: Logic Circuit Simulation
   meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
   computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
-  meta(name='description', content='LogiJS is a logic circuit simulator built for educational use. Easy to use, yet powerful.')
+  meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
   meta(charset='UTF-8')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   link(rel='shortcut icon', href='images/favicon.ico')
@@ -52,7 +53,7 @@ body
               span.icon-bar
               span.icon-bar
             a.navbar-brand(href='#')
-              img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+              img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS logo', title='LogiJS')
           #nav-bar.navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
               li.active
@@ -82,47 +83,36 @@ body
           h1 Discover the world of logic circuits.
           p Get started today, for free.
       p
-        a.btn.btn-lg.btn-orange(href='/editor', role='button' style="margin-right: 6px;") 
+        a.btn.btn-lg.btn-orange(href='/editor', rel="nofollow", role='button' style="margin-right: 6px;") 
           <i class="fa fa-plus-circle"></i> NEW SKETCH
         if user !== ''
-          a.btn.btn-lg.btn-green(href='/dashboard', role='button')
+          a.btn.btn-lg.btn-green(href='/dashboard', rel="nofollow", role='button')
             <i class="fa fa-th"></i> DASHBOARD
         else
-          a.btn.btn-lg.btn-green(href='/signup', role='button')
+          a.btn.btn-lg.btn-green(href='/signup', rel="nofollow", role='button')
             <i class="fa fa-sign-in-alt"></i> REGISTER
-    //a(href='/editor?sketch=first_steps')
-      img(title='Click here to open this sketch in LogiJS!', src='images/circuit.png', alt='Circuit example', id='demopic')
     
     .ribbon.grid-item(style="grid-row: 1 / 3; grid-column: 2; margin-top: 20px;")
       .carousel
         h2 Samples
         .sample-element
-          img.grid-item(src='librarySketches/library__0gates.png')
+          img.grid-item(src='librarySketches/library__0gates.png', alt="A LogiJS example sketch showing the three basic logic gates")
           .grid-item(style="grid-row: 1; grid-column: 2;")
             h3(style="float: left; text-align: left;") Basic Gates 
-            a.open_link(style="float: right; text-align: right;" href="/editor?sketch=library__0gates") <i class="fa fa-play"></i> OPEN
+            a.open_link(style="float: right; text-align: right;" href="/editor?sketch=library__0gates", rel="nofollow") <i class="fa fa-play"></i> OPEN
             p(style="clear: both;") This sketch demonstrates the three basic logic gates, AND, OR and XOR. It also shows the usage of input and output elements. Logic gates are the fundamentals of every logic circuit.
-          //.grid-item(style="grid-row: 1; grid-column: 3;")
-            a.btn.btn-lg.btn-green(href="/editor?sketch=library__0gates", style="margin-left: 20px; display: block; float: right; width: 100px;")
-                <i class="fa fa-play"></i> OPEN
         .sample-element
-          img.grid-item(src='librarySketches/library__14BitCounter.png')
+          img.grid-item(src='librarySketches/library__14BitCounter.png', alt="A LogiJS example sketch showing a four bit counter")
           .grid-item(style="grid-row: 1; grid-column: 2;")
             h3(style="float: left; text-align: left;") 4-Bit Counter
-            a.open_link(style="float: right; text-align: right;" href="/editor?sketch=library__14BitCounter") <i class="fa fa-play"></i> OPEN
+            a.open_link(style="float: right; text-align: right;" href="/editor?sketch=library__14BitCounter", rel="nofollow") <i class="fa fa-play"></i> OPEN
             p(style="clear: both;") This sketch implements a simple counter made using D gates. It is connected to a clock, permanently increasing the binary output value. When the value passes the biggest possible value, the counter restarts from zero.
-          //.grid-item(style="grid-row: 1; grid-column: 3;")
-            a.btn.btn-lg.btn-green(href="/editor?sketch=library__14BitCounter", style="margin-left: 20px; display: block; float: right; width: 100px;")
-                <i class="fa fa-play"></i> OPEN
         .sample-element
-          img.grid-item(src='librarySketches/library__2traffic.png')
+          img.grid-item(src='librarySketches/library__2traffic.png', alt="A LogiJS example sketch showing a traffic light simulation")
           .grid-item(style="grid-row: 1; grid-column: 2;")
             h3(style="float: left; text-align: left;") Traffic Lights
-            a.open_link(style="float: right; text-align: right;" href="/editor?sketch=library__2traffic") <i class="fa fa-play"></i> OPEN
+            a.open_link(style="float: right; text-align: right;" href="/editor?sketch=library__2traffic", rel="nofollow") <i class="fa fa-play"></i> OPEN
             p(style="clear: both;") This sketch simulates traffic lights using a counter and a diode matrix. There is a light for road traffic and one for crossing pedestrians.
-          //.grid-item(style="grid-row: 1; grid-column: 3;")
-            a.btn.btn-lg.btn-green(href="/editor?sketch=library__2traffic", style="margin-left: 20px; display: block; float: right; width: 100px;")
-                <i class="fa fa-play"></i> OPEN
         a.btn.btn-lg.btn-orange(href="/samples", style="display: block; margin: 0 auto;")
                 <i class="fas fa-stream"></i> VIEW ALL SAMPLES
 
@@ -132,15 +122,15 @@ body
           <!-- Wrapper for slides -->
           <div class="carousel-inner" style="border-radius: 10px; margin: 0;">
             <div class="item active">
-              <img src="images/slide_01.PNG" alt="" style="">
+              <img src="images/slide_01.PNG" alt="A LogiJS example sketch showing a traffic light simulation">
             </div>
 
             <div class="item">
-              <img src="images/slide_02.PNG" alt="">
+              <img src="images/slide_02.PNG" alt="A LogiJS example sketch showing a basic cpu structure">
             </div>
 
             <div class="item">
-              <img src="images/slide_03.PNG" alt="">
+              <img src="images/slide_03.PNG" alt="A LogiJS example sketch showing a more complex cpu structure">
             </div>
           </div>
 
@@ -159,24 +149,21 @@ body
       .carousel
         h2 Features
         .feature-element
-          //img(src='images/favicon.png')
           p.feature-icon <i class="fa fa-cloud-upload-alt fa-4x"></i>
           h3 Save Your Sketches Online
           p <a href="/signup">Register for a free user account</a> that allows you to manage your circuits online! After registration, you get access to a dashboard where you can save your circuits. On top of that, you may import your circuits into other circuits as custom modules.
         .feature-element
-          //img(src='images/favicon.png')
           p.feature-icon <i class="fa fa-drafting-compass fa-4x"></i>
           h3 Create Your Own Elements
-          p Many circuits contain the same logic structures multiple times. In LogiJS, you can build these structures in seperate sketches to load them into your projects. To use this feature, please <a href="/signup">register for a free account</a>. Feel free to build a library of modules for use in your projects! Have fun!
+          p Many circuits contain the same logic structures multiple times. In LogiJS, you can build these structures in separate sketches to load them into your projects. To use this feature, please <a href="/signup">register for a free account</a>. Feel free to build a library of modules for use in your projects! Have fun!
         .feature-element
-          //img(src='images/favicon.png')
           p.feature-icon <i class="fa fa-graduation-cap fa-4x"></i>
           h3 Focused On Education
           p LogiJS was built with education in mind. Its clear and distraction free design makes it a powerful tool for teaching the fundamentals of logic circuits. We believe that great software can spark interest and help to give students a deep understanding of electrical engineering basics.
     
     .sidebar.about-logijs.grid-item(style={"grid-row": "4", "grid-column": "1"})
       h2 What is LogiJS?
-      img(src='images/sample_sketch_1.png' style="float: left; margin: 20px 10px 0 0;")
+      img(src='images/sample_sketch_1.png' style="float: left; margin: 20px 10px 0 0;", alt="A LogiJS example sketch showing a part of a counter")
       p(style="margin-top: 20px;")
         | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
       p
@@ -191,7 +178,7 @@ body
     .sidebar.upcoming-features.grid-item(style={"grid-row": "4", "grid-column": "2"})
       h2 Planned Features
       ul(style="margin-top: 20px;")
-        img(src='images/sample_sketch_2.png' style="float: right; margin: 0 0 0 10px;")
+        img(src='images/sample_sketch_2.png' style="float: right; margin: 0 0 0 10px;", alt="A LogiJS example sketch showing a part of a counter")
         li First things first, we will finally complete the selection feature so that you can move, copy and delete sketch parts.
         li We'd like to have a showroom for user-built circuits, where you can view other user's circuits and edit them as copies in your own dashboards. For this, we need to find a way to handle sketch dependencies (custom elements used in the sketch).
         li VHDL and Verilog are the most common hardware description languages. We want to support export to at least one of them. This is useful for exporting circuits to FPGAs and other applications.

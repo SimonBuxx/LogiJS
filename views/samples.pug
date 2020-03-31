@@ -1,4 +1,5 @@
 doctype html
+<html lang="en">
 head
   |   <!-- Google Tag Manager -->
   |   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -10,7 +11,7 @@ head
   title LogiJS: Samples
   meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
   computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
-  meta(name='description', content='LogiJS is a logic circuit simulator built for educational use. Easy to use, yet powerful.')
+  meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
   meta(charset='UTF-8')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   link(rel='shortcut icon', href='images/favicon.ico')
@@ -52,7 +53,7 @@ body
               span.icon-bar
               span.icon-bar
             a.navbar-brand(href='/')
-              img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS', title='LogiJS')
+              img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS logo', title='LogiJS')
           #nav-bar.navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
               li
@@ -84,7 +85,7 @@ body
             .sample_item
               img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketches[r])
               p.sample_sketch_name(style="float: left;") #{sketchNames[r]}
-              a.open_link(style="float: right; text-align: right; margin: 20px;" href="/editor?sketch=library__0gates") <i class="fa fa-play"></i> OPEN
+              a.open_link(style="float: right; text-align: right; margin: 20px;" href="/editor?sketch=" + sketches[r], rel="nofollow") <i class="fa fa-play"></i> OPEN
               //button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketches[r] + "'", role='button', style="float:right; position: absolute; right: 15px; bottom: 20px; width: 100px;")
                 <i class="fa fa-play"></i> OPEN
               //button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketches[r], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', right: '110px', bottom: '0px', margin: '10px', float: 'right'}) 
@@ -94,7 +95,7 @@ body
     .sidebar.grid-item(style={"grid-row": "1 / 3", "grid-column": "2", 'margin-top': '20px'})
       .sticky-bar
         h1 What is LogiJS?
-        img(src='images/sample_sketch_1.png')
+        img(src='images/sample_sketch_1.png', alt="A LogiJS example sketch showing a part of a counter")
         p 
           | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
         p 
