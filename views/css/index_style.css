@@ -13,6 +13,7 @@ h1, h2, h3, h4, h5, h6, span, p { font-family: 'Open Sans', Arial, 'Helvetica Ne
 a {
     color: rgb(200, 50, 50);
     text-decoration: none;
+    font-weight: normal;
 }
 
 a:hover {
@@ -49,6 +50,10 @@ a:hover {
     top: 0;
     z-index: 5000;
     width:100%;
+}
+
+.top-menu a {
+    font-weight: lighter;
 }
 
 .top-menu .navbar-toggle {
@@ -558,11 +563,12 @@ input {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	font-size: 14px;
-	color:#ffffff;
+    color:#ffffff;
 }
 .footer_bottom_content a {
 	font-size: 14px;
-	color:#ffffff;
+    color:#ffffff;
+    font-weight: lighter;
 }
 
 @media (min-width: 768px) {
