@@ -35,27 +35,25 @@ head
             span.icon-bar
             span.icon-bar
           a.navbar-brand(href='/')
-            img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS logo', title='LogiJS')
-        #nav-bar.navbar-collapse.collapse
-          ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
+            img(src='images/logo_index.png', alt='LogiJS logo', title='LogiJS')
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right
             li
               a.internal-link(rel='nofollow', href='/', target='_parent') HOME
             li
               a.internal-link(rel='nofollow', href='/samples', target='_parent') SAMPLES
-            //li
-              //a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
             li
               a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
-            li
-              if user !== ''
-                a.internal-link(rel='nofollow', href='/dashboard', target='_parent', style="margin-left: 60px; color: rgb(40, 180, 40);") #{user.toUpperCase()}
-              else
-                a.internal-link(rel='nofollow', href='/login', target='_parent', style="margin-left: 60px;") LOGIN
-            if user == ''
-                li
-                    a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
+            if user !== ''
+              li
+                a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') #{user.toUpperCase()}
+            else
+              li
+                a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') LOGIN
+              li
+                a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
 div
-  #blur
+  #blurred-background
   #dashboard_item_back.carousel(style="text-align: justify;")
     #caption(style='color: white; text-align: center; padding: 10px;')
       h1 Impressum & Datenschutzerklärung

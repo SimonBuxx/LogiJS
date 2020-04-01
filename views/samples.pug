@@ -53,9 +53,9 @@ body
               span.icon-bar
               span.icon-bar
             a.navbar-brand(href='/')
-              img(src='images/logo_index.png', style='width: 200px;', alt='LogiJS logo', title='LogiJS')
-          #nav-bar.navbar-collapse.collapse
-            ul.nav.navbar-nav.navbar-right(style='margin-top: 40px;')
+              img(src='images/logo_index.png', alt='LogiJS logo', title='LogiJS')
+          .navbar-collapse.collapse
+            ul.nav.navbar-nav.navbar-right
               li
                 a.internal-link(rel='nofollow', href='/', target='_parent') HOME
               li.active
@@ -64,15 +64,15 @@ body
                 //a.internal-link(rel='nofollow', href='/features', target='_parent') FEATURES
               li
                 a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
-              li
-                if user !== ''
-                  a.internal-link.user-button(rel='nofollow', href='/dashboard', target='_parent') #{user.toUpperCase()}
-                else
-                  a.internal-link(rel='nofollow', href='/login', target='_parent', style="margin-left: 60px;") LOGIN
-              if user == ''
+              if user !== ''
+                li
+                  a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') #{user.toUpperCase()}
+              else
+                li
+                  a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') LOGIN
                 li
                   a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
-  #blur
+  #blurred-background
   .outer-sample-container
     #sample-title.carousel
       button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button' style="margin: 15px; float:right; position: absolute; right: 0; width: 170px;")
@@ -86,11 +86,7 @@ body
               img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '20px', top: '20px', height: '200px', width: '200px'}, alt=sketches[r])
               p.sample_sketch_name(style="float: left;") #{sketchNames[r]}
               a.open_link(style="float: right; text-align: right; margin: 20px;" href="/editor?sketch=" + sketches[r], rel="nofollow") <i class="fa fa-play"></i> OPEN
-              //button.btn.btn-lg.btn-green(type='submit', onclick="window.location.href='/editor?sketch=" + sketches[r] + "'", role='button', style="float:right; position: absolute; right: 15px; bottom: 20px; width: 100px;")
-                <i class="fa fa-play"></i> OPEN
-              //button.btn.btn-lg.btn-orange.download(type='submit', id='dl' + sketches[r], role='button', style={color: 'white','background-color': 'transparent', position: 'absolute', right: '110px', bottom: '0px', margin: '10px', float: 'right'}) 
-                  <i class="fa fa-download"></i> DOWNLOAD
-              p.sample_sketch_desc(style={'text-align': 'justify', 'clear': 'both'}) #{descriptions[r]}
+              p.sample_sketch_desc.clear(style={'text-align': 'justify'}) #{descriptions[r]}
         - r++;
     .sidebar.grid-item(style={"grid-row": "1 / 3", "grid-column": "2", 'margin-top': '20px'})
       .sticky-bar
