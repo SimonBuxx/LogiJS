@@ -67,57 +67,56 @@ body
   #blurred-background
   if sketchData.sketches.length === 0
     .outer-dashboard-container
-      #dashboard_item_back.grid-item(style={height: '180px', 'margin': '20px 20px 0 0', 'grid-row': '1', 'grid-column': '1'})
-        h1(style="padding: 10px; font-size: 24px;") You don't have any sketches.
-        div(style="text-align: center;")
-          button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button' style="margin: 5px;")
+      #nosketches_back
+        p#nosketches_message You don't have any sketches.
+        #nosketch_buttons
+          button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
             <i class="fa fa-plus-circle"></i> NEW SKETCH
-          button.btn.btn-lg.btn-green(type='submit', rel="nofollow", onclick="window.location.href='/samples'", role='button' style="margin: 5px;")
+          button.btn.btn-lg.btn-green(type='submit', rel="nofollow", onclick="window.location.href='/samples'", role='button')
             <i class="fas fa-stream"></i> VIEW SAMPLES
-      .sidebar.grid-item(style={"grid-row": "1", "grid-column": "2", 'margin-top': '20px'})
+      .sidebar.db-sidebar
           .sticky-bar
-            button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button' style="margin: 0; width: 100%;")
+            button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
               <i class="fa fa-plus-circle"></i> NEW SKETCH
             form#import-button.Profile(title="Coming soon!")
-              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
+              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
                 <i class="fa fa-file-upload"></i> IMPORT FILE
             form#profile-button.Profile(title="Coming soon!")
-              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
+              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
                 <i class="fa fa-user-circle"></i> PROFILE
             form#logout-button.Logout
-              button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", role='button' style="margin: 0; position: absolute; bottom: 20px; width: calc(100% - 40px);")
+              button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", role='button')
                 <i class="fa fa-sign-out-alt"></i> LOGOUT
   else
     .outer-dashboard-container
-      .sidebar.grid-item(style={"grid-row": "1", "grid-column": "2", 'margin-top': '20px'})
+      .sidebar.db-sidebar
           .sticky-bar
-            button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button' style="margin: 0; width: 100%;")
+            button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
               <i class="fa fa-plus-circle"></i> NEW SKETCH
             form#import-button.Profile(title="Coming soon!")
-              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
+              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
                 <i class="fa fa-file-upload"></i> IMPORT FILE
             form#profile-button.Profile(title="Coming soon!")
-              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button' style="margin: 10px 0 0 0; width: 100%;")
+              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
                 <i class="fa fa-user-circle"></i> PROFILE
             form#logout-button.Logout
-              button.btn.btn-lg.btn-orange(type='submit', role='button' style="margin: 0; position: absolute; bottom: 20px; width: calc(100% - 40px);")
+              button.btn.btn-lg.btn-orange(type='submit', role='button')
                 <i class="fa fa-sign-out-alt"></i> LOGOUT
-      .carousel.item-container(style="grid-row: 1; grid-column: 1;")
+      .carousel.item-container
         - var r = 0;
         - var n = 0;
         while r < sketchData.sketches.length
           - n++;
           if n === 3
             - n = 0;
-          .sketch_item.grid-item
-            //(style="grid-row: " + Math.ceil((r + 1) / 3) + "; grid-column: " + (n+1) + ";")
-            img.normal(src='data:image/png;base64,' + images[r], style={position: 'absolute', left: '0', top: '50px', margin: '20px', width: '200px;'}, alt=sketchData.sketches[r])
+          .sketch_item
+            img(src='data:image/png;base64,' + images[r], alt=sketchData.sketches[r])
             p.sketch_name #{sketchData.sketches[r]}
-            button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', rel="nofollow", style={position: 'absolute', margin: 0, left: '20px', top: '280px', width: '200px'})
+            button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', rel="nofollow")
               <i class="fa fa-play"></i> OPEN
-            p.file_size(style={position: 'absolute', top: '370px', left: '20px'}) File Size: #{sketchData.sizes[r]} KB
-            p.modified_date(style={position: 'absolute', left: '20px', top: '395px'}) Last Modified: #{sketchData.modified[r]}
-            p.db_sketch_desc(style={'text-align': 'justify', 'font-size': '14px'}) #{descriptions[r]}
+            p.file_size File Size: #{sketchData.sizes[r]} KB
+            p.modified_date Last Modified: #{sketchData.modified[r]}
+            p.db_sketch_desc #{descriptions[r]}
             a.download(id='dl' + sketchData.sketches[r], rel="nofollow") 
                 <i class="fa fa-file-download"></i> DOWNLOAD
             if (user !== 'demouser')
@@ -135,7 +134,6 @@ body
           | Copyright &copy; 2020 
           a(href='https://www.github.com/SimonBuxx') Simon Buchholz
           |  | 
-        span(style="text-align: right;")
           a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
   <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
   script

@@ -66,16 +66,16 @@ body
               li.active
                 a(href='#') REGISTER
   #blurred-background
-  #login_back.carousel(style='height: 450px;')
+  #register_back.carousel
     - var error = parseInt(error_code);
     form.SignUp
       case error
-        when 1: h1(style='color: red; font-size: 20px;') Username invalid!
-        when 2: h1(style='color: red; font-size: 20px;') Email address invalid!
+        when 1: p.red-message Username invalid!
+        when 2: p.red-message Email address invalid!
         when 3 
-          h1(style='color: red; font-size: 20px;') Password invalid! 
-          h2(style='color: red; font-size: 14px; margin: 0 10px;') Please enter 6 to 50 upper- AND lowercase characters, containing at least one digit.
-        when 4: h1(style='color: red; font-size: 20px;') Username already taken!
+          p.red-message Password invalid! 
+          p.red-message.password-tipps Please enter 6 to 50 upper- AND lowercase characters, containing at least one digit.
+        when 4: p.red-message Username already taken!
         default: h1 Register
       p
         input.username(type='text', placeholder='USERNAME')
@@ -84,10 +84,10 @@ body
         br
         input.password(type='password', placeholder='PASSWORD')
         br
-        input.btn.btn-lg.btn-orange(style='width: 300px; margin-top: 10px;', type='submit', value='REGISTER', role='button')
+        input.btn.btn-lg.btn-orange.login-confirm-button(type='submit', value='REGISTER', role='button')
       p.login-redirect-text
         | Already have an account? 
-        a.login-redirect-text.red_link(href='/login') LOGIN
+        a.login-redirect-text(href='/login') LOGIN
       br
   .footer_bottom
     .text-center
@@ -96,7 +96,6 @@ body
           | Copyright &copy; 2020 
           a(href='https://www.github.com/SimonBuxx') Simon Buchholz
           |  | 
-        span(style="text-align: right;")
           a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
   script
     include ../libraries/jquery.min.js
