@@ -25,10 +25,10 @@ a:focus {
 }
 
 .top-menu {
-    min-height:110px;
+    min-height: 110px;
     top: 0;
     z-index: 5000;
-    width:100%;
+    width: 100%;
 }
 
 .top-menu a {
@@ -98,23 +98,28 @@ input {
     grid-template-rows: auto auto 1fr;
 }
 
-.ribbon {
-    width: 100%;
+.card {
     border-radius: 10px;
-    padding: 20px;
+    padding: 30px 0 0 0;
     background-color: rgb(50, 50, 50);
 }
 
-.ribbon h2 {
-    margin-bottom: 30px;
+.card h1, h2, h3 {
+    text-align: center;
+}
+
+.card h1 {
+    margin: 20px 0 10px 0;
+}
+
+.card h2 {
+    margin: 10px 0 30px 0;
 }
 
 .feature-element {
-    flex: 1;
-    width: 33.33333%;
     float: left;
-    box-sizing: border-box;
-    padding: 10px;
+    width: 33.33333%;
+    padding: 0 30px 30px 30px;
 }
 
 .feature-element h3 {
@@ -130,7 +135,6 @@ input {
     font-weight: normal;
     color: rgb(200, 50, 50);
     font-size: 20px;
-    margin-right: 10px;
 }
 
 .open_link:hover,
@@ -156,15 +160,14 @@ input {
 .sample-element p {
     grid-row: 2;
     grid-column: 2;
-    margin: 0 10px 60px 20px;
+    margin: 0 0 60px 20px;
     text-align: justify;
 }
 
 .feature-element p {
-    margin: 0 20px;
+    margin: 0;
     text-align: justify;
     min-height: 100px;
-
 }
 
 .feature-icon {
@@ -175,12 +178,6 @@ input {
     text-align: center;
     display: block;
     color: rgb(200, 50, 50);
-}
-
-.carousel h2, h3 {
-    z-index: 10;
-    color: #ffffff;
-    text-align: center;
 }
 
 .sample-element img {
@@ -342,12 +339,32 @@ input {
     width: 180px;
 }
 
+.leftcolumn {
+    float: left;
+    width: 50%;
+    padding: 0 10px 20px 0;
+}
+
+.rightcolumn {
+    float: right;
+    width: 50%;
+    padding: 0 0 20px 10px;
+}
+
+.bothcolumns {
+    float: left;
+    width: 100%;
+    padding: 0 0 20px 0;
+}
+
 #welcome-tile {
-    grid-row: 1; 
-    grid-column: 1; 
     margin-top: 20px; 
     max-height: 280px; 
     padding-top: 20px;
+}
+
+#welcome-tile p {
+    text-align: center;
 }
 
 #welcome-tile h2 {
@@ -356,9 +373,36 @@ input {
 }
 
 #samples-tile {
-    grid-row: 1 / 3; 
-    grid-column: 2; 
     margin-top: 20px;
+}
+
+.show-in-mobile {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+    .hide-in-mobile {
+        display: none;
+    }
+    .show-in-mobile {
+        display: block;
+    }
+}
+
+#welcome-tile h2.notification {
+    float: left;
+    text-align: right;
+    font-size: 16px;
+    max-width: 80%;
+}
+
+#welcome-tile .info-icon {
+    float: right;
+    text-align: right;
+    font-size: 16px;
+    max-width: 20%;
+    margin-top: 7px;
+    color: rgb(200, 50, 50);
 }
 
 .sample-description {
@@ -382,10 +426,7 @@ input {
 }
 
 #carousel-tile {
-    grid-row: 2; 
-    grid-column: 1; 
     padding: 0; 
-    align-self: start;
 }
 
 #carousel-tile .carousel-inner {
@@ -403,38 +444,46 @@ input {
 }
 
 #features-tile {
-    grid-row: 3; 
-    grid-column: 1 / 3; 
     margin: 0;
+    float: left;
 }
 
-#about-tile, #upcoming-tile {
-    background: #323232;
-    border-radius: 10px;
-    padding: 30px 30px 0 30px;
-    margin-bottom: 20px;
+.card-container {
+    padding: 0 10%;
 }
 
-#about-tile p, #upcoming-tile ul {
-    margin-top: 20px;
+@media (max-width: 1023px) {
+    .card-container {
+        padding: 0 20px;
+    }
 }
 
-#about-tile {
-    grid-row: 4;
-    grid-column: 1;
+.card-container:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
-#about-tile img {
+.with-padding {
+    padding: 30px;
+}
+
+@media (max-width: 1023px) {
+    .with-padding {
+        padding: 15px;
+    }
+}
+
+#about-tile .inline-sketch-img {
     float: left; 
     margin: 20px 10px 0 0;
 }
 
-#upcoming-tile {
-    grid-row: 4;
-    grid-column: 2;
+#upcoming-tile ul {
+    padding: 0 0 0 10px;
 }
 
-#upcoming-tile img {
+#upcoming-tile .inline-sketch-img {
     float: right; 
     margin: 0 0 0 10px;
 }
@@ -518,8 +567,10 @@ ul.navbar-nav {
     color: white;
 }
 
-.login-button, .user-button {
-    margin-left: 60px;
+@media (min-width: 1023px) {
+    .login-button, .user-button {
+        margin-left: 60px;
+    }
 }
 
 p.red-message, p.green-message {
@@ -656,22 +707,17 @@ p.password-tipps {
     text-align: justify;
 }
 
-.sidebar h1, .sidebar h2 {
-    color: white;
-    text-shadow: none;
-    text-align: center;
+.sidebar h1 {
     margin: 0;
 }
 
-.sidebar img {
+.sidebar img, .inline-sketch-img {
     display: block;
     height: 180px;
     margin: 20px auto;
 }
 
-.sidebar p, .sidebar ul {
-    color: white;
-    font-size: 16px;
+.justify {
     text-align: justify;
 }
 
@@ -735,7 +781,7 @@ p.password-tipps {
 }
 
 .twitter-container {
-    margin: 20px auto 60px auto; 
+    margin: 0 auto 60px auto; 
     width: 100%;
 }
 
@@ -761,9 +807,23 @@ p.password-tipps {
     font-weight: lighter;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1023px) {
   .navbar-nav > li > a {
     padding-top: 9px;
     padding-bottom: 9px;
   } 
+}
+
+@media (max-width: 1023px) {
+    .leftcolumn, .rightcolumn {   
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+}
+
+@media (max-width: 1023px) {
+    .feature-element {   
+      width: 100%;
+    }
 }

@@ -71,77 +71,80 @@ body
                 li
                   a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
   #blurred-background
-  .grid-container
-    #welcome-tile.carousel.ribbon
-      if user !== ''
-        h1 Welcome, #{user}!
-        h2 Glad to have you here.
-      else
-        h1 Discover the world of logic circuits.
-        h2 Get started today, for free.
-      p
-        a.btn.btn-lg.btn-orange(href='/editor', rel="nofollow", role='button') 
-          <i class="fa fa-plus-circle"></i> NEW SKETCH
+  .card-container
+    .leftcolumn
+      #welcome-tile.card.with-padding
         if user !== ''
-          a.btn.btn-lg.btn-green(href='/dashboard', rel="nofollow", role='button')
-            <i class="fa fa-th"></i> DASHBOARD
+          h1 Welcome, #{user}!
+          h2 Glad to have you here.
         else
-          a.btn.btn-lg.btn-green(href='/signup', rel="nofollow", role='button')
-            <i class="fa fa-sign-in-alt"></i> REGISTER
-    
-    #samples-tile.ribbon
-      .carousel
-        h2 Samples
-        .sample-element
-          img(src='librarySketches/library__0gates.png', alt="A LogiJS example sketch showing the three basic logic gates")
-          .sample-description
-            h3 Basic Gates 
-            a.open_link(href="/editor?sketch=library__0gates", rel="nofollow") <i class="fa fa-play"></i> OPEN
-            p.clear This sketch demonstrates the three basic logic gates, AND, OR and XOR. It also shows the usage of input and output elements. Logic gates are the fundamentals of every logic circuit.
-        .sample-element
-          img(src='librarySketches/library__14BitCounter.png', alt="A LogiJS example sketch showing a four bit counter")
-          .sample-description
-            h3 4-Bit Counter
-            a.open_link(href="/editor?sketch=library__14BitCounter", rel="nofollow") <i class="fa fa-play"></i> OPEN
-            p.clear This sketch implements a simple counter made using D gates. It is connected to a clock, permanently increasing the binary output value. When the value passes the biggest possible value, the counter restarts from zero.
-        .sample-element
-          img(src='librarySketches/library__2traffic.png', alt="A LogiJS example sketch showing a traffic light simulation")
-          .sample-description
-            h3 Traffic Lights
-            a.open_link(href="/editor?sketch=library__2traffic", rel="nofollow") <i class="fa fa-play"></i> OPEN
-            p.clear This sketch simulates traffic lights using a counter and a diode matrix. There is a light for road traffic and one for crossing pedestrians.
-        a.btn.btn-lg.btn-orange.all-samples-button(href="/samples")
-                <i class="fas fa-stream"></i> VIEW ALL SAMPLES
+          h1 Discover the world of logic circuits.
+          h2.hide-in-mobile Get started today, for free.
+          h2.notification.show-in-mobile To access LogiJS, please open this page on a desktop device.
+          p.info-icon.show-in-mobile <i class="fa fa-info-circle fa-3x"></i>
+          .clear
+        p.hide-in-mobile
+          a.btn.btn-lg.btn-orange(href='/editor', rel="nofollow", role='button') 
+            <i class="fa fa-plus-circle"></i> NEW SKETCH
+          if user !== ''
+            a.btn.btn-lg.btn-green(href='/dashboard', rel="nofollow", role='button')
+              <i class="fa fa-th"></i> DASHBOARD
+          else
+            a.btn.btn-lg.btn-green(href='/signup', rel="nofollow", role='button')
+              <i class="fa fa-sign-in-alt"></i> REGISTER
+    .rightcolumn.hide-in-mobile
+      #samples-tile.card.with-padding
+        .carousel
+          h2 Samples
+          .sample-element
+            img(src='librarySketches/library__0gates.png', alt="A LogiJS example sketch showing the three basic logic gates")
+            .sample-description
+              h3 Basic Gates 
+              a.open_link(href="/editor?sketch=library__0gates", rel="nofollow") <i class="fa fa-play"></i> OPEN
+              p.clear This sketch demonstrates the three basic logic gates, AND, OR and XOR. It also shows the usage of input and output elements. Logic gates are the fundamentals of every logic circuit.
+          .sample-element
+            img(src='librarySketches/library__14BitCounter.png', alt="A LogiJS example sketch showing a four bit counter")
+            .sample-description
+              h3 4-Bit Counter
+              a.open_link(href="/editor?sketch=library__14BitCounter", rel="nofollow") <i class="fa fa-play"></i> OPEN
+              p.clear This sketch implements a simple counter made using D gates. It is connected to a clock, permanently increasing the binary output value. When the value passes the biggest possible value, the counter restarts from zero.
+          .sample-element
+            img(src='librarySketches/library__2traffic.png', alt="A LogiJS example sketch showing a traffic light simulation")
+            .sample-description
+              h3 Traffic Lights
+              a.open_link(href="/editor?sketch=library__2traffic", rel="nofollow") <i class="fa fa-play"></i> OPEN
+              p.clear This sketch simulates traffic lights using a counter and a diode matrix. There is a light for road traffic and one for crossing pedestrians.
+          a.btn.btn-lg.btn-orange.all-samples-button(href="/samples")
+                  <i class="fas fa-stream"></i> VIEW ALL SAMPLES
+    .leftcolumn
+      #carousel-tile.card
+        .carousel
+          <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              <div class="item active">
+                <img src="images/slide_01.PNG" alt="A LogiJS example sketch showing a traffic light simulation">
+              </div>
 
-    #carousel-tile.ribbon
-      .carousel
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-            <div class="item active">
-              <img src="images/slide_01.PNG" alt="A LogiJS example sketch showing a traffic light simulation">
+              <div class="item">
+                <img src="images/slide_02.PNG" alt="A LogiJS example sketch showing a basic cpu structure">
+              </div>
+
+              <div class="item">
+                <img src="images/slide_03.PNG" alt="A LogiJS example sketch showing a more complex cpu structure">
+              </div>
             </div>
 
-            <div class="item">
-              <img src="images/slide_02.PNG" alt="A LogiJS example sketch showing a basic cpu structure">
-            </div>
-
-            <div class="item">
-              <img src="images/slide_03.PNG" alt="A LogiJS example sketch showing a more complex cpu structure">
-            </div>
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+              <i class="fa fa-chevron-left"></i>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+              <i class="fa fa-chevron-right"></i>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
-
-          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-            <i class="fa fa-chevron-left"></i>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="right carousel-control" href="#myCarousel" data-slide="next">
-            <i class="fa fa-chevron-right"></i>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-
-    #features-tile.ribbon
-      .carousel
+    .bothcolumns
+      #features-tile.card
         h2 Features
         .feature-element
           p.feature-icon <i class="fa fa-cloud-upload-alt fa-4x"></i>
@@ -155,31 +158,34 @@ body
           p.feature-icon <i class="fa fa-graduation-cap fa-4x"></i>
           h3 Focused On Education
           p LogiJS was built with education in mind. Its clear and distraction free design makes it a powerful tool for teaching the fundamentals of logic circuits. We believe that great software can spark interest and help to give students a deep understanding of electrical engineering basics.
-    
-    #about-tile.sidebar
-      h2 What is LogiJS?
-      img(src='images/sample_sketch_1.png', alt="A LogiJS example sketch showing a part of a counter")
-      p
-        | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
-      p
-        | Our goal is to offer a software 
-        | that isn't only free for everybody, but also encourages students to get creative with logic circuits and develop a deep understanding of the basic concepts. Our goal is not to
-        | build a software for production use or for learning advanced techniques. Instead, we focuse on simplicity to create an experimenting playground free of distractions and frustrations.
-      p
-        | Please note that LogiJS is currently in active development. Changes may come rapidly and unanounced. Also, we can't guarantee for possible data loss or damage done trough use of our software.
-      p
-        | If you would like to learn more about the technical side of LogiJS or are interested in supporting us, please visit our project on <a href="https://www.github.com/SimonBuxx/LogiJS">GitHub</a>.
-      .clear
-    #upcoming-tile.sidebar
-      h2 Planned Features
-      ul
-        img(src='images/sample_sketch_2.png', alt="A LogiJS example sketch showing a part of a counter")
-        li First things first, we will finally complete the selection feature so that you can move, copy and delete sketch parts.
-        li We'd like to have a showroom for user-built circuits, where you can view other user's circuits and edit them as copies in your own dashboards. For this, we need to find a way to handle sketch dependencies (custom elements used in the sketch).
-        li VHDL and Verilog are the most common hardware description languages. We want to support export to at least one of them. This is useful for exporting circuits to FPGAs and other applications.
-        li Users should be able to edit sketches with multiple users at the same time. Users should also get the possibility to share sketches via unique links.
-        li If you have feature suggestions or want to report problems or bugs, please feel free to open an issue in our <a href="https://www.github.com/SimonBuxx/LogiJS">GitHub</a>.
-      .clear
+    .leftcolumn
+      #about-tile.card.with-padding
+        h2 What is LogiJS?
+        img.inline-sketch-img(src='images/sample_sketch_1.png', alt="A LogiJS example sketch showing a part of a counter")
+        .justify
+          p
+            | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
+          p
+            | Our goal is to offer a software 
+            | that isn't only free for everybody, but also encourages students to get creative with logic circuits and develop a deep understanding of the basic concepts. Our goal is not to
+            | build a software for production use or for learning advanced techniques. Instead, we focuse on simplicity to create an experimenting playground free of distractions and frustrations.
+          p
+            | Please note that LogiJS is currently in active development. Changes may come rapidly and unanounced. Also, we can't guarantee for possible data loss or damage done trough use of our software.
+          p
+            | If you would like to learn more about the technical side of LogiJS or are interested in supporting us, please visit our project on <a href="https://www.github.com/SimonBuxx/LogiJS">GitHub</a>.
+        .clear
+    .rightcolumn
+      #upcoming-tile.card.with-padding
+        h2 Planned Features
+        .justify
+          ul
+            img.inline-sketch-img(src='images/sample_sketch_2.png', alt="A LogiJS example sketch showing a part of a counter")
+            li First things first, we will finally complete the selection feature so that you can move, copy and delete sketch parts.
+            li We'd like to have a showroom for user-built circuits, where you can view other user's circuits and edit them as copies in your own dashboards. For this, we need to find a way to handle sketch dependencies (custom elements used in the sketch).
+            li VHDL and Verilog are the most common hardware description languages. We want to support export to at least one of them. This is useful for exporting circuits to FPGAs and other applications.
+            li Users should be able to edit sketches with multiple users at the same time. Users should also get the possibility to share sketches via unique links.
+            li If you have feature suggestions or want to report problems or bugs, please feel free to open an issue in our <a href="https://www.github.com/SimonBuxx/LogiJS">GitHub</a>.
+        .clear
   .twitter-container.text-center
     a(href="https://twitter.com/logi_js?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-screen-name="true" data-show-count="true") Follow @logi_js
   .footer_bottom

@@ -88,20 +88,21 @@ body
               a.open_link(href="/editor?sketch=" + sketches[r], rel="nofollow") <i class="fa fa-play"></i> OPEN
               p.sample_sketch_desc.clear #{descriptions[r]}
         - r++;
-    .sidebar
-      .sticky-bar
+    .sidebar.hide-in-mobile
+      .sticky-bar.with-padding
         h1 What is LogiJS?
         img(src='images/sample_sketch_1.png', alt="A LogiJS example sketch showing a part of a counter")
-        p 
-          | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
-        p 
-          | Our goal is to offer a software 
-          | that isn't only free for everybody, but also encourages students to get creative with logic circuits and develop a deep understanding of the basic concepts. Our goal is not to
-          | build a software for production use or for learning advanced techniques. Instead, we focuse on simplicity to create an experimenting playground free of distractions and frustrations.
-        p
-          | Please note that LogiJS is currently in active development. Changes may come rapidly and unanounced. Also, we can't guarantee for possible data loss or damage done trough use of our software.
-        p
-          | If you would like to learn more about the technical side of LogiJS or are interested in supporting us, please visit our project on <a href="https://www.github.com/SimonBuxx/LogiJS">GitHub</a>.
+        .justify
+          p 
+            | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
+          p 
+            | Our goal is to offer a software 
+            | that isn't only free for everybody, but also encourages students to get creative with logic circuits and develop a deep understanding of the basic concepts. Our goal is not to
+            | build a software for production use or for learning advanced techniques. Instead, we focuse on simplicity to create an experimenting playground free of distractions and frustrations.
+          p
+            | Please note that LogiJS is currently in active development. Changes may come rapidly and unanounced. Also, we can't guarantee for possible data loss or damage done trough use of our software.
+          p
+            | If you would like to learn more about the technical side of LogiJS or are interested in supporting us, please visit our project on <a href="https://www.github.com/SimonBuxx/LogiJS">GitHub</a>.
   .footer_bottom
     .text-center
       .footer_bottom_content
