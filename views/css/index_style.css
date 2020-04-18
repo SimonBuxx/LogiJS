@@ -55,8 +55,8 @@ a:focus {
 }
 
 input {
-    margin: 20px;
-    width: 300px;
+    margin: 20px 0;
+    width: 100%;
     font-size: 20px;
     padding: 10px;
     border: none;
@@ -196,13 +196,21 @@ input {
     margin: 20px 0 0 0;
     -ms-transform: translate(-50%, -0%);
     transform: translate(-50%, -0%);
-    max-width: 400px;
-    padding: 20px;
+    width: 380px;
+    padding: 20px 40px;
     display: block;
     background: #323232;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
+}
+
+
+@media (max-width: 1023px) {
+    #login_back, #register_back {
+        top: 110px;
+        max-width: 90%;
+    }
 }
 
 #sample-title {
@@ -621,7 +629,8 @@ p.password-tipps {
 }
 
 .login-confirm-button {
-    width: 300px; 
+    width: 100%;
+    margin: 0; 
     margin-top: 10px;
 }
 
@@ -762,7 +771,7 @@ p.password-tipps {
 
 .sidebar img, .inline-sketch-img {
     display: block;
-    height: 180px;
+    width: 50%;
     margin: 20px auto;
 }
 
