@@ -67,14 +67,25 @@ body
   #blurred-background
   if sketchData.sketches.length === 0
     .outer-dashboard-container
+      .item-container
+        .db-mobile-bar.show-in-mobile
+          form#import-button.Import(title="Coming soon!")
+            button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
+              <i class="fa fa-file-upload"></i> IMPORT FILE
+          form#profile-button.Profile(title="Coming soon!")
+            button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
+              <i class="fa fa-user-circle"></i> PROFILE
+          form#logout-button.Logout
+            button.btn.btn-lg.btn-orange(type='submit', role='button')
+              <i class="fa fa-sign-out-alt"></i> LOGOUT
       #nosketches_back
         p#nosketches_message You don't have any sketches.
         #nosketch_buttons
-          button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
+          button.btn.btn-lg.btn-orange.hide-in-mobile(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
             <i class="fa fa-plus-circle"></i> NEW SKETCH
           button.btn.btn-lg.btn-green(type='submit', rel="nofollow", onclick="window.location.href='/samples'", role='button')
             <i class="fas fa-stream"></i> VIEW SAMPLES
-      .sidebar.db-sidebar
+      .sidebar.db-sidebar.hide-in-mobile
           .sticky-bar
             button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
               <i class="fa fa-plus-circle"></i> NEW SKETCH
@@ -89,11 +100,11 @@ body
                 <i class="fa fa-sign-out-alt"></i> LOGOUT
   else
     .outer-dashboard-container
-      .sidebar.db-sidebar
+      .sidebar.db-sidebar.hide-in-mobile
           .sticky-bar
             button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
               <i class="fa fa-plus-circle"></i> NEW SKETCH
-            form#import-button.Profile(title="Coming soon!")
+            form#import-button.Import(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
                 <i class="fa fa-file-upload"></i> IMPORT FILE
             form#profile-button.Profile(title="Coming soon!")
@@ -103,6 +114,16 @@ body
               button.btn.btn-lg.btn-orange(type='submit', role='button')
                 <i class="fa fa-sign-out-alt"></i> LOGOUT
       .carousel.item-container
+        .db-mobile-bar.show-in-mobile
+          form#import-button.Import(title="Coming soon!")
+            button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
+              <i class="fa fa-file-upload"></i> IMPORT FILE
+          form#profile-button.Profile(title="Coming soon!")
+            button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
+              <i class="fa fa-user-circle"></i> PROFILE
+          form#logout-button.Logout
+            button.btn.btn-lg.btn-orange(type='submit', role='button')
+              <i class="fa fa-sign-out-alt"></i> LOGOUT
         - var r = 0;
         - var n = 0;
         while r < sketchData.sketches.length
@@ -112,7 +133,7 @@ body
           .sketch_item
             img(src='data:image/png;base64,' + images[r], alt=sketchData.sketches[r])
             p.sketch_name #{sketchData.sketches[r]}
-            button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', rel="nofollow")
+            button.btn.btn-lg.btn-orange.disable-in-mobile(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', rel="nofollow")
               <i class="fa fa-play"></i> OPEN
             p.file_size File Size: #{sketchData.sizes[r]} KB
             p.modified_date Last Modified: #{sketchData.modified[r]}

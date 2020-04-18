@@ -275,6 +275,19 @@ input {
     grid-column: 1;
 }
 
+@media (max-width: 1023px) {
+    #nosketches_back {
+        margin: 20px 0;
+        height: 180px;
+        padding: 0 10px;
+        width: 240px;
+    }
+
+    #nosketch_buttons button {
+        width: 200px;
+    }
+}
+
 #nosketches_message {
     padding: 30px 0 0 0; 
     font-size: 24px;
@@ -339,6 +352,14 @@ input {
     width: 180px;
 }
 
+@media (max-width: 1023px) {
+    #logout-button button {
+        position: relative;
+        margin: 10px 0 0 0; 
+        width: 100%;
+    }
+}
+
 .leftcolumn {
     float: left;
     width: 50%;
@@ -383,6 +404,14 @@ input {
 @media (max-width: 1023px) {
     .hide-in-mobile {
         display: none;
+    }
+    .disable-in-mobile {
+        pointer-events: none;
+        cursor: not-allowed;
+        opacity: 0.65;
+        filter: alpha(opacity=65);
+        -webkit-box-shadow: none;
+        box-shadow: none;
     }
     .show-in-mobile {
         display: block;
@@ -650,6 +679,16 @@ p.password-tipps {
     transition-delay: .5s;
 }
 
+@media (max-width: 1023px) {
+    .outer-dashboard-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 .sketch_item:hover {
     height: 580px;
 }
@@ -687,6 +726,16 @@ p.password-tipps {
     top: 400px;
     text-align: justify;
     font-size: 14px;
+}
+
+.db-mobile-bar {
+    position: relative;
+    height:190px;
+    background: #323232;
+    border-radius: 10px;
+    margin: 0;
+    padding: 10px 20px 20px 20px;
+    overflow: hidden;
 }
 
 .sample_item {

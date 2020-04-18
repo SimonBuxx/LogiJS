@@ -12,12 +12,14 @@ sketchData.then(function (data) {
     console.log(data);
 });*/
 
-const Logout = document.querySelector('.Logout');
-Logout.addEventListener('submit', (e) => {
-    e.preventDefault();
-    setCookie('access_token', '', -1);
-    window.location = '/';
-});
+const Logout = document.querySelectorAll('.Logout');
+for (const button of Logout) {
+    button.addEventListener('submit', (e) => { //jshint ignore:line
+        e.preventDefault();
+        setCookie('access_token', '', -1);
+        window.location = '/';
+    });
+}
 
 const openButtons = document.querySelectorAll(".btn.open");
 for (const button of openButtons) {
@@ -29,19 +31,16 @@ for (const button of openButtons) {
 const deleteButtons = document.querySelectorAll(".delete");
 for (const button of deleteButtons) {
     button.addEventListener('click', function (event) { //jshint ignore:line
-        /*if (confButton !== event.target.id) {
-            button.value = 'SURE?';
-            if (confButton !== '') {
-                document.querySelector('.delete#' + confButton).value = 'Delete';
-            }
+        if (confButton !== event.target.id) {
+            button.innerHTML = 'SURE?&nbsp;&nbsp;&nbsp;&nbsp;';
             confButton = event.target.id;
-        } else {*/
-            //((confButton = '';
+        } else {
+            confButton = '';
             post('/delete', {
                 sketch: event.currentTarget.id
             });
             location.reload();
-        //}
+        }
     });
 }
 
