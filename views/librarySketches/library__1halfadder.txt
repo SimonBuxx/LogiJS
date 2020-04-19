@@ -1,0 +1,1 @@
+{"tops":[],"inputLabels":["","","",""],"outputLabels":["","","",""],"caption":"Half Adder","inputs":4,"outputs":4,"desc":"This sketch implements a half adder that is used to add two single binary digits. Half adders can be combined to form full adders, used to add binary numbers."}
