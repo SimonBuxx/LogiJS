@@ -75,7 +75,7 @@ body
   #blurred-background
   .outer-sample-container
     #sample-title.carousel
-      button.btn.btn-lg.btn-orange(type='submit', onclick="window.location.href='/editor'", role='button')
+      button.btn.btn-lg.btn-orange.hide-in-mobile(type='submit', onclick="window.location.href='/editor'", role='button')
         <i class="fa fa-plus-circle"></i> NEW SKETCH
       h1 Logic Circuit Samples
     .carousel.samples-container
@@ -85,7 +85,7 @@ body
             .sample_item
               img(src='data:image/png;base64,' + images[r], alt=sketches[r])
               h2.sample_sketch_name #{sketchNames[r]}
-              a.open_link(href="/editor?sketch=" + sketches[r], rel="nofollow") <i class="fa fa-play"></i> OPEN
+              a.open_link.disable-in-mobile(href="/editor?sketch=" + sketches[r], rel="nofollow") <i class="fa fa-play"></i> OPEN
               p.sample_sketch_desc.clear #{descriptions[r]}
         - r++;
     .sidebar.hide-in-mobile

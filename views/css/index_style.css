@@ -232,7 +232,7 @@ input {
 }
 
 #sample-title > h1 {
-    margin: 15px 85px 15px 0;
+    margin: 15px 170px 15px 0;
 }
 
 .sample_item > img {
@@ -647,7 +647,7 @@ p.password-tipps {
 
 .outer-sample-container {
     display: grid;
-    grid-template-columns: 1fr 420px;
+    grid-template-columns: 1fr 25%;
     margin: 0 10%;
     margin-bottom: 70px;
 }
@@ -763,6 +763,48 @@ p.password-tipps {
     top: 60px;
     font-size: 16px;
     text-align: justify;
+}
+
+@media (max-width: 1023px) {
+    #sample-title > h1 {
+        font-size: 30px;
+        margin: 20px 10px;
+    }
+
+    .outer-sample-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        margin: 0 0 60px 20px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .samples-container {
+        grid-template-rows: repeat(auto-fit, 440px);
+    }
+
+    .sample_item {
+        height: 440px;
+    }
+
+    .sample_item > .sample_sketch_name {
+        left: 20px;
+        top: 20px;
+    }
+
+    .sample_item > img {
+        left: 20px;
+        top: 60px;
+    }
+    .sample_item > .sample_sketch_desc {
+        left: 20px;
+        top: 270px;
+        width: calc(100% - 40px);
+    }
+
+    .sample_item > .open_link {
+        margin: 17px 20px;
+    }
 }
 
 .sidebar h1 {
