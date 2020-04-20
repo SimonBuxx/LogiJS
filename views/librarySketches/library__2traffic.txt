@@ -1,1 +1,0 @@
-{"tops":[],"inputLabels":[">"],"outputLabels":["","","","",""],"caption":"Traffic Lights","inputs":1,"outputs":5,"desc":"This sketch simulates traffic lights using a counter and a diode matrix. There is a light for road traffic and one for crossing pedestrians."}

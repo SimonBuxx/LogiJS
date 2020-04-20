@@ -84,7 +84,7 @@ body
         if r < sketches.length
             .sample_item
               img(src='data:image/png;base64,' + images[r], alt=sketches[r])
-              h2.sample_sketch_name #{sketchNames[r]}
+              h2.sample_sketch_name ##{r+1} #{sketchNames[r]}
               a.open_link.disable-in-mobile(href="/editor?sketch=" + sketches[r], rel="nofollow") <i class="fa fa-play"></i> OPEN
               p.sample_sketch_desc.clear #{descriptions[r]}
         - r++;

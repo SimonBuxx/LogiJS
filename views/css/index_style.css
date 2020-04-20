@@ -781,11 +781,11 @@ p.password-tipps {
     }
 
     .samples-container {
-        grid-template-rows: repeat(auto-fit, 440px);
+        grid-template-rows: repeat(auto-fit, 530px);
     }
 
     .sample_item {
-        height: 440px;
+        height: 530px;
     }
 
     .sample_item > .sample_sketch_name {
