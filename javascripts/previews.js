@@ -559,6 +559,17 @@ function showPreviewImage() {
         let look = getThisLook();
         if (look.outputs > 0) {
             showImportPreview(look, window.width / 2 - 330, window.height / 2 - 46);
+        } else {
+            textFont('Open Sans');
+            textSize(18);
+            strokeWeight(5);
+            stroke(200, 50, 50);
+            fill(255);
+            translate(window.width / 2 - 265, window.height / 2);
+            rotate(radians(45));
+            text('No outputs!', 0, 0);
+            rotate(radians(-45));
+            translate(-window.width / 2 + 265, -window.height / 2);
         }
     };
 }

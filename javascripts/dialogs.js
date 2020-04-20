@@ -78,6 +78,7 @@ function showSaveDialogElements() {
     saveDialogText.show();
     // Reposition the cancel button, that is also used in other dialogs
     cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 110);
+    cancelButton.style('width', '145px');
 }
 
 function hideSaveDialogElements() {
@@ -94,19 +95,16 @@ function showCustomDialogElements() {
     pageUpButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 260, customDialogRows * 220 - 10);
     pageDownButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 260, customDialogRows * 220 + 50);
     cancelButton.position(Math.round(window.width / 8) + customDialogColumns * 220 + 260, customDialogRows * 220 + 110);
+
+    cancelButton.style('width', '155px');
     
     cancelButton.show();
     customDialogText.show();
-    if (customDialogPages > 0 && customDialogPage < customDialogPages) {
-        pageDownButton.show();
-    } else {
-        pageDownButton.hide();
-    }
-    if (customDialogPage > 0) {
-        pageUpButton.show();
-    } else {
-        pageUpButton.hide();
-    }
+    pageDownButton.show();
+    pageUpButton.show();
+
+    pageDownButton.elt.disabled = !(customDialogPages > 0 && customDialogPage < customDialogPages);
+    pageUpButton.elt.disabled = (customDialogPage <= 0);
 }
 
 function hideCustomDialogElements() {
@@ -169,6 +167,17 @@ function showCustomItem(place, img, caption, look) {
             if (look.hasOwnProperty('outputs')) {
                 if (look.outputs > 0) {
                     showImportPreview(look, x, y);
+                } else {
+                    textFont('Open Sans');
+                    textSize(18);
+                    strokeWeight(5);
+                    stroke(200, 50, 50);
+                    fill(255);
+                    translate(x + 70, y + 55);
+                    rotate(radians(45));
+                    text('No outputs!', 0, 0);
+                    rotate(radians(-45));
+                    translate(-x - 70, -y - 55);
                 }
             }
             fill(0, 0, 0, 0);
@@ -178,7 +187,7 @@ function showCustomItem(place, img, caption, look) {
             noStroke();
             fill(255);
             textSize(16);
-            text(caption.toUpperCase(), x + 10, y + 170);
+            text(caption, x + 10, y + 170);
         };
     }
 }

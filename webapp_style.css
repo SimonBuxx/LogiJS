@@ -500,9 +500,22 @@ input[type=range]::-ms-tooltip {
     outline: none;
 }
 
+.customDialogButton {
+    width: 155px;
+}
+
 .btn-red:hover {
     background: linear-gradient(145deg, #d63636, #b42d2d);
     color:#ffffff;
+}
+
+.btn-red:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 #github {

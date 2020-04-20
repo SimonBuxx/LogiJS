@@ -699,7 +699,7 @@ function createDialogElements() {
     cancelButton.elt.className = 'btn btn-lg btn-red';
     cancelButton.hide();
 
-    pageUpButton = createButton('<i class="fas fa-arrow-up"></i> Up');
+    pageUpButton = createButton('<i class="fas fa-arrow-up"></i> UP');
     pageUpButton.position(window.width - 545, window.height - window.height / 5);
     pageUpButton.style('padding-left', '10px');
     pageUpButton.style('padding-right', '10px');
@@ -711,10 +711,10 @@ function createDialogElements() {
         showCustomDialog = false;
         customClicked();
     });
-    pageUpButton.elt.className = 'btn btn-lg btn-red';
+    pageUpButton.elt.className = 'btn btn-lg btn-red customDialogButton';
     pageUpButton.hide();
 
-    pageDownButton = createButton('<i class="fas fa-arrow-down"></i> Down');
+    pageDownButton = createButton('<i class="fas fa-arrow-down"></i> DOWN');
     pageDownButton.position(window.width - 335, window.height - window.height / 5 + 50);
     pageDownButton.style('padding-left', '10px');
     pageDownButton.style('padding-right', '10px');
@@ -726,7 +726,7 @@ function createDialogElements() {
         showCustomDialog = false;
         customClicked();
     });
-    pageDownButton.elt.className = 'btn btn-lg btn-red';
+    pageDownButton.elt.className = 'btn btn-lg btn-red customDialogButton';
     pageDownButton.hide();
 
     saveDialogText = createP('SAVE SKETCH');
@@ -737,7 +737,7 @@ function createDialogElements() {
     saveDialogText.position(windowWidth / 2 - 65, windowHeight / 2 - 160);
     saveDialogText.style('font-size', '36px');
 
-    customDialogText = createP('IMPORT OWN ELEMENT');
+    customDialogText = createP('Import Your Own Elements');
     customDialogText.hide();
     customDialogText.elt.style.color = 'white';
     customDialogText.elt.style.fontFamily = 'Open Sans';
