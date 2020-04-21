@@ -105,6 +105,12 @@ router.get('/legal', function (req, res) {
     });
 });
 
+router.get('/terms-of-service', function (req, res) {
+    res.render('tos', {
+        user: getUser(req)
+    });
+});
+
 router.get('/login', function (req, res) {
     res.render('login', {
         failed: req.query.failed,

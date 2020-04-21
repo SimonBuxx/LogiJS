@@ -243,9 +243,21 @@ input {
     width: 200px
 }
 
+#full-width-title {
+    margin: 20px 10%;
+    padding: 0;
+    background: #323232;
+    border-radius: 10px;
+}
+
+#full-width-title > h1 {
+    margin: 15px 0;
+    padding: 15px;
+}
+
 #legal_back {
     margin: 20px 10% 0 10%;
-    padding: 20px;
+    padding: 20px 20%;
     background: #323232;
     border-radius: 10px;
     text-align: justify;
@@ -253,6 +265,10 @@ input {
 
 #legal_back h1 {
     padding: 10px;
+}
+
+#legal_back h2 {
+    margin: 20px 0 20px 0;
 }
 
 #legal_back h3 {
@@ -272,6 +288,17 @@ input {
 #legal_back > .address {
     margin-top: 30px;
     text-align: center;
+}
+
+@media (max-width: 1023px) {
+    #legal_back {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    #full-width-title {
+        margin: 20px;
+    }
 }
 
 #nosketches_back {

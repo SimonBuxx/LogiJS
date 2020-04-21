@@ -54,10 +54,11 @@ head
                 a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
 div
   #blurred-background
-  #legal_back.carousel
-    h1 Impressum & Datenschutzerklärung
-    hr
-    h2 Impressum
+  #full-width-title
+    h1 Legal Notice (Impressum / Datenschutz)
+  #legal_back
+    p This is an open-source project by <a href="https://github.com/simonbuxx">Simon Buchholz</a>. This service underlies German law. At the moment, our privacy policy is provided in german only.
+    h2 Legal Information according to § 5 TMG
     p.address
       | Simon Buchholz
       br
@@ -65,7 +66,7 @@ div
       br
       |  23562 Lübeck
     p.address
-      | Telefon: 0176 43344340
+      | Tel.: 0176 43344340
       br
       |  E-Mail: logijs(at)outlook.com
     h3 Haftung für Inhalte
@@ -311,10 +312,9 @@ div
   .text-center
     .footer_bottom_content
       span#footer-line
-        | Copyright &copy; 2020 
-        a(href='https://www.github.com/SimonBuxx') Simon Buchholz
-        |  | 
-        a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+          a.internal-link(rel='nofollow', href='/terms-of-service', target='_parent') Terms of Service
+          |  | 
+          a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
 script
   include ../libraries/jquery.min.js
   include ../libraries/bootstrap.min.js

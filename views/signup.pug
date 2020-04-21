@@ -86,6 +86,10 @@ body
         br
         input.btn.btn-lg.btn-orange.login-confirm-button(type='submit', value='REGISTER', role='button')
       p.login-redirect-text
+        | By continuing, you are accepting our <br>
+        a.login-redirect-text(href='/terms-of-service') TERMS OF SERVICE
+        | .
+      p.login-redirect-text
         | Already have an account? 
         a.login-redirect-text(href='/login') LOGIN
       br
@@ -93,8 +97,7 @@ body
     .text-center
       .footer_bottom_content
         span#footer-line
-          | Copyright &copy; 2020 
-          a(href='https://www.github.com/SimonBuxx') Simon Buchholz
+          a.internal-link(rel='nofollow', href='/terms-of-service', target='_parent') Terms of Service
           |  | 
           a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
   script
