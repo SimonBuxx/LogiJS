@@ -20,7 +20,7 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
 }
 
 .carousel-caption {
-    font-size: 50px;
+    font-size: 2.5vw;
     text-align: left;
 }
 
@@ -636,14 +636,15 @@ a:focus {
 
 .carousel-text {
     float: left;
-    margin-top: 100px;
+    margin-top: 4%;
     margin-left: 12%;
+    padding-bottom: 20px;
 }
 
 .carousel-image {
     float: right;
     width: 40%;
-    height: 300px;
+    /*height: 300px;*/
     border-radius: 10px;
     margin-right: 12%;
 }
