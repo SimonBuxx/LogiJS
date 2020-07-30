@@ -41,6 +41,12 @@ module.exports = {
                 return { success: false };
             });
     },
+    getEmail(user) {
+        return knex('user').where({ 'username': user }).select('email')
+            .then(data => {
+                return data[0].email;
+            });
+    }
 };
 
 function saltHashPassword({

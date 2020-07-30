@@ -124,12 +124,25 @@ router.get('/signup', function (req, res) {
 
 router.get('/dashboard', function (req, res) {
     let user = getUser(req);
+    store.getEmail(user).then(data => {
+        console.log(data);
+    });
     user_data.getSketches(user, function (data) {
         res.render('dashboard', {
             user: user,
             sketchData: data.sketches,
             images: data.images,
             descriptions: data.descriptions
+        });
+    });
+});
+
+router.get('/profile', function (req, res) {
+    let user = getUser(req);
+    store.getEmail(user).then(email => {
+        res.render('profile', {
+            user: user,
+            email: email
         });
     });
 });

@@ -14,7 +14,7 @@ head
   meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
   meta(charset='UTF-8')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
-  link(rel='shortcut icon', href='images/favicon.ico')
+  link(rel='shortcut icon', href='images/favi.png')
   style
     include css/bootstrap.css
     include css/index_style.css
@@ -42,88 +42,88 @@ body
   |   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKSH2RQ"
   |   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   |   <!-- End Google Tag Manager (noscript) -->
-  .top-menu
+  .top-menu#top
     .container
       .navbar.navbar-default.navbar-fixed-top(role='navigation')
         .container
+          ul.nav.navbar-nav.navbar-left
+            li
+              a.internal-link(rel='nofollow', href='/#features', target='_parent') Features
+            li
+              a.internal-link(rel='nofollow', href='/#samples', target='_parent') Samples
+            li
+              a.internal-link(rel='nofollow', href='/#about', target='_parent') About
           .navbar-header
             button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
               span.sr-only Toggle navigation
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.navbar-brand(href='/')
-              img(src='images/logo_index.png', alt='LogiJS logo', title='LogiJS')
+            a.navbar-brand(href='/#top')
+              img#top_logo_small(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS')
           .navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right
               li
-                a.internal-link(rel='nofollow', href='/', target='_parent') HOME
-              li
-                a.internal-link(rel='nofollow', href='/samples', target='_parent') SAMPLES
-              li
-                a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
-              li.active
-                a.user-button(href='#') #{user.toUpperCase()}
-  #blurred-background
+                a.user-button.internal-link(rel='nofollow', href='#', target='_parent') #{user} <i class="fa fa-user" style="color: #c83232;"></i>
   if sketchData.sketches.length === 0
     .outer-dashboard-container
       .item-container
         .db-mobile-bar.show-in-mobile
           form#import-button.Import(title="Coming soon!")
             button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-              <i class="fa fa-file-upload"></i> IMPORT FILE
+              <i class="fa fa-file-upload"></i> Import File
           form#profile-button.Profile(title="Coming soon!")
-            button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-              <i class="fa fa-user-circle"></i> PROFILE
+              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
+                <i class="fa fa-user-circle"></i> Profile
           form#logout-button.Logout
             button.btn.btn-lg.btn-orange(type='submit', role='button')
-              <i class="fa fa-sign-out-alt"></i> LOGOUT
+              <i class="fa fa-sign-out-alt"></i> Logout
       #nosketches_back
         p#nosketches_message You don't have any sketches.
         #nosketch_buttons
           button.btn.btn-lg.btn-orange.hide-in-mobile(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
-            <i class="fa fa-plus-circle"></i> NEW SKETCH
-          button.btn.btn-lg.btn-green(type='submit', rel="nofollow", onclick="window.location.href='/samples'", role='button')
-            <i class="fas fa-stream"></i> VIEW SAMPLES
+            <i class="fa fa-plus-circle"></i> New Sketch
+          button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/#samples'", role='button')
+            <i class="fas fa-stream"></i> View Samples
       .sidebar.db-sidebar.hide-in-mobile
           .sticky-bar
             button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
-              <i class="fa fa-plus-circle"></i> NEW SKETCH
-            form#import-button.Profile(title="Coming soon!")
+              <i class="fa fa-plus-circle"></i> New Sketch
+            form#import-button.Import(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-                <i class="fa fa-file-upload"></i> IMPORT FILE
+                <i class="fa fa-file-upload"></i> Import File
             form#profile-button.Profile(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-                <i class="fa fa-user-circle"></i> PROFILE
+                <i class="fa fa-user-circle"></i> Profile
             form#logout-button.Logout
               button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", role='button')
-                <i class="fa fa-sign-out-alt"></i> LOGOUT
+                <i class="fa fa-sign-out-alt"></i> Logout
   else
     .outer-dashboard-container
       .sidebar.db-sidebar.hide-in-mobile
           .sticky-bar
             button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
-              <i class="fa fa-plus-circle"></i> NEW SKETCH
+              <i class="fa fa-plus-circle"></i> New Sketch
             form#import-button.Import(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-                <i class="fa fa-file-upload"></i> IMPORT FILE
+                <i class="fa fa-file-upload"></i> Import File
             form#profile-button.Profile(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-                <i class="fa fa-user-circle"></i> PROFILE
+                <i class="fa fa-user-circle"></i> Profile
             form#logout-button.Logout
               button.btn.btn-lg.btn-orange(type='submit', role='button')
-                <i class="fa fa-sign-out-alt"></i> LOGOUT
-      .carousel.item-container
+                <i class="fa fa-sign-out-alt"></i> Logout
+      .item-container
         .db-mobile-bar.show-in-mobile
           form#import-button.Import(title="Coming soon!")
             button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-              <i class="fa fa-file-upload"></i> IMPORT FILE
+              <i class="fa fa-file-upload"></i> Import File
           form#profile-button.Profile(title="Coming soon!")
-            button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-              <i class="fa fa-user-circle"></i> PROFILE
+              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
+                <i class="fa fa-user-circle"></i> Profile
           form#logout-button.Logout
             button.btn.btn-lg.btn-orange(type='submit', role='button')
-              <i class="fa fa-sign-out-alt"></i> LOGOUT
+              <i class="fa fa-sign-out-alt"></i> Logout
         - var r = 0;
         - var n = 0;
         while r < sketchData.sketches.length
@@ -133,28 +133,36 @@ body
           .sketch_item
             img(src='data:image/png;base64,' + images[r], alt=sketchData.sketches[r])
             p.sketch_name #{sketchData.sketches[r]}
+              span(style="color: #c83232;") .
             button.btn.btn-lg.btn-orange.disable-in-mobile(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', rel="nofollow")
-              <i class="fa fa-play"></i> OPEN
+              <i class="fa fa-play"></i> Open
             p.file_size File Size: #{sketchData.sizes[r]} KB
             p.modified_date Last Modified: #{sketchData.modified[r]}
             p.db_sketch_desc #{descriptions[r]}
             a.download(id='dl' + sketchData.sketches[r], rel="nofollow") 
-                <i class="fa fa-file-download"></i> DOWNLOAD
+                <span style="color: #c83232"><i class="fa fa-file-download"></i></span> Download
             if (user !== 'demouser')
               a.del.delete(id=sketchData.sketches[r], rel="nofollow")
-                <i class="fa fa-trash-alt"></i> DELETE
+                <span style="color: #c83232"><i class="fa fa-trash-alt"></i></span> Delete
             else 
               a.del(onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r], rel="nofollow")
-                <i class="fa fa-trash-alt"></i> DELETE
+                <span style="color: #c83232"><i class="fa fa-trash-alt"></i></span> Delete
             .clear
           -r++;
   .footer_bottom
-    .text-center
       .footer_bottom_content
-        span#footer-line
+        .footer_box
           a.internal-link(rel='nofollow', href='/terms-of-service', target='_parent') Terms of Service
-          |  | 
           a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+        .footer_box
+          p(style="text-align: center; display: inline-block; width: 100%;")
+            a(href='https://twitter.com/logi_js', target='_blank', style="margin-right: 5px;")
+              img(src="images/twitter.png" style="width: 40px; margin-top: -20px;")
+            a(href='https://github.com/SimonBuxx/logijs', target='_blank', style="margin-left: 5px;")
+              img(src="images/github_dark.png" style="width: 40px; margin-top: -20px;")
+        .footer_box
+          p(style="text-align: right;") Made with <i class="fas fa-heart" style="color: #c83232;"></i> in Lübeck
+            span(style="color: #c83232;") .
   <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
   script
     include ../libraries/jquery.min.js

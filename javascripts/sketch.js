@@ -323,7 +323,7 @@ function setup() { // jshint ignore:line
     leftSideButtons = createDiv('');
     leftSideButtons.elt.className = 'scrollBoxLeft';
     leftSideButtons.elt.style.height = (windowHeight - 74 - 32 - 15).toString() + 'px';
-    leftSideButtons.elt.style.margin = '55px 0px';
+    leftSideButtons.elt.style.margin = '80px 0px';
 
     createTopButtons();
 
@@ -664,6 +664,8 @@ function deleteClicked() {
     This triggers when a label text was altered
 */
 function labelChanged() {
+    textFont('Gudea');
+    textSize(20);
     labels[labelToModify].alterText(labelTextBox.value()); // Alter the text of the selected label
     reDraw();
     positionModifierElements();
@@ -947,6 +949,7 @@ function segDisplayClicked(dontToggle = false) {
         bitSelect.style('display', 'inline-block');
         labelBits.show();
         labelBits.style('display', 'inline-block');
+        labelOptions.show();
     }
 }
 
@@ -1725,7 +1728,7 @@ function reDraw() {
     }
 
     if (loading && !showCustomDialog) {
-        showMessage('LOADING...', loadFile.split('.json')[0]);
+        showMessage('Loading sketch...', loadFile.split('.json')[0]);
     }
 
     if (error !== '') {
@@ -1737,7 +1740,7 @@ function reDraw() {
     }
 
     // Draw the zoom and framerate labels
-    textFont('Gudea');
+    textFont('ArcaMajora3');
     textAlign(LEFT, TOP);
     textSize(12);
     fill(0);

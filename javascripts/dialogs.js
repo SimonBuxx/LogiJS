@@ -8,15 +8,16 @@ function showMessage(msg, subline = '') {
     noStroke();
     rect(0, 0, window.width, window.height); 
     // Draw the message box
-    fill(50);
+    fill(255);
     rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150, 10);
     // Display the message
-    fill(255);
+    fill(50);
     textSize(30);
-    textFont('Open Sans');
+    textFont('ArcaMajora3');
     textAlign(CENTER, CENTER);
     text(msg, window.width / 2, window.height / 2 - 20);
     textSize(20);
+    fill(200, 50, 50);
     text(subline, window.width / 2, window.height / 2 + 30);
 }
 
@@ -40,9 +41,9 @@ function saveDialogClicked() {
 
 function showSaveDialog() {
     // Draw the save dialog background
-    fill(50);
+    fill(255);
     noStroke();
-    rect(window.width / 2 - 365, window.height / 2 - 208, 580, 385, 10);
+    rect(window.width / 2 - 355, window.height / 2 - 208, 565, 375, 10);
     
     showSaveDialogElements();
     configureButtons('savedialog');
@@ -77,7 +78,7 @@ function showSaveDialogElements() {
     descInput.show();
     saveDialogText.show();
     // Reposition the cancel button, that is also used in other dialogs
-    cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 110);
+    cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 113);
     cancelButton.style('width', '145px');
 }
 
@@ -116,7 +117,7 @@ function hideCustomDialogElements() {
 
 function displayCustomDialog() {
     // Draw the custom dialog background
-    fill(50);
+    fill(255);
     noStroke();
     rect(Math.round(window.width / 8), 50, customDialogColumns * 220 + 220, customDialogRows * 220 + 90, 10);
     
@@ -162,7 +163,7 @@ function showCustomItem(place, img, caption, look) {
         raw.onload = function () {
             let normal_img = createImage(200, 200);
             normal_img.drawingContext.drawImage(raw, 0, 0);
-            normal_img.drawingContext.drawImage(gradientRaw, 0, 0);
+            //normal_img.drawingContext.drawImage(gradientRaw, 0, 0);
             image(normal_img, x, y);
             if (look.hasOwnProperty('outputs')) {
                 if (look.outputs > 0) {
@@ -180,13 +181,15 @@ function showCustomItem(place, img, caption, look) {
                     translate(-x - 70, -y - 55);
                 }
             }
+            textFont('ArcaMajora3');
             fill(0, 0, 0, 0);
             strokeWeight(10);
-            stroke(50);
+            stroke(255);
             rect(x, y, 200, 200, 10);
             noStroke();
             fill(255);
-            textSize(16);
+            textSize(20);
+
             text(caption, x + 10, y + 170);
         };
     }

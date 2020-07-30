@@ -3,12 +3,21 @@ html {
 	 -ms-overflow-style: none;
 }
 
+@font-face {
+    font-family: ArcaMajora3;
+    src: url("css/ArcaMajora3-Bold.otf") format("opentype");
+}
+
+
 body {
     margin: 0; 
     height: 100%;
     overflow: hidden;
     background: linear-gradient(to bottom, #323232, black);
     background: #323232;
+
+    font-family: ArcaMajora3;
+
     background-attachment: fixed;
 	user-select: none;
 	-webkit-user-drag: none;
@@ -28,12 +37,13 @@ body {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
+    font-size: 17px;
     color: rgb(255, 255, 255);
+
     -o-text-overflow: clip;
     text-overflow: clip;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     background: none;
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -72,8 +82,8 @@ body {
 
 .button:active, .button.active {
     background: linear-gradient(145deg, #b42d2d, #d63636);
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
+    /*box-shadow: 5px 5px 5px #2b2b2b, 
+                -5px -5px 5px #3a3a3a;*/
 }
 
 .button:disabled {
@@ -94,8 +104,6 @@ body {
     border-radius: 10px;
     border: none;
     padding: 0;
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
 .redButton {
@@ -168,12 +176,12 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    font-family: 'Open Sans', sans-serif;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
     text-align: center;
-    color: #969696;
-    margin: 10px 0 5px 0;
-    font-size: 15px;
-    text-transform: uppercase;
+    color: #fff;
+    margin: 10px 0 10px 0;
+    font-size: 17px;
+    /*text-transform: uppercase;*/
 }
 
 .checkbox {
@@ -182,9 +190,9 @@ body {
     -moz-user-select: none;
     user-select: none;
     color: white;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
-    margin: 18px 0 5px 10px;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
+    font-size: 17px;
+    margin: 15px 0 5px 20px;
 }
 
 .buttonLeft{
@@ -197,12 +205,12 @@ body {
     cursor: pointer;
     padding: 10px 6px;
     border-radius: 10px;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
+    font-size: 17px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     background: none;
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -221,8 +229,6 @@ body {
 
 .buttonLeft:active, .buttonLeft.active {
     background: linear-gradient(145deg, #b42d2d, #d63636);
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
 .buttonLeft.active:hover {
@@ -252,12 +258,13 @@ body {
     cursor: pointer;
     border-radius: 10px;
     border: none;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
+    font-size: 17px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
     background: none;
+
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -278,8 +285,6 @@ body {
     -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
     background: #646464;
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
 .previewButton.active > .preview {
@@ -311,17 +316,14 @@ body {
 }
 
 .topBox > label {
-    font-family: 'Open Sans', sans-serif;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
     color: white;
     font-size: 20px;
     padding: 10px;
 }
 
 .descInput {
-    background: #646464;
     padding: 10px;
-    box-shadow: inset 30px 30px 90px #2b2b2b, 
-                inset -30px -30px 90px #3a3a3a;
 }
 
 .optionLabel {
@@ -332,8 +334,8 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
+    font-size: 16px;
     color: white;
 }
 
@@ -346,15 +348,15 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    padding: 3px 5px;
+    padding: 5px 5px;
     border-radius: 10px;
     border: none;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
+    font-size: 16px;
     color: rgb(255, 255, 255);
     -o-text-overflow: clip;
     text-overflow: clip;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     background: #323232;
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -362,8 +364,6 @@ body {
     -khtml-user-select: none;
     user-select: none;
     background: #646464;
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
 .sequencer {
@@ -383,7 +383,7 @@ body {
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     user-select: none;
-    font-family: 'Open Sans', sans-serif;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 15px;
     color: white;
     -o-text-overflow: clip;
@@ -391,8 +391,6 @@ body {
     background-color: #646464;
     border: none;
     border-radius: 10px;
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
 .sequencer::-ms-expand {
@@ -405,7 +403,7 @@ body {
   }
 
 .labelTextBox {
-    font-family: 'Open Sans', sans-serif;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 18px;
     padding: 7px;
     border: none;
@@ -413,8 +411,6 @@ body {
     border-radius: 10px;
     color: black;
     border: none;
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
 .slider {
@@ -427,8 +423,6 @@ body {
     -webkit-transition: .2s;
     transition: opacity .2s;
     border-radius: 10px;
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
 .slider::-webkit-slider-thumb {
@@ -456,40 +450,34 @@ input[type=range]::-ms-tooltip {
 .saveInput {
     padding: 10px;
     margin: 20px;
-    font-size: 20px;
+    font-size: 22px;
     width: 280px;
     border: none;
     background: white;
     color: black;
     border-radius: 10px;
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
 .textInput {
-    font-size: 18px;
+    font-size: 25px;
     padding: 10px;
     border: none;
     background: white;
     color: black;
     border-radius: 10px;
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
 }
 
-.textInput:disabled {
-    background: #323232;
+.textInput:disabled::placeholder {
+    color: #ddd;
 }
 
 .btn-red {
     background: linear-gradient(145deg, #b42d2d, #d63636);
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
     border-radius: 10px;
     border: none;
     padding: 10px 10px;
     margin: 10px;
-    font-family:  'Open Sans', Arial, sans-serif;
+    font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
     font-size: 20px;
     color:#ffffff;
     text-align: center;
@@ -526,10 +514,9 @@ input[type=range]::-ms-tooltip {
 
 #logo {
     position: fixed;
-    left: 1px;
-    left: 40px;
-    top: -5px;
-    width: 150px;
+    left: 15px;
+    top: 0px;
+    width: 200px;
     margin: 0;
     padding: 0;
 }

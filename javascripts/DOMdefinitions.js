@@ -16,7 +16,7 @@ function createTopButtons() {
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('<i class="far fa-trash-alt icon"></i> Delete');
-    deleteButton.position(306, 3);
+    deleteButton.position(310, 3);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = 'button';
     deleteButton.mouseOver(function () {
@@ -28,7 +28,7 @@ function createTopButtons() {
 
     // Starts and stops the simulation
     simButton = createButton('<i class="fa fa-play icon"></i> Start');
-    simButton.position(396, 3);
+    simButton.position(404, 3);
     simButton.mousePressed(simClicked);
     simButton.elt.className = 'button';
     simButton.mouseOver(function () {
@@ -40,7 +40,7 @@ function createTopButtons() {
 
     // Undos the last action
     undoButton = createButton('<i class="fa fa-undo icon"></i> Undo');
-    undoButton.position(476, 3);
+    undoButton.position(488, 3);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -49,7 +49,7 @@ function createTopButtons() {
 
     // Redos the last action
     redoButton = createButton('<i class="fa fa-redo icon"></i> Redo');
-    redoButton.position(561, 3);
+    redoButton.position(577, 3);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -58,7 +58,7 @@ function createTopButtons() {
 
     // Activates the mode for area selecting
     selectButton = createButton('<i class="fas fa-object-group icon"></i> Select');
-    selectButton.position(644, 3);
+    selectButton.position(664, 3);
     selectButton.mousePressed(startSelect);
     selectButton.elt.style.cursor = 'default';
     selectButton.elt.className = 'button';
@@ -67,7 +67,7 @@ function createTopButtons() {
 
 function createBasicElements() {
     // Adds text 'Basic'
-    labelBasic = createP('BASIC ELEMENTS');
+    labelBasic = createP('Basic Elements<span style="color: #c83232">.</span>');
     labelBasic.elt.className = 'label';
     labelBasic.parent(leftSideButtons);
 
@@ -191,7 +191,7 @@ function createBasicElements() {
 
 function createAdvancedElements() {
     // Adds text 'Advanced Elements'
-    labelAdvanced = createP('ADVANCED ELEMENTS');
+    labelAdvanced = createP('Advanced Elements<span style="color: #c83232">.</span>');
     labelAdvanced.elt.className = 'label';
     labelAdvanced.parent(leftSideButtons);
 
@@ -457,7 +457,7 @@ function createAdvancedElements() {
 }
 
 function createCustomImportButton() {
-    customButton = createButton('<i class="fa fa-file-import icon"></i> Import own element');
+    customButton = createButton('<i class="fa fa-file-import icon"></i> Custom Import');
     customButton.mousePressed(function () { customDialogPage = 0; customClicked(); });
     customButton.elt.className = 'buttonLeft';
     customButton.mouseOver(function () {
@@ -474,13 +474,13 @@ function createCustomImportButton() {
 
 function createElementOptions() {
     // Adds text 'Options'
-    labelOptions = createP('OPTIONS');
+    labelOptions = createP('Options<span style="color: #c83232">.</span>');
     labelOptions.elt.className = 'label';
     labelOptions.parent(leftSideButtons);
     labelOptions.hide();
 
     // Adds text 'Gate inputs'
-    labelGateInputs = createP('GATE INPUTS');
+    labelGateInputs = createP('Gate Inputs');
     labelGateInputs.hide();
     labelGateInputs.elt.className = 'optionLabel';
     labelGateInputs.parent(leftSideButtons);
@@ -502,7 +502,7 @@ function createElementOptions() {
     });
 
     // Adds text 'Direction'
-    labelDirection = createP('DIRECTION');
+    labelDirection = createP('Direction');
     labelDirection.hide();
     labelDirection.elt.className = 'optionLabel';
     labelDirection.parent(leftSideButtons);
@@ -525,19 +525,19 @@ function createElementOptions() {
     });
 
     // Adds text 'Input width'
-    labelBits = createP('INPUT WIDTH');
+    labelBits = createP('Input Width');
     labelBits.hide();
     labelBits.elt.className = 'optionLabel';
     labelBits.parent(leftSideButtons);
 
     // Adds text 'Output width'
-    labelOutputWidth = createP('OUTPUT WIDTH');
+    labelOutputWidth = createP('Output Width');
     labelOutputWidth.hide();
     labelOutputWidth.elt.className = 'optionLabel';
     labelOutputWidth.parent(leftSideButtons);
 
     // Adds text 'Input width'
-    labelInputWidth = createP('INPUT WIDTH');
+    labelInputWidth = createP('Input Width');
     labelInputWidth.hide();
     labelInputWidth.elt.className = 'optionLabel';
     labelInputWidth.parent(leftSideButtons);
@@ -608,7 +608,7 @@ function createElementOptions() {
         setHelpText('');
     });
 
-    sfcheckbox = createCheckbox('SYNC TICKS TO FRAMES', true);
+    sfcheckbox = createCheckbox('Sync ticks to frames', true);
     sfcheckbox.hide();
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
@@ -632,15 +632,15 @@ function createHelpLabel() {
     helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
     helpLabel.elt.className = 'label';
     helpLabel.elt.style.color = 'white';
-    helpLabel.position(745, 5);
+    helpLabel.position(765, 5);
     helpLabel.hide();
 }
 
 function createDialogElements() {
     moduleNameInput = createInput('');
-    moduleNameInput.attribute('placeholder', 'MODULE NAME');
+    moduleNameInput.attribute('placeholder', 'Module Name');
     moduleNameInput.position(windowWidth / 2 - 238, windowHeight / 2 - 104);
-    moduleNameInput.elt.style.fontFamily = 'Open Sans';
+    moduleNameInput.elt.style.fontFamily = 'ArcaMajora3';
     moduleNameInput.elt.className = 'textInput saveInput';
     moduleNameInput.size(180, 27);
     moduleNameInput.elt.onkeyup = function () {
@@ -656,9 +656,9 @@ function createDialogElements() {
     });
 
     sketchNameInput = createInput('');
-    sketchNameInput.attribute('placeholder', 'SKETCH NAME');
+    sketchNameInput.attribute('placeholder', 'Sketch Name');
     sketchNameInput.position(windowWidth / 2 - 23, windowHeight / 2 - 104);
-    sketchNameInput.elt.style.fontFamily = 'Open Sans';
+    sketchNameInput.elt.style.fontFamily = 'ArcaMajora3';
     sketchNameInput.elt.className = 'textInput saveInput';
     sketchNameInput.elt.onkeyup = function () {
         if (!moduleNameInput.elt.disabled && !moduleNameChanged) {
@@ -675,14 +675,14 @@ function createDialogElements() {
     });
 
     descInput = createElement('textarea');
-    descInput.attribute('placeholder', 'SKETCH DESCRIPTION');
+    descInput.attribute('placeholder', 'Sketch Description');
     descInput.position(windowWidth / 2 - 3, windowHeight / 2 - 25);
     descInput.size(280, 114);
-    descInput.elt.style.fontFamily = 'Open Sans';
-    descInput.elt.style.fontSize = '15px';
+    descInput.elt.style.fontFamily = 'ArcaMajora3';
+    descInput.elt.style.fontSize = '18px';
     descInput.elt.className = 'textInput descInput';
     if (getCookieValue('access_token') === '') {
-        descInput.attribute('placeholder', 'SKETCH DESCRIPTION\n(LOG IN TO GIVE A DESCRIPTION)');
+        descInput.attribute('placeholder', 'Sketch Description\n(Log in to give a description)');
         descInput.elt.disabled = true;
     }
     descInput.hide();
@@ -693,13 +693,13 @@ function createDialogElements() {
         setHelpText('');
     });
 
-    cancelButton = createButton('CANCEL');
+    cancelButton = createButton('Cancel');
     cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 110);
     cancelButton.mousePressed(cancelClicked);
     cancelButton.elt.className = 'btn btn-lg btn-red';
     cancelButton.hide();
 
-    pageUpButton = createButton('<i class="fas fa-arrow-up"></i> UP');
+    pageUpButton = createButton('<i class="fas fa-arrow-up"></i> Up');
     pageUpButton.position(window.width - 545, window.height - window.height / 5);
     pageUpButton.style('padding-left', '10px');
     pageUpButton.style('padding-right', '10px');
@@ -714,7 +714,7 @@ function createDialogElements() {
     pageUpButton.elt.className = 'btn btn-lg btn-red customDialogButton';
     pageUpButton.hide();
 
-    pageDownButton = createButton('<i class="fas fa-arrow-down"></i> DOWN');
+    pageDownButton = createButton('<i class="fas fa-arrow-down"></i> Down');
     pageDownButton.position(window.width - 335, window.height - window.height / 5 + 50);
     pageDownButton.style('padding-left', '10px');
     pageDownButton.style('padding-right', '10px');
@@ -729,35 +729,35 @@ function createDialogElements() {
     pageDownButton.elt.className = 'btn btn-lg btn-red customDialogButton';
     pageDownButton.hide();
 
-    saveDialogText = createP('SAVE SKETCH');
+    saveDialogText = createP('Save Sketch<span style="color: #c83232">.</span>');
     saveDialogText.hide();
-    saveDialogText.elt.style.color = 'white';
-    saveDialogText.elt.style.fontFamily = 'Open Sans';
+    saveDialogText.elt.style.color = '#323232';
+    saveDialogText.elt.style.fontFamily = 'ArcaMajora3';
     saveDialogText.elt.style.margin = '3px 0px 0px 0px';
     saveDialogText.position(windowWidth / 2 - 65, windowHeight / 2 - 160);
     saveDialogText.style('font-size', '36px');
 
-    customDialogText = createP('Import Your Own Elements');
+    customDialogText = createP('Import your own elements<span style="color: #c83232">.</span>');
     customDialogText.hide();
-    customDialogText.elt.style.color = 'white';
-    customDialogText.elt.style.fontFamily = 'Open Sans';
+    customDialogText.elt.style.color = '#323232';
+    customDialogText.elt.style.fontFamily = 'ArcaMajora3';
     customDialogText.elt.style.margin = '3px 0px 0px 0px';
-    customDialogText.position(windowWidth / 2 - 100, 120);
+    customDialogText.position(windowWidth / 2 - 120, 120);
     customDialogText.style('font-size', '36px');
 
     // Button to save the sketch
     if (getCookieValue('access_token') !== '') {
-        saveButton = createButton('SAVE');
+        saveButton = createButton('Save');
         saveButton.mouseOver(function () {
             setHelpText('Save this sketch to the dashboard');
         });
     } else {
-        saveButton = createButton('DOWNLOAD');
+        saveButton = createButton('Download');
         saveButton.mouseOver(function () {
             setHelpText('Download this sketch as a JSON file');
         });
     }
-    saveButton.position(windowWidth / 2 + 142, windowHeight / 2 + 110);
+    saveButton.position(windowWidth / 2 + 142, windowHeight / 2 + 113);
     saveButton.mousePressed(saveClicked);
     saveButton.elt.className = 'btn btn-lg btn-red';
     saveButton.mouseOut(function () {
@@ -769,8 +769,7 @@ function createDialogElements() {
 function createTopRightButtons() {
     // Clears the canvas and resets the view
     newButton = createButton('<i class="fas fa-file icon"></i> New');
-    newButton.position(windowWidth - 290, 3);
-    newButton.elt.style.width = '50px';
+    newButton.position(windowWidth - 306, 3);
     newButton.mousePressed(function () {
         if (newButton.html() === 'SURE?') {
             newButton.elt.className = "button";
@@ -791,7 +790,7 @@ function createTopRightButtons() {
     });
 
     saveDialogButton = createButton('<i class="fas fa-save icon"></i> Save');
-    saveDialogButton.position(windowWidth - 216, 3);
+    saveDialogButton.position(windowWidth - 230, 3);
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = 'button';
     saveDialogButton.mouseOver(function () {
@@ -818,7 +817,7 @@ function createTopRightButtons() {
             setHelpText('');
         });
     }
-    dashboardButton.elt.style.width = '110px';
+    dashboardButton.elt.style.width = '120px';
     dashboardButton.mousePressed(function () {
         if (dashboardButton.html() === 'SURE?') {
             window.location = '/dashboard';
@@ -828,6 +827,6 @@ function createTopRightButtons() {
             setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('<i class="fas fa-th icon"></i> Dashboard'); } else { dashboardButton.html('<i class="fa fa-sign-in-alt icon"></i> Login'); } dashboardButton.elt.className = "button"; }, 3000);
         }
     });
-    dashboardButton.position(windowWidth - 142, 3);
+    dashboardButton.position(windowWidth - 150, 3);
     dashboardButton.elt.className = 'button';
 }

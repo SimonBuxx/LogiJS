@@ -52,12 +52,13 @@ function Label(x, y, txt, transform) {
         this.txt = txt;
         //this.lines = txt.split('\n');
         this.lines = txt.split('\n').filter(e => e !== '');
-        textSize(20);
-        this.w = Math.ceil((textWidth(this.lines.reduce(function (a, b) { return a.length > b.length ? a : b; })) + 10) / 30 + 1) * 30;
+        this.w = Math.ceil((textWidth(this.lines.reduce(function (a, b) { return a.length > b.length ? a : b; })) + 35) / 30) * 30;
         this.h = 30 * this.lines.length - 10;
         this.updateClickBox();
     };
 
+    textFont('Gudea');
+    textSize(20);
     this.alterText(txt);
 
     /*

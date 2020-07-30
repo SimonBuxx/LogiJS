@@ -32,7 +32,7 @@ const deleteButtons = document.querySelectorAll(".delete");
 for (const button of deleteButtons) {
     button.addEventListener('click', function (event) { //jshint ignore:line
         if (confButton !== event.target.id) {
-            button.innerHTML = 'SURE?&nbsp;&nbsp;&nbsp;&nbsp;';
+            button.innerHTML = '<i class="fa fa-exclamation-circle" style="color: #c83232"></i> SURE?';
             confButton = event.target.id;
         } else {
             confButton = '';

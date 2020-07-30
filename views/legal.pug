@@ -8,316 +8,339 @@ head
   |   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   |   })(window,document,'script','dataLayer','GTM-WKSH2RQ');</script>
   |   <!-- End Google Tag Manager -->
-  title LogiJS: Impressum & Datenschutzerklärung
+  title LogiJS: Legal Notice
   meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
   computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
   meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
   meta(charset='UTF-8')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
-  link(rel='shortcut icon', href='images/favicon.ico')
+  link(rel='shortcut icon', href='images/favi.png')
   link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css")
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
   style
     include css/bootstrap.css
     include css/index_style.css
-<body style="margin: 0 0 100px;">
+body
   |   <!-- Google Tag Manager (noscript) -->
   |   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKSH2RQ"
   |   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   |   <!-- End Google Tag Manager (noscript) -->
-.top-menu
-  .container
-    .navbar.navbar-default.navbar-fixed-top(role='navigation')
-      .container
-        .navbar-header
-          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href='/')
-            img(src='images/logo_index.png', alt='LogiJS logo', title='LogiJS')
-        .navbar-collapse.collapse
-          ul.nav.navbar-nav.navbar-right
+  .top-menu#top
+    .container
+      .navbar.navbar-default.navbar-fixed-top(role='navigation')
+        .container
+          ul.nav.navbar-nav.navbar-left
             li
-              a.internal-link(rel='nofollow', href='/', target='_parent') HOME
+              a.internal-link(rel='nofollow', href='/#features', target='_parent') Features
             li
-              a.internal-link(rel='nofollow', href='/samples', target='_parent') SAMPLES
+              a.internal-link(rel='nofollow', href='/#samples', target='_parent') Samples
             li
-              a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
-            if user !== ''
-              li
-                a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') #{user.toUpperCase()}
-            else
-              li
-                a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') LOGIN
-              li
-                a.internal-link(rel='nofollow', href='/signup', target='_parent') REGISTER
-div
-  #blurred-background
-  #full-width-title
-    h1 Legal Notice (Impressum / Datenschutz)
-  #legal_back
-    p This is an open-source project by <a href="https://github.com/simonbuxx">Simon Buchholz</a>. This service underlies German law. At the moment, our privacy policy is provided in german only.
-    h2 Legal Information according to § 5 TMG
-    p.address
-      | Simon Buchholz
-      br
-      |  Grace-Hopper-Str. 15
-      br
-      |  23562 Lübeck
-    p.address
-      | Tel.: 0176 43344340
-      br
-      |  E-Mail: logijs(at)outlook.com
-    h3 Haftung für Inhalte
-    p
-      | Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen
-      | Seiten
-      | nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als
-      | Diensteanbieter
-      | jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen
-      | oder
-      | nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
-    p
-      | Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen
-      | bleiben
-      | hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis
-      | einer
-      | konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden
-      | wir
-      | diese Inhalte umgehend entfernen.
-    h3 Haftung für Links
-    p
-      | Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss
-      | haben.
-      | Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für
-      | die
-      | Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
-      | Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße
-      | überprüft.
-      | Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.
-    p
-      | Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer
-      | Rechtsverletzung
-      | nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
-    h3 Urheberrecht
-    p
-      | Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen
-      | Urheberrecht.
-      | Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der
-      | Grenzen
-      | des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
-      | Downloads
-      | und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.
-    p(id='privacy')
-      | Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter
-      | beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine
-      | Urheberrechtsverletzung
-      | aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen
-      | werden
-      | wir derartige Inhalte umgehend entfernen.
-    hr
-    h1 Datenschutzerklärung
-    h2 1. Datenschutz auf einen Blick
-    h3 Allgemeine Hinweise
-    p
-      | Die folgenden Hinweise geben einen einfachen überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.
-    h3 Datenerfassung auf dieser Website
-    p
-      strong Wer ist verantwortlich für die Datenerfassung auf dieser Website?
-    p
-      | Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.
-    p
-      strong Wie erfassen wir Ihre Daten?
-    p
-      | Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben.
-    p
-      | Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z. B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.
-    p
-      strong Wofür nutzen wir Ihre Daten?
-    p
-      | Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden.
-    p
-      strong Welche Rechte haben Sie bezüglich Ihrer Daten?
-    p
-      | Sie haben jederzeit das Recht unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.
-    p
-      | Außerdem haben Sie das Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Details hierzu entnehmen Sie der Datenschutzerklärung unter &amp;bdquo;Recht auf Einschränkung der Verarbeitung&ldquo;.
-    h3 Analyse-Tools und Tools von Drittanbietern
-    p
-      | Beim Besuch dieser Website kann Ihr Surf-Verhalten statistisch ausgewertet werden. Das geschieht vor allem mit Cookies und mit sogenannten Analyseprogrammen. Die Analyse Ihres Surf-Verhaltens erfolgt in der Regel anonym; das Surf-Verhalten kann nicht zu Ihnen zurückverfolgt werden.
-    p
-      | Sie können dieser Analyse widersprechen oder sie durch die Nichtbenutzung bestimmter Tools verhindern. Detaillierte Informationen zu diesen Tools und über Ihre Widerspruchsmöglichkeiten finden Sie in der folgenden Datenschutzerklärung.
-    h2 2. Hosting
-    h3 Externes Hosting
-    p
-      | Diese Website wird bei einem externen Dienstleister gehostet (Hoster). Personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Webseitenzugriffe und sonstige Daten, die über eine Website generiert werden, handeln.
-    p
-      | Der Einsatz des Hosters erfolgt zum Zwecke der Vertragserfüllung gegenüber unseren potenziellen und bestehenden Kunden (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und effizienten Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO).
-    p
-      | Unser Hoster wird Ihre Daten nur insoweit verarbeiten, wie dies zur Erfüllung seiner Leistungspflichten erforderlich ist und unsere Weisungen in Bezug auf diese Daten befolgen.
-    p
-      strong Abschluss eines Vertrages über Auftragsverarbeitung
-    p
-      | Um die datenschutzkonforme Verarbeitung zu gewährleisten, haben wir einen Vertrag über Auftragsverarbeitung mit unserem Hoster geschlossen.
-    h2 3. Allgemeine Hinweise und Pflichtinformationen
-    h3 Datenschutz
-    p
-      | Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.
-    p
-      | Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht.
-    p
-      | Wir weisen darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.
-    h3 Hinweis zur verantwortlichen Stelle
-    p Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
-    p.address
-      | Simon Buchholz
-      br
-      | Grace-Hopper-Str. 15
-      br
-      | 23562 Lübeck
-    p.address
-      | Telefon: 017643344340
-      br
-      | E-Mail: logijs@outlook.com
-    p
-      | Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. ä.) entscheidet.
-    h3 Widerruf Ihrer Einwilligung zur Datenverarbeitung
-    p
-      | Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Dazu reicht eine formlose Mitteilung per E-Mail an uns. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
-    h3
-      | Widerspruchsrecht gegen die Datenerhebung in besonderen Fällen sowie gegen Direktwerbung (Art. 21 DSGVO)
-    p
-      | WENN DIE DATENVERARBEITUNG AUF GRUNDLAGE VON ART. 6 ABS. 1 LIT. E ODER F DSGVO ERFOLGT, HABEN SIE JEDERZEIT DAS RECHT, AUS GRüNDEN, DIE SICH AUS IHRER BESONDEREN SITUATION ERGEBEN, GEGEN DIE VERARBEITUNG IHRER PERSONENBEZOGENEN DATEN WIDERSPRUCH EINZULEGEN; DIES GILT AUCH FüR EIN AUF DIESE BESTIMMUNGEN GESTüTZTES PROFILING. DIE JEWEILIGE RECHTSGRUNDLAGE, AUF DENEN EINE VERARBEITUNG BERUHT, ENTNEHMEN SIE DIESER DATENSCHUTZERKLäRUNG. WENN SIE WIDERSPRUCH EINLEGEN, WERDEN WIR IHRE BETROFFENEN PERSONENBEZOGENEN DATEN NICHT MEHR VERARBEITEN, ES SEI DENN, WIR KöNNEN ZWINGENDE SCHUTZWüRDIGE GRüNDE FüR DIE VERARBEITUNG NACHWEISEN, DIE IHRE INTERESSEN, RECHTE UND FREIHEITEN üBERWIEGEN ODER DIE VERARBEITUNG DIENT DER GELTENDMACHUNG, AUSüBUNG ODER VERTEIDIGUNG VON RECHTSANSPRüCHEN (WIDERSPRUCH NACH ART. 21 ABS. 1 DSGVO).
-    p
-      | WERDEN IHRE PERSONENBEZOGENEN DATEN VERARBEITET, UM DIREKTWERBUNG ZU BETREIBEN, SO HABEN SIE DAS RECHT, JEDERZEIT WIDERSPRUCH GEGEN DIE VERARBEITUNG SIE BETREFFENDER PERSONENBEZOGENER DATEN ZUM ZWECKE DERARTIGER WERBUNG EINZULEGEN; DIES GILT AUCH FüR DAS PROFILING, SOWEIT ES MIT SOLCHER DIREKTWERBUNG IN VERBINDUNG STEHT. WENN SIE WIDERSPRECHEN, WERDEN IHRE PERSONENBEZOGENEN DATEN ANSCHLIESSEND NICHT MEHR ZUM ZWECKE DER DIREKTWERBUNG VERWENDET (WIDERSPRUCH NACH ART. 21 ABS. 2 DSGVO).
-    h3 Beschwerderecht bei der zuständigen Aufsichtsbehörde
-    p
-      | Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.
-    h3 Recht auf Datenübertragbarkeit
-    p
-      | Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen. Sofern Sie die direkte übertragung der Daten an einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch machbar ist.
-    h3 SSL- bzw. TLS-Verschlüsselung
-    p
-      | Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der übertragung vertraulicher Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von &amp;bdquo;http://&ldquo; auf &amp;bdquo;https://&ldquo; wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.
-    p
-      | Wenn die SSL- bzw. TLS-Verschlüsselung aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.
-    h3 Auskunft, Löschung und Berichtigung
-    p
-      | Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.
-    h3 Recht auf Einschränkung der Verarbeitung
-    p
-      | Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Hierzu können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht in folgenden Fällen:
-    ul
-      li
-        | Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen Daten bestreiten, benötigen wir in der Regel Zeit, um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
-      li
-        | Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig geschah/geschieht, können Sie statt der Löschung die Einschränkung der Datenverarbeitung verlangen.
-      li
-        | Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie jedoch zur Ausübung, Verteidigung oder Geltendmachung von Rechtsansprüchen benötigen, haben Sie das Recht, statt der Löschung die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
-      li
-        | Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben, muss eine Abwägung zwischen Ihren und unseren Interessen vorgenommen werden. Solange noch nicht feststeht, wessen Interessen überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
-    p
-      | Wenn Sie die Verarbeitung Ihrer personenbezogenen Daten eingeschränkt haben, dürfen diese Daten - von ihrer Speicherung abgesehen - nur mit Ihrer Einwilligung oder zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen oder juristischen Person oder aus Gründen eines wichtigen öffentlichen Interesses der Europäischen Union oder eines Mitgliedstaats verarbeitet werden.
-    h2 4. Datenerfassung auf dieser Website
-    h3 Cookies
-    p
-      | Die Internetseiten verwenden teilweise so genannte Cookies. Cookies richten auf Ihrem Rechner keinen Schaden an und enthalten keine Viren. Cookies dienen dazu, unser Angebot nutzerfreundlicher, effektiver und sicherer zu machen. Cookies sind kleine Textdateien, die auf Ihrem Rechner abgelegt werden und die Ihr Browser speichert.
-    p
-      | Die meisten der von uns verwendeten Cookies sind so genannte "Session-Cookies". Sie werden nach Ende Ihres Besuchs automatisch gelöscht. Andere Cookies bleiben auf Ihrem Endgerät gespeichert bis Sie diese löschen. Diese Cookies ermöglichen es uns, Ihren Browser beim nächsten Besuch wiederzuerkennen.
-    p
-      | Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert werden und Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle oder generell ausschließen sowie das automatische Löschen der Cookies beim Schließen des Browsers aktivieren. Bei der Deaktivierung von Cookies kann die Funktionalität dieser Website eingeschränkt sein.
-    p
-      | Cookies, die zur Durchführung des elektronischen Kommunikationsvorgangs oder zur Bereitstellung bestimmter, von Ihnen erwünschter Funktionen (z. B. Warenkorbfunktion) erforderlich sind, werden auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO gespeichert. Der Websitebetreiber hat ein berechtigtes Interesse an der Speicherung von Cookies zur technisch fehlerfreien und optimierten Bereitstellung seiner Dienste. Sofern eine entsprechende Einwilligung abgefragt wurde (z. B. eine Einwilligung zur Speicherung von Cookies), erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die Einwilligung ist jederzeit widerrufbar.
-    p
-      | Soweit andere Cookies (z. B. Cookies zur Analyse Ihres Surfverhaltens) gespeichert werden, werden diese in dieser Datenschutzerklärung gesondert behandelt.
-    h2 5. Soziale Medien
-    h3 Twitter Plugin
-    p
-      | Auf dieser Website sind Funktionen des Dienstes Twitter eingebunden. Diese Funktionen werden angeboten durch die Twitter Inc., 1355 Market Street, Suite 900, San Francisco, CA 94103, USA. Durch das Benutzen von Twitter und der Funktion "Re-Tweet" werden die von Ihnen besuchten Websites mit Ihrem Twitter-Account verknüpft und anderen Nutzern bekannt gegeben. Dabei werden auch Daten an Twitter übertragen. Wir weisen darauf hin, dass wir als Anbieter der Seiten keine Kenntnis vom Inhalt der übermittelten Daten sowie deren Nutzung durch Twitter erhalten. Weitere Informationen hierzu finden Sie in der Datenschutzerklärung von Twitter unter: 
-      a(href='https://twitter.com/de/privacy', target='_blank', rel='noopener noreferrer') https://twitter.com/de/privacy
-      | .
-    p
-      | Die Verwendung des Twitter-Plugins erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an einer möglichst umfangreichen Sichtbarkeit in den Sozialen Medien.
-    p
-      | Ihre Datenschutzeinstellungen bei Twitter können Sie in den Konto-Einstellungen unter 
-      a(href='https://twitter.com/account/settings', target='_blank', rel='noopener noreferrer') https://twitter.com/account/settings
-      |  ändern.
-    h2 6. Plugins und Tools
-    h3 Google Web Fonts
-    p
-      | Diese Seite nutzt zur einheitlichen Darstellung von Schriftarten so genannte Web Fonts, die von Google bereitgestellt werden. Beim Aufruf einer Seite lädt Ihr Browser die benötigten Web Fonts in ihren Browsercache, um Texte und Schriftarten korrekt anzuzeigen.
-    p
-      | Zu diesem Zweck muss der von Ihnen verwendete Browser Verbindung zu den Servern von Google aufnehmen. Hierdurch erlangt Google Kenntnis darüber, dass über Ihre IP-Adresse diese Website aufgerufen wurde. Die Nutzung von Google Web Fonts erfolgt im Interesse einer einheitlichen und ansprechenden Darstellung unserer Online-Angebote. Dies stellt ein berechtigtes Interesse im Sinne von Art. 6 Abs. 1 lit. f DSGVO dar.
-    p
-      | Wenn Ihr Browser Web Fonts nicht unterstützt, wird eine Standardschrift von Ihrem Computer genutzt.
-    p
-      | Weitere Informationen zu Google Web Fonts finden Sie unter 
-      a(href='https://developers.google.com/fonts/faq', target='_blank', rel='noopener noreferrer') https://developers.google.com/fonts/faq
-      |  und in der Datenschutzerklärung von Google: 
-      a(href='https://policies.google.com/privacy?hl=de', target='_blank', rel='noopener noreferrer') https://policies.google.com/privacy?hl=de
-      | .
+              a.internal-link(rel='nofollow', href='/#about', target='_parent') About
+          .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href='/')
+              img#top_logo(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS')
+          .navbar-collapse.collapse
+            ul.nav.navbar-nav.navbar-right
+              if user !== ''
+                li
+                  a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') #{user} <i class="fa fa-user" style="color: #c83232;"></i>
+              else
+                li
+                  a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') Login
+                li
+                  a.internal-link(rel='nofollow', href='/signup', target='_parent') Register 
+.legal-content
+  h1 Legal Notice
+    span(style="color: #c83232;") .
+  h1.sub-caption (DE: Impressum & Datenschutz)
+  p This is an open-source project by <a href="https://github.com/simonbuxx">Simon Buchholz</a>. This service underlies German law. At the moment, our privacy policy is provided in german only.
+  h2 Legal Information according to § 5 TMG
+  p.address
+    | Simon Buchholz
+    br
+    |  Grace-Hopper-Str. 15
+    br
+    |  23562 Lübeck
+  p.address
+    | Tel.: 0176 43344340
+    br
+    |  E-Mail: logijs(at)outlook.com
+  h3 Haftung für Inhalte
+  p
+    | Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen
+    | Seiten
+    | nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als
+    | Diensteanbieter
+    | jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen
+    | oder
+    | nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+  p
+    | Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen
+    | bleiben
+    | hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis
+    | einer
+    | konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden
+    | wir
+    | diese Inhalte umgehend entfernen.
+  h3 Haftung für Links
+  p
+    | Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss
+    | haben.
+    | Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für
+    | die
+    | Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
+    | Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße
+    | überprüft.
+    | Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.
+  p
+    | Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer
+    | Rechtsverletzung
+    | nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
+  h3 Urheberrecht
+  p
+    | Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen
+    | Urheberrecht.
+    | Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der
+    | Grenzen
+    | des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+    | Downloads
+    | und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.
+  p(id='privacy')
+    | Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter
+    | beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine
+    | Urheberrechtsverletzung
+    | aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen
+    | werden
+    | wir derartige Inhalte umgehend entfernen.
+  h1.spacing Datenschutzerklärung
+    span(style="color: #c83232;") .
+  h2 1. Datenschutz auf einen Blick
+  h3 Allgemeine Hinweise
+  p
+    | Die folgenden Hinweise geben einen einfachen überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.
+  h3 Datenerfassung auf dieser Website
+  p
+    strong Wer ist verantwortlich für die Datenerfassung auf dieser Website?
+  p
+    | Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.
+  p
+    strong Wie erfassen wir Ihre Daten?
+  p
+    | Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben.
+  p
+    | Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z. B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.
+  p
+    strong Wofür nutzen wir Ihre Daten?
+  p
+    | Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden.
+  p
+    strong Welche Rechte haben Sie bezüglich Ihrer Daten?
+  p
+    | Sie haben jederzeit das Recht unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.
+  p
+    | Außerdem haben Sie das Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Details hierzu entnehmen Sie der Datenschutzerklärung unter &bdquo;Recht auf Einschränkung der Verarbeitung&ldquo;.
+  h3 Analyse-Tools und Tools von Drittanbietern
+  p
+    | Beim Besuch dieser Website kann Ihr Surf-Verhalten statistisch ausgewertet werden. Das geschieht vor allem mit Cookies und mit sogenannten Analyseprogrammen. Die Analyse Ihres Surf-Verhaltens erfolgt in der Regel anonym; das Surf-Verhalten kann nicht zu Ihnen zurückverfolgt werden.
+  p
+    | Sie können dieser Analyse widersprechen oder sie durch die Nichtbenutzung bestimmter Tools verhindern. Detaillierte Informationen zu diesen Tools und über Ihre Widerspruchsmöglichkeiten finden Sie in der folgenden Datenschutzerklärung.
+  h2 2. Hosting
+  h3 Externes Hosting
+  p
+    | Diese Website wird bei einem externen Dienstleister gehostet (Hoster). Personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Webseitenzugriffe und sonstige Daten, die über eine Website generiert werden, handeln.
+  p
+    | Der Einsatz des Hosters erfolgt zum Zwecke der Vertragserfüllung gegenüber unseren potenziellen und bestehenden Kunden (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und effizienten Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO).
+  p
+    | Unser Hoster wird Ihre Daten nur insoweit verarbeiten, wie dies zur Erfüllung seiner Leistungspflichten erforderlich ist und unsere Weisungen in Bezug auf diese Daten befolgen.
+  p
+    strong Abschluss eines Vertrages über Auftragsverarbeitung
+  p
+    | Um die datenschutzkonforme Verarbeitung zu gewährleisten, haben wir einen Vertrag über Auftragsverarbeitung mit unserem Hoster geschlossen.
+  h2 3. Allgemeine Hinweise und Pflichtinformationen
+  h3 Datenschutz
+  p
+    | Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.
+  p
+    | Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht.
+  p
+    | Wir weisen darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.
+  h3 Hinweis zur verantwortlichen Stelle
+  p Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
+  p.address
+    | Simon Buchholz
+    br
+    | Grace-Hopper-Str. 15
+    br
+    | 23562 Lübeck
+  p.address
+    | Telefon: 017643344340
+    br
+    | E-Mail: logijs@outlook.com
+  p
+    | Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. ä.) entscheidet.
+  h3 Widerruf Ihrer Einwilligung zur Datenverarbeitung
+  p
+    | Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Dazu reicht eine formlose Mitteilung per E-Mail an uns. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
+  h3
+    | Widerspruchsrecht gegen die Datenerhebung in besonderen Fällen sowie gegen Direktwerbung (Art. 21 DSGVO)
+  p
+    | WENN DIE DATENVERARBEITUNG AUF GRUNDLAGE VON ART. 6 ABS. 1 LIT. E ODER F DSGVO ERFOLGT, HABEN SIE JEDERZEIT DAS RECHT, AUS GRüNDEN, DIE SICH AUS IHRER BESONDEREN SITUATION ERGEBEN, GEGEN DIE VERARBEITUNG IHRER PERSONENBEZOGENEN DATEN WIDERSPRUCH EINZULEGEN; DIES GILT AUCH FüR EIN AUF DIESE BESTIMMUNGEN GESTüTZTES PROFILING. DIE JEWEILIGE RECHTSGRUNDLAGE, AUF DENEN EINE VERARBEITUNG BERUHT, ENTNEHMEN SIE DIESER DATENSCHUTZERKLäRUNG. WENN SIE WIDERSPRUCH EINLEGEN, WERDEN WIR IHRE BETROFFENEN PERSONENBEZOGENEN DATEN NICHT MEHR VERARBEITEN, ES SEI DENN, WIR KöNNEN ZWINGENDE SCHUTZWüRDIGE GRüNDE FüR DIE VERARBEITUNG NACHWEISEN, DIE IHRE INTERESSEN, RECHTE UND FREIHEITEN üBERWIEGEN ODER DIE VERARBEITUNG DIENT DER GELTENDMACHUNG, AUSüBUNG ODER VERTEIDIGUNG VON RECHTSANSPRüCHEN (WIDERSPRUCH NACH ART. 21 ABS. 1 DSGVO).
+  p
+    | WERDEN IHRE PERSONENBEZOGENEN DATEN VERARBEITET, UM DIREKTWERBUNG ZU BETREIBEN, SO HABEN SIE DAS RECHT, JEDERZEIT WIDERSPRUCH GEGEN DIE VERARBEITUNG SIE BETREFFENDER PERSONENBEZOGENER DATEN ZUM ZWECKE DERARTIGER WERBUNG EINZULEGEN; DIES GILT AUCH FüR DAS PROFILING, SOWEIT ES MIT SOLCHER DIREKTWERBUNG IN VERBINDUNG STEHT. WENN SIE WIDERSPRECHEN, WERDEN IHRE PERSONENBEZOGENEN DATEN ANSCHLIESSEND NICHT MEHR ZUM ZWECKE DER DIREKTWERBUNG VERWENDET (WIDERSPRUCH NACH ART. 21 ABS. 2 DSGVO).
+  h3 Beschwerderecht bei der zuständigen Aufsichtsbehörde
+  p
+    | Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.
+  h3 Recht auf Datenübertragbarkeit
+  p
+    | Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen. Sofern Sie die direkte übertragung der Daten an einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch machbar ist.
+  h3 SSL- bzw. TLS-Verschlüsselung
+  p
+    | Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der übertragung vertraulicher Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von &bdquo;http://&ldquo; auf &bdquo;https://&ldquo; wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.
+  p
+    | Wenn die SSL- bzw. TLS-Verschlüsselung aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.
+  h3 Auskunft, Löschung und Berichtigung
+  p
+    | Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.
+  h3 Recht auf Einschränkung der Verarbeitung
+  p
+    | Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Hierzu können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht in folgenden Fällen:
+  ul
+    li
+      | Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen Daten bestreiten, benötigen wir in der Regel Zeit, um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
+    li
+      | Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig geschah/geschieht, können Sie statt der Löschung die Einschränkung der Datenverarbeitung verlangen.
+    li
+      | Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie jedoch zur Ausübung, Verteidigung oder Geltendmachung von Rechtsansprüchen benötigen, haben Sie das Recht, statt der Löschung die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
+    li
+      | Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben, muss eine Abwägung zwischen Ihren und unseren Interessen vorgenommen werden. Solange noch nicht feststeht, wessen Interessen überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
+  p
+    | Wenn Sie die Verarbeitung Ihrer personenbezogenen Daten eingeschränkt haben, dürfen diese Daten - von ihrer Speicherung abgesehen - nur mit Ihrer Einwilligung oder zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen oder juristischen Person oder aus Gründen eines wichtigen öffentlichen Interesses der Europäischen Union oder eines Mitgliedstaats verarbeitet werden.
+  h2 4. Datenerfassung auf dieser Website
+  h3 Cookies
+  p
+    | Die Internetseiten verwenden teilweise so genannte Cookies. Cookies richten auf Ihrem Rechner keinen Schaden an und enthalten keine Viren. Cookies dienen dazu, unser Angebot nutzerfreundlicher, effektiver und sicherer zu machen. Cookies sind kleine Textdateien, die auf Ihrem Rechner abgelegt werden und die Ihr Browser speichert.
+  p
+    | Die meisten der von uns verwendeten Cookies sind so genannte "Session-Cookies". Sie werden nach Ende Ihres Besuchs automatisch gelöscht. Andere Cookies bleiben auf Ihrem Endgerät gespeichert bis Sie diese löschen. Diese Cookies ermöglichen es uns, Ihren Browser beim nächsten Besuch wiederzuerkennen.
+  p
+    | Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies informiert werden und Cookies nur im Einzelfall erlauben, die Annahme von Cookies für bestimmte Fälle oder generell ausschließen sowie das automatische Löschen der Cookies beim Schließen des Browsers aktivieren. Bei der Deaktivierung von Cookies kann die Funktionalität dieser Website eingeschränkt sein.
+  p
+    | Cookies, die zur Durchführung des elektronischen Kommunikationsvorgangs oder zur Bereitstellung bestimmter, von Ihnen erwünschter Funktionen (z. B. Warenkorbfunktion) erforderlich sind, werden auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO gespeichert. Der Websitebetreiber hat ein berechtigtes Interesse an der Speicherung von Cookies zur technisch fehlerfreien und optimierten Bereitstellung seiner Dienste. Sofern eine entsprechende Einwilligung abgefragt wurde (z. B. eine Einwilligung zur Speicherung von Cookies), erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die Einwilligung ist jederzeit widerrufbar.
+  p
+    | Soweit andere Cookies (z. B. Cookies zur Analyse Ihres Surfverhaltens) gespeichert werden, werden diese in dieser Datenschutzerklärung gesondert behandelt.
+  h2 5. Soziale Medien
+  h3 Twitter Plugin
+  p
+    | Auf dieser Website sind Funktionen des Dienstes Twitter eingebunden. Diese Funktionen werden angeboten durch die Twitter Inc., 1355 Market Street, Suite 900, San Francisco, CA 94103, USA. Durch das Benutzen von Twitter und der Funktion "Re-Tweet" werden die von Ihnen besuchten Websites mit Ihrem Twitter-Account verknüpft und anderen Nutzern bekannt gegeben. Dabei werden auch Daten an Twitter übertragen. Wir weisen darauf hin, dass wir als Anbieter der Seiten keine Kenntnis vom Inhalt der übermittelten Daten sowie deren Nutzung durch Twitter erhalten. Weitere Informationen hierzu finden Sie in der Datenschutzerklärung von Twitter unter: 
+    a(href='https://twitter.com/de/privacy', target='_blank', rel='noopener noreferrer') https://twitter.com/de/privacy
+    | .
+  p
+    | Die Verwendung des Twitter-Plugins erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an einer möglichst umfangreichen Sichtbarkeit in den Sozialen Medien.
+  p
+    | Ihre Datenschutzeinstellungen bei Twitter können Sie in den Konto-Einstellungen unter 
+    a(href='https://twitter.com/account/settings', target='_blank', rel='noopener noreferrer') https://twitter.com/account/settings
+    |  ändern.
+  h2 6. Plugins und Tools
+  h3 Google Web Fonts
+  p
+    | Diese Seite nutzt zur einheitlichen Darstellung von Schriftarten so genannte Web Fonts, die von Google bereitgestellt werden. Beim Aufruf einer Seite lädt Ihr Browser die benötigten Web Fonts in ihren Browsercache, um Texte und Schriftarten korrekt anzuzeigen.
+  p
+    | Zu diesem Zweck muss der von Ihnen verwendete Browser Verbindung zu den Servern von Google aufnehmen. Hierdurch erlangt Google Kenntnis darüber, dass über Ihre IP-Adresse diese Website aufgerufen wurde. Die Nutzung von Google Web Fonts erfolgt im Interesse einer einheitlichen und ansprechenden Darstellung unserer Online-Angebote. Dies stellt ein berechtigtes Interesse im Sinne von Art. 6 Abs. 1 lit. f DSGVO dar.
+  p
+    | Wenn Ihr Browser Web Fonts nicht unterstützt, wird eine Standardschrift von Ihrem Computer genutzt.
+  p
+    | Weitere Informationen zu Google Web Fonts finden Sie unter 
+    a(href='https://developers.google.com/fonts/faq', target='_blank', rel='noopener noreferrer') https://developers.google.com/fonts/faq
+    |  und in der Datenschutzerklärung von Google: 
+    a(href='https://policies.google.com/privacy?hl=de', target='_blank', rel='noopener noreferrer') https://policies.google.com/privacy?hl=de
+    | .
 
-    h3 Google Analytics
-    p
-      | Diese Website nutzt den Dienst „Google Analytics“, welcher von der
-      | Google Inc. (1600 Amphitheatre Parkway Mountain View, CA 94043, USA)
-      | angeboten wird, zur Analyse der Websitebenutzung durch Nutzer. Der
-      | Dienst verwendet „Cookies“ – Textdateien, welche auf Ihrem Endgerät
-      | gespeichert werden. Die durch die Cookies gesammelten Informationen
-      | werden im Regelfall an einen Google-Server in den USA gesandt und
-      | dort gespeichert.
-    p
-      | Auf dieser Website greift die IP-Anonymisierung. Die IP-Adresse der
-      | Nutzer wird innerhalb der Mitgliedsstaaten der EU und des
-      | Europäischen Wirtschaftsraum gekürzt. Durch diese Kürzung entfällt
-      | der Personenbezug Ihrer IP-Adresse. Im Rahmen der Vereinbarung zur
-      | Auftragsdatenvereinbarung, welche die Websitebetreiber mit der
-      | Google Inc. geschlossen haben, erstellt diese mithilfe der
-      | gesammelten Informationen eine Auswertung der Websitenutzung und der
-      | Websiteaktivität und erbringt mit der Internetnutzung verbundene
-      | Dienstleistungen.
-    p
-      | Sie haben die Möglichkeit, die Speicherung des Cookies auf Ihrem
-      | Gerät zu verhindern, indem Sie in Ihrem Browser entsprechende
-      | Einstellungen vornehmen. Es ist nicht gewährleistet, dass Sie auf
-      | alle Funktionen dieser Website ohne Einschränkungen zugreifen
-      | können, wenn Ihr Browser keine Cookies zulässt.
-    p
-      | Weiterhin können Sie durch ein Browser-Plugin verhindern, dass die
-      | durch Cookies gesammelten Informationen (inklusive Ihrer IP-Adresse)
-      | an die Google Inc. gesendet und von der Google Inc. genutzt werden.
-      | Folgender Link führt Sie zu dem entsprechenden Plugin:
-      | <a href="https://tools.google.com/dlpage/gaoptout?hl=de"> https://tools.google.com/dlpage/gaoptout?hl=de</a>
-    p
-      | Alternativ verhindern Sie mit einem Klick auf 
-      | <a onclick="alert('Google Analytics wurde deaktiviert');" href="javascript:gaOptout()">diesen Link</a>
-      | , dass Google Analytics
-      | innerhalb dieser Website Daten über Sie erfasst. Mit dem Klick auf
-      | obigen Link laden Sie ein „Opt-Out-Cookie“ herunter. Ihr Browser 
-      | muss die Speicherung von Cookies also hierzu grundsätzlich erlauben.
-      | Löschen Sie Ihre Cookies regelmäßig, ist ein erneuter Klick auf den
-      | Link bei jedem Besuch dieser Website vonnöten.
-    p
-      | Hier finden Sie weitere Informationen zur Datennutzung durch die
-      | Google Inc.: 
-      | <a href="https://support.google.com/analytics/answer/6004245?hl=de">
-      | https://support.google.com/analytics/answer/6004245?hl=de</a>
+  h3 Google Analytics
+  p
+    | Diese Website nutzt den Dienst „Google Analytics“, welcher von der
+    | Google Inc. (1600 Amphitheatre Parkway Mountain View, CA 94043, USA)
+    | angeboten wird, zur Analyse der Websitebenutzung durch Nutzer. Der
+    | Dienst verwendet „Cookies“ – Textdateien, welche auf Ihrem Endgerät
+    | gespeichert werden. Die durch die Cookies gesammelten Informationen
+    | werden im Regelfall an einen Google-Server in den USA gesandt und
+    | dort gespeichert.
+  p
+    | Auf dieser Website greift die IP-Anonymisierung. Die IP-Adresse der
+    | Nutzer wird innerhalb der Mitgliedsstaaten der EU und des
+    | Europäischen Wirtschaftsraum gekürzt. Durch diese Kürzung entfällt
+    | der Personenbezug Ihrer IP-Adresse. Im Rahmen der Vereinbarung zur
+    | Auftragsdatenvereinbarung, welche die Websitebetreiber mit der
+    | Google Inc. geschlossen haben, erstellt diese mithilfe der
+    | gesammelten Informationen eine Auswertung der Websitenutzung und der
+    | Websiteaktivität und erbringt mit der Internetnutzung verbundene
+    | Dienstleistungen.
+  p
+    | Sie haben die Möglichkeit, die Speicherung des Cookies auf Ihrem
+    | Gerät zu verhindern, indem Sie in Ihrem Browser entsprechende
+    | Einstellungen vornehmen. Es ist nicht gewährleistet, dass Sie auf
+    | alle Funktionen dieser Website ohne Einschränkungen zugreifen
+    | können, wenn Ihr Browser keine Cookies zulässt.
+  p
+    | Weiterhin können Sie durch ein Browser-Plugin verhindern, dass die
+    | durch Cookies gesammelten Informationen (inklusive Ihrer IP-Adresse)
+    | an die Google Inc. gesendet und von der Google Inc. genutzt werden.
+    | Folgender Link führt Sie zu dem entsprechenden Plugin:
+    | <a href="https://tools.google.com/dlpage/gaoptout?hl=de"> https://tools.google.com/dlpage/gaoptout?hl=de</a>
+  p
+    | Alternativ verhindern Sie mit einem Klick auf 
+    | <a onclick="alert('Google Analytics wurde deaktiviert');" href="javascript:gaOptout()">diesen Link</a>
+    | , dass Google Analytics
+    | innerhalb dieser Website Daten über Sie erfasst. Mit dem Klick auf
+    | obigen Link laden Sie ein „Opt-Out-Cookie“ herunter. Ihr Browser 
+    | muss die Speicherung von Cookies also hierzu grundsätzlich erlauben.
+    | Löschen Sie Ihre Cookies regelmäßig, ist ein erneuter Klick auf den
+    | Link bei jedem Besuch dieser Website vonnöten.
+  p
+    | Hier finden Sie weitere Informationen zur Datennutzung durch die
+    | Google Inc.: 
+    | <a href="https://support.google.com/analytics/answer/6004245?hl=de">
+    | https://support.google.com/analytics/answer/6004245?hl=de</a>
 
-    p.address
-      | Muster: 
-      a(href='https://www.e-recht24.de') eRecht24 
-      | (mit Ergänzungen)
+  p.address
+    | Muster: 
+    a(href='https://www.e-recht24.de') eRecht24 
+    | (mit Ergänzungen)
 .footer_bottom
-  .text-center
     .footer_bottom_content
-      span#footer-line
-          a.internal-link(rel='nofollow', href='/terms-of-service', target='_parent') Terms of Service
-          |  | 
-          a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+      .footer_box
+        a.internal-link(rel='nofollow', href='/terms-of-service', target='_parent') Terms of Service
+        a.internal-link(rel='nofollow', href='#', target='_parent') Legal Notice
+      .footer_box
+        p(style="text-align: center; display: inline-block; width: 100%;")
+          a(href='https://twitter.com/logi_js', target='_blank', style="margin-right: 5px;")
+            img(src="images/twitter.png" style="width: 40px; margin-top: -20px;")
+          a(href='https://github.com/SimonBuxx/logijs', target='_blank', style="margin-left: 5px;")
+            img(src="images/github_dark.png" style="width: 40px; margin-top: -20px;")
+      .footer_box
+        p(style="text-align: right;") Made with <i class="fas fa-heart" style="color: #c83232;"></i> in Lübeck
+          span(style="color: #c83232;") .
 script
   include ../libraries/jquery.min.js
   include ../libraries/bootstrap.min.js
   include ../libraries/stickUp.min.js
-</body>
+script.
+  window.onscroll = function() {scrollFunction()};
+  function scrollFunction() {
+    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+      document.getElementById("top_logo").style.width = "200px";
+      document.getElementById("front_teaser").style.opacity = "0";
+      document.getElementById("main-carousel").style.opacity = "1";
+    } else {
+      document.getElementById("top_logo").style.width = "350px";
+      document.getElementById("front_teaser").style.opacity = "1";
+      document.getElementById("main-carousel").style.opacity = "0";
+    }
+  }
+
 </html>

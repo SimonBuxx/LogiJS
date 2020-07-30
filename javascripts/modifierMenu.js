@@ -2,6 +2,7 @@
 // Contains functions for the modifier mode
 
 function enterModifierMode() {
+    closeCustomDialog();
     setControlMode('modify');
     setSelectMode('none');
     setActive(modifierModeButton, true);
@@ -179,7 +180,7 @@ function positionModifierElements() {
     sequencer.position(modifierMenuX + 442, modifierMenuY + 67);
 
     captionInput.position(modifierMenuX + 250, modifierMenuY + 70);
-    inputIsTopBox.position(modifierMenuX + 270, modifierMenuY + 120);
+    inputIsTopBox.position(modifierMenuX + 280, modifierMenuY + 120);
     clockspeedSlider.position(modifierMenuX + 300, modifierMenuY + 170);
     minusLabel.position(modifierMenuX + 278, modifierMenuY + 161);
     plusLabel.position(modifierMenuX + 475, modifierMenuY + 165);
@@ -392,7 +393,7 @@ function createColorButtons() {
 }
 
 function createModifierElements() {
-    inputIsTopBox = createCheckbox('PIN TO THE TOP', false);
+    inputIsTopBox = createCheckbox('Pin to the top', false);
     inputIsTopBox.hide();
     inputIsTopBox.changed(newIsTopState);
     inputIsTopBox.elt.className = 'topBox';
@@ -411,12 +412,13 @@ function createModifierElements() {
     minusLabel.style('font-size', '30px');
 
     captionInput = createInput('');
-    captionInput.elt.style.fontFamily = 'Open Sans';
+    captionInput.elt.style.fontFamily = 'ArcaMajora3';
     captionInput.hide();
     captionInput.size(167, 15);
-    captionInput.attribute('placeholder', 'PIN NAME');
+    captionInput.attribute('placeholder', 'Pin Name');
     captionInput.input(newCaption);
     captionInput.elt.className = "textInput";
+    captionInput.style('font-size', '20px');
     captionInput.mouseOver(function () {
         setHelpText('Caption of the corresponding pin on an exported module');
     });
