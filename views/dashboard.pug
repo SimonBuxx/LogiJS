@@ -65,17 +65,19 @@ body
             ul.nav.navbar-nav.navbar-right
               li
                 a.user-button.internal-link(rel='nofollow', href='#', target='_parent') #{user} <i class="fa fa-user" style="color: #c83232;"></i>
+              li
+                a.Logout.internal-link(rel='nofollow', href='#', target='_parent') Logout <i class="fa fa-sign-out-alt" style="color: #c83232;"></i>
   if sketchData.sketches.length === 0
     .outer-dashboard-container
       .item-container
         .db-mobile-bar.show-in-mobile
-          form#import-button.Import(title="Coming soon!")
+          //form#import-button.Import(title="Coming soon!")
             button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
               <i class="fa fa-file-upload"></i> Import File
-          form#profile-button.Profile(title="Coming soon!")
+          //form#profile-button.Profile(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
                 <i class="fa fa-user-circle"></i> Profile
-          form#logout-button.Logout
+          //form#logout-button.Logout
             button.btn.btn-lg.btn-orange(type='submit', role='button')
               <i class="fa fa-sign-out-alt"></i> Logout
       #nosketches_back
@@ -89,13 +91,15 @@ body
           .sticky-bar
             button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
               <i class="fa fa-plus-circle"></i> New Sketch
-            form#import-button.Import(title="Coming soon!")
+            //button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
+              <i class="fa fa-plus-circle"></i> New Sketch
+            //form#import-button.Import(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
                 <i class="fa fa-file-upload"></i> Import File
-            form#profile-button.Profile(title="Coming soon!")
+            //form#profile-button.Profile(title="Coming soon!")
               button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
                 <i class="fa fa-user-circle"></i> Profile
-            form#logout-button.Logout
+            //form#logout-button.Logout
               button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", role='button')
                 <i class="fa fa-sign-out-alt"></i> Logout
   else
@@ -104,15 +108,15 @@ body
           .sticky-bar
             button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
               <i class="fa fa-plus-circle"></i> New Sketch
-            form#import-button.Import(title="Coming soon!")
-              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-                <i class="fa fa-file-upload"></i> Import File
-            form#profile-button.Profile(title="Coming soon!")
-              button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
-                <i class="fa fa-user-circle"></i> Profile
-            form#logout-button.Logout
-              button.btn.btn-lg.btn-orange(type='submit', role='button')
-                <i class="fa fa-sign-out-alt"></i> Logout
+            p#click_name #{sketchData.sketches[0]}
+              span(style="color: #c83232;") .
+            img#click_image(src='data:image/png;base64,' + images[0], alt=sketchData.sketches[r])
+            p#click_desc #{descriptions[0]}
+            p#click_date
+            a.click_download.download(rel="nofollow") 
+                <span style="color: #c83232"><i class="fa fa-file-download"></i></span> Download
+            a.delete.click_delete(rel="nofollow")
+                <span style="color: #c83232"><i class="fa fa-trash-alt"></i></span> Delete
       .item-container
         .db-mobile-bar.show-in-mobile
           form#import-button.Import(title="Coming soon!")
@@ -131,23 +135,26 @@ body
           if n === 3
             - n = 0;
           .sketch_item
-            img(src='data:image/png;base64,' + images[r], alt=sketchData.sketches[r])
+            .preview_image
+              img(src='data:image/png;base64,' + images[r], alt=sketchData.sketches[r])
+              span.overlay(onclick='sketch_click(' + r + ')')
+                span.preview-span(id='span' + sketchData.sketches[r]) Details
             p.sketch_name #{sketchData.sketches[r]}
               span(style="color: #c83232;") .
-            button.btn.btn-lg.btn-orange.disable-in-mobile(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', rel="nofollow")
+            //button.btn.btn-lg.btn-orange.disable-in-mobile(type='submit', onclick="window.location.href='/editor?sketch=" + sketchData.sketches[r] + "'", role='button', rel="nofollow")
               <i class="fa fa-play"></i> Open
-            p.file_size File Size: #{sketchData.sizes[r]} KB
-            p.modified_date Last Modified: #{sketchData.modified[r]}
-            p.db_sketch_desc #{descriptions[r]}
-            a.download(id='dl' + sketchData.sketches[r], rel="nofollow") 
+            //p.file_size File Size: #{sketchData.sizes[r]} KB
+            //p.modified_date Last Modified: #{sketchData.modified[r]}
+            //p.db_sketch_desc #{descriptions[r]}
+            //a.download(id='dl' + sketchData.sketches[r], rel="nofollow") 
                 <span style="color: #c83232"><i class="fa fa-file-download"></i></span> Download
-            if (user !== 'demouser')
+            //if (user !== 'demouser')
               a.del.delete(id=sketchData.sketches[r], rel="nofollow")
                 <span style="color: #c83232"><i class="fa fa-trash-alt"></i></span> Delete
-            else 
+            //else 
               a.del(onclick="alert('Error: This is a demo account!');", id=sketchData.sketches[r], rel="nofollow")
                 <span style="color: #c83232"><i class="fa fa-trash-alt"></i></span> Delete
-            .clear
+            //.clear
           -r++;
   .footer_bottom
       .footer_bottom_content
@@ -168,3 +175,37 @@ body
     include ../libraries/jquery.min.js
     include ../libraries/bootstrap.min.js
     include ../site_scripts/dashboard.js
+  script.
+    if (!{JSON.stringify(sketchData.sketches)}.length > 0) {
+      let date = "!{sketchData.modified}".split(',')[0];
+      let sketch_name = "!{sketchData.sketches}".split(',')[0];
+      sketch_date = new Date(date);
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      document.getElementById('click_date').innerHTML = 'Last edited on ' + sketch_date.toLocaleDateString('en-US', options) + '<span style="color: #c83232;">.</span>';
+      document.getElementsByClassName('click_download')[0].id = 'dl' + sketch_name;
+      document.getElementsByClassName('click_delete')[0].id = sketch_name;
+      document.getElementById('span' + sketch_name).innerHTML = '<i class="fa fa-chevron-right fa-3x"></i>';
+    }
+    function sketch_click(r) {
+      let sketch_name = "!{sketchData.sketches}".split(',')[r];
+      if (document.getElementById('span' + sketch_name).innerHTML === '<i class="fa fa-chevron-right fa-3x"></i>') {
+        window.location.href='/editor?sketch=' + sketch_name;
+      } else {
+        let date = "!{sketchData.modified}".split(',')[r];
+        sketch_date = new Date(date);
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        let sketch_desc = !{JSON.stringify(descriptions)}[r];
+        document.getElementById('click_name').innerHTML = sketch_name + '<span style="color: #c83232;">.</span>';
+        document.getElementById('click_desc').innerHTML = sketch_desc;
+        document.getElementById('click_date').innerHTML = 'Last edited on ' + sketch_date.toLocaleDateString('en-US', options) + '<span style="color: #c83232;">.</span>';
+        document.getElementById('click_image').src = 'data:image/png;base64,' + !{JSON.stringify(images)}[r];
+        document.getElementById('click_image').alt = sketch_name;
+        document.getElementsByClassName('click_download')[0].id = 'dl' + sketch_name;
+        document.getElementsByClassName('click_delete')[0].id = sketch_name;
+        let preview_spans = document.getElementsByClassName('preview-span');
+        for (let i = 0; i < preview_spans.length; i++) {
+          document.getElementsByClassName('preview-span')[i].innerHTML = 'Details';
+        }
+        document.getElementById('span' + sketch_name).innerHTML = '<i class="fa fa-chevron-right fa-3x"></i>';
+      }
+    }

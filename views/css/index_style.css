@@ -336,7 +336,7 @@ a:focus {
 #nosketches_back {
     margin: 20px 20px 0 0;
     padding: 10px;
-    background: #efefef;
+    background: #fff;
     border-radius: 10px;
     height: 180px;
     grid-row: 1;
@@ -376,9 +376,8 @@ a:focus {
 }
 
 .sticky-bar {
-    background: #efefef;
+    background: #fff;
     border-radius: 10px;
-    padding: 20px;
     height: calc(100vh - 280px);
     position: -webkit-sticky;
     position: sticky;
@@ -386,6 +385,16 @@ a:focus {
     overflow: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    border-left: 2px solid;
+    border-image: 
+    linear-gradient(
+      to top, 
+      rgba(0, 0, 0, 0),
+      #323232, 
+      rgba(0, 0, 0, 0)
+    ) 1 100%;
+    margin-left: -50px;
+    padding-left: 50px;
 }
 
 .sticky-bar::-webkit-scrollbar {
@@ -395,7 +404,28 @@ a:focus {
 .db-sidebar {
     grid-row: 1;
     grid-column: 2;
+    width: 280px;
+}
+
+#click_name {
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#click_desc {
+    text-align: justify;
+    font-size: 16px;
+}
+
+#click_date {
     margin-top: 20px;
+    font-size: 16px;
+}
+
+#click_image {
+    width: 200px;
+    border-radius: 10px;
 }
 
 .profile-sidebar {
@@ -406,13 +436,10 @@ a:focus {
     float: right;
 }
 
-.db-sidebar .btn {
-    font-size: 20px;
-}
-
 #editor-button {
-    margin: 0; 
+    margin: 0 0 50px 0; 
     width: 100%;
+    font-size: 22px;
 }
 
 #import-button button {
@@ -898,8 +925,8 @@ p.password-tipps {
 .item-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, 240px);
-    gap: 20px;
-    margin: 20px 0 0 0;
+    gap: 0;
+    margin: 0 0 0 0;
     grid-row: 1;
     grid-column: 1;
 }
@@ -916,13 +943,13 @@ p.password-tipps {
 
 .sketch_item {
     position: relative;
-    height: 340px;
-    background: #efefef;
+    height: 300px;
+    background: #fff;
     border-radius: 10px;
     margin: 0;
     overflow: hidden;
-    transition: all .4s ease-in-out;
-    transition-delay: .2s;
+    /*transition: all .4s ease-in-out;
+    transition-delay: .2s;*/
 }
 
 @media (max-width: 1023px) {
@@ -935,19 +962,48 @@ p.password-tipps {
     }
 }
 
-.sketch_item:hover {
+/*.sketch_item:hover {
     height: 580px;
-}
+}*/
 
-.sketch_item > img {
-    position: absolute;
+.sketch_item img {
+    /*position: absolute;
     left: 0;
-    top: 50px;
+    top: 50px;*/
     margin: 20px;
+    margin-top: 60px;
     width: 200px;
+    cursor: pointer;
 }
 
-.sketch_item > img, .sample_item > img {
+span.overlay {
+    background: rgba(0, 0, 0, 0);
+    display:table;
+    color: rgba(0, 0, 0, 0);
+    height: 200px;
+    width: 200px;
+    position: relative;
+    bottom: 220px;
+    left: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.preview_image:hover span.overlay {
+    background: rgba(200, 50, 50, 1);
+    color: #fff;
+    transition: 0.2s ease-in-out;
+}
+
+span.overlay span {
+    font-size: 25px;
+    color: inherit;
+    display:table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.sketch_item img, .sample_item > img {
     border-radius: 10px;
 }
 
@@ -988,7 +1044,7 @@ p.password-tipps {
     color: #323232;
 }
 
-.download, .del {
+/*.download, .del {
     cursor: pointer;
     margin-top: 340px;
     font-size: 18px;
@@ -1001,6 +1057,25 @@ p.password-tipps {
     text-align: left;
     margin-left: 20px;
     width: 120px;
+}*/
+
+.download {
+    font-size: 16px;
+    float: left;
+    color: #323232;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 50px;
+}
+
+.delete {
+    color: #323232;
+    cursor: pointer;
+    text-align: right;
+    float: right;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-right: 50px;
 }
 
 .del {
@@ -1116,13 +1191,8 @@ p.password-tipps {
     }
 }
 
-.sidebar h1 {
-    margin: 0;
-}
-
 .sidebar img, .inline-sketch-img {
     display: block;
-    width: 50%;
     margin: 20px auto;
 }
 

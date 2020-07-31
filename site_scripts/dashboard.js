@@ -14,7 +14,7 @@ sketchData.then(function (data) {
 
 const Logout = document.querySelectorAll('.Logout');
 for (const button of Logout) {
-    button.addEventListener('submit', (e) => { //jshint ignore:line
+    button.addEventListener('click', (e) => { //jshint ignore:line
         e.preventDefault();
         setCookie('access_token', '', -1);
         window.location = '/';
