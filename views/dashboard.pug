@@ -115,7 +115,11 @@ body
             p#click_date
             a.click_download.download(rel="nofollow") 
                 <span style="color: #c83232"><i class="fa fa-file-download"></i></span> Download
-            a.delete.click_delete(rel="nofollow")
+            if (user !== 'demouser')
+              a.del.delete.click_delete(rel="nofollow")
+                <span style="color: #c83232"><i class="fa fa-trash-alt"></i></span> Delete
+            else 
+              a.del.click_delete(onclick="alert('Error: This is a demo account!');", rel="nofollow")
                 <span style="color: #c83232"><i class="fa fa-trash-alt"></i></span> Delete
       .item-container
         .db-mobile-bar.show-in-mobile
