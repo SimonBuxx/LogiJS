@@ -458,7 +458,12 @@ function createAdvancedElements() {
 
 function createCustomImportButton() {
     customButton = createButton('<i class="fa fa-file-import icon"></i> Custom Import');
-    customButton.mousePressed(function () { customDialogPage = 0; customClicked(); });
+    customButton.mousePressed(function () { 
+        fill('rgba(0, 0, 0, 0.5)');
+        noStroke();
+        rect(0, 0, window.width, window.height);
+        customClicked(); 
+    });
     customButton.elt.className = 'buttonLeft';
     customButton.mouseOver(function () {
         setHelpText('Import your own sketches as custom elements');
@@ -676,7 +681,7 @@ function createDialogElements() {
 
     descInput = createElement('textarea');
     descInput.attribute('placeholder', 'Sketch Description');
-    descInput.position(windowWidth / 2 - 3, windowHeight / 2 - 25);
+    descInput.position(windowWidth / 2 - 3, windowHeight / 2 - 30);
     descInput.size(280, 114);
     descInput.elt.style.fontFamily = 'ArcaMajora3';
     descInput.elt.style.fontSize = '18px';
@@ -699,36 +704,6 @@ function createDialogElements() {
     cancelButton.elt.className = 'btn btn-lg btn-red';
     cancelButton.hide();
 
-    pageUpButton = createButton('<i class="fas fa-arrow-up"></i> Up');
-    pageUpButton.position(window.width - 545, window.height - window.height / 5);
-    pageUpButton.style('padding-left', '10px');
-    pageUpButton.style('padding-right', '10px');
-    pageUpButton.mousePressed(function () {
-        if (customDialogPage <= 0) {
-            return;
-        }
-        customDialogPage--;
-        showCustomDialog = false;
-        customClicked();
-    });
-    pageUpButton.elt.className = 'btn btn-lg btn-red customDialogButton';
-    pageUpButton.hide();
-
-    pageDownButton = createButton('<i class="fas fa-arrow-down"></i> Down');
-    pageDownButton.position(window.width - 335, window.height - window.height / 5 + 50);
-    pageDownButton.style('padding-left', '10px');
-    pageDownButton.style('padding-right', '10px');
-    pageDownButton.mousePressed(function () {
-        if (customDialogPage >= customDialogPages) {
-            return;
-        }
-        customDialogPage++;
-        showCustomDialog = false;
-        customClicked();
-    });
-    pageDownButton.elt.className = 'btn btn-lg btn-red customDialogButton';
-    pageDownButton.hide();
-
     saveDialogText = createP('Save Sketch<span style="color: #c83232">.</span>');
     saveDialogText.hide();
     saveDialogText.elt.style.color = '#323232';
@@ -737,22 +712,14 @@ function createDialogElements() {
     saveDialogText.position(windowWidth / 2 - 65, windowHeight / 2 - 160);
     saveDialogText.style('font-size', '36px');
 
-    customDialogText = createP('Import your own elements<span style="color: #c83232">.</span>');
-    customDialogText.hide();
-    customDialogText.elt.style.color = '#323232';
-    customDialogText.elt.style.fontFamily = 'ArcaMajora3';
-    customDialogText.elt.style.margin = '3px 0px 0px 0px';
-    customDialogText.position(windowWidth / 2 - 120, 120);
-    customDialogText.style('font-size', '36px');
-
     // Button to save the sketch
     if (getCookieValue('access_token') !== '') {
-        saveButton = createButton('Save');
+        saveButton = createButton('<i class="fas fa-save"></i> Save');
         saveButton.mouseOver(function () {
             setHelpText('Save this sketch to the dashboard');
         });
     } else {
-        saveButton = createButton('Download');
+        saveButton = createButton('<i class="fas fa-file-download"></i> Download');
         saveButton.mouseOver(function () {
             setHelpText('Download this sketch as a JSON file');
         });

@@ -1,16 +1,4 @@
-//let socket = io.connect();
 let confButton = '';
-
-/*let sketchData = [];
-
-sketchData = fetch('/sketches')
-    .then(function (res) {
-        return res.json();
-    });
-
-sketchData.then(function (data) {
-    console.log(data);
-});*/
 
 const Logout = document.querySelectorAll('.Logout');
 for (const button of Logout) {

@@ -338,9 +338,11 @@ a:focus {
     padding: 10px;
     background: #fff;
     border-radius: 10px;
-    height: 180px;
     grid-row: 1;
     grid-column: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 @media (max-width: 1023px) {
@@ -389,6 +391,17 @@ a:focus {
     ) 1 100%;
     margin-left: -50px;
     padding-left: 50px;
+    min-height: 200px;
+}
+
+.sticky-bar h1 {
+    font-size: 30px;
+    margin: 0 0 20px 0;
+    text-align: center;
+}
+
+.sticky-bar p {
+    text-align: justify;
 }
 
 .sticky-bar::-webkit-scrollbar {
@@ -432,6 +445,12 @@ a:focus {
 
 #editor-button {
     margin: 0 0 50px 0; 
+    width: 100%;
+    font-size: 22px;
+}
+
+#open-button {
+    margin: 20px 0 0 0; 
     width: 100%;
     font-size: 22px;
 }
@@ -942,8 +961,6 @@ p.password-tipps {
     border-radius: 10px;
     margin: 0;
     overflow: hidden;
-    /*transition: all .4s ease-in-out;
-    transition-delay: .2s;*/
 }
 
 @media (max-width: 1023px) {

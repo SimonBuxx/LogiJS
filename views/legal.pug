@@ -50,12 +50,14 @@ body
             ul.nav.navbar-nav.navbar-right
               if user !== ''
                 li
-                  a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') #{user} <i class="fa fa-user" style="color: #c83232;"></i>
+                  a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') <i class="fa fa-user" style="color: #c83232;"></i> #{user}
+                li
+                  a.Logout.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-out-alt" style="color: #c83232;"></i> Logout
               else
                 li
-                  a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') Login
+                  a.login-button.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-in-alt" style="color: #c83232;"></i> Login
                 li
-                  a.internal-link(rel='nofollow', href='/signup', target='_parent') Register 
+                  a.internal-link(rel='nofollow', href='/signup', target='_parent') <i class="fa fa-user-plus" style="color: #c83232;"></i> Register
 .legal-content
   h1 Legal Notice
     span(style="color: #c83232;") .
@@ -329,18 +331,5 @@ script
   include ../libraries/jquery.min.js
   include ../libraries/bootstrap.min.js
   include ../libraries/stickUp.min.js
-script.
-  window.onscroll = function() {scrollFunction()};
-  function scrollFunction() {
-    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-      document.getElementById("top_logo").style.width = "200px";
-      document.getElementById("front_teaser").style.opacity = "0";
-      document.getElementById("main-carousel").style.opacity = "1";
-    } else {
-      document.getElementById("top_logo").style.width = "350px";
-      document.getElementById("front_teaser").style.opacity = "1";
-      document.getElementById("main-carousel").style.opacity = "0";
-    }
-  }
-
+  include ../site_scripts/tos_legal.js
 </html>

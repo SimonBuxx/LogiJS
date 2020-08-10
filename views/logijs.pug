@@ -53,11 +53,42 @@ body
   |   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKSH2RQ"
   |   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   |   <!-- End Google Tag Manager (noscript) -->
-  a(href='https://github.com/SimonBuxx/LogiJS')
-    img#github(src='images/github.png', alt='Fork me on GitHub')
-    a(href='/')
-      img#logo(src='images/alt_logo.png', alt='LogiJS logo')
+  a(href='/')
+    img#logo(src='images/alt_logo.png', alt='LogiJS logo')
+  .custom-container(style="position: relative;")
+    #custom-dialog
+      h1 Import your own elements<span style="color: #c83232">.</span>
+      button#cancel-button.btn.btn-lg.btn-red(rel="nofollow" onclick="cancelClicked();") Cancel
+      if sketchData.sketches.length === 0
+        .no_sketches_container
+          p.no_sketches_info You don't have any sketches
+            span(style="color: #c83232;") .
+      else
+        .item-container
+          - var r = 0;
+          while r < sketchData.sketches.length
+            .sketch_item
+              .preview_image
+                img(src='data:image/png;base64,' + images[r], alt=sketchData.sketches[r])
+                span.overlay(onclick='custom_element_clicked(' + r + ')', onmouseover='custom_element_hovered(' + r + ')')
+                  span.preview-span(id='span' + sketchData.sketches[r]) <i class="fa fa-search"></i> Details
+              p.sketch_name #{sketchData.sketches[r]}
+                span(style="color: #c83232;") .
+            -r++;
+      p.preview_name Preview
+        span(style="color: #c83232;") .
+      #canvas-container
+      p.preview_name How to
+        span(style="color: #c83232;") . 
+      p.preview_text In this menu, you can import structures you built in other sketch documents.<br><br>
+        | To prepare a sketch for being imported, you can 
+        | click on its in- and outputs in edit mode to alter their description and their order in which they appear on the final module. You can also place inputs at the top of your modules.
   script
     include ../site_scripts/survicate.js
     include ../libraries/jquery.min.js
     include ../libraries/bootstrap.min.js
+  script.
+    let preview_spans = document.getElementsByClassName('preview-span');
+    for (let i = 0; i < preview_spans.length; i++) {
+      document.getElementsByClassName('preview-span')[i].innerHTML = '<i class="fa fa-file-import"></i> Import';
+    }

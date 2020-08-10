@@ -153,26 +153,6 @@ let saveDialog = false;
 */
 let showCustomDialog = false;
 
-/*
-    The number of columns for the sketch previews in the custom module dialog
-*/
-let customDialogColumns = 0;
-
-/*
-    The number of rows for the sketch previews in the custom module dialog
-*/
-let customDialogRows = 0;
-
-/*
-    The current page displayed in the custom module dialog
-*/
-let customDialogPage = 0;
-
-/*
-    The number of pages in the custom module dialog
-*/
-let customDialogPages = 0;
-
 let error = '';
 let errordesc = '';
 
@@ -268,7 +248,7 @@ let sequencer;
 let leftSideButtons;
 
 let sketchNameInput, moduleNameInput, saveButton, saveDialogText;
-let helpLabel, customDialogText, saveDialogButton, dashboardButton, cancelButton, descInput, newButton, pageUpButton, pageDownButton;
+let helpLabel, saveDialogButton, dashboardButton, cancelButton, descInput, newButton;
 let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions,
     andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
@@ -289,7 +269,9 @@ let socket;
 /*
     This is the main HTML5 canvas variable for the sketch area
 */
-let mainCanvas;
+let mainCanvas, pwCanvas;
+
+let PWp5; // The p5 element for the preview canvas
 
 /*
     Disable some error messages from p5
@@ -308,6 +290,8 @@ function setup() { // jshint ignore:line
     mainCanvas = createCanvas(windowWidth - 230, windowHeight - 50);     // Creates the canvas in full window size
     mainCanvas.position(230, 50);
     mainCanvas.id('mainCanvas');
+
+    initPreviewCanvas();
 
     // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -329,7 +313,7 @@ function setup() { // jshint ignore:line
 
     createBasicElements();
     createAdvancedElements();
-    
+
     createCustomImportButton();
     createElementOptions();
 
@@ -372,6 +356,7 @@ function setup() { // jshint ignore:line
 
     reDraw();
     setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
+    justClosedMenu = false;
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -1418,7 +1403,7 @@ function startSimulation() {
     }
 
     setSimButtonText('<i class="fa fa-stop icon"></i> Stop'); // Alter the caption of the Start/Stop button
-    
+
     // Go to modify mode to hide previews etc.
     setControlMode('modify');
 
@@ -1493,7 +1478,7 @@ function endSimulation() {
     for (const elem of wires) {
         elem.state = false;
     }
-    
+
     simRunning = false;
     reDraw();
 }
@@ -1564,7 +1549,7 @@ function configureButtons(mode) {
     labelButton.elt.disabled = toolbox;
     buttonButton.elt.disabled = toolbox;
     clockButton.elt.disabled = toolbox;
-    
+
     reg4Button.elt.disabled = toolbox;
     decoderButton.elt.disabled = toolbox;
     counterButton.elt.disabled = toolbox;
@@ -1750,13 +1735,10 @@ function reDraw() {
 }
 
 function fetchImportData() {
-    customDialogColumns = Math.floor((window.width - 150 - window.width / 4) / 220);
-    customDialogRows = Math.floor((window.height - window.height / 10) / 220);
     socket.emit('getImportSketches', { access_token: getCookieValue('access_token') });
     socket.on('importSketches', (data) => {
         socket.off('importSketches');
         importSketchData = data;
-        customDialogPages = Math.ceil(Math.ceil(data.sketches.length / customDialogColumns) / customDialogRows) - 1;
     });
 }
 

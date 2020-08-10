@@ -88,9 +88,24 @@ router.get('/', function (req, res) {
 });
 
 router.get('/editor', function (req, res) {
-    res.render('logijs', {
-        user: getUser(req)
-    });
+    let user = getUser(req);
+    if (user !== '') {
+        user_data.getSketches(user, function (data) {
+            res.render('logijs', {
+                user: user,
+                sketchData: data.sketches,
+                images: data.images,
+                descriptions: data.descriptions
+            });
+        });
+    } else {
+        res.render('logijs', {
+            user: '',
+            sketchData: { sketches: {}},
+            images: {},
+            descriptions: {}
+        });
+    }
 });
 
 router.get('/features', function (req, res) {
