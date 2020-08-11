@@ -781,6 +781,10 @@ span.overlay span {
     transition: max-height 0.2s ease-out;
 }
 
+.active {
+    display: block;
+}
+
 .sidebar img, .inline-sketch-img {
     display: block;
     margin: 20px auto;
