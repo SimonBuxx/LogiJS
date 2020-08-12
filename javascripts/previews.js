@@ -52,7 +52,11 @@ function showElementPreview() {
         textAlign(CENTER, CENTER);
         fill(0);
         textSize(10);
-        text(item.caption, mx + w / 2, my + h / 2);
+        if (Math.max(item.inputs - item.tops.length, item.outputs) % 2 !== 0 && textWidth(item.caption) >= w - 30 && Math.max(item.inputs - item.tops.length, item.outputs) >= 2 && gateDirection % 2 === 0) {
+            text(item.caption, mx + w / 2, my + h / 2 - 15);
+        } else {
+            text(item.caption, mx + w / 2, my + h / 2);
+        }
         textSize(14);
 
         let tops = 0;
@@ -657,7 +661,11 @@ function initPreviewCanvas() {
             p.textAlign(CENTER, CENTER);
             p.fill(0);
             p.textSize(10);
-            p.text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2);
+            if (Math.max(item.inputs - item.tops.length, item.outputs) % 2 !== 0 && p.textWidth(item.caption) >= w - 30 && Math.max(item.inputs - item.tops.length, item.outputs) >= 2) {
+                p.text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2 - 15);
+            } else {
+                p.text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2);
+            }
             p.textSize(14);
             let tops = 0;
             for (let i = 1; i <= item.inputs; i++) {

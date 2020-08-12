@@ -574,7 +574,11 @@ CustomSketch.prototype.show = function () {
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
-    text(this.caption, this.x + this.w / 2, this.y + this.h / 2); // Draw text
+    if (Math.max(this.inputs.length - this.tops, this.outputs.length) % 2 !== 0 && textWidth(this.caption) >= this.w - 30 && Math.max(this.inputs.length - this.tops, this.outputs.length) >= 2 && this.direction % 2 === 0) {
+        text(this.caption, this.x + this.w / 2, this.y + this.h / 2 - 15);
+    } else {
+        text(this.caption, this.x + this.w / 2, this.y + this.h / 2);
+    }
 
     let tops = 0;
     // Draw inputs
