@@ -68,6 +68,8 @@ body
               li
                 a.Logout.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-out-alt" style="color: #c83232;"></i> Logout
   if sketchData.sketches.length === 0
+    .slogan-container
+      h1.background-text(style="top: 50%; transform: translate(0, 50%);") discover the world
     .outer-dashboard-container(style="min-height: calc(100vh - 260px);")
       #nosketches_back
         p#nosketches_message You don't have any sketches

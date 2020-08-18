@@ -35,7 +35,7 @@ function showElementPreview() {
         stroke(0);
         strokeWeight(3);
         fill(255);
-        textFont('Open Sans');
+        textFont('Arial');
 
         // Draw the body
         if (item.tops.length === 0) {
@@ -268,11 +268,11 @@ function showElementPreview() {
                 textAlign(CENTER, CENTER);
                 fill(0);
                 if (previewData.type === 'and') {
-                    text('&', mx + gateWidth / 2, my + gateHeight / 2);
+                    text('&', mx + gateWidth / 2, my + gateHeight / 2 + 2);
                 } else if (previewData.type === 'or') {
-                    text('≥1', mx + gateWidth / 2, my + gateHeight / 2);
+                    text('≥1', mx + gateWidth / 2, my + gateHeight / 2 + 2);
                 } else if (previewData.type === 'xor') {
-                    text('=1', mx + gateWidth / 2, my + gateHeight / 2);
+                    text('=1', mx + gateWidth / 2, my + gateHeight / 2 + 2);
                 }
 
                 // Draw inputs
@@ -419,13 +419,15 @@ function showElementPreview() {
                 textSize(20);
                 textAlign(LEFT, TOP);
                 strokeWeight(3);
-                stroke(140);
+                //stroke(140);
+                noStroke();
                 fill(150, 200);
                 rect(mx - 15, my - 15, GRIDSIZE * 5, GRIDSIZE);
                 noStroke();
-                fill(0);
+                fill(50);
                 rect(mx - 5, my - 5, 10, 10);
-                text('New label', mx + 15, my - 11, GRIDSIZE * 5, GRIDSIZE);
+                fill(0);
+                text('New label', mx + 15, my - 9, GRIDSIZE * 5, GRIDSIZE);
                 break;
         }
     }
@@ -648,7 +650,7 @@ function initPreviewCanvas() {
             p.stroke(0);
             p.strokeWeight(3);
             p.fill(255);
-            p.textFont('Open Sans');
+            p.textFont('Arial');
 
             // Draw the body
             if (item.tops.length === 0) {

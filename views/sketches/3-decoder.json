@@ -137,19 +137,22 @@
       "x": "1245",
       "y": "255",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2²"
     },
     {
       "x": "1275",
       "y": "255",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2¹"
     },
     {
       "x": "1305",
       "y": "255",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2º"
     }
   ],
   "segments": [],

@@ -1,7 +1,7 @@
 function createTopButtons() {
     // Activates the edit mode
     modifierModeButton = createButton('<i class="fa fa-pen icon"></i> Edit');
-    modifierModeButton.position(232, 3);
+    modifierModeButton.position(242, 3);
     modifierModeButton.mousePressed(function () {
         enterModifierMode();
     });
@@ -16,7 +16,7 @@ function createTopButtons() {
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('<i class="far fa-trash-alt icon"></i> Delete');
-    deleteButton.position(310, 3);
+    deleteButton.position(320, 3);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = 'button';
     deleteButton.mouseOver(function () {
@@ -28,7 +28,7 @@ function createTopButtons() {
 
     // Starts and stops the simulation
     simButton = createButton('<i class="fa fa-play icon"></i> Start');
-    simButton.position(404, 3);
+    simButton.position(414, 3);
     simButton.mousePressed(simClicked);
     simButton.elt.className = 'button';
     simButton.mouseOver(function () {
@@ -40,7 +40,7 @@ function createTopButtons() {
 
     // Undos the last action
     undoButton = createButton('<i class="fa fa-undo icon"></i> Undo');
-    undoButton.position(488, 3);
+    undoButton.position(498, 3);
     undoButton.mousePressed(() => {
         undo();
     });
@@ -49,7 +49,7 @@ function createTopButtons() {
 
     // Redos the last action
     redoButton = createButton('<i class="fa fa-redo icon"></i> Redo');
-    redoButton.position(577, 3);
+    redoButton.position(587, 3);
     redoButton.mousePressed(() => {
         redo();
     });
@@ -58,7 +58,7 @@ function createTopButtons() {
 
     // Activates the mode for area selecting
     selectButton = createButton('<i class="fas fa-object-group icon"></i> Select');
-    selectButton.position(664, 3);
+    selectButton.position(674, 3);
     selectButton.mousePressed(startSelect);
     selectButton.elt.style.cursor = 'default';
     selectButton.elt.className = 'button';
@@ -67,7 +67,7 @@ function createTopButtons() {
 
 function createBasicElements() {
     // Adds text 'Basic'
-    labelBasic = createP('Basic Elements<span style="color: #c83232">.</span>');
+    labelBasic = createP('Logic Gates<span style="color: #c83232">.</span>');
     labelBasic.elt.className = 'label';
     labelBasic.parent(leftSideButtons);
 
@@ -77,7 +77,7 @@ function createBasicElements() {
     andButton.elt.className = 'previewButton';
     andButton.elt.innerHTML = '<img class="preview" src="images/and-gate.png">';
     andButton.mouseOver(function () {
-        setHelpText('AND-Gate');
+        setHelpText('AND Gate');
     });
     andButton.mouseOut(function () {
         setHelpText('');
@@ -90,7 +90,7 @@ function createBasicElements() {
     orButton.elt.className = 'previewButton';
     orButton.elt.innerHTML = '<img class="preview" src="images/or-gate.png">';
     orButton.mouseOver(function () {
-        setHelpText('OR-Gate');
+        setHelpText('OR Gate');
     });
     orButton.mouseOut(function () {
         setHelpText('');
@@ -103,12 +103,64 @@ function createBasicElements() {
     xorButton.elt.className = 'previewButton';
     xorButton.elt.innerHTML = '<img class="preview" src="images/xor-gate.png">';
     xorButton.mouseOver(function () {
-        setHelpText('XOR-Gate');
+        setHelpText('XOR Gate');
     });
     xorButton.mouseOut(function () {
         setHelpText('');
     });
     xorButton.parent(leftSideButtons);
+
+    // Adds not-gates
+    notButton = createButton('');
+    notButton.mousePressed(function () {
+        setActive(notButton, true);
+        setPreviewElement(true, {
+            tops: [],
+            inputLabels: [''],
+            outputLabels: ['1'],
+            caption: 'NOT',
+            inputs: 1,
+            outputs: 1
+        });
+        return importCustom('not-gate.json');
+    });
+    notButton.elt.className = 'previewButton';
+    notButton.elt.innerHTML = '<img class="preview" src="images/not-gate.png">';
+    notButton.mouseOver(function () {
+        setHelpText('NOT Gate');
+    });
+    notButton.mouseOut(function () {
+        setHelpText('');
+    });
+    notButton.parent(leftSideButtons);
+
+    // Adds buffer gates
+    bufferButton = createButton('');
+    bufferButton.mousePressed(function () {
+        setActive(bufferButton, true);
+        setPreviewElement(true, {
+            tops: [],
+            inputLabels: [''],
+            outputLabels: ['1'],
+            caption: '',
+            inputs: 1,
+            outputs: 1
+        });
+        return importCustom('1-buffer.json');
+    });
+    bufferButton.elt.className = 'previewButton';
+    bufferButton.elt.innerHTML = '<img class="preview" src="images/buffer.png">';
+    bufferButton.mouseOver(function () {
+        setHelpText('Buffer Gate');
+    });
+    bufferButton.mouseOut(function () {
+        setHelpText('');
+    });
+    bufferButton.parent(leftSideButtons);
+
+    labelInOut = createP('Inputs & Outputs<span style="color: #c83232">.</span>');
+    labelInOut.elt.className = 'label';
+    labelInOut.parent(leftSideButtons);
 
     // Adds switches
     inputButton = createButton('');
@@ -174,24 +226,11 @@ function createBasicElements() {
         setHelpText('');
     });
     segDisplayButton.parent(leftSideButtons);
-
-    // Adds labels
-    labelButton = createButton('');
-    labelButton.mousePressed(function () { labelButtonClicked(false); });
-    labelButton.elt.className = 'previewButton';
-    labelButton.elt.innerHTML = '<img class="preview" src="images/label.png">';
-    labelButton.mouseOver(function () {
-        setHelpText('Text Label');
-    });
-    labelButton.mouseOut(function () {
-        setHelpText('');
-    });
-    labelButton.parent(leftSideButtons);
 }
 
 function createAdvancedElements() {
     // Adds text 'Advanced Elements'
-    labelAdvanced = createP('Advanced Elements<span style="color: #c83232">.</span>');
+    labelAdvanced = createP('Memory<span style="color: #c83232">.</span>');
     labelAdvanced.elt.className = 'label';
     labelAdvanced.parent(leftSideButtons);
 
@@ -202,7 +241,7 @@ function createAdvancedElements() {
         setPreviewElement(true, {
             tops: [],
             inputLabels: ['S', 'R'],
-            outputLabels: ['Q', ''],
+            outputLabels: ['Q', 'Q̅'],
             caption: 'RS-FF',
             inputs: 2,
             outputs: 2
@@ -225,7 +264,7 @@ function createAdvancedElements() {
         setPreviewElement(true, {
             tops: [],
             inputLabels: ['D', '>'],
-            outputLabels: ['Q', ''],
+            outputLabels: ['Q', 'Q̅'],
             caption: 'D-FF',
             inputs: 2,
             outputs: 2
@@ -241,30 +280,35 @@ function createAdvancedElements() {
         setHelpText('');
     });
     dFlipFlopButton.parent(leftSideButtons);
-    // Adds a counter
-    counterButton = createButton('Counter');
-    counterButton.mousePressed(function () {
-        setActive(counterButton, true);
-        let opLabels = new Array(counterBitWidth).fill('');
+
+    // Adds a register (4Bit)
+    reg4Button = createButton('4Bit-Register');
+    reg4Button.mousePressed(function () {
+        setActive(reg4Button, true);
         setPreviewElement(true, {
-            tops: [],
-            inputLabels: ['>'],
-            outputLabels: opLabels,
-            caption: 'Counter',
-            inputs: 1,
-            outputs: counterBitWidth
+            tops: [0, 1],
+            inputLabels: ['L', '>', '2³', '2²', '2¹', '2º'],
+            outputLabels: ['2³', '2²', '2¹', '2º'],
+            caption: 'Register',
+            inputs: 6,
+            outputs: 4
         });
-        return counterClicked();
+        return importCustom('4-register.json');
     });
-    counterButton.elt.className = 'previewButton';
-    counterButton.elt.innerHTML = '<img class="preview" src="images/counter.png">';
-    counterButton.mouseOver(function () {
-        setHelpText('Counter');
+    reg4Button.elt.className = 'previewButton';
+    reg4Button.elt.innerHTML = '<img class="preview" src="images/register.png">';
+    reg4Button.mouseOver(function () {
+        setHelpText('4-bit Register');
     });
-    counterButton.mouseOut(function () {
+    reg4Button.mouseOut(function () {
         setHelpText('');
     });
-    counterButton.parent(leftSideButtons);
+    reg4Button.parent(leftSideButtons);
+
+    labelConverter = createP('Converter<span style="color: #c83232">.</span>');
+    labelConverter.elt.className = 'label';
+    labelConverter.parent(leftSideButtons);
+
     // Adds a decoder
     decoderButton = createButton('Decoder');
     decoderButton.mousePressed(function () {
@@ -273,7 +317,7 @@ function createAdvancedElements() {
         for (let i = 0; i < Math.pow(2, decoderBitWidth); i++) {
             opLabels.push(i);
         }
-        let ipLabels = new Array(decoderBitWidth).fill('');
+        let ipLabels = ['2⁴','2³','2²','2¹','2º'].slice(5 - decoderBitWidth, 5);
         setPreviewElement(true, {
             tops: [],
             inputLabels: ipLabels,
@@ -385,37 +429,20 @@ function createAdvancedElements() {
         setHelpText('');
     });
     demuxButton.parent(leftSideButtons);
-    // Adds a register (4Bit)
-    reg4Button = createButton('4Bit-Register');
-    reg4Button.mousePressed(function () {
-        setActive(reg4Button, true);
-        setPreviewElement(true, {
-            tops: [0, 1],
-            inputLabels: ['L', '>', '2³', '2²', '2¹', '2º'],
-            outputLabels: ['2³', '2²', '2¹', '2º'],
-            caption: 'Register',
-            inputs: 6,
-            outputs: 4
-        });
-        return importCustom('4-register.json');
-    });
-    reg4Button.elt.className = 'previewButton';
-    reg4Button.elt.innerHTML = '<img class="preview" src="images/register.png">';
-    reg4Button.mouseOver(function () {
-        setHelpText('4-bit Register');
-    });
-    reg4Button.mouseOut(function () {
-        setHelpText('');
-    });
-    reg4Button.parent(leftSideButtons);
+
+
+    labelAdder = createP('Adder<span style="color: #c83232">.</span>');
+    labelAdder.elt.className = 'label';
+    labelAdder.parent(leftSideButtons);
+
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
     halfaddButton.mousePressed(function () {
         setActive(halfaddButton, true);
         setPreviewElement(true, {
             tops: [],
-            inputLabels: ['', ''],
-            outputLabels: ['', ''],
+            inputLabels: ['A', 'B'],
+            outputLabels: ['S', 'C'],
             caption: 'HA',
             inputs: 2,
             outputs: 2
@@ -437,8 +464,8 @@ function createAdvancedElements() {
         setActive(fulladdButton, true);
         setPreviewElement(true, {
             tops: [],
-            inputLabels: ['', '', ''],
-            outputLabels: ['', ''],
+            inputLabels: ['A', 'B', 'C'],
+            outputLabels: ['S', 'C'],
             caption: 'FA',
             inputs: 3,
             outputs: 2
@@ -454,24 +481,69 @@ function createAdvancedElements() {
         setHelpText('');
     });
     fulladdButton.parent(leftSideButtons);
+
+    labelVarious = createP('Various Elements<span style="color: #c83232">.</span>');
+    labelVarious.elt.className = 'label';
+    labelVarious.parent(leftSideButtons);
+
+    // Adds a counter
+    counterButton = createButton('Counter');
+    counterButton.mousePressed(function () {
+        setActive(counterButton, true);
+        let opLabels = [];
+        for (let i = 0; i < counterBitWidth; i++) {
+            opLabels.push(i);
+        }
+        setPreviewElement(true, {
+            tops: [],
+            inputLabels: ['>'],
+            outputLabels: opLabels,
+            caption: 'Counter',
+            inputs: 1,
+            outputs: counterBitWidth
+        });
+        return counterClicked();
+    });
+    counterButton.elt.className = 'previewButton';
+    counterButton.elt.innerHTML = '<img class="preview" src="images/counter.png">';
+    counterButton.mouseOver(function () {
+        setHelpText('Counter');
+    });
+    counterButton.mouseOut(function () {
+        setHelpText('');
+    });
+    counterButton.parent(leftSideButtons);
+
+    // Adds labels
+    labelButton = createButton('');
+    labelButton.mousePressed(function () { labelButtonClicked(false); });
+    labelButton.elt.className = 'previewButton';
+    labelButton.elt.innerHTML = '<img class="preview" src="images/label.png">';
+    labelButton.mouseOver(function () {
+        setHelpText('Text Label');
+    });
+    labelButton.mouseOut(function () {
+        setHelpText('');
+    });
+    labelButton.parent(leftSideButtons);
 }
 
 function createCustomImportButton() {
-    customButton = createButton('<i class="fa fa-file-import icon"></i> Custom Import');
-    customButton.mousePressed(function () { 
+    customButton = createButton('<i class="fa fa-file-import icon"></i> Custom Modules');
+    customButton.mousePressed(function () {
         fill('rgba(0, 0, 0, 0.5)');
         noStroke();
         rect(0, 0, window.width, window.height);
-        customClicked(); 
+        customClicked();
     });
     customButton.elt.className = 'buttonLeft';
     customButton.mouseOver(function () {
-        setHelpText('Import your own sketches as custom elements');
+        setHelpText('Import your own sketches as custom modules');
     });
     customButton.mouseOut(function () {
         setHelpText('');
     });
-    customButton.parent(leftSideButtons);
+    customButton.parent(leftSideContainer);
     if (getCookieValue('access_token') === '') {
         customButton.elt.disabled = true;
     }
@@ -481,14 +553,14 @@ function createElementOptions() {
     // Adds text 'Options'
     labelOptions = createP('Options<span style="color: #c83232">.</span>');
     labelOptions.elt.className = 'label';
-    labelOptions.parent(leftSideButtons);
+    labelOptions.parent(leftSideContainer);
     labelOptions.hide();
 
     // Adds text 'Gate inputs'
     labelGateInputs = createP('Gate Inputs');
     labelGateInputs.hide();
     labelGateInputs.elt.className = 'optionLabel';
-    labelGateInputs.parent(leftSideButtons);
+    labelGateInputs.parent(leftSideContainer);
 
     gateInputSelect = createSelect();
     gateInputSelect.hide();
@@ -497,7 +569,7 @@ function createElementOptions() {
     }
     gateInputSelect.changed(newGateInputNumber);
     gateInputSelect.elt.className = 'selectLeft';
-    gateInputSelect.parent(leftSideButtons);
+    gateInputSelect.parent(leftSideContainer);
     gateInputSelect.value('2');
     gateInputSelect.mouseOver(function () {
         setHelpText('Define the number of gate inputs');
@@ -510,7 +582,7 @@ function createElementOptions() {
     labelDirection = createP('Direction');
     labelDirection.hide();
     labelDirection.elt.className = 'optionLabel';
-    labelDirection.parent(leftSideButtons);
+    labelDirection.parent(leftSideContainer);
 
     directionSelect = createSelect();
     directionSelect.hide();
@@ -520,7 +592,7 @@ function createElementOptions() {
     directionSelect.option('Down');
     directionSelect.changed(newDirection);
     directionSelect.elt.className = 'selectLeft';
-    directionSelect.parent(leftSideButtons);
+    directionSelect.parent(leftSideContainer);
     directionSelect.value('Right');
     directionSelect.mouseOver(function () {
         setHelpText('Define the direction of the element');
@@ -533,19 +605,19 @@ function createElementOptions() {
     labelBits = createP('Input Width');
     labelBits.hide();
     labelBits.elt.className = 'optionLabel';
-    labelBits.parent(leftSideButtons);
+    labelBits.parent(leftSideContainer);
 
     // Adds text 'Output width'
     labelOutputWidth = createP('Output Width');
     labelOutputWidth.hide();
     labelOutputWidth.elt.className = 'optionLabel';
-    labelOutputWidth.parent(leftSideButtons);
+    labelOutputWidth.parent(leftSideContainer);
 
     // Adds text 'Input width'
     labelInputWidth = createP('Input Width');
     labelInputWidth.hide();
     labelInputWidth.elt.className = 'optionLabel';
-    labelInputWidth.parent(leftSideButtons);
+    labelInputWidth.parent(leftSideContainer);
 
     bitSelect = createSelect();
     bitSelect.hide();
@@ -556,7 +628,7 @@ function createElementOptions() {
     bitSelect.option('32');
     bitSelect.changed(newBitLength);
     bitSelect.elt.className = 'selectLeft';
-    bitSelect.parent(leftSideButtons);
+    bitSelect.parent(leftSideContainer);
     bitSelect.value('4');
     bitSelect.mouseOver(function () {
         setHelpText('Define the number of input bits');
@@ -572,7 +644,7 @@ function createElementOptions() {
     }
     counterBitSelect.changed(newCounterBitLength);
     counterBitSelect.elt.className = 'selectLeft';
-    counterBitSelect.parent(leftSideButtons);
+    counterBitSelect.parent(leftSideContainer);
     counterBitSelect.value('4');
     counterBitSelect.mouseOver(function () {
         setHelpText('Define the number of output bits');
@@ -588,7 +660,7 @@ function createElementOptions() {
     }
     decoderBitSelect.changed(newDecoderBitLength);
     decoderBitSelect.elt.className = 'selectLeft';
-    decoderBitSelect.parent(leftSideButtons);
+    decoderBitSelect.parent(leftSideContainer);
     decoderBitSelect.value('2');
     decoderBitSelect.mouseOver(function () {
         setHelpText('Define the number of input bits');
@@ -604,7 +676,7 @@ function createElementOptions() {
     }
     multiplexerBitSelect.changed(newMuxBitLength);
     multiplexerBitSelect.elt.className = 'selectLeft';
-    multiplexerBitSelect.parent(leftSideButtons);
+    multiplexerBitSelect.parent(leftSideContainer);
     multiplexerBitSelect.value('1');
     multiplexerBitSelect.mouseOver(function () {
         setHelpText('Define the address width of the element');
@@ -614,6 +686,7 @@ function createElementOptions() {
     });
 
     sfcheckbox = createCheckbox('Sync ticks to frames', true);
+    document.getElementsByTagName('label')[0].innerHTML = 'Sync ticks to frames<span style="color: #c83232">.</span>';
     sfcheckbox.hide();
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
@@ -624,7 +697,7 @@ function createElementOptions() {
         }
     });
     sfcheckbox.elt.className = 'checkbox';
-    sfcheckbox.parent(leftSideButtons);
+    sfcheckbox.parent(leftSideContainer);
     sfcheckbox.mouseOver(function () {
         setHelpText('Synchronize the simulation speed with the frame rate');
     });
@@ -636,8 +709,8 @@ function createElementOptions() {
 function createHelpLabel() {
     helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
     helpLabel.elt.className = 'label';
-    helpLabel.elt.style.color = 'white';
-    helpLabel.position(765, 5);
+    helpLabel.elt.style.color = '#323232';
+    helpLabel.position(775, 5);
     helpLabel.hide();
 }
 

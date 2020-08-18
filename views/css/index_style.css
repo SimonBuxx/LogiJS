@@ -13,10 +13,27 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
     text-shadow: none;
 }
 
+.slogan-container {
+    position: relative;
+}
+
 .slogan {
     font-size: 70px;
     margin-top: 150px;
     text-align: center;
+}
+
+.background-text {
+    position: absolute;
+    margin: 0;
+    top: -120px;
+    font-size: 350px;
+    z-index: -1000;
+    white-space: nowrap;
+    overflow: hidden;
+    left: -100px;
+    color: #f7f7f7;
+    width: calc(100% + 100px);
 }
 
 .carousel-caption {
@@ -121,6 +138,7 @@ a:focus {
     width: 800px;
     transition: 0.5s;
     border-radius: 10px;
+    border: 2px solid #969696;
 }
 
 .sample-element img {
@@ -176,7 +194,7 @@ a:focus {
 }
 
 .legal-content {
-    margin: 100px 30% 0 30%;
+    margin: -50px 30% 0 30%;
     text-align: justify;
 }
 
@@ -219,7 +237,7 @@ a:focus {
 #nosketches_back {
     margin: 20px 20px 0 0;
     padding: 10px;
-    background: #fff;
+    background: none;
     border-radius: 10px;
     grid-row: 1;
     grid-column: 1;
@@ -257,7 +275,7 @@ a:focus {
 }
 
 .sticky-bar {
-    background: #fff;
+    background: none;
     border-radius: 10px;
     position: sticky;
     top: 130px;
@@ -475,6 +493,7 @@ a:focus {
     width: 40%;
     border-radius: 10px;
     margin-right: 12%;
+    border: 2px solid #969696;
 }
 
 input {
@@ -483,7 +502,7 @@ input {
     font-size: 30px;
     padding: 10px;
     border: none;
-    background: white;
+    background: none;
     color: black;
     border-radius: 10px;
 }
@@ -548,6 +567,10 @@ input {
     height: 65px;
     padding-top: 14px;
     font-size: 30px;
+}
+
+.carousel-button {
+    padding-top: 30px;
 }
 
 .show_all {
@@ -673,7 +696,7 @@ p.password-tipps {
 .sketch_item {
     position: relative;
     height: 300px;
-    background: #fff;
+    background: none;
     border-radius: 10px;
     margin: 0;
     overflow: hidden;

@@ -250,7 +250,7 @@ let leftSideButtons;
 let sketchNameInput, moduleNameInput, saveButton, saveDialogText;
 let helpLabel, saveDialogButton, dashboardButton, cancelButton, descInput, newButton;
 let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions,
-    andButton, orButton, xorButton, inputButton, buttonButton, clockButton,
+    andButton, orButton, xorButton, bufferButton, notButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
 
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
@@ -287,8 +287,8 @@ document.addEventListener('contextmenu', event => event.preventDefault());
     Sets up the canvas and caps the framerate
 */
 function setup() { // jshint ignore:line
-    mainCanvas = createCanvas(windowWidth - 230, windowHeight - 50);     // Creates the canvas in full window size
-    mainCanvas.position(230, 50);
+    mainCanvas = createCanvas(windowWidth - 240, windowHeight - 50);     // Creates the canvas in full window size
+    mainCanvas.position(240, 50);
     mainCanvas.id('mainCanvas');
 
     initPreviewCanvas();
@@ -302,12 +302,16 @@ function setup() { // jshint ignore:line
 
     document.title = 'LogiJS: New Sketch';
 
+    leftSideContainer = createDiv('');
+    leftSideContainer.elt.style.height = (windowHeight - 74 - 32 - 15).toString() + 'px';
+    leftSideContainer.elt.className = 'scrollContainerLeft';
+    leftSideContainer.elt.style.margin = '80px 0px';
 
     //Div for the Left Side Buttons
     leftSideButtons = createDiv('');
     leftSideButtons.elt.className = 'scrollBoxLeft';
-    leftSideButtons.elt.style.height = (windowHeight - 74 - 32 - 15).toString() + 'px';
-    leftSideButtons.elt.style.margin = '80px 0px';
+    leftSideButtons.parent(leftSideContainer);
+    leftSideButtons.elt.style.height = Math.min(540, windowHeight - 300) + 'px';
 
     createTopButtons();
 
@@ -568,6 +572,8 @@ function setUnactive() {
     andButton.elt.className = 'previewButton';
     orButton.elt.className = 'previewButton';
     xorButton.elt.className = 'previewButton';
+    bufferButton.elt.className = 'previewButton';
+    notButton.elt.className = 'previewButton';
     inputButton.elt.className = 'previewButton';
     buttonButton.elt.className = 'previewButton';
     clockButton.elt.className = 'previewButton';
@@ -668,7 +674,10 @@ function newCounterBitLength() {
     counterBitWidth = parseInt(counterBitSelect.value());
     custFile = counterBitWidth + '-counter.json';
     if (isActive(counterButton)) {
-        let opLabels = new Array(counterBitWidth).fill('');
+        let opLabels = [];
+        for (let i = 0; i < counterBitWidth; i++) {
+            opLabels.push(i);
+        }
         setPreviewElement(true, {
             tops: [],
             inputLabels: ['>'],
@@ -688,7 +697,7 @@ function newDecoderBitLength() {
         for (let i = 0; i < Math.pow(2, decoderBitWidth); i++) {
             opLabels.push(i);
         }
-        let ipLabels = new Array(decoderBitWidth).fill('');
+        let ipLabels = ['2⁴','2³','2²','2¹','2º'].slice(5 - decoderBitWidth, 5);
         setPreviewElement(true, {
             tops: [],
             inputLabels: ipLabels,
@@ -784,6 +793,7 @@ function newClockspeed() {
     if (inputToModify >= 0) {
         if (inputs[inputToModify].clock) {
             inputs[inputToModify].speed = 60 - clockspeedSlider.value();
+            console.log(inputs[inputToModify].speed);
         }
     }
 }
@@ -1543,6 +1553,8 @@ function configureButtons(mode) {
     andButton.elt.disabled = toolbox;
     orButton.elt.disabled = toolbox;
     xorButton.elt.disabled = toolbox;
+    bufferButton.elt.disabled = toolbox;
+    notButton.elt.disabled = toolbox;
     inputButton.elt.disabled = toolbox;
     outputButton.elt.disabled = toolbox;
     segDisplayButton.elt.disabled = toolbox;
@@ -1773,7 +1785,7 @@ function showElements() {
     }
 
     if (customs.length > 0) {
-        textFont('Open Sans');
+        textFont('Arial');
         for (const elem of customs) {
             if (elem.visible) {
                 elem.show();
@@ -1853,6 +1865,9 @@ function keyPressed() {
             case CONTROL:
                 //startSelect();
                 console.log(wires.length);
+                // Uncomment to make screenshots
+                //let img  = canvas.toDataURL("image/png");
+                //document.write('<img src="'+img+'"/>');
                 break;
             case 32: // Space
                 if (simRunning) {

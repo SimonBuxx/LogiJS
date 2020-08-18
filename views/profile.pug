@@ -8,13 +8,13 @@ head
   |   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   |   })(window,document,'script','dataLayer','GTM-WKSH2RQ');</script>
   |   <!-- End Google Tag Manager -->
-  title LogiJS: Login
+  title LogiJS: Profile
   meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
   computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
   meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
   meta(charset='UTF-8')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
-  link(rel='shortcut icon', href='images/favi.png')
+  link(rel='shortcut icon', href='images/favicon.ico')
   style
     include css/bootstrap.css
     include css/index_style.css
@@ -42,74 +42,69 @@ body
   |   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKSH2RQ"
   |   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   |   <!-- End Google Tag Manager (noscript) -->
-  .top-menu#top
+  .top-menu
     .container
       .navbar.navbar-default.navbar-fixed-top(role='navigation')
         .container
-          ul.nav.navbar-nav.navbar-left
-            li
-              a.internal-link(rel='nofollow', href='/#features', target='_parent') Features
-            li
-              a.internal-link(rel='nofollow', href='/#samples', target='_parent') Samples
-            li
-              a.internal-link(rel='nofollow', href='/#about', target='_parent') About
           .navbar-header
             button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
               span.sr-only Toggle navigation
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.navbar-brand(href='/#top')
-              img#top_logo(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS')
+            a.navbar-brand(href='/')
+              img(src='images/logo_index.png', alt='LogiJS logo', title='LogiJS')
           .navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right
               li
-                a.login-button.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-in-alt" style="color: #c83232;"></i> Login
+                a.internal-link(rel='nofollow', href='/', target='_parent') HOME
               li
-                a.internal-link(rel='nofollow', href='/signup', target='_parent') <i class="fa fa-user-plus" style="color: #c83232;"></i> Register
-  .slogan-container(style="margin-top: 150px;")
-    h1.background-text discover the world
-  .login_container
-    form.Login
-      if failed
-        p.red-message Login failed!
-      else if signup_success
-        p.green-message Registration successful
-          span(style="color: #c83232;") .
-      else
-        h1.login_title Login
-          span(style="color: #c83232;") .
-      p
-        input.username(type='text', placeholder='Username')
-        br
-        input.password(type='password', placeholder='Password')
-        br
-        input.btn.btn-lg.btn-orange.login-confirm-button(type='submit', value='Login', role='button')
-      p.login-redirect-text
-        | Don't have an account? 
-        a.login-redirect-text(href='/signup') Register
-      br
-  .footer_bottom.footer_bottom_absolute
+                a.internal-link(rel='nofollow', href='/samples', target='_parent') SAMPLES
+              li
+                a.external-link(rel='nofollow', href='https://www.github.com/SimonBuxx/LogiJS', target='_parent') GITHUB
+              li
+                a.user-button(href='/dashboard') #{user.toUpperCase()}
+  #blurred-background
+  .profile-mobile-bar.show-in-mobile
+    form#import-button.Import(title="Coming soon!")
+      button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
+        <i class="fa fa-file-upload"></i> IMPORT FILE
+      button#profile-button.btn.btn-lg.btn-orange(type='submit', role='button', onclick="window.location.href='#'")
+        <i class="fa fa-user-circle"></i> PROFILE
+    form#logout-button.Logout
+      button.btn.btn-lg.btn-orange(type='submit', role='button')
+        <i class="fa fa-sign-out-alt"></i> LOGOUT
+  #info-card.card.profile_card
+    img.profile-pic(src="images/default-profile.svg", alt="Profile picture")
+    .profile-data
+      h2 #{user}
+      h3 #{email}
+      h3 Maybe a member since date
+  #password-card.profile_card
+    .profile-data
+      h2 Change Password
+      h3 Here should be two password inputs and one button to change the password.
+  .sidebar.profile-sidebar.hide-in-mobile
+      .sticky-bar
+        button#editor-button.btn.btn-lg.btn-orange(type='submit', rel="nofollow", onclick="window.location.href='/editor'", role='button')
+          <i class="fa fa-plus-circle"></i> NEW SKETCH
+        form#import-button.Import(title="Coming soon!")
+          button.btn.btn-lg.btn-orange(disabled="true", type='submit', role='button')
+            <i class="fa fa-file-upload"></i> IMPORT FILE
+          button#profile-button.btn.btn-lg.btn-orange(type='submit', role='button', onclick="window.location.href='#'")
+            <i class="fa fa-user-circle"></i> PROFILE
+        form#logout-button.Logout
+          button.btn.btn-lg.btn-orange(type='submit', role='button')
+            <i class="fa fa-sign-out-alt"></i> LOGOUT
+  .footer_bottom
+    .text-center
       .footer_bottom_content
-        .footer_box
+        span#footer-line
           a.internal-link(rel='nofollow', href='/terms-of-service', target='_parent') Terms of Service
+          |  | 
           a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
-        .footer_box
-          p(style="text-align: center; display: inline-block; width: 100%;")
-            a(href='https://twitter.com/logi_js', target='_blank', style="margin-right: 5px;")
-              img(src="images/twitter.png" style="width: 40px; margin-top: -20px;")
-            a(href='https://github.com/SimonBuxx/logijs', target='_blank', style="margin-left: 5px;")
-              img(src="images/github_dark.png" style="width: 40px; margin-top: -20px;")
-        .footer_box
-          p(style="text-align: right;") Made with <i class="fas fa-heart" style="color: #c83232;"></i> in Lübeck
-            span(style="color: #c83232;") .
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
   script
     include ../libraries/jquery.min.js
     include ../libraries/bootstrap.min.js
-    include ../site_scripts/login.js
-  script.
-    if (window.innerHeight > 800) {
-      document.getElementById("top_logo").style.width = "350px";
-    } else {
-      document.getElementById("top_logo").style.width = "200px";
-    }
+    include ../site_scripts/dashboard.js

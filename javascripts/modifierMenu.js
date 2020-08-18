@@ -153,25 +153,27 @@ function showLabelPropMenu() {
 }
 
 function showModifierMenu() {
-    fill(50);
     noStroke();
+    fill('rgba(0, 0, 0, 0.5)');
+    rect(0, 0, windowWidth, windowHeight);
+    fill(255);
     strokeCap(SQUARE);
     if (inputToModify >= 0) {
         modifierMenuX = (inputs[inputToModify].x + transform.dx - 1) * transform.zoom;
         modifierMenuY = (inputs[inputToModify].y + transform.dy + GRIDSIZE + 2) * transform.zoom;
         if (!inputs[inputToModify].clock) {
-            rect(modifierMenuX, modifierMenuY, 300, 120, 0, 10);
+            rect(modifierMenuX, modifierMenuY, 300, 120, 10);
         } else {
-            rect(modifierMenuX, modifierMenuY, 300, 170, 0, 10);
+            rect(modifierMenuX, modifierMenuY, 300, 170, 10);
         }
     } else if (outputToModify >= 0) {
         modifierMenuX = (outputs[outputToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
         modifierMenuY = (outputs[outputToModify].y + transform.dy + GRIDSIZE / 2 + 2) * transform.zoom;
-        rect(modifierMenuX, modifierMenuY, 300, 130, 0, 10);
+        rect(modifierMenuX, modifierMenuY, 300, 130, 10);
     } else if (labelToModify >= 0) {
         modifierMenuX = (labels[labelToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
         modifierMenuY = (labels[labelToModify].y + transform.dy + GRIDSIZE / 2 + GRIDSIZE * (labels[labelToModify].lines.length - 1) + 2) * transform.zoom;
-        rect(modifierMenuX, modifierMenuY, 300, 170, 0, 10);
+        rect(modifierMenuX, modifierMenuY, 300, 170, 10);
     }
     strokeCap(ROUND);
 }
@@ -190,7 +192,7 @@ function positionModifierElements() {
     greenButton.position(modifierMenuX + 382, modifierMenuY + 130);
     blueButton.position(modifierMenuX + 448, modifierMenuY + 130);
 
-    labelTextBox.position(modifierMenuX + 250, modifierMenuY + 70);
+    labelTextBox.position(modifierMenuX + 240, modifierMenuY + 100);
 }
 
 function newIsTopState() {
@@ -406,7 +408,7 @@ function createModifierElements() {
 
     minusLabel = createP('-');
     minusLabel.hide();
-    minusLabel.elt.style.color = 'white';
+    minusLabel.elt.style.color = '#323232';
     minusLabel.elt.style.fontFamily = 'Open Sans';
     minusLabel.elt.style.margin = '3px 0px 0px 0px';
     minusLabel.style('font-size', '30px');
@@ -428,7 +430,7 @@ function createModifierElements() {
 
     plusLabel = createP('+');
     plusLabel.hide();
-    plusLabel.elt.style.color = 'white';
+    plusLabel.elt.style.color = '#323232';
     plusLabel.elt.style.fontFamily = 'Open Sans';
     plusLabel.elt.style.margin = '3px 0px 0px 0px';
     plusLabel.style('font-size', '30px');
@@ -446,11 +448,18 @@ function createModifierElements() {
         setHelpText('');
     });
 
+    /*labelTextCaption = createP('Label Caption<span style="color: #c83232">.</span>');
+    labelTextCaption.hide();
+    labelTextCaption.elt.style.color = '#323232';
+    labelTextCaption.elt.style.fontFamily = 'Open Sans';
+    labelTextCaption.elt.style.margin = '3px 0px 0px 0px';
+    labelTextCaption.style('font-size', '30px');*/
+
     labelTextBox = createElement('textarea');
     labelTextBox.elt.className = 'labelTextBox';
     labelTextBox.attribute('placeholder', 'New Label');
     labelTextBox.hide();
-    labelTextBox.size(245, 115);
+    labelTextBox.size(260, 90);
     labelTextBox.elt.onkeyup = labelChanged;
     labelTextBox.mouseOver(function () {
         setHelpText('Edit the text of this label');

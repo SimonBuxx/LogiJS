@@ -301,7 +301,7 @@ LogicGate.prototype.show = function () {
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
     fill(0);
-    text(this.caption, this.x + this.w / 2, this.y + this.h / 2); // Draw text
+    text(this.caption, this.x + this.w / 2, this.y + this.h / 2 + 2); // Draw text
 
     // Draw inputs
     for (let i = 1; i <= this.inputCount; i++) {

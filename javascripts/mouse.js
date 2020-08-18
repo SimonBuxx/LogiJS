@@ -42,7 +42,7 @@ function mouseWheel(event) {
                 segDisplayClicked(true);
                 break;
             case 9:
-                labelButtonClicked(true);
+                labelButtonClicked(true);          
                 break;
             default:
                 console.log('Invalid object type!');

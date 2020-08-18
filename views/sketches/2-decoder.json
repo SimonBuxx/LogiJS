@@ -73,13 +73,15 @@
       "x": "915",
       "y": "255",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2¹"
     },
     {
       "x": "945",
       "y": "255",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2º"
     }
   ],
   "segments": [],

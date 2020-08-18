@@ -16,12 +16,14 @@
     {
       "x": "1170",
       "y": "300",
-      "colr": "0"
+      "colr": "0",
+      "lbl": "S"
     },
     {
       "x": "1170",
       "y": "360",
-      "colr": "0"
+      "colr": "0",
+      "lbl": "C"
     }
   ],
   "inputs": [
@@ -29,19 +31,22 @@
       "x": "855",
       "y": "345",
       "framecount": "0",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "A"
     },
     {
       "x": "855",
       "y": "315",
       "framecount": "0",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "B"
     },
     {
       "x": "855",
       "y": "285",
       "framecount": "0",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "C"
     }
   ],
   "segments": [],

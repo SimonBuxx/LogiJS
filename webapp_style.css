@@ -12,8 +12,7 @@ body {
     margin: 0; 
     height: 100%;
     overflow: hidden;
-    background: linear-gradient(to bottom, #323232, black);
-    background: #323232;
+    background: #fff;
 
     font-family: ArcaMajora3;
 
@@ -38,7 +37,7 @@ body {
     border-radius: 10px;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 17px;
-    color: rgb(255, 255, 255);
+    color: #323232;
 
     -o-text-overflow: clip;
     text-overflow: clip;
@@ -80,6 +79,7 @@ body {
 
 .button:active, .button.active {
     background: linear-gradient(145deg, #b42d2d, #d63636);
+    color: white;
 }
 
 .button:disabled {
@@ -142,11 +142,26 @@ body {
 }
 
 .colorButton:active, .colorButton.active {
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    border: 2px solid white;
+    -webkit-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.redButton:active, .redButton.active {
+    border: 3px solid #9f2828;
+}
+
+.yellowButton:active, .yellowButton.active {
+    border: 3px solid #dfdf11;
+}
+
+.greenButton:active, .greenButton.active {
+    border: 3px solid #1e8a1e;
+}
+
+.blueButton:active, .blueButton.active {
+    border: 3px solid #074a8d;
 }
 
 .ease_in {
@@ -174,8 +189,8 @@ body {
     user-select: none;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     text-align: center;
-    color: #fff;
-    margin: 10px 0 10px 0;
+    color: #323232;
+    margin: 10px 0;
     font-size: 17px;
 }
 
@@ -184,16 +199,16 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    color: white;
+    color: #323232;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 17px;
-    margin: 15px 0 5px 20px;
+    margin: 20px 0 5px 20px;
 }
 
 .buttonLeft{
-	margin-top : 5px;
+	margin-top : 10px;
     margin-left: 8px;
-	width: 200px;
+	width: 210px;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
@@ -202,7 +217,7 @@ body {
     border-radius: 10px;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 17px;
-    color: rgb(255, 255, 255);
+    color: #323232;
     -o-text-overflow: clip;
     text-overflow: clip;
     background: none;
@@ -223,6 +238,7 @@ body {
 
 .buttonLeft:active, .buttonLeft.active {
     background: linear-gradient(145deg, #b42d2d, #d63636);
+    color: white;
 }
 
 .buttonLeft.active:hover {
@@ -243,8 +259,8 @@ body {
 .previewButton {
     width: 65px;
     height: 65px;
-    padding: 0;
-    margin: 2px 5px 0 5px;
+    padding: 2px;
+    margin: 3px;
     display: inline-block;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
@@ -274,11 +290,11 @@ body {
 }
 
 .previewButton:active, .previewButton.active {
-    -webkit-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 50ms cubic-bezier(0.42, 0, 0.58, 1);
-    background: #646464;
+    -webkit-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    background: #969696;
 }
 
 .previewButton.active > .preview {
@@ -300,7 +316,7 @@ body {
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    filter: brightness(50%);
+    filter: brightness(80%);
 }
 
 .topBox {
@@ -311,7 +327,7 @@ body {
 
 .topBox > label {
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
-    color: white;
+    color: #323232;
     font-size: 20px;
     padding: 10px;
 }
@@ -331,7 +347,7 @@ body {
     user-select: none;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 16px;
-    color: white;
+    color: #323232;
 }
 
 .selectLeft{
@@ -348,16 +364,15 @@ body {
     border: none;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 16px;
-    color: rgb(255, 255, 255);
+    color: #fff;
     -o-text-overflow: clip;
     text-overflow: clip;
-    background: #323232;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     user-select: none;
-    background: #646464;
+    background: #969696;
 }
 
 .sequencer {
@@ -378,11 +393,11 @@ body {
     -khtml-user-select: none;
     user-select: none;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
-    font-size: 15px;
-    color: white;
+    font-size: 18px;
+    color: #323232;
     -o-text-overflow: clip;
     text-overflow: clip;
-    background-color: #646464;
+    background-color: #fff;
     border: none;
     border-radius: 10px;
 }
@@ -392,7 +407,8 @@ body {
   }
 
 .sequencer option {
-    background:#6e6e6e;
+    background:#fff;
+    color: #323232;
     padding: 1px 10px;
   }
 
@@ -412,7 +428,7 @@ body {
     appearance: none;
     height: 30px;
     width: 160px;
-    background: #646464;
+    background: #969696;
     outline: none;
     -webkit-transition: .2s;
     transition: opacity .2s;
@@ -425,7 +441,7 @@ body {
     width: 20px;
     height: 30px;
     border-radius: 0;
-    background: #292929;
+    background: #323232;
     cursor: pointer;
 }
 
@@ -433,7 +449,7 @@ body {
     width: 20px;
     height: 30px;
     border-radius: 0;
-    background: #292929;
+    background: #323232;
     cursor: pointer;
 }
 
@@ -473,7 +489,7 @@ input[type=range]::-ms-tooltip {
     margin: 10px;
     font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
     font-size: 20px;
-    color:#ffffff;
+    color:#fff;
     text-align: center;
 	-webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
@@ -490,10 +506,10 @@ input[type=range]::-ms-tooltip {
     position: absolute;
     z-index: 1000;
     padding: 10px;
-    left: 260px;
+    left: 300px;
     top: 0px;
     background: white;
-    width: calc(100% - 310px);
+    width: calc(100% - 380px);
     border-radius: 10px;
     height: calc(100vh - 130px);
     margin: 0;
@@ -656,7 +672,7 @@ h1 {
 
 #logo {
     position: fixed;
-    left: 15px;
+    left: 20px;
     top: 0px;
     width: 200px;
     margin: 0;
@@ -667,9 +683,32 @@ h1 {
 	width :230px;
 	overflow-y : auto;
 	overflow-x : hidden;
-    margin-top : 74px;
+    padding-left : 7px;
+    scrollbar-width: thin;
+    /*border-bottom: 3px solid #323232;*/
+}
+
+.scrollContainerLeft{
+	width :240px;
+	overflow-y : hidden;
+	overflow-x : hidden;
+    margin-top : 0;
     scrollbar-width: none;
 }
-.scrollBoxLeft::-webkit-scrollbar { 
-    display: none; 
+
+::-webkit-scrollbar { 
+    scrollbar-width: thin;
+    width: 5px;
 }
+
+::-webkit-scrollbar-track {
+    background: #fff;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #969696;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }

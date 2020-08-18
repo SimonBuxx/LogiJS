@@ -301,31 +301,36 @@
       "x": "315",
       "y": "45",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2⁴"
     },
     {
       "x": "315",
       "y": "105",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2³"
     },
     {
       "x": "315",
       "y": "165",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2²"
     },
     {
       "x": "315",
       "y": "225",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2¹"
     },
     {
       "x": "315",
       "y": "285",
       "framecount": "-1",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "2º"
     }
   ],
   "segments": [],

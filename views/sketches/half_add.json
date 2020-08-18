@@ -26,12 +26,14 @@
     {
       "x": "930",
       "y": "270",
-      "colr": "0"
+      "colr": "0",
+      "lbl": "S"
     },
     {
       "x": "930",
       "y": "330",
-      "colr": "0"
+      "colr": "0",
+      "lbl": "C"
     }
   ],
   "inputs": [
@@ -39,13 +41,15 @@
       "x": "705",
       "y": "255",
       "framecount": "0",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "A"
     },
     {
       "x": "705",
       "y": "285",
       "framecount": "0",
-      "clock": "false"
+      "clock": "false",
+      "lbl": "B"
     }
   ],
   "segments": [],
