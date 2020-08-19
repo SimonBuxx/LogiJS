@@ -702,7 +702,7 @@ function newDecoderBitLength() {
         for (let i = 0; i < Math.pow(2, decoderBitWidth); i++) {
             opLabels.push(i);
         }
-        let ipLabels = ['2⁴','2³','2²','2¹','2º'].slice(5 - decoderBitWidth, 5);
+        let ipLabels = ['2⁴', '2³', '2²', '2¹', '2º'].slice(5 - decoderBitWidth, 5);
         setPreviewElement(true, {
             tops: [],
             inputLabels: ipLabels,
@@ -1021,7 +1021,11 @@ function setSelectMode(mode) {
 }
 
 function addWires() {
-    let pushed = false;
+    let pushed = false; // True, when wires have been changed in any way
+
+    // These are set true when a preview wire in that direction is 100% part of the existing wire
+    let overlapOverAllX = false;
+    let overlapOverAllY = false;
 
     let xIndex = -1;
     let yIndex = -1;
@@ -1039,23 +1043,31 @@ function addWires() {
                     let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY, false, transform);
                     newWire.endX = Math.max(wires[xIndex].endX, wires[i].endX);
                     newWire.endY = wires[xIndex].startY;
-                    editLog.push(['r', xIndex, wires[xIndex], newWire]);
-                    wires.splice(xIndex, 1, newWire);
-                    pushed = true;
-                    deletedIndices.push(i);
+                    if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
+                        editLog.push(['r', xIndex, wires[xIndex], newWire]);
+                        wires.splice(xIndex, 1, newWire);
+                        pushed = true;
+                        deletedIndices.push(i);
+                    } else {
+                        overlapOverAllX = true;
+                    }
                 } else {
                     let newWire = new Wire(0, Math.min(pwWireX.startX, wires[i].startX), pwWireX.startY, false, transform);
                     newWire.endX = Math.max(pwWireX.endX, wires[i].endX);
                     newWire.endY = pwWireX.startY;
-                    editLog.push(['r', i, wires[i], newWire]);
-                    wires.splice(i, 1, newWire);
-                    pushed = true;
-                    xIndex = i;
+                    if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
+                        editLog.push(['r', i, wires[i], newWire]);
+                        wires.splice(i, 1, newWire);
+                        pushed = true;
+                        xIndex = i;
+                    } else {
+                        overlapOverAllX = true;
+                    }
                 }
             }
         }
 
-        if (xIndex < 0) {
+        if (xIndex < 0 && !overlapOverAllX) {
             let newWire = new Wire(0, pwWireX.startX, pwWireX.startY, false, transform);
             newWire.endX = pwWireX.endX;
             newWire.endY = pwWireX.startY;
@@ -1068,29 +1080,38 @@ function addWires() {
     if (pwWireY !== null) {
         for (let i = 0; i < wires.length; i++) {
             let overlap = wireOverlap(pwWireY, wires[i]);
+            // If there's an overlap or the wires are adjacent
             if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 1 && pwWireY.startX === wires[i].startX &&
                 (pwWireY.startY == wires[i].endY || pwWireY.startY == wires[i].startY || pwWireY.endY == wires[i].startY || pwWireY.endY == wires[i].endY))) { //jshint ignore:line
                 if (yIndex >= 0) {
                     let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false, transform);
                     newWire.endX = wires[yIndex].startX;
                     newWire.endY = Math.max(wires[yIndex].endY, wires[i].endY);
-                    editLog.push(['r', yIndex, wires[yIndex], newWire]);
-                    wires.splice(yIndex, 1, newWire);
-                    pushed = true;
-                    deletedIndices.push(i);
+                    if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
+                        editLog.push(['r', yIndex, wires[yIndex], newWire]);
+                        wires.splice(yIndex, 1, newWire);
+                        pushed = true;
+                        deletedIndices.push(i);
+                    } else {
+                        overlapOverAllY = true;
+                    }
                 } else {
                     let newWire = new Wire(1, pwWireY.startX, Math.min(pwWireY.startY, wires[i].startY), false, transform);
                     newWire.endX = pwWireY.startX;
                     newWire.endY = Math.max(pwWireY.endY, wires[i].endY);
-                    editLog.push(['r', i, wires[i], newWire]);
-                    wires.splice(i, 1, newWire);
-                    pushed = true;
-                    yIndex = i;
+                    if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
+                        editLog.push(['r', i, wires[i], newWire]);
+                        wires.splice(i, 1, newWire);
+                        pushed = true;
+                        yIndex = i;
+                    } else {
+                        overlapOverAllY = true;
+                    }
                 }
             }
         }
 
-        if (yIndex < 0) {
+        if (yIndex < 0 && !overlapOverAllY) {
             let newWire = new Wire(1, pwWireY.startX, pwWireY.startY, false, transform);
             newWire.endX = pwWireY.startX;
             newWire.endY = pwWireY.endY;
