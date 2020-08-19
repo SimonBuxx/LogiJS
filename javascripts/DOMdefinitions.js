@@ -317,7 +317,7 @@ function createAdvancedElements() {
         for (let i = 0; i < Math.pow(2, decoderBitWidth); i++) {
             opLabels.push(i);
         }
-        let ipLabels = ['2⁴','2³','2²','2¹','2º'].slice(5 - decoderBitWidth, 5);
+        let ipLabels = ['2⁴', '2³', '2²', '2¹', '2º'].slice(5 - decoderBitWidth, 5);
         setPreviewElement(true, {
             tops: [],
             inputLabels: ipLabels,
@@ -553,6 +553,8 @@ function createElementOptions() {
     // Adds text 'Options'
     labelOptions = createP('Options<span style="color: #c83232">.</span>');
     labelOptions.elt.className = 'label';
+    labelOptions.elt.style.fontSize = '25px';
+    labelOptions.style('text-align', 'center');
     labelOptions.parent(leftSideContainer);
     labelOptions.hide();
 
@@ -692,8 +694,16 @@ function createElementOptions() {
         syncFramerate = sfcheckbox.checked();
         if (!sfcheckbox.checked() && simRunning) {
             updater = setInterval(updateTick, 1);
+            tickTimeLabel.hide();
+            tickTimeSlider.hide();
+            bpTickTimeCB.hide();
         } else {
             clearInterval(updater);
+            if (tickTime > 0) {
+                tickTimeLabel.show();
+                tickTimeSlider.show();
+            }
+            bpTickTimeCB.show();
         }
     });
     sfcheckbox.elt.className = 'checkbox';
@@ -702,6 +712,50 @@ function createElementOptions() {
         setHelpText('Synchronize the simulation speed with the frame rate');
     });
     sfcheckbox.mouseOut(function () {
+        setHelpText('');
+    });
+    
+    bpTickTimeCB = createCheckbox('Bypass min. tick time', true);
+    document.getElementsByTagName('label')[1].innerHTML = 'Bypass min. tick time<span style="color: #c83232">.</span>';
+    bpTickTimeCB.hide();
+    bpTickTimeCB.checked(false);
+    bpTickTimeCB.changed(function () {
+        if (bpTickTimeCB.checked()) {
+            tickTime = 0;
+            tickTimeLabel.hide();
+            tickTimeSlider.hide();
+        } else {
+            newTickTime();
+            tickTimeLabel.show();
+            tickTimeSlider.show();
+        }
+    });
+    bpTickTimeCB.elt.className = 'checkbox';
+    bpTickTimeCB.parent(leftSideContainer);
+    bpTickTimeCB.mouseOver(function () {
+        setHelpText('Synchronize simulation without using a minimum time per tick');
+    });
+    bpTickTimeCB.mouseOut(function () {
+        setHelpText('');
+    });
+
+    // Adds text 'Input width'
+    tickTimeLabel = createP('Min. time per tick:');
+    tickTimeLabel.hide();
+    tickTimeLabel.elt.className = 'label';
+    tickTimeLabel.parent(leftSideContainer);
+
+    tickTimeSlider = createSlider(2, 100, 10, 1);
+    tickTimeSlider.hide();
+    tickTimeSlider.input(function () {
+        newTickTime();
+    });
+    tickTimeSlider.elt.className = 'slider sliderLeft';
+    tickTimeSlider.parent(leftSideContainer);
+    tickTimeSlider.mouseOver(function () {
+        setHelpText('Sets the minimum time per simulation tick');
+    });
+    tickTimeSlider.mouseOut(function () {
         setHelpText('');
     });
 }

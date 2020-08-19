@@ -188,9 +188,9 @@ body {
     -moz-user-select: none;
     user-select: none;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
-    text-align: center;
+    text-align: left;
     color: #323232;
-    margin: 10px 0;
+    margin: 10px 15px;
     font-size: 17px;
 }
 
@@ -202,7 +202,7 @@ body {
     color: #323232;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 17px;
-    margin: 20px 0 5px 20px;
+    margin: 20px 0 20px 20px;
 }
 
 .buttonLeft{
@@ -453,6 +453,16 @@ body {
     cursor: pointer;
 }
 
+.sliderLeft {
+	display: inline-block;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    user-select: none;
+    margin: 0 auto;
+}
+
 input[type=range]::-ms-tooltip {
     display: none;
 }
@@ -683,9 +693,8 @@ h1 {
 	width :230px;
 	overflow-y : auto;
 	overflow-x : hidden;
-    padding-left : 7px;
+    padding-right : 7px;
     scrollbar-width: thin;
-    /*border-bottom: 3px solid #323232;*/
 }
 
 .scrollContainerLeft{

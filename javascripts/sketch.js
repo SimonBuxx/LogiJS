@@ -261,6 +261,8 @@ let updater, sfcheckbox;
 let gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 
+let tickTimeSlider, tickTimeLabel, bpTickTimeCB;
+
 /*
     This is the socket element used for socket communication with the server
 */
@@ -272,6 +274,9 @@ let socket;
 let mainCanvas, pwCanvas;
 
 let PWp5; // The p5 element for the preview canvas
+
+let lastTickTime = 0;
+let tickTime = 10;
 
 /*
     Disable some error messages from p5
@@ -796,6 +801,11 @@ function newClockspeed() {
             console.log(inputs[inputToModify].speed);
         }
     }
+}
+
+function newTickTime() {
+    tickTime = tickTimeSlider.value();
+    console.log(tickTime);
 }
 
 /* 
@@ -1409,7 +1419,7 @@ function deleteSegDisplay(segDisNumber) {
 */
 function startSimulation() {
     if (!sfcheckbox.checked()) {
-        updater = setInterval(updateTick, 0);
+        updater = setInterval(updateTick, 1);
     }
 
     setSimButtonText('<i class="fa fa-stop icon"></i> Stop'); // Alter the caption of the Start/Stop button
@@ -1442,6 +1452,16 @@ function startSimulation() {
     labelOptions.show();
     sfcheckbox.show();
 
+    // Show the tick time slider
+    if (syncFramerate && tickTime > 0) {
+        tickTimeLabel.show();
+        tickTimeSlider.show();
+    }
+
+    if (syncFramerate) {
+        bpTickTimeCB.show();
+    }
+
     // Start the simulation and exit the modifier mode
     simRunning = true;
     leaveModifierMode();
@@ -1461,6 +1481,12 @@ function endSimulation() {
     // Hide the checkbox
     labelOptions.hide();
     sfcheckbox.hide();
+
+    // Hide the tick time slider
+    tickTimeLabel.hide();
+    tickTimeSlider.hide();
+
+    bpTickTimeCB.hide();
 
     groups = []; // Reset the groups, as they are regenerated when starting again
     for (const elem of gates) {
@@ -1486,7 +1512,7 @@ function endSimulation() {
         elem.setState(false);
     }
     for (const elem of wires) {
-        elem.state = false;
+        elem.setState(false);
     }
 
     simRunning = false;
@@ -1591,8 +1617,12 @@ function configureButtons(mode) {
     Executes in every frame, draws everything and updates the sketch logic
 */
 function draw() {
+    //console.log(passedUpdateTime);
     if (simRunning) {
-        updateTick(); // Updates the circuit logic
+        if (!syncFramerate || (syncFramerate && performance.now() - lastTickTime >= tickTime)) {
+            updateTick(); // Updates the circuit logic
+            lastTickTime = performance.now();
+        }
         reDraw(); // Redraw all elements of the sketch
     } else {
         if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI() && !modifierMenuDisplayed()) {

@@ -181,18 +181,6 @@ function updateCursors() {
             }
         }
     }
-    if (showCustomDialog) {
-        let pos = mouseOverImport(Math.round(window.width / 8) + 40, 140, customDialogRows, customDialogColumns);
-        let place = customDialogColumns * pos.row + pos.col + customDialogPage * customDialogColumns * customDialogRows;
-        if (pos.col >= 0 && pos.row >= 0 && place < importSketchData.sketches.length) {
-            hand = true;
-            cursor(HAND);
-            if (importSketchData.looks[place].outputs === 0) {
-                hand = true;
-                cursor('not-allowed');
-            }
-        }
-    }
     if (controlMode === 'select' && selectionBox.mouseOver() && showSelectionBox) {
         hand = true;
         cursor(MOVE);
@@ -316,13 +304,6 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (showCustomDialog) {
-        let pos = mouseOverImport(Math.round(window.width / 8) + 40, 140, customDialogRows, customDialogColumns);
-        if (pos.row >= 0 && pos.col >= 0) {
-            importItemClicked(pos.row, pos.col);
-        }
-        return;
-    }
     if (loading || saveDialog || justClosedMenu || modifierMenuDisplayed()) {
         return;
     }
