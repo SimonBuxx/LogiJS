@@ -138,7 +138,7 @@ a:focus {
     width: 800px;
     transition: 0.5s;
     border-radius: 10px;
-    border: 2px solid #969696;
+    box-shadow: 0 0 20px #969696
 }
 
 .sample-element img {
@@ -483,7 +483,7 @@ a:focus {
 
 .carousel-text {
     float: left;
-    margin-top: 4%;
+    margin-top: calc(4% + 20px);
     margin-left: 12%;
     padding-bottom: 20px;
 }
@@ -493,7 +493,8 @@ a:focus {
     width: 40%;
     border-radius: 10px;
     margin-right: 12%;
-    border: 2px solid #969696;
+    margin-top: 20px;
+    box-shadow: 0 0 20px #969696;
 }
 
 input {
