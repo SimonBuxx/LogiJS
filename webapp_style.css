@@ -188,7 +188,7 @@ body {
     -moz-user-select: none;
     user-select: none;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
-    text-align: left;
+    text-align: center;
     color: #323232;
     margin: 10px 15px;
     font-size: 17px;
@@ -257,8 +257,8 @@ body {
 }
 
 .previewButton {
-    width: 65px;
-    height: 65px;
+    width: 64px;
+    height: 64px;
     padding: 2px;
     margin: 3px;
     display: inline-block;
@@ -266,7 +266,7 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 2px;
     border: none;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 17px;
@@ -279,14 +279,15 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    box-shadow: 0 0 4px #969696;
 }
 
-.previewButton:hover > .preview {
-    filter: brightness(80%);
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+.previewButton:hover {
+    -webkit-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    background: #ddd;
 }
 
 .previewButton:active, .previewButton.active {
@@ -297,18 +298,14 @@ body {
     background: #969696;
 }
 
-.previewButton.active > .preview {
-    filter: brightness(100%);
-}
-
 .previewButton:disabled {
     -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     cursor: default;
-    background: none;
-    box-shadow: none;
+    background: #ddd;
+    box-shadow: 0 0 5px #969696;
 }
 
 .previewButton:disabled >  .preview {
@@ -316,7 +313,7 @@ body {
     -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    filter: brightness(80%);
+    filter: brightness(90%);
 }
 
 .topBox {
@@ -693,8 +690,9 @@ h1 {
 	width :230px;
 	overflow-y : auto;
 	overflow-x : hidden;
-    padding-right : 7px;
+    padding-right : 2px;
     scrollbar-width: thin;
+    scrollbar-color: #969696 #fff;
 }
 
 .scrollContainerLeft{
@@ -702,6 +700,7 @@ h1 {
 	overflow-y : hidden;
 	overflow-x : hidden;
     margin-top : 0;
+    padding-left: 5px;
     scrollbar-width: none;
 }
 
@@ -709,15 +708,11 @@ h1 {
     scrollbar-width: thin;
     width: 5px;
 }
-
-::-webkit-scrollbar-track {
-    background: #fff;
-  }
   
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: #969696;
-  }
+}
   
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #666;
-  }
+}

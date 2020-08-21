@@ -764,7 +764,7 @@ function createHelpLabel() {
     helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
     helpLabel.elt.className = 'label';
     helpLabel.elt.style.color = '#323232';
-    helpLabel.position(775, 5);
+    helpLabel.position(760, 5);
     helpLabel.hide();
 }
 

@@ -316,7 +316,7 @@ function setup() { // jshint ignore:line
     leftSideButtons = createDiv('');
     leftSideButtons.elt.className = 'scrollBoxLeft';
     leftSideButtons.parent(leftSideContainer);
-    leftSideButtons.elt.style.height = Math.min(540, windowHeight - 300) + 'px';
+    leftSideButtons.elt.style.height = Math.min(500, windowHeight - 300) + 'px';
 
     createTopButtons();
 
@@ -1572,6 +1572,7 @@ function configureButtons(mode) {
         savedialog = false;
         simulation = false;
         customimport = true;
+        //leftSideButtons.style('display', 'none');
     } else if (mode === 'savedialog') {
         toolbox = true;
         modifiers = true;
