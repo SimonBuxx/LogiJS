@@ -493,10 +493,12 @@ body {
 
 .sliderLeft:disabled::-webkit-slider-thumb {
     background: #969696;
+    cursor: default;
 }
 
 .sliderLeft:disabled::-moz-range-thumb {
     background: #969696;
+    cursor: default;
 }
 
 input[type=range]::-ms-tooltip {
