@@ -194,6 +194,26 @@ body {
     font-size: 17px;
 }
 
+.scrollContainerLeft > .label {
+    margin: 30px 0 10px 0;
+    width: 230px;
+}
+
+.scrollContainerLeft > .simLabel {
+    margin: 20px 0;
+}
+
+.scrollContainerLeft > .msLabel {
+    float: right;
+    width: 60px;
+    margin: 0 20px 0 0;
+    line-height: 30px;
+}
+
+.disabledLabel {
+    color: #969696;
+}
+
 .checkbox {
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -203,6 +223,10 @@ body {
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 17px;
     margin: 20px 0 20px 20px;
+}
+
+.scrollContainerLeft > .checkbox {
+    margin: 10px 20px;
 }
 
 .buttonLeft{
@@ -438,6 +462,7 @@ body {
     width: 20px;
     height: 30px;
     border-radius: 0;
+    border: none;
     background: #323232;
     cursor: pointer;
 }
@@ -446,18 +471,32 @@ body {
     width: 20px;
     height: 30px;
     border-radius: 0;
+    border: none;
     background: #323232;
     cursor: pointer;
 }
 
 .sliderLeft {
-	display: inline-block;
+    float: left;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     user-select: none;
-    margin: 0 auto;
+    margin: 0 0 0 20px;
+    width: 130px;
+}
+
+.sliderLeft:disabled {
+    background: #ddd; 
+}
+
+.sliderLeft:disabled::-webkit-slider-thumb {
+    background: #969696;
+}
+
+.sliderLeft:disabled::-moz-range-thumb {
+    background: #969696;
 }
 
 input[type=range]::-ms-tooltip {

@@ -550,6 +550,14 @@ function createCustomImportButton() {
 }
 
 function createElementOptions() {
+    // Adds text 'Simulation'
+    labelSimulation = createP('Simulation<span style="color: #c83232">.</span>');
+    labelSimulation.elt.className = 'label simLabel';
+    labelSimulation.elt.style.fontSize = '25px';
+    labelSimulation.style('text-align', 'center');
+    labelSimulation.parent(leftSideContainer);
+    labelSimulation.hide();
+
     // Adds text 'Options'
     labelOptions = createP('Options<span style="color: #c83232">.</span>');
     labelOptions.elt.className = 'label';
@@ -688,22 +696,27 @@ function createElementOptions() {
     });
 
     sfcheckbox = createCheckbox('Sync ticks to frames', true);
-    document.getElementsByTagName('label')[0].innerHTML = 'Sync ticks to frames<span style="color: #c83232">.</span>';
+    //document.getElementsByTagName('label')[0].innerHTML = 'Sync ticks to frames<span style="color: #c83232">.</span>';
     sfcheckbox.hide();
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
         if (!sfcheckbox.checked() && simRunning) {
             updater = setInterval(updateTick, 1);
-            tickTimeLabel.hide();
-            tickTimeSlider.hide();
-            bpTickTimeCB.hide();
+            tickTimeLabel.elt.className = 'label disabledLabel';
+            tickTimeMsLabel.elt.className = 'label msLabel disabledLabel';
+            tickTimeSlider.elt.disabled = true;
+            document.getElementsByClassName('tickTimeCB')[0].disabled = true;
+            document.getElementsByClassName('tickTimeCB')[1].className = 'tickTimeCB disabledLabel';
         } else {
             clearInterval(updater);
             if (tickTime > 0) {
-                tickTimeLabel.show();
-                tickTimeSlider.show();
+                tickTimeLabel.elt.className = 'label';
+                tickTimeMsLabel.elt.className = 'label msLabel';
+                tickTimeSlider.elt.disabled = false;
             }
             bpTickTimeCB.show();
+            document.getElementsByClassName('tickTimeCB')[0].disabled = false;
+            document.getElementsByClassName('tickTimeCB')[1].className = 'tickTimeCB';
         }
     });
     sfcheckbox.elt.className = 'checkbox';
@@ -714,20 +727,25 @@ function createElementOptions() {
     sfcheckbox.mouseOut(function () {
         setHelpText('');
     });
-    
+
     bpTickTimeCB = createCheckbox('Bypass min. tick time', true);
-    document.getElementsByTagName('label')[1].innerHTML = 'Bypass min. tick time<span style="color: #c83232">.</span>';
+    //document.getElementsByTagName('label')[1].innerHTML = 'Bypass min. tick time<span style="color: #c83232">.</span>';
+    document.getElementsByTagName('input')[1].className = 'tickTimeCB';
+    document.getElementsByTagName('label')[1].className = 'tickTimeCB';
     bpTickTimeCB.hide();
     bpTickTimeCB.checked(false);
     bpTickTimeCB.changed(function () {
         if (bpTickTimeCB.checked()) {
             tickTime = 0;
-            tickTimeLabel.hide();
-            tickTimeSlider.hide();
+            tickTimeLabel.elt.className = 'label disabledLabel';
+            tickTimeMsLabel.elt.className = 'label msLabel disabledLabel';
+            tickTimeSlider.elt.disabled = true;
+
         } else {
             newTickTime();
-            tickTimeLabel.show();
-            tickTimeSlider.show();
+            tickTimeLabel.elt.className = 'label';
+            tickTimeMsLabel.elt.className = 'label msLabel';
+            tickTimeSlider.elt.disabled = false;
         }
     });
     bpTickTimeCB.elt.className = 'checkbox';
@@ -739,13 +757,12 @@ function createElementOptions() {
         setHelpText('');
     });
 
-    // Adds text 'Input width'
-    tickTimeLabel = createP('Min. time per tick:');
+    tickTimeLabel = createP('Minimum time per tick:');
     tickTimeLabel.hide();
     tickTimeLabel.elt.className = 'label';
     tickTimeLabel.parent(leftSideContainer);
 
-    tickTimeSlider = createSlider(2, 100, 10, 1);
+    tickTimeSlider = createSlider(0, 100, 10, 1);
     tickTimeSlider.hide();
     tickTimeSlider.input(function () {
         newTickTime();
@@ -758,6 +775,11 @@ function createElementOptions() {
     tickTimeSlider.mouseOut(function () {
         setHelpText('');
     });
+
+    tickTimeMsLabel = createP('10ms');
+    tickTimeMsLabel.hide();
+    tickTimeMsLabel.elt.className = 'label msLabel';
+    tickTimeMsLabel.parent(leftSideContainer);
 }
 
 function createHelpLabel() {

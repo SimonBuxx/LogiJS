@@ -249,7 +249,7 @@ let leftSideButtons;
 
 let sketchNameInput, moduleNameInput, saveButton, saveDialogText;
 let helpLabel, saveDialogButton, dashboardButton, cancelButton, descInput, newButton;
-let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions,
+let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions, labelSimulation,
     andButton, orButton, xorButton, bufferButton, notButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
 
@@ -261,7 +261,7 @@ let updater, sfcheckbox;
 let gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 
-let tickTimeSlider, tickTimeLabel, bpTickTimeCB;
+let tickTimeSlider, tickTimeLabel, bpTickTimeCB, tickTimeMsLabel;
 
 /*
     This is the socket element used for socket communication with the server
@@ -530,6 +530,7 @@ function hideAllOptions() {
     multiplexerBitSelect.hide();
     labelInputWidth.hide();
     labelOptions.hide();
+    labelSimulation.hide();
 }
 
 /*
@@ -805,7 +806,7 @@ function newClockspeed() {
 
 function newTickTime() {
     tickTime = tickTimeSlider.value();
-    console.log(tickTime);
+    tickTimeMsLabel.elt.innerHTML = tickTimeSlider.value() + 'ms';
 }
 
 /* 
@@ -1452,6 +1453,8 @@ function startSimulation() {
     setActive(simButton, true);
     configureButtons('simulation');
     hideAllOptions();
+    leftSideButtons.hide();
+    customButton.hide();
 
     // Parse all wire groups and attach the components
     parseGroups();
@@ -1469,19 +1472,15 @@ function startSimulation() {
         customs[i].setSimRunning(true);
     }
 
-    // Show the checkbox
-    labelOptions.show();
+    labelSimulation.show();
+
+    // Show the frame sync checkbox
     sfcheckbox.show();
 
-    // Show the tick time slider
-    if (syncFramerate && tickTime > 0) {
-        tickTimeLabel.show();
-        tickTimeSlider.show();
-    }
-
-    if (syncFramerate) {
-        bpTickTimeCB.show();
-    }
+    tickTimeLabel.show();
+    tickTimeMsLabel.show();
+    tickTimeSlider.show();
+    bpTickTimeCB.show();
 
     // Start the simulation and exit the modifier mode
     simRunning = true;
@@ -1500,14 +1499,18 @@ function endSimulation() {
     configureButtons('edit');
 
     // Hide the checkbox
-    labelOptions.hide();
+    labelSimulation.hide();
     sfcheckbox.hide();
 
     // Hide the tick time slider
     tickTimeLabel.hide();
+    tickTimeMsLabel.hide();
     tickTimeSlider.hide();
 
     bpTickTimeCB.hide();
+
+    leftSideButtons.show();
+    customButton.show();
 
     groups = []; // Reset the groups, as they are regenerated when starting again
     for (const elem of gates) {
