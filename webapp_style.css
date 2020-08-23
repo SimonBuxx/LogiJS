@@ -29,14 +29,14 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    padding: 0 14px;
-    margin-top: 4px;
+    padding: 0 12px;
+    margin-top: 7px;
     height: 35px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
-    font-size: 17px;
+    font-size: 18px;
     color: #323232;
 
     -o-text-overflow: clip;
@@ -191,7 +191,18 @@ body {
     text-align: center;
     color: #323232;
     margin: 10px 15px;
-    font-size: 17px;
+    font-size: 18px;
+}
+
+.inlineLabel {
+    display: inline-block;
+    color: #323232;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.sketchNameLabel {
+    color: #969696;
 }
 
 .scrollContainerLeft > .label {
@@ -231,8 +242,9 @@ body {
 
 .buttonLeft{
 	margin-top : 10px;
-    margin-left: 8px;
-	width: 210px;
+    margin-left: 10px;
+    width: 208px;
+    margin: 10px 10px 10px 5px;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
@@ -240,7 +252,7 @@ body {
     padding: 10px 6px;
     border-radius: 10px;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
-    font-size: 17px;
+    font-size: 18px;
     color: #323232;
     -o-text-overflow: clip;
     text-overflow: clip;
@@ -555,7 +567,7 @@ input[type=range]::-ms-tooltip {
     z-index: 1000;
     padding: 10px;
     left: 300px;
-    top: 0px;
+    top: 80px;
     background: white;
     width: calc(100% - 380px);
     border-radius: 10px;
@@ -727,22 +739,43 @@ h1 {
     padding: 0;
 }
 
+.topButtonsContainer {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    background: white;
+}
+
+.topLeftButtons {
+    margin-left: 240px;
+}
+
+.topRightButtons {
+    margin-left: auto;
+    margin-right: 10px;
+}
+
 .scrollBoxLeft{
-	width :230px;
-	overflow-y : auto;
-	overflow-x : hidden;
-    padding-right : 2px;
+    display: inline-block;
+	width: 230px;
+	overflow-y: auto;
+	overflow-x: hidden;
+    padding-right: 2px;
     scrollbar-width: thin;
     scrollbar-color: #969696 #fff;
 }
 
 .scrollContainerLeft{
-	width :240px;
-	overflow-y : hidden;
-	overflow-x : hidden;
-    margin-top : 0;
+    display: inline-block;
+	width: 235px;
+	overflow-y: hidden;
+	overflow-x: hidden;
+    margin-top: 0;
     padding-left: 5px;
+    padding-top: 25px;
     scrollbar-width: none;
+    background: white;
+    height: 100%;
 }
 
 ::-webkit-scrollbar { 

@@ -97,6 +97,9 @@ function hideSaveDialogElements() {
 }
 
 function displayCustomDialog() {
+    fill('rgba(0, 0, 0, 0.5)');
+    noStroke();
+    rect(0, 0, window.width, window.height);
     document.getElementById('custom-dialog').style.display = 'block';
     if (importSketchData.looks.length > 0) {
         PWp5.showImportPreview(importSketchData.looks[0], 0, 0);

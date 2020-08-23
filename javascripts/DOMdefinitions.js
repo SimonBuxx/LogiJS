@@ -1,7 +1,6 @@
 function createTopButtons() {
     // Activates the edit mode
     modifierModeButton = createButton('<i class="fa fa-pen icon"></i> Edit');
-    modifierModeButton.position(242, 3);
     modifierModeButton.mousePressed(function () {
         enterModifierMode();
     });
@@ -12,11 +11,10 @@ function createTopButtons() {
     modifierModeButton.mouseOut(function () {
         setHelpText('');
     });
-
+    modifierModeButton.parent(topLeftButtons);
 
     // Activates the delete mode (objects and wires)
     deleteButton = createButton('<i class="far fa-trash-alt icon"></i> Delete');
-    deleteButton.position(320, 3);
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = 'button';
     deleteButton.mouseOver(function () {
@@ -25,44 +23,55 @@ function createTopButtons() {
     deleteButton.mouseOut(function () {
         setHelpText('');
     });
+    deleteButton.parent(topLeftButtons);
 
     // Starts and stops the simulation
     simButton = createButton('<i class="fa fa-play icon"></i> Start');
-    simButton.position(414, 3);
     simButton.mousePressed(simClicked);
     simButton.elt.className = 'button';
+    simButton.style('min-width', simButton.width + 10 + 'px');
     simButton.mouseOver(function () {
         setHelpText('Starts and stops the simulation');
     });
     simButton.mouseOut(function () {
         setHelpText('');
     });
+    simButton.parent(topLeftButtons);
 
     // Undos the last action
     undoButton = createButton('<i class="fa fa-undo icon"></i> Undo');
-    undoButton.position(498, 3);
     undoButton.mousePressed(() => {
         undo();
     });
     undoButton.elt.disabled = true;
     undoButton.elt.className = 'button';
+    undoButton.parent(topLeftButtons);
 
     // Redos the last action
     redoButton = createButton('<i class="fa fa-redo icon"></i> Redo');
-    redoButton.position(587, 3);
     redoButton.mousePressed(() => {
         redo();
     });
     redoButton.elt.disabled = true;
     redoButton.elt.className = 'button';
+    redoButton.parent(topLeftButtons);
 
     // Activates the mode for area selecting
     selectButton = createButton('<i class="fas fa-object-group icon"></i> Select');
-    selectButton.position(674, 3);
     selectButton.mousePressed(startSelect);
     selectButton.elt.style.cursor = 'default';
     selectButton.elt.className = 'button';
     selectButton.elt.title = 'Coming soon!';
+    selectButton.parent(topLeftButtons);
+
+    helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
+    helpLabel.elt.className = 'label inlineLabel';
+    helpLabel.parent(topLeftButtons);
+    helpLabel.hide();
+
+    sketchNameLabel = createP('Untitled Sketch');
+    sketchNameLabel.elt.className = 'label inlineLabel sketchNameLabel';
+    sketchNameLabel.parent(topRightButtons);
 }
 
 function createBasicElements() {
@@ -529,11 +538,8 @@ function createAdvancedElements() {
 }
 
 function createCustomImportButton() {
-    customButton = createButton('<i class="fa fa-file-import icon"></i> Custom Modules');
+    customButton = createButton('<i class="fa fa-microchip icon"></i> Custom Modules');
     customButton.mousePressed(function () {
-        fill('rgba(0, 0, 0, 0.5)');
-        noStroke();
-        rect(0, 0, window.width, window.height);
         customClicked();
     });
     customButton.elt.className = 'buttonLeft';
@@ -782,14 +788,6 @@ function createElementOptions() {
     tickTimeMsLabel.parent(leftSideContainer);
 }
 
-function createHelpLabel() {
-    helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
-    helpLabel.elt.className = 'label';
-    helpLabel.elt.style.color = '#323232';
-    helpLabel.position(760, 5);
-    helpLabel.hide();
-}
-
 function createDialogElements() {
     moduleNameInput = createInput('');
     moduleNameInput.attribute('placeholder', 'Module Name');
@@ -883,32 +881,10 @@ function createDialogElements() {
 }
 
 function createTopRightButtons() {
-    // Clears the canvas and resets the view
-    newButton = createButton('<i class="fas fa-file icon"></i> New');
-    newButton.position(windowWidth - 306, 3);
-    newButton.mousePressed(function () {
-        if (newButton.html() === 'SURE?') {
-            newButton.elt.className = "button";
-            newButton.html('<i class="fas fa-file icon"></i> New');
-            newClicked();
-        } else {
-            newButton.elt.className = "button active";
-            newButton.html('SURE?');
-            setTimeout(function () { newButton.html('<i class="fas fa-file icon"></i> New'); newButton.elt.className = "button"; }, 3000);
-        }
-    });
-    newButton.elt.className = 'button';
-    newButton.mouseOver(function () {
-        setHelpText('Clears the sketch');
-    });
-    newButton.mouseOut(function () {
-        setHelpText('');
-    });
-
     saveDialogButton = createButton('<i class="fas fa-save icon"></i> Save');
-    saveDialogButton.position(windowWidth - 230, 3);
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = 'button';
+    saveDialogButton.parent(topRightButtons);
     saveDialogButton.mouseOver(function () {
         setHelpText('Saves the sketch');
     });
@@ -918,6 +894,7 @@ function createTopRightButtons() {
 
     if (getCookieValue('access_token') !== '') {
         dashboardButton = createButton('<i class="fas fa-th icon"></i> Dashboard');
+        dashboardButton.style('min-width', dashboardButton.width + 20 + 'px');
         dashboardButton.mouseOver(function () {
             setHelpText('Get back to the dashboard');
         });
@@ -926,6 +903,7 @@ function createTopRightButtons() {
         });
     } else {
         dashboardButton = createButton('<i class="fa fa-sign-in-alt icon"></i> Login');
+        dashboardButton.style('min-width', dashboardButton.width + 5 + 'px');
         dashboardButton.mouseOver(function () {
             setHelpText('Log into your LogiJS account');
         });
@@ -933,7 +911,6 @@ function createTopRightButtons() {
             setHelpText('');
         });
     }
-    dashboardButton.elt.style.width = '120px';
     dashboardButton.mousePressed(function () {
         if (dashboardButton.html() === 'SURE?') {
             window.location = '/dashboard';
@@ -943,6 +920,6 @@ function createTopRightButtons() {
             setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.html('<i class="fas fa-th icon"></i> Dashboard'); } else { dashboardButton.html('<i class="fa fa-sign-in-alt icon"></i> Login'); } dashboardButton.elt.className = "button"; }, 3000);
         }
     });
-    dashboardButton.position(windowWidth - 150, 3);
     dashboardButton.elt.className = 'button';
+    dashboardButton.parent(topRightButtons);
 }

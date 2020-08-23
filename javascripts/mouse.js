@@ -304,7 +304,7 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (loading || saveDialog || justClosedMenu || modifierMenuDisplayed()) {
+    if (loading || saveDialog || justClosedMenu || modifierMenuDisplayed() || mouseOverGUI()) {
         return;
     }
     if (!simRunning && !mouseOverGUI()) {
@@ -376,7 +376,7 @@ function mouseClicked() {
           Finishing the selection process by invoking handleSelection
 */
 function mouseReleased() {
-    if (loading || showCustomDialog || saveDialog) { return; }
+    if (loading || showCustomDialog || saveDialog || mouseOverGUI()) { return; }
     if (modifierMenuDisplayed()) {
         if (!mouseOverGUI() && clickedOutOfGUI) {
             closeModifierMenu();
@@ -691,7 +691,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed() || mouseOverGUI()) { return; }
     if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);

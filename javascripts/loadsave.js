@@ -60,6 +60,7 @@ function loadSketch(file) {
         socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
         socket.on('userSketchData', (data) => {
             if (data.success === true) {
+                setSketchNameLabel(file.split('.')[0]);
                 load(data.data);
             } else {
                 fileNotFoundError();
@@ -75,6 +76,7 @@ function loadSketchFromJSON(data, file) {
     loading = true;
     loadFile = file;
     document.title = 'LogiJS: ' + file;
+    setSketchNameLabel(file);
     load(data);
 }
 
@@ -376,4 +378,8 @@ function loadURLSketch() {
             socket.off('sketchDescription');
         });
     }
+}
+
+function setSketchNameLabel(name) {
+    sketchNameLabel.elt.innerHTML = name;
 }

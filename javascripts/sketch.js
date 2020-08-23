@@ -245,10 +245,10 @@ let labelTextBox; // Label elements
 */
 let sequencer;
 
-let leftSideButtons;
+let leftSideButtons, topLeftButtons, topRightButtons, topButtonsContainer;
 
 let sketchNameInput, moduleNameInput, saveButton, saveDialogText;
-let helpLabel, saveDialogButton, dashboardButton, cancelButton, descInput, newButton;
+let helpLabel, sketchNameLabel, saveDialogButton, dashboardButton, cancelButton, descInput;
 let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions, labelSimulation,
     andButton, orButton, xorButton, bufferButton, notButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
@@ -292,6 +292,19 @@ document.addEventListener('contextmenu', event => event.preventDefault());
     Sets up the canvas and caps the framerate
 */
 function setup() { // jshint ignore:line
+    topButtonsContainer = createDiv('');
+    topButtonsContainer.elt.className = 'topButtonsContainer';
+
+    //Div for the Top Left Buttons
+    topLeftButtons = createDiv('');
+    topLeftButtons.elt.className = 'topLeftButtons';
+    topLeftButtons.parent(topButtonsContainer);
+
+    //Div for the Top Right Buttons
+    topRightButtons = createDiv('');
+    topRightButtons.elt.className = 'topRightButtons';
+    topRightButtons.parent(topButtonsContainer);
+
     mainCanvas = createCanvas(windowWidth - 240, windowHeight - 50);     // Creates the canvas in full window size
     mainCanvas.position(240, 50);
     mainCanvas.id('mainCanvas');
@@ -308,9 +321,9 @@ function setup() { // jshint ignore:line
     document.title = 'LogiJS: New Sketch';
 
     leftSideContainer = createDiv('');
-    leftSideContainer.elt.style.height = (windowHeight - 74 - 32 - 15).toString() + 'px';
+    //leftSideContainer.elt.style.height = (windowHeight - 74 - 32 - 15).toString() + 'px';
     leftSideContainer.elt.className = 'scrollContainerLeft';
-    leftSideContainer.elt.style.margin = '80px 0px';
+    //leftSideContainer.elt.style.margin = '20px 0px';
 
     //Div for the Left Side Buttons
     leftSideButtons = createDiv('');
@@ -326,7 +339,6 @@ function setup() { // jshint ignore:line
     createCustomImportButton();
     createElementOptions();
 
-    createHelpLabel();
     createDialogElements();
 
     createTopRightButtons();
@@ -475,6 +487,7 @@ function demuxClicked() {
 
 // Triggered when a sketch should be saved
 function saveClicked() {
+    setSketchNameLabel(sketchNameInput.value());
     saveSketch(sketchNameInput.value() + '.json', function (look) {
         closeSaveDialog();
         look.desc = descInput.value();
@@ -489,32 +502,6 @@ function cancelClicked() {
     } else if (showCustomDialog) {
         closeCustomDialog();
     }
-}
-
-// Resets the canvas and the view / transformation
-function newClicked() {
-    clearItems();
-    clearActionStacks();
-    hideAllOptions();
-    closeCustomDialog();
-    closeSaveDialog();
-    transform = new Transformation(0, 0, 1);
-    currentGridSize = GRIDSIZE;
-    gateInputCount = 2;
-    gateInputSelect.value('2');
-    gateDirection = 0;
-    directionSelect.value('Right');
-    setLoading(false);
-    if (simRunning) {
-        endSimulation(); // End the simulation, if started
-    }
-    leaveModifierMode();
-    enterModifierMode();
-    wireMode = 'none';
-    document.title = 'LogiJS: New Sketch';
-    sketchNameInput.value('');
-    moduleNameInput.value('');
-    reDraw();
 }
 
 function hideAllOptions() {
@@ -1963,7 +1950,7 @@ function keyPressed() {
 function setHelpText(str) {
     if (str !== '') {
         helpLabel.elt.innerHTML = '<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i> ' + str;
-        helpLabel.show();
+        helpLabel.style('display', 'inline-block');
     } else {
         helpLabel.hide();
     }
