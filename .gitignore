@@ -3,6 +3,7 @@ userSketches/
 views/previews
 .DS_Store
 private.key
+public.key
 nodemon.json
 google76e7434874552abc.html
 site_scripts/knexfile.js
