@@ -499,6 +499,10 @@ function importJSONClicked() {
     let fr = new FileReader();
 
     fr.onload = function (e) {
+        if (simRunning) {
+            endSimulation();
+            enterModifierMode();
+        }
         let result = JSON.parse(e.target.result);
         let name = files.item(0).name.split('.')[0];
         loadSketchFromJSON(result, name);

@@ -736,7 +736,7 @@ function createElementOptions() {
 
     bpTickTimeCB = createCheckbox('Bypass min. tick time', true);
     //document.getElementsByTagName('label')[1].innerHTML = 'Bypass min. tick time<span style="color: #c83232">.</span>';
-    document.getElementsByTagName('input')[1].className = 'tickTimeCB';
+    document.getElementsByTagName('input')[2].className = 'tickTimeCB';
     document.getElementsByTagName('label')[1].className = 'tickTimeCB';
     bpTickTimeCB.hide();
     bpTickTimeCB.checked(false);

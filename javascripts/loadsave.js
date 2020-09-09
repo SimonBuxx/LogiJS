@@ -73,7 +73,7 @@ function loadSketch(file) {
 function loadSketchFromJSON(data, file) {
     nextCustomToLoadIndex = 0;
     customsToLoadQueue = [];
-    loading = true;
+    setLoading(true);
     loadFile = file;
     document.title = 'LogiJS: ' + file;
     setSketchNameLabel(file);
