@@ -848,7 +848,7 @@ function createDialogElements() {
     cancelButton = createButton('Cancel');
     cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 110);
     cancelButton.mousePressed(cancelClicked);
-    cancelButton.elt.className = 'btn btn-lg btn-red';
+    cancelButton.elt.className = 'btn btn-lg btn-red hover-btn';
     cancelButton.hide();
 
     saveDialogText = createP('Save Sketch<span style="color: #c83232">.</span>');
@@ -873,7 +873,7 @@ function createDialogElements() {
     }
     saveButton.position(windowWidth / 2 + 142, windowHeight / 2 + 113);
     saveButton.mousePressed(saveClicked);
-    saveButton.elt.className = 'btn btn-lg btn-red';
+    saveButton.elt.className = 'btn btn-lg btn-red hover-btn';
     saveButton.mouseOut(function () {
         setHelpText('');
     });
@@ -881,6 +881,23 @@ function createDialogElements() {
 }
 
 function createTopRightButtons() {
+    document.getElementById('fileid').onchange = function() {
+        importJSONClicked();    
+    };
+
+    importButton = createButton('<i class="fas fa-file-upload icon"></i> Import');
+    importButton.mousePressed(function () {
+        document.getElementById('fileid').click();    
+    });
+    importButton.elt.className = 'button';
+    importButton.parent(topRightButtons);
+    importButton.mouseOver(function () {
+        setHelpText('Import a JSON file');
+    });
+    importButton.mouseOut(function () {
+        setHelpText('');
+    });
+
     saveDialogButton = createButton('<i class="fas fa-save icon"></i> Save');
     saveDialogButton.mousePressed(saveDialogClicked);
     saveDialogButton.elt.className = 'button';

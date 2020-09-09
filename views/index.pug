@@ -65,14 +65,14 @@ body
             ul.nav.navbar-nav.navbar-right
               if user !== ''
                 li
-                  a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') <i class="fa fa-user" style="color: #c83232;"></i> #{user}
+                  a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') <i class="fa fa-user red"></i> #{user}
                 li
-                  a.Logout.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-out-alt" style="color: #c83232;"></i> Logout
+                  a.Logout.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-out-alt red"></i> Logout
               else
                 li
-                  a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') <i class="fa fa-sign-in-alt" style="color: #c83232;"></i> Login
+                  a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') <i class="fa fa-sign-in-alt red"></i> Login
                 li
-                  a.internal-link(rel='nofollow', href='/signup', target='_parent') <i class="fa fa-user-plus" style="color: #c83232;"></i> Register
+                  a.internal-link(rel='nofollow', href='/signup', target='_parent') <i class="fa fa-user-plus red"></i> Register
   .slogan-container
     h1.background-text discover the world
     if user !== ''
@@ -83,7 +83,7 @@ body
         | Discover the world
         br
         | of logic circuits
-        span(style="color: #c83232;") .
+        span.red .
   .get_started
     if user !== ''
       //a.btn.btn-lg.btn-orange(href='/dashboard', rel="nofollow", role='button')
@@ -106,7 +106,7 @@ body
           </ol>
           <div class="carousel-inner">
             <div class="item active">
-              <span class="carousel-text"><h2 class="carousel-caption">Learn the basics of logic<br>gates and circuits<span style="color: #c83232;">.</span></h2>
+              <span class="carousel-text"><h2 class="carousel-caption">Learn the basics of logic<br>gates and circuits<span class="red">.</span></h2>
                 <div class="carousel-button">
                   <a class="btn btn-lg btn-orange" href="/editor" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
                 </div>
@@ -115,7 +115,7 @@ body
             </div>
 
             <div class="item">
-              <span class="carousel-text"><h2 class="carousel-caption">Import your circuits as<br>custom components<span style="color: #c83232;">.</span></h2>
+              <span class="carousel-text"><h2 class="carousel-caption">Import your circuits as<br>custom components<span class="red">.</span></h2>
                 <div class="carousel-button">
                   <a class="btn btn-lg btn-orange" href="/editor" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
                 </div>
@@ -124,7 +124,7 @@ body
             </div>
 
             <div class="item">
-              <span class="carousel-text"><h2 class="carousel-caption">Save and access your<br>circuits online<span style="color: #c83232;">.</span></h2>
+              <span class="carousel-text"><h2 class="carousel-caption">Save and access your<br>circuits online<span class="red">.</span></h2>
                 <div class="carousel-button">
                   <a class="btn btn-lg btn-orange" href="/editor" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
                 </div>
@@ -210,7 +210,7 @@ body
   #about(style="display: block; position: relative; top: -150px; visibility: hidden;")
   h2.normal-caption
     | Who whe are
-    span(style="color: #c83232;") .
+    span.red .
   .justify(style="margin: 0 30% 60px 30%;")
     p
       | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
@@ -221,8 +221,8 @@ body
     p
       | Please note that LogiJS is currently in active development. Changes may come rapidly and unanounced. Also, we can't guarantee for possible data loss or damage done trough use of our software.
   h2.normal-caption
-    | What's in the future
-    span(style="color: #c83232;") .
+    | What we're working on
+    span.red .
   .justify(style="margin: 0 30% 0 30%;")
     ul
       li First things first, we will finally complete the selection feature so that you can move, copy and delete sketch parts.
@@ -243,8 +243,8 @@ body
             a(href='https://github.com/SimonBuxx/logijs', target='_blank', style="margin-left: 5px;")
               img(src="images/github_dark.png" style="width: 40px; margin-top: -20px;")
         .footer_box
-          p(style="text-align: right;") Made with <i class="fas fa-heart" style="color: #c83232;"></i> in Lübeck
-            span(style="color: #c83232;") .
+          p(style="text-align: right;") Made with <i class="fas fa-heart red"></i> in Lübeck
+            span.red .
   script
     include ../libraries/jquery.min.js
     include ../libraries/bootstrap.min.js

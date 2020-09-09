@@ -248,10 +248,15 @@ let sequencer;
 let leftSideButtons, topLeftButtons, topRightButtons, topButtonsContainer;
 
 let sketchNameInput, moduleNameInput, saveButton, saveDialogText;
-let helpLabel, sketchNameLabel, saveDialogButton, dashboardButton, cancelButton, descInput;
+let helpLabel, cancelButton, descInput;
 let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions, labelSimulation,
     andButton, orButton, xorButton, bufferButton, notButton, inputButton, buttonButton, clockButton,
     outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
+
+/*
+    Right side elements
+*/
+let importButton, saveDialogButton, dashboardButton, sketchNameLabel;
 
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
@@ -483,6 +488,24 @@ function demuxClicked() {
     multiplexerBitSelect.style('display', 'inline-block');
     labelOptions.show();
     custFile = muxBitWidth + '-demux.json';
+}
+
+function importJSONClicked() {
+    let files = document.getElementById('fileid').files;
+    if (files.length <= 0) {
+        return false;
+    }
+
+    let fr = new FileReader();
+
+    fr.onload = function (e) {
+        let result = JSON.parse(e.target.result);
+        let name = files.item(0).name.split('.')[0];
+        loadSketchFromJSON(result, name);
+        sketchNameInput.elt.value = name;
+    };
+
+    fr.readAsText(files.item(0));
 }
 
 // Triggered when a sketch should be saved

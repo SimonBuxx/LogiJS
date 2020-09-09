@@ -13,6 +13,10 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
     text-shadow: none;
 }
 
+.red {
+    color: #c83232;
+}
+
 .slogan-container {
     position: relative;
 }
@@ -543,8 +547,10 @@ input {
     border-radius: 10px;
     color:#ffffff;
     background: linear-gradient(145deg, #b42d2d, #d63636);
+    background: #c83232;
     border: none;
     box-shadow: none;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .btn-green {
@@ -587,7 +593,8 @@ input {
 
 .btn-orange:hover, .btn-orange:focus, .btn-orange:active, .btn-orange.active {
     color: white;
-    background: linear-gradient(145deg, #d63636, #b42d2d);
+    background: #323232;
+    box-shadow: 0 0 20px #969696;
 }
 
 .btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active {

@@ -53,7 +53,7 @@ body {
     color: rgb(200, 50, 50);
   }
 
-  .button.active > .icon, .buttonLeft.active > .icon {
+  .button.active > .icon, .buttonLeft.active > .icon, .button:active > .icon {
     color: rgb(255, 255, 255);
   }
 
@@ -78,7 +78,7 @@ body {
 }
 
 .button:active, .button.active {
-    background: linear-gradient(145deg, #b42d2d, #d63636);
+    background: #c83232;
     color: white;
 }
 
@@ -542,7 +542,7 @@ input[type=range]::-ms-tooltip {
 }
 
 .btn-red {
-    background: linear-gradient(145deg, #b42d2d, #d63636);
+    background: #c83232;
     border-radius: 10px;
     border: none;
     padding: 10px 10px;
@@ -556,6 +556,7 @@ input[type=range]::-ms-tooltip {
     cursor: pointer;
     width: 145px;
     outline: none;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .customDialogButton {
@@ -716,8 +717,12 @@ h1 {
     height: 50px;
 }
 
+.hover-btn:hover {
+    background: #323232;
+    box-shadow: 0 0 20px #969696;
+}
+
 .btn-red:hover {
-    background: linear-gradient(145deg, #d63636, #b42d2d);
     color:#ffffff;
 }
 

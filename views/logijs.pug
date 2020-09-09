@@ -55,10 +55,12 @@ body
   |   <!-- End Google Tag Manager (noscript) -->
   a(href='/')
     img#logo(src='images/alt_logo_dark.png', alt='LogiJS logo')
+  //<input type="file" id="selectFiles" value="Import" />
+  <input id='fileid' type='file' hidden/>
   .custom-container(style="position: relative;")
     #custom-dialog
       h1 Import your own elements<span style="color: #c83232">.</span>
-      button#cancel-button.btn.btn-lg.btn-red(rel="nofollow" onclick="cancelClicked();") Cancel
+      button#cancel-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="cancelClicked();") Cancel
       if sketchData.sketches.length === 0
         .no_sketches_container
           p.no_sketches_info You don't have any sketches
