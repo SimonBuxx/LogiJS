@@ -67,6 +67,8 @@ body
                 a.user-button.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-user" style="color: #c83232;"></i> #{user}
               li
                 a.Logout.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-out-alt" style="color: #c83232;"></i> Logout
+              li
+                a#mode-button.internal-link(rel='nofollow', href='javascript:;', target='_parent' title='Toggle Dark Mode') <i class="fa fa-moon red"></i>
   if sketchData.sketches.length === 0
     .slogan-container
       h1.background-text(style="top: 50%; transform: translate(0, 50%);") discover the world
