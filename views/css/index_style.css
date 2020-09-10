@@ -324,6 +324,16 @@ a:focus {
     min-height: 200px;
 }
 
+.dark-theme .sticky-bar {
+    border-image: 
+    linear-gradient(
+      to top, 
+      rgba(0, 0, 0, 0),
+      #fff, 
+      rgba(0, 0, 0, 0)
+    ) 1 100%;
+}
+
 .sticky-bar h1 {
     font-size: 30px;
     margin: 0 0 20px 0;
@@ -812,7 +822,7 @@ span.overlay span {
     color: #323232;
 }
 
-.download {
+.download{
     font-size: 16px;
     float: left;
     color: #323232;
@@ -829,6 +839,14 @@ span.overlay span {
     font-size: 16px;
     margin-top: 10px;
     margin-right: 50px;
+}
+
+.dark-theme .download, .dark-theme .del {
+    color: white;
+}
+
+.dark-theme .download:hover, .dark-theme .del:hover {
+    color: #969696;
 }
 
 .modified_date {
