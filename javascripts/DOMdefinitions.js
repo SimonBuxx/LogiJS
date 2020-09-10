@@ -527,7 +527,11 @@ function createAdvancedElements() {
     labelButton = createButton('');
     labelButton.mousePressed(function () { labelButtonClicked(false); });
     labelButton.elt.className = 'previewButton';
-    labelButton.elt.innerHTML = '<img class="preview" src="images/label.png">';
+    if (currentTheme === 'dark') {
+        labelButton.elt.innerHTML = '<img class="preview" src="images/label_white.png">';
+    } else {
+        labelButton.elt.innerHTML = '<img class="preview" src="images/label.png">';
+    }
     labelButton.mouseOver(function () {
         setHelpText('Text Label');
     });
@@ -846,14 +850,18 @@ function createDialogElements() {
     });
 
     cancelButton = createButton('Cancel');
-    cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 110);
+    cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 113);
     cancelButton.mousePressed(cancelClicked);
     cancelButton.elt.className = 'btn btn-lg btn-red hover-btn';
     cancelButton.hide();
 
     saveDialogText = createP('Save Sketch<span style="color: #c83232">.</span>');
     saveDialogText.hide();
-    saveDialogText.elt.style.color = '#323232';
+    if (currentTheme === 'dark') {
+        saveDialogText.elt.style.color = '#fff';
+    } else {
+        saveDialogText.elt.style.color = '#323232';
+    }
     saveDialogText.elt.style.fontFamily = 'ArcaMajora3';
     saveDialogText.elt.style.margin = '3px 0px 0px 0px';
     saveDialogText.position(windowWidth / 2 - 65, windowHeight / 2 - 160);

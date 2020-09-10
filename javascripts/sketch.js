@@ -1933,10 +1933,11 @@ function keyPressed() {
                 break;
             case CONTROL:
                 //startSelect();
-                console.log(wires.length);
+                //console.log(wires.length);
                 // Uncomment to make screenshots
                 //let img  = canvas.toDataURL("image/png");
                 //document.write('<img src="'+img+'"/>');
+
                 break;
             case 32: // Space
                 if (simRunning) {

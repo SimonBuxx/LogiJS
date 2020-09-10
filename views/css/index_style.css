@@ -45,7 +45,7 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
     white-space: nowrap;
     overflow: hidden;
     left: -100px;
-    color: #f7f7f7;
+    color: #f6f6f6;
     width: calc(100% + 100px);
 }
 
@@ -167,7 +167,7 @@ a:focus {
 }
 
 .dark-theme #front_teaser {
-    box-shadow: 0 0 20px #323232;
+    box-shadow: 0 0 20px #202020;
 }
 
 .sample-element img {
@@ -545,7 +545,7 @@ a:focus {
 }
 
 .dark-theme .carousel-image {
-    box-shadow: 0 0 20px #272727;
+    box-shadow: 0 0 20px #202020;
 }
 
 input {
@@ -638,10 +638,10 @@ input {
     box-shadow: 0 0 20px #969696;
 }
 
-.dark-theme .btn-orange:hover, .btn-orange:focus, .btn-orange:active, .btn-orange.active {
+.dark-theme .btn-orange:hover, .dark-theme  .btn-orange:focus, .dark-theme  .btn-orange:active, .dark-theme  .btn-orange.active {
     color: #323232;
     background: #fff;
-    box-shadow: 0 0 20px #272727;
+    box-shadow: 0 0 20px #202020;
 }
 
 .navbar-default .navbar-nav li > a {
@@ -721,6 +721,10 @@ p.red-message {
 
 p.green-message {
     color: #323232;
+}
+
+.dark-theme p.green-message {
+    color: white;
 }
 
 p.password-tipps {

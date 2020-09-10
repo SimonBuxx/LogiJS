@@ -381,5 +381,9 @@ function loadURLSketch() {
 }
 
 function setSketchNameLabel(name) {
-    sketchNameLabel.elt.innerHTML = name;
+    if (name.startsWith('library__')) {
+        sketchNameLabel.elt.innerHTML = name.slice(10);
+    } else {
+        sketchNameLabel.elt.innerHTML = name;
+    }
 }

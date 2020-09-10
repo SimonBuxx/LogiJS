@@ -304,7 +304,7 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (loading || saveDialog || justClosedMenu || modifierMenuDisplayed() || mouseOverGUI()) {
+    if (loading || saveDialog || justClosedMenu ||showCustomDialog || modifierMenuDisplayed() || mouseOverGUI()) {
         return;
     }
     if (!simRunning && !mouseOverGUI()) {

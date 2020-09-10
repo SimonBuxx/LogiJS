@@ -156,7 +156,11 @@ function showModifierMenu() {
     noStroke();
     fill('rgba(0, 0, 0, 0.5)');
     rect(0, 0, windowWidth, windowHeight);
-    fill(255);
+    if (currentTheme === 'dark') {
+        fill(50, 50, 50);
+    } else {
+        fill(255);
+    }
     strokeCap(SQUARE);
     if (inputToModify >= 0) {
         modifierMenuX = (inputs[inputToModify].x + transform.dx - 1) * transform.zoom;
@@ -192,7 +196,7 @@ function positionModifierElements() {
     greenButton.position(modifierMenuX + 382, modifierMenuY + 130);
     blueButton.position(modifierMenuX + 448, modifierMenuY + 130);
 
-    labelTextBox.position(modifierMenuX + 240, modifierMenuY + 100);
+    labelTextBox.position(modifierMenuX + 240, modifierMenuY + 60);
 }
 
 function newIsTopState() {
@@ -459,7 +463,7 @@ function createModifierElements() {
     labelTextBox.elt.className = 'labelTextBox';
     labelTextBox.attribute('placeholder', 'New Label');
     labelTextBox.hide();
-    labelTextBox.size(260, 90);
+    labelTextBox.size(260, 130);
     labelTextBox.elt.onkeyup = labelChanged;
     labelTextBox.mouseOver(function () {
         setHelpText('Edit the text of this label');

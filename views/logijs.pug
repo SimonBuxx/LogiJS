@@ -93,3 +93,10 @@ body
     for (let i = 0; i < preview_spans.length; i++) {
       document.getElementsByClassName('preview-span')[i].innerHTML = '<i class="fa fa-file-import"></i> Import';
     }
+
+    const currentTheme = localStorage.getItem('theme');
+
+    if (currentTheme === 'dark') {
+        document.documentElement.classList.toggle('dark-theme');
+        document.getElementById('logo').src = 'images/alt_logo.png';
+    }

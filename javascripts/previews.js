@@ -560,7 +560,11 @@ function showPreviewImage() {
         image(img, window.width / 2 - 333, window.height / 2 - 52);
         fill('rgba(0, 0, 0, 0)');
         strokeWeight(10);
-        stroke(255);
+        if (currentTheme === 'dark') {
+            stroke(50, 50, 50);
+        } else {
+            stroke(255);
+        }
         rect(window.width / 2 - 333, window.height / 2 - 52, 200, 200, 10);
         let look = getThisLook();
         if (look.outputs > 0) {

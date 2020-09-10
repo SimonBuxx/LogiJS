@@ -8,10 +8,18 @@ function showMessage(msg, subline = '') {
     noStroke();
     rect(0, 0, window.width, window.height); 
     // Draw the message box
-    fill(255);
+    if (currentTheme === 'dark') {
+        fill(50, 50, 50);
+    } else {
+        fill(255);
+    }
     rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150, 10);
     // Display the message
-    fill(50);
+    if (currentTheme === 'dark') {
+        fill(255);
+    } else {
+        fill(50, 50, 50);
+    }
     textSize(30);
     textFont('ArcaMajora3');
     textAlign(CENTER, CENTER);
@@ -44,7 +52,11 @@ function showSaveDialog() {
     noStroke();
     rect(0, 0, window.width, window.height);
     // Draw the save dialog background
-    fill(255);
+    if (currentTheme === 'dark') {
+        fill(50, 50, 50);
+    } else {
+        fill(255);
+    }
     noStroke();
     //stroke(0);
     //strokeWeight(3);
@@ -82,9 +94,6 @@ function showSaveDialogElements() {
     moduleNameInput.show();
     descInput.show();
     saveDialogText.show();
-    // Reposition the cancel button, that is also used in other dialogs
-    cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 113);
-    cancelButton.style('width', '145px');
 }
 
 function hideSaveDialogElements() {
