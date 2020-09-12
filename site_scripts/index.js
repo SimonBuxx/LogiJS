@@ -87,6 +87,12 @@ router.get('/', function (req, res) {
     });
 });
 
+router.get('/getstarted', function (req, res) {
+    res.render('getstarted', {
+        user: getUser(req)
+    });
+});
+
 router.get('/editor', function (req, res) {
     let user = getUser(req);
     if (user !== '') {

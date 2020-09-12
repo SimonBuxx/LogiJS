@@ -30,10 +30,26 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
     position: relative;
 }
 
+.getstarted-container {
+    position: relative;
+    margin-left: 10%;
+}
+
 .slogan {
     font-size: 70px;
     margin-top: 150px;
     text-align: center;
+}
+
+.getstarted-title {
+    font-size: 4vw;
+    margin-top: calc(40vh - 150px);
+    text-align: left;
+}
+
+.getstarted-subtitle {
+    font-size: 2.6vw;
+    width: 40vw;
 }
 
 .background-text {
@@ -168,6 +184,30 @@ a:focus {
 
 .dark-theme #front_teaser {
     box-shadow: 0 0 20px #202020;
+}
+
+#getstarted_teaser {
+    position: absolute;
+    right: 8vw;
+    top: 31vh;
+    width: 38vw;
+    border-radius: 10px;
+    box-shadow: 0 0 30px #202020;
+    z-index: 20000;
+}
+
+.grey_square {
+    position: absolute; 
+    top: 36vh; 
+    right: 0; 
+    height: 20vw; 
+    background: #323232; 
+    width: 20vw; 
+    z-index: 10000;
+}
+
+.dark-theme .grey_square {
+    background: white;
 }
 
 .sample-element img {
@@ -615,6 +655,15 @@ input {
     height: 65px;
     padding-top: 14px;
     font-size: 30px;
+}
+
+.getstarted-container .btn {
+    width: 250px;
+    height: 60px;
+    padding-top: 14px;
+    font-size: 25px;
+    margin-top: 20px;
+    margin-right: 10px;
 }
 
 .carousel-button {

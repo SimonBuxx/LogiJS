@@ -213,7 +213,7 @@ body {
     margin-bottom: 0;
 }
 
-.sketchNameLabel {
+.sketchNameLabel, .dark-theme .sketchNameLabel {
     color: #969696;
 }
 
