@@ -51,7 +51,6 @@ function hideTour() {
 }
 
 function initTour() {
-    mainCanvas.elt.classList.add('dark-canvas');
     let tour = urlParam('tour');
     if (tour === 'true') {
         advanceTour();
@@ -61,6 +60,7 @@ function initTour() {
 function advanceTour() {
     switch (tourStep) {
         case 0:
+            mainCanvas.elt.classList.add('dark-canvas');
             showTour('', '', true);
             break;
         case 1:
