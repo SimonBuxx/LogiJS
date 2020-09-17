@@ -75,7 +75,7 @@ function createTopButtons() {
             enterModifierMode();
         }
     });
-    moduleButton.elt.disabled = (outputs.length + inputs.length === 0);
+    moduleButton.elt.disabled = (outputs.length === 0);
     moduleButton.elt.className = 'button';
     moduleButton.parent(topLeftButtons);
 

@@ -1436,7 +1436,7 @@ function deleteCustom(customNumber) {
 */
 function deleteOutput(outputNumber) {
     pushUndoAction('delOut', [outputNumber], outputs.splice(outputNumber, 1));
-    moduleButton.elt.disabled = (outputs.length + inputs.length === 0);
+    moduleButton.elt.disabled = (outputs.length === 0);
     reDraw();
 }
 
@@ -1445,7 +1445,7 @@ function deleteOutput(outputNumber) {
 */
 function deleteInput(inputNumber) {
     pushUndoAction('delIn', [inputNumber], inputs.splice(inputNumber, 1));
-    moduleButton.elt.disabled = (outputs.length + inputs.length === 0);
+    moduleButton.elt.disabled = (outputs.length === 0);
     reDraw();
 }
 
@@ -1687,7 +1687,7 @@ function configureButtons(mode) {
     simButton.elt.disabled = simulation;
     saveDialogButton.elt.disabled = savedialog;
     importButton.elt.disabled = jsonimport;
-    moduleButton.elt.disabled = moduleimport || (outputs.length + inputs.length === 0);
+    moduleButton.elt.disabled = moduleimport || (outputs.length === 0);
 }
 
 /*
@@ -1836,7 +1836,7 @@ function reDraw() {
     text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
     if (moduleOptions) {
         textSize(20);
-        fill(255);
+        fill(0);
         text('Click on the in- and outputs to swap them!', 30, 30);
     }
 }
@@ -1947,10 +1947,10 @@ function updateGroups() {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
-    if (saveDialog && keyCode === ESCAPE) {
+    if ((saveDialog || moduleOptions) && keyCode === ESCAPE) {
         enterModifierMode();
     }
-    if (captionInput.elt === document.activeElement || labelTextBox === document.activeElement || loading || saveDialog) {
+    if (captionInput.elt === document.activeElement || labelTextBox === document.activeElement || loading || saveDialog || moduleOptions) {
         return;
     }
     if (sketchNameInput !== document.activeElement) {

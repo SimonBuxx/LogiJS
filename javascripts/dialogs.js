@@ -34,7 +34,7 @@ function showMessage(msg, subline = '') {
     text(subline, window.width / 2, window.height / 2 + 30);
 }
 
-function showTour(headline, text, welcome=false) {
+function showTour(headline, text, welcome = false) {
     document.getElementById('tour-dialog').style.display = 'block';
     document.getElementById('tour-headline').innerHTML = headline;
     document.getElementById('tour-text').innerHTML = text;
@@ -46,10 +46,12 @@ function showTour(headline, text, welcome=false) {
 }
 
 function hideTour() {
+    mainCanvas.elt.classList.remove('dark-canvas');
     document.getElementById('tour-dialog').style.display = 'none';
 }
 
 function initTour() {
+    mainCanvas.elt.classList.add('dark-canvas');
     let tour = urlParam('tour');
     if (tour === 'true') {
         advanceTour();
@@ -57,7 +59,7 @@ function initTour() {
 }
 
 function advanceTour() {
-    switch(tourStep) {
+    switch (tourStep) {
         case 0:
             showTour('', '', true);
             break;
@@ -69,11 +71,35 @@ function advanceTour() {
             showTour('The Toolbox<span style="color: #c83232">.</span>', 'The area on the left contains all components that you‘ll need to build basic logic circuits from scratch<span style="color: #c83232">.</span>');
             break;
         case 3:
-            showTour('Custom Modules<span style="color: #c83232">.</span>', 'If you‘re logged into your LogiJS account, you can import your circuits as custom modules using this dialog<span style="color: #c83232">.</span>');
+            showTour('Edit Mode<span style="color: #c83232">.</span>', 'Click on <i class="fa fa-pen icon" style="color: #c83232;"></i> Edit above to add wires and modify sketch components<span style="color: #c83232">.</span>');
             break;
         case 4:
-            document.getElementById('tour-button').innerHTML = 'Finish';
+            showTour('Edit Mode<span style="color: #c83232">.</span>', 'Try changing a clock\'s speed or an output\'s color by clicking on the components!');
+            break;
+        case 5:
+            showTour('Edit Mode<span style="color: #c83232">.</span>', 'You can also add diodes on wire intersections while in edit mode by clicking on them<span style="color: #c83232">.</span>');
+            break;
+        case 6:
+            showTour('Delete Mode<span style="color: #c83232">.</span>', 'Click on <i class="fa fa-trash-alt icon" style="color: #c83232;"></i> Delete to remove wires and other components<span style="color: #c83232">.</span>');
+            break;
+        case 7:
+            showTour('Delete Mode<span style="color: #c83232">.</span>', 'You can remove wires by dragging over the sketch, just like when placing them<span style="color: #c83232">.</span>');
+            break;
+        case 8:
             showTour('Simulation<span style="color: #c83232">.</span>', 'Click the <i class="fa fa-play icon" style="color: #c83232;"></i> Start button to bring your circuit to life<span style="color: #c83232">.</span>');
+            break;
+        case 9:
+            showTour('Custom Modules<span style="color: #c83232">.</span>', 'If you‘re logged in, you can import circuits as custom modules using the <i class="fa fa-microchip icon" style="color: #c83232;"></i> Custom Modules dialog<span style="color: #c83232">.</span>');
+            break;
+        case 10:
+            showTour('Custom Modules<span style="color: #c83232">.</span>', 'When you\'ve got at least one output, use <i class="fa fa-tools icon" style="color: #c83232;"></i> Module to edit the sketch\'s appearance as a custom module<span style="color: #c83232">.</span>');
+            break;
+        case 11:
+            showTour('File Import<span style="color: #c83232">.</span>', 'Click on <i class="fa fa-file-upload icon" style="color: #c83232;"></i> Import to upload local JSON sketch files<span style="color: #c83232">.</span>');
+            break;
+        case 12:
+            document.getElementById('tour-button').innerHTML = 'Finish';
+            showTour('', 'That\'s it for this introduction. Thank you for using LogiJS<span style="color: #c83232">.</span>');
             break;
         default:
             hideTour();
@@ -210,10 +236,10 @@ function initPinConfigurator() {
     configurator.innerHTML = '';
     for (let i = 0; i < Math.max(inputs.length, outputs.length); i++) {
         let lbl = document.createElement('p');
-            lbl.innerHTML = i + 1;
-            lbl.classList.add('configuratorLabel');
-            lbl.style.gridColumn = 1;
-            configurator.appendChild(lbl);
+        lbl.innerHTML = i + 1;
+        lbl.classList.add('configuratorLabel');
+        lbl.style.gridColumn = 1;
+        configurator.appendChild(lbl);
         if (i < inputs.length) {
             let checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -222,14 +248,14 @@ function initPinConfigurator() {
             checkbox.value = '';
             checkbox.name = 'topCheckbox';
             checkbox.checked = inputs[i].isTop;
-            checkbox.addEventListener('click', function() { // jshint ignore:line
+            checkbox.addEventListener('click', function () { // jshint ignore:line
                 inputs[i].setIsTop(checkbox.checked);
                 showModulePreviewer();
             });
-            checkbox.addEventListener('mouseenter', function() { // jshint ignore:line
+            checkbox.addEventListener('mouseenter', function () { // jshint ignore:line
                 setHelpText('Sets this input on top of the module');
             });
-            checkbox.addEventListener('mouseleave', function() { // jshint ignore:line
+            checkbox.addEventListener('mouseleave', function () { // jshint ignore:line
                 setHelpText('');
             });
             let newInput = document.createElement('input');
@@ -238,14 +264,14 @@ function initPinConfigurator() {
             newInput.style.gridColumn = 3;
             newInput.placeholder = 'None';
             newInput.value = inputs[i].lbl;
-            newInput.onkeyup = function() { // jshint ignore:line
+            newInput.onkeyup = function () { // jshint ignore:line
                 inputs[i].lbl = newInput.value;
                 showModulePreviewer();
             };
-            newInput.addEventListener('mouseenter', function() { // jshint ignore:line
+            newInput.addEventListener('mouseenter', function () { // jshint ignore:line
                 setHelpText('The name of this input on the module');
             });
-            newInput.addEventListener('mouseleave', function() { // jshint ignore:line
+            newInput.addEventListener('mouseleave', function () { // jshint ignore:line
                 setHelpText('');
             });
             configurator.appendChild(checkbox);
@@ -258,15 +284,15 @@ function initPinConfigurator() {
             newInput.style.gridColumn = 4;
             newInput.placeholder = 'None';
             newInput.value = outputs[i].lbl;
-            newInput.onkeyup = function() { // jshint ignore:line
+            newInput.onkeyup = function () { // jshint ignore:line
                 outputs[i].lbl = newInput.value;
                 showModulePreviewer();
 
             };
-            newInput.addEventListener('mouseenter', function() { // jshint ignore:line
+            newInput.addEventListener('mouseenter', function () { // jshint ignore:line
                 setHelpText('The name of this output on the module');
             });
-            newInput.addEventListener('mouseleave', function() { // jshint ignore:line
+            newInput.addEventListener('mouseleave', function () { // jshint ignore:line
                 setHelpText('');
             });
             configurator.appendChild(newInput);
