@@ -12,8 +12,8 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-    if (loading || saveDialog || showCustomDialog || mouseOverGUI() || modifierMenuDisplayed()) { return; }
-    if (keyIsDown(18) && !simRunning) { // If the alt key is pressed => scroll trough basic elements
+    if (loading || saveDialog || showCustomDialog || mouseOverGUI() || elementMenuShown()) { return; }
+    if (keyIsDown(18) && !simRunning && !moduleOptions) { // If the alt key is pressed => scroll trough basic elements
         wheel = Math.sign(event.deltaY);
         addType = Math.max(1, Math.min(9, addType + wheel));
         switch (addType) {
@@ -47,10 +47,6 @@ function mouseWheel(event) {
             default:
                 console.log('Invalid object type!');
                 break;
-
-        }
-        if (controlMode !== 'modify' && selectMode === 'none') {
-            leaveModifierMode();
         }
         return;
     }
@@ -67,7 +63,7 @@ function mouseWheel(event) {
         }
         transform.zoom = (currentGridSize / GRIDSIZE);
         dragSpeed = 1 / transform.zoom;
-        if (!simRunning && !showCustomDialog) {
+        if (!simRunning) {
             reDraw();
         }
     }
@@ -75,7 +71,7 @@ function mouseWheel(event) {
 }
 
 function mouseMoved() {
-    if (loading || saveDialog || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || elementMenuShown()) { return; }
     updateCursors();
 }
 
@@ -96,73 +92,75 @@ function updateCursors() {
                 }
             }
             for (const elem of inputs) {
-                if (elem.mouseOver()) {
+                if (elem.mouseOver() && (elem.getIsClock() || moduleOptions)) {
                     hand = true;
                     cursor(HAND);
                 }
             }
+            if (!moduleOptions) {
             for (const elem of labels) {
                 if (elem.mouseOver()) {
                     hand = true;
                     cursor(HAND);
                 }
             }
-            for (const elem of gates) {
-                for (const e of elem.inputClickBoxes) {
-                    if (e.mouseOver()) {
-                        hand = true;
-                        cursor(HAND);
-                        negDir = elem.direction;
-                        negPort = e;
-                        isOutput = false;
+                for (const elem of gates) {
+                    for (const e of elem.inputClickBoxes) {
+                        if (e.mouseOver()) {
+                            hand = true;
+                            cursor(HAND);
+                            negDir = elem.direction;
+                            negPort = e;
+                            isOutput = false;
+                        }
+                    }
+                    for (const e of elem.outputClickBoxes) {
+                        if (e.mouseOver()) {
+                            hand = true;
+                            cursor(HAND);
+                            negDir = elem.direction;
+                            negPort = e;
+                            isOutput = true;
+                        }
                     }
                 }
-                for (const e of elem.outputClickBoxes) {
-                    if (e.mouseOver()) {
-                        hand = true;
-                        cursor(HAND);
-                        negDir = elem.direction;
-                        negPort = e;
-                        isOutput = true;
+                for (const elem of segDisplays) {
+                    for (const e of elem.inputClickBoxes) {
+                        if (e.mouseOver()) {
+                            hand = true;
+                            cursor(HAND);
+                            negDir = 3;
+                            negPort = e;
+                            isOutput = false;
+                        }
+                    }
+                }
+                for (const elem of customs) {
+                    if (!elem.visible) {
+                        continue;
+                    }
+                    for (let i = 0; i < elem.inputClickBoxes.length; i++) {
+                        if (elem.inputClickBoxes[i].mouseOver()) {
+                            hand = true;
+                            cursor(HAND);
+                            negDir = elem.direction;
+                            negPort = elem.inputClickBoxes[i];
+                            isOutput = false;
+                            isTop = elem.objects[INPNUM][i].isTop; // Seems to work
+                        }
+                    }
+                    for (const e of elem.outputClickBoxes) {
+                        if (e.mouseOver()) {
+                            hand = true;
+                            cursor(HAND);
+                            negDir = elem.direction;
+                            negPort = e;
+                            isOutput = true;
+                        }
                     }
                 }
             }
-            for (const elem of segDisplays) {
-                for (const e of elem.inputClickBoxes) {
-                    if (e.mouseOver()) {
-                        hand = true;
-                        cursor(HAND);
-                        negDir = 3;
-                        negPort = e;
-                        isOutput = false;
-                    }
-                }
-            }
-            for (const elem of customs) {
-                if (!elem.visible) {
-                    continue;
-                }
-                for (let i = 0; i < elem.inputClickBoxes.length; i++) {
-                    if (elem.inputClickBoxes[i].mouseOver()) {
-                        hand = true;
-                        cursor(HAND);
-                        negDir = elem.direction;
-                        negPort = elem.inputClickBoxes[i];
-                        isOutput = false;
-                        isTop = elem.objects[INPNUM][i].isTop; // Seems to work
-                    }
-                }
-                for (const e of elem.outputClickBoxes) {
-                    if (e.mouseOver()) {
-                        hand = true;
-                        cursor(HAND);
-                        negDir = elem.direction;
-                        negPort = e;
-                        isOutput = true;
-                    }
-                }
-            }
-            if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+            if (!moduleOptions && fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                 hand = true;
                 cursor(HAND);
                 if (isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2)) < 0 ||
@@ -188,7 +186,7 @@ function updateCursors() {
     if (!hand) {
         cursor(ARROW);
     }
-    if (showCustomDialog) {
+    if (showCustomDialog || moduleOptions) {
         return;
     }
     if (removeOldPreview) {
@@ -210,7 +208,7 @@ function updateCursors() {
 }
 
 function mouseDragged() {
-    if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || showCustomDialog || elementMenuShown()) { return; }
     if (controlMode === 'select' && selectMode === 'drag') {
         if (sDragX2 !== Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE ||
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
@@ -226,12 +224,12 @@ function mouseDragged() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
-    if (modifierMenuDisplayed() && !mouseOverGUI()) {
+    if (elementMenuShown() && !mouseOverGUI()) {
         clickedOutOfGUI = true;
     } else {
         clickedOutOfGUI = false;
     }
-    if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed()) { return; }
+    if (loading || saveDialog || showCustomDialog || moduleOptions || elementMenuShown()) { return; }
 
     if (wireMode === 'hold') {
         wireMode = 'none';
@@ -304,7 +302,7 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (loading || saveDialog || justClosedMenu ||showCustomDialog || modifierMenuDisplayed() || mouseOverGUI()) {
+    if (loading || saveDialog || justClosedMenu ||showCustomDialog || elementMenuShown() || mouseOverGUI()) {
         return;
     }
     if (!simRunning && !mouseOverGUI()) {
@@ -376,8 +374,57 @@ function mouseClicked() {
           Finishing the selection process by invoking handleSelection
 */
 function mouseReleased() {
-    if (loading || showCustomDialog || saveDialog || mouseOverGUI()) { return; }
-    if (modifierMenuDisplayed()) {
+    if (moduleOptions && !mouseOverGUI()) {
+        let swapped = false;
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].mouseOver() && !swapped) {
+                if (swapInput !== i) {
+                    if (swapInput >= 0) {
+                        inputs[swapInput].mark(false);
+                        swapInputs(swapInput, i);
+                        swapInput = -1;
+                        swapped = true;
+                        initPinConfigurator();
+                        showModulePreviewer();
+                    } else {
+                        inputs[i].mark(true);
+                        swapInput = i;
+                    }
+                } else {
+                    inputs[swapInput].mark(false);
+                    swapInput = -1;
+                    swapped = true;
+                }
+                reDraw();
+            }
+        }
+        swapped = false;
+        for (let i = 0; i < outputs.length; i++) {
+            if (outputs[i].mouseOver() && !swapped) {
+                if (swapOutput !== i) {
+                    if (swapOutput >= 0) {
+                        outputs[swapOutput].mark(false);
+                        swapOutputs(swapOutput, i);
+                        swapOutput = -1;
+                        swapped = true;
+                        initPinConfigurator();
+                        showModulePreviewer();
+                    } else {
+                        outputs[i].mark(true);
+                        swapOutput = i;
+                    }
+                } else {
+                    outputs[swapOutput].mark(false);
+                    swapOutput = -1;
+                    swapped = true;
+                }
+                reDraw();
+            }
+        }
+    }
+
+    if (loading || showCustomDialog || saveDialog || moduleOptions || mouseOverGUI()) { return; }
+    if (elementMenuShown()) {
         if (!mouseOverGUI() && clickedOutOfGUI) {
             closeModifierMenu();
             unmarkPropTargets();
@@ -451,14 +498,16 @@ function mouseReleased() {
                                         if (inputToModify >= 0) {
                                             inputs[inputToModify].mark(false);
                                         }
-                                        inputs[i].mark(true);
-                                        inputToModify = i;
-                                        sequencerAdjusted = false;
-                                        showModifierMenu();
-                                        showInputPropMenu();
-                                        positionModifierElements();
-                                        wireMode = 'none';
-                                        reDraw();
+                                        if (inputs[i].clock) {
+                                            inputs[i].mark(true);
+                                            inputToModify = i;
+                                            sequencerAdjusted = false;
+                                            updateModifierMenuPosition();
+                                            showClockPropMenu();
+                                            positionModifierElements();
+                                            wireMode = 'none';
+                                            reDraw();
+                                        }
                                     }
                                 }
                             }
@@ -471,7 +520,7 @@ function mouseReleased() {
                                         outputs[i].mark(true);
                                         outputToModify = i;
                                         sequencerAdjusted = false;
-                                        showModifierMenu();
+                                        updateModifierMenuPosition();
                                         showOutputPropMenu();
                                         positionModifierElements();
                                         wireMode = 'none';
@@ -488,7 +537,7 @@ function mouseReleased() {
                                         labels[i].mark(true);
                                         labelToModify = i;
                                         sequencerAdjusted = false;
-                                        showModifierMenu();
+                                        updateModifierMenuPosition();
                                         showLabelPropMenu();
                                         positionModifierElements();
                                         wireMode = 'none';
@@ -680,8 +729,11 @@ function mouseOverGUI() {
     /*if (mouseY > window.height - 220 && mouseX < 970 && showHints) {
         return true;
     }*/
+    if (moduleOptions && mouseX >= window.width - 360) {
+        return true;
+    }
     if (controlMode === 'modify' && inputToModify + outputToModify + labelToModify >= -2) {
-        return (mouseY < 0) || (mouseX < 0) || mouseX >= modifierMenuX && mouseX <= modifierMenuX + 300 && mouseY >= modifierMenuY && mouseY <= modifierMenuY + 170;
+        return (mouseY < 0) || (mouseX < 0) || mouseX >= modifierMenuX && mouseX <= modifierMenuX + 300 && mouseY >= modifierMenuY && mouseY <= modifierMenuY + 150;
     }
     return (mouseY < 0) || (mouseX < 0);
 }
@@ -691,7 +743,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (loading || saveDialog || showCustomDialog || modifierMenuDisplayed() || mouseOverGUI()) { return; }
+    if (loading || saveDialog || showCustomDialog || elementMenuShown() || mouseOverGUI()) { return; }
     if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);

@@ -56,7 +56,7 @@ body
   a(href='/')
     img#logo(src='images/alt_logo_dark.png', alt='LogiJS logo')
   <input id='fileid' type='file' accept='.json' hidden/>
-  .custom-container(style="position: relative;")
+  .custom-container(style="position: relative; z-index: 1")
     #custom-dialog
       h1 Import your own elements<span style="color: #c83232">.</span>
       button#cancel-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="cancelClicked();") Cancel
@@ -79,11 +79,74 @@ body
       p.preview_name Preview
         span(style="color: #c83232;") .
       #canvas-container
-      p.preview_name How to
+      p.preview_name(style='margin-top: 0;') How to
         span(style="color: #c83232;") . 
       p.preview_text In this menu, you can import structures you built in other sketch documents.<br><br>
         | To prepare a sketch for being imported, you can 
         | click on its in- and outputs in edit mode to alter their description and their order in which they appear on the final module. You can also place inputs at the top of your modules.
+      .grey-rect
+      .red-rect
+    .save-container(style="position: relative; z-index: 1")
+      #save-dialog
+        h1 Save Sketch<span style="color: #c83232">.</span>
+        //input#module-input.textInput.saveInput(placeholder='Module Name')
+        input#sketchname-input.textInput.saveInput(placeholder='Sketch Name')
+        textarea#desc-input.textInput.descInput(placeholder='Sketch Description')
+        #img-container(style='width: 200px; height: 200px; overflow: hidden; position: absolute; left: 40px; bottom: 40px;')
+          img#preview-image
+        button#cancel-save-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="cancelClicked();") Cancel
+        if user !== ''
+          button#save-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="saveClicked();") <i class="fas fa-save"></i> Save
+        else
+          button#save-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="saveClicked();") <i class="fas fa-file-download"></i> Download
+        .grey-rect
+        .red-rect
+    .output-container(style="position: relative; z-index: 1")
+      #output-modifier
+        h1 Output Color<span style="color: #c83232">.</span>
+        button.colorButton.redButton(rel="nofollow" onclick="newOutputColor(0);")
+        button.colorButton.yellowButton(rel="nofollow" onclick="newOutputColor(1);")
+        button.colorButton.greenButton(rel="nofollow" onclick="newOutputColor(2);")
+        button.colorButton.blueButton(rel="nofollow" onclick="newOutputColor(3);")
+        .grey-rect-mini
+        .red-rect-mini
+    .clock-container(style="position: relative; z-index: 1")
+      #clock-modifier
+        h1 Clock Speed<span style="color: #c83232">.</span>
+        input#cs-slider.slider(type='range', min='1', max='60', value='30', oninput='newClockspeed();')
+        p#cs-label 30 ticks/toggle
+        .grey-rect-mini
+        .red-rect-mini
+    .label-container(style="position: relative; z-index: 1")
+      #label-modifier
+        h1 Label Text<span style="color: #c83232">.</span>
+        textarea#label-textbox(placeholder='New Label')
+        .grey-rect-mini
+        .red-rect-mini
+    .tour-container(style="position: relative; z-index: 1")
+      #tour-dialog
+        h1#tour-headline Welcome<span style="color: #c83232">.</span>
+        h1#tour-welcome Welcome to the Tour<span style="color: #c83232">.</span>
+        p#tour-text In this short tutorial, you will learn the basics on how to use LogiJS<span style="color: #c83232">.</span>
+        button#tour-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow", onclick="advanceTour();") Start
+        .grey-rect
+        .red-rect
+    #module-overlay
+    .mp-container(style="position: relative; z-index: 1")
+      #module-previewer
+        h1 Module Preview<span style="color: #c83232">.</span>
+        input#module-input.textInput.saveInput(placeholder='Module Name')
+        #module-container
+        .grey-rect-medium
+    .mp-container(style="position: relative; z-index: 1")
+      #pin-configurator
+        h1 Pin Configurator<span style="color: #c83232">.</span>
+        #pin-head
+          .configuratorLabel(style='grid-column: 2') Top
+          .configuratorLabel(style='grid-column: 3') Inputs
+          .configuratorLabel(style='grid-column: 4') Outputs
+        #pin-inner
+        .red-rect-medium
   script
     include ../site_scripts/survicate.js
     include ../libraries/jquery.min.js

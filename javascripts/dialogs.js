@@ -3,17 +3,22 @@
 */
 
 function showMessage(msg, subline = '') {
-    // Darken the background
-    fill('rgba(0, 0, 0, 0.5)');
     noStroke();
-    rect(0, 0, window.width, window.height); 
     // Draw the message box
+    fill(200, 50, 50);
+    rect(window.width / 2 - 320, window.height / 2 - 5, 100, 100);
+    if (currentTheme === 'dark') {
+        fill(255);
+    } else {
+        fill(50, 50, 50);
+    }
+    rect(window.width / 2 + 220, window.height / 2 - 95, 100, 100);
     if (currentTheme === 'dark') {
         fill(50, 50, 50);
     } else {
         fill(255);
     }
-    rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150, 10);
+    rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150);
     // Display the message
     if (currentTheme === 'dark') {
         fill(255);
@@ -29,86 +34,106 @@ function showMessage(msg, subline = '') {
     text(subline, window.width / 2, window.height / 2 + 30);
 }
 
+function showTour(headline, text, welcome=false) {
+    document.getElementById('tour-dialog').style.display = 'block';
+    document.getElementById('tour-headline').innerHTML = headline;
+    document.getElementById('tour-text').innerHTML = text;
+    if (welcome) {
+        document.getElementById('tour-welcome').style.display = 'block';
+    } else {
+        document.getElementById('tour-welcome').style.display = 'none';
+    }
+}
+
+function hideTour() {
+    document.getElementById('tour-dialog').style.display = 'none';
+}
+
+function initTour() {
+    let tour = urlParam('tour');
+    if (tour === 'true') {
+        advanceTour();
+    }
+}
+
+function advanceTour() {
+    switch(tourStep) {
+        case 0:
+            showTour('', '', true);
+            break;
+        case 1:
+            document.getElementById('tour-button').innerHTML = 'Continue';
+            showTour('', 'In this short tutorial, you will learn the basics on how to use LogiJS<span style="color: #c83232">.</span>');
+            break;
+        case 2:
+            showTour('The Toolbox<span style="color: #c83232">.</span>', 'The area on the left contains all components that you‘ll need to build basic logic circuits from scratch<span style="color: #c83232">.</span>');
+            break;
+        case 3:
+            showTour('Custom Modules<span style="color: #c83232">.</span>', 'If you‘re logged into your LogiJS account, you can import your circuits as custom modules using this dialog<span style="color: #c83232">.</span>');
+            break;
+        case 4:
+            document.getElementById('tour-button').innerHTML = 'Finish';
+            showTour('Simulation<span style="color: #c83232">.</span>', 'Click the <i class="fa fa-play icon" style="color: #c83232;"></i> Start button to bring your circuit to life<span style="color: #c83232">.</span>');
+            break;
+        default:
+            hideTour();
+    }
+    tourStep++;
+}
+
 function saveDialogClicked() {
     // The sketch may be saved during simulation, therefore stop it before saving
     if (simRunning) {
         endSimulation();
     }
+    if (saveDialog) {
+        enterModifierMode();
+        return;
+    }
     // If there is a modifier menu displayed, close it
-    if (modifierMenuDisplayed()) {
+    if (elementMenuShown()) {
         closeModifierMenu();
         unmarkPropTargets();
     }
     enterModifierMode();
     saveDialog = true;
+    setActive(saveDialogButton, true);
     // Take a picture before redrawing
     previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
+    document.getElementById('preview-image').src = previewImg;
 
     reDraw();
 }
 
 function showSaveDialog() {
-    fill('rgba(0, 0, 0, 0.5)');
-    noStroke();
-    rect(0, 0, window.width, window.height);
+    mainCanvas.elt.classList.add('dark-canvas');
     // Draw the save dialog background
-    if (currentTheme === 'dark') {
-        fill(50, 50, 50);
-    } else {
-        fill(255);
-    }
-    noStroke();
-    //stroke(0);
-    //strokeWeight(3);
-    rect(window.width / 2 - 355, window.height / 2 - 208, 565, 375, 10);
-    
-    showSaveDialogElements();
+    document.getElementById('save-dialog').style.display = 'block';
     configureButtons('savedialog');
 
     // If the module name was changed by hand, don't update it to be the sketch file name
-    moduleNameChanged = (moduleNameInput.value() !== sketchNameInput.value()) && (moduleNameInput.value() !== '');
+    moduleNameChanged = (moduleNameInput.value !== sketchNameInput.value && (moduleNameInput.value !== ''));
     // If there are no outputs in the sketch, disable the module name input
-    moduleNameInput.elt.disabled = (outputs.length <= 0);
+    moduleNameInput.disabled = (outputs.length <= 0);
 
     // Update the module name 
     if (outputs.length <= 0) {
-        moduleNameInput.value('');
+        moduleNameInput.value = '';
     } else if (!moduleNameChanged) {
-        moduleNameInput.value(sketchNameInput.value());
+        moduleNameInput.value = sketchNameInput.value;
     }
-    showPreviewImage();
 }
 
 
 function closeSaveDialog() {
     saveDialog = false;
-    hideSaveDialogElements();
-    configureButtons('edit');
+    document.getElementById('save-dialog').style.display = 'none';
     justClosedMenu = true;
-}
-
-function showSaveDialogElements() {
-    saveButton.show();
-    cancelButton.show();
-    sketchNameInput.show();
-    moduleNameInput.show();
-    descInput.show();
-    saveDialogText.show();
-}
-
-function hideSaveDialogElements() {
-    saveButton.hide();
-    cancelButton.hide();
-    sketchNameInput.hide();
-    moduleNameInput.hide();
-    descInput.hide();
-    saveDialogText.hide();
+    mainCanvas.elt.classList.remove('dark-canvas');
 }
 
 function displayCustomDialog() {
-    fill('rgba(0, 0, 0, 0.5)');
-    noStroke();
-    rect(0, 0, window.width, window.height);
+    mainCanvas.elt.classList.add('dark-canvas');
     document.getElementById('custom-dialog').style.display = 'block';
     if (importSketchData.looks.length > 0) {
         PWp5.showImportPreview(importSketchData.looks[0], 0, 0);
@@ -129,7 +154,7 @@ function closeCustomDialog() {
     }
 
     justClosedMenu = true;
-    reDraw();
+    mainCanvas.elt.classList.remove('dark-canvas');
 }
 
 function custom_element_clicked(r) {
@@ -153,4 +178,112 @@ function custom_element_hovered(r) {
     } else {
         PWp5.showNoOutputs();
     }
+}
+
+function showModuleOptions() {
+    moduleOptions = true;
+    configureButtons('moduleOptions');
+    document.getElementById('module-overlay').style.display = 'block';
+    showModulePreviewer();
+    initPinConfigurator();
+    showPinConfigurator();
+    reDraw();
+}
+
+function hideModuleOptions() {
+    moduleOptions = false;
+    document.getElementById('module-overlay').style.display = 'none';
+    hideModulePreviewer();
+    hidePinConfigurator();
+}
+
+function showPinConfigurator() {
+    document.getElementById('pin-configurator').style.display = 'block';
+}
+
+function hidePinConfigurator() {
+    document.getElementById('pin-configurator').style.display = 'none';
+}
+
+function initPinConfigurator() {
+    let configurator = document.getElementById('pin-inner');
+    configurator.innerHTML = '';
+    for (let i = 0; i < Math.max(inputs.length, outputs.length); i++) {
+        let lbl = document.createElement('p');
+            lbl.innerHTML = i + 1;
+            lbl.classList.add('configuratorLabel');
+            lbl.style.gridColumn = 1;
+            configurator.appendChild(lbl);
+        if (i < inputs.length) {
+            let checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.classList.add('topCheckbox');
+            checkbox.id = 'topCheckbox' + i;
+            checkbox.value = '';
+            checkbox.name = 'topCheckbox';
+            checkbox.checked = inputs[i].isTop;
+            checkbox.addEventListener('click', function() { // jshint ignore:line
+                inputs[i].setIsTop(checkbox.checked);
+                showModulePreviewer();
+            });
+            checkbox.addEventListener('mouseenter', function() { // jshint ignore:line
+                setHelpText('Sets this input on top of the module');
+            });
+            checkbox.addEventListener('mouseleave', function() { // jshint ignore:line
+                setHelpText('');
+            });
+            let newInput = document.createElement('input');
+            newInput.classList.add('inputLabel');
+            newInput.id = 'ipLabel' + i;
+            newInput.style.gridColumn = 3;
+            newInput.placeholder = 'None';
+            newInput.value = inputs[i].lbl;
+            newInput.onkeyup = function() { // jshint ignore:line
+                inputs[i].lbl = newInput.value;
+                showModulePreviewer();
+            };
+            newInput.addEventListener('mouseenter', function() { // jshint ignore:line
+                setHelpText('The name of this input on the module');
+            });
+            newInput.addEventListener('mouseleave', function() { // jshint ignore:line
+                setHelpText('');
+            });
+            configurator.appendChild(checkbox);
+            configurator.appendChild(newInput);
+        }
+        if (i < outputs.length) {
+            let newInput = document.createElement('input');
+            newInput.classList.add('inputLabel');
+            newInput.id = 'opLabel' + i;
+            newInput.style.gridColumn = 4;
+            newInput.placeholder = 'None';
+            newInput.value = outputs[i].lbl;
+            newInput.onkeyup = function() { // jshint ignore:line
+                outputs[i].lbl = newInput.value;
+                showModulePreviewer();
+
+            };
+            newInput.addEventListener('mouseenter', function() { // jshint ignore:line
+                setHelpText('The name of this output on the module');
+            });
+            newInput.addEventListener('mouseleave', function() { // jshint ignore:line
+                setHelpText('');
+            });
+            configurator.appendChild(newInput);
+        }
+    }
+}
+
+function showModulePreviewer() {
+    document.getElementById('module-previewer').style.display = 'block';
+    let look = getThisLook();
+    if (look.outputs > 0) {
+        modulep5.showImportPreview(look, 0, 0);
+    } else {
+        modulep5.showEmptyGrid();
+    }
+}
+
+function hideModulePreviewer() {
+    document.getElementById('module-previewer').style.display = 'none';
 }

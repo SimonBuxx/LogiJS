@@ -3,6 +3,9 @@
 
 function enterModifierMode() {
     closeCustomDialog();
+    closeSaveDialog();
+    closeModifierMenu();
+    hideModuleOptions();
     setControlMode('modify');
     setSelectMode('none');
     setActive(modifierModeButton, true);
@@ -10,22 +13,10 @@ function enterModifierMode() {
     addType = 0;
 }
 
-function leaveModifierMode() {
-    closeModifierMenu();
-    unmarkPropTargets();
-}
-
-// Hides the PropMenu without quitting the modifierModeActive
-// Used, when the user clickes outside a valid target for modifierModeActive
 function closeModifierMenu() {
-    setInputModifierVisibility(false);
-    setOutputModifierVisibility(false);
-    setLabelModifierVisibility(false);
-    captionInput.hide();
-    sequencer.hide();
-    inputToModify = -1;
-    labelToModify = -1;
-    outputToModify = -1;
+    hideElementMenus(); // Hide all element menus
+    unmarkPropTargets(); // Unmark all outputs, clocks, etc.
+    mainCanvas.elt.classList.remove('dark-canvas'); // Lighten up the canvas
 }
 
 /*
@@ -83,31 +74,17 @@ function unmarkAll() {
     Shows the DOM elements for the input options and unmarks all other
     objects that can be marked in modifier mode
 */
-function showInputPropMenu() {
-    setOutputModifierVisibility(false);
-    setInputModifierVisibility(true);
-    setLabelModifierVisibility(false);
-    if (inputs[inputToModify].clock) {
-        minusLabel.show();
-        plusLabel.show();
-        clockspeedSlider.show();
-        clockspeedSlider.value(60 - inputs[inputToModify].speed);
+function showClockPropMenu() {
+    hideElementMenus();
+    setClockModifierVisibility(true);
+    //inputIsTopBox.checked(inputs[inputToModify].isTop);
+    //captionInput.value(inputs[inputToModify].lbl);
+    //sequencer.value(inputToModify + 1);
+    clockspeedSlider.value = 61 - inputs[inputToModify].speed;
+    if (inputs[inputToModify].speed !== 1) {
+        document.getElementById('cs-label').innerHTML = inputs[inputToModify].speed + ' ticks/toggle';
     } else {
-        minusLabel.hide();
-        plusLabel.hide();
-        clockspeedSlider.hide();
-    }
-    inputIsTopBox.checked(inputs[inputToModify].isTop);
-    captionInput.value(inputs[inputToModify].lbl);
-    sequencer.value(inputToModify + 1);
-
-    outputToModify = -1;
-    labelToModify = -1;
-    for (const elem of outputs) {
-        elem.mark(false);
-    }
-    for (const elem of labels) {
-        elem.mark(false);
+        document.getElementById('cs-label').innerHTML = inputs[inputToModify].speed + ' tick/toggle';
     }
 }
 
@@ -116,21 +93,11 @@ function showInputPropMenu() {
     objects that can be marked in modifier mode
 */
 function showOutputPropMenu() {
+    hideElementMenus();
     setOutputModifierVisibility(true);
-    setInputModifierVisibility(false);
-    setLabelModifierVisibility(false);
     setOutputColor(outputs[outputToModify].colr);
-    captionInput.value(outputs[outputToModify].lbl);
-    sequencer.value(outputToModify + 1);
-
-    inputToModify = -1;
-    labelToModify = -1;
-    for (const elem of inputs) {
-        elem.mark(false);
-    }
-    for (const elem of labels) {
-        elem.mark(false);
-    }
+    //captionInput.value(outputs[outputToModify].lbl);
+    //sequencer.value(outputToModify + 1);
 }
 
 /*
@@ -138,65 +105,39 @@ function showOutputPropMenu() {
     objects that can be marked in modifier mode
 */
 function showLabelPropMenu() {
-    setInputModifierVisibility(false);
-    setOutputModifierVisibility(false);
+    hideElementMenus();
     setLabelModifierVisibility(true);
-    labelTextBox.value(labels[labelToModify].txt);
-    outputToModify = -1;
-    inputToModify = -1;
-    for (const elem of outputs) {
-        elem.mark(false);
-    }
-    for (const elem of inputs) {
-        elem.mark(false);
-    }
+    labelTextBox.value = labels[labelToModify].txt;
 }
 
-function showModifierMenu() {
-    noStroke();
-    fill('rgba(0, 0, 0, 0.5)');
-    rect(0, 0, windowWidth, windowHeight);
-    if (currentTheme === 'dark') {
-        fill(50, 50, 50);
-    } else {
-        fill(255);
-    }
-    strokeCap(SQUARE);
+function updateModifierMenuPosition() {
+    mainCanvas.elt.classList.add('dark-canvas');
     if (inputToModify >= 0) {
         modifierMenuX = (inputs[inputToModify].x + transform.dx - 1) * transform.zoom;
         modifierMenuY = (inputs[inputToModify].y + transform.dy + GRIDSIZE + 2) * transform.zoom;
-        if (!inputs[inputToModify].clock) {
-            rect(modifierMenuX, modifierMenuY, 300, 120, 10);
-        } else {
-            rect(modifierMenuX, modifierMenuY, 300, 170, 10);
-        }
     } else if (outputToModify >= 0) {
         modifierMenuX = (outputs[outputToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
         modifierMenuY = (outputs[outputToModify].y + transform.dy + GRIDSIZE / 2 + 2) * transform.zoom;
-        rect(modifierMenuX, modifierMenuY, 300, 130, 10);
     } else if (labelToModify >= 0) {
-        modifierMenuX = (labels[labelToModify].x + transform.dx - GRIDSIZE / 2 - 1) * transform.zoom;
-        modifierMenuY = (labels[labelToModify].y + transform.dy + GRIDSIZE / 2 + GRIDSIZE * (labels[labelToModify].lines.length - 1) + 2) * transform.zoom;
-        rect(modifierMenuX, modifierMenuY, 300, 170, 10);
+        modifierMenuX = (labels[labelToModify].x + transform.dx) * transform.zoom;
+        modifierMenuY = (labels[labelToModify].y + transform.dy + GRIDSIZE / 2 + GRIDSIZE * (labels[labelToModify].lines.length - 1)) * transform.zoom;
     }
-    strokeCap(ROUND);
 }
 
 function positionModifierElements() {
-    sequencer.position(modifierMenuX + 442, modifierMenuY + 67);
+    //sequencer.position(modifierMenuX + 442, modifierMenuY + 67);
 
-    captionInput.position(modifierMenuX + 250, modifierMenuY + 70);
-    inputIsTopBox.position(modifierMenuX + 280, modifierMenuY + 120);
-    clockspeedSlider.position(modifierMenuX + 300, modifierMenuY + 170);
-    minusLabel.position(modifierMenuX + 278, modifierMenuY + 161);
-    plusLabel.position(modifierMenuX + 475, modifierMenuY + 165);
+    //captionInput.position(modifierMenuX + 250, modifierMenuY + 70);
+    //inputIsTopBox.position(modifierMenuX + 280, modifierMenuY + 120);
 
-    redButton.position(modifierMenuX + 250, modifierMenuY + 130);
-    yellowButton.position(modifierMenuX + 316, modifierMenuY + 130);
-    greenButton.position(modifierMenuX + 382, modifierMenuY + 130);
-    blueButton.position(modifierMenuX + 448, modifierMenuY + 130);
+    document.getElementById('clock-modifier').style.left = modifierMenuX + 240 + 'px';
+    document.getElementById('clock-modifier').style.top = modifierMenuY + 50 + 'px';
 
-    labelTextBox.position(modifierMenuX + 240, modifierMenuY + 60);
+    document.getElementById('output-modifier').style.left = modifierMenuX + 240 + 'px';
+    document.getElementById('output-modifier').style.top = modifierMenuY + 50 + 'px';
+
+    document.getElementById('label-modifier').style.left = modifierMenuX + 240 + 'px';
+    document.getElementById('label-modifier').style.top = modifierMenuY + 50 + 'px';
 }
 
 function newIsTopState() {
@@ -217,9 +158,7 @@ function sequencerChanged() {
         inputToModify = parseInt(sequencer.value()) - 1;
         inputIsTopBox.checked(inputs[inputToModify].isTop);
         captionInput.value(inputs[inputToModify].lbl);
-        if (inputs[inputToModify].clock) {
-            clockspeedSlider.value(60 - inputs[inputToModify].speed);
-        }
+        clockspeedSlider.value = 60 - inputs[inputToModify].speed;
         adjustSequencer(false, inputToModify + 1);
         sequencer.value(inputToModify + 1);
     } else {
@@ -232,6 +171,14 @@ function sequencerChanged() {
     }
 }
 
+function swapInputs(a, b) {
+    inputs[a] = inputs.splice(b, 1, inputs[a])[0];
+}
+
+function swapOutputs(a, b) {
+    outputs[a] = outputs.splice(b, 1, outputs[a])[0];
+}
+
 function fillSequencer(max, top) {
     sequencer.elt.innerHTML = '';
     sequencer.option(top);
@@ -242,7 +189,6 @@ function fillSequencer(max, top) {
     }
     sequencer.value('1');
 }
-
 
 /*
     Updates the color of the marked output according to the
@@ -258,71 +204,58 @@ function setOutputColor(code) {
     setColorButtonsUnactive();
     switch (code) {
         case 0:
-            setActive(redButton, false);
+            redButton.className += ' col-active';
             break;
         case 1:
-            setActive(yellowButton, false);
+            yellowButton.className += ' col-active';
             break;
         case 2:
-            setActive(greenButton, false);
+            greenButton.className += ' col-active';
             break;
         case 3:
-            setActive(blueButton, false);
+            blueButton.className += ' col-active';
             break;
         default:
     }
+    hideAllOptions();
 }
 
 function setOutputModifierVisibility(show) {
-    setColorButtonVisibility(show);
     if (show) {
-        captionInput.show();
+        document.getElementById('output-modifier').style.display = 'block';
+        /*captionInput.show();
         if (!sequencerAdjusted) {
             adjustSequencer(true, outputToModify + 1);
         }
-        sequencer.show();
+        sequencer.show();*/
+    } else {
+        document.getElementById('output-modifier').style.display = 'none';
     }
 }
 
-function setInputModifierVisibility(show) {
+function setClockModifierVisibility(show) {
     if (show) {
-        inputIsTopBox.show();
-        captionInput.show();
-        if (!sequencerAdjusted) {
-            adjustSequencer(false, inputToModify + 1);
-        }
-        sequencer.show();
+        document.getElementById('clock-modifier').style.display = 'block';
     } else {
-        inputIsTopBox.hide();
-        minusLabel.hide();
-        plusLabel.hide();
-        clockspeedSlider.hide();
+        document.getElementById('clock-modifier').style.display = 'none';
     }
 }
 
 function setLabelModifierVisibility(show) {
     if (show) {
-        labelTextBox.show();
+        document.getElementById('label-modifier').style.display = 'block';
     } else {
-        labelTextBox.hide();
+        document.getElementById('label-modifier').style.display = 'none';
     }
 }
 
-function setColorButtonVisibility(show) {
-    if (show) {
-        redButton.show();
-        yellowButton.show();
-        greenButton.show();
-        blueButton.show();
-    } else {
-        redButton.hide();
-        yellowButton.hide();
-        greenButton.hide();
-        blueButton.hide();
-    }
+function hideElementMenus() {
+    document.getElementById('output-modifier').style.display = 'none';
+    document.getElementById('clock-modifier').style.display = 'none';
+    document.getElementById('label-modifier').style.display = 'none';
 }
 
-function modifierMenuDisplayed() {
+function elementMenuShown() {
     return (controlMode === 'modify' && (inputToModify + outputToModify + labelToModify >= -2));
 }
 
@@ -336,66 +269,44 @@ function adjustSequencer(io, top) {
 }
 
 function setColorButtonsUnactive() {
-    redButton.elt.className = 'colorButton redButton';
-    yellowButton.elt.className = 'colorButton yellowButton';
-    greenButton.elt.className = 'colorButton greenButton';
-    blueButton.elt.className = 'colorButton blueButton';
+    redButton.className = 'colorButton redButton';
+    yellowButton.className = 'colorButton yellowButton';
+    greenButton.className = 'colorButton greenButton';
+    blueButton.className = 'colorButton blueButton';
 }
 
 function createColorButtons() {
-    redButton = createButton('');
-    redButton.size(60, 30);
-    redButton.elt.className = 'colorButton redButton';
-    redButton.mousePressed(function () {
-        newOutputColor(0);
-    });
-    redButton.mouseOver(function () {
+    redButton = document.getElementsByClassName('redButton')[0];
+    redButton.addEventListener('mouseenter', function () {
         setHelpText('Set the output color to red');
     });
-    redButton.mouseOut(function () {
+    redButton.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 
-    yellowButton = createButton('');
-    yellowButton.size(60, 30);
-    yellowButton.elt.className = 'colorButton yellowButton';
-    yellowButton.mousePressed(function () {
-        newOutputColor(1);
-    });
-    yellowButton.mouseOver(function () {
+    yellowButton = document.getElementsByClassName('yellowButton')[0];
+    yellowButton.addEventListener('mouseenter', function () {
         setHelpText('Set the output color to yellow');
     });
-    yellowButton.mouseOut(function () {
+    yellowButton.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 
-    greenButton = createButton('');
-    greenButton.size(60, 30);
-    greenButton.elt.className = 'colorButton greenButton';
-    greenButton.mousePressed(function () {
-        newOutputColor(2);
-    });
-    greenButton.mouseOver(function () {
+    greenButton = document.getElementsByClassName('greenButton')[0];
+    greenButton.addEventListener('mouseenter', function () {
         setHelpText('Set the output color to green');
     });
-    greenButton.mouseOut(function () {
+    greenButton.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 
-    blueButton = createButton('');
-    blueButton.size(60, 30);
-    blueButton.elt.className = 'colorButton blueButton';
-    blueButton.mousePressed(function () {
-        newOutputColor(3);
-    });
-    blueButton.mouseOver(function () {
+    blueButton = document.getElementsByClassName('blueButton')[0];
+    blueButton.addEventListener('mouseenter', function () {
         setHelpText('Set the output color to blue');
     });
-    blueButton.mouseOut(function () {
+    blueButton.addEventListener('mouseleave', function () {
         setHelpText('');
     });
-
-    setColorButtonVisibility(false);
 }
 
 function createModifierElements() {
@@ -409,13 +320,6 @@ function createModifierElements() {
     inputIsTopBox.mouseOut(function () {
         setHelpText('');
     });
-
-    minusLabel = createP('-');
-    minusLabel.hide();
-    minusLabel.elt.style.color = '#323232';
-    minusLabel.elt.style.fontFamily = 'Open Sans';
-    minusLabel.elt.style.margin = '3px 0px 0px 0px';
-    minusLabel.style('font-size', '30px');
 
     captionInput = createInput('');
     captionInput.elt.style.fontFamily = 'ArcaMajora3';
@@ -432,43 +336,20 @@ function createModifierElements() {
         setHelpText('');
     });
 
-    plusLabel = createP('+');
-    plusLabel.hide();
-    plusLabel.elt.style.color = '#323232';
-    plusLabel.elt.style.fontFamily = 'Open Sans';
-    plusLabel.elt.style.margin = '3px 0px 0px 0px';
-    plusLabel.style('font-size', '30px');
-
-    clockspeedSlider = createSlider(1, 60, 30, 1);
-    clockspeedSlider.hide();
-    clockspeedSlider.input(function () {
-        newClockspeed();
-    });
-    clockspeedSlider.elt.className = 'slider';
-    clockspeedSlider.mouseOver(function () {
+    clockspeedSlider = document.getElementById('cs-slider');
+    clockspeedSlider.addEventListener('mouseenter', function () {
         setHelpText('Sets the toggle speed of this clock element');
     });
-    clockspeedSlider.mouseOut(function () {
+    clockspeedSlider.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 
-    /*labelTextCaption = createP('Label Caption<span style="color: #c83232">.</span>');
-    labelTextCaption.hide();
-    labelTextCaption.elt.style.color = '#323232';
-    labelTextCaption.elt.style.fontFamily = 'Open Sans';
-    labelTextCaption.elt.style.margin = '3px 0px 0px 0px';
-    labelTextCaption.style('font-size', '30px');*/
-
-    labelTextBox = createElement('textarea');
-    labelTextBox.elt.className = 'labelTextBox';
-    labelTextBox.attribute('placeholder', 'New Label');
-    labelTextBox.hide();
-    labelTextBox.size(260, 130);
-    labelTextBox.elt.onkeyup = labelChanged;
-    labelTextBox.mouseOver(function () {
+    labelTextBox = document.getElementById('label-textbox');
+    labelTextBox.onkeyup = labelChanged;
+    labelTextBox.addEventListener('mouseenter', function () {
         setHelpText('Edit the text of this label');
     });
-    labelTextBox.mouseOut(function () {
+    labelTextBox.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 

@@ -138,7 +138,7 @@ Input.prototype.pointInOutput = function (dummy, px, py) {
 /*
     Displays the input on the screen
 */
-Input.prototype.show = function () {
+Input.prototype.show = function (order = 0) {
     stroke(0);
     strokeWeight(3);
     if (this.state) {
@@ -176,6 +176,19 @@ Input.prototype.show = function () {
         strokeWeight(3);
         line(this.x + 15, this.y + 6, this.x + 15, this.y + 15);
         line(this.x + 15, this.y + 15, this.x + 22, this.y + 20);
+    }
+
+    if (order > 0) {
+        noStroke();
+        fill(255);
+        textSize(20);
+        textFont('ArcaMajora3');
+        textAlign(LEFT, TOP);
+        if (order.toString().length === 1) {
+            text(order, this.x + 10, this.y + 7);
+        } else {
+            text(order, this.x + 4, this.y + 7);
+        }
     }
 
     //this.clickBox.markClickBox();

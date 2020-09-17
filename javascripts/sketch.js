@@ -227,7 +227,12 @@ let inputToModify = -1;
 let outputToModify = -1;
 let labelToModify = -1;
 
+let swapInput = -1;
+let swapOutput = -1;
+
 let modifierMenuX, modifierMenuY;
+
+let moduleOptions = false;
 
 let sequencerAdjusted = false;
 let clickedOutOfGUI = false;
@@ -235,7 +240,7 @@ let clickedOutOfGUI = false;
 /*
     These are the modifier elements and their descriptional labels.
 */
-let inputIsTopBox, captionInput, minusLabel, plusLabel; // Input elements
+let inputIsTopBox, captionInput; // Input elements
 let redButton, yellowButton, greenButton, blueButton; // Output elements
 let labelTextBox; // Label elements
 
@@ -251,7 +256,7 @@ let sketchNameInput, moduleNameInput, saveButton, saveDialogText;
 let helpLabel, cancelButton, descInput;
 let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions, labelSimulation,
     andButton, orButton, xorButton, bufferButton, notButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton, moduleButton;
 
 /*
     Right side elements
@@ -279,9 +284,12 @@ let socket;
 let mainCanvas, pwCanvas;
 
 let PWp5; // The p5 element for the preview canvas
+let modulep5; // p5 element for the module canvas
 
 let lastTickTime = 0;
 let tickTime = 10;
+
+let tourStep = 0;
 
 /*
     Disable some error messages from p5
@@ -315,6 +323,7 @@ function setup() { // jshint ignore:line
     mainCanvas.id('mainCanvas');
 
     initPreviewCanvas();
+    initModuleCanvas();
 
     // Prevents the input field from being focused when clicking in the canvas
     document.addEventListener('mousedown', function (event) {
@@ -383,6 +392,8 @@ function setup() { // jshint ignore:line
     reDraw();
     setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
     justClosedMenu = false;
+
+    initTour();
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -506,7 +517,7 @@ function importJSONClicked() {
         let result = JSON.parse(e.target.result);
         let name = files.item(0).name.split('.')[0];
         loadSketchFromJSON(result, name);
-        sketchNameInput.elt.value = name;
+        sketchNameInput.value = name;
     };
 
     fr.readAsText(files.item(0));
@@ -514,21 +525,17 @@ function importJSONClicked() {
 
 // Triggered when a sketch should be saved
 function saveClicked() {
-    setSketchNameLabel(sketchNameInput.value());
-    saveSketch(sketchNameInput.value() + '.json', function (look) {
-        closeSaveDialog();
-        look.desc = descInput.value();
-        document.title = 'LogiJS: ' + sketchNameInput.value();
-        socket.emit('savePreview', { name: sketchNameInput.value(), img: previewImg, desc: JSON.stringify(look), access_token: getCookieValue('access_token') });
+    setSketchNameLabel(sketchNameInput.value);
+    saveSketch(sketchNameInput.value + '.json', function (look) {
+        enterModifierMode();
+        look.desc = descInput.value;
+        document.title = 'LogiJS: ' + sketchNameInput.value;
+        socket.emit('savePreview', { name: sketchNameInput.value, img: previewImg, desc: JSON.stringify(look), access_token: getCookieValue('access_token') });
     });
 }
 
 function cancelClicked() {
-    if (saveDialog) {
-        closeSaveDialog();
-    } else if (showCustomDialog) {
-        closeCustomDialog();
-    }
+    enterModifierMode();
 }
 
 function hideAllOptions() {
@@ -615,6 +622,8 @@ function setUnactive() {
     selectButton.elt.className = 'button';
     modifierModeButton.elt.className = 'button';
     simButton.elt.className = 'button';
+    saveDialogButton.elt.className = 'button';
+    moduleButton.elt.className = 'button';
 }
 
 function deleteClicked() {
@@ -677,7 +686,7 @@ function deleteClicked() {
 function labelChanged() {
     textFont('Gudea');
     textSize(20);
-    labels[labelToModify].alterText(labelTextBox.value()); // Alter the text of the selected label
+    labels[labelToModify].alterText(labelTextBox.value); // Alter the text of the selected label
     reDraw();
     positionModifierElements();
 }
@@ -812,8 +821,12 @@ function newDirection() {
 function newClockspeed() {
     if (inputToModify >= 0) {
         if (inputs[inputToModify].clock) {
-            inputs[inputToModify].speed = 60 - clockspeedSlider.value();
-            console.log(inputs[inputToModify].speed);
+            inputs[inputToModify].speed = 61 - clockspeedSlider.value;
+            if (inputs[inputToModify].speed !== 1) {
+                document.getElementById('cs-label').innerHTML = inputs[inputToModify].speed + ' ticks/toggle';
+            } else {
+                document.getElementById('cs-label').innerHTML = inputs[inputToModify].speed + ' tick/toggle';
+            }
         }
     }
 }
@@ -1002,7 +1015,7 @@ function setControlMode(mode) {
         setSelectMode('none');
     }
     if (mode === 'addObject' || mode === 'select' || mode === 'delete') {
-        leaveModifierMode();
+        closeModifierMenu();
         controlMode = mode;
     } else if (mode === 'modify') {
         controlMode = 'modify';
@@ -1228,6 +1241,7 @@ function addOutput() {
     newOutput.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newOutput.updateClickBox();
     outputs.push(newOutput);
+    moduleButton.elt.disabled = false;
     pushUndoAction('addOut', [outputs.length - 1], [newOutput]);
     reDraw();
 }
@@ -1273,6 +1287,7 @@ function addInput() {
     newInput.clock = newIsClock;
     inputs.push(newInput);
     pushUndoAction('addIn', [inputs.length - 1], [newInput]);
+    moduleButton.elt.disabled = false;
     reDraw();
 }
 
@@ -1286,7 +1301,7 @@ function addLabel() {
             return;
         }
     }
-    var newLabel = new Label(mouseX, mouseY, 'New label', transform);
+    var newLabel = new Label(mouseX, mouseY, 'New Label', transform);
     newLabel.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newLabel.updateClickBox();
     labels.push(newLabel);
@@ -1421,6 +1436,7 @@ function deleteCustom(customNumber) {
 */
 function deleteOutput(outputNumber) {
     pushUndoAction('delOut', [outputNumber], outputs.splice(outputNumber, 1));
+    moduleButton.elt.disabled = (outputs.length + inputs.length === 0);
     reDraw();
 }
 
@@ -1429,6 +1445,7 @@ function deleteOutput(outputNumber) {
 */
 function deleteInput(inputNumber) {
     pushUndoAction('delIn', [inputNumber], inputs.splice(inputNumber, 1));
+    moduleButton.elt.disabled = (outputs.length + inputs.length === 0);
     reDraw();
 }
 
@@ -1498,7 +1515,7 @@ function startSimulation() {
 
     // Start the simulation and exit the modifier mode
     simRunning = true;
-    leaveModifierMode();
+    closeModifierMenu();
 }
 
 /*
@@ -1576,44 +1593,63 @@ function updateUndoButtons() {
 }
 
 function configureButtons(mode) {
-    let toolbox, modifiers, simulation, customimport, savedialog;
+    let toolbox, modifiers, simulation, customimport, savedialog, jsonimport, moduleimport;
     if (mode === 'edit') {
         toolbox = false;
         modifiers = false;
         savedialog = false;
         simulation = false;
         customimport = false;
+        jsonimport = false;
+        moduleimport = false;
     } else if (mode === 'simulation') {
         toolbox = true;
         modifiers = true;
         savedialog = false;
         simulation = false;
         customimport = true;
-        //leftSideButtons.style('display', 'none');
+        jsonimport = false;
+        moduleimport = true;
     } else if (mode === 'savedialog') {
         toolbox = true;
         modifiers = true;
-        savedialog = true;
+        savedialog = false;
         simulation = true;
         customimport = true;
+        jsonimport = true;
+        moduleimport = true;
     } else if (mode === 'customdialog') {
         toolbox = true;
         modifiers = true;
         savedialog = true;
         simulation = true;
         customimport = false;
+        jsonimport = true;
+        moduleimport = true;
     } else if (mode === 'loading') {
         toolbox = true;
         modifiers = true;
         savedialog = true;
         simulation = true;
         customimport = true;
+        jsonimport = true;
+        moduleimport = true;
+    } else if (mode === 'moduleOptions') {
+        toolbox = true;
+        modifiers = true;
+        savedialog = true;
+        simulation = true;
+        customimport = true;
+        jsonimport = true;
+        moduleimport = false;
     } else {
         toolbox = false;
         modifiers = false;
         savedialog = false;
         simulation = false;
         customimport = false;
+        jsonimport = false;
+        moduleimport = false;
     }
     andButton.elt.disabled = toolbox;
     orButton.elt.disabled = toolbox;
@@ -1650,6 +1686,8 @@ function configureButtons(mode) {
     }
     simButton.elt.disabled = simulation;
     saveDialogButton.elt.disabled = savedialog;
+    importButton.elt.disabled = jsonimport;
+    moduleButton.elt.disabled = moduleimport || (outputs.length + inputs.length === 0);
 }
 
 /*
@@ -1664,11 +1702,11 @@ function draw() {
         }
         reDraw(); // Redraw all elements of the sketch
     } else {
-        if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI() && !modifierMenuDisplayed()) {
+        if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI() && !elementMenuShown()) {
             generatePreviewWires(wirePreviewStartX, wirePreviewStartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
                 Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
             reDraw();
-        } else if (controlMode === 'select' || controlMode === 'addObject' && !mouseIsPressed && !modifierMenuDisplayed()) {
+        } else if (controlMode === 'select' || controlMode === 'addObject' && !mouseIsPressed && !elementMenuShown()) {
             reDraw();
         }
 
@@ -1776,25 +1814,8 @@ function reDraw() {
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 
-    // If the modifier mode is active and an object was selected, show the modifier menu background
-    if (modifierMenuDisplayed()) {
-        scale(transform.zoom);
-        translate(transform.dx, transform.dy);
-        if (inputToModify >= 0) {
-            inputs[inputToModify].show();
-        } else if (outputToModify >= 0) {
-            outputs[outputToModify].show();
-        } else if (labelToModify >= 0) {
-            labels[labelToModify].show();
-        }
-        scale(1 / transform.zoom);
-        translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
-        showModifierMenu();
-        cursor(ARROW);
-    }
-
     if (loading && !showCustomDialog) {
-        showMessage('Loading sketch...', loadFile.split('.json')[0]);
+        showMessage('Loading Sketch...', loadFile.split('.json')[0]);
     }
 
     if (error !== '') {
@@ -1813,6 +1834,11 @@ function reDraw() {
     noStroke();
     text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
     text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
+    if (moduleOptions) {
+        textSize(20);
+        fill(255);
+        text('Click on the in- and outputs to swap them!', 30, 30);
+    }
 }
 
 function fetchImportData() {
@@ -1865,11 +1891,20 @@ function showElements() {
     for (const elem of conpoints) {
         elem.show();
     }
-    for (const elem of outputs) {
-        elem.show();
-    }
-    for (const elem of inputs) {
-        elem.show();
+    if (moduleOptions) {
+        for (let i = 0; i < outputs.length; i++) {
+            outputs[i].show(i + 1);
+        }
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].show(i + 1);
+        }
+    } else {
+        for (let i = 0; i < outputs.length; i++) {
+            outputs[i].show();
+        }
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].show();
+        }
     }
     for (const elem of diodes) {
         elem.show();
@@ -1912,10 +1947,13 @@ function updateGroups() {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
-    if (captionInput.elt === document.activeElement || labelTextBox.elt === document.activeElement || loading || saveDialog) {
+    if (saveDialog && keyCode === ESCAPE) {
+        enterModifierMode();
+    }
+    if (captionInput.elt === document.activeElement || labelTextBox === document.activeElement || loading || saveDialog) {
         return;
     }
-    if (sketchNameInput.elt !== document.activeElement) {
+    if (sketchNameInput !== document.activeElement) {
         if (keyCode >= 49 && keyCode <= 57) {
             gateInputCount = keyCode - 48;
             gateInputSelect.value(gateInputCount);
@@ -1927,7 +1965,7 @@ function keyPressed() {
                 reDraw();
                 break;
             case RETURN:
-                leaveModifierMode();
+                closeModifierMenu();
                 hideAllOptions();
                 simClicked();
                 break;
@@ -1937,7 +1975,6 @@ function keyPressed() {
                 // Uncomment to make screenshots
                 //let img  = canvas.toDataURL("image/png");
                 //document.write('<img src="'+img+'"/>');
-
                 break;
             case 32: // Space
                 if (simRunning) {

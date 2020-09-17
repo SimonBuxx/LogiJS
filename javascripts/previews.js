@@ -419,15 +419,14 @@ function showElementPreview() {
                 textSize(20);
                 textAlign(LEFT, TOP);
                 strokeWeight(3);
-                //stroke(140);
                 noStroke();
                 fill(150, 200);
                 rect(mx - 15, my - 15, GRIDSIZE * 5, GRIDSIZE);
                 noStroke();
                 fill(50);
-                rect(mx - 5, my - 5, 10, 10);
+                rect(mx, my - 15, 3, 30);
                 fill(0);
-                text('New label', mx + 15, my - 9, GRIDSIZE * 5, GRIDSIZE);
+                text('New Label', mx + 15, my - 9, GRIDSIZE * 5, GRIDSIZE);
                 break;
         }
     }
@@ -570,7 +569,7 @@ function showPreviewImage() {
         if (look.outputs > 0) {
             showImportPreview(look, window.width / 2 - 330, window.height / 2 - 46);
         } else {
-            moduleNameInput.attribute('placeholder', 'No outputs!');
+            moduleNameInput.placeholder = 'No outputs!';
         }
     };
 }
@@ -731,4 +730,156 @@ function initPreviewCanvas() {
     node.setAttribute('id', 'preview-canvas');
     PWp5 = new p5(pwSketch, node);
     window.document.getElementById('canvas-container').appendChild(node);
+}
+
+function initModuleCanvas() {
+    let moduleSketch = function (p) {
+        p.setup = function () {
+            p.createCanvas(200, 200);
+        };
+
+        p.showNoOutputs = function () {
+            p.background(150);
+
+            for (let i = 0; i < 7; i++) {
+                p.stroke(140);
+                p.strokeWeight(3);
+                p.line(0, i * 30, 200, i * 30);
+            }
+
+            for (let i = 0; i < 7; i++) {
+                p.stroke(140);
+                p.strokeWeight(3);
+                p.line(i * 30, 0, i * 30, 200);
+            }
+
+            p.textFont('ArcaMajora3');
+            p.noStroke();
+            p.fill(200, 50, 50);
+            p.textSize(14);
+            p.text('This sketch has no outputs.', 12, 94);
+        };
+
+        p.showEmptyGrid = function () {
+            p.background(150);
+
+            for (let i = 0; i < 7; i++) {
+                p.stroke(140);
+                p.strokeWeight(3);
+                p.line(0, i * 30, 200, i * 30);
+            }
+
+            for (let i = 0; i < 7; i++) {
+                p.stroke(140);
+                p.strokeWeight(3);
+                p.line(i * 30, 0, i * 30, 200);
+            }
+        };
+
+        p.showImportPreview = function (item, x, y) {
+            let x1, x2, y1, y2;
+            let w = Math.max((item.tops.length - 1), 0) * 30 + 60;
+            let h = (Math.max(item.inputs - item.tops.length, item.outputs) + 1) * 30;
+            let scaling = 1;
+            if (h >= 150) {
+                scaling = 150 / h;
+                p.scale(scaling);
+            }
+
+            p.background(150);
+
+            for (let i = 0; i < 7 / scaling; i++) {
+                p.stroke(140);
+                p.strokeWeight(3);
+                p.line(0, i * 30, 200 / scaling, i * 30);
+            }
+
+            for (let i = 0; i < 7 / scaling; i++) {
+                p.stroke(140);
+                p.strokeWeight(3);
+                p.line(i * 30, 0, i * 30, 200 / scaling);
+            }
+
+            x += Math.round(((200 - w * scaling) / 2) / (30 * scaling)) * 30 * scaling;
+            y += Math.round(((200 - h * scaling) / 2) / (30 * scaling)) * 30 * scaling;
+            p.stroke(0);
+            p.strokeWeight(3);
+            p.fill(255);
+            p.textFont('Arial');
+
+            // Draw the body
+            if (item.tops.length === 0) {
+                p.rect(x / scaling, (y / scaling) + GRIDSIZE / 2, w, h - GRIDSIZE);
+            } else {
+                p.rect(x / scaling, y / scaling, w, h);
+            }
+
+            p.noStroke();
+            p.textAlign(CENTER, CENTER);
+            p.fill(0);
+            p.textSize(10);
+            if (Math.max(item.inputs - item.tops.length, item.outputs) % 2 !== 0 && p.textWidth(item.caption) >= w - 30 && Math.max(item.inputs - item.tops.length, item.outputs) >= 2) {
+                p.text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2 - 15);
+            } else {
+                p.text(item.caption, (x / scaling) + w / 2, (y / scaling) + h / 2);
+            }
+            p.textSize(14);
+            let tops = 0;
+            for (let i = 1; i <= item.inputs; i++) {
+                p.stroke(0);
+                p.strokeWeight(2);
+                if (item.tops.includes(i - 1)) {
+                    tops++;
+                    x1 = (x / scaling) + (30 * tops);
+                    y1 = (y / scaling) - 6;
+                    x2 = (x / scaling) + (30 * tops);
+                    y2 = (y / scaling);
+                    if (item.inputLabels[i - 1] === ">") {
+                        p.line(x1, y2 + 14, x1 - 6, y2);
+                        p.line(x1, y2 + 14, x1 + 6, y2);
+                    } else {
+                        p.noStroke();
+                        p.text(item.inputLabels[i - 1], x1, y2 + 10);
+                    }
+                } else {
+                    x1 = (x / scaling) - 6;
+                    y1 = (y / scaling) + (30 * (i - tops));
+                    x2 = (x / scaling);
+                    y2 = (y / scaling) + (30 * (i - tops));
+                    if (item.inputLabels[i - 1] === ">") {
+                        p.line(x2 + 14, y1, x2, y1 - 6);
+                        p.line(x2 + 14, y1, x2, y1 + 6);
+                    } else {
+                        p.noStroke();
+                        p.text(item.inputLabels[i - 1], x2 + 10, y1);
+                    }
+                }
+                p.stroke(0);
+                p.strokeWeight(3);
+                p.line(x1, y1, x2, y2);
+            }
+
+            for (let i = 1; i <= item.outputs; i++) {
+                p.stroke(0);
+                p.strokeWeight(3);
+                x1 = (x / scaling) + w;
+                y1 = (y / scaling) + (30 * i);
+                x2 = (x / scaling) + w + 6;
+                y2 = (y / scaling) + (30 * i);
+                p.noStroke();
+                p.text(item.outputLabels[i - 1], x1 - 10, y1);
+                p.stroke(0);
+                p.strokeWeight(3);
+                p.line(x1, y1, x2, y2);
+            }
+
+            p.scale(1 / scaling);
+            p.textAlign(LEFT, TOP);
+        };
+    };
+
+    let node = document.createElement('div');
+    node.setAttribute('id', 'module-canvas');
+    modulep5 = new p5(moduleSketch, node);
+    window.document.getElementById('module-container').appendChild(node);
 }

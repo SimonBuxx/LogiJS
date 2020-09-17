@@ -64,6 +64,28 @@ function createTopButtons() {
     selectButton.elt.title = 'Coming soon!';
     selectButton.parent(topLeftButtons);
 
+    moduleButton = createButton('<i class="fas fa-tools icon"></i> Module');
+    moduleButton.mousePressed(function() {
+        if (!moduleOptions) {
+            enterModifierMode();
+            showModuleOptions();
+            setActive(moduleButton, true);
+        } else {
+            hideModuleOptions();
+            enterModifierMode();
+        }
+    });
+    moduleButton.elt.disabled = (outputs.length + inputs.length === 0);
+    moduleButton.elt.className = 'button';
+    moduleButton.parent(topLeftButtons);
+
+    moduleButton.mouseOver(function () {
+        setHelpText('Configure this sketch as a custom module');
+    });
+    moduleButton.mouseOut(function () {
+        setHelpText('');
+    });
+
     helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
     helpLabel.elt.className = 'label inlineLabel';
     helpLabel.parent(topLeftButtons);
@@ -740,7 +762,7 @@ function createElementOptions() {
 
     bpTickTimeCB = createCheckbox('Bypass min. tick time', true);
     //document.getElementsByTagName('label')[1].innerHTML = 'Bypass min. tick time<span style="color: #c83232">.</span>';
-    document.getElementsByTagName('input')[2].className = 'tickTimeCB';
+    document.getElementsByTagName('input')[5].className = 'tickTimeCB';
     document.getElementsByTagName('label')[1].className = 'tickTimeCB';
     bpTickTimeCB.hide();
     bpTickTimeCB.checked(false);
@@ -793,99 +815,56 @@ function createElementOptions() {
 }
 
 function createDialogElements() {
-    moduleNameInput = createInput('');
-    moduleNameInput.attribute('placeholder', 'Module Name');
-    moduleNameInput.position(windowWidth / 2 - 238, windowHeight / 2 - 104);
-    moduleNameInput.elt.style.fontFamily = 'ArcaMajora3';
-    moduleNameInput.elt.className = 'textInput saveInput';
-    moduleNameInput.size(180, 27);
-    moduleNameInput.elt.onkeyup = function () {
+    moduleNameInput = document.getElementById('module-input');
+    moduleNameInput.onkeyup = function () {
         moduleNameChanged = true;
-        reDraw();
+        showModulePreviewer();
     };
-    moduleNameInput.hide();
-    moduleNameInput.mouseOver(function () {
+    moduleNameInput.addEventListener('mouseenter', function () {
         setHelpText('This is the text written on the module');
     });
-    moduleNameInput.mouseOut(function () {
+    moduleNameInput.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 
-    sketchNameInput = createInput('');
-    sketchNameInput.attribute('placeholder', 'Sketch Name');
-    sketchNameInput.position(windowWidth / 2 - 23, windowHeight / 2 - 104);
-    sketchNameInput.elt.style.fontFamily = 'ArcaMajora3';
-    sketchNameInput.elt.className = 'textInput saveInput';
-    sketchNameInput.elt.onkeyup = function () {
-        if (!moduleNameInput.elt.disabled && !moduleNameChanged) {
-            moduleNameInput.value(sketchNameInput.value());
+    sketchNameInput = document.getElementById('sketchname-input');
+    sketchNameInput.onkeyup = function () {
+        if (!moduleNameInput.disabled && !moduleNameChanged) {
+            moduleNameInput.value = sketchNameInput.value;
         }
         reDraw();
     };
-    sketchNameInput.hide();
-    sketchNameInput.mouseOver(function () {
+    sketchNameInput.addEventListener('mouseenter', function () {
         setHelpText('This is the file name of the sketch');
     });
-    sketchNameInput.mouseOut(function () {
+    sketchNameInput.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 
-    descInput = createElement('textarea');
-    descInput.attribute('placeholder', 'Sketch Description');
-    descInput.position(windowWidth / 2 - 3, windowHeight / 2 - 30);
-    descInput.size(280, 114);
-    descInput.elt.style.fontFamily = 'ArcaMajora3';
-    descInput.elt.style.fontSize = '18px';
-    descInput.elt.className = 'textInput descInput';
+    descInput = document.getElementById('desc-input');
     if (getCookieValue('access_token') === '') {
-        descInput.attribute('placeholder', 'Sketch Description\n(Log in to give a description)');
-        descInput.elt.disabled = true;
+        descInput.placeholder = 'Sketch Description\n(Log in to give a description)';
+        descInput.disabled = true;
     }
-    descInput.hide();
-    descInput.mouseOver(function () {
+    descInput.addEventListener('mouseenter', function () {
         setHelpText('This is the description displayed in the dashboard');
     });
-    descInput.mouseOut(function () {
+    descInput.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 
-    cancelButton = createButton('Cancel');
-    cancelButton.position(windowWidth / 2 - 13, windowHeight / 2 + 113);
-    cancelButton.mousePressed(cancelClicked);
-    cancelButton.elt.className = 'btn btn-lg btn-red hover-btn';
-    cancelButton.hide();
-
-    saveDialogText = createP('Save Sketch<span style="color: #c83232">.</span>');
-    saveDialogText.hide();
-    if (currentTheme === 'dark') {
-        saveDialogText.elt.style.color = '#fff';
-    } else {
-        saveDialogText.elt.style.color = '#323232';
-    }
-    saveDialogText.elt.style.fontFamily = 'ArcaMajora3';
-    saveDialogText.elt.style.margin = '3px 0px 0px 0px';
-    saveDialogText.position(windowWidth / 2 - 65, windowHeight / 2 - 160);
-    saveDialogText.style('font-size', '36px');
-
-    // Button to save the sketch
     if (getCookieValue('access_token') !== '') {
-        saveButton = createButton('<i class="fas fa-save"></i> Save');
-        saveButton.mouseOver(function () {
+        document.getElementById('save-button').addEventListener('mouseenter', function () {
             setHelpText('Save this sketch to the dashboard');
         });
     } else {
-        saveButton = createButton('<i class="fas fa-file-download"></i> Download');
-        saveButton.mouseOver(function () {
+        document.getElementById('save-button').addEventListener('mouseleave', function () {
             setHelpText('Download this sketch as a JSON file');
         });
     }
-    saveButton.position(windowWidth / 2 + 142, windowHeight / 2 + 113);
-    saveButton.mousePressed(saveClicked);
-    saveButton.elt.className = 'btn btn-lg btn-red hover-btn';
-    saveButton.mouseOut(function () {
+    document.getElementById('save-button').addEventListener('mouseleave', function () {
         setHelpText('');
     });
-    saveButton.hide();
 }
 
 function createTopRightButtons() {
