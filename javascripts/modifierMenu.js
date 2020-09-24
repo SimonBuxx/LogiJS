@@ -5,6 +5,7 @@ function enterModifierMode() {
     closeCustomDialog();
     closeSaveDialog();
     closeModifierMenu();
+    justClosedMenu = false;
     hideModuleOptions();
     setControlMode('modify');
     setSelectMode('none');

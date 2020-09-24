@@ -178,7 +178,6 @@ a:focus {
     margin: 100px auto 0 auto;
     width: 800px;
     transition: 0.5s;
-    border-radius: 10px;
     box-shadow: 0 0 20px #969696;
 }
 
@@ -191,7 +190,6 @@ a:focus {
     right: 8vw;
     top: 31vh;
     width: 38vw;
-    border-radius: 10px;
     box-shadow: 0 0 30px #202020;
     z-index: 20000;
 }
@@ -212,7 +210,6 @@ a:focus {
 
 .sample-element img {
     width: 140px;
-    border-radius: 10px;
     float: right;
     margin-top: 10px;
 }
@@ -231,28 +228,6 @@ a:focus {
 
 .sample-description:hover .top-image {
     opacity: 1;
-}
-
-#sample-title {
-    margin: 20px 20px 0 0;
-    padding: 0;
-    height: 75px;
-    background: #323232;
-    grid-row: 1;
-    grid-column: 1;
-    border-radius: 10px;
-}
-
-#sample-title > button {
-    margin: 15px; 
-    float: right; 
-    position: absolute;
-    right: 0; 
-    width: 170px;
-}
-
-#sample-title > h1 {
-    margin: 15px 170px 15px 0;
 }
 
 .sample_item > img {
@@ -307,7 +282,6 @@ a:focus {
     margin: 20px 20px 0 0;
     padding: 10px;
     background: none;
-    border-radius: 10px;
     grid-row: 1;
     grid-column: 1;
     display: flex;
@@ -330,7 +304,7 @@ a:focus {
 
 #nosketches_message {
     padding: 30px 0 0 0; 
-    font-size: 24px;
+    font-size: 40px;
     text-align: center;
 }
 
@@ -345,7 +319,6 @@ a:focus {
 
 .sticky-bar {
     background: none;
-    border-radius: 10px;
     position: sticky;
     top: 130px;
     overflow: scroll;
@@ -412,7 +385,6 @@ a:focus {
 
 #click_image {
     width: 200px;
-    border-radius: 10px;
 }
 
 #editor-button {
@@ -578,7 +550,6 @@ a:focus {
 .carousel-image {
     float: right;
     width: 40%;
-    border-radius: 10px;
     margin-right: 12%;
     margin-top: 20px;
     box-shadow: 0 0 20px #969696;
@@ -596,7 +567,7 @@ input {
     border: none;
     background: none;
     color: black;
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 .dark-theme input {
@@ -633,11 +604,8 @@ input {
 }
 
 .btn-orange, .dark-theme .btn-orange {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    border-radius: 0;
     color:#ffffff;
-    background: linear-gradient(145deg, #b42d2d, #d63636);
     background: #c83232;
     border: none;
     box-shadow: none;
@@ -726,19 +694,6 @@ ul.navbar-nav {
     margin-top: 20px;
 }
 
-.navbar-default .navbar-nav > li.active > a {
-    border-radius: 10px;
-    color: inherit;
-    background: linear-gradient(145deg, #b42d2d, #d63636);
-    box-shadow: 5px 5px 5px #2b2b2b, 
-                -5px -5px 5px #3a3a3a;
-}
-
-.navbar-default .navbar-nav > li.active > a:hover,
-.navbar-default .navbar-nav > li.active > a:focus {
-    color: inherit;
-}
-
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
     transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -801,7 +756,6 @@ p.password-tipps {
     position: relative;
     height: 300px;
     background: none;
-    border-radius: 10px;
     margin: 0;
     overflow: hidden;
 }
@@ -821,7 +775,6 @@ p.password-tipps {
     margin-top: 60px;
     width: 200px;
     cursor: pointer;
-    border-radius: 10px;
 }
 
 span.overlay {
@@ -833,7 +786,6 @@ span.overlay {
     position: relative;
     bottom: 220px;
     left: 20px;
-    border-radius: 10px;
     cursor: pointer;
 }
 

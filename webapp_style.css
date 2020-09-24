@@ -163,9 +163,14 @@ body {
     -moz-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
     -o-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    border: 3px solid #323232;
 }
 
-.redButton:active, .redButton.col-active {
+.dark-theme .colorButton:active, .dark-theme .colorButton.col-active {
+    border: 3px solid white;
+}
+
+/*.redButton:active, .redButton.col-active {
     border: 3px solid #9f2828;
 }
 
@@ -179,7 +184,7 @@ body {
 
 .blueButton:active, .blueButton.col-active {
     border: 3px solid #074a8d;
-}
+}*/
 
 .ease_in {
     opacity: 0.0;

@@ -42,7 +42,7 @@ function mouseWheel(event) {
                 segDisplayClicked(true);
                 break;
             case 9:
-                labelButtonClicked(true);          
+                labelButtonClicked(true);
                 break;
             default:
                 console.log('Invalid object type!');
@@ -98,12 +98,12 @@ function updateCursors() {
                 }
             }
             if (!moduleOptions) {
-            for (const elem of labels) {
-                if (elem.mouseOver()) {
-                    hand = true;
-                    cursor(HAND);
+                for (const elem of labels) {
+                    if (elem.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
                 }
-            }
                 for (const elem of gates) {
                     for (const e of elem.inputClickBoxes) {
                         if (e.mouseOver()) {
@@ -302,7 +302,7 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (loading || saveDialog || justClosedMenu ||showCustomDialog || elementMenuShown() || mouseOverGUI()) {
+    if (loading || saveDialog || justClosedMenu || showCustomDialog || elementMenuShown() || mouseOverGUI()) {
         return;
     }
     if (!simRunning && !mouseOverGUI()) {
