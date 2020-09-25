@@ -11,6 +11,18 @@ html {
     background: #323232;
 }
 
+.cc-message, .dark-theme .cc-message {
+    color: #323232;
+}
+
+.cc-window {
+    box-shadow: 0 0 20px #969696;
+}
+
+.dark-theme .cc-window {
+    box-shadow: 0 0 20px #202020;
+}
+
 h1, h2, h3, h4, h5, h6, span, p, a, li, button { 
     font-family: ArcaMajora3, 'Open Sans', Arial, 'Helvetica Neue', sans-serif; 
     color: #323232;

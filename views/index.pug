@@ -24,18 +24,23 @@ head
   script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
   script.
     window.addEventListener("load", function () {
-    window.cookieconsent.initialise({
-    "palette": {
-    "popup": {
-    "background": "#323232",
-    "text": "#ffffff"
-    },
-    "button": {
-    "background": "#c83232",
-    "text": "#ffffff"
-    }
-    }
-    })
+      window.cookieconsent.initialise({
+        "position": "bottom-right",
+        "content": {
+          "dismiss": "Allow Cookies"
+        },
+        "palette": {
+          "popup": {
+            "background": "#fff",
+            "text": "#323232",
+            "link": "#c83232"
+          },
+          "button": {
+            "background": "#c83232",
+            "text": "#ffffff"
+          }
+        }
+      })
     });
 body
   |   <!-- Google Tag Manager (noscript) -->
