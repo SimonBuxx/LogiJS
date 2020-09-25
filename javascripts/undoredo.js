@@ -363,7 +363,7 @@ function redo() {
 
 function pushUndoAction(type, indizees, objects) {
     actionUndo.push(new Action(type, indizees, objects));
-    actionRedo.pop();
+    actionRedo = [];
     if (actionUndo.length > HIST_LENGTH) {
         actionUndo.splice(0, 1);
     }

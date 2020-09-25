@@ -302,7 +302,7 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (loading || saveDialog || justClosedMenu || showCustomDialog || elementMenuShown() || mouseOverGUI()) {
+    if (loading || saveDialog || justClosedMenu || moduleOptions || showCustomDialog || elementMenuShown() || mouseOverGUI()) {
         return;
     }
     if (!simRunning && !mouseOverGUI()) {

@@ -42,6 +42,7 @@ function createTopButtons() {
     undoButton = createButton('<i class="fa fa-undo icon"></i> Undo');
     undoButton.mousePressed(() => {
         undo();
+        moduleButton.elt.disabled = (outputs.length === 0);
     });
     undoButton.elt.disabled = true;
     undoButton.elt.className = 'button';
@@ -51,6 +52,7 @@ function createTopButtons() {
     redoButton = createButton('<i class="fa fa-redo icon"></i> Redo');
     redoButton.mousePressed(() => {
         redo();
+        moduleButton.elt.disabled = (outputs.length === 0);
     });
     redoButton.elt.disabled = true;
     redoButton.elt.className = 'button';

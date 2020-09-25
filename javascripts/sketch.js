@@ -1351,6 +1351,8 @@ function deleteWires() {
         }
     }
 
+    let lengthBeforeDelete = wires.length;
+
     /*
         delete all wires that should be removed
     */
@@ -1363,7 +1365,7 @@ function deleteWires() {
     /*
         Add all newly created wires
     */
-    for (let i = wires.length - 1; i >= 0; i--) {
+    for (let i = lengthBeforeDelete - 1; i >= 0; i--) {
         if (deletedIndices.indexOf(i) >= 0) {
             if (replaceIndices.indexOf(i) >= 0) {
                 let newWires = newWiresList.pop();

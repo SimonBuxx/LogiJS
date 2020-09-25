@@ -54,11 +54,6 @@ body
             li
               a.internal-link(rel='nofollow', href='#about', target='_parent') About
           .navbar-header
-            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-              span.sr-only Toggle navigation
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
             a.navbar-brand(href='#top')
               img#top_logo(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS')
           .navbar-collapse.collapse
@@ -144,7 +139,7 @@ body
           </a>
         </div>
   #samples(style="display: block; position: relative; top: -150px; visibility: hidden;")
-  h2.normal-caption Samples
+  h2#samples-caption.normal-caption Samples
   .sample-element.left-elem
     .sample-description
       a(href="/editor?sketch=library__0gates", rel="nofollow")
@@ -213,7 +208,7 @@ body
   h2.normal-caption
     | Who whe are
     span.red .
-  .justify(style="margin: 0 30% 60px 30%;")
+  .justify(style="margin-bottom: 60px;")
     p
       | LogiJS is an open source logic circuit simulator. Logic circuits are everywhere these days and therefore taught at universities worldwide. 
     p
@@ -225,7 +220,7 @@ body
   h2.normal-caption
     | What we're working on
     span.red .
-  .justify(style="margin: 0 30% 0 30%;")
+  .justify
     ul
       li First things first, we will finally complete the selection feature so that you can move, copy and delete sketch parts.
       li We'd like to have a showroom for user-built circuits, where you can view other user's circuits and edit them as copies in your own dashboards. For this, we need to find a way to handle sketch dependencies (custom elements used in the sketch).

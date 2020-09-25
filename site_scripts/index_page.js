@@ -5,9 +5,13 @@ function scrollFunction() {
         document.getElementById("front_teaser").style.opacity = "0";
         document.getElementById("main-carousel").style.opacity = "1";
     } else {
-        document.getElementById("top_logo").style.width = "350px";
         document.getElementById("front_teaser").style.opacity = "1";
-        document.getElementById("main-carousel").style.opacity = "0";
+        if (document.body.clientWidth >= 1024) {
+            document.getElementById("main-carousel").style.opacity = "0";
+            document.getElementById("top_logo").style.width = "350px";
+        } else {
+            document.getElementById("top_logo").style.width = "200px";
+        }
     }
 }
 

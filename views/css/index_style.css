@@ -36,8 +36,8 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
 }
 
 .slogan {
-    font-size: 70px;
-    margin-top: 150px;
+    font-size: clamp(35px, 6vw, 70px);
+    margin-top: clamp(50px, 10vw, 150px);
     text-align: center;
 }
 
@@ -55,8 +55,8 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
 .background-text {
     position: absolute;
     margin: 0;
-    top: -120px;
-    font-size: 350px;
+    top: clamp(-120px, -10vw, -40px);
+    font-size: clamp(200px, 20vw, 350px);
     z-index: -1000;
     white-space: nowrap;
     overflow: hidden;
@@ -70,7 +70,7 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
 }
 
 .carousel-caption {
-    font-size: 2.5vw;
+    font-size: clamp(25px, 2.5vw, 60px);
     text-align: left;
 }
 
@@ -143,7 +143,7 @@ a:focus {
 }
 
 .navbar-brand > img {
-    width: 350px;
+    width: clamp(200px, 19vw, 350px);
     transition: 0.2s;
 }
 
@@ -163,6 +163,7 @@ a:focus {
 
 .scroll_down a {
     color: #323232;
+    font-size: clamp(10px, 1vw, 20px);
 }
 
 .dark-theme .scroll_down a {
@@ -179,6 +180,12 @@ a:focus {
     width: 800px;
     transition: 0.5s;
     box-shadow: 0 0 20px #969696;
+}
+
+@media (max-width: 1023px) {
+    #front_teaser {
+        display: none;
+    }
 }
 
 .dark-theme #front_teaser {
@@ -206,6 +213,20 @@ a:focus {
 
 .dark-theme .grey_square {
     background: white;
+}
+
+@media (max-width: 1023px) {
+    .sample-element {
+        display: none;
+    }
+
+    #samples-caption {
+        display: none;
+    }
+
+    .show_all a {
+        display: none;
+    }
 }
 
 .sample-element img {
@@ -537,7 +558,18 @@ a:focus {
     margin: -300px auto 50px auto;
     transition: 0.2s;
     opacity: 0;
-    
+}
+
+@media (max-width: 1023px) {
+    #main-carousel {
+        width: 90%;
+        opacity: 1;
+        margin-top: 50px;
+    }
+
+    .carousel-control.left, .carousel-control.right {
+        font-size: 15px;
+    }
 }
 
 .carousel-text {
@@ -553,6 +585,27 @@ a:focus {
     margin-right: 12%;
     margin-top: 20px;
     box-shadow: 0 0 20px #969696;
+}
+
+@media (max-width: 1023px) {
+    .carousel-image {
+        float: none;
+        width: 60vw;
+        margin: 0 auto;
+    }
+
+    .carousel-button {
+        display: none;
+    }
+
+    .carousel-text {
+        margin: 0;
+        width: 100%;
+    }
+
+    .carousel-caption {
+        text-align: center;
+    }
 }
 
 .dark-theme .carousel-image {
@@ -619,10 +672,9 @@ input {
 }
 
 .get_started .btn, .carousel-button .btn {
-    width: 300px;
-    height: 65px;
-    padding-top: 14px;
-    font-size: 30px;
+    width: clamp(200px, 15vw, 300px);
+    padding: 14px;
+    font-size: clamp(20px, 1.5vw, 30px);
 }
 
 .getstarted-container .btn {
@@ -704,8 +756,14 @@ ul.navbar-nav {
     .navbar-nav > li > a {
       padding-top: 9px;
       padding-bottom: 9px;
-    } 
-  }
+    }
+}
+
+@media (max-width: 1023px) {
+    .navbar-left, .navbar-right {
+        display: none;
+    }
+}
 
 @media (min-width: 1023px) {
     .login-button, .user-button {
@@ -879,6 +937,14 @@ span.overlay span {
 
 .justify {
     text-align: justify;
+    margin: 0 auto;
+    width: 40%;
+}
+
+@media (max-width: 1023px) { 
+    .justify {
+        width: 90%;
+    }
 }
 
 .footer_bottom {
