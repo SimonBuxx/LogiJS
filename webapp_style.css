@@ -220,6 +220,10 @@ body {
     color: #fff;
 }
 
+.leftLabel {
+    display: inline-block;
+}
+
 .inlineLabel {
     display: inline-block;
     color: #323232;

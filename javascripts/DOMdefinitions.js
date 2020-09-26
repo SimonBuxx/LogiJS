@@ -67,7 +67,7 @@ function createTopButtons() {
     selectButton.parent(topLeftButtons);
 
     moduleButton = createButton('<i class="fas fa-tools icon"></i> Module');
-    moduleButton.mousePressed(function() {
+    moduleButton.mousePressed(function () {
         if (!moduleOptions) {
             enterModifierMode();
             showModuleOptions();
@@ -737,18 +737,28 @@ function createElementOptions() {
         if (!sfcheckbox.checked() && simRunning) {
             tickTimeLabel.elt.className = 'label disabledLabel';
             tickTimeMsLabel.elt.className = 'label msLabel disabledLabel';
+            multiplicatorLabel.elt.className = 'label msLabel';
+            multDescLabel.elt.className = 'label leftLabel';
             tickTimeSlider.elt.disabled = true;
+            multiplicatorSlider.elt.disabled = false;
+
             document.getElementsByClassName('tickTimeCB')[0].disabled = true;
             document.getElementsByClassName('tickTimeCB')[1].className = 'tickTimeCB disabledLabel';
+
+            newMultiplicator();
         } else {
             if (tickTime > 0) {
                 tickTimeLabel.elt.className = 'label';
                 tickTimeMsLabel.elt.className = 'label msLabel';
                 tickTimeSlider.elt.disabled = false;
             }
+            multiplicatorSlider.elt.disabled = true;
+            multiplicatorLabel.elt.className = 'label msLabel disabledLabel';
+            multDescLabel.elt.className = 'label leftLabel disabledLabel';
             bpTickTimeCB.show();
             document.getElementsByClassName('tickTimeCB')[0].disabled = false;
             document.getElementsByClassName('tickTimeCB')[1].className = 'tickTimeCB';
+            stopTicks = true;
         }
     });
     sfcheckbox.elt.className = 'checkbox';
@@ -791,7 +801,7 @@ function createElementOptions() {
 
     tickTimeLabel = createP('Minimum time per tick:');
     tickTimeLabel.hide();
-    tickTimeLabel.elt.className = 'label';
+    tickTimeLabel.elt.className = 'label leftLabel';
     tickTimeLabel.parent(leftSideContainer);
 
     tickTimeSlider = createSlider(0, 100, 10, 1);
@@ -812,6 +822,34 @@ function createElementOptions() {
     tickTimeMsLabel.hide();
     tickTimeMsLabel.elt.className = 'label msLabel';
     tickTimeMsLabel.parent(leftSideContainer);
+
+    multDescLabel = createP('Speed Multiplier:');
+    multDescLabel.hide();
+    multDescLabel.elt.className = 'label leftLabel';
+    multDescLabel.parent(leftSideContainer);
+    multDescLabel.style('display', 'inline-block');
+    multDescLabel.elt.disabled = true;
+
+    multiplicatorSlider = createSlider(1, 10, 1, 1);
+    multiplicatorSlider.hide();
+    multiplicatorSlider.input(function () {
+        newMultiplicator();
+    });
+    multiplicatorSlider.elt.className = 'slider sliderLeft';
+    multiplicatorSlider.parent(leftSideContainer);
+    multiplicatorSlider.mouseOver(function () {
+        setHelpText('Speeds up the simulation at higher CPU cost');
+    });
+    multiplicatorSlider.mouseOut(function () {
+        setHelpText('');
+    });
+    multiplicatorSlider.elt.disabled = true;
+
+    multiplicatorLabel = createP('1');
+    multiplicatorLabel.hide();
+    multiplicatorLabel.elt.className = 'label msLabel';
+    multiplicatorLabel.parent(leftSideContainer);
+    multiplicatorLabel.elt.disabled = true;
 }
 
 function createDialogElements() {
@@ -868,13 +906,13 @@ function createDialogElements() {
 }
 
 function createTopRightButtons() {
-    document.getElementById('fileid').onchange = function() {
-        importJSONClicked();    
+    document.getElementById('fileid').onchange = function () {
+        importJSONClicked();
     };
 
     importButton = createButton('<i class="fas fa-file-upload icon"></i> Import');
     importButton.mousePressed(function () {
-        document.getElementById('fileid').click();    
+        document.getElementById('fileid').click();
     });
     importButton.elt.className = 'button';
     importButton.parent(topRightButtons);

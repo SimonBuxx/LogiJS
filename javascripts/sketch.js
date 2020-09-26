@@ -169,6 +169,10 @@ let importSketchData = {}; // Contains look and caption of all user sketches tha
 */
 let syncFramerate = true;
 
+speedMultiplicator = 5;
+
+stopTicks = false;
+
 let segIndices = [];
 let wireIndices = [];
 
@@ -269,7 +273,7 @@ let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
 let gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 
-let tickTimeSlider, tickTimeLabel, bpTickTimeCB, tickTimeMsLabel, sfcheckbox;
+let tickTimeSlider, tickTimeLabel, bpTickTimeCB, tickTimeMsLabel, sfcheckbox, multiplicatorSlider, multiplicatorLabel;
 
 /*
     This is the socket element used for socket communication with the server
@@ -396,7 +400,8 @@ function setup() { // jshint ignore:line
 
     initTour();
 
-    setInterval(redraw, 0);
+    //setInterval(redraw, 1);
+    setInterval(draw60, 16);
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -837,6 +842,22 @@ function newClockspeed() {
 function newTickTime() {
     tickTime = tickTimeSlider.value();
     tickTimeMsLabel.elt.innerHTML = tickTimeSlider.value() + 'ms';
+}
+
+function newMultiplicator() {
+    speedMultiplicator = multiplicatorSlider.value() * 5;
+    if (simRunning) {
+        stopTicks = true;
+        setTimeout(function () {
+            stopTicks = false;
+            if (!syncFramerate) {
+                for (let i = 0; i < speedMultiplicator; i++) {
+                    updateTick();
+                }
+            }
+        }, 20);
+    }
+    multiplicatorLabel.elt.innerHTML = multiplicatorSlider.value();
 }
 
 /* 
@@ -1513,10 +1534,20 @@ function startSimulation() {
     tickTimeMsLabel.show();
     tickTimeSlider.show();
     bpTickTimeCB.show();
+    multiplicatorSlider.show();
+    multiplicatorLabel.show();
+    multDescLabel.show();
+    multDescLabel.style('display', 'inline-block');
 
     // Start the simulation and exit the modifier mode
     simRunning = true;
     closeModifierMenu();
+    if (!syncFramerate) {
+        stopTicks = false;
+        for (let i = 0; i < speedMultiplicator; i++) {
+            updateTick();
+        }
+    }
 }
 
 /*
@@ -1528,6 +1559,7 @@ function startSimulation() {
 function endSimulation() {
     setSimButtonText('<i class="fa fa-play icon"></i> Start'); // Set the button caption to 'Start'
     configureButtons('edit');
+    stopTicks = true;
 
     // Hide the checkbox
     labelSimulation.hide();
@@ -1537,6 +1569,9 @@ function endSimulation() {
     tickTimeLabel.hide();
     tickTimeMsLabel.hide();
     tickTimeSlider.hide();
+    multiplicatorSlider.hide();
+    multiplicatorLabel.hide();
+    multDescLabel.hide();
 
     bpTickTimeCB.hide();
 
@@ -1691,28 +1726,26 @@ function configureButtons(mode) {
 }
 
 let curTime = 0;
-let lastTime = 0;
 let diffTime = 0;
 
-/*
-    Executes in every frame, draws everything and updates the sketch logic
-*/
 function draw() {
+    if (simRunning && !syncFramerate) {
+        //updateTick(); // Updates the circuit logic
+    }
+}
+
+/*
+    Executed max. 60 times per second
+*/
+function draw60() {
+    diffTime = performance.now() - curTime;
+    curTime = performance.now();
     if (simRunning) {
-        curTime = performance.now();
-        if (!syncFramerate) {
-            updateTick(); // Updates the circuit logic
+        if (syncFramerate && curTime - lastTickTime >= tickTime) {
+            updateTick(false);
+            lastTickTime = curTime;
         }
-        if (curTime - lastrfTime >= rfTime) {
-            diffTime = curTime - lastTime;
-            lastTime = curTime;
-            if (syncFramerate && curTime - lastTickTime >= tickTime) {
-                updateTick();
-                lastTickTime = curTime;
-            }
-            reDraw(); // Redraw all elements of the sketch
-            lastrfTime = curTime;
-        }
+        reDraw();
     } else {
         if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI() && !elementMenuShown()) {
             generatePreviewWires(wirePreviewStartX, wirePreviewStartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
@@ -1728,8 +1761,7 @@ function draw() {
 /*
     Executes one update tick of the sketch logic
 */
-function updateTick() {
-    console.log('updateTick');
+function updateTick(rec = true) {
     // Tell all gates to update
     for (const value of gates) {
         value.update();
@@ -1779,6 +1811,10 @@ function updateTick() {
         if (value.state) {
             groups[value.groupB].diodeHigh();
         }
+    }
+
+    if (simRunning && !stopTicks && rec) {
+        setTimeout(updateTick, 10);
     }
 }
 
@@ -1844,9 +1880,7 @@ function reDraw() {
     fill(0);
     noStroke();
     text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
-    if (simRunning) {
-        text(Math.round(1000 / diffTime), window.width - 20, window.height - 20); // Framerate label
-    }
+    text(Math.round(1000 / diffTime), window.width - 20, window.height - 20); // Framerate label
     if (moduleOptions) {
         textSize(20);
         fill(0);
