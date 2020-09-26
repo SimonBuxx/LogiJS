@@ -169,9 +169,9 @@ let importSketchData = {}; // Contains look and caption of all user sketches tha
 */
 let syncFramerate = true;
 
-speedMultiplicator = 5;
+let speedMultiplicator = 5;
 
-stopTicks = false;
+let stopTicks = false;
 
 let segIndices = [];
 let wireIndices = [];
@@ -1729,9 +1729,7 @@ let curTime = 0;
 let diffTime = 0;
 
 function draw() {
-    if (simRunning && !syncFramerate) {
-        //updateTick(); // Updates the circuit logic
-    }
+    
 }
 
 /*
