@@ -827,7 +827,6 @@ function createElementOptions() {
     multDescLabel.hide();
     multDescLabel.elt.className = 'label leftLabel';
     multDescLabel.parent(leftSideContainer);
-    multDescLabel.style('display', 'inline-block');
     multDescLabel.elt.disabled = true;
 
     multiplicatorSlider = createSlider(1, 10, 1, 1);
