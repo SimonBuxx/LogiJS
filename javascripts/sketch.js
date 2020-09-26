@@ -266,12 +266,10 @@ let importButton, saveDialogButton, dashboardButton, sketchNameLabel;
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
 
-let updater, sfcheckbox;
-
 let gateInputSelect, labelGateInputs, directionSelect, bitSelect, labelDirection, labelBits, counterBitSelect, labelOutputWidth,
     decoderBitSelect, labelInputWidth, multiplexerBitSelect;
 
-let tickTimeSlider, tickTimeLabel, bpTickTimeCB, tickTimeMsLabel;
+let tickTimeSlider, tickTimeLabel, bpTickTimeCB, tickTimeMsLabel, sfcheckbox;
 
 /*
     This is the socket element used for socket communication with the server
@@ -288,6 +286,9 @@ let modulep5; // p5 element for the module canvas
 
 let lastTickTime = 0;
 let tickTime = 10;
+
+let lastrfTime = 0;
+let rfTime = 16;
 
 let tourStep = 0;
 
@@ -359,7 +360,7 @@ function setup() { // jshint ignore:line
 
     createModifierElements();
 
-    frameRate(60); // Caps the framerate at 60 FPS
+    //frameRate(60); // Caps the framerate at 60 FPS
 
     enterModifierMode();
 
@@ -394,6 +395,8 @@ function setup() { // jshint ignore:line
     justClosedMenu = false;
 
     initTour();
+
+    setInterval(redraw, 0);
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -1473,10 +1476,6 @@ function deleteSegDisplay(segDisNumber) {
     - simRunning is set so that the sketch can't be altered
 */
 function startSimulation() {
-    if (!sfcheckbox.checked()) {
-        updater = setInterval(updateTick, 1);
-    }
-
     setSimButtonText('<i class="fa fa-stop icon"></i> Stop'); // Alter the caption of the Start/Stop button
 
     // Go to modify mode to hide previews etc.
@@ -1527,7 +1526,6 @@ function startSimulation() {
     - simRunning is cleared so that the sketch can be altered
 */
 function endSimulation() {
-    clearInterval(updater); // Stop the unsynced simulation updater
     setSimButtonText('<i class="fa fa-play icon"></i> Start'); // Set the button caption to 'Start'
     configureButtons('edit');
 
@@ -1692,17 +1690,29 @@ function configureButtons(mode) {
     moduleButton.elt.disabled = moduleimport || (outputs.length === 0);
 }
 
+let curTime = 0;
+let lastTime = 0;
+let diffTime = 0;
+
 /*
     Executes in every frame, draws everything and updates the sketch logic
 */
 function draw() {
-    //console.log(passedUpdateTime);
     if (simRunning) {
-        if (!syncFramerate || (syncFramerate && performance.now() - lastTickTime >= tickTime)) {
+        curTime = performance.now();
+        if (!syncFramerate) {
             updateTick(); // Updates the circuit logic
-            lastTickTime = performance.now();
         }
-        reDraw(); // Redraw all elements of the sketch
+        if (curTime - lastrfTime >= rfTime) {
+            diffTime = curTime - lastTime;
+            lastTime = curTime;
+            if (syncFramerate && curTime - lastTickTime >= tickTime) {
+                updateTick();
+                lastTickTime = curTime;
+            }
+            reDraw(); // Redraw all elements of the sketch
+            lastrfTime = curTime;
+        }
     } else {
         if ((wireMode === 'preview' || wireMode === 'delete') && !mouseOverGUI() && !elementMenuShown()) {
             generatePreviewWires(wirePreviewStartX, wirePreviewStartY, Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE,
@@ -1711,9 +1721,7 @@ function draw() {
         } else if (controlMode === 'select' || controlMode === 'addObject' && !mouseIsPressed && !elementMenuShown()) {
             reDraw();
         }
-
     }
-
     handleDragging();
 }
 
@@ -1721,6 +1729,7 @@ function draw() {
     Executes one update tick of the sketch logic
 */
 function updateTick() {
+    console.log('updateTick');
     // Tell all gates to update
     for (const value of gates) {
         value.update();
@@ -1835,7 +1844,9 @@ function reDraw() {
     fill(0);
     noStroke();
     text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
-    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
+    if (simRunning) {
+        text(Math.round(1000 / diffTime), window.width - 20, window.height - 20); // Framerate label
+    }
     if (moduleOptions) {
         textSize(20);
         fill(0);

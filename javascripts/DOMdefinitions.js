@@ -735,14 +735,12 @@ function createElementOptions() {
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
         if (!sfcheckbox.checked() && simRunning) {
-            updater = setInterval(updateTick, 1);
             tickTimeLabel.elt.className = 'label disabledLabel';
             tickTimeMsLabel.elt.className = 'label msLabel disabledLabel';
             tickTimeSlider.elt.disabled = true;
             document.getElementsByClassName('tickTimeCB')[0].disabled = true;
             document.getElementsByClassName('tickTimeCB')[1].className = 'tickTimeCB disabledLabel';
         } else {
-            clearInterval(updater);
             if (tickTime > 0) {
                 tickTimeLabel.elt.className = 'label';
                 tickTimeMsLabel.elt.className = 'label msLabel';
