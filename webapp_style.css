@@ -255,6 +255,10 @@ body {
     color: #969696;
 }
 
+.dark-theme .disabledLabel {
+    color: #969696;
+}
+
 .checkbox {
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -593,6 +597,14 @@ body {
 .sliderLeft:disabled::-webkit-slider-thumb {
     background: #969696;
     cursor: default;
+}
+
+.dark-theme .sliderLeft:disabled {
+    background: #585858;
+}
+
+.dark-theme .sliderLeft:disabled::-webkit-slider-thumb {
+    background: #969696;
 }
 
 .sliderLeft:disabled::-moz-range-thumb {

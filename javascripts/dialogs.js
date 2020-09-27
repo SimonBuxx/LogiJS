@@ -128,7 +128,7 @@ function saveDialogClicked() {
     previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
     document.getElementById('preview-image').src = previewImg;
 
-    reDraw();
+    showSaveDialog();
 }
 
 function showSaveDialog() {

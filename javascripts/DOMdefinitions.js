@@ -825,7 +825,7 @@ function createElementOptions() {
 
     multDescLabel = createP('Speed Multiplier:');
     multDescLabel.hide();
-    multDescLabel.elt.className = 'label leftLabel';
+    multDescLabel.elt.className = 'label leftLabel disabledLabel';
     multDescLabel.parent(leftSideContainer);
     multDescLabel.elt.disabled = true;
 
@@ -846,7 +846,7 @@ function createElementOptions() {
 
     multiplicatorLabel = createP('1');
     multiplicatorLabel.hide();
-    multiplicatorLabel.elt.className = 'label msLabel';
+    multiplicatorLabel.elt.className = 'label msLabel disabledLabel';
     multiplicatorLabel.parent(leftSideContainer);
     multiplicatorLabel.elt.disabled = true;
 }

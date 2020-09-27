@@ -169,7 +169,7 @@ let importSketchData = {}; // Contains look and caption of all user sketches tha
 */
 let syncFramerate = true;
 
-let speedMultiplicator = 5;
+let speedMultiplicator = 10;
 
 let stopTicks = false;
 
@@ -364,7 +364,7 @@ function setup() { // jshint ignore:line
 
     createModifierElements();
 
-    //frameRate(60); // Caps the framerate at 60 FPS
+    frameRate(60); // Caps the framerate at 60 FPS
 
     enterModifierMode();
 
@@ -399,9 +399,6 @@ function setup() { // jshint ignore:line
     justClosedMenu = false;
 
     initTour();
-
-    //setInterval(redraw, 1);
-    setInterval(draw60, 16);
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -845,7 +842,7 @@ function newTickTime() {
 }
 
 function newMultiplicator() {
-    speedMultiplicator = multiplicatorSlider.value() * 5;
+    speedMultiplicator = multiplicatorSlider.value() * 10;
     if (simRunning) {
         stopTicks = true;
         setTimeout(function () {
@@ -1542,12 +1539,7 @@ function startSimulation() {
     // Start the simulation and exit the modifier mode
     simRunning = true;
     closeModifierMenu();
-    if (!syncFramerate) {
-        stopTicks = false;
-        for (let i = 0; i < speedMultiplicator; i++) {
-            updateTick();
-        }
-    }
+    newMultiplicator();
 }
 
 /*
@@ -1560,53 +1552,54 @@ function endSimulation() {
     setSimButtonText('<i class="fa fa-play icon"></i> Start'); // Set the button caption to 'Start'
     configureButtons('edit');
     stopTicks = true;
+    setTimeout(function () { // wait until all updateTick functions have terminated
+        // Hide the checkbox
+        labelSimulation.hide();
+        sfcheckbox.hide();
 
-    // Hide the checkbox
-    labelSimulation.hide();
-    sfcheckbox.hide();
+        // Hide the tick time slider
+        tickTimeLabel.hide();
+        tickTimeMsLabel.hide();
+        tickTimeSlider.hide();
+        multiplicatorSlider.hide();
+        multiplicatorLabel.hide();
+        multDescLabel.hide();
 
-    // Hide the tick time slider
-    tickTimeLabel.hide();
-    tickTimeMsLabel.hide();
-    tickTimeSlider.hide();
-    multiplicatorSlider.hide();
-    multiplicatorLabel.hide();
-    multDescLabel.hide();
+        bpTickTimeCB.hide();
 
-    bpTickTimeCB.hide();
+        leftSideButtons.show();
+        customButton.show();
 
-    leftSideButtons.show();
-    customButton.show();
+        groups = []; // Reset the groups, as they are regenerated when starting again
+        for (const elem of gates) {
+            elem.shutdown(); // Tell all the gates to leave the simulation mode
+        }
+        for (const elem of customs) {
+            elem.setSimRunning(false); // Shutdown all custom elements
+        }
+        for (const elem of segDisplays) {
+            elem.shutdown();
+        }
+        // Set all item states to zero
+        for (const elem of conpoints) {
+            elem.state = false;
+        }
+        for (const elem of outputs) {
+            elem.state = false;
+        }
+        for (const elem of inputs) {
+            elem.setState(false);
+        }
+        for (const elem of diodes) {
+            elem.setState(false);
+        }
+        for (const elem of wires) {
+            elem.setState(false);
+        }
 
-    groups = []; // Reset the groups, as they are regenerated when starting again
-    for (const elem of gates) {
-        elem.shutdown(); // Tell all the gates to leave the simulation mode
-    }
-    for (const elem of customs) {
-        elem.setSimRunning(false); // Shutdown all custom elements
-    }
-    for (const elem of segDisplays) {
-        elem.shutdown();
-    }
-    // Set all item states to zero
-    for (const elem of conpoints) {
-        elem.state = false;
-    }
-    for (const elem of outputs) {
-        elem.state = false;
-    }
-    for (const elem of inputs) {
-        elem.setState(false);
-    }
-    for (const elem of diodes) {
-        elem.setState(false);
-    }
-    for (const elem of wires) {
-        elem.setState(false);
-    }
-
-    simRunning = false;
-    reDraw();
+        simRunning = false;
+        reDraw();
+    }, 20);
 }
 
 function setSimButtonText(text) {
@@ -1725,19 +1718,8 @@ function configureButtons(mode) {
     moduleButton.elt.disabled = moduleimport || (outputs.length === 0);
 }
 
-let curTime = 0;
-let diffTime = 0;
-
 function draw() {
-    
-}
-
-/*
-    Executed max. 60 times per second
-*/
-function draw60() {
-    diffTime = performance.now() - curTime;
-    curTime = performance.now();
+    let curTime = performance.now();
     if (simRunning) {
         if (syncFramerate && curTime - lastTickTime >= tickTime) {
             updateTick(false);
@@ -1812,7 +1794,7 @@ function updateTick(rec = true) {
     }
 
     if (simRunning && !stopTicks && rec) {
-        setTimeout(updateTick, 10);
+        setTimeout(updateTick, 20);
     }
 }
 
@@ -1829,7 +1811,6 @@ function reDraw() {
     translate(transform.dx, transform.dy);
 
     // Draw all sketch elements on screen
-    //let t0 = performance.now();
     showElements();
 
     // Display the preview wire segment set
@@ -1843,32 +1824,25 @@ function reDraw() {
         }
     }
 
-    if (controlMode === 'select' && selectMode === 'start') {
+    /*if (controlMode === 'select' && selectMode === 'start') {
         fill(0, 0, 0, 100); // Set the fill color to a semi-transparent black
         noStroke();
         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
         rect(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
             Math.abs(selectStartX - selectEndX), Math.abs(selectStartY - selectEndY));
-    }
-
-    //let t1 = performance.now();
-    //console.log('took ' + (t1 - t0) + ' milliseconds.');
+    }*/
 
     // Reverse the scaling and translating to draw the stationary elements of the GUI
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 
-    if (loading && !showCustomDialog) {
+    if (loading) {
         showMessage('Loading Sketch...', loadFile.split('.json')[0]);
     }
 
-    if (error !== '') {
+    if (error.length > 0) {
         showMessage(error, errordesc);
-    }
-
-    if (saveDialog) {
-        showSaveDialog();
     }
 
     // Draw the zoom and framerate labels
@@ -1878,10 +1852,10 @@ function reDraw() {
     fill(0);
     noStroke();
     text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
-    text(Math.round(1000 / diffTime), window.width - 20, window.height - 20); // Framerate label
+    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
+
     if (moduleOptions) {
         textSize(20);
-        fill(0);
         text('Click on the in- and outputs to swap them!', 30, 30);
     }
 }
