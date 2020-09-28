@@ -594,12 +594,6 @@ function initPreviewCanvas() {
                 p.strokeWeight(3);
                 p.line(i * 30, 0, i * 30, 200);
             }
-
-            p.textFont('ArcaMajora3');
-            p.noStroke();
-            p.fill(200, 50, 50);
-            p.textSize(14);
-            p.text('This sketch has no outputs.', 12, 94);
         };
 
         p.showEmptyGrid = function () {
@@ -752,12 +746,6 @@ function initModuleCanvas() {
                 p.strokeWeight(3);
                 p.line(i * 30, 0, i * 30, 200);
             }
-
-            p.textFont('ArcaMajora3');
-            p.noStroke();
-            p.fill(200, 50, 50);
-            p.textSize(14);
-            p.text('This sketch has no outputs.', 12, 94);
         };
 
         p.showEmptyGrid = function () {

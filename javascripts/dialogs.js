@@ -185,8 +185,6 @@ function closeCustomDialog() {
 
 function custom_element_clicked(r) {
     if (r >= importSketchData.sketches.length || importSketchData.looks[r].outputs === 0) {
-        closeCustomDialog();
-        showMessage('This sketch has no output elements!', 'Only sketches that contain outputs can be imported.');
         return; // If the place should be greater than the number of available modules or the module has no outputs, return.
     }
     setActive(customButton, true); // Set the custom modules button as activated
@@ -202,6 +200,7 @@ function custom_element_hovered(r) {
     if (importSketchData.looks[r].outputs > 0) {
         PWp5.showImportPreview(importSketchData.looks[r], 0, 0);
     } else {
+        document.getElementsByClassName('preview-span')[r].innerHTML = '<i class="fa fa-exclamation-circle"></i> This sketch has no outputs.';
         PWp5.showNoOutputs();
     }
 }

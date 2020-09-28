@@ -265,7 +265,7 @@ let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions, labelSimul
 /*
     Right side elements
 */
-let importButton, saveDialogButton, dashboardButton, sketchNameLabel;
+let importButton, saveDialogButton, dashboardButton, topSketchInput;
 
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, reg4Button,
     muxButton, demuxButton, halfaddButton, fulladdButton, customButton;
@@ -310,18 +310,13 @@ document.addEventListener('contextmenu', event => event.preventDefault());
     Sets up the canvas and caps the framerate
 */
 function setup() { // jshint ignore:line
-    topButtonsContainer = createDiv('');
-    topButtonsContainer.elt.className = 'topButtonsContainer';
+    topButtonsContainer = document.getElementById('topButtonsContainer');
 
     //Div for the Top Left Buttons
-    topLeftButtons = createDiv('');
-    topLeftButtons.elt.className = 'topLeftButtons';
-    topLeftButtons.parent(topButtonsContainer);
+    topLeftButtons = document.getElementById('topLeftButtons');
 
     //Div for the Top Right Buttons
-    topRightButtons = createDiv('');
-    topRightButtons.elt.className = 'topRightButtons';
-    topRightButtons.parent(topButtonsContainer);
+    topRightButtons = document.getElementById('topRightButtons');
 
     mainCanvas = createCanvas(windowWidth - 240, windowHeight - 50);     // Creates the canvas in full window size
     mainCanvas.position(240, 50);
@@ -530,12 +525,15 @@ function importJSONClicked() {
 
 // Triggered when a sketch should be saved
 function saveClicked() {
-    setSketchNameLabel(sketchNameInput.value);
-    saveSketch(sketchNameInput.value + '.json', function (look) {
+    filename = sketchNameInput.value;
+    if (filename === '') {
+        filename = 'untitled';
+    }
+    saveSketch(filename + '.json', function (look) {
         enterModifierMode();
         look.desc = descInput.value;
-        document.title = 'LogiJS: ' + sketchNameInput.value;
-        socket.emit('savePreview', { name: sketchNameInput.value, img: previewImg, desc: JSON.stringify(look), access_token: getCookieValue('access_token') });
+        document.title = 'LogiJS: ' + filename;
+        socket.emit('savePreview', { name: filename, img: previewImg, desc: JSON.stringify(look), access_token: getCookieValue('access_token') });
     });
 }
 

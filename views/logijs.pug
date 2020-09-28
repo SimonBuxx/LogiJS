@@ -56,6 +56,10 @@ body
   a(href='/')
     img#logo(src='images/alt_logo_dark.png', alt='LogiJS logo')
   <input id='fileid' type='file' accept='.json' hidden/>
+  #topButtonsContainer
+    #topLeftButtons
+    #topRightButtons
+      input#sketchname-1(placeholder='Untitled Sketch')
   .custom-container(style="position: relative; z-index: 1")
     #custom-dialog
       h1 Import your own elements<span style="color: #c83232">.</span>
@@ -72,7 +76,7 @@ body
               .preview_image
                 img(src='data:image/png;base64,' + images[r], alt=sketchData.sketches[r])
                 span.overlay(onclick='custom_element_clicked(' + r + ')', onmouseover='custom_element_hovered(' + r + ')')
-                  span.preview-span(id='span' + sketchData.sketches[r]) <i class="fa fa-search"></i> Details
+                  span.preview-span(id='span' + sketchData.sketches[r]) <i class="fa fa-file-import"></i> Import
               p.sketch_name #{sketchData.sketches[r]}
                 span(style="color: #c83232;") .
             -r++;
@@ -89,16 +93,12 @@ body
     .save-container(style="position: relative; z-index: 1")
       #save-dialog
         h1 Save Sketch<span style="color: #c83232">.</span>
-        //input#module-input.textInput.saveInput(placeholder='Module Name')
-        input#sketchname-input.textInput.saveInput(placeholder='Sketch Name')
+        input#sketchname-2.textInput.saveInput(placeholder='Sketch Name')
         textarea#desc-input.textInput.descInput(placeholder='Sketch Description')
         #img-container(style='width: 200px; height: 200px; overflow: hidden; position: absolute; left: 40px; bottom: 40px;')
           img#preview-image
         button#cancel-save-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="cancelClicked();") Cancel
-        if user !== ''
-          button#save-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="saveClicked();") <i class="fas fa-save"></i> Save
-        else
-          button#save-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="saveClicked();") <i class="fas fa-file-download"></i> Download
+        button#save-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="saveClicked();") <i class="fas fa-save"></i> Save
         .grey-rect
         .red-rect
     .output-container(style="position: relative; z-index: 1")

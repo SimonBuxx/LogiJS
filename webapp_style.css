@@ -231,10 +231,6 @@ body {
     margin-bottom: 0;
 }
 
-.sketchNameLabel, .dark-theme .sketchNameLabel {
-    color: #969696;
-}
-
 .scrollContainerLeft > .label {
     margin: 30px 0 10px 0;
     width: 230px;
@@ -623,7 +619,7 @@ input[type=range]::-ms-tooltip {
     width: 280px;
     border: none;
     background: white;
-    color: black;
+    color: #323232;
 }
 
 .textInput {
@@ -631,7 +627,7 @@ input[type=range]::-ms-tooltip {
     padding: 10px;
     border: none;
     background: white;
-    color: black;
+    color: #323232;
 }
 
 .textInput:disabled::placeholder {
@@ -665,7 +661,7 @@ input[type=range]::-ms-tooltip {
     position: absolute;
     padding: 10px;
     left: calc(50vw - 230px);
-    top: calc(50vh - 180px);
+    top: calc(50vh - 230px);
     background: white;
     width: 280px;
     height: 105px;
@@ -681,7 +677,7 @@ input[type=range]::-ms-tooltip {
     position: absolute;
     padding: 10px;
     left: calc(50vw - 230px);
-    top: calc(50vh - 180px);
+    top: calc(50vh - 230px);
     background: white;
     width: 220px;
     height: 140px;
@@ -702,27 +698,11 @@ input[type=range]::-ms-tooltip {
     color: #fff;
 }
 
-#clock-modifier {
-    position: absolute;
-    padding: 10px;
-    left: calc(50vw - 230px);
-    top: calc(50vh - 180px);
-    background: white;
-    width: 220px;
-    height: 140px;
-    margin: 0;
-    display: none;
-}
-
-.dark-theme #clock-modifier {
-    background: #323232;
-}
-
 #label-modifier {
     position: absolute;
     padding: 10px;
     left: calc(50vw - 230px);
-    top: calc(50vh - 180px);
+    top: calc(50vh - 230px);
     background: white;
     width: 240px;
     height: 160px;
@@ -791,7 +771,7 @@ input[type=range]::-ms-tooltip {
     position: absolute;
     padding: 10px;
     left: calc(50vw - 230px);
-    top: calc(50vh - 180px);
+    top: calc(50vh - 230px);
     background: white;
     width: 600px;
     height: 250px;
@@ -852,7 +832,7 @@ input[type=range]::-ms-tooltip {
     position: absolute;
     padding: 10px;
     left: calc(50vw - 230px);
-    top: calc(50vh - 180px);
+    top: calc(50vh - 230px);
     background: white;
     width: 600px;
     height: 400px;
@@ -886,7 +866,22 @@ input[type=range]::-ms-tooltip {
     text-align: center;
 }
 
-#sketchname-input {
+#sketchname-1 {
+    font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
+    font-size: 18px;
+    width: 150px;
+    border: none;
+    background: none;
+    color: #969696;
+    text-align: right;
+    padding: 5px 15px 5px 0;
+}
+
+#sketchname-1::placeholder {
+    color: #969696;
+}
+
+#sketchname-2 {
     font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
     height: 27px;
     width: 200px;
@@ -911,7 +906,7 @@ input[type=range]::-ms-tooltip {
     width: 450px;
     height: 100vh;
     right: 0;
-    top: 50px;
+    top: 0;
     background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
     transition: 0.2s ease-in-out;
     display: none;
@@ -925,7 +920,7 @@ input[type=range]::-ms-tooltip {
     position: absolute;
     padding: 10px;
     left: 425px;
-    top: 130px;
+    top: 80px;
     background: white;
     width: calc(100% - 630px);
     height: calc(100vh - 230px);
@@ -941,7 +936,7 @@ input[type=range]::-ms-tooltip {
     position: absolute;
     padding: 10px;
     right: 100px;
-    top: 150px;
+    top: 90px;
     background: white;
     width: 240px;
     height: 340px;
@@ -957,7 +952,7 @@ input[type=range]::-ms-tooltip {
     position: absolute;
     padding: 10px;
     right: 100px;
-    top: 540px;
+    top: 480px;
     background: white;
     width: 240px;
     height: 340px;
@@ -971,6 +966,11 @@ input[type=range]::-ms-tooltip {
     grid-template-rows: auto;
     justify-items: center;
     align-items: center;
+    color: #323232;
+}
+
+.dark-theme #pin-head {
+    color: #fff;
 }
 
 #pin-inner {
@@ -1255,22 +1255,22 @@ h1 {
     padding: 0;
 }
 
-.topButtonsContainer {
+#topButtonsContainer {
     display: flex;
     justify-content: space-between;
     height: 50px;
     background: white;
 }
 
-.dark-theme .topButtonsContainer {
+.dark-theme #topButtonsContainer {
     background: #323232;
 }
 
-.topLeftButtons {
+#topLeftButtons {
     margin-left: 240px;
 }
 
-.topRightButtons {
+#topRightButtons {
     margin-left: auto;
     margin-right: 10px;
 }

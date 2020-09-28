@@ -92,10 +92,6 @@ function createTopButtons() {
     helpLabel.elt.className = 'label inlineLabel';
     helpLabel.parent(topLeftButtons);
     helpLabel.hide();
-
-    sketchNameLabel = createP('Untitled Sketch');
-    sketchNameLabel.elt.className = 'label inlineLabel sketchNameLabel';
-    sketchNameLabel.parent(topRightButtons);
 }
 
 function createBasicElements() {
@@ -729,8 +725,7 @@ function createElementOptions() {
         setHelpText('');
     });
 
-    sfcheckbox = createCheckbox('Sync ticks to frames', true);
-    //document.getElementsByTagName('label')[0].innerHTML = 'Sync ticks to frames<span style="color: #c83232">.</span>';
+    sfcheckbox = createCheckbox('Sync Ticks to Frames', true);
     sfcheckbox.hide();
     sfcheckbox.changed(function () {
         syncFramerate = sfcheckbox.checked();
@@ -770,9 +765,8 @@ function createElementOptions() {
         setHelpText('');
     });
 
-    bpTickTimeCB = createCheckbox('Bypass min. tick time', true);
-    //document.getElementsByTagName('label')[1].innerHTML = 'Bypass min. tick time<span style="color: #c83232">.</span>';
-    document.getElementsByTagName('input')[5].className = 'tickTimeCB';
+    bpTickTimeCB = createCheckbox('Bypass min. ms/tick', true);
+    document.getElementsByTagName('input')[6].className = 'tickTimeCB';
     document.getElementsByTagName('label')[1].className = 'tickTimeCB';
     bpTickTimeCB.hide();
     bpTickTimeCB.checked(false);
@@ -793,13 +787,13 @@ function createElementOptions() {
     bpTickTimeCB.elt.className = 'checkbox';
     bpTickTimeCB.parent(leftSideContainer);
     bpTickTimeCB.mouseOver(function () {
-        setHelpText('Synchronize simulation without using a minimum time per tick');
+        setHelpText('Simulate with full frame rate speed');
     });
     bpTickTimeCB.mouseOut(function () {
         setHelpText('');
     });
 
-    tickTimeLabel = createP('Minimum time per tick:');
+    tickTimeLabel = createP('Minimum ms/tick');
     tickTimeLabel.hide();
     tickTimeLabel.elt.className = 'label leftLabel';
     tickTimeLabel.parent(leftSideContainer);
@@ -823,7 +817,7 @@ function createElementOptions() {
     tickTimeMsLabel.elt.className = 'label msLabel';
     tickTimeMsLabel.parent(leftSideContainer);
 
-    multDescLabel = createP('Speed Multiplier:');
+    multDescLabel = createP('Speed Multiplier');
     multDescLabel.hide();
     multDescLabel.elt.className = 'label leftLabel disabledLabel';
     multDescLabel.parent(leftSideContainer);
@@ -864,17 +858,33 @@ function createDialogElements() {
         setHelpText('');
     });
 
-    sketchNameInput = document.getElementById('sketchname-input');
+    sketchNameInput = document.getElementById('sketchname-2');
     sketchNameInput.onkeyup = function () {
         if (!moduleNameInput.disabled && !moduleNameChanged) {
             moduleNameInput.value = sketchNameInput.value;
         }
+        topSketchInput.value = sketchNameInput.value;
         reDraw();
     };
     sketchNameInput.addEventListener('mouseenter', function () {
         setHelpText('This is the file name of the sketch');
     });
     sketchNameInput.addEventListener('mouseleave', function () {
+        setHelpText('');
+    });
+
+    topSketchInput = document.getElementById('sketchname-1');
+    topSketchInput.onkeyup = function () {
+        if (!moduleNameInput.disabled && !moduleNameChanged) {
+            moduleNameInput.value = topSketchInput.value;
+        }
+        sketchNameInput.value = topSketchInput.value;
+        reDraw();
+    };
+    topSketchInput.addEventListener('mouseenter', function () {
+        setHelpText('This is the file name of the sketch');
+    });
+    topSketchInput.addEventListener('mouseleave', function () {
         setHelpText('');
     });
 
@@ -916,19 +926,27 @@ function createTopRightButtons() {
     importButton.elt.className = 'button';
     importButton.parent(topRightButtons);
     importButton.mouseOver(function () {
-        setHelpText('Import a JSON file');
+        setHelpText('Import a JSON file (Clears the current sketch!)');
     });
     importButton.mouseOut(function () {
         setHelpText('');
     });
 
-    saveDialogButton = createButton('<i class="fas fa-save icon"></i> Save');
-    saveDialogButton.mousePressed(saveDialogClicked);
+    if (getCookieValue('access_token') !== '') {
+        saveDialogButton = createButton('<i class="fas fa-save icon"></i> Save');
+        saveDialogButton.mousePressed(saveDialogClicked);
+        saveDialogButton.mouseOver(function () {
+            setHelpText('Saves the Sketch');
+        });
+    } else {
+        saveDialogButton = createButton('<i class="fas fa-file-download icon"></i> Download');
+        saveDialogButton.mousePressed(saveClicked);
+        saveDialogButton.mouseOver(function () {
+            setHelpText('Download as JSON');
+        });
+    }
     saveDialogButton.elt.className = 'button';
     saveDialogButton.parent(topRightButtons);
-    saveDialogButton.mouseOver(function () {
-        setHelpText('Saves the sketch');
-    });
     saveDialogButton.mouseOut(function () {
         setHelpText('');
     });
@@ -937,7 +955,7 @@ function createTopRightButtons() {
         dashboardButton = createButton('<i class="fas fa-th icon"></i> Dashboard');
         dashboardButton.style('min-width', dashboardButton.width + 20 + 'px');
         dashboardButton.mouseOver(function () {
-            setHelpText('Get back to the dashboard');
+            setHelpText('Get back to the Dashboard');
         });
         dashboardButton.mouseOut(function () {
             setHelpText('');

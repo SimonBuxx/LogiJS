@@ -43,6 +43,8 @@ function saveSketch(filename, callback) {
         }
     }
     if (getCookieValue('access_token') !== '') {
+        sketchNameInput.value = filename.split('.')[0];
+        topSketchInput.value = filename.split('.')[0];
         socket.emit('saveUserSketch', { file: filename, json: json, access_token: getCookieValue('access_token') });
     } else {
         saveJSON(json, filename); // Save the file as json (asks for directory...)
@@ -60,7 +62,6 @@ function loadSketch(file) {
         socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
         socket.on('userSketchData', (data) => {
             if (data.success === true) {
-                setSketchNameLabel(file.split('.')[0]);
                 load(data.data);
             } else {
                 fileNotFoundError();
@@ -76,7 +77,6 @@ function loadSketchFromJSON(data, file) {
     setLoading(true);
     loadFile = file;
     document.title = 'LogiJS: ' + file;
-    setSketchNameLabel(file);
     load(data);
 }
 
@@ -357,8 +357,10 @@ function loadURLSketch() {
     if (loadfile !== '') {
         if (loadfile.indexOf('lib') === 0) {
             sketchNameInput.value = loadfile.substring(10);
+            topSketchInput.value = loadfile.substring(10);
         } else {
             sketchNameInput.value = loadfile;
+            topSketchInput.value = loadfile;
         }
         setLoading(true);
         loadSketch(loadfile + '.json');
@@ -377,13 +379,5 @@ function loadURLSketch() {
             }
             socket.off('sketchDescription');
         });
-    }
-}
-
-function setSketchNameLabel(name) {
-    if (name.startsWith('library__')) {
-        sketchNameLabel.elt.innerHTML = name.slice(10);
-    } else {
-        sketchNameLabel.elt.innerHTML = name;
     }
 }

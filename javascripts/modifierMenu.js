@@ -132,13 +132,13 @@ function positionModifierElements() {
     //inputIsTopBox.position(modifierMenuX + 280, modifierMenuY + 120);
 
     document.getElementById('clock-modifier').style.left = modifierMenuX + 240 + 'px';
-    document.getElementById('clock-modifier').style.top = modifierMenuY + 50 + 'px';
+    document.getElementById('clock-modifier').style.top = modifierMenuY + 'px';
 
     document.getElementById('output-modifier').style.left = modifierMenuX + 240 + 'px';
-    document.getElementById('output-modifier').style.top = modifierMenuY + 50 + 'px';
+    document.getElementById('output-modifier').style.top = modifierMenuY + 'px';
 
     document.getElementById('label-modifier').style.left = modifierMenuX + 240 + 'px';
-    document.getElementById('label-modifier').style.top = modifierMenuY + 50 + 'px';
+    document.getElementById('label-modifier').style.top = modifierMenuY + 'px';
 }
 
 function newIsTopState() {
