@@ -6,7 +6,7 @@ function createTopButtons() {
     });
     modifierModeButton.elt.className = 'button active';
     modifierModeButton.mouseOver(function () {
-        setHelpText('Draws wires and changes element properties');
+        setHelpText('Draw wires and change element properties');
     });
     modifierModeButton.mouseOut(function () {
         setHelpText('');
@@ -18,7 +18,7 @@ function createTopButtons() {
     deleteButton.mousePressed(deleteClicked);
     deleteButton.elt.className = 'button';
     deleteButton.mouseOver(function () {
-        setHelpText('Deletes wires and elements');
+        setHelpText('Delete wires and elements');
     });
     deleteButton.mouseOut(function () {
         setHelpText('');
@@ -31,7 +31,7 @@ function createTopButtons() {
     simButton.elt.className = 'button';
     simButton.style('min-width', simButton.width + 10 + 'px');
     simButton.mouseOver(function () {
-        setHelpText('Starts and stops the simulation');
+        setHelpText('Start and stop the Simulation');
     });
     simButton.mouseOut(function () {
         setHelpText('');
@@ -82,7 +82,7 @@ function createTopButtons() {
     moduleButton.parent(topLeftButtons);
 
     moduleButton.mouseOver(function () {
-        setHelpText('Configure this sketch as a custom module');
+        setHelpText('Configure this Sketch as a Custom Module');
     });
     moduleButton.mouseOut(function () {
         setHelpText('');
@@ -568,7 +568,7 @@ function createCustomImportButton() {
     });
     customButton.elt.className = 'buttonLeft';
     customButton.mouseOver(function () {
-        setHelpText('Import your own sketches as custom modules');
+        setHelpText('Import your own Sketches as Custom Modules');
     });
     customButton.mouseOut(function () {
         setHelpText('');
@@ -612,7 +612,7 @@ function createElementOptions() {
     gateInputSelect.parent(leftSideContainer);
     gateInputSelect.value('2');
     gateInputSelect.mouseOver(function () {
-        setHelpText('Define the number of gate inputs');
+        setHelpText('Define the number of Gate Inputs');
     });
     gateInputSelect.mouseOut(function () {
         setHelpText('');
@@ -671,7 +671,7 @@ function createElementOptions() {
     bitSelect.parent(leftSideContainer);
     bitSelect.value('4');
     bitSelect.mouseOver(function () {
-        setHelpText('Define the number of input bits');
+        setHelpText('Define the number of Input Bits');
     });
     bitSelect.mouseOut(function () {
         setHelpText('');
@@ -687,7 +687,7 @@ function createElementOptions() {
     counterBitSelect.parent(leftSideContainer);
     counterBitSelect.value('4');
     counterBitSelect.mouseOver(function () {
-        setHelpText('Define the number of output bits');
+        setHelpText('Define the number of Output Bits');
     });
     counterBitSelect.mouseOut(function () {
         setHelpText('');
@@ -703,7 +703,7 @@ function createElementOptions() {
     decoderBitSelect.parent(leftSideContainer);
     decoderBitSelect.value('2');
     decoderBitSelect.mouseOver(function () {
-        setHelpText('Define the number of input bits');
+        setHelpText('Define the number of Input Bits');
     });
     decoderBitSelect.mouseOut(function () {
         setHelpText('');
@@ -719,7 +719,7 @@ function createElementOptions() {
     multiplexerBitSelect.parent(leftSideContainer);
     multiplexerBitSelect.value('1');
     multiplexerBitSelect.mouseOver(function () {
-        setHelpText('Define the address width of the element');
+        setHelpText('Define the Address Width of the element');
     });
     multiplexerBitSelect.mouseOut(function () {
         setHelpText('');
@@ -759,7 +759,7 @@ function createElementOptions() {
     sfcheckbox.elt.className = 'checkbox';
     sfcheckbox.parent(leftSideContainer);
     sfcheckbox.mouseOver(function () {
-        setHelpText('Synchronize the simulation speed with the frame rate');
+        setHelpText('Sync the Simulation Speed with the Frame Rate');
     });
     sfcheckbox.mouseOut(function () {
         setHelpText('');
@@ -787,7 +787,7 @@ function createElementOptions() {
     bpTickTimeCB.elt.className = 'checkbox';
     bpTickTimeCB.parent(leftSideContainer);
     bpTickTimeCB.mouseOver(function () {
-        setHelpText('Simulate with full frame rate speed');
+        setHelpText('Simulate with full Frame Rate Speed');
     });
     bpTickTimeCB.mouseOut(function () {
         setHelpText('');
@@ -806,7 +806,7 @@ function createElementOptions() {
     tickTimeSlider.elt.className = 'slider sliderLeft';
     tickTimeSlider.parent(leftSideContainer);
     tickTimeSlider.mouseOver(function () {
-        setHelpText('Sets the minimum time per simulation tick');
+        setHelpText('Set the minimum time per Simulation Tick');
     });
     tickTimeSlider.mouseOut(function () {
         setHelpText('');
@@ -831,7 +831,7 @@ function createElementOptions() {
     multiplicatorSlider.elt.className = 'slider sliderLeft';
     multiplicatorSlider.parent(leftSideContainer);
     multiplicatorSlider.mouseOver(function () {
-        setHelpText('Speeds up the simulation at higher CPU cost');
+        setHelpText('Speed up the Simulation at higher CPU cost');
     });
     multiplicatorSlider.mouseOut(function () {
         setHelpText('');
@@ -852,7 +852,7 @@ function createDialogElements() {
         showModulePreviewer();
     };
     moduleNameInput.addEventListener('mouseenter', function () {
-        setHelpText('This is the text written on the module');
+        setHelpText('This is the Text written on the Module');
     });
     moduleNameInput.addEventListener('mouseleave', function () {
         setHelpText('');
@@ -867,7 +867,7 @@ function createDialogElements() {
         reDraw();
     };
     sketchNameInput.addEventListener('mouseenter', function () {
-        setHelpText('This is the file name of the sketch');
+        setHelpText('This is the File Name of the Sketch');
     });
     sketchNameInput.addEventListener('mouseleave', function () {
         setHelpText('');
@@ -882,7 +882,7 @@ function createDialogElements() {
         reDraw();
     };
     topSketchInput.addEventListener('mouseenter', function () {
-        setHelpText('This is the file name of the sketch');
+        setHelpText('This is the File Name of the Sketch');
     });
     topSketchInput.addEventListener('mouseleave', function () {
         setHelpText('');
@@ -894,7 +894,7 @@ function createDialogElements() {
         descInput.disabled = true;
     }
     descInput.addEventListener('mouseenter', function () {
-        setHelpText('This is the description displayed in the dashboard');
+        setHelpText('This is the Description displayed in the Dashboard');
     });
     descInput.addEventListener('mouseleave', function () {
         setHelpText('');
@@ -902,11 +902,11 @@ function createDialogElements() {
 
     if (getCookieValue('access_token') !== '') {
         document.getElementById('save-button').addEventListener('mouseenter', function () {
-            setHelpText('Save this sketch to the dashboard');
+            setHelpText('Save this Sketch to the Dashboard');
         });
     } else {
         document.getElementById('save-button').addEventListener('mouseleave', function () {
-            setHelpText('Download this sketch as a JSON file');
+            setHelpText('Download this Sketch as a JSON File');
         });
     }
     document.getElementById('save-button').addEventListener('mouseleave', function () {
@@ -926,7 +926,7 @@ function createTopRightButtons() {
     importButton.elt.className = 'button';
     importButton.parent(topRightButtons);
     importButton.mouseOver(function () {
-        setHelpText('Import a JSON file (Clears the current sketch!)');
+        setHelpText('Import a JSON File (Clears the current Sketch!)');
     });
     importButton.mouseOut(function () {
         setHelpText('');
@@ -964,7 +964,7 @@ function createTopRightButtons() {
         dashboardButton = createButton('<i class="fa fa-sign-in-alt icon"></i> Login');
         dashboardButton.style('min-width', dashboardButton.width + 5 + 'px');
         dashboardButton.mouseOver(function () {
-            setHelpText('Log into your LogiJS account');
+            setHelpText('Log into your LogiJS Account');
         });
         dashboardButton.mouseOut(function () {
             setHelpText('');

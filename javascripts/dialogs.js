@@ -200,7 +200,7 @@ function custom_element_hovered(r) {
     if (importSketchData.looks[r].outputs > 0) {
         PWp5.showImportPreview(importSketchData.looks[r], 0, 0);
     } else {
-        document.getElementsByClassName('preview-span')[r].innerHTML = '<i class="fa fa-exclamation-circle"></i> This sketch has no outputs.';
+        document.getElementsByClassName('preview-span')[r].innerHTML = '<i class="fa fa-exclamation-circle"></i> This Sketch has no Outputs';
         PWp5.showNoOutputs();
     }
 }
