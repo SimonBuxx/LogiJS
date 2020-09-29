@@ -98,8 +98,8 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'moveSel':
-                conpoints = act.actionObject[1];
-                diodes = act.actionObject[3];
+                conpoints = _.cloneDeep(act.actionObject[1]);
+                diodes = _.cloneDeep(act.actionObject[3]);
 
                 let retrievedWires = [];
                 let retrievedIndizes = [];
@@ -162,7 +162,7 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'addWire':
-                conpoints = act.actionObject[1];
+                conpoints = _.cloneDeep(act.actionObject[1]);
                 for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
                     if (act.actionObject[0][i][0] === 'a') {
                         wires.splice(act.actionObject[0][i][1], 1);
@@ -175,7 +175,7 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'delWire':
-                conpoints = act.actionObject[1];
+                conpoints = _.cloneDeep(act.actionObject[1]);
                 for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
                     if (act.actionObject[0][i][0] === 'a') {
                         wires.splice(act.actionObject[0][i][1], 1);
@@ -294,8 +294,8 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'moveSel':
-                conpoints = act.actionObject[2];
-                diodes = act.actionObject[4];
+                conpoints = _.cloneDeep(act.actionObject[2]);
+                diodes = _.cloneDeep(act.actionObject[4]);
 
                 let retrievedIndizes = [];
 
@@ -356,7 +356,7 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'addWire':
-                conpoints = act.actionObject[2];
+                conpoints = _.cloneDeep(act.actionObject[2]);
                 for (let i = 0; i < act.actionObject[0].length; i++) {
                     if (act.actionObject[0][i][0] === 'a') {
                         wires.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
@@ -369,7 +369,7 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'delWire':
-                conpoints = act.actionObject[2];
+                conpoints = _.cloneDeep(act.actionObject[2]);
                 for (let i = 0; i < act.actionObject[0].length; i++) {
                     if (act.actionObject[0][i][0] === 'a') {
                         console.log('redoing add');
