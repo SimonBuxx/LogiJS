@@ -41,9 +41,9 @@ function ClickBox(x, y, w, h, transform) {
         Draws a rect around the clickBox (debugging purposes)
     */
     this.markClickBox = function () {
-        stroke(0);
-        strokeWeight(2);
-        fill(0, 128);
+        stroke(50);
+        strokeWeight(3);
+        fill(0, 80);
         rect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
     };
 

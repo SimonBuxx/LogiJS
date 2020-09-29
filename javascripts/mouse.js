@@ -284,8 +284,6 @@ function mousePressed() {
                             }
                             setSelectMode('drag');
                         } else {
-                            pushMoveSelectionAction(sDragX2 - initX, sDragY2 - initY, selectionBox.x - selectionBox.w / 2, selectionBox.y - selectionBox.h / 2,
-                                selectionBox.x + selectionBox.w / 2, selectionBox.y + selectionBox.h / 2);
                             finishSelection();
                             enterModifierMode();
                             initX = 0;

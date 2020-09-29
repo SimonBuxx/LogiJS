@@ -61,9 +61,9 @@ function createTopButtons() {
     // Activates the mode for area selecting
     selectButton = createButton('<i class="fas fa-object-group icon"></i> Select');
     selectButton.mousePressed(startSelect);
-    selectButton.elt.style.cursor = 'default';
+    //selectButton.elt.style.cursor = 'default';
     selectButton.elt.className = 'button';
-    selectButton.elt.title = 'Coming soon!';
+    //selectButton.elt.title = 'Coming soon!';
     selectButton.parent(topLeftButtons);
 
     moduleButton = createButton('<i class="fas fa-tools icon"></i> Module');

@@ -9,80 +9,86 @@ function handleSelection(x1, y1, x2, y2) {
     selectionBox.updatePosition(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
     selectionBox.updateSize(x2 - x1, y2 - y1);
     selectionBox.setTransform(transform);
-    selection = [];
-    selectionConpoints = _.cloneDeep(conpoints);
-    selectionWires = _.cloneDeep(wires);
-    for (let i = 0; i < gates.length; i++) {
-        if (gates[i].x >= x1 && gates[i].x <= x2 && gates[i].y >= y1 && gates[i].y <= y2) {
-            gates[i].marked = true;
-            selection.push([gates[i], i]);
-        }
-    }
-    for (let i = 0; i < customs.length; i++) {
-        if (customs[i].visible && (customs[i].x >= x1 && customs[i].x <= x2 && customs[i].y >= y1 && customs[i].y <= y2)) {
-            customs[i].marked = true;
-            selection.push([customs[i], i]);
-        }
-    }
-    for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].x >= x1 && inputs[i].x <= x2 && inputs[i].y >= y1 && inputs[i].y <= y2) {
-            inputs[i].marked = true;
-            selection.push([inputs[i], i]);
-        }
-    }
-    for (let i = 0; i < outputs.length; i++) {
-        if (outputs[i].x >= x1 && outputs[i].x <= x2 && outputs[i].y >= y1 && outputs[i].y <= y2) {
-            outputs[i].marked = true;
-            selection.push([outputs[i], i]);
-        }
-    }
-    for (let i = 0; i < conpoints.length; i++) {
-        if (conpoints[i].x >= x1 && conpoints[i].x <= x2 && conpoints[i].y >= y1 && conpoints[i].y <= y2) {
-            conpoints[i].marked = true;
-            selection.push([conpoints[i], i]);
-        }
-    }
-    for (let i = 0; i < diodes.length; i++) {
-        if (diodes[i].x >= x1 && diodes[i].x <= x2 && diodes[i].y >= y1 && diodes[i].y <= y2) {
-            diodes[i].marked = true;
-            selection.push([diodes[i], i]);
-        }
-    }
-    for (let i = 0; i < labels.length; i++) {
-        if (labels[i].x >= x1 && labels[i].x <= x2 && labels[i].y >= y1 && labels[i].y <= y2) {
-            labels[i].marked = true;
-            selection.push([labels[i], i]);
-        }
-    }
-    for (let i = 0; i < segDisplays.length; i++) {
-        if (segDisplays[i].x >= x1 && segDisplays[i].x <= x2 && segDisplays[i].y >= y1 && segDisplays[i].y <= y2) {
-            segDisplays[i].marked = true;
-            selection.push([segDisplays[i], i]);
-        }
-    }
-    /*for (let i = 0; i < wires.length; i++) {
+
+    selectionStartPosX = selectionBox.x;
+    selectionStartPosY = selectionBox.y;
+
+    selectionLog = [];
+    selWireIndizes = [];
+    selDiodeIndizes = [];
+    selGatesIndizes = [];
+    selInputsIndizes = [];
+    selOutputsIndizes = [];
+    selLabelIndizes = [];
+    selSegDisplayIndizes = [];
+    selCustomIndizes = [];
+    selConpointIndizes = [];
+
+    for (let i = 0; i < wires.length; i++) {
         if (((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) &&
             (wires[i].startX <= x2 || x2 >= wires[i].endX)) && (wires[i].startY >= y1 && wires[i].endY <= y2)) ||
             ((wires[i].direction === 1) && ((wires[i].startY >= y1 || y1 <= wires[i].endY) &&
                 (wires[i].startY <= y2 || y2 >= wires[i].endY)) && (wires[i].startX >= x1 && wires[i].endX <= x2))) {
-            //wires[i].marked = true;
-            wires[i].wireFlag = true;
-            selection.push([wires[i], i]);
+            wires[i].marked = true;
+            selWireIndizes.push(i);
         }
-    }*/
-    
-    /*greySegments = [];
-    for (let i = 0; i < segments.length; i++) {
-        if (((segments[i].direction === 0) && ((segments[i].startX >= x1 || x1 <= segments[i].endX) &&
-            (segments[i].startX <= x2 || x2 >= segments[i].endX)) && (segments[i].startY >= y1 && segments[i].endY <= y2)) ||
-            ((segments[i].direction === 1) && ((segments[i].startY >= y1 || y1 <= segments[i].endY) &&
-                (segments[i].startY <= y2 || y2 >= segments[i].endY)) && (segments[i].startX >= x1 && segments[i].endX <= x2))) {
-            greySegments.push(_.cloneDeep(segments[i]));
-            segments[i].marked = true;
-            segments[i].wireFlag = false;
-            selection.push([segments[i], i]);
+    }
+
+    for (let i = 0; i < diodes.length; i++) {
+        if (diodes[i].x >= x1 && diodes[i].x <= x2 && diodes[i].y >= y1 && diodes[i].y <= y2) {
+            diodes[i].marked = true;
+            selDiodeIndizes.push(i);
         }
-    }*/
+    }
+
+    for (let i = 0; i < gates.length; i++) {
+        if (gates[i].x >= x1 && gates[i].x <= x2 && gates[i].y >= y1 && gates[i].y <= y2) {
+            gates[i].marked = true;
+            selGatesIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].x >= x1 && inputs[i].x <= x2 && inputs[i].y >= y1 && inputs[i].y <= y2) {
+            inputs[i].marked = true;
+            selInputsIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < outputs.length; i++) {
+        if (outputs[i].x >= x1 && outputs[i].x <= x2 && outputs[i].y >= y1 && outputs[i].y <= y2) {
+            outputs[i].marked = true;
+            selOutputsIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < labels.length; i++) {
+        if (labels[i].x >= x1 && labels[i].x <= x2 && labels[i].y >= y1 && labels[i].y <= y2) {
+            labels[i].marked = true;
+            selLabelIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < segDisplays.length; i++) {
+        if (segDisplays[i].x >= x1 && segDisplays[i].x <= x2 && segDisplays[i].y >= y1 && segDisplays[i].y <= y2) {
+            segDisplays[i].marked = true;
+            selSegDisplayIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < customs.length; i++) {
+        if (customs[i].visible && (customs[i].x >= x1 && customs[i].x <= x2 && customs[i].y >= y1 && customs[i].y <= y2)) {
+            customs[i].marked = true;
+            selCustomIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < conpoints.length; i++) {
+        if (conpoints[i].x >= x1 && conpoints[i].x <= x2 && conpoints[i].y >= y1 && conpoints[i].y <= y2) {
+            conpoints[i].marked = true;
+            selConpointIndizes.push(i);
+        }
+    }
 }
 
 /*
@@ -90,45 +96,41 @@ function handleSelection(x1, y1, x2, y2) {
 */
 function moveSelection(dx, dy, moveConpointsAndWires = true) {
     selectionBox.updatePosition(selectionBox.x + dx, selectionBox.y + dy);
-    for (let i = 0; i < selection.length; i++) {
-        switch (selection[i][0].id.charAt(0)) {
-            case 'o':
-                outputs[selection[i][1]].alterPosition(dx, dy);
-                break;
-            case 'i':
-                inputs[selection[i][1]].alterPosition(dx, dy);
-                break;
-            case 's':
-                segDisplays[selection[i][1]].alterPosition(dx, dy);
-                break;
-            case 'l':
-                labels[selection[i][1]].alterPosition(dx, dy);
-                break;
-            case 'd':
-                diodes[selection[i][1]].alterPosition(dx, dy);
-                break;
-            case 'p':
-                if (moveConpointsAndWires) {
-                    conpoints[selection[i][1]].alterPosition(dx, dy);
-                }
-                break;
-            case 'c':
-                customs[selection[i][1]].alterPosition(dx, dy);
-                break;
-            case 'g':
-                gates[selection[i][1]].alterPosition(dx, dy);
-                break;
-            case 'w':
-                if (moveConpointsAndWires) {
-                    //if (selection[i][0].wireFlag) {
-                        wires[selection[i][1]].alterPosition(dx, dy);
-                    //} else {
-                    //    segments[selection[i][1]].alterPosition(dx, dy);
-                    //}
-                }
-                break;
-            default:
-        }
+
+    for (let i = 0; i < selWireIndizes.length; i++) {
+        wires[selWireIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selDiodeIndizes.length; i++) {
+        diodes[selDiodeIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selGatesIndizes.length; i++) {
+        gates[selGatesIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selInputsIndizes.length; i++) {
+        inputs[selInputsIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selOutputsIndizes.length; i++) {
+        outputs[selOutputsIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selLabelIndizes.length; i++) {
+        labels[selLabelIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selSegDisplayIndizes.length; i++) {
+        segDisplays[selSegDisplayIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selCustomIndizes.length; i++) {
+        customs[selCustomIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selConpointIndizes.length; i++) {
+        conpoints[selConpointIndizes[i]].alterPosition(dx, dy);
     }
 }
 
@@ -136,20 +138,150 @@ function moveSelection(dx, dy, moveConpointsAndWires = true) {
     Recalculates all wire segments and redoes the connection points
 */
 function finishSelection() {
-    /*segments = [];
-    for (let i = 0; i < wires.length; i++) {
-        if (wires[i].startX === wires[i].endX) {
-            // Vertical wire, split in n vertical segments
-            for (let j = 0; j < (wires[i].endY - wires[i].startY) / GRIDSIZE; j++) {
-                segments.push(new Wire(1, wires[i].startX, (wires[i].startY + j * GRIDSIZE), false, transform));
+    let selectionOffsetX = selectionBox.x - selectionStartPosX;
+    let selectionOffsetY = selectionBox.y - selectionStartPosY;
+
+    for (let i = 0; i < selWireIndizes.length; i++) {
+        selectionLog.push(['mWire', selWireIndizes[i]]);
+    }
+
+    integrateWires();
+    
+    let conpointsBefore = _.cloneDeep(conpoints);
+
+    for (let i = 0; i < selConpointIndizes.length; i++) {
+        conpointsBefore[selConpointIndizes[i]].alterPosition(-selectionOffsetX, -selectionOffsetY);
+        conpointsBefore[selConpointIndizes[i]].marked = false;
+        conpoints[selConpointIndizes[i]].marked = false;
+    }
+
+    let diodesBefore = _.cloneDeep(diodes);
+    for (let i = 0; i < selDiodeIndizes.length; i++) {
+        diodesBefore[selDiodeIndizes[i]].alterPosition(-selectionOffsetX, -selectionOffsetY);
+        diodesBefore[selDiodeIndizes[i]].marked = false;
+        diodes[selDiodeIndizes[i]].marked = false;
+    }
+
+    doConpoints();
+
+    let conpointsAfter = _.cloneDeep(conpoints);
+    let diodesAfter = _.cloneDeep(diodes);
+    pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes], 
+        [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
+    if (selectionOffsetX === 0 && selectionOffsetY === 0) {
+        undo();
+    }
+}
+
+function integrateWires() {
+    // These are set true when a preview wire in that direction is 100% part of the existing wire
+    let overlapOverAllX = false;
+    let overlapOverAllY = false;
+
+    let xIndex = -1;
+    let yIndex = -1;
+
+    let deletedIndices = [];
+
+    let wiresToAdd = [];
+    let wiresToAddIndizes = [];
+
+    for (let i = selWireIndizes.length - 1; i >= 0; i--) {
+        wires[selWireIndizes[i]].marked = false; // Unmark all marked wires
+        wiresToAdd = wiresToAdd.concat(wires.splice(selWireIndizes[i], 1));
+        wiresToAddIndizes.push(selWireIndizes[i]);
+    }
+
+    for (let j = 0; j < wiresToAdd.length; j++) {
+        xIndex = -1;
+        yIndex = -1;
+        deletedIndices = [];
+        overlapOverAllX = false;
+        overlapOverAllY = false;
+        if (wiresToAdd[j].direction === 0) {
+            for (let i = 0; i < wires.length; i++) {
+                let overlap = wireOverlap(wiresToAdd[j], wires[i]);
+                if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 0 && wiresToAdd[j].startY === wires[i].startY &&
+                    (wiresToAdd[j].startX == wires[i].endX || wiresToAdd[j].startX == wires[i].startX || wiresToAdd[j].endX == wires[i].startX || wiresToAdd[j].endX == wires[i].endX))) { //jshint ignore:line
+                    if (xIndex >= 0) {
+                        let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY, false, transform);
+                        newWire.endX = Math.max(wires[xIndex].endX, wires[i].endX);
+                        newWire.endY = wires[xIndex].startY;
+                        if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
+                            selectionLog.push(['rWire', xIndex, wires[xIndex], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
+                            wires.splice(xIndex, 1, newWire);
+                            deletedIndices.push(i);
+                        } else {
+                            overlapOverAllX = true;
+                            selectionLog.push(['rWire', xIndex, wires[xIndex], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
+                        }
+                    } else {
+                        let newWire = new Wire(0, Math.min(wiresToAdd[j].startX, wires[i].startX), wiresToAdd[j].startY, false, transform);
+                        newWire.endX = Math.max(wiresToAdd[j].endX, wires[i].endX);
+                        newWire.endY = wiresToAdd[j].startY;
+                        if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
+                            selectionLog.push(['rWire', i, wires[i], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
+                            wires.splice(i, 1, newWire);
+                            xIndex = i;
+                        } else {
+                            overlapOverAllX = true;
+                            selectionLog.push(['rWire', i, wires[i], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
+                        }
+                    }
+                }
             }
-        } else if (wires[i].startY === wires[i].endY) {
-            // Horizontal wire, split in n horizontal segments
-            for (let j = 0; j < (wires[i].endX - wires[i].startX) / GRIDSIZE; j++) {
-                segments.push(new Wire(0, wires[i].startX + j * GRIDSIZE, wires[i].startY, false, transform));
+            if (xIndex < 0 && !overlapOverAllX) {
+                let newWire = new Wire(0, wiresToAdd[j].startX, wiresToAdd[j].startY, false, transform);
+                newWire.endX = wiresToAdd[j].endX;
+                newWire.endY = wiresToAdd[j].startY;
+                selectionLog.push(['aWire', wires.length, newWire, wiresToAddIndizes[j]]);
+                wires.push(newWire);
+            }
+        } else {
+            for (let i = 0; i < wires.length; i++) {
+                let overlap = wireOverlap(wiresToAdd[j], wires[i]);
+                // If there's an overlap or the wires are adjacent
+                if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 1 && wiresToAdd[j].startX === wires[i].startX &&
+                    (wiresToAdd[j].startY == wires[i].endY || wiresToAdd[j].startY == wires[i].startY || wiresToAdd[j].endY == wires[i].startY || wiresToAdd[j].endY == wires[i].endY))) { //jshint ignore:line
+                    if (yIndex >= 0) {
+                        let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false, transform);
+                        newWire.endX = wires[yIndex].startX;
+                        newWire.endY = Math.max(wires[yIndex].endY, wires[i].endY);
+                        if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
+                            selectionLog.push(['rWire', yIndex, wires[yIndex], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
+                            wires.splice(yIndex, 1, newWire);
+                            deletedIndices.push(i);
+                        } else {
+                            overlapOverAllY = true;
+                            selectionLog.push(['rWire', yIndex, wires[yIndex], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
+                        }
+                    } else {
+                        let newWire = new Wire(1, wiresToAdd[j].startX, Math.min(wiresToAdd[j].startY, wires[i].startY), false, transform);
+                        newWire.endX = wiresToAdd[j].startX;
+                        newWire.endY = Math.max(wiresToAdd[j].endY, wires[i].endY);
+                        if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
+                            selectionLog.push(['rWire', i, wires[i], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
+                            wires.splice(i, 1, newWire);
+                            yIndex = i;
+                        } else {
+                            overlapOverAllY = true;
+                            selectionLog.push(['rWire', i, wires[i], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
+                        }
+                    }
+                }
+            }
+
+            if (yIndex < 0 && !overlapOverAllY) {
+                let newWire = new Wire(1, wiresToAdd[j].startX, wiresToAdd[j].startY, false, transform);
+                newWire.endX = wiresToAdd[j].startX;
+                newWire.endY = wiresToAdd[j].endY;
+                selectionLog.push(['aWire', wires.length, newWire, wiresToAddIndizes[j]]);
+                wires.push(newWire);
             }
         }
-    }*/
-    //findLines();
-    doConpoints();
+
+        for (let i = deletedIndices.length - 1; i >= 0; i--) {
+            selectionLog.push(['dWire', deletedIndices[i], wires.splice(deletedIndices[i], 1)[0]]);
+        }
+    }
 }

@@ -28,6 +28,16 @@ let selection = [];
 let selectionConpoints = [];
 let selectionWires = [];
 
+let selWireIndizes = [];
+let selDiodeIndizes = [];
+let selGatesIndizes = [];
+let selInputsIndizes = [];
+let selOutputsIndizes = [];
+let selLabelIndizes = [];
+let selSegDisplayIndizes = [];
+let selCustomIndizes = [];
+let selConpointIndizes = [];
+
 /*
     These are the start coordinates for the wire preview elements
 */
@@ -103,6 +113,14 @@ let selectStartX = 0;
 let selectStartY = 0;
 let selectEndX = 0;
 let selectEndY = 0;
+
+/*
+    Position of the select box before dragging
+*/
+let selectionStartPosX = 0;
+let selectionStartPosY = 0;
+
+let selectionLog = [];
 
 let sDragX1 = 0;
 let sDragX2 = 0;
@@ -578,12 +596,6 @@ function clearItems() {
 function clearActionStacks() {
     actionUndo = [];
     actionRedo = [];
-}
-
-function pushMoveSelectionAction(dx, dy, x1, y1, x2, y2) {
-    if ((Math.abs(dx) >= GRIDSIZE || Math.abs(dy) >= GRIDSIZE) && selection.length > 0) {
-        pushUndoAction('moveSel', [dx, dy, x1, y1, x2, y2], [_.cloneDeep(selection), _.cloneDeep(selectionConpoints), _.cloneDeep(selectionWires)]);
-    }
 }
 
 function setActive(btn, clear = true) {
@@ -1619,7 +1631,7 @@ function updateUndoButtons() {
 }
 
 function configureButtons(mode) {
-    let toolbox, modifiers, simulation, customimport, savedialog, jsonimport, moduleimport;
+    let toolbox, modifiers, simulation, customimport, savedialog, jsonimport, moduleimport, select;
     if (mode === 'edit') {
         toolbox = false;
         modifiers = false;
@@ -1628,6 +1640,7 @@ function configureButtons(mode) {
         customimport = false;
         jsonimport = false;
         moduleimport = false;
+        select = false;
     } else if (mode === 'simulation') {
         toolbox = true;
         modifiers = true;
@@ -1636,6 +1649,7 @@ function configureButtons(mode) {
         customimport = true;
         jsonimport = false;
         moduleimport = true;
+        select = true;
     } else if (mode === 'savedialog') {
         toolbox = true;
         modifiers = true;
@@ -1644,6 +1658,7 @@ function configureButtons(mode) {
         customimport = true;
         jsonimport = true;
         moduleimport = true;
+        select = true;
     } else if (mode === 'customdialog') {
         toolbox = true;
         modifiers = true;
@@ -1652,6 +1667,7 @@ function configureButtons(mode) {
         customimport = false;
         jsonimport = true;
         moduleimport = true;
+        select = true;
     } else if (mode === 'loading') {
         toolbox = true;
         modifiers = true;
@@ -1660,6 +1676,7 @@ function configureButtons(mode) {
         customimport = true;
         jsonimport = true;
         moduleimport = true;
+        select = true;
     } else if (mode === 'moduleOptions') {
         toolbox = true;
         modifiers = true;
@@ -1668,6 +1685,7 @@ function configureButtons(mode) {
         customimport = true;
         jsonimport = true;
         moduleimport = false;
+        select = true;
     } else {
         toolbox = false;
         modifiers = false;
@@ -1676,6 +1694,7 @@ function configureButtons(mode) {
         customimport = false;
         jsonimport = false;
         moduleimport = false;
+        select = false;
     }
     andButton.elt.disabled = toolbox;
     orButton.elt.disabled = toolbox;
@@ -1703,7 +1722,7 @@ function configureButtons(mode) {
 
     modifierModeButton.elt.disabled = modifiers;
     deleteButton.elt.disabled = modifiers;
-    selectButton.elt.disabled = true;
+    selectButton.elt.disabled = select;
     if (!modifiers) {
         updateUndoButtons();
     } else {
@@ -1822,14 +1841,14 @@ function reDraw() {
         }
     }
 
-    /*if (controlMode === 'select' && selectMode === 'start') {
-        fill(0, 0, 0, 100); // Set the fill color to a semi-transparent black
+    if (controlMode === 'select' && selectMode === 'start') {
+        fill(0, 60); // Set the fill color to a semi-transparent black
         noStroke();
         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
         rect(Math.min(selectStartX, selectEndX), Math.min(selectStartY, selectEndY),
             Math.abs(selectStartX - selectEndX), Math.abs(selectStartY - selectEndY));
-    }*/
+    }
 
     // Reverse the scaling and translating to draw the stationary elements of the GUI
     scale(1 / transform.zoom);
