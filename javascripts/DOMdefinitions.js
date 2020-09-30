@@ -859,6 +859,20 @@ function createDialogElements() {
         setHelpText('');
     });
 
+    document.getElementById('copy-select-button').addEventListener('mouseenter', function () {
+        setHelpText('Copy this Sketch Part');
+    });
+    document.getElementById('copy-select-button').addEventListener('mouseleave', function () {
+        setHelpText('');
+    });
+
+    document.getElementById('delete-select-button').addEventListener('mouseenter', function () {
+        setHelpText('Delete this Sketch Part');
+    });
+    document.getElementById('delete-select-button').addEventListener('mouseleave', function () {
+        setHelpText('');
+    });
+
     moduleNameInput = document.getElementById('module-input');
     moduleNameInput.onkeyup = function () {
         moduleNameChanged = true;

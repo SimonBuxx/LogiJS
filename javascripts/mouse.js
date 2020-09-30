@@ -63,6 +63,9 @@ function mouseWheel(event) {
         }
         transform.zoom = (currentGridSize / GRIDSIZE);
         dragSpeed = 1 / transform.zoom;
+        if (selectMode === 'end') {
+            positionSelectionTools();
+        }
         if (!simRunning) {
             reDraw();
         }
@@ -217,6 +220,8 @@ function mouseDragged() {
             sDragX2 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
             sDragY2 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
         }
+    } else if (controlMode === 'select' && selectMode === 'end') {
+        positionSelectionTools();
     }
 }
 
@@ -283,6 +288,8 @@ function mousePressed() {
                                 initY = sDragY1;
                             }
                             setSelectMode('drag');
+                            document.getElementById('copy-select-button').disabled = true;
+                            document.getElementById('delete-select-button').disabled = true;
                         } else {
                             finishSelection();
                             enterModifierMode();

@@ -89,13 +89,19 @@ function handleSelection(x1, y1, x2, y2) {
             selConpointIndizes.push(i);
         }
     }
+
+    document.getElementById('select-tools').style.display = 'block';
+    document.getElementById('copy-select-button').disabled = true; // for now
+    document.getElementById('delete-select-button').disabled = true;
+    positionSelectionTools();
 }
 
 /*
     Moves the selected items by dx, dy
 */
-function moveSelection(dx, dy, moveConpointsAndWires = true) {
+function moveSelection(dx, dy) {
     selectionBox.updatePosition(selectionBox.x + dx, selectionBox.y + dy);
+    positionSelectionTools();
 
     for (let i = 0; i < selWireIndizes.length; i++) {
         wires[selWireIndizes[i]].alterPosition(dx, dy);
@@ -141,12 +147,14 @@ function finishSelection() {
     let selectionOffsetX = selectionBox.x - selectionStartPosX;
     let selectionOffsetY = selectionBox.y - selectionStartPosY;
 
+    document.getElementById('select-tools').style.display = 'none';
+
     for (let i = 0; i < selWireIndizes.length; i++) {
         selectionLog.push(['mWire', selWireIndizes[i]]);
     }
 
     integrateWires();
-    
+
     let conpointsBefore = _.cloneDeep(conpoints);
 
     for (let i = 0; i < selConpointIndizes.length; i++) {
@@ -166,7 +174,7 @@ function finishSelection() {
 
     let conpointsAfter = _.cloneDeep(conpoints);
     let diodesAfter = _.cloneDeep(diodes);
-    pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes], 
+    pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes],
         [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
     if (selectionOffsetX === 0 && selectionOffsetY === 0) {
         undo();
@@ -284,4 +292,9 @@ function integrateWires() {
             selectionLog.push(['dWire', deletedIndices[i], wires.splice(deletedIndices[i], 1)[0]]);
         }
     }
+}
+
+function positionSelectionTools() {
+    document.getElementById('select-tools').style.left = ((selectionBox.x + selectionBox.w / 2 + transform.dx + 2) * transform.zoom) + 240 - 200 + 'px';
+    document.getElementById('select-tools').style.top = ((selectionBox.y + transform.dy - selectionBox.h / 2 - 1) * transform.zoom) - 50 + 'px';
 }
