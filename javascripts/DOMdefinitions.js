@@ -65,6 +65,12 @@ function createTopButtons() {
     selectButton.elt.className = 'button';
     //selectButton.elt.title = 'Coming soon!';
     selectButton.parent(topLeftButtons);
+    selectButton.mouseOver(function () {
+        setHelpText('Select an area to move, copy or delete');
+    });
+    selectButton.mouseOut(function () {
+        setHelpText('');
+    });
 
     moduleButton = createButton('<i class="fas fa-tools icon"></i> Module');
     moduleButton.mousePressed(function () {
@@ -846,6 +852,13 @@ function createElementOptions() {
 }
 
 function createDialogElements() {
+    document.getElementById('logo').addEventListener('mouseenter', function () {
+        setHelpText('Go to Start Page');
+    });
+    document.getElementById('logo').addEventListener('mouseleave', function () {
+        setHelpText('');
+    });
+
     moduleNameInput = document.getElementById('module-input');
     moduleNameInput.onkeyup = function () {
         moduleNameChanged = true;

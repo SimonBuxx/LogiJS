@@ -10,7 +10,7 @@ function ConPoint(x, y, state, g) {
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
 
     this.marked = false;
-    this.markColor = color(150, 30, 30);
+    this.markColor = color(MRED, MGREEN, MBLUE);
 
     this.id = 'p' + Date.now() + Math.random();
 }

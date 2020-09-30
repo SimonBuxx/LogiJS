@@ -551,12 +551,12 @@ CustomSketch.prototype.pointInOutput = function (n, px, py) {
 */
 CustomSketch.prototype.show = function () {
     let x1, x2, y1, y2;
-    stroke(0);
+    fill(255);
     strokeWeight(3);
     if (this.marked) {
-        fill(MRED, MGREEN, MBLUE);
+        stroke(MRED, MGREEN, MBLUE);
     } else {
-        fill(255);
+        stroke(0);
     }
 
     // Draw the body
@@ -573,7 +573,11 @@ CustomSketch.prototype.show = function () {
     noStroke();
     textSize(this.textSize);
     textAlign(CENTER, CENTER);
-    fill(0);
+    if (this.marked) {
+        fill(MRED, MGREEN, MBLUE);
+    } else {
+        fill(0);
+    }
     if (Math.max(this.inputs.length - this.tops, this.outputs.length) % 2 !== 0 && textWidth(this.caption) >= this.w - 30 && Math.max(this.inputs.length - this.tops, this.outputs.length) >= 2 && this.direction % 2 === 0) {
         text(this.caption, this.x + this.w / 2, this.y + this.h / 2 - 15);
     } else {
@@ -678,10 +682,18 @@ CustomSketch.prototype.show = function () {
             }
         }
 
-        fill(0);
+        if (this.marked) {
+            fill(MRED, MGREEN, MBLUE);
+        } else {
+            fill(0);
+        }
 
         if (this.objects[INPNUM][i - 1].lbl === ">") {
-            stroke(0);
+            if (this.marked) {
+                stroke(MRED, MGREEN, MBLUE);
+            } else {
+                stroke(0);
+            }
             if (!this.objects[INPNUM][i - 1].isTop) {
                 switch (this.direction) {
                     case 0:
@@ -798,7 +810,11 @@ CustomSketch.prototype.show = function () {
             }
         }
 
-        fill(0);
+        if (this.marked) {
+            fill(MRED, MGREEN, MBLUE);
+        } else {
+            fill(0);
+        }
         noStroke();
         textSize(14);
         if (this.objects[OUTPNUM][i - 1].lbl !== "") {

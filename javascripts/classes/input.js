@@ -144,7 +144,8 @@ Input.prototype.show = function (order = 0) {
     if (this.state) {
         fill(this.highColor);
     } else if (this.marked) {
-        fill(MRED, MGREEN, MBLUE);
+        stroke(MRED, MGREEN, MBLUE);
+        fill(230);
     } else {
         fill(this.lowColor);
     }
@@ -154,17 +155,24 @@ Input.prototype.show = function (order = 0) {
     if (this.state) {
         fill(HARED, HAGREEN, HABLUE);
     } else if (this.marked) {
-        fill(MARED, MAGREEN, MABLUE);
+        fill(255);
     } else {
         fill(LARED, LAGREEN, LABLUE);
     }
     triangle(this.x + 2, this.y + 2, this.x + GRIDSIZE - 2, this.y + 2, this.x + 2, this.y + GRIDSIZE - 2);
     noFill();
-    stroke(0);
+    if (this.marked) {
+        stroke(MRED, MGREEN, MBLUE);
+    } else {
+        stroke(0);
+    }
     rect(this.x, this.y, this.w, this.h);
-
     if (this.framecount >= 0 && !this.clock) {
-        fill(0);
+        if (this.marked) {
+            fill(MRED, MGREEN, MBLUE);
+        } else {
+            fill(0);
+        }
         if (this.state) {
             strokeWeight(7);
         }
@@ -172,7 +180,11 @@ Input.prototype.show = function (order = 0) {
     }
 
     if (this.clock) {
-        stroke(0);
+        if (this.marked) {
+            stroke(MRED, MGREEN, MBLUE);
+        } else {
+            stroke(0);
+        }
         strokeWeight(3);
         line(this.x + 15, this.y + 6, this.x + 15, this.y + 15);
         line(this.x + 15, this.y + 15, this.x + 22, this.y + 20);

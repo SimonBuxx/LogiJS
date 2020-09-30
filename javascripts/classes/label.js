@@ -71,17 +71,21 @@ function Label(x, y, txt, transform) {
         strokeWeight(3);
         stroke(140);
         noStroke();
+        fill(150, 200);
+        rect(this.x, this.y - 15, this.w, this.h + 10);
         if (this.marked) {
             fill(MRED, MGREEN, MBLUE);
         } else {
-            fill(150, 200);
+            fill(50);
         }
-        rect(this.x, this.y - 15, this.w, this.h + 10);
-        fill(50);
         for (let i = 0; i < this.lines.length; i++) {
             rect(this.x, this.y - 15 + i * 30, 3, 30);
         }
-        fill(0);
+        if (this.marked) {
+            fill(255);
+        } else {
+            fill(0);
+        }
         for (let i = 0; i < this.lines.length; i++) {
             text(this.lines[i], this.x + 15, this.y - 9 + i * 30, this.w, this.h);
         }

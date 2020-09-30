@@ -111,7 +111,8 @@ Output.prototype.show = function (order = 0) {
     if (this.state) {
         fill(this.highColor);
     } else if (this.marked) {
-        fill(MRED, MGREEN, MBLUE);
+        stroke(MRED, MGREEN, MBLUE);
+        fill(230);
     } else {
         fill(50);
     }
@@ -120,7 +121,7 @@ Output.prototype.show = function (order = 0) {
     if (this.state) {
         fill(this.accentColor);
     } else if (this.marked) {
-        fill(MARED, MAGREEN, MABLUE);
+        fill(255);
     } else {
         fill(LARED, LAGREEN, LABLUE);
     }

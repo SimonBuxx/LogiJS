@@ -1842,7 +1842,7 @@ function reDraw() {
     }
 
     if (controlMode === 'select' && selectMode === 'start') {
-        fill(0, 60); // Set the fill color to a semi-transparent black
+        fill(0, 50); // Set the fill color to a semi-transparent black
         noStroke();
         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
