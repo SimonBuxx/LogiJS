@@ -463,7 +463,7 @@ body {
     box-sizing: content-box;
     cursor: pointer;
     padding: 5px 5px;
-    border-radius: 10px;
+    border-radius: 0;
     border: none;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 16px;
@@ -475,7 +475,7 @@ body {
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     user-select: none;
-    background: #969696;
+    background: #585858;
     outline: none;
 }
 
@@ -879,6 +879,7 @@ input[type=range]::-ms-tooltip {
     bottom: 100px;
     width: 280px;
     height: 172px;
+    resize: none;
 }
 
 #preview-image {
@@ -1237,13 +1238,17 @@ h1 {
     width: 200px;
     margin: 0;
     padding: 0;
+    z-index: 1000;
 }
 
 #topButtonsContainer {
+    position: relative;
     display: flex;
     justify-content: space-between;
     height: 50px;
     background: white;
+    overflow: hidden;
+    z-index: 100;
 }
 
 .dark-theme #topButtonsContainer {

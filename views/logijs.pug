@@ -59,7 +59,7 @@ body
   #topButtonsContainer
     #topLeftButtons
     #topRightButtons
-      input#sketchname-1(placeholder='Untitled Sketch')
+      input#sketchname-1(placeholder='Untitled Sketch', autocomplete='off')
   .custom-container(style="position: relative; z-index: 1")
     #custom-dialog
       h1 Import your own Modules<span style="color: #c83232">.</span>
@@ -93,7 +93,7 @@ body
   .save-container(style="position: relative; z-index: 1")
     #save-dialog
       h1 Save Sketch<span style="color: #c83232">.</span>
-      input#sketchname-2.textInput.saveInput(placeholder='Sketch Name')
+      input#sketchname-2.textInput.saveInput(placeholder='Sketch Name', autocomplete='off')
       textarea#desc-input.textInput.descInput(placeholder='Sketch Description')
       #img-container(style='width: 200px; height: 200px; overflow: hidden; position: absolute; left: 40px; bottom: 40px;')
         img#preview-image
@@ -103,8 +103,8 @@ body
       .red-rect
   .select-container(style="position: relative; z-index: 1")
     #select-tools
-      button#copy-select-button.btn.btn-lg.button(rel="nofollow" onclick="") <i class="fas fa-copy icon"></i> Copy
-      button#delete-select-button.btn.btn-lg.button(rel="nofollow" onclick="deleteSelection();") <i class="fas fa-trash-alt icon"></i> Delete
+      button#copy-select-button.btn.btn-lg.button(rel="nofollow" onclick="", style='z-index: -100;') <i class="fas fa-copy icon"></i> Copy
+      button#delete-select-button.btn.btn-lg.button(rel="nofollow" onclick="deleteSelection();", style='z-index: -100;') <i class="fas fa-trash-alt icon"></i> Delete
   .output-container(style="position: relative; z-index: 1")
     #output-modifier
       h1 Output Color<span style="color: #c83232">.</span>
@@ -139,7 +139,7 @@ body
   .mp-container(style="position: relative; z-index: 1")
     #module-previewer
       h1 Module Preview<span style="color: #c83232">.</span>
-      input#module-input.textInput.saveInput(placeholder='Module Name')
+      input#module-input.textInput.saveInput(placeholder='Module Name', autocomplete='off')
       #module-container
       .grey-rect-medium
   .mp-container(style="position: relative; z-index: 1")
