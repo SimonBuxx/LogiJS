@@ -58,6 +58,7 @@ body {
     -moz-user-select: none;
     user-select: none;
     border: none;
+    outline: none;
   }
 
   .dark-theme .button {
@@ -117,6 +118,7 @@ body {
     margin: 0 5px;
     border: 3px solid rgba(0, 0, 0, 0);
     border-radius: 0;
+    outline: none;
 }
 
 .redButton {
@@ -296,6 +298,7 @@ body {
     user-select: none;
     border: none;
     border-radius: 0;
+    outline: none;
 }
 
 .dark-theme .buttonLeft {
@@ -354,6 +357,7 @@ body {
     -moz-user-select: none;
     user-select: none;
     box-shadow: 0 0 4px #969696;
+    outline: none;
 }
 
 .dark-theme .previewButton {
@@ -472,44 +476,8 @@ body {
     -khtml-user-select: none;
     user-select: none;
     background: #969696;
+    outline: none;
 }
-
-.sequencer {
-    margin-top : 3px;
-    margin-left : 5px;
-    display: inline-block;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    cursor: pointer;
-    padding: 1px 10px;
-    -ms-user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    user-select: none;
-    font-family: ArcaMajora3, 'Open Sans', sans-serif;
-    font-size: 18px;
-    color: #323232;
-    -o-text-overflow: clip;
-    text-overflow: clip;
-    background-color: #fff;
-    border: none;
-    border-radius: 10px;
-}
-
-.sequencer::-ms-expand {
-    display: none;
-  }
-
-.sequencer option {
-    background:#fff;
-    color: #323232;
-    padding: 1px 10px;
-  }
 
 #label-textbox {
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
@@ -522,6 +490,8 @@ body {
     border: none;
     width: 220px;
     height: 60px;
+    outline: none;
+    resize: none;
 }
 
 .dark-theme #label-textbox {
@@ -628,6 +598,7 @@ input[type=range]::-ms-tooltip {
     border: none;
     background: white;
     color: #323232;
+    outline: none;
 }
 
 .textInput:disabled::placeholder {
@@ -887,6 +858,7 @@ input[type=range]::-ms-tooltip {
     color: #969696;
     text-align: right;
     padding: 5px 15px 5px 0;
+    outline: none;
 }
 
 #sketchname-1::placeholder {

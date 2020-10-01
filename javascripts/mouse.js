@@ -506,7 +506,6 @@ function mouseReleased() {
                                         if (inputs[i].clock) {
                                             inputs[i].mark(true);
                                             inputToModify = i;
-                                            sequencerAdjusted = false;
                                             updateModifierMenuPosition();
                                             showClockPropMenu();
                                             positionModifierElements();
@@ -524,7 +523,6 @@ function mouseReleased() {
                                         }
                                         outputs[i].mark(true);
                                         outputToModify = i;
-                                        sequencerAdjusted = false;
                                         updateModifierMenuPosition();
                                         showOutputPropMenu();
                                         positionModifierElements();
@@ -541,7 +539,6 @@ function mouseReleased() {
                                         }
                                         labels[i].mark(true);
                                         labelToModify = i;
-                                        sequencerAdjusted = false;
                                         updateModifierMenuPosition();
                                         showLabelPropMenu();
                                         positionModifierElements();

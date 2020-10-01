@@ -129,7 +129,11 @@ Output.prototype.show = function (order = 0) {
 
     if (order > 0) {
         noStroke();
-        fill(255);
+        if (this.marked) {
+            fill(50);
+        } else {
+            fill(255);
+        }
         textSize(20);
         textFont('ArcaMajora3');
         textAlign(LEFT, TOP);

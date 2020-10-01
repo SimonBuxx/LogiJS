@@ -257,7 +257,6 @@ let modifierMenuX, modifierMenuY;
 
 let moduleOptions = false;
 
-let sequencerAdjusted = false;
 let clickedOutOfGUI = false;
 
 /*
@@ -266,12 +265,6 @@ let clickedOutOfGUI = false;
 let inputIsTopBox, captionInput; // Input elements
 let redButton, yellowButton, greenButton, blueButton; // Output elements
 let labelTextBox; // Label elements
-
-/*
-    This is a select element that allows the user to alter the in- and output order.
-    It's displayed in the modifier menu of in- and outputs.
-*/
-let sequencer;
 
 let leftSideButtons, topLeftButtons, topRightButtons, topButtonsContainer;
 
@@ -1320,7 +1313,6 @@ function addInput() {
     newInput.clock = newIsClock;
     inputs.push(newInput);
     pushUndoAction('addIn', [inputs.length - 1], [newInput]);
-    moduleButton.elt.disabled = false;
     reDraw();
 }
 

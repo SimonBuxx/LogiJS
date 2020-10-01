@@ -253,7 +253,7 @@ function finishSelection() {
     pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes],
         [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
     if (selectionOffsetX === 0 && selectionOffsetY === 0) {
-        undo();
+        undo(true);
     }
 }
 

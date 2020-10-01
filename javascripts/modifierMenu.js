@@ -79,9 +79,6 @@ function unmarkAll() {
 function showClockPropMenu() {
     hideElementMenus();
     setClockModifierVisibility(true);
-    //inputIsTopBox.checked(inputs[inputToModify].isTop);
-    //captionInput.value(inputs[inputToModify].lbl);
-    //sequencer.value(inputToModify + 1);
     clockspeedSlider.value = 61 - inputs[inputToModify].speed;
     if (inputs[inputToModify].speed !== 1) {
         document.getElementById('cs-label').innerHTML = inputs[inputToModify].speed + ' ticks/toggle';
@@ -98,8 +95,6 @@ function showOutputPropMenu() {
     hideElementMenus();
     setOutputModifierVisibility(true);
     setOutputColor(outputs[outputToModify].colr);
-    //captionInput.value(outputs[outputToModify].lbl);
-    //sequencer.value(outputToModify + 1);
 }
 
 /*
@@ -127,11 +122,6 @@ function updateModifierMenuPosition() {
 }
 
 function positionModifierElements() {
-    //sequencer.position(modifierMenuX + 442, modifierMenuY + 67);
-
-    //captionInput.position(modifierMenuX + 250, modifierMenuY + 70);
-    //inputIsTopBox.position(modifierMenuX + 280, modifierMenuY + 120);
-
     document.getElementById('clock-modifier').style.left = modifierMenuX + 240 + 'px';
     document.getElementById('clock-modifier').style.top = modifierMenuY + 'px';
 
@@ -154,42 +144,12 @@ function newCaption() {
     }
 }
 
-function sequencerChanged() {
-    if (inputToModify >= 0) {
-        inputs[parseInt(sequencer.value()) - 1] = inputs.splice(inputToModify, 1, inputs[parseInt(sequencer.value()) - 1])[0];
-        inputToModify = parseInt(sequencer.value()) - 1;
-        inputIsTopBox.checked(inputs[inputToModify].isTop);
-        captionInput.value(inputs[inputToModify].lbl);
-        clockspeedSlider.value = 60 - inputs[inputToModify].speed;
-        adjustSequencer(false, inputToModify + 1);
-        sequencer.value(inputToModify + 1);
-    } else {
-        outputs[parseInt(sequencer.value()) - 1] = outputs.splice(outputToModify, 1, outputs[parseInt(sequencer.value()) - 1])[0];
-        outputToModify = parseInt(sequencer.value()) - 1;
-        captionInput.value(outputs[outputToModify].lbl);
-        setOutputColor(outputs[outputToModify].colr);
-        adjustSequencer(true, outputToModify + 1);
-        sequencer.value(outputToModify + 1);
-    }
-}
-
 function swapInputs(a, b) {
     inputs[a] = inputs.splice(b, 1, inputs[a])[0];
 }
 
 function swapOutputs(a, b) {
     outputs[a] = outputs.splice(b, 1, outputs[a])[0];
-}
-
-function fillSequencer(max, top) {
-    sequencer.elt.innerHTML = '';
-    sequencer.option(top);
-    for (let i = 1; i <= max; i++) {
-        if (i !== top) {
-            sequencer.option(i);
-        }
-    }
-    sequencer.value('1');
 }
 
 /*
@@ -225,11 +185,6 @@ function setOutputColor(code) {
 function setOutputModifierVisibility(show) {
     if (show) {
         document.getElementById('output-modifier').style.display = 'block';
-        /*captionInput.show();
-        if (!sequencerAdjusted) {
-            adjustSequencer(true, outputToModify + 1);
-        }
-        sequencer.show();*/
     } else {
         document.getElementById('output-modifier').style.display = 'none';
     }
@@ -259,15 +214,6 @@ function hideElementMenus() {
 
 function elementMenuShown() {
     return (controlMode === 'modify' && (inputToModify + outputToModify + labelToModify >= -2));
-}
-
-function adjustSequencer(io, top) {
-    if (io) {
-        fillSequencer(outputs.length, top);
-    } else {
-        fillSequencer(inputs.length, top);
-    }
-    sequencerAdjusted = true;
 }
 
 function setColorButtonsUnactive() {
@@ -352,19 +298,6 @@ function createModifierElements() {
         setHelpText('Edit the text of this label');
     });
     labelTextBox.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    sequencer = createSelect();
-    sequencer.hide();
-    sequencer.size(42, 33);
-    sequencer.changed(sequencerChanged);
-    fillSequencer(1);
-    sequencer.elt.className = 'sequencer';
-    sequencer.mouseOver(function () {
-        setHelpText('Position of the corresponding pin on an exported module');
-    });
-    sequencer.mouseOut(function () {
         setHelpText('');
     });
 

@@ -51,6 +51,9 @@ function Label(x, y, txt, transform) {
     this.alterText = function (txt) {
         this.txt = txt;
         this.lines = txt.split('\n').filter(e => e !== '');
+        if (this.lines.length === 0) {
+            this.lines = ['New Label'];
+        }
         this.w = Math.ceil((textWidth(this.lines.reduce(function (a, b) { return a.length > b.length ? a : b; })) + 20) / 30) * 30;
         this.h = 30 * this.lines.length - 10;
         this.updateClickBox();
