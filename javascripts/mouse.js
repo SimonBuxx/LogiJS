@@ -277,7 +277,7 @@ function mousePressed() {
                     case 'end':
                         selectEndX = Math.round(((mouseX + GRIDSIZE / 2) / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
                         selectEndY = Math.round(((mouseY + GRIDSIZE / 2) / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE + GRIDSIZE / 2;
-                        if (selectionBox.mouseOver()) {
+                        if (selectionBox.mouseOver(true)) {
                             // Start dragging
                             sDragX1 = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
                             sDragY1 = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
@@ -289,7 +289,7 @@ function mousePressed() {
                             }
                             setSelectMode('drag');
                             document.getElementById('copy-select-button').disabled = true;
-                            document.getElementById('delete-select-button').disabled = true;
+                            document.getElementById('delete-select-button').disabled = false;
                         } else {
                             finishSelection();
                             enterModifierMode();

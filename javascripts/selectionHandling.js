@@ -14,6 +14,7 @@ function handleSelection(x1, y1, x2, y2) {
     selectionStartPosY = selectionBox.y;
 
     selectionLog = [];
+    deleteLog = [];
     selWireIndizes = [];
     selDiodeIndizes = [];
     selGatesIndizes = [];
@@ -92,8 +93,84 @@ function handleSelection(x1, y1, x2, y2) {
 
     document.getElementById('select-tools').style.display = 'block';
     document.getElementById('copy-select-button').disabled = true; // for now
-    document.getElementById('delete-select-button').disabled = true;
+    document.getElementById('delete-select-button').disabled = false;
     positionSelectionTools();
+}
+
+function deleteSelection() {
+    let selectionOffsetX = selectionBox.x - selectionStartPosX;
+    let selectionOffsetY = selectionBox.y - selectionStartPosY;
+    if (selectionOffsetX !== 0 || selectionOffsetY !== 0) {
+        moveSelection(-selectionOffsetX, -selectionOffsetY);
+    }
+
+    for (let i = selWireIndizes.length - 1; i >= 0; i--) {
+        wires[selWireIndizes[i]].marked = false;
+        deleteLog.push(['wire', selWireIndizes[i], wires.splice(selWireIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selGatesIndizes.length - 1; i >= 0; i--) {
+        gates[selGatesIndizes[i]].marked = false;
+        deleteLog.push(['gate', selGatesIndizes[i], gates.splice(selGatesIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selInputsIndizes.length - 1; i >= 0; i--) {
+        inputs[selInputsIndizes[i]].marked = false;
+        deleteLog.push(['input', selInputsIndizes[i], inputs.splice(selInputsIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selOutputsIndizes.length - 1; i >= 0; i--) {
+        outputs[selOutputsIndizes[i]].marked = false;
+        deleteLog.push(['output', selOutputsIndizes[i], outputs.splice(selOutputsIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selLabelIndizes.length - 1; i >= 0; i--) {
+        labels[selLabelIndizes[i]].marked = false;
+        deleteLog.push(['label', selLabelIndizes[i], labels.splice(selLabelIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selSegDisplayIndizes.length - 1; i >= 0; i--) {
+        segDisplays[selSegDisplayIndizes[i]].marked = false;
+        deleteLog.push(['segDisplay', selSegDisplayIndizes[i], segDisplays.splice(selSegDisplayIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selCustomIndizes.length - 1; i >= 0; i--) {
+        customs[selCustomIndizes[i]].marked = false;
+        customs[selCustomIndizes[i]].visible = false;
+        /*for (let j = customs.length - 1; j >= 0; j--) {
+            if (customs[j].pid === customs[selCustomIndizes[i]].id) {
+                customs.splice(j, 1);
+            }
+        }*/
+        //console.log('push custom delete ' + selCustomIndizes[i]);
+        //selCustomIndizes = selCustomIndizes.concat(invisibleCustoms);
+        deleteLog.push(['custom', selCustomIndizes[i], []/*customs.splice(selCustomIndizes[i], 1)[0]*/]);
+    }
+
+    if (deleteLog.length > 0) {
+        let conpointsBefore = _.cloneDeep(conpoints);
+
+        for (let i = 0; i < selConpointIndizes.length; i++) {
+            conpointsBefore[selConpointIndizes[i]].marked = false;
+            conpoints[selConpointIndizes[i]].marked = false;
+        }
+
+        let diodesBefore = _.cloneDeep(diodes);
+        for (let i = 0; i < selDiodeIndizes.length; i++) {
+            diodesBefore[selDiodeIndizes[i]].marked = false;
+            diodes[selDiodeIndizes[i]].marked = false;
+        }
+
+        doConpoints();
+
+        let conpointsAfter = _.cloneDeep(conpoints);
+        let diodesAfter = _.cloneDeep(diodes);
+        pushUndoAction('delSel', [], [_.cloneDeep(deleteLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
+    }
+
+    enterModifierMode();
+    initX = 0;
+    initY = 0;
 }
 
 /*
@@ -152,7 +229,6 @@ function finishSelection() {
     for (let i = 0; i < selWireIndizes.length; i++) {
         selectionLog.push(['mWire', selWireIndizes[i]]);
     }
-
     integrateWires();
 
     let conpointsBefore = _.cloneDeep(conpoints);

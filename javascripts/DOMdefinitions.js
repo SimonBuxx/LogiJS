@@ -61,9 +61,7 @@ function createTopButtons() {
     // Activates the mode for area selecting
     selectButton = createButton('<i class="fas fa-object-group icon"></i> Select');
     selectButton.mousePressed(startSelect);
-    //selectButton.elt.style.cursor = 'default';
     selectButton.elt.className = 'button';
-    //selectButton.elt.title = 'Coming soon!';
     selectButton.parent(topLeftButtons);
     selectButton.mouseOver(function () {
         setHelpText('Select an area to move, copy or delete');

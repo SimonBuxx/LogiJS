@@ -104,7 +104,7 @@ body
   .select-container(style="position: relative; z-index: 1")
     #select-tools
       button#copy-select-button.btn.btn-lg.button(rel="nofollow" onclick="") <i class="fas fa-copy icon"></i> Copy
-      button#delete-select-button.btn.btn-lg.button(rel="nofollow" onclick="") <i class="fas fa-trash-alt icon"></i> Delete
+      button#delete-select-button.btn.btn-lg.button(rel="nofollow" onclick="deleteSelection();") <i class="fas fa-trash-alt icon"></i> Delete
   .output-container(style="position: relative; z-index: 1")
     #output-modifier
       h1 Output Color<span style="color: #c83232">.</span>

@@ -57,11 +57,18 @@ function ClickBox(x, y, w, h, transform) {
     };
 
     // Returns if the mouse is in a gridSize sized area around x, y
-    this.mouseOver = function () {
-        return (((mouseX / this.transform.zoom - this.transform.dx) >= (this.x - this.w / 2)) &&
-             ((mouseX / this.transform.zoom - this.transform.dx) <= (this.x + this.w / 2)) &&
-             ((mouseY / this.transform.zoom - this.transform.dy) >= (this.y - this.h / 2)) &&
-             ((mouseY / this.transform.zoom - this.transform.dy) <= (this.y + this.h / 2)));
+    this.mouseOver = function (selectOffset = false) {
+        if (!selectOffset) {
+            return (((mouseX / this.transform.zoom - this.transform.dx) >= (this.x - this.w / 2)) &&
+                ((mouseX / this.transform.zoom - this.transform.dx) <= (this.x + this.w / 2)) &&
+                ((mouseY / this.transform.zoom - this.transform.dy) >= (this.y - this.h / 2)) &&
+                ((mouseY / this.transform.zoom - this.transform.dy) <= (this.y + this.h / 2)));
+        } else {
+            return (((mouseX / this.transform.zoom - this.transform.dx) >= (this.x - this.w / 2)) &&
+                ((mouseX / this.transform.zoom - this.transform.dx) <= (this.x + this.w / 2)) &&
+                ((mouseY / this.transform.zoom - this.transform.dy) >= (this.y - this.h / 2 - (50 / this.transform.zoom))) &&
+                ((mouseY / this.transform.zoom - this.transform.dy) <= (this.y + this.h / 2)));
+        }
     };
 
     /*

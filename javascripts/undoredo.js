@@ -161,6 +161,35 @@ function undo() {
 
                 actionRedo.push(act);
                 break;
+            case 'delSel':
+                conpoints = _.cloneDeep(act.actionObject[1]);
+                diodes = _.cloneDeep(act.actionObject[3]);
+
+                for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
+                    if (act.actionObject[0][i][0] === 'wire') {
+                        wires.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'gate') {
+                        gates.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'input') {
+                        inputs.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'output') {
+                        outputs.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'label') {
+                        labels.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'segDisplay') {
+                        segDisplays.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'custom') {
+                        customs[act.actionObject[0][i][1]].visible = true;
+                    }
+                }
+                actionRedo.push(act);
+                break;
             case 'addWire':
                 conpoints = _.cloneDeep(act.actionObject[1]);
                 for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
@@ -353,6 +382,35 @@ function redo() {
                     customs[act.actionIndizes[7][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
                 }
 
+                actionUndo.push(act);
+                break;
+            case 'delSel':
+                conpoints = _.cloneDeep(act.actionObject[2]);
+                diodes = _.cloneDeep(act.actionObject[4]);
+
+                for (let i = 0; i < act.actionObject[0].length; i++) {
+                    if (act.actionObject[0][i][0] === 'wire') {
+                        wires.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'gate') {
+                        gates.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'input') {
+                        inputs.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'output') {
+                        outputs.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'label') {
+                        labels.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'segDisplay') {
+                        segDisplays.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'custom') {
+                        customs[act.actionObject[0][i][1]].visible = false;
+                    }
+                }
                 actionUndo.push(act);
                 break;
             case 'addWire':

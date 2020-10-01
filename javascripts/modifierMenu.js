@@ -11,6 +11,7 @@ function enterModifierMode() {
     setSelectMode('none');
     setActive(modifierModeButton, true);
     configureButtons('edit');
+    document.getElementById('select-tools').style.display = 'none';
     addType = 0;
 }
 

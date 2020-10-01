@@ -121,6 +121,7 @@ let selectionStartPosX = 0;
 let selectionStartPosY = 0;
 
 let selectionLog = [];
+let deleteLog = [];
 
 let sDragX1 = 0;
 let sDragX2 = 0;
@@ -1022,6 +1023,7 @@ function startSelect() {
     if (controlMode === 'select') {
         enterModifierMode();
     } else {
+        configureButtons('select');
         setActive(selectButton, true);
         setControlMode('select');
         setSelectMode('none');
@@ -1686,6 +1688,15 @@ function configureButtons(mode) {
         jsonimport = true;
         moduleimport = false;
         select = true;
+    } else if (mode === 'select') {
+        toolbox = true;
+        modifiers = true;
+        savedialog = true;
+        simulation = true;
+        customimport = true;
+        jsonimport = true;
+        moduleimport = true;
+        select = false;
     } else {
         toolbox = false;
         modifiers = false;
