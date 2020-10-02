@@ -213,7 +213,7 @@ function undo(noRedoPush = false) {
                         wires.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
                     }
                 }
-                for (let i = 0; i < act.a[0].length; i++) {
+                for (let i = 0; i < act.actionIndizes[0].length; i++) {
                     diodes.splice(act.actionIndizes[0][i], 0, _.cloneDeep(act.actionObject[3][i][0]));
                 }
                 actionRedo.push(act);

@@ -1326,7 +1326,7 @@ function addLabel() {
             return;
         }
     }
-    var newLabel = new Label(mouseX, mouseY, 'New Label', transform);
+    var newLabel = new Label(mouseX, mouseY, '', transform);
     newLabel.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newLabel.updateClickBox();
     labels.push(newLabel);
