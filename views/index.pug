@@ -99,50 +99,49 @@ body
     a(href="#features" title="Scroll down") <i class="fa fa-chevron-down fa-4x"></i>
   #features
   img#front_teaser(src='images/front_teaser_white.png', alt='LogiJS Editor', title='LogiJS Editor')
-  .carousel#main-carousel
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-          </ol>
-          <div class="carousel-inner">
-            <div class="item active">
-              <span class="carousel-text"><h2 class="carousel-caption">Learn the basics of logic<br>gates and circuits<span class="red">.</span></h2>
-                <div class="carousel-button">
-                  <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
-                </div>
-              </span> 
-              <img id="carousel-1" class="carousel-image" src="images/carousel_1_new.png" alt="A LogiJS example sketch showing a traffic light simulation">
+  #main-carousel
+    #myCarousel.carousel.slide(data-ride="carousel")
+      ol.carousel-indicators
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      <div class="carousel-inner">
+        <div class="item active">
+          <span class="carousel-text"><h2 class="carousel-caption">Learn the basics of logic<br>gates and circuits<span class="red">.</span></h2>
+            <div class="carousel-button">
+              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
             </div>
-
-            <div class="item">
-              <span class="carousel-text"><h2 class="carousel-caption">Import your circuits as<br>custom components<span class="red">.</span></h2>
-                <div class="carousel-button">
-                  <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
-                </div>
-              </span> 
-              <img id="carousel-2" class="carousel-image" src="images/carousel_2_new.png" alt="A LogiJS example sketch showing a basic cpu structure">
-            </div>
-
-            <div class="item">
-              <span class="carousel-text"><h2 class="carousel-caption">Save and access your<br>circuits online<span class="red">.</span></h2>
-                <div class="carousel-button">
-                  <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
-                </div>
-              </span>
-              <img id="carousel-3" class="carousel-image" src="images/carousel_3_new.png" alt="The LogiJS user dashboard">
-            </div>
-          </div>
-          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-            <i class="fa fa-chevron-left fa-3x"></i>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="right carousel-control" href="#myCarousel" data-slide="next">
-            <i class="fa fa-chevron-right fa-3x"></i>
-            <span class="sr-only">Next</span>
-          </a>
+          </span> 
+          <img id="carousel-1" class="carousel-image" src="images/carousel_1_new.png" alt="A LogiJS example sketch showing a traffic light simulation">
         </div>
+
+        <div class="item">
+          <span class="carousel-text"><h2 class="carousel-caption">Import your circuits as<br>custom components<span class="red">.</span></h2>
+            <div class="carousel-button">
+              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
+            </div>
+          </span> 
+          <img id="carousel-2" class="carousel-image" src="images/carousel_2_new.png" alt="A LogiJS example sketch showing a basic cpu structure">
+        </div>
+
+        <div class="item">
+          <span class="carousel-text"><h2 class="carousel-caption">Save and access your<br>circuits online<span class="red">.</span></h2>
+            <div class="carousel-button">
+              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
+            </div>
+          </span>
+          <img id="carousel-3" class="carousel-image" src="images/carousel_3_new.png" alt="The LogiJS user dashboard">
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <i class="fa fa-chevron-left fa-3x"></i>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <i class="fa fa-chevron-right fa-3x"></i>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
   #samples(style="display: block; position: relative; top: -150px; visibility: hidden;")
   h2#samples-caption.normal-caption Samples
   .sample-element.left-elem

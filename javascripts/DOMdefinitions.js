@@ -76,9 +76,11 @@ function createTopButtons() {
             enterModifierMode();
             showModuleOptions();
             setActive(moduleButton, true);
+            setHelpText('Click on the in- and outputs to swap them!');
         } else {
             hideModuleOptions();
             enterModifierMode();
+            setHelpText('');
         }
     });
     moduleButton.elt.disabled = (outputs.length === 0);
@@ -86,16 +88,19 @@ function createTopButtons() {
     moduleButton.parent(topLeftButtons);
 
     moduleButton.mouseOver(function () {
-        setHelpText('Configure this Sketch as a Custom Module');
+        if (!moduleOptions) {
+            setHelpText('Configure this Sketch as a Custom Module');
+        }
     });
     moduleButton.mouseOut(function () {
-        setHelpText('');
+        if (!moduleOptions) {
+            setHelpText('');
+        }
     });
 
     helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
     helpLabel.elt.className = 'label inlineLabel';
-    helpLabel.parent(topLeftButtons);
-    helpLabel.hide();
+    document.getElementById('helpLabelContainer').appendChild(helpLabel.elt);
 }
 
 function createBasicElements() {
@@ -566,7 +571,7 @@ function createAdvancedElements() {
 }
 
 function createCustomImportButton() {
-    customButton = createButton('<i class="fa fa-microchip icon"></i> Custom Modules');
+    customButton = createButton('<i class="fa fa-paste icon"></i> Custom Modules');
     customButton.mousePressed(function () {
         customClicked();
     });
@@ -880,7 +885,7 @@ function createDialogElements() {
         setHelpText('This is the Text written on the Module');
     });
     moduleNameInput.addEventListener('mouseleave', function () {
-        setHelpText('');
+        setHelpText('Click on the in- and outputs to swap them!');
     });
 
     sketchNameInput = document.getElementById('sketchname-2');
@@ -910,7 +915,11 @@ function createDialogElements() {
         setHelpText('This is the File Name of the Sketch');
     });
     topSketchInput.addEventListener('mouseleave', function () {
-        setHelpText('');
+        if (!moduleOptions) {
+            setHelpText('');
+        } else {
+            setHelpText('Click on the in- and outputs to swap them!');
+        }
     });
 
     descInput = document.getElementById('desc-input');
@@ -983,7 +992,11 @@ function createTopRightButtons() {
             setHelpText('Get back to the Dashboard');
         });
         dashboardButton.mouseOut(function () {
-            setHelpText('');
+            if (!moduleOptions) {
+                setHelpText('');
+            } else {
+                setHelpText('Click on the in- and outputs to swap them!');
+            }
         });
     } else {
         dashboardButton = createButton('<i class="fa fa-sign-in-alt icon"></i> Login');
@@ -992,7 +1005,11 @@ function createTopRightButtons() {
             setHelpText('Log into your LogiJS Account');
         });
         dashboardButton.mouseOut(function () {
-            setHelpText('');
+            if (!moduleOptions) {
+                setHelpText('');
+            } else {
+                setHelpText('Click on the in- and outputs to swap them!');
+            }
         });
     }
     dashboardButton.mousePressed(function () {

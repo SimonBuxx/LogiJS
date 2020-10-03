@@ -200,7 +200,7 @@ function custom_element_hovered(r) {
     if (importSketchData.looks[r].outputs > 0) {
         PWp5.showImportPreview(importSketchData.looks[r], 0, 0);
     } else {
-        document.getElementsByClassName('preview-span')[r].innerHTML = '<i class="fa fa-exclamation-circle"></i> This Sketch has no Outputs';
+        document.getElementsByClassName('preview-span')[r].innerHTML = '<span class="no-outputs"><i class="fa fa-times-circle"></i> This Sketch has no Outputs</span>';
         PWp5.showNoOutputs();
     }
 }
@@ -255,7 +255,7 @@ function initPinConfigurator() {
                 setHelpText('Sets this input on top of the module');
             });
             checkbox.addEventListener('mouseleave', function () { // jshint ignore:line
-                setHelpText('');
+                setHelpText('Click on the in- and outputs to swap them!');
             });
             let newInput = document.createElement('input');
             newInput.classList.add('inputLabel');
@@ -271,7 +271,7 @@ function initPinConfigurator() {
                 setHelpText('The name of this input on the module');
             });
             newInput.addEventListener('mouseleave', function () { // jshint ignore:line
-                setHelpText('');
+                setHelpText('Click on the in- and outputs to swap them!');
             });
             configurator.appendChild(checkbox);
             configurator.appendChild(newInput);
@@ -292,7 +292,7 @@ function initPinConfigurator() {
                 setHelpText('The name of this output on the module');
             });
             newInput.addEventListener('mouseleave', function () { // jshint ignore:line
-                setHelpText('');
+                setHelpText('Click on the in- and outputs to swap them!');
             });
             configurator.appendChild(newInput);
         }

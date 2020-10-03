@@ -59,6 +59,8 @@ let moduleCaption = []; // Name of the sketch, displayed on customs
 */
 let currentGridSize = GRIDSIZE;
 
+let isScrolling, showHelpTimeout;
+
 /*
     The control mode represents the current state of the system.
     These are the different possible modes:
@@ -1866,18 +1868,12 @@ function reDraw() {
     }
 
     // Draw the zoom and framerate labels
-    textFont('ArcaMajora3');
+    /*textFont('ArcaMajora3');
     textAlign(LEFT, TOP);
     textSize(12);
-    fill(0);
     noStroke();
-    text(Math.round(transform.zoom * 100) + '%', 10, window.height - 20); // Zoom label
-    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label
-
-    if (moduleOptions) {
-        textSize(20);
-        text('Click on the in- and outputs to swap them!', 30, 30);
-    }
+    fill(0);
+    text(Math.round(frameRate()), window.width - 20, window.height - 20); // Framerate label*/
 }
 
 function fetchImportData() {
@@ -1969,7 +1965,7 @@ function showElements() {
     }
 
     if (showSelectionBox) {
-        selectionBox.markClickBox();
+        selectionBox.markClickBox(true);
     }
 }
 
@@ -2053,10 +2049,18 @@ function keyPressed() {
 
 function setHelpText(str) {
     if (str !== '') {
-        helpLabel.elt.innerHTML = '<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i> ' + str;
-        helpLabel.style('display', 'inline-block');
+        helpLabel.elt.innerHTML = '<i class="fa fa-question-circle icon" style="color: #c83232;"></i> ' + str;
+        if (document.getElementById('helpLabelContainer').style.opacity === '0') {
+            //document.getElementById('helpLabelContainer').style.opacity = '1';
+        showHelpTimeout = setTimeout(function() {
+                document.getElementById('helpLabelContainer').style.opacity = '1';
+                document.getElementById('zoomLabelContainer').style.bottom = '60px';
+            }, 500);
+        }
     } else {
-        helpLabel.hide();
+        window.clearTimeout(showHelpTimeout);
+        document.getElementById('helpLabelContainer').style.opacity = '0';
+        document.getElementById('zoomLabelContainer').style.bottom = '0px';
     }
 }
 

@@ -68,6 +68,12 @@ function mouseWheel(event) {
         }
         if (!simRunning) {
             reDraw();
+            document.getElementById('zoomLabelContainer').style.opacity = '1';
+            document.getElementById('zoomLabel').innerHTML = '<i class="fa fa-search icon" style="color: rgb(200, 50, 50);"></i> ' + Math.round(transform.zoom * 100) + '%';
+            window.clearTimeout(isScrolling);
+            isScrolling = setTimeout(function() {
+                document.getElementById('zoomLabelContainer').style.opacity = '0';
+            }, 2000);
         }
     }
     updateCursors();

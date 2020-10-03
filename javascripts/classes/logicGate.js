@@ -111,19 +111,8 @@ LogicGate.prototype.turn = function () {
 */
 LogicGate.prototype.setDirection = function (dir) {
     this.dir = dir;
-    // Turn the brick if dir is 1 or 3
     if (this.dir % 2 !== 0) {
         this.turn();
-        // Turn the clickBoxes
-        for (let i = 0; i < this.inputClickBoxes.length; i++) {
-            this.inputClickBoxes[i].turn();
-        }
-        for (let i = 0; i < this.outputClickBoxes.length; i++) {
-            this.outputClickBoxes[i].turn();
-        }
-        this.gClickBox.turn();
-        this.gClickBox.updatePosition(this.x + GRIDSIZE / 2, this.y);
-        this.gClickBox.updateSize(this.w - GRIDSIZE, this.h - GRIDSIZE);
     }
 };
 
@@ -144,7 +133,6 @@ LogicGate.prototype.setInput = function (i, s) {
             this.inputs[i] = !this.inputs[i];
         }
     } else {
-        // Error
         console.log('Input ' + i + ' doesn\'t exist!');
     }
 };
@@ -240,7 +228,8 @@ LogicGate.prototype.updateClickBoxes = function () {
     if (this.direction % 2 === 0) {
         this.gClickBox.updateSize(this.w, this.h - GRIDSIZE);
     } else {
-        this.gClickBox.updateSize(this.h, this.w - GRIDSIZE);
+        console.log(this.h, this.w);
+        this.gClickBox.updateSize(this.w - GRIDSIZE, this.h);
     }
     this.gClickBox.setTransform(this.transform);
 };

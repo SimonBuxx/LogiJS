@@ -830,12 +830,10 @@ CustomSketch.prototype.show = function () {
     // Uncomment to show global clickbox
     // this.gClickBox.markClickBox();
     // Uncomment to show clickboxes of in- and outputs
-    /*
-    for (let i = 0; i < this.inputClickBoxes.length; i++) {
+    /*for (let i = 0; i < this.inputClickBoxes.length; i++) {
         this.inputClickBoxes[i].markClickBox();
     }
     for (let i = 0; i < this.outputClickBoxes.length; i++) {
         this.outputClickBoxes[i].markClickBox();
-    }
-    */
+    }*/
 };

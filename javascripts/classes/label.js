@@ -92,7 +92,6 @@ function Label(x, y, txt, transform) {
         for (let i = 0; i < this.lines.length; i++) {
             text(this.lines[i], this.x + 15, this.y - 9 + i * 30, this.w, this.h);
         }
-        //text(this.txt, this.x + 15, this.y - 11, this.w, this.h);
         //this.clickBox.markClickBox();
     };
 }

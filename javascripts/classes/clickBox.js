@@ -40,17 +40,19 @@ function ClickBox(x, y, w, h, transform) {
     /*
         Draws a rect around the clickBox (debugging purposes)
     */
-    this.markClickBox = function () {
-        noStroke();
-        if (currentTheme === 'dark') {
-            fill(50);
-            stroke(50);
-        } else {
-            fill(255);
-            stroke(255);
+    this.markClickBox = function (select = false) {
+        if (select) {
+            noStroke();
+            if (currentTheme === 'dark') {
+                fill(50);
+                stroke(50);
+            } else {
+                fill(255);
+                stroke(255);
+            }
+            strokeWeight(3);
+            rect(this.x + this.w / 2 - (200 / this.transform.zoom), this.y - this.h / 2 - (50 / this.transform.zoom), 200 / this.transform.zoom, 50 / this.transform.zoom);
         }
-        strokeWeight(3);
-        rect(this.x + this.w / 2 - (200 / this.transform.zoom), this.y - this.h / 2 - (50 / this.transform.zoom), 200 / this.transform.zoom, 50 / this.transform.zoom);
         stroke(50);
         fill(0, 30);
         rect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
