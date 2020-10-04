@@ -112,7 +112,7 @@ Output.prototype.show = function (order = 0) {
         fill(this.highColor);
     } else if (this.marked) {
         stroke(MRED, MGREEN, MBLUE);
-        fill(230);
+        fill(150);
     } else {
         fill(50);
     }
@@ -121,7 +121,7 @@ Output.prototype.show = function (order = 0) {
     if (this.state) {
         fill(this.accentColor);
     } else if (this.marked) {
-        fill(255);
+        fill(170);
     } else {
         fill(LARED, LAGREEN, LABLUE);
     }
@@ -129,11 +129,7 @@ Output.prototype.show = function (order = 0) {
 
     if (order > 0) {
         noStroke();
-        if (this.marked) {
-            fill(50);
-        } else {
-            fill(255);
-        }
+        fill(255);
         textSize(20);
         textFont('ArcaMajora3');
         textAlign(LEFT, TOP);
