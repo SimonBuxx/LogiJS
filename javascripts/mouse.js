@@ -68,13 +68,13 @@ function mouseWheel(event) {
         }
         if (!simRunning) {
             reDraw();
-            document.getElementById('zoomLabelContainer').style.opacity = '1';
-            document.getElementById('zoomLabel').innerHTML = '<i class="fa fa-search icon" style="color: rgb(200, 50, 50);"></i> ' + Math.round(transform.zoom * 100) + '%';
-            window.clearTimeout(isScrolling);
-            isScrolling = setTimeout(function() {
-                document.getElementById('zoomLabelContainer').style.opacity = '0';
-            }, 2000);
         }
+        document.getElementById('zoomLabelContainer').style.opacity = '1';
+        document.getElementById('zoomLabel').innerHTML = '<i class="fa fa-search icon" style="color: rgb(200, 50, 50);"></i> ' + Math.round(transform.zoom * 100) + '%';
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(function () {
+            document.getElementById('zoomLabelContainer').style.opacity = '0';
+        }, 2000);
     }
     updateCursors();
 }
@@ -385,7 +385,7 @@ function mouseClicked() {
           Finishing the selection process by invoking handleSelection
 */
 function mouseReleased() {
-    if (moduleOptions && !mouseOverGUI()) {
+    if (moduleOptions && !mouseOverGUI() && mouseButton === LEFT) {
         let swapped = false;
         for (let i = 0; i < inputs.length; i++) {
             if (inputs[i].mouseOver() && !swapped) {
