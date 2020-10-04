@@ -1967,6 +1967,10 @@ function showElements() {
     if (showSelectionBox) {
         selectionBox.markClickBox(true);
     }
+
+    if (frameRate() < 20) {
+        setHelpText('Low Frame Rate!', 'exclamation-circle');
+    }
 }
 
 /*
@@ -2047,9 +2051,9 @@ function keyPressed() {
     }
 }
 
-function setHelpText(str) {
+function setHelpText(str, icon='question-circle') {
     if (str !== '') {
-        helpLabel.elt.innerHTML = '<i class="fa fa-question-circle icon" style="color: #c83232;"></i> ' + str;
+        helpLabel.elt.innerHTML = '<i class="fa fa-' + icon + ' icon" style="color: #c83232;"></i> ' + str;
         if (document.getElementById('helpLabelContainer').style.opacity === '0') {
             //document.getElementById('helpLabelContainer').style.opacity = '1';
         showHelpTimeout = setTimeout(function() {

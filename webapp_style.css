@@ -335,10 +335,7 @@ body {
 }
 
 .previewButton:hover {
-    -webkit-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 100ms linear;
     background: #ddd;
 }
 
@@ -347,10 +344,7 @@ body {
 }
 
 .previewButton:active, .previewButton.active {
-    -webkit-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 100ms linear;
     background: #969696;
 }
 
@@ -359,23 +353,17 @@ body {
 }
 
 .previewButton:disabled {
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 100ms linear;
     cursor: default;
-    background: #ddd;
+    background: #eee;
 }
 
 .dark-theme .previewButton:disabled {
-    background: #202020;
+    background: #323232;
 }
 
 .previewButton:disabled >  .preview {
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 100ms linear;
     filter: brightness(90%);
 }
 
