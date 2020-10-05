@@ -346,7 +346,7 @@ function setup() { // jshint ignore:line
         }
     }, false);
 
-    document.title = 'LogiJS: New Sketch';
+    document.title = 'LogiJS: Untitled Sketch';
 
     leftSideContainer = createDiv('');
     //leftSideContainer.elt.style.height = (windowHeight - 74 - 32 - 15).toString() + 'px';

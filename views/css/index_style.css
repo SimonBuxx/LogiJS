@@ -633,7 +633,12 @@ input {
     background: none;
     color: black;
     border-radius: 0;
-    outline: none;
+    outline: 1px solid rgba(0, 0, 0, 0);
+    transition: all 200ms linear;
+}
+
+input:hover {
+    outline: 1px solid #969696;
 }
 
 .dark-theme input {

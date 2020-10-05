@@ -76,25 +76,23 @@ body
               li
                 a#mode-button.internal-link(rel='nofollow', href='javascript:;', target='_parent' title='Toggle Dark Mode') <i class="fa fa-moon red"></i>
   .slogan-container
-    h1.background-text discover the world
+    h1.background-text Discover the world
     if user !== ''
       h1.slogan
-        | Hello, #{user}!
+        | Welcome, #{user}!
     else
       h1.slogan
-        | Discover the world
+        | Discover the World
         br
-        | of logic circuits
+        | of Logic Circuits
         span.red .
   .get_started
     if user !== ''
-      //a.btn.btn-lg.btn-orange(href='/dashboard', rel="nofollow", role='button')
-              <i class="fa fa-th"></i> Dashboard
       a.btn.btn-lg.btn-orange(href='/editor', rel="nofollow", role='button')
               <i class="fa fa-plus-circle"></i> New Sketch
     else
       a.btn.btn-lg.btn-orange(href='/getstarted', rel="nofollow", role='button') 
-            <i class="fa fa-magic"></i> Get Started
+            <i class="fa fa-directions"></i> Get Started
   .scroll_down
     a(href="#features" title="Scroll down") <i class="fa fa-chevron-down fa-4x"></i>
   #features
@@ -109,7 +107,7 @@ body
         <div class="item active">
           <span class="carousel-text"><h2 class="carousel-caption">Learn the basics of logic<br>gates and circuits<span class="red">.</span></h2>
             <div class="carousel-button">
-              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
+              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-directions"></i> Get Started</a>
             </div>
           </span> 
           <img id="carousel-1" class="carousel-image" src="images/carousel_1_new.png" alt="A LogiJS example sketch showing a traffic light simulation">
@@ -118,7 +116,7 @@ body
         <div class="item">
           <span class="carousel-text"><h2 class="carousel-caption">Import your circuits as<br>custom components<span class="red">.</span></h2>
             <div class="carousel-button">
-              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
+              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-directions"></i> Get Started</a>
             </div>
           </span> 
           <img id="carousel-2" class="carousel-image" src="images/carousel_2_new.png" alt="A LogiJS example sketch showing a basic cpu structure">
@@ -127,7 +125,7 @@ body
         <div class="item">
           <span class="carousel-text"><h2 class="carousel-caption">Save and access your<br>circuits online<span class="red">.</span></h2>
             <div class="carousel-button">
-              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-magic"></i> Get started</a>
+              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-directions"></i> Get Started</a>
             </div>
           </span>
           <img id="carousel-3" class="carousel-image" src="images/carousel_3_new.png" alt="The LogiJS user dashboard">
@@ -143,7 +141,7 @@ body
       </a>
     </div>
   #samples(style="display: block; position: relative; top: -150px; visibility: hidden;")
-  h2#samples-caption.normal-caption Samples
+  h2#samples-caption.normal-caption Samples<span class="red">.</span>
   .sample-element.left-elem
     .sample-description
       a(href="/editor?sketch=library__0gates", rel="nofollow")

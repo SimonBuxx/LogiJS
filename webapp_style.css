@@ -236,6 +236,13 @@ body {
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
     font-size: 17px;
     margin: 20px 0 20px 20px;
+    outline: 1px solid rgba(0, 0, 0, 0);
+    padding: 5px;
+    transition: all 200ms linear;
+}
+
+.checkbox:hover {
+    outline: 1px solid #969696;
 }
 
 .dark-theme .checkbox {
@@ -243,7 +250,7 @@ body {
 }
 
 .scrollContainerLeft > .checkbox {
-    margin: 10px 20px;
+    margin: 10px 20px 10px 10px;
 }
 
 .preview-span .no-outputs {
@@ -324,6 +331,7 @@ body {
 
     -ms-user-select: none;
     -webkit-user-select: none;
+    -webkit-user-drag: none;
     -moz-user-select: none;
     user-select: none;
     box-shadow: 0 0 3px #969696;
@@ -371,6 +379,12 @@ body {
     filter: brightness(50%);
 }
 
+.preview {
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+}
 
 .topBox {
     appearance: none;
@@ -434,7 +448,12 @@ body {
     -khtml-user-select: none;
     user-select: none;
     background: #969696;
-    outline: none;
+    outline: 1px solid rgba(0, 0, 0, 0);
+    transition: all 200ms linear;
+}
+
+.selectLeft:hover {
+    outline: 1px solid #969696;
 }
 
 .dark-theme .selectLeft {
@@ -477,6 +496,7 @@ body {
     -webkit-transition: .2s;
     transition: opacity .2s;
     border-radius: 0;
+    outline: 1px solid rgba(0, 0, 0, 0);
 }
 
 .slider::-webkit-slider-thumb {
@@ -560,7 +580,12 @@ input[type=range]::-ms-tooltip {
     border: none;
     background: white;
     color: #323232;
-    outline: none;
+    outline: 1px solid rgba(0, 0, 0, 0);
+    transition: 200ms linear;
+}
+
+.textInput:hover {
+    outline: 1px solid #969696;
 }
 
 .textInput:disabled::placeholder {
@@ -805,9 +830,10 @@ input[type=range]::-ms-tooltip {
 
 #module-input {
     font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
-    width: 200px;
+    width: 180px;
     height: 27px;
     margin: 10px;
+    margin-left: 20px;
     text-align: center;
 }
 
@@ -819,27 +845,40 @@ input[type=range]::-ms-tooltip {
     background: none;
     color: #969696;
     text-align: right;
-    padding: 5px 15px 5px 0;
-    outline: none;
+    padding: 7px 10px 5px 0;
+    margin-right: 5px;
+    outline: 1px solid rgba(0, 0, 0, 0);
+    transition: all 200ms linear;
 }
 
 #sketchname-1::placeholder {
     color: #969696;
+    transition: all 200ms linear;
+}
+
+#sketchname-1:hover {
+    outline: 1px solid #969696;
+    color: #323232;
+}
+
+.dark-theme #sketchname-1:hover {
+    color: #fff;
 }
 
 #sketchname-2 {
     font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
     height: 27px;
-    width: 200px;
+    width: 180px;
+    margin-left: 30px;
 }
 
 #desc-input {
     font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
     font-size: 18px;
     position: absolute;
-    right: 50px;
+    right: 40px;
     bottom: 100px;
-    width: 280px;
+    width: 300px;
     height: 172px;
     resize: none;
 }
@@ -955,15 +994,20 @@ input[type=range]::-ms-tooltip {
     width: 70px;
     background: white;
     font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
-    padding: 5px;
+    padding: 0px;
     height: 40px;
     color: #323232;
     font-size: 20px;
-    outline: none;
     border: none;
     border-radius: 0;
-    margin: 5px;
+    margin: 10px;
     text-align: center;
+    outline: 1px solid rgba(0, 0, 0, 0);
+    transition: all 200ms linear;
+}
+
+.inputLabel:hover {
+    outline: 1px solid #969696;
 }
 
 .dark-theme .inputLabel {
@@ -1269,11 +1313,11 @@ h1 {
 	overflow-x: hidden;
     padding-right: 2px;
     scrollbar-width: thin;
-    scrollbar-color: #969696 #fff;
+    scrollbar-color: #ccc #fff;
 }
 
 .dark-theme .scrollBoxLeft {
-    scrollbar-color: #969696 #323232;
+    scrollbar-color: #202020 #323232;
 }
 
 .scrollContainerLeft{
@@ -1299,7 +1343,7 @@ h1 {
 }
   
 ::-webkit-scrollbar-thumb {
-    background: #969696;
+    background: #ccc;
 }
 
 .dark-theme ::-webkit-scrollbar-thumb {

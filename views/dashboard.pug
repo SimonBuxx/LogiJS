@@ -8,7 +8,7 @@ head
   |   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   |   })(window,document,'script','dataLayer','GTM-WKSH2RQ');</script>
   |   <!-- End Google Tag Manager -->
-  title LogiJS: Dashboard
+  title LogiJS: #{user}'s Dashboard
   meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
   computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
   meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
@@ -76,7 +76,7 @@ body
                 a#mode-button.internal-link(rel='nofollow', href='javascript:;', target='_parent' title='Toggle Dark Mode') <i class="fa fa-moon red"></i>
   if sketchData.sketches.length === 0
     .slogan-container
-      h1.background-text(style="top: 50%; transform: translate(0, 50%);") discover the world
+      h1.background-text(style="top: 50%; transform: translate(0, 50%);") Discover the world
     .outer-dashboard-container(style="min-height: calc(100vh - 260px);")
       #nosketches_back
         p#nosketches_message You don't have any sketches
@@ -116,7 +116,7 @@ body
               a.del.click_delete(onclick="alert('Error: This is a demo account!');", rel="nofollow")
                 <span style="color: #c83232"><i class="fa fa-trash-alt"></i></span> Delete
             button#open-button.click_open.btn.btn-lg.btn-orange(rel="nofollow") 
-                <i class="fa fa-chevron-right"></i> Open
+                <i class="fa fa-play"></i> Open
       .item-container
         - var r = 0;
         while r < sketchData.sketches.length
@@ -156,11 +156,11 @@ body
       document.getElementsByClassName('click_download')[0].id = 'dl' + sketch_name;
       document.getElementsByClassName('click_delete')[0].id = sketch_name;
       document.getElementsByClassName('click_open')[0].onclick = function() {window.location.href='/editor?sketch=' + sketch_name;};
-      document.getElementById('span' + sketch_name).innerHTML = '<i class="fa fa-chevron-right"></i> Open';
+      document.getElementById('span' + sketch_name).innerHTML = '<i class="fa fa-play"></i> Open';
     }
     function sketch_click(r) {
       let sketch_name = "!{sketchData.sketches}".split(',')[r];
-      if (document.getElementById('span' + sketch_name).innerHTML === '<i class="fa fa-chevron-right"></i> Open') {
+      if (document.getElementById('span' + sketch_name).innerHTML === '<i class="fa fa-play"></i> Open') {
         window.location.href='/editor?sketch=' + sketch_name;
       } else {
         let date = "!{sketchData.modified}".split(',')[r];
@@ -179,6 +179,6 @@ body
         for (let i = 0; i < preview_spans.length; i++) {
           document.getElementsByClassName('preview-span')[i].innerHTML = '<i class="fa fa-search"></i> Details';
         }
-        document.getElementById('span' + sketch_name).innerHTML = '<i class="fa fa-chevron-right"></i> Open';
+        document.getElementById('span' + sketch_name).innerHTML = '<i class="fa fa-play"></i> Open';
       }
     }
