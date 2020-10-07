@@ -176,7 +176,9 @@ function closeCustomDialog() {
     configureButtons('edit');
 
     if (controlMode === 'modify') {
-        setActive(modifierModeButton, true);
+        setUnactive();
+        hideAllOptions();
+        editButton.classList.add('active');
     }
 
     justClosedMenu = true;

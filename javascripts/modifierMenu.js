@@ -7,9 +7,11 @@ function enterModifierMode() {
     closeModifierMenu();
     justClosedMenu = false;
     hideModuleOptions();
+    hideAllOptions();
+    setUnactive();
     setControlMode('modify');
     setSelectMode('none');
-    setActive(modifierModeButton, true);
+    editButton.classList.add('active');
     configureButtons('edit');
     document.getElementById('select-tools').style.display = 'none';
     addType = 0;
@@ -132,18 +134,6 @@ function positionModifierElements() {
     document.getElementById('label-modifier').style.top = modifierMenuY + 'px';
 }
 
-function newIsTopState() {
-    inputs[inputToModify].setIsTop(inputIsTopBox.checked());
-}
-
-function newCaption() {
-    if (inputToModify >= 0) {
-        inputs[inputToModify].lbl = captionInput.value();
-    } else {
-        outputs[outputToModify].lbl = captionInput.value();
-    }
-}
-
 function swapInputs(a, b) {
     inputs[a] = inputs.splice(b, 1, inputs[a])[0];
 }
@@ -166,16 +156,16 @@ function setOutputColor(code) {
     setColorButtonsUnactive();
     switch (code) {
         case 0:
-            redButton.className += ' col-active';
+            redButton.classList.add('active');
             break;
         case 1:
-            yellowButton.className += ' col-active';
+            yellowButton.classList.add('active');
             break;
         case 2:
-            greenButton.className += ' col-active';
+            greenButton.classList.add('active');
             break;
         case 3:
-            blueButton.className += ' col-active';
+            blueButton.classList.add('active');
             break;
         default:
     }
@@ -217,89 +207,8 @@ function elementMenuShown() {
 }
 
 function setColorButtonsUnactive() {
-    redButton.className = 'colorButton redButton';
-    yellowButton.className = 'colorButton yellowButton';
-    greenButton.className = 'colorButton greenButton';
-    blueButton.className = 'colorButton blueButton';
-}
-
-function createColorButtons() {
-    redButton = document.getElementsByClassName('redButton')[0];
-    redButton.addEventListener('mouseenter', function () {
-        setHelpText('Set the output color to red');
-    });
-    redButton.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    yellowButton = document.getElementsByClassName('yellowButton')[0];
-    yellowButton.addEventListener('mouseenter', function () {
-        setHelpText('Set the output color to yellow');
-    });
-    yellowButton.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    greenButton = document.getElementsByClassName('greenButton')[0];
-    greenButton.addEventListener('mouseenter', function () {
-        setHelpText('Set the output color to green');
-    });
-    greenButton.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    blueButton = document.getElementsByClassName('blueButton')[0];
-    blueButton.addEventListener('mouseenter', function () {
-        setHelpText('Set the output color to blue');
-    });
-    blueButton.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-}
-
-function createModifierElements() {
-    inputIsTopBox = createCheckbox('Pin to the top', false);
-    inputIsTopBox.hide();
-    inputIsTopBox.changed(newIsTopState);
-    inputIsTopBox.elt.className = 'topBox';
-    inputIsTopBox.mouseOver(function () {
-        setHelpText('On an exported module, this input should appear on top of the element');
-    });
-    inputIsTopBox.mouseOut(function () {
-        setHelpText('');
-    });
-
-    captionInput = createInput('');
-    captionInput.elt.style.fontFamily = 'ArcaMajora3';
-    captionInput.hide();
-    captionInput.size(167, 15);
-    captionInput.attribute('placeholder', 'Pin Name');
-    captionInput.input(newCaption);
-    captionInput.elt.className = "textInput";
-    captionInput.style('font-size', '20px');
-    captionInput.mouseOver(function () {
-        setHelpText('Caption of the corresponding pin on an exported module');
-    });
-    captionInput.mouseOut(function () {
-        setHelpText('');
-    });
-
-    clockspeedSlider = document.getElementById('cs-slider');
-    clockspeedSlider.addEventListener('mouseenter', function () {
-        setHelpText('Sets the toggle speed of this clock element');
-    });
-    clockspeedSlider.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    labelTextBox = document.getElementById('label-textbox');
-    labelTextBox.onkeyup = labelChanged;
-    labelTextBox.addEventListener('mouseenter', function () {
-        setHelpText('Edit the text of this label');
-    });
-    labelTextBox.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    createColorButtons();
+    redButton.classList.remove('active');
+    yellowButton.classList.remove('active');
+    greenButton.classList.remove('active');
+    blueButton.classList.remove('active');
 }

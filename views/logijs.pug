@@ -55,12 +55,22 @@ body
   |   <!-- End Google Tag Manager (noscript) -->
   a(href='/')
     img#logo(src='images/alt_logo_dark.png', alt='LogiJS logo')
-  <input id='fileid' type='file' accept='.json' hidden/>
+  <input id='fileid' type='file' accept='.json' hidden onchange='importJSONClicked();'/>
   #topButtonsContainer
     #topLeftButtons
+      button#edit-button.button.active(rel="nofollow" onclick="enterModifierMode();") <i class="fa fa-pen icon"></i> Edit
+      button#delete-button.button(rel="nofollow" onclick="deleteClicked();") <i class="fa fa-trash-alt icon"></i> Delete
+      button#sim-button.button(rel="nofollow" onclick="simClicked();", style="min-width: 65px;") <i class="fa fa-play icon"></i> Start
+      button#undo-button.button(rel="nofollow" onclick="undoClicked();" disabled) <i class="fa fa-undo icon"></i> Undo
+      button#redo-button.button(rel="nofollow" onclick="redoClicked();" disabled) <i class="fa fa-redo icon"></i> Redo
+      button#select-button.button(rel="nofollow" onclick="startSelect();") <i class="fas fa-object-group icon"></i> Select
+      button#module-button.button(rel="nofollow" onclick="moduleClicked();" disabled) <i class="fas fa-tools icon"></i> Module
     #topRightButtons
       input#sketchname-1(placeholder='Untitled Sketch', autocomplete='off')
+  //#scrollContainerLeft
+    #scrollBoxLeft
   #helpLabelContainer
+      p#help-label.label.inlineLabel <i class="fa fa-question-circle icon" style="color: #c83232;"></i>
   #zoomLabelContainer
     p#zoomLabel.label.inlineLabel 100%
   .custom-container(style="position: relative; z-index: 1")
@@ -111,10 +121,10 @@ body
   .output-container(style="position: relative; z-index: 1")
     #output-modifier
       h1 Output Color<span style="color: #c83232">.</span>
-      button.colorButton.redButton(rel="nofollow" onclick="newOutputColor(0);")
-      button.colorButton.yellowButton(rel="nofollow" onclick="newOutputColor(1);")
-      button.colorButton.greenButton(rel="nofollow" onclick="newOutputColor(2);")
-      button.colorButton.blueButton(rel="nofollow" onclick="newOutputColor(3);")
+      button#redButton.colorButton(rel="nofollow" onclick="newOutputColor(0);")
+      button#yellowButton.colorButton(rel="nofollow" onclick="newOutputColor(1);")
+      button#greenButton.colorButton(rel="nofollow" onclick="newOutputColor(2);")
+      button#blueButton.colorButton(rel="nofollow" onclick="newOutputColor(3);")
       .grey-rect-mini
       .red-rect-mini
   .clock-container(style="position: relative; z-index: 1")
@@ -127,7 +137,7 @@ body
   .label-container(style="position: relative; z-index: 1")
     #label-modifier
       h1 Label Text<span style="color: #c83232">.</span>
-      textarea#label-textbox(placeholder='New Label')
+      textarea#label-textbox(placeholder='New Label' onkeyup='labelChanged();')
       .grey-rect-mini
       .red-rect-mini
   .tour-container(style="position: relative; z-index: 1")

@@ -123,56 +123,46 @@ body {
     border: 3px solid rgba(0, 0, 0, 0);
     border-radius: 0;
     outline: none;
+    transition: all 100ms linear;
 }
 
-.redButton {
+#redButton {
     background: rgb(200, 50, 50);
 }
 
-.yellowButton {
+#yellowButton {
     background: rgb(240, 240, 50);
 }
 
-.greenButton {
+#greenButton {
     background: rgb(40, 180, 40);
 }
 
-.blueButton {
+#blueButton {
     background: rgb(10, 100, 190);
 }
 
-.colorButton:hover {
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-}
-
-.redButton:hover {
+#redButton:hover {
     background: rgb(209, 71, 71);
 }
 
-.yellowButton:hover {
+#yellowButton:hover {
     background: rgb(255, 255, 83);
 }
 
-.greenButton:hover {
+#greenButton:hover {
     background: rgb(78, 208, 69);
 }
 
-.blueButton:hover {
+#blueButton:hover {
     background: rgb(63, 125, 218);
 }
 
-.colorButton:active, .colorButton.col-active {
-    -webkit-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 100ms cubic-bezier(0.42, 0, 0.58, 1);
+.colorButton.active {
     border: 3px solid #323232;
 }
 
-.dark-theme .colorButton:active, .dark-theme .colorButton.col-active {
+.dark-theme .colorButton.active {
     border: 3px solid white;
 }
 
@@ -203,16 +193,16 @@ body {
     margin-bottom: 0;
 }
 
-.scrollContainerLeft > .label {
+#scrollContainerLeft > .label {
     margin: 30px 0 10px 0;
     width: 230px;
 }
 
-.scrollContainerLeft > .simLabel {
+#scrollContainerLeft > .simLabel {
     margin: 20px 0;
 }
 
-.scrollContainerLeft > .msLabel {
+#scrollContainerLeft > .msLabel {
     float: right;
     width: 60px;
     margin: 0 20px 0 0;
@@ -249,7 +239,7 @@ body {
     color: #fff;
 }
 
-.scrollContainerLeft > .checkbox {
+#scrollContainerLeft > .checkbox {
     margin: 10px 20px 10px 10px;
 }
 
@@ -470,17 +460,17 @@ body {
     color: #323232;
     border: none;
     width: 220px;
-    height: 60px;
-    outline: none;
+    height: 70px;
     resize: none;
+    outline: 1px solid rgba(0, 0, 0, 0);
+    transition: all 200ms linear;
+}
+
+#label-textbox:hover {
+    outline: 1px solid #969696;
 }
 
 .dark-theme #label-textbox {
-    background: #323232;
-    color: #fff;
-}
-
-.dark-theme .labelTextBox {
     background: #323232;
     color: #fff;
 }
@@ -1306,9 +1296,10 @@ h1 {
     margin-right: 10px;
 }
 
-.scrollBoxLeft{
+#scrollBoxLeft{
     display: inline-block;
-	width: 230px;
+    width: 230px;
+    height: min(500px, 100vh - 300px);
 	overflow-y: auto;
 	overflow-x: hidden;
     padding-right: 2px;
@@ -1316,11 +1307,11 @@ h1 {
     scrollbar-color: #ccc #fff;
 }
 
-.dark-theme .scrollBoxLeft {
+.dark-theme #scrollBoxLeft {
     scrollbar-color: #202020 #323232;
 }
 
-.scrollContainerLeft{
+#scrollContainerLeft{
     display: inline-block;
 	width: 235px;
 	overflow-y: hidden;
@@ -1333,7 +1324,7 @@ h1 {
     height: 100%;
 }
 
-.dark-theme .scrollContainerLeft {
+.dark-theme #scrollContainerLeft {
     background: #323232;
 }
 

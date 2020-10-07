@@ -257,24 +257,29 @@ let swapOutput = -1;
 
 let modifierMenuX, modifierMenuY;
 
-let moduleOptions = false;
+let moduleOptions = false; // This indicates if the module configurator is open
 
 let clickedOutOfGUI = false;
+
+let logoImage; // The logo image in the top left corner (DOM element)
 
 /*
     These are the modifier elements and their descriptional labels.
 */
-let inputIsTopBox, captionInput; // Input elements
 let redButton, yellowButton, greenButton, blueButton; // Output elements
 let labelTextBox; // Label elements
 
 let leftSideButtons, topLeftButtons, topRightButtons, topButtonsContainer;
 
-let sketchNameInput, moduleNameInput, saveButton, saveDialogText;
+let copySelectButton, deleteSelectButton; // These appear when a sketch part is selected
+
+let sketchNameInput, moduleNameInput, saveDialogText;
 let helpLabel, cancelButton, descInput;
-let deleteButton, simButton, labelBasic, labelAdvanced, labelOptions, labelSimulation,
+let deleteButton, simButton, labelAdvanced, labelOptions, labelSimulation,
     andButton, orButton, xorButton, bufferButton, notButton, inputButton, buttonButton, clockButton,
-    outputButton, clockspeedSlider, undoButton, redoButton, modifierModeButton, labelButton, segDisplayButton, moduleButton;
+    outputButton, clockspeedSlider, undoButton, redoButton, editButton, labelButton, segDisplayButton, moduleButton;
+
+let categoryLabels = [];
 
 /*
     Right side elements
@@ -349,17 +354,15 @@ function setup() { // jshint ignore:line
     document.title = 'LogiJS: Untitled Sketch';
 
     leftSideContainer = createDiv('');
-    //leftSideContainer.elt.style.height = (windowHeight - 74 - 32 - 15).toString() + 'px';
-    leftSideContainer.elt.className = 'scrollContainerLeft';
-    //leftSideContainer.elt.style.margin = '20px 0px';
+    leftSideContainer.elt.id = 'scrollContainerLeft';
 
     //Div for the Left Side Buttons
     leftSideButtons = createDiv('');
-    leftSideButtons.elt.className = 'scrollBoxLeft';
+    leftSideButtons.elt.id = 'scrollBoxLeft';
     leftSideButtons.parent(leftSideContainer);
     leftSideButtons.elt.style.height = Math.min(500, windowHeight - 300) + 'px';
 
-    createTopButtons();
+    linkElementsFromDOM();
 
     createBasicElements();
     createAdvancedElements();
@@ -371,7 +374,7 @@ function setup() { // jshint ignore:line
 
     createTopRightButtons();
 
-    createModifierElements();
+    addElementHelpTexts();
 
     frameRate(60); // Caps the framerate at 60 FPS
 
@@ -406,6 +409,8 @@ function setup() { // jshint ignore:line
     reDraw();
     setTimeout(reDraw, 100); // Redraw after 100ms in case fonts weren't loaded on first redraw
     justClosedMenu = false;
+
+    moduleButton.disabled = (outputs.length === 0); // If there are outputs, enable module configuration
 
     initTour();
 }
@@ -629,12 +634,12 @@ function setUnactive() {
     fulladdButton.elt.className = 'previewButton';
     customButton.elt.className = 'buttonLeft';
 
-    deleteButton.elt.className = 'button';
-    selectButton.elt.className = 'button';
-    modifierModeButton.elt.className = 'button';
-    simButton.elt.className = 'button';
+    deleteButton.classList.remove('active');
+    selectButton.classList.remove('active');
+    moduleButton.classList.remove('active');
+    editButton.classList.remove('active');
+    simButton.classList.remove('active');
     saveDialogButton.elt.className = 'button';
-    moduleButton.elt.className = 'button';
 }
 
 function deleteClicked() {
@@ -685,7 +690,9 @@ function deleteClicked() {
         if (controlMode === 'delete') {
             enterModifierMode();
         } else {
-            setActive(deleteButton, true);
+            setUnactive();
+            hideAllOptions();
+            deleteButton.classList.add('active');
             setControlMode('delete');
         }
     }
@@ -1019,7 +1026,9 @@ function startSelect() {
         enterModifierMode();
     } else {
         configureButtons('select');
-        setActive(selectButton, true);
+        setUnactive();
+        hideAllOptions();
+        selectButton.classList.add('active');
         setControlMode('select');
         setSelectMode('none');
     }
@@ -1269,7 +1278,7 @@ function addOutput() {
     newOutput.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newOutput.updateClickBox();
     outputs.push(newOutput);
-    moduleButton.elt.disabled = false;
+    moduleButton.disabled = false;
     pushUndoAction('addOut', [outputs.length - 1], [newOutput]);
     reDraw();
 }
@@ -1465,7 +1474,7 @@ function deleteCustom(customNumber) {
 */
 function deleteOutput(outputNumber) {
     pushUndoAction('delOut', [outputNumber], outputs.splice(outputNumber, 1));
-    moduleButton.elt.disabled = (outputs.length === 0);
+    moduleButton.disabled = (outputs.length === 0);
     reDraw();
 }
 
@@ -1474,7 +1483,7 @@ function deleteOutput(outputNumber) {
 */
 function deleteInput(inputNumber) {
     pushUndoAction('delIn', [inputNumber], inputs.splice(inputNumber, 1));
-    moduleButton.elt.disabled = (outputs.length === 0);
+    moduleButton.disabled = (outputs.length === 0);
     reDraw();
 }
 
@@ -1506,7 +1515,8 @@ function startSimulation() {
     setControlMode('modify');
 
     // Configure the DOMs for simulation mode
-    setActive(simButton, true);
+    setUnactive();
+    simButton.classList.add('active');
     configureButtons('simulation');
     hideAllOptions();
     leftSideButtons.hide();
@@ -1609,7 +1619,7 @@ function endSimulation() {
 }
 
 function setSimButtonText(text) {
-    simButton.elt.innerHTML = text;
+    simButton.innerHTML = text;
 }
 
 /*
@@ -1618,11 +1628,11 @@ function setSimButtonText(text) {
 */
 function updateUndoButtons() {
     if (loading) {
-        redoButton.elt.disabled = true;
-        undoButton.elt.disabled = true;
+        redoButton.disabled = true;
+        undoButton.disabled = true;
     } else {
-        redoButton.elt.disabled = (actionRedo.length === 0);
-        undoButton.elt.disabled = (actionUndo.length === 0);
+        redoButton.disabled = (actionRedo.length === 0);
+        undoButton.disabled = (actionUndo.length === 0);
     }
 }
 
@@ -1725,19 +1735,19 @@ function configureButtons(mode) {
 
     customButton.elt.disabled = (customimport || (getCookieValue('access_token') === ''));
 
-    modifierModeButton.elt.disabled = modifiers;
-    deleteButton.elt.disabled = modifiers;
-    selectButton.elt.disabled = select;
+    editButton.disabled = modifiers;
+    deleteButton.disabled = modifiers;
+    selectButton.disabled = select;
     if (!modifiers) {
         updateUndoButtons();
     } else {
-        undoButton.elt.disabled = true;
-        redoButton.elt.disabled = true;
+        undoButton.disabled = true;
+        redoButton.disabled = true;
     }
-    simButton.elt.disabled = simulation;
+    simButton.disabled = simulation;
     saveDialogButton.elt.disabled = savedialog;
     importButton.elt.disabled = jsonimport;
-    moduleButton.elt.disabled = moduleimport || (outputs.length === 0);
+    moduleButton.disabled = moduleimport || (outputs.length === 0);
 }
 
 function draw() {
@@ -1989,7 +1999,7 @@ function keyPressed() {
     if ((saveDialog || moduleOptions) && keyCode === ESCAPE) {
         enterModifierMode();
     }
-    if (captionInput.elt === document.activeElement || labelTextBox === document.activeElement || loading || saveDialog || moduleOptions) {
+    if (labelTextBox === document.activeElement || loading || saveDialog || moduleOptions) {
         return;
     }
     if (sketchNameInput !== document.activeElement) {
@@ -2051,12 +2061,11 @@ function keyPressed() {
     }
 }
 
-function setHelpText(str, icon='question-circle') {
+function setHelpText(str, icon = 'question-circle') {
     if (str !== '') {
-        helpLabel.elt.innerHTML = '<i class="fa fa-' + icon + ' icon" style="color: #c83232;"></i> ' + str;
+        helpLabel.innerHTML = '<i class="fa fa-' + icon + ' icon" style="color: #c83232;"></i> ' + str;
         if (document.getElementById('helpLabelContainer').style.opacity === '0') {
-            //document.getElementById('helpLabelContainer').style.opacity = '1';
-        showHelpTimeout = setTimeout(function() {
+            showHelpTimeout = setTimeout(function () {
                 document.getElementById('helpLabelContainer').style.opacity = '1';
                 document.getElementById('zoomLabelContainer').style.bottom = '60px';
             }, 500);

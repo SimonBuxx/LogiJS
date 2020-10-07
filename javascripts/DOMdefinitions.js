@@ -1,113 +1,97 @@
-function createTopButtons() {
-    // Activates the edit mode
-    modifierModeButton = createButton('<i class="fa fa-pen icon"></i> Edit');
-    modifierModeButton.mousePressed(function () {
-        enterModifierMode();
+function addHelpText(element, text) {
+    element.addEventListener('mouseenter', function () {
+        setHelpText(text);
     });
-    modifierModeButton.elt.className = 'button active';
-    modifierModeButton.mouseOver(function () {
-        setHelpText('Draw wires and change element properties');
-    });
-    modifierModeButton.mouseOut(function () {
-        setHelpText('');
-    });
-    modifierModeButton.parent(topLeftButtons);
-
-    // Activates the delete mode (objects and wires)
-    deleteButton = createButton('<i class="far fa-trash-alt icon"></i> Delete');
-    deleteButton.mousePressed(deleteClicked);
-    deleteButton.elt.className = 'button';
-    deleteButton.mouseOver(function () {
-        setHelpText('Delete wires and elements');
-    });
-    deleteButton.mouseOut(function () {
-        setHelpText('');
-    });
-    deleteButton.parent(topLeftButtons);
-
-    // Starts and stops the simulation
-    simButton = createButton('<i class="fa fa-play icon"></i> Start');
-    simButton.mousePressed(simClicked);
-    simButton.elt.className = 'button';
-    simButton.style('min-width', simButton.width + 10 + 'px');
-    simButton.mouseOver(function () {
-        setHelpText('Start and stop the Simulation');
-    });
-    simButton.mouseOut(function () {
-        setHelpText('');
-    });
-    simButton.parent(topLeftButtons);
-
-    // Undos the last action
-    undoButton = createButton('<i class="fa fa-undo icon"></i> Undo');
-    undoButton.mousePressed(() => {
-        undo();
-        moduleButton.elt.disabled = (outputs.length === 0);
-    });
-    undoButton.elt.disabled = true;
-    undoButton.elt.className = 'button';
-    undoButton.parent(topLeftButtons);
-
-    // Redos the last action
-    redoButton = createButton('<i class="fa fa-redo icon"></i> Redo');
-    redoButton.mousePressed(() => {
-        redo();
-        moduleButton.elt.disabled = (outputs.length === 0);
-    });
-    redoButton.elt.disabled = true;
-    redoButton.elt.className = 'button';
-    redoButton.parent(topLeftButtons);
-
-    // Activates the mode for area selecting
-    selectButton = createButton('<i class="fas fa-object-group icon"></i> Select');
-    selectButton.mousePressed(startSelect);
-    selectButton.elt.className = 'button';
-    selectButton.parent(topLeftButtons);
-    selectButton.mouseOver(function () {
-        setHelpText('Select an area to move, copy or delete');
-    });
-    selectButton.mouseOut(function () {
-        setHelpText('');
-    });
-
-    moduleButton = createButton('<i class="fas fa-tools icon"></i> Module');
-    moduleButton.mousePressed(function () {
+    element.addEventListener('mouseleave', function () {
         if (!moduleOptions) {
-            enterModifierMode();
-            showModuleOptions();
-            setActive(moduleButton, true);
-            setHelpText('Click on the in- and outputs to swap them!');
+            setHelpText('');
         } else {
-            hideModuleOptions();
-            enterModifierMode();
-            setHelpText('');
+            setHelpText('Click on the in- and outputs to swap them!');
         }
     });
-    moduleButton.elt.disabled = (outputs.length === 0);
-    moduleButton.elt.className = 'button';
-    moduleButton.parent(topLeftButtons);
+}
 
-    moduleButton.mouseOver(function () {
-        if (!moduleOptions) {
-            setHelpText('Configure this Sketch as a Custom Module');
-        }
-    });
-    moduleButton.mouseOut(function () {
-        if (!moduleOptions) {
-            setHelpText('');
-        }
-    });
+function linkElementsFromDOM() {
+    logoImage = document.getElementById('logo');
 
-    helpLabel = createP('<i class="fa fa-question-circle icon" style="color: rgb(200, 50, 50);"></i>');
-    helpLabel.elt.className = 'label inlineLabel';
-    document.getElementById('helpLabelContainer').appendChild(helpLabel.elt);
+    editButton = document.getElementById('edit-button');
+    deleteButton = document.getElementById('delete-button');
+    simButton = document.getElementById('sim-button');
+    undoButton = document.getElementById('undo-button');
+    redoButton = document.getElementById('redo-button');
+    selectButton = document.getElementById('select-button');
+    moduleButton = document.getElementById('module-button');
+
+    copySelectButton = document.getElementById('copy-select-button');
+    deleteSelectButton = document.getElementById('delete-select-button');
+
+    helpLabel = document.getElementById('help-label');
+
+    clockspeedSlider = document.getElementById('cs-slider');
+    labelTextBox = document.getElementById('label-textbox');
+    redButton = document.getElementById('redButton');
+    yellowButton = document.getElementById('yellowButton');
+    greenButton = document.getElementById('greenButton');
+    blueButton = document.getElementById('blueButton');
+
+    moduleNameInput = document.getElementById('module-input');
+    sketchNameInput = document.getElementById('sketchname-2');
+    topSketchInput = document.getElementById('sketchname-1');
+    descInput = document.getElementById('desc-input');
+
+    moduleNameInput.onkeyup = function () {
+        moduleNameChanged = true;
+        showModulePreviewer(); // Update previewer
+    };
+
+    sketchNameInput.onkeyup = function () {
+        if (!moduleNameInput.disabled && !moduleNameChanged) {
+            moduleNameInput.value = sketchNameInput.value;
+        }
+        topSketchInput.value = sketchNameInput.value;
+        reDraw();
+    };
+
+    topSketchInput.onkeyup = function () {
+        if (!moduleNameInput.disabled && !moduleNameChanged) {
+            moduleNameInput.value = topSketchInput.value;
+        }
+        sketchNameInput.value = topSketchInput.value;
+        reDraw();
+    };
+}
+
+function addElementHelpTexts() {
+    addHelpText(logoImage, 'Go to Start Page');
+
+    addHelpText(editButton, 'Draw wires and change element properties');
+    addHelpText(deleteButton, 'Delete wires and elements');
+    addHelpText(simButton, 'Start and stop the Simulation');
+    addHelpText(selectButton, 'Select an area to move, copy or delete');
+    addHelpText(moduleButton, 'Configure this Sketch as a Custom Module');
+
+    addHelpText(clockspeedSlider, 'Sets the toggle speed of this clock element');
+    addHelpText(labelTextBox, 'Edit the text of this label');
+    addHelpText(redButton, 'Set the output color to red');
+    addHelpText(yellowButton, 'Set the output color to yellow');
+    addHelpText(greenButton, 'Set the output color to green');
+    addHelpText(blueButton, 'Set the output color to blue');
+
+    addHelpText(copySelectButton, 'Copy this Sketch Part');
+    addHelpText(deleteSelectButton, 'Delete this Sketch Part');
+
+    addHelpText(descInput, 'This is the Description displayed in the Dashboard');
+    addHelpText(moduleNameInput, 'This is the Text written on the Module');
+    addHelpText(sketchNameInput, 'This is the File Name of the Sketch');
+    addHelpText(topSketchInput, 'This is the File Name of the Sketch');
+    addHelpText(document.getElementById('save-button'), 'Save this Sketch to the Dashboard');
 }
 
 function createBasicElements() {
-    // Adds text 'Basic'
-    labelBasic = createP('Logic Gates<span style="color: #c83232">.</span>');
-    labelBasic.elt.className = 'label';
-    labelBasic.parent(leftSideButtons);
+    let newCategoryLabel = createP('Logic Gates<span style="color: #c83232">.</span>');
+    newCategoryLabel.elt.className = 'label';
+    newCategoryLabel.parent(leftSideButtons);
+    categoryLabels.push(newCategoryLabel);
 
     // Adds and-gates
     andButton = createButton('');
@@ -196,9 +180,10 @@ function createBasicElements() {
     });
     bufferButton.parent(leftSideButtons);
 
-    labelInOut = createP('Inputs & Outputs<span style="color: #c83232">.</span>');
-    labelInOut.elt.className = 'label';
-    labelInOut.parent(leftSideButtons);
+    newCategoryLabel = createP('Inputs & Outputs<span style="color: #c83232">.</span>');
+    newCategoryLabel.elt.className = 'label';
+    newCategoryLabel.parent(leftSideButtons);
+    categoryLabels.push(newCategoryLabel);
 
     // Adds switches
     inputButton = createButton('');
@@ -267,10 +252,10 @@ function createBasicElements() {
 }
 
 function createAdvancedElements() {
-    // Adds text 'Advanced Elements'
-    labelAdvanced = createP('Memory<span style="color: #c83232">.</span>');
-    labelAdvanced.elt.className = 'label';
-    labelAdvanced.parent(leftSideButtons);
+    let newCategoryLabel = createP('Memory<span style="color: #c83232">.</span>');
+    newCategoryLabel.elt.className = 'label';
+    newCategoryLabel.parent(leftSideButtons);
+    categoryLabels.push(newCategoryLabel);
 
     // Adds an rs-flipflop
     rsFlipFlopButton = createButton('RS Flip-Flop');
@@ -343,9 +328,10 @@ function createAdvancedElements() {
     });
     reg4Button.parent(leftSideButtons);
 
-    labelConverter = createP('Converter<span style="color: #c83232">.</span>');
-    labelConverter.elt.className = 'label';
-    labelConverter.parent(leftSideButtons);
+    newCategoryLabel = createP('Converter<span style="color: #c83232">.</span>');
+    newCategoryLabel.elt.className = 'label';
+    newCategoryLabel.parent(leftSideButtons);
+    categoryLabels.push(newCategoryLabel);
 
     // Adds a decoder
     decoderButton = createButton('Decoder');
@@ -469,9 +455,10 @@ function createAdvancedElements() {
     demuxButton.parent(leftSideButtons);
 
 
-    labelAdder = createP('Adder<span style="color: #c83232">.</span>');
-    labelAdder.elt.className = 'label';
-    labelAdder.parent(leftSideButtons);
+    newCategoryLabel = createP('Adder<span style="color: #c83232">.</span>');
+    newCategoryLabel.elt.className = 'label';
+    newCategoryLabel.parent(leftSideButtons);
+    categoryLabels.push(newCategoryLabel);
 
     // Adds a Half Adder
     halfaddButton = createButton('Half Adder');
@@ -520,9 +507,10 @@ function createAdvancedElements() {
     });
     fulladdButton.parent(leftSideButtons);
 
-    labelVarious = createP('Various Elements<span style="color: #c83232">.</span>');
-    labelVarious.elt.className = 'label';
-    labelVarious.parent(leftSideButtons);
+    newCategoryLabel = createP('Various Elements<span style="color: #c83232">.</span>');
+    newCategoryLabel.elt.className = 'label';
+    newCategoryLabel.parent(leftSideButtons);
+    categoryLabels.push(newCategoryLabel);
 
     // Adds a counter
     counterButton = createButton('Counter');
@@ -576,12 +564,7 @@ function createCustomImportButton() {
         customClicked();
     });
     customButton.elt.className = 'buttonLeft';
-    customButton.mouseOver(function () {
-        setHelpText('Import your own Sketches as Custom Modules');
-    });
-    customButton.mouseOut(function () {
-        setHelpText('');
-    });
+    addHelpText(customButton.elt, 'Import your own Sketches as Custom Modules');
     customButton.parent(leftSideContainer);
     if (getCookieValue('access_token') === '') {
         customButton.elt.disabled = true;
@@ -855,103 +838,13 @@ function createElementOptions() {
 }
 
 function createDialogElements() {
-    document.getElementById('logo').addEventListener('mouseenter', function () {
-        setHelpText('Go to Start Page');
-    });
-    document.getElementById('logo').addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
 
-    document.getElementById('copy-select-button').addEventListener('mouseenter', function () {
-        setHelpText('Copy this Sketch Part');
-    });
-    document.getElementById('copy-select-button').addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    document.getElementById('delete-select-button').addEventListener('mouseenter', function () {
-        setHelpText('Delete this Sketch Part');
-    });
-    document.getElementById('delete-select-button').addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    moduleNameInput = document.getElementById('module-input');
-    moduleNameInput.onkeyup = function () {
-        moduleNameChanged = true;
-        showModulePreviewer();
-    };
-    moduleNameInput.addEventListener('mouseenter', function () {
-        setHelpText('This is the Text written on the Module');
-    });
-    moduleNameInput.addEventListener('mouseleave', function () {
-        setHelpText('Click on the in- and outputs to swap them!');
-    });
-
-    sketchNameInput = document.getElementById('sketchname-2');
-    sketchNameInput.onkeyup = function () {
-        if (!moduleNameInput.disabled && !moduleNameChanged) {
-            moduleNameInput.value = sketchNameInput.value;
-        }
-        topSketchInput.value = sketchNameInput.value;
-        reDraw();
-    };
-    sketchNameInput.addEventListener('mouseenter', function () {
-        setHelpText('This is the File Name of the Sketch');
-    });
-    sketchNameInput.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    topSketchInput = document.getElementById('sketchname-1');
-    topSketchInput.onkeyup = function () {
-        if (!moduleNameInput.disabled && !moduleNameChanged) {
-            moduleNameInput.value = topSketchInput.value;
-        }
-        sketchNameInput.value = topSketchInput.value;
-        reDraw();
-    };
-    topSketchInput.addEventListener('mouseenter', function () {
-        setHelpText('This is the File Name of the Sketch');
-    });
-    topSketchInput.addEventListener('mouseleave', function () {
-        if (!moduleOptions) {
-            setHelpText('');
-        } else {
-            setHelpText('Click on the in- and outputs to swap them!');
-        }
-    });
-
-    descInput = document.getElementById('desc-input');
-    if (getCookieValue('access_token') === '') {
-        descInput.placeholder = 'Sketch Description\n(Log in to give a description)';
-        descInput.disabled = true;
-    }
-    descInput.addEventListener('mouseenter', function () {
-        setHelpText('This is the Description displayed in the Dashboard');
-    });
-    descInput.addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
-
-    if (getCookieValue('access_token') !== '') {
-        document.getElementById('save-button').addEventListener('mouseenter', function () {
-            setHelpText('Save this Sketch to the Dashboard');
-        });
-    } else {
-        document.getElementById('save-button').addEventListener('mouseleave', function () {
-            setHelpText('Download this Sketch as a JSON File');
-        });
-    }
-    document.getElementById('save-button').addEventListener('mouseleave', function () {
-        setHelpText('');
-    });
 }
 
 function createTopRightButtons() {
-    document.getElementById('fileid').onchange = function () {
+    /*document.getElementById('fileid').onchange = function () {
         importJSONClicked();
-    };
+    };*/
 
     importButton = createButton('<i class="fas fa-file-upload icon"></i> Import');
     importButton.mousePressed(function () {
@@ -1023,4 +916,29 @@ function createTopRightButtons() {
     });
     dashboardButton.elt.className = 'button';
     dashboardButton.parent(topRightButtons);
+}
+
+function undoClicked() {
+    undo();
+    moduleButton.disabled = (outputs.length === 0);
+}
+
+function redoClicked() {
+    redo();
+    moduleButton.disabled = (outputs.length === 0);
+}
+
+function moduleClicked() {
+    if (!moduleOptions) {
+        enterModifierMode();
+        showModuleOptions();
+        hideAllOptions();
+        setUnactive();
+        moduleButton.classList.add('active');
+        setHelpText('Click on the in- and outputs to swap them!');
+    } else {
+        hideModuleOptions();
+        enterModifierMode();
+        setHelpText('');
+    }
 }
