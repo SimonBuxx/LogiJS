@@ -1,4 +1,4 @@
-// File: properties.js
+// File: modifierMenu.js
 // Contains functions for the modifier mode
 
 function enterModifierMode() {

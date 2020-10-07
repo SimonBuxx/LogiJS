@@ -27,7 +27,7 @@ function mouseWheel(event) {
                 xorClicked(true);
                 break;
             case 4:
-                inputClicked(true);
+                switchClicked(true);
                 break;
             case 5:
                 buttonClicked(true);
@@ -39,7 +39,7 @@ function mouseWheel(event) {
                 outputClicked(true);
                 break;
             case 8:
-                segDisplayClicked(true);
+                displayClicked(true);
                 break;
             case 9:
                 labelButtonClicked(true);
@@ -198,21 +198,21 @@ function updateCursors() {
     if (showCustomDialog || moduleOptions) {
         return;
     }
-    if (removeOldPreview) {
+    if (redrawNextFrame) {
         reDraw();
-        removeOldPreview = false;
+        redrawNextFrame = false;
     }
     if (showDPreview) {
         showPreview('diode', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
-        removeOldPreview = true;
+        redrawNextFrame = true;
     }
     if (showCPPreview) {
         showPreview('conpoint', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
-        removeOldPreview = true;
+        redrawNextFrame = true;
     }
     if (negPort !== null) {
         showNegationPreview(negPort, isOutput, negDir, isTop);
-        removeOldPreview = true;
+        redrawNextFrame = true;
     }
 }
 
@@ -235,11 +235,6 @@ function mouseDragged() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
-    if (elementMenuShown() && !mouseOverGUI()) {
-        clickedOutOfGUI = true;
-    } else {
-        clickedOutOfGUI = false;
-    }
     if (loading || saveDialog || showCustomDialog || moduleOptions || elementMenuShown()) { return; }
 
     if (wireMode === 'hold') {
@@ -436,7 +431,7 @@ function mouseReleased() {
 
     if (loading || showCustomDialog || saveDialog || moduleOptions || mouseOverGUI()) { return; }
     if (elementMenuShown()) {
-        if (!mouseOverGUI() && clickedOutOfGUI) {
+        if (!mouseOverGUI()) {
             closeModifierMenu();
             unmarkPropTargets();
             justClosedMenu = true;

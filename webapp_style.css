@@ -193,54 +193,93 @@ body {
     margin-bottom: 0;
 }
 
-#scrollContainerLeft > .label {
+#multiplier-label, #ticktime-label {
     margin: 30px 0 10px 0;
     width: 230px;
 }
 
-#scrollContainerLeft > .simLabel {
-    margin: 20px 0;
+#sim-label, #options-label {
+    margin: 20px 0 20px 0;
+    font-size: 25px;
+    text-align: center;
+    display: none;
 }
 
-#scrollContainerLeft > .msLabel {
+#dashboard-login-button {
+    min-width: 70px;
+}
+
+#dashboard-login-button.dashboard-button {
+    min-width: 118px;
+}
+
+#leftSideContainer > .msLabel {
     float: right;
     width: 60px;
     margin: 0 20px 0 0;
     line-height: 30px;
+    display: none;
 }
 
-.disabledLabel {
-    color: #969696;
+.topCheckbox {
+    outline: 1px solid rgba(0, 0, 0, 0);
+    transition: all 200ms linear;
+    cursor: pointer;
 }
 
-.dark-theme .disabledLabel {
-    color: #969696;
+.topCheckbox:hover {
+    outline: 1px solid #969696;
 }
 
 .checkbox {
+    display: none;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    color: #323232;
-    font-family: ArcaMajora3, 'Open Sans', sans-serif;
-    font-size: 17px;
     margin: 20px 0 20px 20px;
     outline: 1px solid rgba(0, 0, 0, 0);
     padding: 5px;
     transition: all 200ms linear;
+    cursor: pointer;
 }
 
 .checkbox:hover {
     outline: 1px solid #969696;
 }
 
+.checkbox:disabled {
+    outline: 1px solid rgba(0, 0, 0, 0);
+    cursor: default;
+}
+
 .dark-theme .checkbox {
     color: #fff;
 }
 
-#scrollContainerLeft > .checkbox {
+#leftSideContainer > .checkbox {
     margin: 10px 20px 10px 10px;
+}
+
+.checkbox-label {
+    display: none;
+    color: #323232;
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.dark-theme .checkbox-label {
+    color: #fff;
+}
+
+.disabledLabel, .dark-theme .disabledLabel {
+    color: #969696;
+    cursor: default;
+}
+
+#ticktime-label, #multiplier-label, #multiplier-value-label {
+    display: none;
 }
 
 .preview-span .no-outputs {
@@ -401,7 +440,7 @@ body {
 .optionLabel {
     margin: 5px 0 5px 10px;
     width: 110px;
-    display: inline-block;
+    display: none;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -419,7 +458,7 @@ body {
 	margin-top : 10px;
 	margin-left : 5px;
 	width: 80px;
-	display: inline-block;
+	display: none;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
@@ -487,6 +526,7 @@ body {
     transition: opacity .2s;
     border-radius: 0;
     outline: 1px solid rgba(0, 0, 0, 0);
+    cursor: pointer;
 }
 
 .slider::-webkit-slider-thumb {
@@ -497,7 +537,6 @@ body {
     border-radius: 0;
     border: none;
     background: #323232;
-    cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
@@ -506,7 +545,6 @@ body {
     border-radius: 0;
     border: none;
     background: #323232;
-    cursor: pointer;
 }
 
 .dark-theme .slider::-webkit-slider-thumb {
@@ -518,6 +556,7 @@ body {
 }
 
 .sliderLeft {
+    display: none;
     float: left;
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -1296,7 +1335,7 @@ h1 {
     margin-right: 10px;
 }
 
-#scrollBoxLeft{
+#toolbox{
     display: inline-block;
     width: 230px;
     height: min(500px, 100vh - 300px);
@@ -1307,11 +1346,11 @@ h1 {
     scrollbar-color: #ccc #fff;
 }
 
-.dark-theme #scrollBoxLeft {
+.dark-theme #toolbox {
     scrollbar-color: #202020 #323232;
 }
 
-#scrollContainerLeft{
+#leftSideContainer {
     display: inline-block;
 	width: 235px;
 	overflow-y: hidden;
@@ -1324,7 +1363,7 @@ h1 {
     height: 100%;
 }
 
-.dark-theme #scrollContainerLeft {
+.dark-theme #leftSideContainer {
     background: #323232;
 }
 

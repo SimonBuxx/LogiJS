@@ -123,7 +123,9 @@ function saveDialogClicked() {
     }
     enterModifierMode();
     saveDialog = true;
-    setActive(saveDialogButton, true);
+    setUnactive();
+    hideAllOptions();
+    saveDownloadButton.classList.add('active');
     // Take a picture before redrawing
     previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
     document.getElementById('preview-image').src = previewImg;
@@ -189,7 +191,9 @@ function custom_element_clicked(r) {
     if (r >= importSketchData.sketches.length || importSketchData.looks[r].outputs === 0) {
         return; // If the place should be greater than the number of available modules or the module has no outputs, return.
     }
-    setActive(customButton, true); // Set the custom modules button as activated
+    setUnactive();
+    hideAllOptions();
+    customButton.classList.add('active');
     setPreviewElement(true, importSketchData.looks[r]); // Show a preview of the module at the users mouse position
     importCustom(importSketchData.sketches[r] + '.json'); // Import the module on mouse click
 }

@@ -67,8 +67,9 @@ body
       button#module-button.button(rel="nofollow" onclick="moduleClicked();" disabled) <i class="fas fa-tools icon"></i> Module
     #topRightButtons
       input#sketchname-1(placeholder='Untitled Sketch', autocomplete='off')
-  //#scrollContainerLeft
-    #scrollBoxLeft
+      button#import-button.button(rel="nofollow" onclick="importButtonClicked();") <i class="fas fa-file-upload icon"></i> Import
+      button#save-download-button.button(rel="nofollow" onclick="saveDownloadClicked();") <i class="fas fa-file-download icon"></i> Download
+      button#dashboard-login-button.button(rel="nofollow" onclick="dashboardButtonClicked();") <i class="fas fa-sign-in-alt icon"></i> Login
   #helpLabelContainer
       p#help-label.label.inlineLabel <i class="fa fa-question-circle icon" style="color: #c83232;"></i>
   #zoomLabelContainer
@@ -164,6 +165,116 @@ body
         .configuratorLabel(style='grid-column: 4') Outputs
       #pin-inner
       .red-rect-medium
+  #leftSideContainer
+    #toolbox
+      p.label Logic Gates<span style="color: #c83232">.</span>
+      button#and-button.previewButton(rel="nofollow" onclick="andClicked(false);") 
+        img.preview(src="images/and-gate.png")
+      button#or-button.previewButton(rel="nofollow" onclick="orClicked();") 
+        img.preview(src="images/or-gate.png")
+      button#xor-button.previewButton(rel="nofollow" onclick="xorClicked();") 
+        img.preview(src="images/xor-gate.png")
+      button#not-button.previewButton(rel="nofollow" onclick="notClicked();") 
+        img.preview(src="images/not-gate.png")
+      button#buffer-button.previewButton(rel="nofollow" onclick="bufferClicked();") 
+        img.preview(src="images/buffer.png")
+      p.label Inputs & Outputs<span style="color: #c83232">.</span>
+      button#switch-button.previewButton(rel="nofollow" onclick="switchClicked();") 
+        img.preview(src="images/switch.png")
+      button#button-button.previewButton(rel="nofollow" onclick="buttonClicked();") 
+        img.preview(src="images/button.png")
+      button#clock-button.previewButton(rel="nofollow" onclick="clockClicked();") 
+        img.preview(src="images/clock.png")
+      button#output-button.previewButton(rel="nofollow" onclick="outputClicked();") 
+        img.preview(src="images/output.png")
+      button#display-button.previewButton(rel="nofollow" onclick="displayClicked();") 
+        img.preview(src="images/segments.png")
+      p.label Memory<span style="color: #c83232">.</span>
+      button#rs-flipflop-button.previewButton(rel="nofollow" onclick="rsFlipFlopClicked();") 
+        img.preview(src="images/rs-flipflop.png")
+      button#d-flipflop-button.previewButton(rel="nofollow" onclick="dFlipFlopClicked();") 
+        img.preview(src="images/d-flipflop.png")
+      button#register-button.previewButton(rel="nofollow" onclick="registerClicked();") 
+        img.preview(src="images/register.png")  
+      p.label Converter<span style="color: #c83232">.</span>
+      button#decoder-button.previewButton(rel="nofollow" onclick="decoderClicked();") 
+        img.preview(src="images/decoder.png")
+      button#mux-button.previewButton(rel="nofollow" onclick="muxClicked();") 
+        img.preview(src="images/mux.png")
+      button#demux-button.previewButton(rel="nofollow" onclick="demuxClicked();") 
+        img.preview(src="images/demux.png")
+      p.label Adder<span style="color: #c83232">.</span>
+      button#halfadd-button.previewButton(rel="nofollow" onclick="halfaddClicked();") 
+        img.preview(src="images/halfadd.png") 
+      button#fulladd-button.previewButton(rel="nofollow" onclick="fulladdClicked();") 
+        img.preview(src="images/fulladd.png") 
+      p.label Various Elements<span style="color: #c83232">.</span>
+      button#counter-button.previewButton(rel="nofollow" onclick="counterClicked();") 
+        img.preview(src="images/counter.png")
+      button#label-button.previewButton(rel="nofollow" onclick="labelButtonClicked();") 
+        img.preview(src="images/label.png")
+    button#custom-button.buttonLeft(rel="nofollow" onclick="customClicked();" disabled) <i class="fa fa-paste icon"></i> Custom Modules
+    p#sim-label.label Simulation<span style="color: #c83232">.</span>
+    p#options-label.label Options<span style="color: #c83232">.</span>
+    p#gate-inputs-label.optionLabel Gate Inputs
+    select#gate-inputs-select.selectLeft(onchange="newGateInputNumber();")
+      option(value="1") 1
+      option(value="2" selected) 2
+      option(value="3") 3
+      option(value="4") 4
+      option(value="5") 5
+      option(value="6") 6
+      option(value="7") 7
+      option(value="8") 8
+      option(value="9") 9
+      option(value="10") 10
+    p#direction-label.optionLabel Direction
+    select#direction-select.selectLeft(onchange="newDirection();")
+      option(value="Right" selected) Right
+      option(value="Up") Up
+      option(value="Left") Left
+      option(value="Down") Down
+    p#display-label.optionLabel Input Width
+    p#output-width-label.optionLabel Output Width
+    p#input-width-label.optionLabel Input Width
+    select#display-select.selectLeft(onchange="newDisplayBitLength();")
+      option(value="1") 1
+      option(value="2") 2
+      option(value="3") 3
+      option(value="4" selected) 4
+      option(value="5") 5
+      option(value="6") 6
+      option(value="7") 7
+      option(value="8") 8
+      option(value="16") 16
+      option(value="32") 32
+    select#counter-select.selectLeft(onchange="newCounterBitLength();")
+      option(value="2") 2
+      option(value="3") 3
+      option(value="4" selected) 4
+      option(value="5") 5
+    select#decoder-select.selectLeft(onchange="newDecoderBitLength();")
+      option(value="2" selected) 2
+      option(value="3") 3
+      option(value="4") 4
+      option(value="5") 5
+    select#mux-select.selectLeft(onchange="newMuxBitLength();")
+      option(value="1" selected) 1
+      option(value="2") 2
+      option(value="3") 3
+    input#syncFPSCheckbox.checkbox(type="checkbox" onchange="syncFramerateCheckBoxChanged();" checked) 
+    label#syncFPSLabel.checkbox-label(for="syncFPSCheckbox") Sync Ticks to Frames
+
+    input#bypassCheckbox.checkbox(type="checkbox" onchange="bypassTickTimeChanged();")
+    label#bypassLabel.checkbox-label(for="bypassCheckbox") Bypass min. ms/tick
+
+    p#ticktime-label.label.leftLabel Minimum ms/tick
+    input#ticktime-slider.slider.sliderLeft(type="range" min="0" max="100" value="10" oninput="newTickTime();")
+    p#ticktime-ms.label.msLabel 10ms
+
+    p#multiplier-label.label.leftLabel.disabledLabel Speed Multiplier
+    input#multiplier-slider.slider.sliderLeft(type="range" min="1" max="10" value="1" oninput="newMultiplicator();" disabled)
+    p#multiplier-value-label.label.msLabel.disabledLabel 1
   script
     include ../site_scripts/survicate.js
     include ../libraries/jquery.min.js

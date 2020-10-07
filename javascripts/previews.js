@@ -543,37 +543,6 @@ function showImportPreview(item, x, y) {
     textAlign(LEFT, TOP);
 }
 
-function showPreviewImage() {
-    let raw = new Image(window.height, window.height);
-    raw.src = previewImg;
-    let gradImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAQAAAAHUWYVAAABV0lEQVR4Ae3YBxEAMRADMafwxxwU6RKFHd+XnpKDIIggCCIIggiCIIKwWk8NFoIggiCIIAgiCIIIgiD4dWIhCCIIggiCIILgOwQLEQRBBEEQQRBEEARBEEHwL8tCEEQQBBEEQRDEdwgWIgiCCIIggiAIggiCIH6dYCGCIIggCIIggiCID0MsRBAEEQRBEEQQfIdYCIIIgiCCIAiCCIIggiCIf1lYiCAI8idBBEEQQfAdYiEIIgiCIIggCCIIggiCXycWgiAIIgiCCIIggiCIIAhCDxaChVgIFmIhCOJkYSGC4GRhIRaChQiCk2UhCOJkYSFYiIUgiJOFhVgIFmIhWAiCOFlYiCA4WRaChVgIguBkWQgWYiEI4mRhIRaChSCIk4WFWAgWIghOloUgCE6WhWAhFoIgThYWYiFYCII4WViIhWAhguBkWQgWgoUIgpNlIViIhSDIFwafxgPUTiURLQAAAABJRU5ErkJggg==';
-    let gradientRaw = new Image(200, 200);
-    gradientRaw.src = gradImg;
-    raw.onload = function () {
-        let img = createImage(raw.width, raw.height);
-        img.drawingContext.drawImage(raw, 0, 0, window.height, window.height, 0, 0, window.height, window.height);
-        img.resize(0, window.height / 1.5);
-        img.resize(0, window.height / 3);
-        img.resize(0, 200);
-        //img.drawingContext.drawImage(gradientRaw, 0, 0);
-        image(img, window.width / 2 - 333, window.height / 2 - 52);
-        fill('rgba(0, 0, 0, 0)');
-        strokeWeight(10);
-        if (currentTheme === 'dark') {
-            stroke(50, 50, 50);
-        } else {
-            stroke(255);
-        }
-        rect(window.width / 2 - 333, window.height / 2 - 52, 200, 200, 10);
-        let look = getThisLook();
-        if (look.outputs > 0) {
-            showImportPreview(look, window.width / 2 - 330, window.height / 2 - 46);
-        } else {
-            moduleNameInput.placeholder = 'No outputs!';
-        }
-    };
-}
-
 function initPreviewCanvas() {
     let pwSketch = function (p) {
         p.setup = function () {
