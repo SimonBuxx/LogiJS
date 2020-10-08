@@ -250,10 +250,10 @@ function finishSelection() {
 
     let conpointsAfter = _.cloneDeep(conpoints);
     let diodesAfter = _.cloneDeep(diodes);
-    pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes],
-        [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
-    if (selectionOffsetX === 0 && selectionOffsetY === 0) {
-        undo(true);
+    if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length +
+        selCustomIndizes.length + selConpointIndizes.length > 0 || selectionLog.length > 0) && (selectionOffsetX !== 0 || selectionOffsetY !== 0)) {
+        pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes],
+            [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
     }
 }
 

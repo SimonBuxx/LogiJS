@@ -1,6 +1,6 @@
 // File: undoredo.js
 
-function undo(noRedoPush = false) {
+function undo() {
     let act = actionUndo.pop();
     if (act !== null) {
         switch (act.actionType) {
@@ -158,9 +158,7 @@ function undo(noRedoPush = false) {
                 for (let i = 0; i < act.actionIndizes[7].length; i++) {
                     customs[act.actionIndizes[7][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
                 }
-                if (!noRedoPush) {
-                    actionRedo.push(act);
-                }
+                actionRedo.push(act);
                 break;
             case 'delSel':
                 conpoints = _.cloneDeep(act.actionObject[1]);
