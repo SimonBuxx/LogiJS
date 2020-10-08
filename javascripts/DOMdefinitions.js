@@ -490,7 +490,7 @@ function counterClicked() {
     counterButton.classList.add('active');
     let opLabels = [];
     for (let i = 0; i < counterBitWidth; i++) {
-        opLabels.push(i);
+        opLabels.push('2' + superscripts[counterBitWidth - i - 1]);
     }
     setPreviewElement(true, {
         tops: [],

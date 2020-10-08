@@ -1342,7 +1342,7 @@ h1 {
 #toolbox{
     display: inline-block;
     width: 230px;
-    height: min(500px, 100vh - 300px);
+    height: min(495px, 100vh - 300px);
 	overflow-y: auto;
 	overflow-x: hidden;
     padding-right: 2px;

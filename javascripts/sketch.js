@@ -13,12 +13,14 @@ let labels = []; // List of text labels
 let segDisplays = []; // List of 7-segment displays
 
 let sevenSegmentBits = 4; // Number of bits for new 7-segment displays
-let counterBitWidth = 4; // Output width of counter objects
+let counterBitWidth = 2; // Output width of counter objects
 let decoderBitWidth = 2; // Input width of decoder objects
 let muxBitWidth = 1; // In/output width for (de-) multiplexers
 
 let startDirection = 0; // Start direction for the current wire preview
 let traced = []; // List of all traced wires (needed by parseGroups)
+
+let superscripts = ['º', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
 
 /*
     This is a list of all elements that are currently selected with the selection tool
@@ -589,7 +591,7 @@ function newCounterBitLength() {
     if (counterButton.className.includes('active')) {
         let opLabels = [];
         for (let i = 0; i < counterBitWidth; i++) {
-            opLabels.push(i);
+            opLabels.push('2' + superscripts[counterBitWidth - i - 1]);
         }
         setPreviewElement(true, {
             tops: [],
@@ -771,12 +773,10 @@ function andClicked(dontToggle = false) {
 }
 
 function orClicked(dontToggle = false) {
-    console.log('orClicked');
     hideAllOptions();
     if (controlMode === 'addObject' && addType === 2 && !dontToggle) {
         enterModifierMode();
     } else {
-        console.log('setup or');
         setUnactive();
         orButton.classList.add('active');
         setControlMode('addObject');
@@ -1817,7 +1817,6 @@ function showElements() {
     }
 
     if (segDisplays.length > 0) {
-        textFont('PT Mono');
         for (const elem of segDisplays) {
             elem.show();
         }

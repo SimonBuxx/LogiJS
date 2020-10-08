@@ -23,6 +23,8 @@ function SegmentDisplay(x, y, transform, bits) {
 
     this.id = 's' + Date.now() + Math.random();
 
+    this.superscripts = ['º', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+
     // Initialize the inputs
     for (let i = 0; i < this.inputCount; i++) {
         this.inputs.push(false); // Set all inputs to low
@@ -150,6 +152,7 @@ SegmentDisplay.prototype.show = function () {
     noStroke();
     textSize(80);
     textAlign(CENTER, CENTER);
+    textFont('PT Mono');
     if (this.marked) {
         fill(MRED, MGREEN, MBLUE);
     } else {
@@ -160,7 +163,7 @@ SegmentDisplay.prototype.show = function () {
         txt += '0';
     }
     txt += this.value.toString();
-    text(txt, this.x + this.w / 2, this.y + this.h / 2);
+    text(txt, this.x + this.w / 2, this.y + this.h / 2 - 3);
 
     // Draw inputs
     for (let i = 1; i <= this.inputCount; i++) {
@@ -187,6 +190,21 @@ SegmentDisplay.prototype.show = function () {
 
         if (this.inputsInv[i - 1]) {
             ellipse(this.x1, this.y1 + this.h / 20 - 1.5, 10, 10);
+        }
+
+        if (this.marked) {
+            fill(MRED, MGREEN, MBLUE);
+        } else {
+            fill(0);
+        }
+        noStroke();
+        textSize(14);
+        textFont('Arial');
+
+        if (this.inputCount - i < 10) {
+            text('2' + this.superscripts[this.inputCount - i], this.x1, this.y1 - 10);
+        } else {
+            text('2' + this.superscripts[Math.floor((this.inputCount - i) / 10)] + this.superscripts[this.inputCount - i - Math.floor((this.inputCount - i) / 10) * 10], this.x1, this.y1 - 10);
         }
     }
 

@@ -399,7 +399,7 @@ function showElementPreview() {
                 for (let i = 0; i < Math.pow(2, sevenSegmentBits).toString().length; i++) {
                     txt += '0';
                 }
-                text(txt, mx + GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) / 2, my + (GRIDSIZE * 3) / 2);
+                text(txt, mx + GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) / 2, my + (GRIDSIZE * 3) / 2 - 3);
 
                 // Draw inputs
                 for (let i = 1; i <= sevenSegmentBits; i++) {
@@ -412,6 +412,16 @@ function showElementPreview() {
                     x2 = mx + (GRIDSIZE * i);
                     y2 = my + GRIDSIZE * 3 + 6;
                     line(x1, y1, x2, y2);
+
+                    noStroke();
+                    textSize(14);
+                    textFont('Arial');
+
+                    if (sevenSegmentBits - i < 10) {
+                        text('2' + superscripts[sevenSegmentBits - i], x1, y1 - 10);
+                    } else {
+                        text('2' + superscripts[Math.floor((sevenSegmentBits - i) / 10)] + superscripts[sevenSegmentBits - i - Math.floor((sevenSegmentBits - i) / 10) * 10], x1, y1 - 10);
+                    }
                 }
                 break;
             case 'label':
