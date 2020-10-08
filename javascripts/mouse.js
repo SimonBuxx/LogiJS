@@ -235,6 +235,11 @@ function mouseDragged() {
     Executed when a mouse button is pressed down
 */
 function mousePressed() {
+    if (elementMenuShown() && !mouseOverGUI()) {
+        clickedOutOfGUI = true;
+    } else {
+        clickedOutOfGUI = false;
+    }
     if (loading || saveDialog || showCustomDialog || moduleOptions || elementMenuShown()) { return; }
 
     if (wireMode === 'hold') {
@@ -431,7 +436,7 @@ function mouseReleased() {
 
     if (loading || showCustomDialog || saveDialog || moduleOptions || mouseOverGUI()) { return; }
     if (elementMenuShown()) {
-        if (!mouseOverGUI()) {
+        if (!mouseOverGUI() && clickedOutOfGUI) {
             closeModifierMenu();
             unmarkPropTargets();
             justClosedMenu = true;

@@ -228,6 +228,8 @@ let moduleNameChanged = false;
 */
 let redrawNextFrame = false;
 
+let clickedOutOfGUI = false;
+
 /*
     When an element is selected in modifier mode, it's number is saved in the respective variable.
     The other variables should be -1, indicating no element of this type is selected.
@@ -265,7 +267,7 @@ let editButton, deleteButton, simButton, undoButton, redoButton, selectButton, m
 let topSketchInput, importButton, saveDownloadButton, dashboardButton; // Right side elements
 
 let andButton, orButton, xorButton, bufferButton, notButton, switchButton, buttonButton, clockButton, outputButton, labelButton, displayButton; // Standard element buttons
-let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, registerButton, muxButton, demuxButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
+let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, registerButton, muxButton, demuxButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
 let labelOptions, labelSimulation, labelGateInputs, labelDirection, labelDisplay, labelOutputWidth,
     labelInputWidth, tickTimeLabel, tickTimeMsLabel, multiplierValueLabel; // Left side labels
 
@@ -490,6 +492,7 @@ function setUnactive() {
     decoderButton.classList.remove('active');
     dFlipFlopButton.classList.remove('active');
     rsFlipFlopButton.classList.remove('active');
+    jkFlipFlopButton.classList.remove('active');
     registerButton.classList.remove('active');
     muxButton.classList.remove('active');
     demuxButton.classList.remove('active');
@@ -1582,6 +1585,7 @@ function configureButtons(mode) {
     muxButton.disabled = tools;
     demuxButton.disabled = tools;
     dFlipFlopButton.disabled = tools;
+    jkFlipFlopButton.disabled = tools;
     rsFlipFlopButton.disabled = tools;
     halfaddButton.disabled = tools;
     fulladdButton.disabled = tools;

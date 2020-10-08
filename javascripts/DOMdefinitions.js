@@ -85,6 +85,7 @@ function linkElementsFromDOM() {
 
     rsFlipFlopButton = document.getElementById('rs-flipflop-button');
     dFlipFlopButton = document.getElementById('d-flipflop-button');
+    jkFlipFlopButton = document.getElementById('jk-flipflop-button');
     registerButton = document.getElementById('register-button');
     decoderButton = document.getElementById('decoder-button');
     muxButton = document.getElementById('mux-button');
@@ -177,6 +178,7 @@ function addElementHelpTexts() {
     addHelpText(displayButton, '7-Segment Display');
     addHelpText(rsFlipFlopButton, 'RS Flip-Flop');
     addHelpText(dFlipFlopButton, 'D Flip-Flop');
+    addHelpText(jkFlipFlopButton, 'JK Flip-Flop');
     addHelpText(registerButton, '4-Bit Register');
     addHelpText(decoderButton, 'Decoder');
     addHelpText(muxButton, 'Multiplexer');
@@ -303,6 +305,21 @@ function dFlipFlopClicked() {
         outputs: 2
     });
     return importCustom('d-flipflop.json');
+}
+
+function jkFlipFlopClicked() {
+    setUnactive();
+    hideAllOptions();
+    jkFlipFlopButton.classList.add('active');
+    setPreviewElement(true, {
+        tops: [],
+        inputLabels: ['J', '>', 'K'],
+        outputLabels: ['Q', 'Q̅'],
+        caption: 'JK-FF',
+        inputs: 3,
+        outputs: 2
+    });
+    return importCustom('jk-flipflop.json');
 }
 
 function registerClicked() {

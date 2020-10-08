@@ -529,6 +529,10 @@ body {
     cursor: pointer;
 }
 
+.slider:disabled {
+    cursor: default;
+}
+
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
