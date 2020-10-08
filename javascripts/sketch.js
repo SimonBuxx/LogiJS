@@ -771,12 +771,15 @@ function andClicked(dontToggle = false) {
 }
 
 function orClicked(dontToggle = false) {
+    console.log('orClicked');
     hideAllOptions();
     if (controlMode === 'addObject' && addType === 2 && !dontToggle) {
         enterModifierMode();
     } else {
+        console.log('setup or');
         setUnactive();
         orButton.classList.add('active');
+        setControlMode('addObject');
         addType = 2; // or
         setPreviewElement(false, {}, 'or');
         gateInputSelect.style.display = 'inline-block';
@@ -794,6 +797,7 @@ function xorClicked(dontToggle = false) {
     } else {
         setUnactive();
         xorButton.classList.add('active');
+        setControlMode('addObject');
         addType = 3; // xor
         setPreviewElement(false, {}, 'xor');
         gateInputSelect.style.display = 'inline-block';
