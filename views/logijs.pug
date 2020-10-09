@@ -67,8 +67,12 @@ body
       button#module-button.button(rel="nofollow" onclick="moduleClicked();" disabled) <i class="fas fa-tools icon"></i> Module
     #topRightButtons
       input#sketchname-1(placeholder='Untitled Sketch', autocomplete='off')
-      button#import-button.button(rel="nofollow" onclick="importButtonClicked();") <i class="fas fa-file-upload icon"></i> Import
-      button#save-download-button.button(rel="nofollow" onclick="saveDownloadClicked();") <i class="fas fa-file-download icon"></i> Download
+      .dropdown
+        button#dd-button.button <i class="fas fa-chevron-down icon"></i> Tools
+        #save-dropdown.dropdown-content
+          button.button#import-button(rel="nofollow" onclick="importButtonClicked();") <i class="fas fa-file-upload icon"></i> Import JSON
+          a.button#screenshot-button(href='#' rel="nofollow" onclick="screenshotClicked();") <i class="fas fa-camera icon"></i> Screenshot
+      button.button#save-download-button(rel="nofollow" onclick="saveDownloadClicked();") <i class="fas fa-file-download icon"></i> Download
       button#dashboard-login-button.button(rel="nofollow" onclick="dashboardButtonClicked();") <i class="fas fa-sign-in-alt icon"></i> Login
   #helpLabelContainer
       p#help-label.label.inlineLabel <i class="fa fa-question-circle icon" style="color: #c83232;"></i>

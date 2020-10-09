@@ -61,6 +61,8 @@ function linkElementsFromDOM() {
     customButton.disabled = (getCookieValue('access_token') === '');
 
     importButton = document.getElementById('import-button');
+    screenshotButton = document.getElementById('screenshot-button');
+
     saveDownloadButton = document.getElementById('save-download-button');
     if (getCookieValue('access_token') !== '') {
         saveDownloadButton.innerHTML = '<i class="fas fa-save icon"></i> Save';
@@ -143,8 +145,9 @@ function addElementHelpTexts() {
 
     addHelpText(topSketchInput, 'This is the File Name of the Sketch');
     addHelpText(importButton, 'Import a JSON File (Clears the current Sketch!)');
+    addHelpText(screenshotButton, 'Take a Screenshot of the Sketch');
     if (getCookieValue('access_token') !== '') {
-        addHelpText(saveDownloadButton, 'Save this Sketch');
+        addHelpText(saveDownloadButton, 'Save this Sketch to your Dashboard');
         addHelpText(dashboardButton, 'Get back to the Dashboard');
     } else {
         addHelpText(saveDownloadButton, 'Download as JSON');
@@ -556,7 +559,20 @@ function bypassTickTimeChanged() {
     }
 }
 
+function screenshotClicked() {
+    dropdownClicked = true;
+    reDraw();
+    loadImage('images/alt_logo.png', logoImage => {
+        image(logoImage, window.width - 200, window.height - 100);
+        let img = canvas.toDataURL("image/png");
+        window.open().document.write('<!DOCTYPE html><html><head><title>LogiJS: Screenshot</title></head><body style="margin: 0; background: #323232;"><img style="display: block; position: absolute; top: 25px; left: 120px;" src="' + img + '"/></body></html>');
+        dropdownClicked = false;
+        reDraw();
+    });
+}
+
 function importButtonClicked() {
+    dropdownClicked = true;
     document.getElementById('fileid').click();
 }
 

@@ -231,6 +231,7 @@ let moduleNameChanged = false;
 let redrawNextFrame = false;
 
 let clickedOutOfGUI = false;
+let dropdownClicked = false;
 
 /*
     When an element is selected in modifier mode, it's number is saved in the respective variable.
@@ -266,7 +267,7 @@ let moduleNameInput; // Module configurator elements
 let helpLabel; // Help text label
 
 let editButton, deleteButton, simButton, undoButton, redoButton, selectButton, moduleButton; // Tool buttons
-let topSketchInput, importButton, saveDownloadButton, dashboardButton; // Right side elements
+let topSketchInput, importButton, saveDownloadButton, dashboardButton, screenshotButton; // Right side elements
 
 let andButton, orButton, xorButton, bufferButton, notButton, switchButton, buttonButton, clockButton, outputButton, labelButton, displayButton; // Standard element buttons
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, registerButton, muxButton, demuxButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
@@ -1829,7 +1830,7 @@ function showElements() {
         elem.show();
     }
 
-    if (controlMode === 'addObject') {
+    if (controlMode === 'addObject' && !dropdownClicked) {
         textFont('Consolas');
         showElementPreview();
     }

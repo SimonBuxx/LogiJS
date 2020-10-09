@@ -434,6 +434,7 @@ function mouseReleased() {
         }
     }
 
+    dropdownClicked = false;
     if (loading || showCustomDialog || saveDialog || moduleOptions || mouseOverGUI()) { return; }
     if (elementMenuShown()) {
         if (!mouseOverGUI() && clickedOutOfGUI) {
@@ -734,10 +735,10 @@ function mouseOverImport(baseX, baseY, rows, cols) {
 
 //Checks if the mouse hovers over the GUI(true) or the grid(false)
 function mouseOverGUI() {
-    /*if (mouseY > window.height - 220 && mouseX < 970 && showHints) {
-        return true;
-    }*/
     if (moduleOptions && mouseX >= window.width - 360) {
+        return true;
+    }
+    if (dropdownClicked) {
         return true;
     }
     if (controlMode === 'modify' && inputToModify + outputToModify + labelToModify >= -2) {
