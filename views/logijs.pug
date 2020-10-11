@@ -35,6 +35,7 @@ head
     include ../javascripts/classes/diode.js
     include ../javascripts/classes/conpoint.js
     include ../javascripts/classes/group.js
+    include ../javascripts/customDialog.js
     include ../javascripts/selectionHandling.js
     include ../javascripts/modifierMenu.js
     include ../javascripts/previews.js
@@ -93,7 +94,7 @@ body
             .sketch_item
               .preview_image
                 img(src='data:image/png;base64,' + images[r], alt=sketchData.sketches[r])
-                span.overlay(onclick='custom_element_clicked(' + r + ')', onmouseover='custom_element_hovered(' + r + ')')
+                span.overlay(onclick='customDialog.elementClicked(' + r + ')', onmouseover='customDialog.elementHovered(' + r + ')')
                   span.preview-span(id='span' + sketchData.sketches[r]) <i class="fa fa-file-import"></i> Import
               p.sketch_name #{sketchData.sketches[r]}
                 span(style="color: #c83232;") .

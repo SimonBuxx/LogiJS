@@ -2,7 +2,7 @@
 // Contains functions for the modifier mode
 
 function enterModifierMode() {
-    closeCustomDialog();
+    customDialog.hide();
     closeSaveDialog();
     closeModifierMenu();
     justClosedMenu = false;

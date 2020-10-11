@@ -12,7 +12,7 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
     Triggers when the mouse wheel is used
 */
 function mouseWheel(event) {
-    if (loading || saveDialog || showCustomDialog || mouseOverGUI() || elementMenuShown()) { return; }
+    if (loading || saveDialog || customDialog.isVisible || mouseOverGUI() || elementMenuShown()) { return; }
     if (keyIsDown(18) && !simRunning && !moduleOptions) { // If the alt key is pressed => scroll trough basic elements
         wheel = Math.sign(event.deltaY);
         addType = Math.max(1, Math.min(9, addType + wheel));
@@ -92,7 +92,7 @@ function updateCursors() {
     let hand = false;
     let showDPreview = false;
     let showCPPreview = false;
-    if ((simRunning || controlMode === 'modify') && !showCustomDialog) {
+    if ((simRunning || controlMode === 'modify') && !customDialog.isVisible) {
         if (!simRunning) {
             for (const elem of outputs) {
                 if (elem.mouseOver()) {
@@ -188,14 +188,22 @@ function updateCursors() {
             }
         }
     }
-    if (controlMode === 'select' && selectionBox.mouseOver() && showSelectionBox) {
-        hand = true;
-        cursor(MOVE);
+    if (controlMode === 'select') {
+        if (selectionBox.mouseOver() && showSelectionBox) {
+            hand = true;
+            cursor(MOVE);
+        } else if (showSelectionBox) {
+            hand = true;
+            cursor(HAND);
+        } else {
+            hand = true;
+            cursor('crosshair');
+        }
     }
     if (!hand) {
         cursor(ARROW);
     }
-    if (showCustomDialog || moduleOptions) {
+    if (customDialog.isVisible || moduleOptions) {
         return;
     }
     if (redrawNextFrame) {
@@ -217,7 +225,7 @@ function updateCursors() {
 }
 
 function mouseDragged() {
-    if (loading || saveDialog || showCustomDialog || elementMenuShown()) { return; }
+    if (loading || saveDialog || customDialog.isVisible || elementMenuShown()) { return; }
     if (controlMode === 'select' && selectMode === 'drag') {
         if (sDragX2 !== Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE ||
             sDragY2 !== Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) {
@@ -240,7 +248,7 @@ function mousePressed() {
     } else {
         clickedOutOfGUI = false;
     }
-    if (loading || saveDialog || showCustomDialog || moduleOptions || elementMenuShown()) { return; }
+    if (loading || saveDialog || customDialog.isVisible || moduleOptions || elementMenuShown()) { return; }
 
     if (wireMode === 'hold') {
         wireMode = 'none';
@@ -313,7 +321,7 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if (loading || saveDialog || justClosedMenu || moduleOptions || showCustomDialog || elementMenuShown() || mouseOverGUI()) {
+    if (loading || saveDialog || justClosedMenu || moduleOptions || customDialog.isVisible || elementMenuShown() || mouseOverGUI()) {
         return;
     }
     if (!simRunning && !mouseOverGUI()) {
@@ -435,7 +443,7 @@ function mouseReleased() {
     }
 
     dropdownClicked = false;
-    if (loading || showCustomDialog || saveDialog || moduleOptions || mouseOverGUI()) { return; }
+    if (loading || customDialog.isVisible || saveDialog || moduleOptions || mouseOverGUI()) { return; }
     if (elementMenuShown()) {
         if (!mouseOverGUI() && clickedOutOfGUI) {
             closeModifierMenu();
@@ -752,7 +760,7 @@ function mouseOverGUI() {
     by calculating dx and dy
 */
 function handleDragging() {
-    if (loading || saveDialog || showCustomDialog || elementMenuShown() || mouseOverGUI()) { return; }
+    if (loading || saveDialog || customDialog.isVisible || elementMenuShown() || mouseOverGUI()) { return; }
     if (mouseIsPressed && mouseButton === RIGHT && mouseX > 0 && mouseY > 0) {
         if (lastX !== 0) {
             transform.dx += Math.round((mouseX - lastX) * dragSpeed);

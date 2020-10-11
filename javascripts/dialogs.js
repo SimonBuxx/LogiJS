@@ -152,63 +152,11 @@ function showSaveDialog() {
     }
 }
 
-
 function closeSaveDialog() {
     saveDialog = false;
     document.getElementById('save-dialog').style.display = 'none';
     justClosedMenu = true;
     mainCanvas.elt.classList.remove('dark-canvas');
-}
-
-function displayCustomDialog() {
-    mainCanvas.elt.classList.add('dark-canvas');
-    document.getElementById('custom-dialog').style.display = 'block';
-    if (importSketchData.looks.length > 0) {
-        PWp5.showImportPreview(importSketchData.looks[0], 0, 0);
-    } else {
-        PWp5.showEmptyGrid();
-    }
-    configureButtons('customdialog');
-}
-
-function closeCustomDialog() {
-    showCustomDialog = false;
-    document.getElementById('custom-dialog').style.display = 'none';
-
-    configureButtons('edit');
-
-    if (controlMode === 'modify') {
-        setUnactive();
-        hideAllOptions();
-        editButton.classList.add('active');
-    }
-
-    justClosedMenu = true;
-    mainCanvas.elt.classList.remove('dark-canvas');
-}
-
-function custom_element_clicked(r) {
-    if (r >= importSketchData.sketches.length || importSketchData.looks[r].outputs === 0) {
-        return; // If the place should be greater than the number of available modules or the module has no outputs, return.
-    }
-    setUnactive();
-    hideAllOptions();
-    customButton.classList.add('active');
-    setPreviewElement(true, importSketchData.looks[r]); // Show a preview of the module at the users mouse position
-    importCustom(importSketchData.sketches[r] + '.json'); // Import the module on mouse click
-}
-
-function custom_element_hovered(r) {
-    if (importSketchData.looks.length <= r) {
-        return;
-    }
-    PWp5.clear();
-    if (importSketchData.looks[r].outputs > 0) {
-        PWp5.showImportPreview(importSketchData.looks[r], 0, 0);
-    } else {
-        document.getElementsByClassName('preview-span')[r].innerHTML = '<span class="no-outputs"><i class="fa fa-times-circle"></i> This Sketch has no Outputs</span>';
-        PWp5.showNoOutputs();
-    }
 }
 
 function showModuleOptions() {

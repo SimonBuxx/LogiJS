@@ -158,10 +158,7 @@ let simRunning = false;
 */
 let saveDialog = false;
 
-/*
-    If this variable is true, the custom module dialog is displayed
-*/
-let showCustomDialog = false;
+let customDialog;
 
 let error = '';
 let errordesc = '';
@@ -306,6 +303,10 @@ p5.disableFriendlyErrors = true; // jshint ignore:line
 */
 document.addEventListener('contextmenu', event => event.preventDefault());
 
+function preload() {
+    customDialog = new CustomDialog();
+}
+
 /*
     Sets up the canvas and caps the framerate
 */
@@ -373,9 +374,9 @@ function importCustom(filename) {
         enterModifierMode();
     } else {
         setControlMode('addObject');
-        if (showCustomDialog) {
+        if (customDialog.isVisible) {
             addType = 11; // external custom
-            closeCustomDialog();
+            customDialog.hide();
         } else {
             addType = 10; // internal custom
         }
@@ -387,17 +388,20 @@ function importCustom(filename) {
 }
 
 function customClicked() {
-    if (showCustomDialog) {
-        closeCustomDialog();
-        return;
+    if (customDialog.isVisible) {
+        customDialog.hide();
+        configureButtons('edit');
+        mainCanvas.elt.classList.remove('dark-canvas');
+    } else {
+        setControlMode('modify');
+        setPreviewElement(false, {}, 'none');
+        setUnactive();
+        hideAllOptions();
+        customButton.classList.add('active');
+        mainCanvas.elt.classList.add('dark-canvas');
+        customDialog.display();
+        configureButtons('customdialog');
     }
-    showCustomDialog = true;
-    setPreviewElement(false, {}, 'none');
-    setUnactive();
-    hideAllOptions();
-    customButton.classList.add('active');
-    setControlMode('modify');
-    displayCustomDialog();
 }
 
 function importJSONClicked() {
