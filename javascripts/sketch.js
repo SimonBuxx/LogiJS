@@ -158,6 +158,10 @@ let simRunning = false;
 */
 let saveDialog = false;
 
+let screenshotDialog = false;
+
+let screenshotImg;
+
 let customDialog;
 
 let error = '';
@@ -301,7 +305,7 @@ p5.disableFriendlyErrors = true; // jshint ignore:line
 /*
     This line prevents the browser default right-click menu from appearing.
 */
-document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('contextmenu', function (event) { if (event.target.id !== 'screenshot') {event.preventDefault();}}, false);
 
 function preload() {
     customDialog = new CustomDialog();
@@ -442,6 +446,18 @@ function saveClicked() {
 
 function cancelClicked() {
     enterModifierMode();
+}
+
+function closeScreenshotClicked() {
+    document.getElementById('screenshot-dialog').style.display = 'none';
+    mainCanvas.elt.classList.remove('dark-canvas');
+    screenshotDialog = false;
+    if (!simRunning) {
+        enterModifierMode();
+    } else {
+        simButton.classList.add('active');
+        configureButtons('simulation');
+    }
 }
 
 function hideAllOptions() {
@@ -1566,6 +1582,15 @@ function configureButtons(mode) {
         jsonimport = true;
         moduleimport = true;
         select = false;
+    } else if (mode === 'screenshot') {
+        tools = true;
+        modifiers = true;
+        savedialog = true;
+        simulation = true;
+        customimport = true;
+        jsonimport = true;
+        moduleimport = true;
+        select = true;
     } else {
         tools = false;
         modifiers = false;

@@ -956,6 +956,22 @@ input[type=range]::-ms-tooltip {
     background: #323232;
 }
 
+#screenshot-dialog {
+    position: absolute;
+    padding: 10px;
+    left: 525px;
+    top: 80px;
+    background: white;
+    width: calc(100% - 830px);
+    height: calc(100vh - 230px);
+    margin: 0;
+    display: none;
+}
+
+.dark-theme #screenshot-dialog {
+    background: #323232;
+}
+
 #module-previewer {
     position: absolute;
     padding: 10px;
@@ -1266,12 +1282,46 @@ span.overlay span {
     border-radius: 0;
 }
 
-#cancel-button {
+#cancel-button, #close-screenshot, #newtab-screenshot {
     position: absolute;
     right: 30px;
     bottom: 30px;
     z-index: 2000;
     width: 200px;
+}
+
+#close-screenshot {
+    width: 150px;
+}
+
+#newtab-screenshot {
+    left: 30px;
+}
+
+#screenshot-text {
+    font-size: 20px;
+    text-align: center;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    color: #323232;
+}
+
+.dark-theme #screenshot-text {
+    color: #fff;
+}
+
+#screenshot {
+    position: relative;
+    object-fit: contain;
+    width: 100%;
+    height: calc(100vh - 440px);
+    margin: 0 auto;
+
+    image-rendering: -moz-crisp-edges;         /* Firefox */
+    image-rendering:   -o-crisp-edges;         /* Opera */
+    image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
 }
 
 h1 {

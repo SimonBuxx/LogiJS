@@ -561,14 +561,29 @@ function bypassTickTimeChanged() {
 
 function screenshotClicked() {
     dropdownClicked = true;
+    screenshotDialog = true;
+    setControlMode('modify');
+    setPreviewElement(false, {}, 'none');
+    setUnactive();
+    hideAllOptions();
+    configureButtons('screenshot');
     reDraw();
     loadImage('images/alt_logo.png', logoImage => {
         image(logoImage, window.width - 200, window.height - 100);
-        let img = canvas.toDataURL("image/png");
-        window.open().document.write('<!DOCTYPE html><html><head><title>LogiJS: Screenshot</title></head><body style="margin: 0; background: #323232;"><img style="display: block; position: absolute; top: 25px; left: 120px;" src="' + img + '"/></body></html>');
+        screenshotImg = canvas.toDataURL("image/png");
+        document.getElementById('screenshot').src = screenshotImg;
+        mainCanvas.elt.classList.add('dark-canvas');
+        document.getElementById('screenshot-dialog').style.display = 'block';
         dropdownClicked = false;
         reDraw();
     });
+}
+
+function screenshotNewTab() {
+    let newtab = window.open();
+    newtab.document.write('<!DOCTYPE html><html><head></head><body style="margin: 0; background: #323232;"><img style="display: block; position: absolute; top: 25px; left: 120px;" src="' + screenshotImg + '"/></body></html>');
+    newtab.document.location = '#';
+    newtab.document.title = 'LogiJS: Screenshot';
 }
 
 function importButtonClicked() {

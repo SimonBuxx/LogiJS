@@ -79,6 +79,17 @@ body
       p#help-label.label.inlineLabel <i class="fa fa-question-circle icon" style="color: #c83232;"></i>
   #zoomLabelContainer
     p#zoomLabel.label.inlineLabel 100%
+
+  .screenshot-container(style="position: relative; z-index: 1")
+    #screenshot-dialog
+      h1 Screenshot<span style="color: #c83232">.</span>
+      img#screenshot(src='', alt='Screenshot')
+      p#screenshot-text Right-click on the image to save it
+        span(style="color: #c83232;") .
+      button#close-screenshot.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="closeScreenshotClicked();") Close
+      button#newtab-screenshot.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="screenshotNewTab();") Open in New Tab
+      .grey-rect
+      .red-rect
   .custom-container(style="position: relative; z-index: 1")
     #custom-dialog
       h1 Import your own Modules<span style="color: #c83232">.</span>
