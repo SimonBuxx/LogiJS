@@ -4,6 +4,7 @@
 function enterModifierMode() {
     customDialog.hide();
     closeSaveDialog();
+    screenshotDialog = false;
     closeModifierMenu();
     justClosedMenu = false;
     hideModuleOptions();
@@ -14,6 +15,8 @@ function enterModifierMode() {
     editButton.classList.add('active');
     configureButtons('edit');
     document.getElementById('select-tools').style.display = 'none';
+    document.getElementById('screenshot-dialog').style.display = 'none';
+    mainCanvas.elt.classList.remove('dark-canvas');
     addType = 0;
 }
 

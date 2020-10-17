@@ -562,11 +562,20 @@ CustomSketch.prototype.show = function () {
     // Draw the body
     if (this.tops === 0) {
         if (this.direction % 2 === 0) {
+            if (this.h - GRIDSIZE === 0) {
+                return;
+            }
             rect(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE);
         } else {
+            if (this.w - GRIDSIZE === 0) {
+                return;
+            }
             rect(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h);
         }
     } else {
+        if (this.h === 0 || this.w === 0) {
+            return;
+        }
         rect(this.x, this.y, this.w, this.h);
     }
 

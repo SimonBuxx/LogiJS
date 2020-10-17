@@ -80,6 +80,13 @@ body
   #zoomLabelContainer
     p#zoomLabel.label.inlineLabel 100%
 
+  .message-container(style="position: relative; z-index: 1")
+    #message-dialog
+      h1#message-caption
+      p#message-text
+      .grey-rect-medium
+      .red-rect-medium
+
   .screenshot-container(style="position: relative; z-index: 1")
     #screenshot-dialog
       h1 Screenshot<span style="color: #c83232">.</span>
@@ -90,6 +97,7 @@ body
       button#newtab-screenshot.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="screenshotNewTab();") Open in New Tab
       .grey-rect
       .red-rect
+
   .custom-container(style="position: relative; z-index: 1")
     #custom-dialog
       h1 Import your own Modules<span style="color: #c83232">.</span>
@@ -113,13 +121,9 @@ body
       p.preview_name Preview
         span(style="color: #c83232;") .
       #canvas-container
-      p.preview_name(style='margin-top: 0;') How To
-        span(style="color: #c83232;") . 
-      p.preview_text In this menu, you can import structures you built in other sketch documents.<br><br>
-        | To prepare a sketch for being imported, you can 
-        | click on its in- and outputs in edit mode to alter their description and their order in which they appear on the final module. You can also place inputs at the top of your modules.
       .grey-rect
       .red-rect
+
   .save-container(style="position: relative; z-index: 1")
     #save-dialog
       h1 Save Sketch<span style="color: #c83232">.</span>

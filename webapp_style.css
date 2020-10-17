@@ -972,6 +972,32 @@ input[type=range]::-ms-tooltip {
     background: #323232;
 }
 
+#message-dialog {
+    position: absolute;
+    padding: 10px;
+    left: calc(50vw - 230px);
+    top: calc(50vh - 125px);
+    background: white;
+    width: 600px;
+    height: 150px;
+    margin: 0;
+    display: none;
+}
+
+.dark-theme #message-dialog {
+    background: #323232;
+}
+
+#message-text {
+    text-align: center;
+    color: #323232;
+    font-size: 20px;
+}
+
+.dark-theme #message-text {
+    color: #fff;
+}
+
 #module-previewer {
     position: absolute;
     padding: 10px;

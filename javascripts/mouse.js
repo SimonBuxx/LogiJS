@@ -13,46 +13,9 @@ let lockElements = false; // For delete mode, ensures that wires can be deleted 
 */
 function mouseWheel(event) {
     if (loading || saveDialog || customDialog.isVisible || screenshotDialog || mouseOverGUI() || elementMenuShown()) { return; }
-    if (keyIsDown(18) && !simRunning && !moduleOptions) { // If the alt key is pressed => scroll trough basic elements
-        wheel = Math.sign(event.deltaY);
-        addType = Math.max(1, Math.min(9, addType + wheel));
-        switch (addType) {
-            case 1:
-                andClicked(true);
-                break;
-            case 2:
-                orClicked(true);
-                break;
-            case 3:
-                xorClicked(true);
-                break;
-            case 4:
-                switchClicked(true);
-                break;
-            case 5:
-                buttonClicked(true);
-                break;
-            case 6:
-                clockClicked(true);
-                break;
-            case 7:
-                outputClicked(true);
-                break;
-            case 8:
-                displayClicked(true);
-                break;
-            case 9:
-                labelButtonClicked(true);
-                break;
-            default:
-                console.log('Invalid object type!');
-                break;
-        }
-        return;
-    }
 
     if (mouseX > 0 && mouseY > 0) {
-        wheel = Math.sign(event.deltaY) * 1.5; // -1.5 for zoom in, +1.5 for zoom out
+        wheel = Math.sign(event.deltaY) * 2; // -1.5 for zoom in, +1.5 for zoom out
         if ((currentGridSize + 1 < maxZoom * GRIDSIZE && wheel < 1) || (currentGridSize - 1 > minZoom * GRIDSIZE) && wheel > 1) {
             origX = mouseX * (transform.zoom);
             origY = mouseY * (transform.zoom);

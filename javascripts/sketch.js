@@ -164,8 +164,7 @@ let screenshotImg;
 
 let customDialog;
 
-let error = '';
-let errordesc = '';
+let messageHider;
 
 /*
     This object indicates if and what object preview should be drawn on screen.
@@ -305,7 +304,7 @@ p5.disableFriendlyErrors = true; // jshint ignore:line
 /*
     This line prevents the browser default right-click menu from appearing.
 */
-document.addEventListener('contextmenu', function (event) { if (event.target.id !== 'screenshot') {event.preventDefault();}}, false);
+document.addEventListener('contextmenu', function (event) { if (event.target.id !== 'screenshot') { event.preventDefault(); } }, false);
 
 function preload() {
     customDialog = new CustomDialog();
@@ -336,15 +335,15 @@ function setup() { // jshint ignore:line
     loadURLSketch();
 
     socket.on('demousererror', function () {
-        showError('Saving failed: No permissions!', 'This is a demo account.');
+        showMessage('Saving failed<span style="color: #c83232">.</span>', 'This is a demo account<span style="color: #c83232">.</span>');
     });
 
     socket.on('regexerror', function () {
-        showError('Saving failed: Forbidden characters!', 'Please use only letters and numbers.');
+        showMessage('Saving failed<span style="color: #c83232">.</span>', 'Please use only letters and numbers<span style="color: #c83232">.</span>');
     });
 
     socket.on('nametoolongerror', function () {
-        showError('Saving failed: Sketch name too long!', 'Please keep your file names shorter than 50 characters.');
+        showMessage('Saving failed<span style="color: #c83232">.</span>', 'The sketch name must be shorter than 50 characters<span style="color: #c83232">.</span>');
     });
 
     fetchImportData();
@@ -355,13 +354,6 @@ function setup() { // jshint ignore:line
     moduleButton.disabled = (outputs.length === 0); // If there are outputs, enable module configuration
 
     initTour(); // Show the tour if the variable has been passed
-}
-
-function showError(errorText, description) {
-    error = errorText;
-    errordesc = description;
-    reDraw();
-    setTimeout(function () { error = ''; errordesc = ''; reDraw(); }, 3000);
 }
 
 // Credits to https://stackoverflow.com/questions/2405355/how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page (Mic)
@@ -544,11 +536,6 @@ function deleteClicked() {
         let delOutputs = [[], []];
         let delWires = [[], []];
         let delSegDisplays = [[], []];
-        for (let i = 0; i < selection.length; i++) {
-            error = 'This feature is coming soon!';
-            errordesc = '';
-            setTimeout(function () { error = ''; }, 3000); //jshint ignore:line
-        }
         for (let j = delGates[1].length - 1; j >= 0; j--) {
             gates.splice(delGates[1][j], 1);
         }
@@ -1760,15 +1747,6 @@ function reDraw() {
     scale(1 / transform.zoom);
     translate(-transform.zoom * transform.dx, -transform.zoom * transform.dy);
 
-    if (loading) {
-        showMessage('Loading Sketch...', loadFile.split('.json')[0]);
-    }
-
-    if (error.length > 0) {
-        showMessage(error, errordesc);
-    }
-
-    // Draw the zoom and framerate labels
     /*textFont('ArcaMajora3');
     textAlign(LEFT, TOP);
     textSize(12);
@@ -1896,21 +1874,19 @@ function keyPressed() {
         if (keyCode >= 49 && keyCode <= 57) {
             gateInputCount = keyCode - 48;
             gateInputSelect.value = gateInputCount;
-            return;
+            return false;
         }
         switch (keyCode) {
             case ESCAPE:
                 enterModifierMode();
                 reDraw();
                 break;
-            case RETURN:
-                closeModifierMenu();
-                hideAllOptions();
-                simClicked();
-                break;
+            case RETURN: // Enter
+                if (!simButton.disabled) {
+                    simClicked();
+                }
+                return false;
             case CONTROL:
-                //startSelect();
-                //console.log(wires.length);
                 // Uncomment to make screenshots
                 //let img  = canvas.toDataURL("image/png");
                 //document.write('<img src="'+img+'"/>');
@@ -1923,6 +1899,36 @@ function keyPressed() {
                     deleteClicked();
                 } else {
                     enterModifierMode();
+                }
+                break;
+            case 80: // P
+                if (!screenshotButton.disabled) {
+                    screenshotClicked();
+                }
+                break;
+            case 73: // I
+                if (!importButton.disabled) {
+                    importButtonClicked();
+                }
+                break;
+            case 83: // S
+                if (!selectButton.disabled) {
+                    startSelect();
+                }
+                break;
+            case 68: // D
+                if (!deleteButton.disabled) {
+                    deleteClicked();
+                }
+                break;
+            case 90: // Z
+                if (!undoButton.disabled) {
+                    undoClicked();
+                }
+                break;
+            case 89: // Y
+                if (!redoButton.disabled) {
+                    redoClicked();
                 }
                 break;
             case 48: // 0

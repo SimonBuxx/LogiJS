@@ -2,36 +2,16 @@
     This function draws a popup message on the screen
 */
 
-function showMessage(msg, subline = '') {
-    noStroke();
-    // Draw the message box
-    fill(200, 50, 50);
-    rect(window.width / 2 - 320, window.height / 2 - 5, 100, 100);
-    if (currentTheme === 'dark') {
-        fill(255);
+function showMessage(msg, subline = '', autoHide=true) {
+    document.getElementById('message-caption').innerHTML = msg;
+    document.getElementById('message-text').innerHTML = subline;
+    document.getElementById('message-dialog').style.display = 'block';
+    if (autoHide) {
+        window.clearTimeout(messageHider);
+        messageHider = setTimeout(function () { document.getElementById('message-dialog').style.display = 'none'; }, 3000);
     } else {
-        fill(50, 50, 50);
+        window.clearTimeout(messageHider);
     }
-    rect(window.width / 2 + 220, window.height / 2 - 95, 100, 100);
-    if (currentTheme === 'dark') {
-        fill(50, 50, 50);
-    } else {
-        fill(255);
-    }
-    rect(window.width / 2 - 300, window.height / 2 - 75, 600, 150);
-    // Display the message
-    if (currentTheme === 'dark') {
-        fill(255);
-    } else {
-        fill(50, 50, 50);
-    }
-    textSize(30);
-    textFont('ArcaMajora3');
-    textAlign(CENTER, CENTER);
-    text(msg, window.width / 2, window.height / 2 - 20);
-    textSize(20);
-    fill(200, 50, 50);
-    text(subline, window.width / 2, window.height / 2 + 30);
 }
 
 function showTour(headline, text, welcome = false) {

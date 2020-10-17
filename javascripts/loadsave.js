@@ -58,6 +58,7 @@ function loadSketch(file) {
     loading = true;
     loadFile = file;
     document.title = 'LogiJS: ' + loadFile.split('.')[0];
+    showMessage('Loading Sketch<span style="color: #c83232">.</span>', loadFile.split('.json')[0]);
     loadJSON('sketches/' + file, load, function () {
         socket.emit('getUserSketch', { file: file.split('.')[0], access_token: getCookieValue('access_token') });
         socket.on('userSketchData', (data) => {
@@ -77,14 +78,14 @@ function loadSketchFromJSON(data, file) {
     setLoading(true);
     loadFile = file;
     document.title = 'LogiJS: ' + file;
+    showMessage('Loading Sketch<span style="color: #c83232">.</span>', loadFile.split('.json')[0]);
     load(data);
 }
 
 function fileNotFoundError() {
     // Change the site's title to the error message
-    document.title = 'LogiJS: Sketch not found!';
-    showMessage('Sketch not found!', 'Please use a local copy of LogiJS to open local files.');
-    setTimeout(function () { setLoading(false); }, 3000);
+    document.title = 'LogiJS: Sketch not found';
+    showMessage('Sketch not found<span style="color: #c83232">.</span>', 'Couldn\'t find this sketch in your files or the library<span style="color: #c83232">.</span>', false);
 }
 
 function load(loadData) {
@@ -180,6 +181,7 @@ function load(loadData) {
 */
 function loadCustomFile(file, num, hlparent) {
     loadFile = file;
+    showMessage('Loading Sketch<span style="color: #c83232">.</span>', loadFile.split('.json')[0]);
     if (cachedFiles.indexOf(file) >= 0) {
         setTimeout(function () {
             loadCallback(cachedData[cachedFiles.indexOf(file)], num, hlparent);
@@ -201,6 +203,8 @@ function loadCustomFile(file, num, hlparent) {
                         cachedData.push(loadData);
                     }
                     loadCallback(loadData, num, hlparent);
+                } else {
+                    showMessage('Loading failed<span style="color: #c83232">.</span>', 'Dependency ' + loadFile.split('.json')[0] + ' not found<span style="color: #c83232">.</span>', false);
                 }
                 socket.off('userSketchData');
             });
@@ -287,12 +291,14 @@ function loadCustomSketches() {
         loadNext();
     } else {
         setLoading(false);
+        document.getElementById('message-dialog').style.display = 'none';
     }
 }
 
 function loadNext() {
     if (customsToLoadQueue.length <= nextCustomToLoadIndex) {
         setLoading(false);
+        document.getElementById('message-dialog').style.display = 'none';
     } else {
         loadCustomFile(customsToLoadQueue[nextCustomToLoadIndex][0], customsToLoadQueue[nextCustomToLoadIndex][1], customsToLoadQueue[nextCustomToLoadIndex][2]);
         nextCustomToLoadIndex++;
@@ -355,6 +361,7 @@ function getThisLook() {
 function loadURLSketch() {
     let loadfile = urlParam('sketch');
     if (loadfile !== '') {
+        showMessage('Loading Sketch<span style="color: #c83232">.</span>', loadFile.split('.json')[0]);
         if (loadfile.indexOf('lib') === 0) {
             sketchNameInput.value = loadfile.substring(10);
             topSketchInput.value = loadfile.substring(10);

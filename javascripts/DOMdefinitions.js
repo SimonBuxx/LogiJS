@@ -137,15 +137,15 @@ function linkElementsFromDOM() {
 function addElementHelpTexts() {
     addHelpText(logoImage, 'Go to Start Page');
 
-    addHelpText(editButton, 'Draw wires and change element properties');
-    addHelpText(deleteButton, 'Delete wires and elements');
-    addHelpText(simButton, 'Start and stop the Simulation');
-    addHelpText(selectButton, 'Select an area to move, copy or delete');
+    addHelpText(editButton, 'Draw Wires and change Element Properties <span style="color: #c83232">[Esc]</span>');
+    addHelpText(deleteButton, 'Delete Wires and Elements <span style="color: #c83232">[D]</span>');
+    addHelpText(simButton, 'Start and stop the Simulation <span style="color: #c83232">[⏎]</span>');
+    addHelpText(selectButton, 'Select an area to move, copy or delete <span style="color: #c83232">[S]</span>');
     addHelpText(moduleButton, 'Configure this Sketch as a Custom Module');
 
     addHelpText(topSketchInput, 'This is the File Name of the Sketch');
-    addHelpText(importButton, 'Import a JSON File (Clears the current Sketch!)');
-    addHelpText(screenshotButton, 'Take a Screenshot of the Sketch');
+    addHelpText(importButton, 'Import a JSON File (Clears the current Sketch!) <span style="color: #c83232">[I]</span>');
+    addHelpText(screenshotButton, 'Take a Screenshot of the Sketch <span style="color: #c83232">[P]</span>');
     if (getCookieValue('access_token') !== '') {
         addHelpText(saveDownloadButton, 'Save this Sketch to your Dashboard');
         addHelpText(dashboardButton, 'Get back to the Dashboard');
