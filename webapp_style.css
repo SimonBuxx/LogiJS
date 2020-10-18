@@ -865,6 +865,10 @@ input[type=range]::-ms-tooltip {
     width: 150px;
 }
 
+#save-sketch-button {
+    display: none;
+}
+
 #module-input {
     font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
     width: 180px;

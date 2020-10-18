@@ -105,7 +105,7 @@ function saveDialogClicked() {
     saveDialog = true;
     setUnactive();
     hideAllOptions();
-    saveDownloadButton.classList.add('active');
+    saveButton.classList.add('active');
     // Take a picture before redrawing
     previewImg = document.getElementById('mainCanvas').toDataURL('image/png');
     document.getElementById('preview-image').src = previewImg;

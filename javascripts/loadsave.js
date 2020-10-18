@@ -1,6 +1,6 @@
 // File: loadsave.js
 
-function saveSketch(filename, callback) {
+function buildJSON() {
     // Create a new json object to store all elements in
     let json = {};
     json.caption = moduleNameInput.value;
@@ -42,14 +42,26 @@ function saveSketch(filename, callback) {
             json.customs.push(customs[i].getData());
         }
     }
-    if (getCookieValue('access_token') !== '') {
-        sketchNameInput.value = filename.split('.')[0];
-        topSketchInput.value = filename.split('.')[0];
-        socket.emit('saveUserSketch', { file: filename, json: json, access_token: getCookieValue('access_token') });
-    } else {
-        saveJSON(json, filename); // Save the file as json (asks for directory...)
-    }
+    return json;
+}
+
+function saveSketch(filename, callback) {
+    let json = buildJSON();
+    sketchNameInput.value = filename.split('.')[0];
+    topSketchInput.value = filename.split('.')[0];
+    socket.emit('saveUserSketch', { file: filename, json: json, access_token: getCookieValue('access_token') });
     callback(getLookData(json));
+}
+
+function downloadSketch() {
+    let filename = sketchNameInput.value;
+    if (filename === '') {
+        filename = 'untitled';
+    }
+    let json = buildJSON();
+    saveJSON(json, filename + '.json'); // Save the file as json (asks for directory...)
+    enterModifierMode();
+    document.title = 'LogiJS: ' + filename;
 }
 
 function loadSketch(file) {
@@ -85,6 +97,8 @@ function loadSketchFromJSON(data, file) {
 function fileNotFoundError() {
     // Change the site's title to the error message
     document.title = 'LogiJS: Sketch not found';
+    screenshotButton.disabled = true;
+    mainCanvas.elt.classList.add('dark-canvas');
     showMessage('Sketch not found<span style="color: #c83232">.</span>', 'Couldn\'t find this sketch in your files or the library<span style="color: #c83232">.</span>', false);
 }
 

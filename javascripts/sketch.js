@@ -267,7 +267,7 @@ let moduleNameInput; // Module configurator elements
 let helpLabel; // Help text label
 
 let editButton, deleteButton, simButton, undoButton, redoButton, selectButton, moduleButton; // Tool buttons
-let topSketchInput, importButton, saveDownloadButton, dashboardButton, screenshotButton; // Right side elements
+let topSketchInput, importButton, saveButton, downloadButton, dashboardButton, screenshotButton; // Right side elements
 
 let andButton, orButton, xorButton, bufferButton, notButton, switchButton, buttonButton, clockButton, outputButton, labelButton, displayButton; // Standard element buttons
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, registerButton, muxButton, demuxButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
@@ -520,7 +520,7 @@ function setUnactive() {
     moduleButton.classList.remove('active');
     editButton.classList.remove('active');
     simButton.classList.remove('active');
-    saveDownloadButton.classList.remove('active');
+    saveButton.classList.remove('active');
 }
 
 function deleteClicked() {
@@ -1623,7 +1623,7 @@ function configureButtons(mode) {
         redoButton.disabled = true;
     }
     simButton.disabled = simulation;
-    saveDownloadButton.disabled = savedialog;
+    saveButton.disabled = savedialog;
     importButton.disabled = jsonimport;
     moduleButton.disabled = moduleimport || (outputs.length === 0);
 }

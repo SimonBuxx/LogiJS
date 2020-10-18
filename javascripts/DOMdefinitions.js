@@ -63,10 +63,12 @@ function linkElementsFromDOM() {
     importButton = document.getElementById('import-button');
     screenshotButton = document.getElementById('screenshot-button');
 
-    saveDownloadButton = document.getElementById('save-download-button');
+    saveButton = document.getElementById('save-sketch-button');
     if (getCookieValue('access_token') !== '') {
-        saveDownloadButton.innerHTML = '<i class="fas fa-save icon"></i> Save';
+        saveButton.style.display = 'inline-block';
     }
+
+    downloadButton = document.getElementById('download-button');
 
     dashboardButton = document.getElementById('dashboard-login-button');
     if (getCookieValue('access_token') !== '') {
@@ -147,10 +149,10 @@ function addElementHelpTexts() {
     addHelpText(importButton, 'Import a JSON File (Clears the current Sketch!) <span style="color: #c83232">[I]</span>');
     addHelpText(screenshotButton, 'Take a Screenshot of the Sketch <span style="color: #c83232">[P]</span>');
     if (getCookieValue('access_token') !== '') {
-        addHelpText(saveDownloadButton, 'Save this Sketch to your Dashboard');
+        addHelpText(saveButton, 'Save this Sketch to your Dashboard');
         addHelpText(dashboardButton, 'Get back to the Dashboard');
     } else {
-        addHelpText(saveDownloadButton, 'Download as JSON');
+        addHelpText(downloadButton, 'Download as JSON');
         addHelpText(dashboardButton, 'Log into your LogiJS Account');
     }
 
@@ -591,14 +593,6 @@ function importButtonClicked() {
     document.getElementById('fileid').click();
 }
 
-function saveDownloadClicked() {
-    if (getCookieValue('access_token') !== '') {
-        saveDialogClicked();
-    } else {
-        saveClicked();
-    }
-}
-
 function dashboardButtonClicked() {
     if (dashboardButton.innerHTML === 'SURE?') {
         window.location = '/dashboard';
@@ -606,5 +600,27 @@ function dashboardButtonClicked() {
         dashboardButton.classList.add('active');
         dashboardButton.innerHTML = 'SURE?';
         setTimeout(function () { if (getCookieValue('access_token') !== '') { dashboardButton.innerHTML = '<i class="fas fa-th icon"></i> Dashboard'; } else { dashboardButton.innerHTML = '<i class="fa fa-sign-in-alt icon"></i> Login'; } dashboardButton.classList.remove('active'); }, 3000);
+    }
+}
+
+function darkmodeClicked() {
+    dropdownClicked = true;
+    setControlMode('modify');
+    setPreviewElement(false, {}, 'none');
+    setUnactive();
+    hideAllOptions();
+    reDraw();
+    if (currentTheme === 'light') {
+        currentTheme = 'dark';
+        document.documentElement.classList.add('dark-theme');
+        document.getElementById('logo').src = 'images/alt_logo.png';
+        labelButton.innerHTML = '<img class="preview" src="images/label_white.png">';
+        document.getElementById('darkmode-button').innerHTML = '<i class="fas fa-sun icon"></i> Light Mode';
+    } else {
+        currentTheme = 'light';
+        document.documentElement.classList.remove('dark-theme');
+        document.getElementById('logo').src = 'images/alt_logo_dark.png';
+        labelButton.innerHTML = '<img class="preview" src="images/label.png">';
+        document.getElementById('darkmode-button').innerHTML = '<i class="fas fa-moon icon"></i> Dark Mode';
     }
 }
