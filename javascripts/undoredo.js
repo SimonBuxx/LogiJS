@@ -429,10 +429,8 @@ function redo() {
                 conpoints = _.cloneDeep(act.actionObject[2]);
                 for (let i = 0; i < act.actionObject[0].length; i++) {
                     if (act.actionObject[0][i][0] === 'a') {
-                        console.log('redoing add');
                         wires.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
                     } else if (act.actionObject[0][i][0] === 'd') {
-                        console.log('redoing delete');
                         wires.splice(act.actionObject[0][i][1], 1);
                     }
                 }
