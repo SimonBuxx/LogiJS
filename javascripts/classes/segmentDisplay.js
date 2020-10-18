@@ -129,6 +129,11 @@ SegmentDisplay.prototype.pointInInput = function (n, px, py) {
 SegmentDisplay.prototype.update = function () {
     this.value = 0;
     for (let i = 0; i < this.inputCount; i++) {
+        if (!this.ipset[i]) {
+            this.inputs[i] = this.inputsInv[i];
+        }
+    }
+    for (let i = 0; i < this.inputCount; i++) {
         if (this.inputs[i]) {
             this.value += Math.pow(2, this.inputCount - i - 1);
         }

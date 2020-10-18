@@ -623,4 +623,5 @@ function darkmodeClicked() {
         labelButton.innerHTML = '<img class="preview" src="images/label.png">';
         document.getElementById('darkmode-button').innerHTML = '<i class="fas fa-moon icon"></i> Dark Mode';
     }
+    localStorage.setItem('theme', currentTheme);
 }
