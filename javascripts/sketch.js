@@ -179,7 +179,7 @@ let importSketchData = {}; // Contains look and caption of all user sketches tha
 */
 let syncFramerate = true;
 
-let speedMultiplicator = 10;
+let speedMultiplier = 10;
 
 let stopTicks = false;
 
@@ -730,19 +730,22 @@ function newTickTime() {
     tickTimeMsLabel.innerHTML = tickTimeSlider.value + 'ms';
 }
 
-function newMultiplicator() {
-    speedMultiplicator = multiplierSlider.value * 10;
+function newMultiplier() {
+    speedMultiplier = multiplierSlider.value * 10;
     if (simRunning) {
         stopTicks = true;
         setTimeout(function () {
             stopTicks = false;
             if (!syncFramerate) {
-                for (let i = 0; i < speedMultiplicator; i++) {
+                for (let i = 0; i < speedMultiplier; i++) {
                     updateTick();
                 }
             }
-        }, 20);
+        }, 100);
     }
+}
+
+function updateMultiplierLabel() {
     multiplierValueLabel.innerHTML = multiplierSlider.value;
 }
 
@@ -1423,7 +1426,7 @@ function startSimulation() {
     // Start the simulation and exit the modifier mode
     simRunning = true;
     closeModifierMenu();
-    newMultiplicator();
+    newMultiplier();
 }
 
 /*

@@ -297,7 +297,7 @@ body
     p#ticktime-ms.label.msLabel 10ms
 
     p#multiplier-label.label.leftLabel.disabledLabel Speed Multiplier
-    input#multiplier-slider.slider.sliderLeft(type="range" min="1" max="10" value="1" oninput="newMultiplicator();" disabled)
+    input#multiplier-slider.slider.sliderLeft(type="range" min="1" max="10" value="1" oninput="updateMultiplierLabel();" onchange="newMultiplier();" disabled)
     p#multiplier-value-label.label.msLabel.disabledLabel 1
   script
     include ../site_scripts/survicate.js

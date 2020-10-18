@@ -528,7 +528,7 @@ function syncFramerateCheckBoxChanged() {
         bypassCheckbox.disabled = true;
         bypassLabel.classList.add('disabledLabel');
 
-        newMultiplicator();
+        newMultiplier();
     } else {
         if (tickTime > 0) {
             tickTimeLabel.classList.remove('disabledLabel');
