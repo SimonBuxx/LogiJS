@@ -84,6 +84,17 @@ function loadSketch(file) {
     });
 }
 
+function loadFromLink(file) {
+    nextCustomToLoadIndex = 0;
+    customsToLoadQueue = [];
+    loading = true;
+    loadFile = file;
+    showMessage('Loading Sketch<span style="color: #c83232">.</span>', loadFile.split('.json')[0]);
+    loadJSON('sharedSketches/' + file, load, function () {
+        fileNotFoundError();
+    });
+}
+
 function loadSketchFromJSON(data, file) {
     nextCustomToLoadIndex = 0;
     customsToLoadQueue = [];
@@ -99,7 +110,7 @@ function fileNotFoundError() {
     document.title = 'LogiJS: Sketch not found';
     screenshotButton.disabled = true;
     mainCanvas.elt.classList.add('dark-canvas');
-    showMessage('Sketch not found<span style="color: #c83232">.</span>', 'Couldn\'t find this sketch in your files or the library<span style="color: #c83232">.</span>', false);
+    showMessage('Sketch not found<span style="color: #c83232">.</span>', 'Couldn\'t find this sketch in any location<span style="color: #c83232">.</span>', false);
 }
 
 function load(loadData) {
@@ -374,8 +385,9 @@ function getThisLook() {
 
 function loadURLSketch() {
     let loadfile = urlParam('sketch');
+    let loadLink = urlParam('link');
     if (loadfile !== '') {
-        showMessage('Loading Sketch<span style="color: #c83232">.</span>', loadFile.split('.json')[0]);
+        showMessage('Loading Sketch<span style="color: #c83232">.</span>', loadFile);
         if (loadfile.indexOf('lib') === 0) {
             sketchNameInput.value = loadfile.substring(10);
             topSketchInput.value = loadfile.substring(10);
@@ -400,5 +412,9 @@ function loadURLSketch() {
             }
             socket.off('sketchDescription');
         });
+    } else if (loadLink !== '') {
+        showMessage('Loading Sketch<span style="color: #c83232">.</span>', loadLink);
+        setLoading(true);
+        loadFromLink(loadLink + '.json');
     }
 }

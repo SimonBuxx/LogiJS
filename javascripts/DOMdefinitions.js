@@ -62,6 +62,7 @@ function linkElementsFromDOM() {
 
     importButton = document.getElementById('import-button');
     screenshotButton = document.getElementById('screenshot-button');
+    shareLinkButton = document.getElementById('share-link-button');
 
     saveButton = document.getElementById('save-sketch-button');
     if (getCookieValue('access_token') !== '') {
@@ -150,6 +151,8 @@ function addElementHelpTexts() {
     addHelpText(topSketchInput, 'This is the File Name of the Sketch');
     addHelpText(importButton, 'Import a JSON File (Clears the current Sketch!) <span style="color: #c83232">[I]</span>');
     addHelpText(screenshotButton, 'Take a Screenshot of the Sketch <span style="color: #c83232">[P]</span>');
+    addHelpText(document.getElementById('darkmode-button'), 'Toggle between dark and light mode');
+    addHelpText(shareLinkButton, 'Create a link to a copy of this sketch');
     if (getCookieValue('access_token') !== '') {
         addHelpText(saveButton, 'Save this Sketch to your Dashboard');
         addHelpText(dashboardButton, 'Get back to the Dashboard');
@@ -598,6 +601,7 @@ function bypassTickTimeChanged() {
 function screenshotClicked() {
     dropdownClicked = true;
     screenshotDialog = true;
+    setHelpText('');
     setControlMode('modify');
     setPreviewElement(false, {}, 'none');
     setUnactive();
@@ -637,6 +641,16 @@ function dashboardButtonClicked() {
     }
 }
 
+function shareLinkClicked() {
+    dropdownClicked = true;
+    configureButtons('shareLink');
+
+    let json = buildJSON();
+    socket.emit('createLink', { json: json });
+
+    setTimeout(function () { dropdownClicked = false; }, 100); // Allow elements to be placed again after 100ms
+}
+
 /*
     This function is triggered when the dark/light mode button in the dropdown menu is clicked
 */
@@ -656,5 +670,5 @@ function darkmodeClicked() {
         document.getElementById('darkmode-button').innerHTML = '<i class="fas fa-moon icon"></i> Dark Mode';
     }
     localStorage.setItem('theme', currentTheme); // Save the current theme to sync it with the rest of the site
-    setTimeout(function() {dropdownClicked = false;}, 100); // Allow elements to be placed again after 100ms
+    setTimeout(function () { dropdownClicked = false; }, 100); // Allow elements to be placed again after 100ms
 }

@@ -160,6 +160,8 @@ let saveDialog = false;
 
 let screenshotDialog = false;
 
+let linkDialog = false;
+
 let screenshotImg;
 
 let customDialog;
@@ -267,10 +269,10 @@ let moduleNameInput; // Module configurator elements
 let helpLabel; // Help text label
 
 let editButton, deleteButton, simButton, undoButton, redoButton, selectButton, moduleButton; // Tool buttons
-let topSketchInput, importButton, saveButton, downloadButton, dashboardButton, screenshotButton; // Right side elements
+let topSketchInput, importButton, saveButton, downloadButton, dashboardButton, screenshotButton, shareLinkButton; // Right side elements
 
 let andButton, orButton, xorButton, bufferButton, notButton, switchButton, buttonButton, clockButton, outputButton, labelButton, displayButton; // Standard element buttons
-let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, rsClockedButton, tFlipFlopButton, 
+let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, rsClockedButton, tFlipFlopButton,
     registerButton, muxButton, demuxButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
 let labelOptions, labelSimulation, labelGateInputs, labelDirection, labelDisplay, labelOutputWidth,
     labelInputWidth, tickTimeLabel, tickTimeMsLabel, multiplierValueLabel; // Left side labels
@@ -345,6 +347,14 @@ function setup() { // jshint ignore:line
 
     socket.on('nametoolongerror', function () {
         showMessage('Saving failed<span style="color: #c83232">.</span>', 'The sketch name must be shorter than 50 characters<span style="color: #c83232">.</span>');
+    });
+
+    socket.on('createdLink', function (data) {
+        linkDialog = true;
+        setHelpText('');
+        mainCanvas.elt.classList.add('dark-canvas');
+        document.getElementById('link-dialog').style.display = 'block';
+        document.getElementById('link-input').value = data.link;
     });
 
     fetchImportData();
@@ -445,6 +455,18 @@ function closeScreenshotClicked() {
     document.getElementById('screenshot-dialog').style.display = 'none';
     mainCanvas.elt.classList.remove('dark-canvas');
     screenshotDialog = false;
+    if (!simRunning) {
+        enterModifierMode();
+    } else {
+        simButton.classList.add('active');
+        configureButtons('simulation');
+    }
+}
+
+function closeLinkDialogClicked() {
+    document.getElementById('link-dialog').style.display = 'none';
+    mainCanvas.elt.classList.remove('dark-canvas');
+    linkDialog = false;
     if (!simRunning) {
         enterModifierMode();
     } else {
@@ -1511,7 +1533,7 @@ function updateUndoButtons() {
 }
 
 function configureButtons(mode) {
-    let tools, modifiers, simulation, customimport, savedialog, jsonimport, moduleimport, select;
+    let tools, modifiers, simulation, customimport, savedialog, jsonimport, moduleimport, select, shareLink, screenshot;
     if (mode === 'edit') {
         tools = false;
         modifiers = false;
@@ -1521,6 +1543,8 @@ function configureButtons(mode) {
         jsonimport = false;
         moduleimport = false;
         select = false;
+        shareLink = false;
+        screenshot = false;
     } else if (mode === 'simulation') {
         tools = true;
         modifiers = true;
@@ -1530,6 +1554,8 @@ function configureButtons(mode) {
         jsonimport = false;
         moduleimport = true;
         select = true;
+        shareLink = false;
+        screenshot = false;
     } else if (mode === 'savedialog') {
         tools = true;
         modifiers = true;
@@ -1539,6 +1565,8 @@ function configureButtons(mode) {
         jsonimport = true;
         moduleimport = true;
         select = true;
+        shareLink = true;
+        screenshot = true;
     } else if (mode === 'customdialog') {
         tools = true;
         modifiers = true;
@@ -1548,6 +1576,8 @@ function configureButtons(mode) {
         jsonimport = true;
         moduleimport = true;
         select = true;
+        shareLink = true;
+        screenshot = true;
     } else if (mode === 'loading') {
         tools = true;
         modifiers = true;
@@ -1557,6 +1587,8 @@ function configureButtons(mode) {
         jsonimport = true;
         moduleimport = true;
         select = true;
+        shareLink = true;
+        screenshot = true;
     } else if (mode === 'moduleOptions') {
         tools = true;
         modifiers = true;
@@ -1566,6 +1598,8 @@ function configureButtons(mode) {
         jsonimport = true;
         moduleimport = false;
         select = true;
+        shareLink = true;
+        screenshot = true;
     } else if (mode === 'select') {
         tools = true;
         modifiers = true;
@@ -1575,6 +1609,8 @@ function configureButtons(mode) {
         jsonimport = true;
         moduleimport = true;
         select = false;
+        shareLink = true;
+        screenshot = true;
     } else if (mode === 'screenshot') {
         tools = true;
         modifiers = true;
@@ -1584,6 +1620,19 @@ function configureButtons(mode) {
         jsonimport = true;
         moduleimport = true;
         select = true;
+        shareLink = true;
+        screenshot = true;
+    } else if (mode === 'shareLink') {
+        tools = true;
+        modifiers = true;
+        savedialog = true;
+        simulation = true;
+        customimport = true;
+        jsonimport = true;
+        moduleimport = true;
+        select = true;
+        shareLink = true;
+        screenshot = true;
     } else {
         tools = false;
         modifiers = false;
@@ -1593,6 +1642,8 @@ function configureButtons(mode) {
         jsonimport = false;
         moduleimport = false;
         select = false;
+        shareLink = false;
+        screenshot = false;
     }
     andButton.disabled = tools;
     orButton.disabled = tools;
@@ -1634,6 +1685,8 @@ function configureButtons(mode) {
     saveButton.disabled = savedialog;
     importButton.disabled = jsonimport;
     moduleButton.disabled = moduleimport || (outputs.length === 0);
+    shareLinkButton.disabled = shareLink;
+    screenshotButton.disabled = screenshot;
 }
 
 function draw() {

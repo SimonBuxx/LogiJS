@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
 const glob = require('glob');
+const crypto = require('crypto');
 const validator = require('email-validator');
 const passwordValidator = require('password-validator');
 const app = express();
@@ -106,7 +107,7 @@ router.get('/editor', function (req, res) {
     } else {
         res.render('logijs', {
             user: '',
-            sketchData: { sketches: {}},
+            sketchData: { sketches: {} },
             images: {},
             descriptions: {}
         });
@@ -139,7 +140,7 @@ router.get('/login', function (req, res) {
 });
 
 router.get('/signup', function (req, res) {
-    res.render('signup', {error_code: req.query.error_code});
+    res.render('signup', { error_code: req.query.error_code });
 });
 
 router.get('/dashboard', function (req, res) {
@@ -180,19 +181,19 @@ router.get('/libDownload', (req, res) => {
 router.post('/createUser', (req, res) => {
     if (!req.body.username.match(usernameRegex)) {
         console.log('Failure: username doesn\'t match regex!');
-        res.status(401).send({error_code: 1}).end();
+        res.status(401).send({ error_code: 1 }).end();
         return;
     }
 
     if (req.body.email.length > 50 || !validator.validate(req.body.email)) {
         console.log('Failure: email invalid!');
-        res.status(401).send({error_code: 2}).end();
+        res.status(401).send({ error_code: 2 }).end();
         return;
     }
 
     if (!pwSchema.validate(req.body.password)) {
         console.log('Failure: password invalid!');
-        res.status(401).send({error_code: 3}).end();
+        res.status(401).send({ error_code: 3 }).end();
         return;
     }
 
@@ -204,13 +205,13 @@ router.post('/createUser', (req, res) => {
         })
         .then(({ success }) => {
             if (success) {
-                res.status(401).send({error_code: 0}).end();
+                res.status(401).send({ error_code: 0 }).end();
                 if (!fs.existsSync('./userSketches/' + req.body.username + '/')) {
                     fs.mkdirSync('./userSketches/' + req.body.username + '/');
                 }
             } else {
                 console.log('Failure: username already exists!');
-                res.status(401).send({error_code: 4}).end();
+                res.status(401).send({ error_code: 4 }).end();
             }
         });
 });
@@ -420,7 +421,7 @@ io.on('connection', (socket) => {
         if (data.access_token === '') {
             return;
         } else if (!data.name.match(filenameRegex)) {
-            console.log('[MINOR] Preview saving error!');            
+            console.log('[MINOR] Preview saving error!');
         } else {
             let user = jwt_handler.decode(data.access_token, { issuer: i, subject: s, audience: a }).payload.user;
             if (user === 'demouser') {
@@ -472,6 +473,14 @@ io.on('connection', (socket) => {
                 });
             }
         }
+    });
+
+    socket.on('createLink', (data) => {
+        let filename = crypto.randomBytes(10).toString('base64').slice(0, 10);
+
+        fs.writeFile('./views/sharedSketches/' + filename + '.json', JSON.stringify(data.json), 'utf8', function (err) {
+            socket.emit('createdLink', { link: 'https://logijs.com/editor?link=' + filename });
+        });
     });
 });
 

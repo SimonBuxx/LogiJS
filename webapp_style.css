@@ -23,6 +23,10 @@ body {
 	-ms-user-select: none;
 }
 
+input {
+    font-family: ArcaMajora3, 'Open Sans', sans-serif;
+}
+
 .dark-theme body {
     background: #323232;
 }
@@ -879,7 +883,6 @@ input[type=range]::-ms-tooltip {
 }
 
 #sketchname-1 {
-    font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
     font-size: 18px;
     width: 150px;
     border: none;
@@ -907,7 +910,6 @@ input[type=range]::-ms-tooltip {
 }
 
 #sketchname-2 {
-    font-family: ArcaMajora3, 'Open Sans', Arial, sans-serif;
     height: 27px;
     width: 180px;
     margin-left: 30px;
@@ -974,6 +976,69 @@ input[type=range]::-ms-tooltip {
 
 .dark-theme #screenshot-dialog {
     background: #323232;
+}
+
+
+#screenshot-text {
+    font-size: 20px;
+    text-align: center;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    color: #323232;
+}
+
+.dark-theme #screenshot-text {
+    color: #fff;
+}
+
+#screenshot {
+    position: relative;
+    object-fit: contain;
+    width: 100%;
+    height: calc(100vh - 440px);
+    margin: 0 auto;
+
+    image-rendering: -moz-crisp-edges;         /* Firefox */
+    image-rendering:   -o-crisp-edges;         /* Opera */
+    image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+}
+
+#link-dialog {
+    position: absolute;
+    padding: 10px;
+    left: calc(50vw - 230px);
+    top: calc(50vh - 200px);
+    background: white;
+    width: 600px;
+    height: 300px;
+    margin: 0;
+    display: none;
+}
+
+.dark-theme #link-dialog {
+    background: #323232;
+}
+
+#link-input {
+    margin: 0 20px;
+    width: 540px;
+    font-size: 22px;
+    text-align: center;
+    font-family: monospace;
+    user-select: all;
+}
+
+#link-text {
+    font-size: 20px;
+    text-align: center;
+    color: #323232;
+    margin: 20px;
+}
+
+.dark-theme #link-text {
+    color: #fff;
 }
 
 #message-dialog {
@@ -1324,34 +1389,16 @@ span.overlay span {
     width: 150px;
 }
 
+#close-link-button {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    z-index: 2000;
+    width: 150px;
+}
+
 #newtab-screenshot {
     left: 30px;
-}
-
-#screenshot-text {
-    font-size: 20px;
-    text-align: center;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    color: #323232;
-}
-
-.dark-theme #screenshot-text {
-    color: #fff;
-}
-
-#screenshot {
-    position: relative;
-    object-fit: contain;
-    width: 100%;
-    height: calc(100vh - 440px);
-    margin: 0 auto;
-
-    image-rendering: -moz-crisp-edges;         /* Firefox */
-    image-rendering:   -o-crisp-edges;         /* Opera */
-    image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
-    image-rendering: crisp-edges;
-    -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
 }
 
 h1 {
