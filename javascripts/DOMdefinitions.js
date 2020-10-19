@@ -337,7 +337,7 @@ function rsClockedClicked() {
     rsClockedButton.classList.add('active');
     setPreviewElement(true, {
         tops: [],
-        inputLabels: ['R', '>', 'S'],
+        inputLabels: ['S', '>', 'R'],
         outputLabels: ['Q', 'Q̅'],
         caption: 'RS-FF',
         inputs: 3,
