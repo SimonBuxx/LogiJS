@@ -90,6 +90,8 @@ function linkElementsFromDOM() {
     rsFlipFlopButton = document.getElementById('rs-flipflop-button');
     dFlipFlopButton = document.getElementById('d-flipflop-button');
     jkFlipFlopButton = document.getElementById('jk-flipflop-button');
+    rsClockedButton = document.getElementById('rs-clocked-button');
+    tFlipFlopButton = document.getElementById('t-flipflop-button');
     registerButton = document.getElementById('register-button');
     decoderButton = document.getElementById('decoder-button');
     muxButton = document.getElementById('mux-button');
@@ -184,6 +186,8 @@ function addElementHelpTexts() {
     addHelpText(rsFlipFlopButton, 'RS Flip-Flop');
     addHelpText(dFlipFlopButton, 'D Flip-Flop');
     addHelpText(jkFlipFlopButton, 'JK Flip-Flop');
+    addHelpText(rsClockedButton, 'Clocked RS Flip-Flop');
+    addHelpText(tFlipFlopButton, 'T Flip-Flop');
     addHelpText(registerButton, '4-Bit Register');
     addHelpText(decoderButton, 'Decoder');
     addHelpText(muxButton, 'Multiplexer');
@@ -325,6 +329,36 @@ function jkFlipFlopClicked() {
         outputs: 2
     });
     return importCustom('jk-flipflop.json');
+}
+
+function rsClockedClicked() {
+    setUnactive();
+    hideAllOptions();
+    rsClockedButton.classList.add('active');
+    setPreviewElement(true, {
+        tops: [],
+        inputLabels: ['R', '>', 'S'],
+        outputLabels: ['Q', 'Q̅'],
+        caption: 'RS-FF',
+        inputs: 3,
+        outputs: 2
+    });
+    return importCustom('rs-clocked.json');
+}
+
+function tFlipFlopClicked() {
+    setUnactive();
+    hideAllOptions();
+    tFlipFlopButton.classList.add('active');
+    setPreviewElement(true, {
+        tops: [],
+        inputLabels: ['T', '>'],
+        outputLabels: ['Q', 'Q̅'],
+        caption: 'T-FF',
+        inputs: 2,
+        outputs: 2
+    });
+    return importCustom('t-flipflop.json');
 }
 
 function registerClicked() {

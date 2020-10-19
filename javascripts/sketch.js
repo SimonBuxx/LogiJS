@@ -270,7 +270,8 @@ let editButton, deleteButton, simButton, undoButton, redoButton, selectButton, m
 let topSketchInput, importButton, saveButton, downloadButton, dashboardButton, screenshotButton; // Right side elements
 
 let andButton, orButton, xorButton, bufferButton, notButton, switchButton, buttonButton, clockButton, outputButton, labelButton, displayButton; // Standard element buttons
-let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, registerButton, muxButton, demuxButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
+let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, rsClockedButton, tFlipFlopButton, 
+    registerButton, muxButton, demuxButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
 let labelOptions, labelSimulation, labelGateInputs, labelDirection, labelDisplay, labelOutputWidth,
     labelInputWidth, tickTimeLabel, tickTimeMsLabel, multiplierValueLabel; // Left side labels
 
@@ -508,6 +509,8 @@ function setUnactive() {
     dFlipFlopButton.classList.remove('active');
     rsFlipFlopButton.classList.remove('active');
     jkFlipFlopButton.classList.remove('active');
+    rsClockedButton.classList.remove('active');
+    tFlipFlopButton.classList.remove('active');
     registerButton.classList.remove('active');
     muxButton.classList.remove('active');
     demuxButton.classList.remove('active');
@@ -1610,6 +1613,8 @@ function configureButtons(mode) {
     demuxButton.disabled = tools;
     dFlipFlopButton.disabled = tools;
     jkFlipFlopButton.disabled = tools;
+    rsClockedButton.disabled = tools;
+    tFlipFlopButton.disabled = tools;
     rsFlipFlopButton.disabled = tools;
     halfaddButton.disabled = tools;
     fulladdButton.disabled = tools;
