@@ -603,25 +603,24 @@ function dashboardButtonClicked() {
     }
 }
 
+/*
+    This function is triggered when the dark/light mode button in the dropdown menu is clicked
+*/
 function darkmodeClicked() {
-    dropdownClicked = true;
-    setControlMode('modify');
-    setPreviewElement(false, {}, 'none');
-    setUnactive();
-    hideAllOptions();
-    reDraw();
+    dropdownClicked = true; // Prevent elements from being placed underneath the dropdown menu
     if (currentTheme === 'light') {
-        currentTheme = 'dark';
-        document.documentElement.classList.add('dark-theme');
+        currentTheme = 'dark'; // Set the new theme for editor-internal use
+        document.documentElement.classList.add('dark-theme'); // Apply dark theme css
         document.getElementById('logo').src = 'images/alt_logo.png';
         labelButton.innerHTML = '<img class="preview" src="images/label_white.png">';
         document.getElementById('darkmode-button').innerHTML = '<i class="fas fa-sun icon"></i> Light Mode';
     } else {
         currentTheme = 'light';
-        document.documentElement.classList.remove('dark-theme');
+        document.documentElement.classList.remove('dark-theme'); // Remove dark theme css
         document.getElementById('logo').src = 'images/alt_logo_dark.png';
         labelButton.innerHTML = '<img class="preview" src="images/label.png">';
         document.getElementById('darkmode-button').innerHTML = '<i class="fas fa-moon icon"></i> Dark Mode';
     }
-    localStorage.setItem('theme', currentTheme);
+    localStorage.setItem('theme', currentTheme); // Save the current theme to sync it with the rest of the site
+    setTimeout(function() {dropdownClicked = false;}, 100); // Allow elements to be placed again after 100ms
 }

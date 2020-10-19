@@ -1870,8 +1870,8 @@ function keyPressed() {
     if ((saveDialog || moduleOptions) && keyCode === ESCAPE) {
         enterModifierMode();
     }
-    if (labelTextBox === document.activeElement || loading || saveDialog || moduleOptions) {
-        return;
+    if (labelTextBox === document.activeElement || loading || saveDialog || moduleOptions || topSketchInput === document.activeElement) {
+        return; // Prevent shortcuts when a text input is active etc.
     }
     if (sketchNameInput !== document.activeElement) {
         if (keyCode >= 49 && keyCode <= 57) {
@@ -1884,7 +1884,7 @@ function keyPressed() {
                 enterModifierMode();
                 reDraw();
                 break;
-            case RETURN: // Enter
+            case RETURN:
                 if (!simButton.disabled) {
                     simClicked();
                 }
