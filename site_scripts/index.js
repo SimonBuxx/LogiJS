@@ -479,7 +479,7 @@ io.on('connection', (socket) => {
         let filename = crypto.randomBytes(10).toString('base64').slice(0, 10);
 
         fs.writeFile('./views/sharedSketches/' + filename + '.json', JSON.stringify(data.json), 'utf8', function (err) {
-            socket.emit('createdLink', { link: 'https://logijs.com/editor?link=' + filename });
+            socket.emit('createdLink', { filename: filename });
         });
     });
 });

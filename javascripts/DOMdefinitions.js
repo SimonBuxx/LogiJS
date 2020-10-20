@@ -176,6 +176,8 @@ function addElementHelpTexts() {
     addHelpText(sketchNameInput, 'This is the File Name of the Sketch');
     addHelpText(document.getElementById('save-button'), 'Save this Sketch to the Dashboard');
 
+    addHelpText(document.getElementById('copy-link-button'), 'Copy this link to Clipboard');
+
     addHelpText(andButton, 'AND Gate');
     addHelpText(orButton, 'OR Gate');
     addHelpText(xorButton, 'XOR Gate');

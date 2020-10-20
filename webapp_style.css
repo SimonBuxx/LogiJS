@@ -23,6 +23,14 @@ body {
 	-ms-user-select: none;
 }
 
+::-moz-selection {
+    background: #c83232;
+}
+  
+::selection {
+    background: #c83232;
+}
+
 input {
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
 }
@@ -1027,7 +1035,6 @@ input[type=range]::-ms-tooltip {
     font-size: 22px;
     text-align: center;
     font-family: monospace;
-    user-select: all;
 }
 
 #link-text {
@@ -1392,6 +1399,14 @@ span.overlay span {
 #close-link-button {
     position: absolute;
     right: 20px;
+    bottom: 20px;
+    z-index: 2000;
+    width: 150px;
+}
+
+#copy-link-button {
+    position: absolute;
+    left: 20px;
     bottom: 20px;
     z-index: 2000;
     width: 150px;

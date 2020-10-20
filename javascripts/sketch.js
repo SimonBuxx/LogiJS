@@ -354,7 +354,7 @@ function setup() { // jshint ignore:line
         setHelpText('');
         mainCanvas.elt.classList.add('dark-canvas');
         document.getElementById('link-dialog').style.display = 'block';
-        document.getElementById('link-input').value = data.link;
+        document.getElementById('link-input').value = window.location.href.split('editor')[0] + 'editor?link=' + data.filename;
     });
 
     fetchImportData();
@@ -473,6 +473,13 @@ function closeLinkDialogClicked() {
         simButton.classList.add('active');
         configureButtons('simulation');
     }
+}
+
+function copyLinkClicked() {
+    document.getElementById('link-input').select();
+    document.execCommand('copy');
+    setHelpText('Link copied to Clipboard', 'info-circle');
+    setTimeout(function () { setHelpText(''); }, 3000);
 }
 
 function hideAllOptions() {

@@ -71,9 +71,9 @@ body
       .dropdown
         button#dd-button.button <i class="fas fa-chevron-down icon"></i> Tools
         #tools-dropdown.dropdown-content
+          button#share-link-button.button(rel="nofollow" onclick="shareLinkClicked();") <i class="fas fa-link icon"></i> Share Link
           button.button#download-button(rel="nofollow" onclick="downloadSketch();") <i class="fas fa-file-download icon"></i> Download
           button.button#import-button(rel="nofollow" onclick="importButtonClicked();") <i class="fas fa-file-upload icon"></i> Import JSON
-          button#share-link-button.button(rel="nofollow" onclick="shareLinkClicked();") <i class="fas fa-link icon"></i> Share Link
           button.button#screenshot-button(rel="nofollow" onclick="screenshotClicked();") <i class="fas fa-camera icon"></i> Screenshot
           button#darkmode-button.button(rel="nofollow" onclick="darkmodeClicked();") <i class="fas fa-moon icon"></i> Dark Mode
       button.button#save-sketch-button(rel="nofollow" onclick="saveDialogClicked();") <i class="fas fa-save icon"></i> Save
@@ -106,6 +106,7 @@ body
         h1 Link created<span style="color: #c83232">.</span>
         input#link-input.textInput(placeholder='Link', autocomplete='off', readonly)
         p#link-text Users can edit a copy of this sketch and create new links or save their altered versions in their accounts<span style="color: #c83232">.</span>
+        button#copy-link-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="copyLinkClicked();") Copy Link
         button#close-link-button.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="closeLinkDialogClicked();") Close
         .grey-rect-medium
         .red-rect-medium
