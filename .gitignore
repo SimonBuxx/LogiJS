@@ -1,6 +1,7 @@
 node_modules
 userSketches/
 views/previews
+views/sharedSketches
 .DS_Store
 private.key
 public.key
