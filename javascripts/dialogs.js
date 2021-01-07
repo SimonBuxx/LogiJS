@@ -2,7 +2,7 @@
     This function draws a popup message on the screen
 */
 
-function showMessage(msg, subline = '', autoHide=true) {
+function showMessage(msg, subline = '', autoHide = true) {
     document.getElementById('message-caption').innerHTML = msg;
     document.getElementById('message-text').innerHTML = subline;
     document.getElementById('message-dialog').style.display = 'block';
@@ -245,4 +245,17 @@ function showModulePreviewer() {
 
 function hideModulePreviewer() {
     document.getElementById('module-previewer').style.display = 'none';
+}
+
+function hideLinkDialog() {
+    linkDialog = false;
+    setHelpText('');
+    mainCanvas.elt.classList.remove('dark-canvas');
+    document.getElementById('link-dialog').style.display = 'none';
+    if (!simRunning) {
+        enterModifierMode();
+    } else {
+        simButton.classList.add('active');
+        configureButtons('simulation');
+    }
 }

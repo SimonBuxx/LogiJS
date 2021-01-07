@@ -22,14 +22,6 @@ let traced = []; // List of all traced wires (needed by parseGroups)
 
 let superscripts = ['º', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
 
-/*
-    This is a list of all elements that are currently selected with the selection tool
-*/
-let selection = [];
-
-let selectionConpoints = [];
-let selectionWires = [];
-
 let selWireIndizes = [];
 let selDiodeIndizes = [];
 let selGatesIndizes = [];
@@ -39,6 +31,14 @@ let selLabelIndizes = [];
 let selSegDisplayIndizes = [];
 let selCustomIndizes = [];
 let selConpointIndizes = [];
+
+let copiedElements = [];
+let selectionIsCopied = false;
+
+let copiedOffsetStartX = 0;
+let copiedOffsetStartY = 0;
+let copiedOffsetWidth = 0;
+let copiedOffsetHeight = 0;
 
 /*
     These are the start coordinates for the wire preview elements
@@ -463,18 +463,6 @@ function closeScreenshotClicked() {
     }
 }
 
-function closeLinkDialogClicked() {
-    document.getElementById('link-dialog').style.display = 'none';
-    mainCanvas.elt.classList.remove('dark-canvas');
-    linkDialog = false;
-    if (!simRunning) {
-        enterModifierMode();
-    } else {
-        simButton.classList.add('active');
-        configureButtons('simulation');
-    }
-}
-
 function copyLinkClicked() {
     document.getElementById('link-input').select();
     document.execCommand('copy');
@@ -556,53 +544,13 @@ function setUnactive() {
 }
 
 function deleteClicked() {
-    // If the button was clicked at the end of a select process
-    if (controlMode === 'select' && selectMode === 'end') {
+    if (controlMode === 'delete') {
         enterModifierMode();
-        setControlMode('modify');
-        unmarkAll();
-        let delGates = [[], []];
-        let delCustoms = [[], []];
-        let delInputs = [[], []];
-        let delLabels = [[], []];
-        let delOutputs = [[], []];
-        let delWires = [[], []];
-        let delSegDisplays = [[], []];
-        for (let j = delGates[1].length - 1; j >= 0; j--) {
-            gates.splice(delGates[1][j], 1);
-        }
-        for (let j = delCustoms[1].length - 1; j >= 0; j--) {
-            customs.splice(delCustoms[1][j], 1);
-        }
-        for (let j = delInputs[1].length - 1; j >= 0; j--) {
-            inputs.splice(delInputs[1][j], 1);
-        }
-        for (let j = delLabels[1].length - 1; j >= 0; j--) {
-            labels.splice(delLabels[1][j], 1);
-        }
-        for (let j = delOutputs[1].length - 1; j >= 0; j--) {
-            outputs.splice(delOutputs[1][j], 1);
-        }
-        for (let j = delSegDisplays[1].length - 1; j >= 0; j--) {
-            segDisplays.splice(delSegDisplays[1][j], 1);
-        }
-        pwWireX = null;
-        pwWireY = null;
-        wireMode = 'none';
-        lockElements = false;
-        if (selection.length > 0) {
-            pushUndoAction('delSel', 0, [_.cloneDeep(delGates), _.cloneDeep(delCustoms), _.cloneDeep(diodes), _.cloneDeep(delInputs), _.cloneDeep(delLabels), _.cloneDeep(delOutputs), _.cloneDeep(delWires), _.cloneDeep(delSegDisplays), _.cloneDeep(conpoints)]);
-        }
-        doConpoints();
     } else {
-        if (controlMode === 'delete') {
-            enterModifierMode();
-        } else {
-            setUnactive();
-            hideAllOptions();
-            deleteButton.classList.add('active');
-            setControlMode('delete');
-        }
+        setUnactive();
+        hideAllOptions();
+        deleteButton.classList.add('active');
+        setControlMode('delete');
     }
 }
 
@@ -969,9 +917,6 @@ function setSelectMode(mode) {
     switch (selectMode) {
         case 'none':
             unmarkAll();
-            selection = [];
-            selectionConpoints = [];
-            selectionWires = [];
             showSelectionBox = false;
             break;
         case 'start':
@@ -1008,7 +953,7 @@ function addWires() {
             if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 0 && pwWireX.startY === wires[i].startY &&
                 (pwWireX.startX == wires[i].endX || pwWireX.startX == wires[i].startX || pwWireX.endX == wires[i].startX || pwWireX.endX == wires[i].endX))) { //jshint ignore:line
                 if (xIndex >= 0) {
-                    let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY, false, transform);
+                    let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY, false);
                     newWire.endX = Math.max(wires[xIndex].endX, wires[i].endX);
                     newWire.endY = wires[xIndex].startY;
                     if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
@@ -1020,7 +965,7 @@ function addWires() {
                         overlapOverAllX = true;
                     }
                 } else {
-                    let newWire = new Wire(0, Math.min(pwWireX.startX, wires[i].startX), pwWireX.startY, false, transform);
+                    let newWire = new Wire(0, Math.min(pwWireX.startX, wires[i].startX), pwWireX.startY, false);
                     newWire.endX = Math.max(pwWireX.endX, wires[i].endX);
                     newWire.endY = pwWireX.startY;
                     if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
@@ -1036,7 +981,7 @@ function addWires() {
         }
 
         if (xIndex < 0 && !overlapOverAllX) {
-            let newWire = new Wire(0, pwWireX.startX, pwWireX.startY, false, transform);
+            let newWire = new Wire(0, pwWireX.startX, pwWireX.startY, false);
             newWire.endX = pwWireX.endX;
             newWire.endY = pwWireX.startY;
             editLog.push(['a', wires.length, newWire]);
@@ -1052,7 +997,7 @@ function addWires() {
             if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 1 && pwWireY.startX === wires[i].startX &&
                 (pwWireY.startY == wires[i].endY || pwWireY.startY == wires[i].startY || pwWireY.endY == wires[i].startY || pwWireY.endY == wires[i].endY))) { //jshint ignore:line
                 if (yIndex >= 0) {
-                    let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false, transform);
+                    let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false);
                     newWire.endX = wires[yIndex].startX;
                     newWire.endY = Math.max(wires[yIndex].endY, wires[i].endY);
                     if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
@@ -1064,7 +1009,7 @@ function addWires() {
                         overlapOverAllY = true;
                     }
                 } else {
-                    let newWire = new Wire(1, pwWireY.startX, Math.min(pwWireY.startY, wires[i].startY), false, transform);
+                    let newWire = new Wire(1, pwWireY.startX, Math.min(pwWireY.startY, wires[i].startY), false);
                     newWire.endX = pwWireY.startX;
                     newWire.endY = Math.max(pwWireY.endY, wires[i].endY);
                     if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
@@ -1080,7 +1025,7 @@ function addWires() {
         }
 
         if (yIndex < 0 && !overlapOverAllY) {
-            let newWire = new Wire(1, pwWireY.startX, pwWireY.startY, false, transform);
+            let newWire = new Wire(1, pwWireY.startX, pwWireY.startY, false);
             newWire.endX = pwWireY.startX;
             newWire.endY = pwWireY.endY;
             editLog.push(['a', wires.length, newWire]);
@@ -1121,21 +1066,21 @@ function addGate(type, inputs, direction) {
     let newGate = null;
     switch (type) {
         case 1:
-            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'and');
+            newGate = new LogicGate(mouseX, mouseY, direction, inputs, 1, 'and');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [gates.length - 1], [newGate]);
             break;
         case 2:
-            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'or');
+            newGate = new LogicGate(mouseX, mouseY, direction, inputs, 1, 'or');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
             pushUndoAction('addGate', [gates.length - 1], [newGate]);
             break;
         case 3:
-            newGate = new LogicGate(mouseX, mouseY, transform, direction, inputs, 1, 'xor');
+            newGate = new LogicGate(mouseX, mouseY, direction, inputs, 1, 'xor');
             newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
             newGate.updateClickBoxes();
             gates.push(newGate);
@@ -1160,7 +1105,7 @@ function addCustom(file, direction) {
         }
     }
     setLoading(true);
-    let newCustom = new CustomSketch(mouseX, mouseY, transform, direction, file);
+    let newCustom = new CustomSketch(mouseX, mouseY, direction, file);
     newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     customs.push(newCustom);
     loadCustomFile(newCustom.filename, customs.length - 1, customs.length - 1);
@@ -1177,7 +1122,7 @@ function addOutput() {
             return;
         }
     }
-    var newOutput = new Output(mouseX, mouseY, transform, 0);
+    var newOutput = new Output(mouseX, mouseY, 0);
     newOutput.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newOutput.updateClickBox();
     outputs.push(newOutput);
@@ -1196,7 +1141,7 @@ function addSegDisplay(bits) {
             return;
         }
     }
-    var newDisplay = new SegmentDisplay(mouseX, mouseY, transform, bits);
+    var newDisplay = new SegmentDisplay(mouseX, mouseY, bits);
     newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newDisplay.updateClickBoxes();
     segDisplays.push(newDisplay);
@@ -1214,7 +1159,7 @@ function addInput() {
             return;
         }
     }
-    var newInput = new Input(mouseX, mouseY, transform);
+    var newInput = new Input(mouseX, mouseY);
     newInput.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newInput.updateClickBox();
     if (inputType === 'button') {
@@ -1240,7 +1185,7 @@ function addLabel() {
             return;
         }
     }
-    var newLabel = new Label(mouseX, mouseY, '', transform);
+    var newLabel = new Label(mouseX, mouseY, '');
     newLabel.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newLabel.updateClickBox();
     labels.push(newLabel);
@@ -1363,10 +1308,16 @@ function deleteGate(gateNumber) {
     Deletes the given custom
 */
 function deleteCustom(customNumber) {
+    let dep_ids = customs[customNumber].getDependencyIDs();
+    let indices_to_remove = [];
     for (let i = customs.length - 1; i >= 0; i--) {
-        if (customs[i].pid === customs[customNumber].id) {
-            customs.splice(i, 1);
+        if (dep_ids.includes(customs[i].id)) {
+            indices_to_remove.push(i);
         }
+    }
+    indices_to_remove.sort((a, b) => b - a); // sort descending
+    for (let i = 0; i < indices_to_remove.length; i++) {
+        customs.splice(indices_to_remove[i], 1);
     }
     pushUndoAction('delCust', [customNumber], customs.splice(customNumber, 1));
     reDraw();
@@ -1840,17 +1791,8 @@ function showElements() {
             elem.show();
         }
     } else {
-        if (selection.length > 0) {
-            for (const elem of wires) {
-                elem.show();
-            }
-            for (const elem of selection) {
-                elem[0].show();
-            }
-        } else {
-            for (let i = 0; i < wires.length; i++) {
-                wires[i].show(false, i);
-            }
+        for (let i = 0; i < wires.length; i++) {
+            wires[i].show(false, i);
         }
     }
 
@@ -1932,12 +1874,29 @@ function updateGroups() {
     Check if a key was pressed and act accordingly
 */
 function keyPressed() {
+    if (linkDialog && keyCode === ESCAPE) {
+        hideLinkDialog();
+        return;
+    }
+
+    if (screenshotDialog && keyCode === ESCAPE) {
+        closeScreenshotClicked();
+        return;
+    }
+    
     if ((saveDialog || moduleOptions) && keyCode === ESCAPE) {
         enterModifierMode();
     }
-    if (labelTextBox === document.activeElement || loading || saveDialog || moduleOptions || topSketchInput === document.activeElement) {
+
+    if (labelTextBox === document.activeElement || loading || saveDialog || linkDialog || moduleOptions || topSketchInput === document.activeElement) {
         return; // Prevent shortcuts when a text input is active etc.
     }
+
+    if (simRunning && keyCode === ESCAPE) {
+        simClicked();
+        return;
+    }
+
     if (sketchNameInput !== document.activeElement) {
         if (keyCode >= 49 && keyCode <= 57) {
             gateInputCount = keyCode - 48;
@@ -1958,6 +1917,7 @@ function keyPressed() {
                 // Uncomment to make screenshots
                 //let img  = canvas.toDataURL("image/png");
                 //document.write('<img src="'+img+'"/>');
+                console.log(customs);
                 break;
             case 32: // Space
                 if (simRunning) {
@@ -1967,6 +1927,16 @@ function keyPressed() {
                     deleteClicked();
                 } else {
                     enterModifierMode();
+                }
+                break;
+            case 86: // V
+                if (controlMode === 'modify') {
+                    pasteSelection();
+                }
+                break;
+            case 67: // C
+                if (document.getElementById('select-tools').style.display === 'block') {
+                    copySelection();
                 }
                 break;
             case 80: // P
@@ -1987,6 +1957,8 @@ function keyPressed() {
             case 68: // D
                 if (!deleteButton.disabled) {
                     deleteClicked();
+                } else if (document.getElementById('select-tools').style.display === 'block') {
+                    deleteSelection();
                 }
                 break;
             case 90: // Z

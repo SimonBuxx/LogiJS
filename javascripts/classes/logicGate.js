@@ -1,10 +1,9 @@
 // File: logicGate.js
 
-function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFunction) {
+function LogicGate(x, y, direction, inputCount, outputCount, logicFunction) {
     this.x = x; // X-Position of the Gate (translated)
     this.y = y; // Y-Position
 
-    this.transform = transform;     // Transformation (Zoom and Translation)
     this.direction = direction;     // Gate direction (0 = inputs left)
     this.inputCount = inputCount;   // # of inputs
     this.outputCount = outputCount; // # of outputs
@@ -46,9 +45,9 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
     this.marked = false;
 
     if (this.direction % 2 === 0) {
-        this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, this.transform);
+        this.gClickBox = new ClickBox(this.x, this.y + GRIDSIZE / 2, this.w, this.h - GRIDSIZE, transform);
     } else {
-        this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, this.transform);
+        this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, transform);
     }
 
     // Initialize the inputs
@@ -56,14 +55,14 @@ function LogicGate(x, y, transform, direction, inputCount, outputCount, logicFun
         this.inputs.push(false); // Set all inputs to low
         this.ipset.push(false);
         this.inputsInv.push(false); // Set all inputs to not inverted
-        this.inputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every input
+        this.inputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, transform)); // Create new clickBoxes for every input
     }
 
     // Initialize the outputs
     for (let i = 0; i < this.outputCount; i++) {
         this.outputs.push(false); // Set all outputs to low
         this.outputsInv.push(false); // Set all outputs to not inverted
-        this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every output
+        this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, transform)); // Create new clickBoxes for every output
     }
 
     this.setCoordinates(this.x, this.y);
@@ -210,7 +209,7 @@ LogicGate.prototype.updateClickBoxes = function () {
             case 3: this.inputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.height, this.y + this.h); break;
         }
 
-        this.inputClickBoxes[i].setTransform(this.transform);
+        this.inputClickBoxes[i].setTransform(transform);
     }
 
     // Update output clickBoxes
@@ -222,16 +221,15 @@ LogicGate.prototype.updateClickBoxes = function () {
             case 3: this.outputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.height, this.y); break;
         }
 
-        this.outputClickBoxes[i].setTransform(this.transform);
+        this.outputClickBoxes[i].setTransform(transform);
     }
     this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2);
     if (this.direction % 2 === 0) {
         this.gClickBox.updateSize(this.w, this.h - GRIDSIZE);
     } else {
-        console.log(this.h, this.w);
         this.gClickBox.updateSize(this.w - GRIDSIZE, this.h);
     }
-    this.gClickBox.setTransform(this.transform);
+    this.gClickBox.setTransform(transform);
 };
 
 /*
@@ -266,8 +264,8 @@ LogicGate.prototype.pointInOutput = function (n, px, py) {
     Draws the gate on the screen
 */
 LogicGate.prototype.show = function () {
-    if ((this.x + this.transform.dx) * this.transform.zoom < 0 - this.w * this.transform.zoom || (this.y + this.transform.dy) * this.transform.zoom < 0 - this.h * this.transform.zoom ||
-        (this.x + this.transform.dx) * this.transform.zoom > windowWidth || (this.y + this.transform.dy) * this.transform.zoom > windowHeight) {
+    if ((this.x + transform.dx) * transform.zoom < 0 - this.w * transform.zoom || (this.y + transform.dy) * transform.zoom < 0 - this.h * transform.zoom ||
+        (this.x + transform.dx) * transform.zoom > windowWidth || (this.y + transform.dy) * transform.zoom > windowHeight) {
         return;
     }
     fill(255);

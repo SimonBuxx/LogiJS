@@ -265,7 +265,7 @@ function mousePressed() {
                                 initY = sDragY1;
                             }
                             setSelectMode('drag');
-                            document.getElementById('copy-select-button').disabled = true;
+                            document.getElementById('copy-select-button').disabled = false;
                             document.getElementById('delete-select-button').disabled = false;
                         } else {
                             finishSelection();

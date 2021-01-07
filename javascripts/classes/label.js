@@ -1,18 +1,17 @@
 // File: label.js
 
-function Label(x, y, txt, transform) {
+function Label(x, y, txt) {
     this.x = x; // X position
     this.y = y; // Y position
     this.h = 20;
     this.w = 0;
-    this.transform = transform;
     this.txt = txt; // Label text
     this.lines = [];
     this.marked = false;
 
     this.id = 'l' + Date.now() + Math.random();
 
-    this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
+    this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, transform);
 
     this.getData = function () {
         var data = {};
@@ -45,7 +44,7 @@ function Label(x, y, txt, transform) {
     this.updateClickBox = function () {
         this.clickBox.updatePosition(this.x + this.w / 2 - 15, this.y + this.h / 2 - 10);
         this.clickBox.updateSize(this.w, this.h + 10);
-        this.clickBox.setTransform(this.transform);
+        this.clickBox.setTransform(transform);
     };
 
     this.alterText = function (txt) {

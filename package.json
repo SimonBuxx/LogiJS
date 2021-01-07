@@ -9,6 +9,7 @@
   "author": "Simon Buchholz",
   "license": "gpl-3.0",
   "dependencies": {
+    "base64url": "^3.0.1",
     "body-parser": "^1.19.0",
     "config": "^3.2.2",
     "cookie-parser": "^1.4.4",

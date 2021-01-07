@@ -127,37 +127,37 @@ function generatePreviewWires(startX, startY, endX, endY) {
 
     if (startDirection === 0) {
         if (startX <= endX) {
-            pwWireX = new Wire(0, startX, startY, false, transform);
+            pwWireX = new Wire(0, startX, startY, false);
             pwWireX.endX = endX;
         } else if (startX >= endX) {
-            pwWireX = new Wire(0, endX, startY, false, transform);
+            pwWireX = new Wire(0, endX, startY, false);
             pwWireX.endX = startX;
         }
         pwWireX.endY = startY;
         
         if (startY <= endY) {
-            pwWireY = new Wire(1, endX, startY, false, transform);
+            pwWireY = new Wire(1, endX, startY, false);
             pwWireY.endY = endY;
         } else if (startY >= endY) {
-            pwWireY = new Wire(1, endX, endY, false, transform);
+            pwWireY = new Wire(1, endX, endY, false);
             pwWireY.endY = startY;
         }
         pwWireY.endX = endX;
     } else if (startDirection === 1) {
         if (startY <= endY) {
-            pwWireY = new Wire(1, startX, startY, false, transform);
+            pwWireY = new Wire(1, startX, startY, false);
             pwWireY.endY = endY;
         } else if (startY >= endY) {
-            pwWireY = new Wire(1, startX, endY, false, transform);
+            pwWireY = new Wire(1, startX, endY, false);
             pwWireY.endY = startY;
         }
         pwWireY.endX = startX;
 
         if (startX <= endX) {
-            pwWireX = new Wire(0, startX, endY, false, transform);
+            pwWireX = new Wire(0, startX, endY, false);
             pwWireX.endX = endX;
         } else if (startX >= endX) {
-            pwWireX = new Wire(0, endX, endY, false, transform);
+            pwWireX = new Wire(0, endX, endY, false);
             pwWireX.endX = startX;
         }
         pwWireX.endY = endY;
@@ -299,28 +299,28 @@ function removeFromWire(w, overlap, wireIndex) {
     }
 
     if (w.direction === 0 && Math.min(w.startX, w.endX) < minX) {
-        let wire1 = new Wire(0, Math.min(w.startX, w.endX), w.startY, false, transform);
+        let wire1 = new Wire(0, Math.min(w.startX, w.endX), w.startY, false);
         wire1.endX = minX;
         wire1.endY = wire1.startY;
         newWires.push(wire1);
     }
 
     if (w.direction === 0 && Math.max(w.startX, w.endX) > maxX) {
-        let wire2 = new Wire(0, maxX, w.startY, false, transform);
+        let wire2 = new Wire(0, maxX, w.startY, false);
         wire2.endX = Math.max(w.startX, w.endX);
         wire2.endY = wire2.startY;
         newWires.push(wire2);
     }
 
     if (w.direction === 1 && Math.min(w.startY, w.endY) < minY) {
-        let wire1 = new Wire(1, w.startX, Math.min(w.startY, w.endY), false, transform);
+        let wire1 = new Wire(1, w.startX, Math.min(w.startY, w.endY), false);
         wire1.endX = wire1.startX;
         wire1.endY = minY;
         newWires.push(wire1);
     }
 
     if (w.direction === 1 && Math.max(w.startY, w.endY) > maxY) {
-        let wire2 = new Wire(1, w.startX, maxY, false, transform);
+        let wire2 = new Wire(1, w.startX, maxY, false);
         wire2.endX = wire2.startX;
         wire2.endY = Math.max(w.startY, w.endY);
         newWires.push(wire2);

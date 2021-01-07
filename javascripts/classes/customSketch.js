@@ -1,10 +1,9 @@
 // File: customSketch.js
 
-function CustomSketch(x, y, transform, direction, file) {
+function CustomSketch(x, y, direction, file) {
     this.x = x; // X-Position of the Custom object
     this.y = y; // Y-Position
 
-    this.transform = transform; // Transformation (Zoom and Translation)
     this.direction = direction; // Direction (0 = inputs left)
     this.inputCount = 0;        // Number of inputs
     this.outputCount = 0;       // Number of outputs
@@ -39,7 +38,7 @@ function CustomSketch(x, y, transform, direction, file) {
 
     this.marked = false; // True, if the object is marked in the selection mode
 
-    this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform); // Global clickbox
+    this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, transform); // Global clickbox
 
     this.visible = true; // True, if the object is visible and not part of another object
 
@@ -51,6 +50,15 @@ function CustomSketch(x, y, transform, direction, file) {
 
     this.parsed = false; // true, if the components have been rendered once
 }
+
+CustomSketch.prototype.getDependencyIDs = function () {
+    let ids = [];
+    for (let i = 0; i < this.responsibles.length; i++) {
+        ids.push(this.responsibles[i].id);
+        ids = ids.concat(this.responsibles[i].getDependencyIDs());
+    }
+    return ids;
+};
 
 /*
     Sets the invertion arrays, determing which in-/outputs are inverted
@@ -136,22 +144,25 @@ CustomSketch.prototype.alterPosition = function (x1, y1) {
 */
 CustomSketch.prototype.setSketchParams = function (params) {
     this.objects = params;
+    this.inputs = [];
+    this.ipset = [];
+    this.outputs = [];
     this.inputCount = this.objects[INPNUM].length;
     this.outputCount = this.objects[OUTPNUM].length;
-    this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
+    this.gClickBox = new ClickBox(this.x, this.y, this.w, this.h, transform);
     this.inputClickBoxes = [];
     this.outputClickBoxes = [];
 
     for (let i = 0; i < this.inputCount; i++) {
         this.inputs.push(false); // Set all inputs to low
         this.ipset.push(false);
-        this.inputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every input
+        this.inputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, transform)); // Create new clickBoxes for every input
     }
 
     // Initialize the outputs
     for (let i = 0; i < this.outputCount; i++) {
         this.outputs.push(false); // Set all outputs to low
-        this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, this.transform)); // Create new clickBoxes for every output
+        this.outputClickBoxes.push(new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, transform)); // Create new clickBoxes for every output
     }
 
     this.reSize(); // Double resizing necessary
@@ -483,7 +494,7 @@ CustomSketch.prototype.updateClickBoxes = function () {
                 case 3: this.inputClickBoxes[i].updatePosition(this.x, this.y + (this.w * tops) / this.gridHeight); break;
             }
         }
-        this.inputClickBoxes[i].setTransform(this.transform);
+        this.inputClickBoxes[i].setTransform(transform);
     }
 
     // Update output clickBoxes
@@ -495,7 +506,7 @@ CustomSketch.prototype.updateClickBoxes = function () {
             case 3: this.outputClickBoxes[i].updatePosition(this.x + (this.w * (i + 1)) / this.gridHeight, this.y); break;
         }
 
-        this.outputClickBoxes[i].setTransform(this.transform);
+        this.outputClickBoxes[i].setTransform(transform);
     }
     // Update position and size of the global clickbox of the custom object
     this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2);
@@ -508,7 +519,7 @@ CustomSketch.prototype.updateClickBoxes = function () {
     } else {
         this.gClickBox.updateSize(this.w, this.h);
     }
-    this.gClickBox.setTransform(this.transform);
+    this.gClickBox.setTransform(transform);
 };
 
 /*

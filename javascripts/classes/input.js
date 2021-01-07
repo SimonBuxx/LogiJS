@@ -1,6 +1,6 @@
 // File: input.js
 
-function Input(x, y, transform) {
+function Input(x, y) {
     this.x = x; // X-Position
     this.y = y; // Y-Position
 
@@ -14,8 +14,6 @@ function Input(x, y, transform) {
     this.clock = false;
     this.speed = 30;
 
-    this.transform = transform;
-
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs
     this.lowColor = color(50, 50, 50);   // Color for low inputs (dark grey)
 
@@ -26,7 +24,7 @@ function Input(x, y, transform) {
     this.id = 'i' + Date.now() + Math.random();
 
     // ClickBox is used for output and global
-    this.clickBox = new ClickBox(this.x - GRIDSIZE / 2, this.y - GRIDSIZE / 2, this.w, this.h, this.transform);
+    this.clickBox = new ClickBox(this.x - GRIDSIZE / 2, this.y - GRIDSIZE / 2, this.w, this.h, transform);
     this.updateClickBox();
 }
 
@@ -118,7 +116,7 @@ Input.prototype.setCoordinates = function (nx, ny) {
 
 Input.prototype.updateClickBox = function () {
     this.clickBox.updatePosition(this.x + GRIDSIZE / 2, this.y + GRIDSIZE / 2);
-    this.clickBox.setTransform(this.transform);
+    this.clickBox.setTransform(transform);
 };
 
 /*

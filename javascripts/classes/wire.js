@@ -1,13 +1,12 @@
 // File: wire.js
 
-function Wire(dir, startX, startY, state, transform) {
+function Wire(dir, startX, startY, state) {
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
 
     this.state = state; // Wire state (false low, true high);
 
     this.direction = dir; // 0 or 1, meaning horizontal or vertical
-    this.transform = transform;
 
     this.startX = 0; // Start point of the segment
     this.startY = 0;

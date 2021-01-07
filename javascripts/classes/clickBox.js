@@ -66,7 +66,7 @@ function ClickBox(x, y, w, h, transform) {
                 ((mouseY / this.transform.zoom - this.transform.dy) >= (this.y - this.h / 2)) &&
                 ((mouseY / this.transform.zoom - this.transform.dy) <= (this.y + this.h / 2)));
         } else {
-            return (((mouseX / this.transform.zoom - this.transform.dx) >= (this.x - this.w / 2)) &&
+            return (((mouseX / this.transform.zoom - this.transform.dx) >= Math.min((this.x - this.w / 2), this.x + this.w / 2 - (200 / this.transform.zoom))) &&
                 ((mouseX / this.transform.zoom - this.transform.dx) <= (this.x + this.w / 2)) &&
                 ((mouseY / this.transform.zoom - this.transform.dy) >= (this.y - this.h / 2 - (50 / this.transform.zoom))) &&
                 ((mouseY / this.transform.zoom - this.transform.dy) <= (this.y + this.h / 2)));

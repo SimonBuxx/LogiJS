@@ -9,6 +9,7 @@ const glob = require('glob');
 const crypto = require('crypto');
 const validator = require('email-validator');
 const passwordValidator = require('password-validator');
+const base64url = require('base64url'); // encodes bytes url safe (for random link sharing IDs)
 const app = express();
 
 const PORT = 8080;
@@ -476,7 +477,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createLink', (data) => {
-        let filename = crypto.randomBytes(10).toString('base64').slice(0, 10);
+        let filename = base64url(crypto.randomBytes(10)).slice(0, 10);
 
         fs.writeFile('./views/sharedSketches/' + filename + '.json', JSON.stringify(data.json), 'utf8', function (err) {
             socket.emit('createdLink', { filename: filename });

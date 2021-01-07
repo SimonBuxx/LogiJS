@@ -2,6 +2,7 @@
 
 function undo() {
     let act = actionUndo.pop();
+    console.log(act);
     if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
@@ -9,10 +10,16 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'addCust':
+                let dep_ids = customs[act.actionIndizes[0]].getDependencyIDs();
+                let indices_to_remove = [];
                 for (let i = customs.length - 1; i >= 0; i--) {
-                    if (customs[i].pid === customs[act.actionIndizes[0]].id) {
-                        customs.splice(i, 1);
+                    if (dep_ids.includes(customs[i].id)) {
+                        indices_to_remove.push(i);
                     }
+                }
+                indices_to_remove.sort((a, b) => b - a); // sort descending
+                for (let i = 0; i < indices_to_remove.length; i++) {
+                    customs.splice(indices_to_remove[i]);
                 }
                 customs.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
@@ -159,6 +166,9 @@ function undo() {
                     customs[act.actionIndizes[7][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
                 }
                 actionRedo.push(act);
+                if (act.actionIndizes[9]) { // Undo pasting if the move action was done after pasting
+                    undo();
+                }
                 break;
             case 'delSel':
                 conpoints = _.cloneDeep(act.actionObject[1]);
@@ -187,6 +197,50 @@ function undo() {
                         customs[act.actionObject[0][i][1]].visible = true;
                     }
                 }
+                actionRedo.push(act);
+                break;
+            case 'pasteSel':
+                console.log('Undoing pasteSel');
+                // TODO: remove inserted elements and delete custom references
+
+                for (let i = act.actionIndizes[0] - 1; i >= 0; i--) {
+                    customs.pop();
+                }
+
+                for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
+                    switch (act.actionObject[0][i].id.charAt(0)) {
+                        case 'w':
+                            wires.pop();
+                            break;
+                        case 'd':
+                            diodes.pop();
+                            break;
+                        case 'g':
+                            gates.pop();
+                            break;
+                        case 'i':
+                            inputs.pop();
+                            break;
+                        case 'o':
+                            outputs.pop();
+                            break;
+                        case 'l':
+                            labels.pop();
+                            break;
+                        case 's':
+                            segDisplays.pop();
+                            break;
+                        case 'c':
+                            customs.pop();
+                            break;
+                        case 'p':
+                            conpoints.pop();
+                            break;
+                        default:
+                            console.error('An error occured while pasting');
+                    }
+                }
+
                 actionRedo.push(act);
                 break;
             case 'addWire':
@@ -264,10 +318,16 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'delCust':
+                let dep_ids = customs[act.actionIndizes[0]].getDependencyIDs();
+                let indices_to_remove = [];
                 for (let i = customs.length - 1; i >= 0; i--) {
-                    if (customs[i].pid === act.actionObject[0].id) {
-                        customs.splice(i, 1);
+                    if (dep_ids.includes(customs[i].id)) {
+                        indices_to_remove.push(i);
                     }
+                }
+                indices_to_remove.sort((a, b) => b - a); // sort descending
+                for (let i = 0; i < indices_to_remove.length; i++) {
+                    customs.splice(indices_to_remove[i]);
                 }
                 customs.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
@@ -412,6 +472,64 @@ function redo() {
                 }
                 actionUndo.push(act);
                 break;
+            case 'pasteSel':
+                // TODO: reinsert removed elements and load customs
+
+                console.log('Customs before redoing paste: ' + customs.length);
+
+                let newCustoms = 0;
+
+                for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
+                    console.log(act.actionObject[0][i].id);
+                    switch (act.actionObject[0][i].id.charAt(0)) {
+                        case 'w':
+                            wires.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'd':
+                            diodes.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'g':
+                            gates.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'i':
+                            inputs.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'o':
+                            outputs.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'l':
+                            labels.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 's':
+                            segDisplays.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'c':
+                            customs.push(_.cloneDeep(act.actionObject[0][i]));
+                            newCustoms++;
+                            break;
+                        case 'p':
+                            conpoints.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        default:
+                            console.error('An error occured while pasting');
+                    }
+                }
+
+                let head = customs.length;
+
+                if (newCustoms === 0) {
+                    actionUndo.push(act);
+                } else {
+                    for (i = newCustoms; i > 0; i--) { // For every newly created custom
+                        loadCustomFile(customs[head - i].filename, head - i, head - i); // Load the custom's dependencies
+                        customs[head - i].parsed = false;
+                    }
+                }
+                unmarkAll();
+                actionUndo.push(act);
+                console.log('Customs after redoing paste: ' + customs.length);
+                redo();
+                break;
             case 'addWire':
                 conpoints = _.cloneDeep(act.actionObject[2]);
                 for (let i = 0; i < act.actionObject[0].length; i++) {
@@ -448,6 +566,7 @@ function redo() {
 }
 
 function pushUndoAction(type, indizes, objects) {
+    console.log(type);
     actionUndo.push(new Action(_.cloneDeep(type), _.cloneDeep(indizes), _.cloneDeep(objects)));
     actionRedo = [];
     if (actionUndo.length > HIST_LENGTH) {

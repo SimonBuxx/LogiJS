@@ -1,12 +1,11 @@
 // File: output.js
 
-function Output(x, y, transform, colr) {
+function Output(x, y, colr) {
     this.x = x; // X-Position
     this.y = y; // Y-Position
     this.w = GRIDSIZE; // Width of the putput
     this.h = GRIDSIZE; // Height of the output
     this.state = false; // Output state
-    this.transform = transform;
     this.lbl = '';
     this.colr = colr; // 0 = red, 1 = yellow, 2 = green, 3 = blue
     this.marked = false;
@@ -18,7 +17,7 @@ function Output(x, y, transform, colr) {
     this.id = 'o' + Date.now() + Math.random();
 
     // ClickBox is used for input and global
-    this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, this.transform);
+    this.clickBox = new ClickBox(this.x, this.y, this.w, this.h, transform);
 
     this.updateColor();
     this.updateClickBox();
@@ -52,7 +51,7 @@ Output.prototype.setCoordinates = function (nx, ny) {
 
 Output.prototype.updateClickBox = function () {
     this.clickBox.updatePosition(this.x, this.y);
-    this.clickBox.setTransform(this.transform);
+    this.clickBox.setTransform(transform);
 };
 
 Output.prototype.alterPosition = function (x1, y1) {

@@ -1,9 +1,8 @@
 // File: diode.js
 
-function Diode(x, y, state, transform) {
+function Diode(x, y, state) {
     this.x = x; // X position
     this.y = y; // Y position
-    this.transform = transform;
     this.state = state; // State of the diode
 
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high
@@ -12,7 +11,7 @@ function Diode(x, y, state, transform) {
     this.groupA = -1; // Group A (Horizontal crossing)
     this.groupB = -1; // Group B (Vertical Crossing)
 
-    this.clickBox = new ClickBox(this.x, this.y, 20, 20, this.transform);
+    this.clickBox = new ClickBox(this.x, this.y, 20, 20, transform);
 
     this.marked = false;
 
@@ -53,7 +52,7 @@ function Diode(x, y, state, transform) {
 
     this.updateClickBox = function () {
         this.clickBox.updatePosition(this.x, this.y);
-        this.clickBox.setTransform(this.transform);
+        this.clickBox.setTransform(transform);
     };
 
     this.updateClickBox();

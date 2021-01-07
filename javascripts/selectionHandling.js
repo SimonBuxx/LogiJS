@@ -92,7 +92,7 @@ function handleSelection(x1, y1, x2, y2) {
     }
 
     document.getElementById('select-tools').style.display = 'block';
-    document.getElementById('copy-select-button').disabled = true; // for now
+    document.getElementById('copy-select-button').disabled = false;
     document.getElementById('delete-select-button').disabled = false;
     positionSelectionTools();
 }
@@ -171,6 +171,173 @@ function deleteSelection() {
     enterModifierMode();
     initX = 0;
     initY = 0;
+}
+
+function copySelection() {
+    copiedElements = [];
+
+    for (let i = 0; i < selWireIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(wires[selWireIndizes[i]]));
+    }
+    for (let i = 0; i < selDiodeIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(diodes[selDiodeIndizes[i]]));
+    }
+    for (let i = 0; i < selGatesIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(gates[selGatesIndizes[i]]));
+    }
+    for (let i = 0; i < selInputsIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(inputs[selInputsIndizes[i]]));
+    }
+    for (let i = 0; i < selOutputsIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(outputs[selOutputsIndizes[i]]));
+    }
+    for (let i = 0; i < selLabelIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(labels[selLabelIndizes[i]]));
+    }
+    for (let i = 0; i < selSegDisplayIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(segDisplays[selSegDisplayIndizes[i]]));
+    }
+    for (let i = 0; i < selCustomIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(customs[selCustomIndizes[i]]));
+    }
+    for (let i = 0; i < selConpointIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(conpoints[selConpointIndizes[i]]));
+    }
+
+    copiedOffsetStartX = selectionBox.x + GRIDSIZE;
+    copiedOffsetStartY = selectionBox.y + GRIDSIZE;
+    copiedOffsetWidth = selectionBox.w;
+    copiedOffsetHeight = selectionBox.h;
+
+    finishSelection();
+    enterModifierMode();
+    initX = 0;
+    initY = 0;
+
+    setHelpText('Selection copied, paste with <span style="color: #c83232">[V]</span>', 'info-circle');
+    setTimeout(function () { setHelpText(''); }, 3000);
+
+    //console.log(copiedElements);
+}
+
+function pasteSelection() {
+    /*
+        If no elements are in clipboard, return
+    */
+    if (copiedElements.length === 0) {
+        setHelpText('No elements in clipboard', 'info-circle');
+        setTimeout(function () { setHelpText(''); }, 3000);
+        return;
+    }
+
+    selectionIsCopied = true;
+
+    selectionLog = [];
+    deleteLog = [];
+    selWireIndizes = [];
+    selDiodeIndizes = [];
+    selGatesIndizes = [];
+    selInputsIndizes = [];
+    selOutputsIndizes = [];
+    selLabelIndizes = [];
+    selSegDisplayIndizes = [];
+    selCustomIndizes = [];
+    selConpointIndizes = [];
+    unmarkAll();
+
+    let newCustoms = 0;
+    let customDependencies = 0;
+
+    for (let i = 0; i < copiedElements.length; i++) {
+        let elem = _.cloneDeep(copiedElements[i]); // Clone the current element
+        elem.alterPosition(GRIDSIZE, GRIDSIZE); // Move the element down right
+        elem.id = elem.id.charAt(0) + Date.now() + Math.random(); // Give the cloned element a new ID
+        switch (elem.id.charAt(0)) { // Switch depending on the type of element
+            /*
+                For all cases: push the cloned element and note the position
+            */
+            case 'w':
+                wires.push(_.cloneDeep(elem));
+                selWireIndizes.push(wires.length - 1);
+                break;
+            case 'd':
+                diodes.push(_.cloneDeep(elem));
+                selDiodeIndizes.push(diodes.length - 1);
+                break;
+            case 'g':
+                gates.push(_.cloneDeep(elem));
+                selGatesIndizes.push(gates.length - 1);
+                break;
+            case 'i':
+                inputs.push(_.cloneDeep(elem));
+                selInputsIndizes.push(inputs.length - 1);
+                break;
+            case 'o':
+                outputs.push(_.cloneDeep(elem));
+                selOutputsIndizes.push(outputs.length - 1);
+                break;
+            case 'l':
+                labels.push(_.cloneDeep(elem));
+                selLabelIndizes.push(labels.length - 1);
+                break;
+            case 's':
+                segDisplays.push(_.cloneDeep(elem));
+                selSegDisplayIndizes.push(segDisplays.length - 1);
+                break;
+            case 'c':
+                customs.push(_.cloneDeep(elem));
+                selCustomIndizes.push(customs.length - 1);
+                newCustoms++;
+                break;
+            case 'p':
+                conpoints.push(_.cloneDeep(elem));
+                selConpointIndizes.push(conpoints.length - 1);
+                break;
+            default:
+                console.error('An error occured while pasting');
+        }
+    }
+
+    /*
+        Configure buttons and modes to enable movement of the new elements
+    */
+    configureButtons('select');
+    setUnactive();
+    hideAllOptions();
+    selectButton.classList.add('active');
+    controlMode = 'select';
+    setSelectMode('end');
+
+    selectStartX = copiedOffsetStartX;
+    selectStartY = copiedOffsetStartY;
+
+    selectionBox.updatePosition(copiedOffsetStartX, copiedOffsetStartY);
+    selectionBox.updateSize(copiedOffsetWidth, copiedOffsetHeight);
+    selectionBox.setTransform(transform);
+
+    document.getElementById('select-tools').style.display = 'block';
+    positionSelectionTools();
+
+    let head = customs.length; // Before loading the custom contents, note how many customs have existed before
+
+    if (newCustoms === 0) {
+        pushUndoAction('pasteSel', [customDependencies], [_.cloneDeep(copiedElements)]);
+    } else {
+        for (i = newCustoms; i > 0; i--) { // For every newly created custom
+            if (i === 1) { // If this is the last custom to be loaded
+                /*
+                    Load the custom's content, note the number of new custom dependencies and push the action for undo/redo
+                */
+                loadCustomFile(customs[head - i].filename, head - i, head - i, function () { // jshint ignore:line
+                    customDependencies = customs.length - head;
+                    pushUndoAction('pasteSel', [customDependencies], [_.cloneDeep(copiedElements)]);
+                });
+            } else {
+                loadCustomFile(customs[head - i].filename, head - i, head - i); // Load the custom's dependencies
+            }
+            customs[head - i].parsed = false;
+        }
+    }
 }
 
 /*
@@ -252,9 +419,10 @@ function finishSelection() {
     let diodesAfter = _.cloneDeep(diodes);
     if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length +
         selCustomIndizes.length + selConpointIndizes.length > 0 || selectionLog.length > 0) && (selectionOffsetX !== 0 || selectionOffsetY !== 0)) {
-        pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes],
+        pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
             [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
     }
+    selectionIsCopied = false;
 }
 
 function integrateWires() {
@@ -288,7 +456,7 @@ function integrateWires() {
                 if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 0 && wiresToAdd[j].startY === wires[i].startY &&
                     (wiresToAdd[j].startX == wires[i].endX || wiresToAdd[j].startX == wires[i].startX || wiresToAdd[j].endX == wires[i].startX || wiresToAdd[j].endX == wires[i].endX))) { //jshint ignore:line
                     if (xIndex >= 0) {
-                        let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY, false, transform);
+                        let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY);
                         newWire.endX = Math.max(wires[xIndex].endX, wires[i].endX);
                         newWire.endY = wires[xIndex].startY;
                         if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
@@ -300,7 +468,7 @@ function integrateWires() {
                             selectionLog.push(['rWire', xIndex, wires[xIndex], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
                         }
                     } else {
-                        let newWire = new Wire(0, Math.min(wiresToAdd[j].startX, wires[i].startX), wiresToAdd[j].startY, false, transform);
+                        let newWire = new Wire(0, Math.min(wiresToAdd[j].startX, wires[i].startX), wiresToAdd[j].startY, false);
                         newWire.endX = Math.max(wiresToAdd[j].endX, wires[i].endX);
                         newWire.endY = wiresToAdd[j].startY;
                         if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
@@ -315,7 +483,7 @@ function integrateWires() {
                 }
             }
             if (xIndex < 0 && !overlapOverAllX) {
-                let newWire = new Wire(0, wiresToAdd[j].startX, wiresToAdd[j].startY, false, transform);
+                let newWire = new Wire(0, wiresToAdd[j].startX, wiresToAdd[j].startY, false);
                 newWire.endX = wiresToAdd[j].endX;
                 newWire.endY = wiresToAdd[j].startY;
                 selectionLog.push(['aWire', wires.length, newWire, wiresToAddIndizes[j]]);
@@ -328,7 +496,7 @@ function integrateWires() {
                 if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 1 && wiresToAdd[j].startX === wires[i].startX &&
                     (wiresToAdd[j].startY == wires[i].endY || wiresToAdd[j].startY == wires[i].startY || wiresToAdd[j].endY == wires[i].startY || wiresToAdd[j].endY == wires[i].endY))) { //jshint ignore:line
                     if (yIndex >= 0) {
-                        let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false, transform);
+                        let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false);
                         newWire.endX = wires[yIndex].startX;
                         newWire.endY = Math.max(wires[yIndex].endY, wires[i].endY);
                         if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
@@ -340,7 +508,7 @@ function integrateWires() {
                             selectionLog.push(['rWire', yIndex, wires[yIndex], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
                         }
                     } else {
-                        let newWire = new Wire(1, wiresToAdd[j].startX, Math.min(wiresToAdd[j].startY, wires[i].startY), false, transform);
+                        let newWire = new Wire(1, wiresToAdd[j].startX, Math.min(wiresToAdd[j].startY, wires[i].startY), false);
                         newWire.endX = wiresToAdd[j].startX;
                         newWire.endY = Math.max(wiresToAdd[j].endY, wires[i].endY);
                         if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
@@ -356,7 +524,7 @@ function integrateWires() {
             }
 
             if (yIndex < 0 && !overlapOverAllY) {
-                let newWire = new Wire(1, wiresToAdd[j].startX, wiresToAdd[j].startY, false, transform);
+                let newWire = new Wire(1, wiresToAdd[j].startX, wiresToAdd[j].startY, false);
                 newWire.endX = wiresToAdd[j].startX;
                 newWire.endY = wiresToAdd[j].endY;
                 selectionLog.push(['aWire', wires.length, newWire, wiresToAddIndizes[j]]);

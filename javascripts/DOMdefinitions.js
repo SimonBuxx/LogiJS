@@ -168,8 +168,8 @@ function addElementHelpTexts() {
     addHelpText(greenButton, 'Set the output color to green');
     addHelpText(blueButton, 'Set the output color to blue');
 
-    addHelpText(copySelectButton, 'Copy this Sketch Part');
-    addHelpText(deleteSelectButton, 'Delete this Sketch Part');
+    addHelpText(copySelectButton, 'Copy this Sketch Part <span style="color: #c83232">[C]</span>');
+    addHelpText(deleteSelectButton, 'Delete this Sketch Part <span style="color: #c83232">[D]</span>');
 
     addHelpText(descInput, 'This is the Description displayed in the Dashboard');
     addHelpText(moduleNameInput, 'This is the Text written on the Module');
