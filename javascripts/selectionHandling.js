@@ -393,34 +393,38 @@ function finishSelection() {
 
     document.getElementById('select-tools').style.display = 'none';
 
-    for (let i = 0; i < selWireIndizes.length; i++) {
-        selectionLog.push(['mWire', selWireIndizes[i]]);
-    }
-    integrateWires();
+    if (selectionOffsetX !== 0 || selectionOffsetY !== 0) {
 
-    let conpointsBefore = _.cloneDeep(conpoints);
+        for (let i = 0; i < selWireIndizes.length; i++) {
+            selectionLog.push(['mWire', selWireIndizes[i]]);
+        }
+        integrateWires();
 
-    for (let i = 0; i < selConpointIndizes.length; i++) {
-        conpointsBefore[selConpointIndizes[i]].alterPosition(-selectionOffsetX, -selectionOffsetY);
-        conpointsBefore[selConpointIndizes[i]].marked = false;
-        conpoints[selConpointIndizes[i]].marked = false;
-    }
+        let conpointsBefore = _.cloneDeep(conpoints);
 
-    let diodesBefore = _.cloneDeep(diodes);
-    for (let i = 0; i < selDiodeIndizes.length; i++) {
-        diodesBefore[selDiodeIndizes[i]].alterPosition(-selectionOffsetX, -selectionOffsetY);
-        diodesBefore[selDiodeIndizes[i]].marked = false;
-        diodes[selDiodeIndizes[i]].marked = false;
-    }
+        for (let i = 0; i < selConpointIndizes.length; i++) {
+            conpointsBefore[selConpointIndizes[i]].alterPosition(-selectionOffsetX, -selectionOffsetY);
+            conpointsBefore[selConpointIndizes[i]].marked = false;
+            conpoints[selConpointIndizes[i]].marked = false;
+        }
 
-    doConpoints();
+        let diodesBefore = _.cloneDeep(diodes);
+        for (let i = 0; i < selDiodeIndizes.length; i++) {
+            diodesBefore[selDiodeIndizes[i]].alterPosition(-selectionOffsetX, -selectionOffsetY);
+            diodesBefore[selDiodeIndizes[i]].marked = false;
+            diodes[selDiodeIndizes[i]].marked = false;
+        }
 
-    let conpointsAfter = _.cloneDeep(conpoints);
-    let diodesAfter = _.cloneDeep(diodes);
-    if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length +
-        selCustomIndizes.length + selConpointIndizes.length > 0 || selectionLog.length > 0) && (selectionOffsetX !== 0 || selectionOffsetY !== 0)) {
-        pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
-            [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
+        doConpoints();
+
+        let conpointsAfter = _.cloneDeep(conpoints);
+        let diodesAfter = _.cloneDeep(diodes);
+        if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length +
+            selCustomIndizes.length + selConpointIndizes.length > 0 || selectionLog.length > 0) /*&& (selectionOffsetX !== 0 || selectionOffsetY !== 0)*/) {
+            console.log('moveSel, offset: ' + selectionOffsetX + ' ' + selectionOffsetY);
+            pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
+                [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
+        }
     }
     selectionIsCopied = false;
 }

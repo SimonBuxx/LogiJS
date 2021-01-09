@@ -299,6 +299,8 @@ let tickTime = 10;
 
 let tourStep = 0;
 
+let idMatchRef = null;
+
 /*
     Disable some error messages from p5
 */
@@ -1917,7 +1919,8 @@ function keyPressed() {
                 // Uncomment to make screenshots
                 //let img  = canvas.toDataURL("image/png");
                 //document.write('<img src="'+img+'"/>');
-                console.log(customs);
+                //console.log(customs);
+                idMatchRef = _.cloneDeep(wires);
                 break;
             case 32: // Space
                 if (simRunning) {
@@ -2040,4 +2043,21 @@ function drawGrid() {
 function getCookieValue(a) {
     var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
     return b ? b.pop() : '';
+}
+
+function idMatch(a, b) {
+    if (a.length !== b.length) {
+        console.log('ID match failed (unequal length)');
+        return false;
+    }
+    for (let i = 0; i < a.length; i++) {
+        if (a[i].x !== b[i].x || a[i].y !== b[i].y) {
+            console.log('ID match failed (unequal position at pos ' + i + ')');
+            console.log(a);
+            console.log(b);
+            return false;
+        }
+    }
+    console.log('ID match passed');
+    return true;
 }

@@ -566,7 +566,7 @@ function redo() {
 }
 
 function pushUndoAction(type, indizes, objects) {
-    console.log(type);
+    //console.log(type);
     actionUndo.push(new Action(_.cloneDeep(type), _.cloneDeep(indizes), _.cloneDeep(objects)));
     actionRedo = [];
     if (actionUndo.length > HIST_LENGTH) {
