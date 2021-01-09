@@ -21,10 +21,10 @@ button.addEventListener("click", function () {
     coll.classList.toggle("active");
     if (coll.style.maxHeight) {
         coll.style.maxHeight = null;
-        button.innerHTML = "<i class=\"fas fa-stream\"></i> Show all";
+        button.innerHTML = "<i class=\"fas fa-stream\"></i> Show All";
     } else {
         coll.style.maxHeight = coll.scrollHeight + "px";
-        button.innerHTML = "<i class=\"fas fa-stream\"></i> Show less";
+        button.innerHTML = "<i class=\"fas fa-stream\"></i> Show Less";
     }
 });
 

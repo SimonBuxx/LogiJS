@@ -69,13 +69,13 @@ function advanceTour() {
             showTour('Simulation<span style="color: #c83232">.</span>', 'Click the <i class="fa fa-play icon" style="color: #c83232;"></i> Start button to bring your circuit to life<span style="color: #c83232">.</span>');
             break;
         case 9:
-            showTour('Custom Modules<span style="color: #c83232">.</span>', 'If you‘re logged in, you can import circuits as custom modules using the <i class="fa fa-microchip icon" style="color: #c83232;"></i> Custom Modules dialog<span style="color: #c83232">.</span>');
+            showTour('Custom Modules<span style="color: #c83232">.</span>', 'If you‘re logged in, you can import circuits as custom modules using the <i class="fa fa-paste icon" style="color: #c83232;"></i> Custom Modules dialog<span style="color: #c83232">.</span>');
             break;
         case 10:
             showTour('Custom Modules<span style="color: #c83232">.</span>', 'When you\'ve got at least one output, use <i class="fa fa-tools icon" style="color: #c83232;"></i> Module to edit the sketch\'s appearance as a custom module<span style="color: #c83232">.</span>');
             break;
         case 11:
-            showTour('File Import<span style="color: #c83232">.</span>', 'Click on <i class="fa fa-file-upload icon" style="color: #c83232;"></i> Import to upload local JSON sketch files<span style="color: #c83232">.</span>');
+            showTour('File Import<span style="color: #c83232">.</span>', 'Click on <i class="fa fa-file-upload icon" style="color: #c83232;"></i> Import JSON in <i class="fas fa-chevron-down icon" style="color: #c83232;"></i> Tools to upload local JSON sketch files<span style="color: #c83232">.</span>');
             break;
         case 12:
             document.getElementById('tour-button').innerHTML = 'Finish';
