@@ -11,8 +11,8 @@ html {
     background: #323232;
 }
 
-.cc-message, .dark-theme .cc-message {
-    color: #323232;
+.cc-message {
+    color: #fff;
 }
 
 .cc-window {

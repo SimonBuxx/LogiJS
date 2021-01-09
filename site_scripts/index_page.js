@@ -37,7 +37,12 @@ for (const button of Logout) {
     });
 }
 
-const currentTheme = localStorage.getItem('theme');
+let currentTheme = localStorage.getItem('theme');
+
+if (currentTheme !== 'light') {
+    currentTheme = 'dark';
+    localStorage.setItem('theme', currentTheme);
+}
 
 if (currentTheme === 'dark') {
     document.documentElement.classList.toggle('dark-theme');
