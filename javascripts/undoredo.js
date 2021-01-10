@@ -200,7 +200,7 @@ function undo() {
                 actionRedo.push(act);
                 break;
             case 'pasteSel':
-                console.log('Undoing pasteSel');
+                //console.log('Undoing pasteSel');
                 // TODO: remove inserted elements and delete custom references
 
                 for (let i = act.actionIndizes[0] - 1; i >= 0; i--) {
@@ -473,14 +473,10 @@ function redo() {
                 actionUndo.push(act);
                 break;
             case 'pasteSel':
-                // TODO: reinsert removed elements and load customs
-
-                console.log('Customs before redoing paste: ' + customs.length);
-
                 let newCustoms = 0;
 
                 for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
-                    console.log(act.actionObject[0][i].id);
+                    //console.log(act.actionObject[0][i].id);
                     switch (act.actionObject[0][i].id.charAt(0)) {
                         case 'w':
                             wires.push(_.cloneDeep(act.actionObject[0][i]));
@@ -517,9 +513,7 @@ function redo() {
 
                 let head = customs.length;
 
-                if (newCustoms === 0) {
-                    actionUndo.push(act);
-                } else {
+                if (newCustoms > 0) {
                     for (i = newCustoms; i > 0; i--) { // For every newly created custom
                         loadCustomFile(customs[head - i].filename, head - i, head - i); // Load the custom's dependencies
                         customs[head - i].parsed = false;
@@ -527,7 +521,6 @@ function redo() {
                 }
                 unmarkAll();
                 actionUndo.push(act);
-                console.log('Customs after redoing paste: ' + customs.length);
                 redo();
                 break;
             case 'addWire':
