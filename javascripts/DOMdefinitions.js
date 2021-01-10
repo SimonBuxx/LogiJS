@@ -505,7 +505,7 @@ function halfaddClicked() {
     setPreviewElement(true, {
         tops: [],
         inputLabels: ['A', 'B'],
-        outputLabels: ['S', 'C'],
+        outputLabels: ['C', 'S'],
         caption: 'HA',
         inputs: 2,
         outputs: 2
@@ -520,7 +520,7 @@ function fulladdClicked() {
     setPreviewElement(true, {
         tops: [],
         inputLabels: ['A', 'B', 'C'],
-        outputLabels: ['S', 'C'],
+        outputLabels: ['C', 'S'],
         caption: 'FA',
         inputs: 3,
         outputs: 2
