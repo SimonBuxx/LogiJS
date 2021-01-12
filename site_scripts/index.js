@@ -147,7 +147,7 @@ router.get('/login', function (req, res) {
 });
 
 router.get('/edulogin', function (req, res) {
-    res.render('edulogin', {
+    res.render('eduLogin', {
         failed: req.query.failed,
         signup_success: req.query.signup_success
     });
