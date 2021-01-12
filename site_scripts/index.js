@@ -127,6 +127,12 @@ router.get('/legal', function (req, res) {
     });
 });
 
+router.get('/how-to-host', function (req, res) {
+    res.render('hosting-tutorial', {
+        user: getUser(req)
+    });
+});
+
 router.get('/terms-of-service', function (req, res) {
     res.render('tos', {
         user: getUser(req)
@@ -135,6 +141,13 @@ router.get('/terms-of-service', function (req, res) {
 
 router.get('/login', function (req, res) {
     res.render('login', {
+        failed: req.query.failed,
+        signup_success: req.query.signup_success
+    });
+});
+
+router.get('/edulogin', function (req, res) {
+    res.render('edulogin', {
         failed: req.query.failed,
         signup_success: req.query.signup_success
     });

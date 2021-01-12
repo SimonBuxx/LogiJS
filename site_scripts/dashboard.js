@@ -62,7 +62,7 @@ const currentTheme = localStorage.getItem('theme');
 
 if (currentTheme === 'dark') {
     document.documentElement.classList.toggle('dark-theme');
-    document.getElementById('top_logo_small').src = 'images/logo_index_new_white.png';
+    document.getElementById('top_logo').src = 'images/logo_index_new_white.png';
     document.getElementById('mode-button').innerHTML = '<i class="fa fa-sun red"></i>';
 }
 
@@ -71,11 +71,11 @@ document.getElementById('mode-button').addEventListener('click', function () {
     document.documentElement.classList.toggle('dark-theme');
     if (document.documentElement.classList.contains('dark-theme')) {
         theme = 'dark';
-        document.getElementById('top_logo_small').src = 'images/logo_index_new_white.png';
+        document.getElementById('top_logo').src = 'images/logo_index_new_white.png';
         document.getElementById('mode-button').innerHTML = '<i class="fa fa-sun red"></i>';
     } else {
         theme = 'light';
-        document.getElementById('top_logo_small').src = 'images/logo_index_new.png';
+        document.getElementById('top_logo').src = 'images/logo_index_new.png';
         document.getElementById('mode-button').innerHTML = '<i class="fa fa-moon red"></i>';
     }
     localStorage.setItem('theme', theme);

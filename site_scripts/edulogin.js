@@ -1,27 +1,27 @@
-const Logout = document.querySelectorAll('.Logout');
-for (const button of Logout) {
-  button.addEventListener('click', (e) => { //jshint ignore:line
+const Login = document.querySelector('.Login');
+Login.addEventListener('submit', (e) => {
     e.preventDefault();
-    setCookie('access_token', '', -1);
-    window.location = '/';
-  });
-}
+    const username = Login.querySelector('.username').value;
+    const password = Login.querySelector('.password').value;
+    post('/login', { username, password })
+        .then(function (response) {
+            if (response.status === 200) {
+                window.location = '/dashboard';
+            } else {
+                window.location = '/edulogin?failed=true';
+            }
+        });
+});
 
-function setCookie(name, value, days) {
-  var d = new Date();
-  d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
-  document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
-}
-
-window.onscroll = function () { scrollFunction(); };
-function scrollFunction() {
-  if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-    document.getElementsByClassName("navbar-brand")[0].style.setProperty("transform", "scale(0.6)");
-    document.getElementsByClassName("navbar-header")[0].style.setProperty("top", "-20px");
-  } else {
-    document.getElementsByClassName("navbar-brand")[0].style.setProperty("transform", "scale(1.0)");
-    document.getElementsByClassName("navbar-header")[0].style.setProperty("top", "10px");
-  }
+function post(path, data) {
+    return window.fetch(path, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
 }
 
 const currentTheme = localStorage.getItem('theme');

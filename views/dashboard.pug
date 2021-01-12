@@ -64,8 +64,13 @@ body
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.navbar-brand(href='/#top')
-              img#top_logo_small(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS')
+            a.navbar-brand(href='/#top', style="transition: 0.2s; transform: scale(0.6); margin-top: -20px;")
+              img#top_logo(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS', style='float: left;')
+              div#logo-div(style="float: right; margin: 0; padding: 0; border-left: 5px solid #c83232; padding-left: 20px;")
+                p#logo-text(style="font-size: 45px; margin-top: 10px; line-height: 1.1; transition: 0.2s; letter-spacing: 2px;") #{user}'s
+                  br
+                  | Dashboard
+                  span(style="color: #c83232;") .
           .navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right
               li

@@ -663,8 +663,37 @@ input:hover {
     left: 50%;
     -ms-transform: translate(-50%, -40%);
     transform: translate(-50%, -40%);
-    width: 400px;
+    width: 430px;
     display: block;
+}
+
+.login-background {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 50px 35px 0px 35px;  
+    box-shadow: 0 0 20px #969696;
+}
+
+.dark-theme .login-background {
+    background: rgba(50, 50, 50, 0.8);
+    box-shadow: 0 0 20px #202020;
+}
+
+.edu-bg {
+    background-image: url('http://localhost:8080/images/uni-hl-demo.jpg'); 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    box-shadow: 0 0 10px 10px white inset; 
+    background-size: 100%; 
+    width: 100%; 
+    height: 100%;
+    background-size: cover; 
+    opacity: 0.1;
+}
+
+.dark-theme .edu-bg {
+    box-shadow: 0 0 10px 10px #323232 inset; 
+    opacity: 0.05;
 }
 
 .login-confirm-button {
@@ -790,21 +819,14 @@ ul.navbar-nav {
     }
 }
 
-p.red-message, p.green-message {
-    margin: 20px;
+p.login-message {
+    margin: -20px 20px 20px 20px;
     font-size: 40px;
     text-align: center;
-}
-
-p.red-message {
-    color: rgb(200, 50, 50);
-}
-
-p.green-message {
     color: #323232;
 }
 
-.dark-theme p.green-message {
+.dark-theme p.login-message {
     color: white;
 }
 

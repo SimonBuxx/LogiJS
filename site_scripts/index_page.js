@@ -1,16 +1,16 @@
 window.onscroll = function () { scrollFunction(); };
 function scrollFunction() {
     if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-        document.getElementById("top_logo").style.width = "200px";
+        document.getElementsByClassName("navbar-brand")[0].style.setProperty("transform", "scale(0.6)");
+        document.getElementsByClassName("navbar-header")[0].style.setProperty("top", "-20px");
         document.getElementById("front_teaser").style.opacity = "0";
         document.getElementById("main-carousel").style.opacity = "1";
     } else {
+        document.getElementsByClassName("navbar-brand")[0].style.setProperty("transform", "scale(1.0)");
+        document.getElementsByClassName("navbar-header")[0].style.setProperty("top", "10px");
         document.getElementById("front_teaser").style.opacity = "1";
         if (document.body.clientWidth >= 1024) {
             document.getElementById("main-carousel").style.opacity = "0";
-            document.getElementById("top_logo").style.width = "350px";
-        } else {
-            document.getElementById("top_logo").style.width = "200px";
         }
     }
 }

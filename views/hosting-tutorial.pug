@@ -1,0 +1,195 @@
+doctype html
+<html lang="en" class="dark-theme">
+head
+  |   <!-- Google Tag Manager -->
+  |   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  |   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  |   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  |   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  |   })(window,document,'script','dataLayer','GTM-WKSH2RQ');</script>
+  |   <!-- End Google Tag Manager -->
+  title LogiJS: Hosting Tutorial
+  meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
+  computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
+  meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='shortcut icon', href='images/favi.png')
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css")
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
+  style
+    include css/bootstrap.css
+    include css/index_style.css
+  script.
+    window.addEventListener("load", function () {
+      window.cookieconsent.initialise({
+        "position": "bottom-right",
+        "content": {
+          "dismiss": "Allow Cookies"
+        },
+        "palette": {
+          "popup": {
+            "background": "#fff",
+            "text": "#323232",
+            "link": "#c83232"
+          },
+          "button": {
+            "background": "#c83232",
+            "text": "#ffffff"
+          }
+        }
+      })
+    });
+body
+  |   <!-- Google Tag Manager (noscript) -->
+  |   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKSH2RQ"
+  |   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  |   <!-- End Google Tag Manager (noscript) -->
+  .top-menu#top
+    .container
+      .navbar.navbar-default.navbar-fixed-top(role='navigation')
+        .container
+          ul.nav.navbar-nav.navbar-left
+            li
+              a.internal-link(rel='nofollow', href='/#features', target='_parent') Features
+            li
+              a.internal-link(rel='nofollow', href='/#samples', target='_parent') Samples
+            li
+              a.internal-link(rel='nofollow', href='/#about', target='_parent') About
+          .navbar-header(style="transition: 0.2s;")
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href='/', style="transition: 0.2s;")
+              img#top_logo(src='images/logo_index_new_white.png', alt='LogiJS logo', title='LogiJS', style='float: left;')
+              div#logo-div(style="float: right; margin: 0; padding: 0; border-left: 5px solid #c83232; padding-left: 20px;")
+                p#logo-text(style="font-size: 45px; margin-top: 10px; line-height: 1.1; transition: 0.2s; letter-spacing: 2px;") Hosting
+                  br
+                  | Tutorial
+                  span(style="color: #c83232;") .
+          .navbar-collapse.collapse
+            ul.nav.navbar-nav.navbar-right
+              if user !== ''
+                li
+                  a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') <i class="fa fa-user" style="color: #c83232;"></i> #{user}
+                li
+                  a.Logout.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-out-alt" style="color: #c83232;"></i> Logout
+              else
+                li
+                  a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') <i class="fa fa-sign-in-alt" style="color: #c83232;"></i> Login
+                li
+                  a.internal-link(rel='nofollow', href='/signup', target='_parent') <i class="fa fa-user-plus" style="color: #c83232;"></i> Register
+              li
+                a#mode-button.internal-link(rel='nofollow', href='javascript:;', target='_parent' title='Toggle Dark Mode') <i class="fa fa-sun red"></i>
+.slogan-container(style="margin-top: 150px;")
+  h1.background-text Discover the world
+.legal-content
+  //h1 Hosting Tutorial
+    span(style="color: #c83232;") .
+  h1.sub-caption Hosting LogiJS on a Private Server
+  p Hosting a version that is independent of the logijs.com website is important if your 
+    | organization relies on availability of the service. Also, the privately hosted version offers additional features for managing user accounts.
+  p The server set up process includes downloading the required files as well as setting up a MySQL database and a reverse proxy.
+  h2 Downloading the Git Repository
+    span(style="color: #c83232;") .
+  p All client- and server code for LogiJS is found in a Git repository 
+    | and uploaded to 
+    a(rel='nofollow', href='https://github.com/SimonBuxx/logijs', target='_blank') GitHub
+    | . If not installed already, please set up Git on your server. Visit 
+    a(rel='nofollow', href='https://git-scm.com/', target='_blank') https://git-scm.com/ 
+    | for further guidance.
+  p With Git installed, please navigate to the folder you want to install LogiJS in and clone the LogiJS repository by typing 
+    span(style='color: #969696;') git clone https://github.com/SimonBuxx/LogiJS.git 
+    | into the server's console.
+  h2 Installing Node.js
+    span(style="color: #c83232;") .
+  p  The server environment used for LogiJS is Node.js, a JavaScript runtime environment. To install Node.js, please refer to 
+    a(rel='nofollow', href='https://nodejs.org/', target='_blank') https://nodejs.org/
+    | . The version currently used on logijs.com is v14.15.1.
+  h2 Installing Dependencies
+    span(style="color: #c83232;") .
+  p Once the LogiJS files are installed, you should install all dependencies. These are packages that Node.js needs to run the server code. Type 
+    span(style='color: #969696;') npm install 
+    | into the console to install all dependencies using Node.js' package manager npm.
+  h2 Basic Configuration
+    span(style="color: #c83232;") .
+  p Before running the LogiJS installation for the first time, some files have to be configured. 
+  p First, please use a trusted service to create a 
+    | 512 bit public and private RSA key set. These keys are used to authenticate user sessions. Replace the existing key inside public.key with
+    | the new public key. For the private key, please create a new file private.key inside the same folder and paste the private key there.
+    | Make sure that the private key is never published.
+  p To connect the server to the MySQL database that we are going to set up soon, please enter the folder site_scripts and create a file called
+    | knexfile.js. Inside this file, paste the following code: module.exports = { client: 'mysql', connection: { user: '', password: '', database: '' } };
+    | The database name and credentials will be filled in as soon as the database is set up.
+  p There are two folders that have to be created manually. The first one is an empty folder named 
+    span(style='color: #969696;') userSketches 
+    | inside the installation's root directory and the second one is the empty folder 
+    span(style='color: #969696;') sharedSketches 
+    | inside the folder 
+    span(style='color: #969696;') views
+    | . These folders hold the user's sketch files and the files that have been shared via public links.
+  
+  h2 Database Setup
+    span(style="color: #c83232;") .
+  p If not already installed, please install a version of MySQL on your server. Resources can be found on 
+    a(rel='nofollow', href='https://dev.mysql.com/downloads/', target='_blank') https://dev.mysql.com/downloads/
+    | . Create a new schema with charset 
+    span(style='color: #969696;') utf8 
+    | and collation 
+    span(style='color: #969696;') utf8_general_ci
+    | . Insert your MySQL credentials and the database name into the knexfile.js and make sure a MySQL server instance is running.
+  p The table that stores user accounts and password data can be created automatically by using the SQL Query Builder Knex.js. To do this, you have to 
+    | execute two so-called migrations, which are code snippets that will set up the database. First, please navigate to 
+    span(style='color: #969696;') /site_scripts/migrations
+    | . In this folder, execute the command 
+    span(style='color: #969696;') knex migrate:latest
+    | . If all goes well, Knex.js will create a new table called "user" inside the MySQL database.
+  h2 Testing the Installation
+    span(style="color: #c83232;") .
+  p To test if everything so far is set up correctly, go back to the root folder of the installation and execute the command 
+    span(style='color: #969696;') node site_scripts/index.js
+    | . If the server execution was successful, the LogiJS service should be accessible locally on 
+    a(rel='nofollow', href='http://localhost:8080', target='_blank') http://localhost:8080
+    | . 
+  p To check whether the database is connected properly, try to create a user account using the normal registration process. 
+    | You can delete this account afterwards using an SQL query.
+  h2 Configuring a Reverse Proxy
+    span(style="color: #c83232;") .
+  p Now that LogiJS is accessible locally, the final step is to make it accessible over the internet or whatever network your organization uses. 
+    | The way this is done on the logijs.com website is using a reverse proxy, 
+    a(rel='nofollow', href='https://www.nginx.com/', target='_blank') nginx 
+    | in our case. There are many tutorials on the internet on how to install and configure nginx as a reverse proxy. 
+  p This reverse proxy should be configured to mirror Node.js' port 8080 to make it accessible from a public domain. 
+    | I also suggest to get a free SSL/TLS certificate from 
+    a(rel='nofollow', href='https://letsencrypt.org/', target='_blank') Let's Encrypt 
+    | and to make sure that nginx redirects queries with http:// to https:// and queries containing www. to queries without.
+    | There are tutorials available on how to achieve this but nginx can be tricky sometimes. So feel free to contact us if you are having problems.
+  p Finally, I want to recommend the Node.js Process Manager 
+    a(rel='nofollow', href='https://pm2.keymetrics.io/', target='_blank') pm2 
+    | which I use to run the Node.js server in the background. It is very easy to use and can be installed via npm using the command 
+    span(style='color: #969696;') npm install pm2 -g
+    | .
+.footer_bottom
+    .footer_bottom_content
+      .footer_box
+        a.internal-link(rel='nofollow', href='/terms-of-service', target='_parent') Terms of Service
+        a.internal-link(rel='nofollow', href='#', target='_parent') Legal Notice
+      .footer_box
+        p(style="text-align: center; display: inline-block; width: 100%;")
+          a(href='https://twitter.com/logi_js', target='_blank', style="margin-right: 5px;")
+            img(src="images/twitter.png" style="width: 40px; margin-top: -20px;")
+          a(href='https://github.com/SimonBuxx/logijs', target='_blank', style="margin-left: 5px;")
+            img(src="images/github_dark.png" style="width: 40px; margin-top: -20px;")
+      .footer_box
+        p(style="text-align: right;") Made with <i class="fas fa-heart" style="color: #c83232;"></i> in Lübeck
+          span(style="color: #c83232;") .
+script
+  include ../libraries/jquery.min.js
+  include ../libraries/bootstrap.min.js
+  include ../libraries/stickUp.min.js
+  include ../site_scripts/edu_tutorial.js
+</html>
