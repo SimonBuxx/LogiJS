@@ -679,7 +679,7 @@ input:hover {
 }
 
 .edu-bg {
-    background-image: url('http://localhost:8080/images/uni-hl-demo.jpg'); 
+    background-image: url('images/uni-hl-demo.jpg'); 
     position: absolute; 
     top: 0; 
     left: 0; 
