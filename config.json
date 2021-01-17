@@ -1,0 +1,42 @@
+{ 
+    "organization": { 
+        "name": "Universität zu Lübeck",
+        "first_line": "Universität",
+        "second_line": "zu Lübeck"
+    },
+    "accounts": {
+        "allow_signups": "true",
+        "enable_login": "true",
+        "user_identificator": "email",
+        "require_verification": "false",
+        "limit_email_hosts": "false",
+        "allowed_hosts": ["student.uni-luebeck.de", "uni-luebeck.de"]
+    },
+    "custom_index_page": {
+        "use_custom_page": "false",
+        "background_image": "https://cdn.prod.www.spiegel.de/images/880f3df9-0001-0004-0000-000000092544_w1528_r1.2514619883040936_fpx35.93_fpy54.98.jpg",
+        "show_organization_name": "true",
+        "refer_to_logijs_com": "true",
+        "background_text": "Universität zu Lübeck",
+        "allow_entering_without_login": "true",
+        "show_made_in_luebeck": "true"
+    },
+    "localization": {
+        "login": "Login",
+        "register": "Konto erstellen",
+        "email": "E-Mail",
+        "username": "Nutzername",
+        "password": "Passwort",
+        "switch_to_logijs_com": "Zu LogiJS.com wechseln",
+        "continue_without_login": "Ohne Anmeldung fortfahren",
+        "toggle_dark_mode": "Dunklen Modus an-/ausschalten",
+        "login_failed": "Anmeldung fehlgeschlagen",
+        "signup_successful": "Registrierung erfolgreich",
+        "already_signed_up": "Du hast schon ein Konto?",
+        "username_invalid": "Nutzername ungültig",
+        "email_invalid": "E-Mail-Adresse ungültig",
+        "password_invalid": "Passwort ungültig",
+        "password_rules": "Bitte gebe zwischen 6 und 50 klein- UND großgeschriebene Zeichen ein, inklusive mindestens einer Zahl",
+        "username_taken": "Nutzername schon vergeben"
+    }
+}

@@ -77,7 +77,10 @@ body
           button.button#screenshot-button(rel="nofollow" onclick="screenshotClicked();") <i class="fas fa-camera icon"></i> Screenshot
           button#darkmode-button.button(rel="nofollow" onclick="darkmodeClicked();") <i class="fas fa-moon icon"></i> Dark Mode
       button.button#save-sketch-button(rel="nofollow" onclick="saveDialogClicked();") <i class="fas fa-save icon"></i> Save
-      button#dashboard-login-button.button(rel="nofollow" onclick="dashboardButtonClicked();") <i class="fas fa-sign-in-alt icon"></i> Login
+      if !no_login
+        button#dashboard-login-button.button(rel="nofollow" onclick="dashboardButtonClicked();") <i class="fas fa-sign-in-alt icon"></i> Login
+      else 
+        button#dashboard-login-button.button(disabled=true, rel="nofollow") <i class="fas fa-sign-in-alt icon"></i> Login
   #helpLabelContainer
       p#help-label.label.inlineLabel <i class="fa fa-question-circle icon" style="color: #c83232;"></i>
   #zoomLabelContainer

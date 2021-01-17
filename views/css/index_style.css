@@ -163,6 +163,14 @@ a:focus {
     width: 200px;
 }
 
+#logo-text {
+    font-size: clamp(26px, 2.5vw, 45px);
+    margin-top: 10px;
+    line-height: 1.1;
+    transition: 0.2s;
+    letter-spacing: 2px;
+}
+
 .container {
     width: 100%;
 }
@@ -472,7 +480,7 @@ a:focus {
 .sample-description {
     width: 650px;
     height: 150px;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
 .left-elem {
@@ -668,7 +676,7 @@ input:hover {
 }
 
 .login-background {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.6);
     padding: 50px 35px 0px 35px;  
     box-shadow: 0 0 20px #969696;
 }
@@ -679,7 +687,7 @@ input:hover {
 }
 
 .edu-bg {
-    background-image: url('images/uni-hl-demo.jpg'); 
+    /*background-image: url('images/uni-hl-demo.jpg'); */
     position: absolute; 
     top: 0; 
     left: 0; 
@@ -695,6 +703,77 @@ input:hover {
     box-shadow: 0 0 10px 10px #323232 inset; 
     opacity: 0.05;
 }
+
+.edu-column {
+    float: left;
+    width: 33.33%;
+    text-align: center;
+    position: relative;
+}
+
+.edu-content {
+    box-shadow: 0 0 20px #969696;
+    width: 70%;
+    margin: 0 auto;
+    padding: 50px;
+    transition: 0.2s;
+}
+
+.edu-content:hover {
+    box-shadow: 0 0 30px #969696;
+}
+
+.dark-theme .edu-content {
+    box-shadow: 0 0 20px #202020;
+}
+
+.dark-theme .edu-content:hover {
+    box-shadow: 0 0 30px #202020;
+}
+
+.edu-column h2 {
+    line-height: 1.3;
+}
+
+.edu-column p {
+    margin-bottom: 50px;
+}
+
+.edu-column a {
+    font-size: 20px;
+    color: #323232;
+}
+
+.dark-theme .edu-column a {
+    color: #fff;
+}
+
+.edu-column a:hover {
+    color: #969696;
+}
+
+.edu-features {
+    width: 80%;
+    margin: 100px auto;
+}
+
+.edu-features:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media (max-width: 1200px) {
+    .edu-content {
+        width: calc(100% - 40px);
+        margin: 0 20px;
+    }
+
+    .edu-features {
+        width: calc(100% - 40px);
+    }
+}
+
 
 .login-confirm-button {
     width: 100%;
@@ -979,15 +1058,50 @@ span.overlay span {
     margin: 20px auto;
 }
 
+figcaption {
+    color: #323232;
+    font-family: ArcaMajora3, 'Open Sans', Arial, 'Helvetica Neue', sans-serif; 
+    margin: 0 0 10px 0;
+}
+
+.dark-theme figcaption {
+    color: #fff;
+}
+
+.shadow-box {
+    box-shadow: 0 0 20px #969696;
+    width: 800px;
+    margin: 20px auto;
+    padding: 20px 50px;
+}
+
+.dark-theme .shadow-box {
+    box-shadow: 0 0 20px #202020;
+}
+
 .justify {
     text-align: justify;
     margin: 0 auto;
-    width: 40%;
 }
 
-@media (max-width: 1023px) { 
-    .justify {
-        width: 90%;
+.justify-box {
+    width: 800px;
+    margin: 50px auto;
+    padding: 0 50px;
+}
+
+.justify > img {
+    width: 100%;
+    margin: 20px 0 10px 0;
+}
+
+.justify li {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 900px) { 
+    .shadow-box, .justify-box {
+        width: calc(100% - 100px);
     }
 }
 
@@ -1022,4 +1136,12 @@ span.overlay span {
     width: 33.33%;
     box-sizing: border-box;
     padding: 20px 20px;
+}
+
+.footer_box_inner {
+    width: 20%;
+}
+
+.footer_box_outer {
+    width: 40%;
 }

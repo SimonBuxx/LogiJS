@@ -1,19 +1,21 @@
-const Login = document.querySelector('.Login');
-if (Login !== null) {
-    Login.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = Login.querySelector('.username').value;
-        const password = Login.querySelector('.password').value;
-        post('/login', { username, password })
-            .then(function (response) {
-                if (response.status === 200) {
-                    window.location = '/dashboard';
-                } else {
-                    window.location = '/?failed=true';
-                }
-            });
+const CreateUser = document.querySelector('.SignUp');
+CreateUser.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = CreateUser.querySelector('.username').value;
+    const email = CreateUser.querySelector('.email').value;
+    const password = CreateUser.querySelector('.password').value;
+    post('/createUser', {
+        username: username,
+        email: email,
+        password: password
+    }).then(function (data) {
+        if (data.error_code === 0) {
+            window.location = '/?signup_success=true';
+        } else {
+            window.location = '/signup?error_code=' + data.error_code;
+        }
     });
-}
+});
 
 function post(path, data) {
     return window.fetch(path, {
@@ -23,7 +25,9 @@ function post(path, data) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
-    });
+    })
+        .then(function (res) { console.log(res.ok); return res.json(); })
+        .then(function (data) { return data; });
 }
 
 const currentTheme = localStorage.getItem('theme');

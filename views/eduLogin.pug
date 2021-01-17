@@ -8,7 +8,7 @@ head
   |   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   |   })(window,document,'script','dataLayer','GTM-WKSH2RQ');</script>
   |   <!-- End Google Tag Manager -->
-  title LogiJS der Universität zu Lübeck
+  title LogiJS: #{organization}
   meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
   computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
   meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
@@ -47,62 +47,62 @@ body
   |   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKSH2RQ"
   |   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   |   <!-- End Google Tag Manager (noscript) -->
-  .edu-bg
+  .edu-bg(style='background-image: url(\'' + background + '\');')
   .top-menu#top
     .container
       .navbar.navbar-default.navbar-fixed-top(role='navigation', style='background: none;')
         .container
           .navbar-header
-            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-              span.sr-only Toggle navigation
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
             a.navbar-brand(href='#', style="transition: 0.2s;")
               img#top_logo(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS', style='float: left;')
-              div#logo-div(style="float: right; margin: 0; padding: 0; border-left: 5px solid #c83232; padding-left: 20px;")
-                p#logo-text(style="font-size: 45px; margin-top: 10px; line-height: 1.1; transition: 0.2s; letter-spacing: 2px;") Universität
-                  br
-                  | zu Lübeck
-                  span(style="color: #c83232;") .
+              if show_org_name
+                div#logo-div(style="float: right; margin: 0; padding: 0; border-left: 5px solid #c83232; padding-left: 20px;")
+                  p#logo-text #{org_first_line}
+                    br
+                    | #{org_second_line}
+                    span(style="color: #c83232;") .
           .navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right
               li
-                a.login-button.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-in-alt" style="color: #c83232;"></i> Login
+                a.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-in-alt" style="color: #c83232;"></i> #{localization.login}
+              if show_registration
+                li
+                  a.internal-link(rel='nofollow', href='/signup', target='_parent') <i class="fa fa-user-plus" style="color: #c83232;"></i> #{localization.register}
               li
-                a.internal-link(rel='nofollow', href='/signup', target='_parent') <i class="fa fa-user-plus" style="color: #c83232;"></i> Konto erstellen
-              li
-                a#mode-button.internal-link(rel='nofollow', href='javascript:;', target='_parent' title='Toggle Dark Mode') <i class="fa fa-moon red"></i>
+                a#mode-button.internal-link(rel='nofollow', href='javascript:;', target='_parent' title=localization.toggle_dark_mode) <i class="fa fa-moon red"></i>
   .slogan-container(style="margin-top: 150px;")
-    h1.background-text Universität zu Lübeck
+    h1.background-text #{background_text}
   .login_container
     form.Login.login-background
       if failed
-        p.login-message Anmeldung fehlgeschlagen
+        p.login-message #{localization.login_failed}
           span(style="color: #c83232;") .
       else if signup_success
-        p.login-message Registrierung erfolgreich
+        p.login-message #{localization.signup_successful}
           span(style="color: #c83232;") .
       else
-        h1.login_title Login
+        h1.login_title #{localization.login}
           span(style="color: #c83232;") .
       p
-        input.username(type='text', placeholder='E-Mail')
+        input.username(type='text', placeholder=localization.username)
         br
-        input.password(type='password', placeholder='Passwort')
+        input.password(type='password', placeholder=localization.password)
         br
-        input.btn.btn-lg.btn-orange.login-confirm-button(type='submit', value='Login', role='button')
+        input.btn.btn-lg.btn-orange.login-confirm-button(type='submit', value=localization.login, role='button')
       p.login-redirect-text
-        a.login-redirect-text(href='/editor') Ohne Anmeldung fortfahren
+        if allow_enter
+          a.login-redirect-text(href='/editor') #{localization.continue_without_login}
       br
   .footer_bottom.footer_bottom_absolute
       .footer_bottom_content
         .footer_box
-          a(rel='nofollow', href='https://logijs.com/', target='_blank') <i class="fa fa-external-link-alt" style="color: #c83232;"></i> Zu logijs.com wechseln
+          if refer_to_logijs_com
+            a(rel='nofollow', href='https://logijs.com/', target='_blank') <i class="fa fa-external-link-alt" style="color: #c83232;"></i> #{localization.switch_to_logijs_com}
         .footer_box
         .footer_box
-          p(style="text-align: right;") Made with <i class="fas fa-heart" style="color: #c83232;"></i> in Lübeck
-            span(style="color: #c83232;") .
+          if made_in_luebeck
+            p(style="text-align: right;") Made with <i class="fas fa-heart" style="color: #c83232;"></i> in Lübeck
+              span(style="color: #c83232;") .
   script
     include ../libraries/jquery.min.js
     include ../libraries/bootstrap.min.js

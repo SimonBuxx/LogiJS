@@ -1,0 +1,163 @@
+doctype html
+<html lang="en">
+head
+  |   <!-- Google Tag Manager -->
+  |   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  |   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  |   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  |   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  |   })(window,document,'script','dataLayer','GTM-WKSH2RQ');</script>
+  |   <!-- End Google Tag Manager -->
+  title LogiJS: For Education
+  meta(name='keywords', content='LogiJS, logic, circuit, simulation, simulator, editor, free, open, source, gate, input, output, sketch, electronics, physics, informatics, it, \
+  computer, chip, pcb, design, creator, creation, processor, cpu, logi, js, javascript')
+  meta(name='description', content='LogiJS is a web-based logic circuit simulator for educational use. Discover the world of logic circuits.')
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='shortcut icon', href='images/favi.png')
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300', rel='stylesheet', type='text/css')
+  style
+    include css/bootstrap.css
+    include css/index_style.css
+  link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css')
+  link(rel="stylesheet", type='text/css', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css")
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js')
+  script.
+    window.addEventListener("load", function () {
+      window.cookieconsent.initialise({
+        "position": "bottom-right",
+        "content": {
+          "dismiss": "Allow Cookies"
+        },
+        "palette": {
+          "popup": {
+            "background": "#323232",
+            "text": "#fff",
+            "link": "#c83232"
+          },
+          "button": {
+            "background": "#c83232",
+            "text": "#ffffff"
+          }
+        }
+      })
+    });
+body
+  |   <!-- Google Tag Manager (noscript) -->
+  |   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKSH2RQ"
+  |   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  |   <!-- End Google Tag Manager (noscript) -->
+  .top-menu#top
+    .container
+      .navbar.navbar-default.navbar-fixed-top(role='navigation')
+        .container
+          ul.nav.navbar-nav.navbar-left
+            li
+              a.internal-link(rel='nofollow', href='/#features', target='_parent') Features
+            li
+              a.internal-link(rel='nofollow', href='/#samples', target='_parent') Samples
+            li
+              a.internal-link(rel='nofollow', href='/#about', target='_parent') About
+          .navbar-header
+            a.navbar-brand(href='#top', style="transition: 0.2s;")
+              img#top_logo(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS', style='float: left;')
+              div#logo-div(style="float: right; margin: 0; padding: 0; border-left: 5px solid #c83232; padding-left: 20px;")
+                p#logo-text For
+                  br
+                  | Education
+                  span(style="color: #c83232;") .
+          .navbar-collapse.collapse
+            ul.nav.navbar-nav.navbar-right
+              if user !== ''
+                li
+                  a.user-button.internal-link(rel='nofollow', href='/dashboard', target='_parent') <i class="fa fa-user red"></i> #{user}
+                li
+                  a.Logout.internal-link(rel='nofollow', href='#', target='_parent') <i class="fa fa-sign-out-alt red"></i> Logout
+              else
+                li
+                  a.login-button.internal-link(rel='nofollow', href='/login', target='_parent') <i class="fa fa-sign-in-alt red"></i> Login
+                li
+                  a.internal-link(rel='nofollow', href='/signup', target='_parent') <i class="fa fa-user-plus red"></i> Register
+              li
+                a#mode-button.internal-link(rel='nofollow', href='javascript:;', target='_parent' title='Toggle Dark Mode') <i class="fa fa-moon red"></i>
+  .slogan-container
+    h1.background-text Elevate your Teaching
+    h1.slogan
+      | Elevate your Teaching
+      br
+      | with LogiJS
+      span.red .
+  .edu-features
+    .edu-column
+      .edu-content
+        p <i class="fas fa-drafting-compass fa-8x red"></i>
+        h2 Build Interactive
+          br
+          | Examples
+          span.red .
+        a(rel='nofollow', href='#', target='_parent') See how <i class="fas fa-chevron-right red"></i>
+    .edu-column
+      .edu-content
+        p <i class="fas fa-magic fa-8x red"></i>
+        h2 Make Tasks
+          br
+          | Fun and Creative
+          span.red .
+        a(rel='nofollow', href='#', target='_parent') See how <i class="fas fa-chevron-right red"></i>
+    .edu-column
+      .edu-content
+        p <i class="fas fa-server fa-8x red"></i>
+        h2 Make it
+          br
+          | your Own
+          span.red .
+        a(rel='nofollow', href='#customization', target='_parent') See how <i class="fas fa-chevron-right red"></i>
+  .shadow-box
+    h2.normal-caption
+      | Build Interactive Examples
+      span.red .
+  .justify-box
+    h2.normal-caption
+      | Make Tasks Fun and Creative
+      span.red .
+  .shadow-box
+    h2.normal-caption#customization
+      | Make it your Own
+      span.red .
+    .justify
+      p When it comes to educational tools, the needs of universities and other organizations usually vary a lot. 
+        | Multiple factors play into the final decision which tool will be adopted: availability, stability, development status, license and many others.
+      p To make LogiJS as useful as possible, we are providing multiple options on how to integrate LogiJS into the organization's ecosystem.
+      p For many purposes, it is sufficient to use the online service provided on this site. Students can import and export their work even without 
+        | creating user accounts. If you are deciding to use LogiJS in this way, we cannot guarantee for the continous availability of the service.
+        | We will put our best effort into keeping the site available, but it could be taken offline due to technical problems or discontinuation of the service.
+      img(src='images/custom_frontpage.png', alt='Custom LogiJS front page', title='Custom LogiJS front page')
+      figcaption Example of a custom LogiJS front page
+        span.red .
+      p The other option is to host LogiJS on a private server in your organization. 
+        | If you decide to go this way, there are many options to customize the installation. For example, you can create a custom front page for your students
+        | and customize the account system or disable it entirely. 
+      p All of this can be done by modifying a single configuration file.
+        | Of course, you can also provide translation to display everything in your language. 
+        | As new versions are developed, we will provide upgrade information for you to follow.
+      p By adopting LogiJS in your organization, your students get a modern, JavaScript-based solution for understanding the complex world of logic circuits.
+
+
+  .footer_bottom
+      .footer_bottom_content
+        .footer_box.footer_box_outer
+          a.internal-link(rel='nofollow', href='/terms-of-service', target='_parent') Terms of Service
+          a.internal-link(rel='nofollow', href='/legal', target='_parent') Legal Notice
+        .footer_box.footer_box_inner
+          p(style="text-align: center; display: inline-block; width: 100%;")
+            a(href='https://twitter.com/logi_js', target='_blank', style="margin-right: 5px;")
+              img(src="images/twitter.png" style="width: 40px; margin-top: -20px;")
+            a(href='https://github.com/SimonBuxx/logijs', target='_blank', style="margin-left: 5px;")
+              img(src="images/github_dark.png" style="width: 40px; margin-top: -20px;")
+        .footer_box.footer_box_outer
+          p(style="text-align: right;") Made with <i class="fas fa-heart red"></i> in Lübeck
+            span.red .
+  script
+    include ../libraries/jquery.min.js
+    include ../libraries/bootstrap.min.js
+    include ../site_scripts/education.js

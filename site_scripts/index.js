@@ -16,6 +16,7 @@ const PORT = 8080;
 
 let jwt_handler = require('./jwt_module.js');
 let user_data = require('./user_data.js');
+const { config } = require('process');
 
 let server = app.listen(PORT, () => {
     console.log('Server running http://localhost:' + PORT);
@@ -54,11 +55,32 @@ app.use('/', router);
 let usernameRegex = /^[A-Za-z0-9\-\_]{1,30}$/;
 let filenameRegex = /^[A-Za-z0-9\-\_]{1,30}$/;
 
+let configuration = JSON.parse(fs.readFileSync('./config.json'));
+let custom = configuration.custom_index_page.use_custom_page === 'true';
+
+// account options: standard: signup and login as on logijs.com, disabled: no account system, limited: signup disabled
+
 router.use(function (req, res, next) {
     if (req.url === '/dashboard') {
         if (!jwt_handler.verify(req.cookies.access_token, { issuer: i, subject: s, audience: a })) {
-            res.redirect('/login');
+            if (custom) {
+                res.redirect('/');
+            } else {
+                res.redirect('/login');
+            }
             return;
+        }
+    }
+    next();
+});
+
+router.use(function (req, res, next) {
+    if (req.url === '/') {
+        if (jwt_handler.verify(req.cookies.access_token, { issuer: i, subject: s, audience: a })) {
+            if (custom) {
+                res.redirect('/dashboard');
+                return;
+            }
         }
     }
     next();
@@ -83,15 +105,52 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', function (req, res) {
-    res.render('index', {
-        user: getUser(req)
-    });
+    if (configuration.custom_index_page.use_custom_page === 'false') {
+        res.render('index', {
+            user: getUser(req)
+        });
+    } else if (configuration.accounts.enable_login === 'true') {
+        res.render('eduLogin', {
+            failed: req.query.failed,
+            signup_success: req.query.signup_success,
+            show_registration: configuration.accounts.allow_signups === 'true',
+            organization: configuration.organization.name,
+            show_org_name: configuration.custom_index_page.show_organization_name === 'true',
+            org_first_line: configuration.organization.first_line,
+            org_second_line: configuration.organization.second_line,
+            background: configuration.custom_index_page.background_image,
+            show_login: true,
+            refer_to_logijs_com: configuration.custom_index_page.refer_to_logijs_com === 'true',
+            background_text: configuration.custom_index_page.background_text,
+            allow_enter: configuration.custom_index_page.allow_entering_without_login === 'true',
+            made_in_luebeck: configuration.custom_index_page.show_made_in_luebeck === 'true',
+            localization: configuration.localization
+        });
+    } else {
+        res.render('logijs', {
+            user: '',
+            sketchData: { sketches: {} },
+            images: {},
+            descriptions: {},
+            no_login: true
+        });
+    }
+});
+
+router.get('/education', function (req, res) {
+    if (!custom) {
+        res.render('education', {
+            user: getUser(req)
+        });
+    }
 });
 
 router.get('/getstarted', function (req, res) {
-    res.render('getstarted', {
-        user: getUser(req)
-    });
+    if (!custom) {
+        res.render('getstarted', {
+            user: getUser(req)
+        });
+    }
 });
 
 router.get('/editor', function (req, res) {
@@ -102,7 +161,8 @@ router.get('/editor', function (req, res) {
                 user: user,
                 sketchData: data.sketches,
                 images: data.images,
-                descriptions: data.descriptions
+                descriptions: data.descriptions,
+                custom: custom
             });
         });
     } else {
@@ -110,51 +170,62 @@ router.get('/editor', function (req, res) {
             user: '',
             sketchData: { sketches: {} },
             images: {},
-            descriptions: {}
+            descriptions: {},
+            custom: custom
         });
     }
 });
 
-router.get('/features', function (req, res) {
-    res.render('features', {
-        user: getUser(req)
-    });
-});
-
 router.get('/legal', function (req, res) {
-    res.render('legal', {
-        user: getUser(req)
-    });
+    if (!custom) {
+        res.render('legal', {
+            user: getUser(req)
+        });
+    }
 });
 
 router.get('/how-to-host', function (req, res) {
-    res.render('hosting-tutorial', {
-        user: getUser(req)
-    });
+    if (!custom) {
+        res.render('hosting-tutorial', {
+            user: getUser(req)
+        });
+    }
 });
 
 router.get('/terms-of-service', function (req, res) {
-    res.render('tos', {
-        user: getUser(req)
-    });
+    if (!custom) {
+        res.render('tos', {
+            user: getUser(req)
+        });
+    }
 });
 
 router.get('/login', function (req, res) {
-    res.render('login', {
-        failed: req.query.failed,
-        signup_success: req.query.signup_success
-    });
-});
-
-router.get('/edulogin', function (req, res) {
-    res.render('eduLogin', {
-        failed: req.query.failed,
-        signup_success: req.query.signup_success
-    });
+    if (!custom) {
+        res.render('login', {
+            failed: req.query.failed,
+            signup_success: req.query.signup_success
+        });
+    }
 });
 
 router.get('/signup', function (req, res) {
-    res.render('signup', { error_code: req.query.error_code });
+    if (configuration.custom_index_page.use_custom_page === 'false') {
+        res.render('signup', { error_code: req.query.error_code });
+    } else if (configuration.accounts.enable_login === 'true') {
+        res.render('eduSignup', {
+            error_code: req.query.error_code,
+            organization: configuration.organization.name,
+            show_org_name: configuration.custom_index_page.show_organization_name === 'true',
+            org_first_line: configuration.organization.first_line,
+            org_second_line: configuration.organization.second_line,
+            background: configuration.custom_index_page.background_image,
+            refer_to_logijs_com: configuration.custom_index_page.refer_to_logijs_com === 'true',
+            background_text: configuration.custom_index_page.background_text,
+            made_in_luebeck: configuration.custom_index_page.show_made_in_luebeck === 'true',
+            localization: configuration.localization
+        });
+    }
 });
 
 router.get('/dashboard', function (req, res) {
@@ -167,7 +238,8 @@ router.get('/dashboard', function (req, res) {
             user: user,
             sketchData: data.sketches,
             images: data.images,
-            descriptions: data.descriptions
+            descriptions: data.descriptions,
+            custom: custom
         });
     });
 });
@@ -193,6 +265,12 @@ router.get('/libDownload', (req, res) => {
 });
 
 router.post('/createUser', (req, res) => {
+    if(configuration.accounts.allow_signups !== 'true') {
+        console.log('Failure: account creation prohibited');
+        res.status(401).send({ error_code: 5 }).end();
+        return;
+    }
+
     if (!req.body.username.match(usernameRegex)) {
         console.log('Failure: username doesn\'t match regex!');
         res.status(401).send({ error_code: 1 }).end();
