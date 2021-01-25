@@ -104,6 +104,7 @@ a, .dark-theme a {
     color: rgb(200, 50, 50);
     text-decoration: none;
     font-weight: normal;
+    /* */
 }
 
 a:hover,
@@ -145,12 +146,12 @@ a:focus {
     transform: translate(-50%, 0);
 }
 
-.container .navbar {
+.navbar {
     background: rgba(255, 255, 255, 0.9); 
     min-height: 110px;
 }
 
-.dark-theme .container .navbar {
+.dark-theme .navbar {
     background: rgba(50, 50, 50, 0.9); 
 }
 
@@ -571,13 +572,19 @@ a:focus {
 
 .carousel-inner {
     padding-bottom: 100px;
+    min-height: 100%;
 }
 
 #main-carousel {
     width: 100%;
+    min-height: 100%;
     margin: -300px auto 50px auto;
     transition: 0.2s;
     opacity: 0;
+}
+
+#myCarousel {
+    height: 100%;
 }
 
 @media (max-width: 1023px) {
@@ -592,11 +599,18 @@ a:focus {
     }
 }
 
+.item {
+    height: auto;
+    overflow: auto;
+}
+
 .carousel-text {
-    float: left;
-    margin-top: calc(4% + 20px);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
     margin-left: 12%;
-    padding-bottom: 20px;
 }
 
 .carousel-image {
