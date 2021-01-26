@@ -92,12 +92,8 @@ body(style="height: 100%;")
         | of Logic Circuits
         span.red .
   .get_started
-    if user !== ''
-      a.btn.btn-lg.btn-orange(href='/editor', rel="nofollow", role='button')
-              <i class="fa fa-plus-circle"></i> New Sketch
-    else
-      a.btn.btn-lg.btn-orange(href='/getstarted', rel="nofollow", role='button') 
-            <i class="fa fa-directions"></i> Get Started
+    a.btn.btn-lg.btn-orange(href='/editor', rel="nofollow", role='button') 
+          <i class="fa fa-plus-circle"></i> New Circuit
   .scroll_down
     a(href="#features" title="Scroll down") <i class="fa fa-chevron-down fa-4x"></i>
   #features
@@ -110,30 +106,30 @@ body(style="height: 100%;")
         <li data-target="#myCarousel" data-slide-to="2"></li>
       <div class="carousel-inner">
         <div class="item active">
+          <img id="carousel-1" class="carousel-image" src="images/carousel_1_new.png" alt="A LogiJS example sketch showing a traffic light simulation">
           <div class="carousel-text"><h2 class="carousel-caption">Learn the Basics of Logic<br>Gates and Circuits<span class="red">.</span></h2>
             <div class="carousel-button">
-              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-directions"></i> Get Started</a>
+              <a class="btn btn-lg btn-orange" href="/editor" rel="nofollow" role="button"><i class="fa fa-plus-circle"></i> New Circuit</a>
             </div>
           </div> 
-          <img id="carousel-1" class="carousel-image" src="images/carousel_1_new.png" alt="A LogiJS example sketch showing a traffic light simulation">
         </div>
 
         <div class="item">
+          <img id="carousel-2" class="carousel-image" src="images/carousel_2_new.png" alt="A LogiJS example sketch showing a basic cpu structure">
           <div class="carousel-text"><h2 class="carousel-caption">Import your Circuits as<br>Custom Components<span class="red">.</span></h2>
             <div class="carousel-button">
-              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-directions"></i> Get Started</a>
+              <a class="btn btn-lg btn-orange" href="/editor" rel="nofollow" role="button"><i class="fa fa-plus-circle"></i> New Circuit</a>
             </div>
           </div> 
-          <img id="carousel-2" class="carousel-image" src="images/carousel_2_new.png" alt="A LogiJS example sketch showing a basic cpu structure">
         </div>
 
         <div class="item">
+          <img id="carousel-3" class="carousel-image" src="images/carousel_3_new.png" alt="The LogiJS user dashboard">
           <div class="carousel-text"><h2 class="carousel-caption">Save and Access your<br>Circuits Online<span class="red">.</span></h2>
             <div class="carousel-button">
-              <a class="btn btn-lg btn-orange" href="/getstarted" rel="nofollow" role="button"><i class="fa fa-directions"></i> Get Started</a>
+              <a class="btn btn-lg btn-orange" href="/editor" rel="nofollow" role="button"><i class="fa fa-plus-circle"></i> New Circuit</a>
             </div>
           </div>
-          <img id="carousel-3" class="carousel-image" src="images/carousel_3_new.png" alt="The LogiJS user dashboard">
         </div>
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev">

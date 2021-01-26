@@ -122,7 +122,7 @@ body
     | 512 bit public and private RSA key set. These keys are used to authenticate user sessions. Replace the existing key inside public.key with
     | the new public key. For the private key, please create a new file private.key inside the same folder and paste the private key there.
     | Make sure that the private key is never published.
-  p To connect the server to the MySQL database that we are going to set up soon, please enter the folder site_scripts and create a file called
+  p To connect the server to the MySQL database that we are going to set up soon, please enter the folder site_scripts and create a file called 
     | knexfile.js. Inside this file, paste the following code: module.exports = { client: 'mysql', connection: { user: '', password: '', database: '' } };
     | The database name and credentials will be filled in as soon as the database is set up.
   p There are two folders that have to be created manually. The first one is an empty folder named 

@@ -626,6 +626,11 @@ a:focus {
         float: none;
         width: 60vw;
         margin: 0 auto;
+        filter: brightness(50%);
+    }
+
+    .dark-theme .carousel-image {
+        filter: brightness(50%);
     }
 
     .carousel-button {
@@ -639,6 +644,7 @@ a:focus {
 
     .carousel-caption {
         text-align: center;
+        color: #fff;
     }
 }
 
@@ -813,7 +819,7 @@ input:hover {
 }
 
 .get_started .btn, .carousel-button .btn {
-    width: clamp(200px, 15vw, 300px);
+    width: clamp(220px, 14vw, 350px);
     padding: 14px;
     font-size: clamp(20px, 1.5vw, 30px);
 }
