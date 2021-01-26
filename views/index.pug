@@ -61,7 +61,7 @@ body(style="height: 100%;")
           .navbar-header
             a.navbar-brand(href='#top', style="transition: 0.2s;")
               img#top_logo(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS', style='float: left;')
-              div#logo-div(style="float: right; margin: 0; padding: 0; border-left: 5px solid #c83232; padding-left: 20px;")
+              div#logo-div
                 p#logo-text Logic Circuit
                   br
                   | Simulation
@@ -93,7 +93,9 @@ body(style="height: 100%;")
         span.red .
   .get_started
     a.btn.btn-lg.btn-orange(href='/editor', rel="nofollow", role='button') 
-          <i class="fa fa-plus-circle"></i> New Circuit
+      <i class="fa fa-plus-circle"></i> New Circuit
+    h2#mobile-message <i class="fa fa-info-circle red"></i> Please use a desktop device to start creating
+      span.red .
   .scroll_down
     a(href="#features" title="Scroll down") <i class="fa fa-chevron-down fa-4x"></i>
   #features

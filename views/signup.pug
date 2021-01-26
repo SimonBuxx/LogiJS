@@ -59,15 +59,10 @@ body
             li
               a.internal-link(rel='nofollow', href='/#about', target='_parent') About
           .navbar-header
-            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-              span.sr-only Toggle navigation
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
             a.navbar-brand(href='/#top', style="transition: 0.2s;")
               img#top_logo(src='images/logo_index_new.png', alt='LogiJS logo', title='LogiJS', style='float: left;')
-              div#logo-div(style="float: right; margin: 0; padding: 0; border-left: 5px solid #c83232; padding-left: 20px;")
-                p#logo-text(style="font-size: 45px; margin-top: 10px; line-height: 1.1; transition: 0.2s; letter-spacing: 2px;") Logic Circuit
+              div#logo-div
+                p#logo-text Logic Circuit
                   br
                   | Simulation
                   span(style="color: #c83232;") .
@@ -132,9 +127,3 @@ body
     include ../libraries/jquery.min.js
     include ../libraries/bootstrap.min.js
     include ../site_scripts/create_account.js
-  script.
-    if (window.innerHeight > 800) {
-      document.getElementById("top_logo").style.width = "350px";
-    } else {
-      document.getElementById("top_logo").style.width = "200px";
-    }

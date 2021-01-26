@@ -82,7 +82,7 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
 }
 
 .carousel-caption {
-    font-size: clamp(25px, 2.5vw, 60px);
+    font-size: clamp(15px, 2.5vw, 60px);
     text-align: left;
 }
 
@@ -172,6 +172,48 @@ a:focus {
     letter-spacing: 2px;
 }
 
+#logo-div {
+    float: right;
+    margin: 0;
+    padding: 0;
+    border-left: 5px solid #c83232;
+    padding-left: 20px;
+}
+
+@media (max-width: 1023px) {
+    #logo-div {
+        clear: both;
+        border-left: none;
+        border-top: 5px solid #c83232;
+        padding-left: 0;
+        width: 100%;
+    }
+
+    #logo-text {
+        margin-top: 10px;
+        line-height: 1.1;
+        transition: 0.2s;
+        letter-spacing: 2px;
+        text-align: center;
+    }
+
+    .container > .navbar-header, .container > .navbar-collapse {
+        margin: 0;
+    }
+
+    .navbar {
+        min-height: 130px;
+    }
+
+    .slogan {
+        margin-top: clamp(100px, 30vw, 200px);
+    }
+
+    .navbar-brand > img {
+        width: clamp(300px, 30vw, 350px);
+    }
+}
+
 .container {
     width: 100%;
 }
@@ -203,14 +245,14 @@ a:focus {
     box-shadow: 0 0 20px #969696;
 }
 
+.dark-theme #front_teaser {
+    box-shadow: 0 0 20px #202020;
+}
+
 @media (max-width: 1023px) {
     #front_teaser {
         display: none;
     }
-}
-
-.dark-theme #front_teaser {
-    box-shadow: 0 0 20px #202020;
 }
 
 #getstarted_teaser {
@@ -318,6 +360,12 @@ a:focus {
 .legal-content > .address {
     margin-bottom: 30px;
     text-align: center;
+}
+
+@media (max-width: 1023px) {
+    .legal-content {
+        margin: 0 10% 0 10%;
+    }
 }
 
 #nosketches_back {
@@ -824,6 +872,29 @@ input:hover {
     font-size: clamp(20px, 1.5vw, 30px);
 }
 
+#mobile-message {
+    visibility: hidden;
+    font-size: 20px;
+    margin: 0 20%;
+    line-height: 1.3;
+    border: 3px solid #c83232;
+    padding: 10px;
+}
+
+@media (max-width: 1023px) {
+    .get_started {
+        margin-top: 0;
+    }
+
+    .get_started .btn {
+       visibility: hidden;
+    }
+
+    #mobile-message {
+        visibility: visible;
+    }
+}
+
 .getstarted-container .btn {
     width: 250px;
     height: 60px;
@@ -965,6 +1036,10 @@ p.password-tipps {
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
+    }
+
+    .item-container {
+        margin: 70px 0 0 0;
     }
 }
 
