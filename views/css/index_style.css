@@ -68,7 +68,8 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
     position: absolute;
     margin: 0;
     top: clamp(-120px, -10vw, -40px);
-    font-size: clamp(200px, 20vw, 350px);
+    top: clamp(-120px, -7vw, -50px);
+    font-size: clamp(150px, 20vw, 350px);
     z-index: -1000;
     white-space: nowrap;
     overflow: hidden;
@@ -82,7 +83,7 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, button {
 }
 
 .carousel-caption {
-    font-size: clamp(15px, 2.5vw, 60px);
+    font-size: clamp(25px, 2.5vw, 50px);
     text-align: left;
 }
 
@@ -104,7 +105,6 @@ a, .dark-theme a {
     color: rgb(200, 50, 50);
     text-decoration: none;
     font-weight: normal;
-    /* */
 }
 
 a:hover,
@@ -202,11 +202,11 @@ a:focus {
     }
 
     .navbar {
-        min-height: 130px;
+        min-height: 160px;
     }
 
     .slogan {
-        margin-top: clamp(100px, 30vw, 200px);
+        margin-top: clamp(100px, 40vw, 200px);
     }
 
     .navbar-brand > img {
@@ -422,6 +422,7 @@ a:focus {
       #323232, 
       rgba(0, 0, 0, 0)
     ) 1 100%;
+    padding: 3px;
     margin-left: -50px;
     padding-left: 50px;
     min-height: 200px;
@@ -619,7 +620,7 @@ a:focus {
 }
 
 .carousel-inner {
-    padding-bottom: 100px;
+    padding-bottom: min(12vw, 100px);
     min-height: 100%;
 }
 
@@ -639,7 +640,7 @@ a:focus {
     #main-carousel {
         width: 90%;
         opacity: 1;
-        margin-top: 50px;
+        margin-top: min(2%, 50px);
     }
 
     .carousel-control.left, .carousel-control.right {
@@ -672,7 +673,7 @@ a:focus {
 @media (max-width: 1023px) {
     .carousel-image {
         float: none;
-        width: 60vw;
+        width: 90vw;
         margin: 0 auto;
         filter: brightness(50%);
     }
@@ -693,6 +694,11 @@ a:focus {
     .carousel-caption {
         text-align: center;
         color: #fff;
+        font-size: clamp(25px, 6vw, 50px);
+    }
+
+    .carousel-control {
+        visibility: hidden;
     }
 }
 
@@ -854,10 +860,9 @@ input:hover {
     border-radius: 0;
     color:#ffffff;
     background: #c83232;
-    border: none;
+    outline: 3px solid rgba(0, 0, 0, 0);
     box-shadow: none;
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    outline: none;
+    border: none;
 }
 
 .get_started {
@@ -879,6 +884,11 @@ input:hover {
     line-height: 1.3;
     border: 3px solid #c83232;
     padding: 10px;
+    box-shadow: 0 0 20px #969696;
+}
+
+.dark-theme #mobile-message {
+    box-shadow: 0 0 20px #202020;
 }
 
 @media (max-width: 1023px) {
@@ -892,6 +902,10 @@ input:hover {
 
     #mobile-message {
         visibility: visible;
+    }
+
+    .scroll_down {
+        visibility: hidden;
     }
 }
 
@@ -920,15 +934,24 @@ input:hover {
 }
 
 .btn-orange:hover, .btn-orange:focus, .btn-orange:active, .btn-orange.active {
-    color: white;
-    background: #323232;
-    box-shadow: 0 0 20px #969696;
-}
-
-.dark-theme .btn-orange:hover, .dark-theme  .btn-orange:focus, .dark-theme  .btn-orange:active, .dark-theme  .btn-orange.active {
     color: #323232;
     background: #fff;
+    box-shadow: 0 0 20px #969696;
+    outline: 3px solid #c83232;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.dark-theme .btn-orange:hover, .dark-theme .btn-orange:focus, .dark-theme .btn-orange:active, .dark-theme .btn-orange.active {
+    color: #fff;
+    background: #323232;
     box-shadow: 0 0 20px #202020;
+    outline: 3px solid #c83232;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.btn-orange:hover i, .btn-orange:focus i, .btn-orange:active i, .btn-orange.active i {
+    color: #c83232;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .navbar-default .navbar-nav li > a {
@@ -1167,7 +1190,7 @@ figcaption {
     box-shadow: 0 0 20px #969696;
     width: 800px;
     margin: 20px auto;
-    padding: 20px 50px;
+    padding: min(20px, 2%) min(50px, 5%);
 }
 
 .dark-theme .shadow-box {
@@ -1182,7 +1205,7 @@ figcaption {
 .justify-box {
     width: 800px;
     margin: 50px auto;
-    padding: 0 50px;
+    padding: min(20px, 2%) min(50px, 5%);
 }
 
 .justify > img {
@@ -1196,7 +1219,7 @@ figcaption {
 
 @media (max-width: 900px) { 
     .shadow-box, .justify-box {
-        width: calc(100% - 100px);
+        width: 90%;
     }
 }
 
@@ -1228,7 +1251,6 @@ figcaption {
 
 .footer_box {
     float: left;
-    width: 33.33%;
     box-sizing: border-box;
     padding: 20px 20px;
 }
@@ -1239,4 +1261,17 @@ figcaption {
 
 .footer_box_outer {
     width: 40%;
+}
+
+
+@media (max-width: 900px) { 
+    .footer_box_outer {
+        width: 100%;
+    }
+
+    .footer_box_inner, .footer_right {
+        visibility: hidden;
+        height: 0;
+        padding: 0;
+    }
 }
