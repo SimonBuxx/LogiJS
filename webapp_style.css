@@ -56,7 +56,7 @@ input {
     cursor: pointer;
     padding: 0 11px 0 10px;
     margin-left: 1px;
-    margin-top: 6px;
+    margin-top: 7px;
     height: 35px;
     border-radius: 0;
     font-family: ArcaMajora3, 'Open Sans', sans-serif;
@@ -71,8 +71,7 @@ input {
     -moz-user-select: none;
     user-select: none;
     border: none;
-    outline: none;
-    border: 1px solid rgba(0, 0, 0, 0);
+    outline: 1px solid rgba(0, 0, 0, 0);
 }
 
 .dark-theme .button {
@@ -96,12 +95,13 @@ input {
 }
 
 .button:hover {
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    /*color: #969696;*/
-    border: 1px solid #969696;
+    outline: 1px solid #323232;
+}
+
+.dark-theme .button:hover {
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    outline: 1px solid #969696;
 }
 
 .button.active:hover {
@@ -110,15 +110,13 @@ input {
 
 .button.active:disabled {
     color: #969696;
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .button:active, .button.active {
     background: #c83232;
     color: white;
+    outline: 1px solid #c83232;
 }
 
 .button:disabled {
@@ -129,7 +127,7 @@ input {
 }
 
 .button:disabled:hover {
-    border: 1px solid rgba(0, 0, 0, 0);
+    outline: 1px solid rgba(0, 0, 0, 0);
 }
 
 .button:disabled > .icon {
@@ -281,6 +279,10 @@ input {
 }
 
 .checkbox-label:hover {
+    outline: 1px solid #323232;
+}
+
+.dark-theme .checkbox-label:hover {
     outline: 1px solid #969696;
 }
 
@@ -336,17 +338,18 @@ input {
 }
 
 .buttonLeft:hover {
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    /*color: #969696;*/
-    outline: 1px solid #969696;
+    outline: 1px solid #323232;
 }
 
 .buttonLeft:active, .buttonLeft.active {
     background: #c83232;
     color: white;
+}
+
+.dark-theme .buttonLeft:hover {
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+    outline: 1px solid #969696;
 }
 
 .buttonLeft.active:hover {
@@ -358,9 +361,6 @@ input {
     cursor: default;
     background: none;
     border: none;
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
@@ -398,11 +398,14 @@ input {
 .previewButton:hover {
     transition: all 100ms linear;
     background: #ddd;
-    outline: 1px solid #5f5f5f;
+    outline: 1px solid #323232;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .dark-theme .previewButton:hover {
     background: #202020;
+    outline: 1px solid #5f5f5f;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .previewButton:active, .previewButton.active {
@@ -507,6 +510,10 @@ input {
 }
 
 .selectLeft:hover {
+    outline: 1px solid #323232;
+}
+
+.dark-theme .selectLeft:hover {
     outline: 1px solid #969696;
 }
 
@@ -691,7 +698,7 @@ input[type=range]::-ms-tooltip {
     -webkit-text-size-adjust: 100%;
     cursor: pointer;
     width: 145px;
-    outline: none;
+    outline: 1px solid rgba(0, 0, 0, 0);
     transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
@@ -1459,19 +1466,29 @@ h1 {
     color: #fff;
 }
 
+.btn-red:hover {
+    color:#ffffff;
+}
+
 .hover-btn:hover {
-    background: #323232;
+    color: #323232;
+    background: #fff;
     box-shadow: 0 0 20px #969696;
+    outline: 1px solid #323232;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.hover-btn:hover i {
+    color: #c83232;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .dark-theme .hover-btn:hover {
-    background: #fff;
-    box-shadow: 0 0 20px #272727;
-    color: #323232;
-}
-
-.btn-red:hover {
-    color:#ffffff;
+    background: #323232;
+    box-shadow: 0 0 20px #202020;
+    color: #fff;
+    outline: 1px solid #969696;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .btn-red:disabled {
@@ -1546,6 +1563,8 @@ h1 {
     margin: 0;
     text-decoration: none;
     line-height: 35px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0);
 }
 
 .dropdown-content .button:hover {
@@ -1553,6 +1572,7 @@ h1 {
     border-bottom: 1px solid #969696;
     border-left: 1px solid rgba(0, 0, 0, 0);
     border-right: 1px solid rgba(0, 0, 0, 0);
+    outline: none;
 }
 
 .dropdown-content .button:disabled:hover {
