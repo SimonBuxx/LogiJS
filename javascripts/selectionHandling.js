@@ -14,6 +14,7 @@ function handleSelection(x1, y1, x2, y2) {
     selectionStartPosY = selectionBox.y;
 
     selectionLog = [];
+    busLog = [];
     deleteLog = [];
     selWireIndizes = [];
     selDiodeIndizes = [];
@@ -24,6 +25,9 @@ function handleSelection(x1, y1, x2, y2) {
     selSegDisplayIndizes = [];
     selCustomIndizes = [];
     selConpointIndizes = [];
+    selBusWrappersIndizes = [];
+    selBusUnwrappersIndizes = [];
+    selBusIndizes = [];
 
     for (let i = 0; i < wires.length; i++) {
         if (((wires[i].direction === 0) && ((wires[i].startX >= x1 || x1 <= wires[i].endX) &&
@@ -32,6 +36,16 @@ function handleSelection(x1, y1, x2, y2) {
                 (wires[i].startY <= y2 || y2 >= wires[i].endY)) && (wires[i].startX >= x1 && wires[i].endX <= x2))) {
             wires[i].marked = true;
             selWireIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < busses.length; i++) {
+        if (((busses[i].direction === 0) && ((busses[i].startX >= x1 || x1 <= busses[i].endX) &&
+            (busses[i].startX <= x2 || x2 >= busses[i].endX)) && (busses[i].startY >= y1 && busses[i].endY <= y2)) ||
+            ((busses[i].direction === 1) && ((busses[i].startY >= y1 || y1 <= busses[i].endY) &&
+                (busses[i].startY <= y2 || y2 >= busses[i].endY)) && (busses[i].startX >= x1 && busses[i].endX <= x2))) {
+            busses[i].marked = true;
+            selBusIndizes.push(i);
         }
     }
 
@@ -77,6 +91,20 @@ function handleSelection(x1, y1, x2, y2) {
         }
     }
 
+    for (let i = 0; i < busWrappers.length; i++) {
+        if (busWrappers[i].x >= x1 && busWrappers[i].x <= x2 && busWrappers[i].y >= y1 && busWrappers[i].y <= y2) {
+            busWrappers[i].marked = true;
+            selBusWrappersIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < busUnwrappers.length; i++) {
+        if (busUnwrappers[i].x >= x1 && busUnwrappers[i].x <= x2 && busUnwrappers[i].y >= y1 && busUnwrappers[i].y <= y2) {
+            busUnwrappers[i].marked = true;
+            selBusUnwrappersIndizes.push(i);
+        }
+    }
+
     for (let i = 0; i < customs.length; i++) {
         if (customs[i].visible && (customs[i].x >= x1 && customs[i].x <= x2 && customs[i].y >= y1 && customs[i].y <= y2)) {
             customs[i].marked = true;
@@ -109,6 +137,11 @@ function deleteSelection() {
         deleteLog.push(['wire', selWireIndizes[i], wires.splice(selWireIndizes[i], 1)[0]]);
     }
 
+    for (let i = selBusIndizes.length - 1; i >= 0; i--) {
+        busses[selBusIndizes[i]].marked = false;
+        deleteLog.push(['bus', selBusIndizes[i], busses.splice(selBusIndizes[i], 1)[0]]);
+    }
+
     for (let i = selGatesIndizes.length - 1; i >= 0; i--) {
         gates[selGatesIndizes[i]].marked = false;
         deleteLog.push(['gate', selGatesIndizes[i], gates.splice(selGatesIndizes[i], 1)[0]]);
@@ -132,6 +165,16 @@ function deleteSelection() {
     for (let i = selSegDisplayIndizes.length - 1; i >= 0; i--) {
         segDisplays[selSegDisplayIndizes[i]].marked = false;
         deleteLog.push(['segDisplay', selSegDisplayIndizes[i], segDisplays.splice(selSegDisplayIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selBusWrappersIndizes.length - 1; i >= 0; i--) {
+        busWrappers[selBusWrappersIndizes[i]].marked = false;
+        deleteLog.push(['busWrapper', selBusWrappersIndizes[i], busWrappers.splice(selBusWrappersIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selBusUnwrappersIndizes.length - 1; i >= 0; i--) {
+        busUnwrappers[selBusUnwrappersIndizes[i]].marked = false;
+        deleteLog.push(['busUnwrapper', selBusUnwrappersIndizes[i], busUnwrappers.splice(selBusUnwrappersIndizes[i], 1)[0]]);
     }
 
     for (let i = selCustomIndizes.length - 1; i >= 0; i--) {
@@ -179,6 +222,9 @@ function copySelection() {
     for (let i = 0; i < selWireIndizes.length; i++) {
         copiedElements.push(_.cloneDeep(wires[selWireIndizes[i]]));
     }
+    for (let i = 0; i < selBusIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(busses[selBusIndizes[i]]));
+    }
     for (let i = 0; i < selDiodeIndizes.length; i++) {
         copiedElements.push(_.cloneDeep(diodes[selDiodeIndizes[i]]));
     }
@@ -196,6 +242,12 @@ function copySelection() {
     }
     for (let i = 0; i < selSegDisplayIndizes.length; i++) {
         copiedElements.push(_.cloneDeep(segDisplays[selSegDisplayIndizes[i]]));
+    }
+    for (let i = 0; i < selBusWrappersIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(busWrappers[selBusWrappersIndizes[i]]));
+    }
+    for (let i = 0; i < selBusUnwrappersIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(busUnwrappers[selBusUnwrappersIndizes[i]]));
     }
     for (let i = 0; i < selCustomIndizes.length; i++) {
         copiedElements.push(_.cloneDeep(customs[selCustomIndizes[i]]));
@@ -233,6 +285,7 @@ function pasteSelection() {
     selectionIsCopied = true;
 
     selectionLog = [];
+    busLog = [];
     deleteLog = [];
     selWireIndizes = [];
     selDiodeIndizes = [];
@@ -243,6 +296,9 @@ function pasteSelection() {
     selSegDisplayIndizes = [];
     selCustomIndizes = [];
     selConpointIndizes = [];
+    selBusWrappersIndizes = [];
+    selBusUnwrappersIndizes = [];
+    selBusIndizes = [];
     unmarkAll();
 
     let newCustoms = 0;
@@ -251,7 +307,11 @@ function pasteSelection() {
     for (let i = 0; i < copiedElements.length; i++) {
         let elem = _.cloneDeep(copiedElements[i]); // Clone the current element
         elem.alterPosition(GRIDSIZE, GRIDSIZE); // Move the element down right
+        let busFlag = elem.id.charAt(elem.id.length - 1);
         elem.id = elem.id.charAt(0) + Date.now() + Math.random(); // Give the cloned element a new ID
+        if (busFlag === 'b') {
+            elem.id += 'b';
+        }
         switch (elem.id.charAt(0)) { // Switch depending on the type of element
             /*
                 For all cases: push the cloned element and note the position
@@ -259,6 +319,10 @@ function pasteSelection() {
             case 'w':
                 wires.push(_.cloneDeep(elem));
                 selWireIndizes.push(wires.length - 1);
+                break;
+            case 'b':
+                busses.push(_.cloneDeep(elem));
+                selBusIndizes.push(busses.length - 1);
                 break;
             case 'd':
                 diodes.push(_.cloneDeep(elem));
@@ -283,6 +347,14 @@ function pasteSelection() {
             case 's':
                 segDisplays.push(_.cloneDeep(elem));
                 selSegDisplayIndizes.push(segDisplays.length - 1);
+                break;
+            case 'r':
+                busWrappers.push(_.cloneDeep(elem));
+                selBusWrappersIndizes.push(busWrappers.length - 1);
+                break;
+            case 'u':
+                busUnwrappers.push(_.cloneDeep(elem));
+                selBusUnwrappersIndizes.push(busUnwrappers.length - 1);
                 break;
             case 'c':
                 customs.push(_.cloneDeep(elem));
@@ -351,6 +423,10 @@ function moveSelection(dx, dy) {
         wires[selWireIndizes[i]].alterPosition(dx, dy);
     }
 
+    for (let i = 0; i < selBusIndizes.length; i++) {
+        busses[selBusIndizes[i]].alterPosition(dx, dy);
+    }
+
     for (let i = 0; i < selDiodeIndizes.length; i++) {
         diodes[selDiodeIndizes[i]].alterPosition(dx, dy);
     }
@@ -373,6 +449,14 @@ function moveSelection(dx, dy) {
 
     for (let i = 0; i < selSegDisplayIndizes.length; i++) {
         segDisplays[selSegDisplayIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selBusWrappersIndizes.length; i++) {
+        busWrappers[selBusWrappersIndizes[i]].alterPosition(dx, dy);
+    }
+
+    for (let i = 0; i < selBusUnwrappersIndizes.length; i++) {
+        busUnwrappers[selBusUnwrappersIndizes[i]].alterPosition(dx, dy);
     }
 
     for (let i = 0; i < selCustomIndizes.length; i++) {
@@ -400,6 +484,11 @@ function finishSelection() {
         }
         integrateWires();
 
+        for (let i = 0; i < selBusIndizes.length; i++) {
+            busLog.push(['mBus', selBusIndizes[i]]);
+        }
+        integrateBusses();
+
         let conpointsBefore = _.cloneDeep(conpoints);
 
         for (let i = 0; i < selConpointIndizes.length; i++) {
@@ -419,11 +508,11 @@ function finishSelection() {
 
         let conpointsAfter = _.cloneDeep(conpoints);
         let diodesAfter = _.cloneDeep(diodes);
-        if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length +
-            selCustomIndizes.length + selConpointIndizes.length > 0 || selectionLog.length > 0) /*&& (selectionOffsetX !== 0 || selectionOffsetY !== 0)*/) {
+        if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length + selBusWrappersIndizes.length + selBusUnwrappersIndizes.length +
+            selCustomIndizes.length + selConpointIndizes.length > 0 || selectionLog.length > 0 || busLog.length > 0) /*&& (selectionOffsetX !== 0 || selectionOffsetY !== 0)*/) {
             console.log('moveSel, offset: ' + selectionOffsetX + ' ' + selectionOffsetY);
-            pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
-                [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter]);
+            pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selBusWrappersIndizes, selBusUnwrappersIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
+                [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter, _.cloneDeep(busLog)]);
         }
     }
     selectionIsCopied = false;
@@ -472,7 +561,7 @@ function integrateWires() {
                             selectionLog.push(['rWire', xIndex, wires[xIndex], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
                         }
                     } else {
-                        let newWire = new Wire(0, Math.min(wiresToAdd[j].startX, wires[i].startX), wiresToAdd[j].startY, false);
+                        let newWire = new Wire(0, Math.min(wiresToAdd[j].startX, wires[i].startX), wiresToAdd[j].startY);
                         newWire.endX = Math.max(wiresToAdd[j].endX, wires[i].endX);
                         newWire.endY = wiresToAdd[j].startY;
                         if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
@@ -487,7 +576,7 @@ function integrateWires() {
                 }
             }
             if (xIndex < 0 && !overlapOverAllX) {
-                let newWire = new Wire(0, wiresToAdd[j].startX, wiresToAdd[j].startY, false);
+                let newWire = new Wire(0, wiresToAdd[j].startX, wiresToAdd[j].startY);
                 newWire.endX = wiresToAdd[j].endX;
                 newWire.endY = wiresToAdd[j].startY;
                 selectionLog.push(['aWire', wires.length, newWire, wiresToAddIndizes[j]]);
@@ -500,7 +589,7 @@ function integrateWires() {
                 if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 1 && wiresToAdd[j].startX === wires[i].startX &&
                     (wiresToAdd[j].startY == wires[i].endY || wiresToAdd[j].startY == wires[i].startY || wiresToAdd[j].endY == wires[i].startY || wiresToAdd[j].endY == wires[i].endY))) { //jshint ignore:line
                     if (yIndex >= 0) {
-                        let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false);
+                        let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY));
                         newWire.endX = wires[yIndex].startX;
                         newWire.endY = Math.max(wires[yIndex].endY, wires[i].endY);
                         if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
@@ -512,7 +601,7 @@ function integrateWires() {
                             selectionLog.push(['rWire', yIndex, wires[yIndex], newWire, wiresToAdd[j], wiresToAddIndizes[j]]);
                         }
                     } else {
-                        let newWire = new Wire(1, wiresToAdd[j].startX, Math.min(wiresToAdd[j].startY, wires[i].startY), false);
+                        let newWire = new Wire(1, wiresToAdd[j].startX, Math.min(wiresToAdd[j].startY, wires[i].startY));
                         newWire.endX = wiresToAdd[j].startX;
                         newWire.endY = Math.max(wiresToAdd[j].endY, wires[i].endY);
                         if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
@@ -528,7 +617,7 @@ function integrateWires() {
             }
 
             if (yIndex < 0 && !overlapOverAllY) {
-                let newWire = new Wire(1, wiresToAdd[j].startX, wiresToAdd[j].startY, false);
+                let newWire = new Wire(1, wiresToAdd[j].startX, wiresToAdd[j].startY);
                 newWire.endX = wiresToAdd[j].startX;
                 newWire.endY = wiresToAdd[j].endY;
                 selectionLog.push(['aWire', wires.length, newWire, wiresToAddIndizes[j]]);
@@ -538,6 +627,119 @@ function integrateWires() {
 
         for (let i = deletedIndices.length - 1; i >= 0; i--) {
             selectionLog.push(['dWire', deletedIndices[i], wires.splice(deletedIndices[i], 1)[0]]);
+        }
+    }
+}
+
+function integrateBusses() {
+    // These are set true when a preview wire in that direction is 100% part of the existing wire
+    let overlapOverAllX = false;
+    let overlapOverAllY = false;
+
+    let xIndex = -1;
+    let yIndex = -1;
+
+    let deletedIndices = [];
+
+    let bussesToAdd = [];
+    let bussesToAddIndizes = [];
+
+    for (let i = selBusIndizes.length - 1; i >= 0; i--) {
+        busses[selBusIndizes[i]].marked = false; // Unmark all marked busses
+        bussesToAdd = bussesToAdd.concat(busses.splice(selBusIndizes[i], 1));
+        bussesToAddIndizes.push(selBusIndizes[i]);
+    }
+
+    for (let j = 0; j < bussesToAdd.length; j++) {
+        xIndex = -1;
+        yIndex = -1;
+        deletedIndices = [];
+        overlapOverAllX = false;
+        overlapOverAllY = false;
+        if (bussesToAdd[j].direction === 0) {
+            for (let i = 0; i < busses.length; i++) {
+                let overlap = wireOverlap(bussesToAdd[j], busses[i]);
+                if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (busses[i].direction === 0 && bussesToAdd[j].startY === busses[i].startY &&
+                    (bussesToAdd[j].startX == busses[i].endX || bussesToAdd[j].startX == busses[i].startX || bussesToAdd[j].endX == busses[i].startX || bussesToAdd[j].endX == busses[i].endX))) { //jshint ignore:line
+                    if (xIndex >= 0) {
+                        let newBus = new Bus(0, Math.min(busses[xIndex].startX, busses[i].startX), busses[xIndex].startY);
+                        newBus.endX = Math.max(busses[xIndex].endX, busses[i].endX);
+                        newBus.endY = busses[xIndex].startY;
+                        if (newBus.startX !== busses[i].startX || newBus.endX !== busses[i].endX) {
+                            busLog.push(['rBus', xIndex, busses[xIndex], newBus, bussesToAdd[j], bussesToAddIndizes[j]]);
+                            busses.splice(xIndex, 1, newBus);
+                            deletedIndices.push(i);
+                        } else {
+                            overlapOverAllX = true;
+                            busLog.push(['rBus', xIndex, busses[xIndex], newBus, bussesToAdd[j], bussesToAddIndizes[j]]);
+                        }
+                    } else {
+                        let newBus = new Bus(0, Math.min(bussesToAdd[j].startX, busses[i].startX), bussesToAdd[j].startY);
+                        newBus.endX = Math.max(bussesToAdd[j].endX, busses[i].endX);
+                        newBus.endY = bussesToAdd[j].startY;
+                        if (newBus.startX !== busses[i].startX || newBus.endX !== busses[i].endX) {
+                            busLog.push(['rBus', i, busses[i], newBus, bussesToAdd[j], bussesToAddIndizes[j]]);
+                            busses.splice(i, 1, newBus);
+                            xIndex = i;
+                        } else {
+                            overlapOverAllX = true;
+                            busLog.push(['rBus', i, busses[i], newBus, bussesToAdd[j], bussesToAddIndizes[j]]);
+                        }
+                    }
+                }
+            }
+            if (xIndex < 0 && !overlapOverAllX) {
+                let newBus = new Bus(0, bussesToAdd[j].startX, bussesToAdd[j].startY);
+                newBus.endX = bussesToAdd[j].endX;
+                newBus.endY = bussesToAdd[j].startY;
+                busLog.push(['aBus', busses.length, newBus, bussesToAddIndizes[j]]);
+                busses.push(newBus);
+            }
+        } else {
+            for (let i = 0; i < busses.length; i++) {
+                let overlap = wireOverlap(bussesToAdd[j], busses[i]);
+                // If there's an overlap or the busses are adjacent
+                if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (busses[i].direction === 1 && bussesToAdd[j].startX === busses[i].startX &&
+                    (bussesToAdd[j].startY == busses[i].endY || bussesToAdd[j].startY == busses[i].startY || bussesToAdd[j].endY == busses[i].startY || bussesToAdd[j].endY == busses[i].endY))) { //jshint ignore:line
+                    if (yIndex >= 0) {
+                        let newBus = new Bus(1, busses[yIndex].startX, Math.min(busses[yIndex].startY, busses[i].startY));
+                        newBus.endX = busses[yIndex].startX;
+                        newBus.endY = Math.max(busses[yIndex].endY, busses[i].endY);
+                        if (newBus.startY !== busses[i].startY || newBus.endY !== busses[i].endY) {
+                            busLog.push(['rBus', yIndex, busses[yIndex], newBus, bussesToAdd[j], bussesToAddIndizes[j]]);
+                            busses.splice(yIndex, 1, newBus);
+                            deletedIndices.push(i);
+                        } else {
+                            overlapOverAllY = true;
+                            busLog.push(['rBus', yIndex, busses[yIndex], newBus, bussesToAdd[j], bussesToAddIndizes[j]]);
+                        }
+                    } else {
+                        let newBus = new Bus(1, bussesToAdd[j].startX, Math.min(bussesToAdd[j].startY, busses[i].startY));
+                        newBus.endX = bussesToAdd[j].startX;
+                        newBus.endY = Math.max(bussesToAdd[j].endY, busses[i].endY);
+                        if (newBus.startY !== busses[i].startY || newBus.endY !== busses[i].endY) {
+                            busLog.push(['rBus', i, busses[i], newBus, bussesToAdd[j], bussesToAddIndizes[j]]);
+                            busses.splice(i, 1, newBus);
+                            yIndex = i;
+                        } else {
+                            overlapOverAllY = true;
+                            busLog.push(['rBus', i, busses[i], newBus, bussesToAdd[j], bussesToAddIndizes[j]]);
+                        }
+                    }
+                }
+            }
+
+            if (yIndex < 0 && !overlapOverAllY) {
+                let newBus = new Bus(1, bussesToAdd[j].startX, bussesToAdd[j].startY);
+                newBus.endX = bussesToAdd[j].startX;
+                newBus.endY = bussesToAdd[j].endY;
+                busLog.push(['aBus', busses.length, newBus, bussesToAddIndizes[j]]);
+                busses.push(newBus);
+            }
+        }
+
+        for (let i = deletedIndices.length - 1; i >= 0; i--) {
+            busLog.push(['dBus', deletedIndices[i], busses.splice(deletedIndices[i], 1)[0]]);
         }
     }
 }

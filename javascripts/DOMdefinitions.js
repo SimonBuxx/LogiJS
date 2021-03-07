@@ -97,6 +97,8 @@ function linkElementsFromDOM() {
     decoderButton = document.getElementById('decoder-button');
     muxButton = document.getElementById('mux-button');
     demuxButton = document.getElementById('demux-button');
+    wrapperButton = document.getElementById('wrapper-button');
+    unwrapperButton = document.getElementById('unwrapper-button');
     halfaddButton = document.getElementById('halfadd-button');
     fulladdButton = document.getElementById('fulladd-button');
     counterButton = document.getElementById('counter-button');
@@ -123,6 +125,9 @@ function linkElementsFromDOM() {
     labelInputWidth = document.getElementById('input-width-label');
     decoderBitSelect = document.getElementById('decoder-select');
     multiplexerBitSelect = document.getElementById('mux-select');
+    wrapperWidthSelect = document.getElementById('wrapper-width-select');
+    busCheckbox = document.getElementById('bus-checkbox');
+    busCheckboxLabel = document.getElementById('bus-checkbox-label');
 
     syncFPSCheckbox = document.getElementById('syncFPSCheckbox');
     syncFPSLabel = document.getElementById('syncFPSLabel');
@@ -140,25 +145,25 @@ function linkElementsFromDOM() {
 }
 
 function addElementHelpTexts() {
-    addHelpText(logoImage, 'Go to Start Page');
+    addHelpText(logoImage, 'Go to start page');
 
-    addHelpText(editButton, 'Draw Wires and change Element Properties <span style="color: #c83232">[Esc]</span>');
-    addHelpText(deleteButton, 'Delete Wires and Elements <span style="color: #c83232">[D]</span>');
-    addHelpText(simButton, 'Start and stop the Simulation <span style="color: #c83232">[⏎]</span>');
+    addHelpText(editButton, 'Draw wires and change element properties <span style="color: #c83232">[Esc]</span>');
+    addHelpText(deleteButton, 'Delete wires and elements <span style="color: #c83232">[D]</span>');
+    addHelpText(simButton, 'Start and stop the simulation <span style="color: #c83232">[⏎]</span>');
     addHelpText(selectButton, 'Select an area to move, copy or delete <span style="color: #c83232">[S]</span>');
     addHelpText(moduleButton, 'Configure this Sketch as a Custom Module');
 
-    addHelpText(topSketchInput, 'This is the File Name of the Sketch');
-    addHelpText(importButton, 'Import a JSON File (Clears the current Sketch!) <span style="color: #c83232">[I]</span>');
-    addHelpText(screenshotButton, 'Take a Screenshot of the Sketch <span style="color: #c83232">[P]</span>');
+    addHelpText(topSketchInput, 'This is the file name of the Sketch');
+    addHelpText(importButton, 'Import a JSON file (Clears the current sketch!) <span style="color: #c83232">[I]</span>');
+    addHelpText(screenshotButton, 'Take a screenshot of the sketch <span style="color: #c83232">[P]</span>');
     addHelpText(document.getElementById('darkmode-button'), 'Toggle between dark and light mode');
     addHelpText(shareLinkButton, 'Create a link to a copy of this sketch');
     if (getCookieValue('access_token') !== '') {
-        addHelpText(saveButton, 'Save this Sketch to your Dashboard');
-        addHelpText(dashboardButton, 'Get back to the Dashboard');
+        addHelpText(saveButton, 'Save this sketch to your dashboard');
+        addHelpText(dashboardButton, 'Get back to the dashboard');
     } else {
         addHelpText(downloadButton, 'Download as JSON');
-        addHelpText(dashboardButton, 'Log into your LogiJS Account');
+        addHelpText(dashboardButton, 'Log into your LogiJS account');
     }
 
     addHelpText(clockspeedSlider, 'Sets the toggle speed of this clock element');
@@ -168,15 +173,15 @@ function addElementHelpTexts() {
     addHelpText(greenButton, 'Set the output color to green');
     addHelpText(blueButton, 'Set the output color to blue');
 
-    addHelpText(copySelectButton, 'Copy this Sketch Part <span style="color: #c83232">[C]</span>');
-    addHelpText(deleteSelectButton, 'Delete this Sketch Part <span style="color: #c83232">[D]</span>');
+    addHelpText(copySelectButton, 'Copy this sketch part <span style="color: #c83232">[C]</span>');
+    addHelpText(deleteSelectButton, 'Delete this sketch part <span style="color: #c83232">[D]</span>');
 
-    addHelpText(descInput, 'This is the Description displayed in the Dashboard');
-    addHelpText(moduleNameInput, 'This is the Text written on the Module');
-    addHelpText(sketchNameInput, 'This is the File Name of the Sketch');
-    addHelpText(document.getElementById('save-button'), 'Save this Sketch to the Dashboard');
+    addHelpText(descInput, 'This is the description displayed in the dashboard');
+    addHelpText(moduleNameInput, 'This is the text written on the module');
+    addHelpText(sketchNameInput, 'This is the file name of the sketch');
+    addHelpText(document.getElementById('save-button'), 'Save this sketch to the dashboard');
 
-    addHelpText(document.getElementById('copy-link-button'), 'Copy this link to Clipboard');
+    addHelpText(document.getElementById('copy-link-button'), 'Copy this link to clipboard');
 
     addHelpText(andButton, 'AND Gate');
     addHelpText(orButton, 'OR Gate');
@@ -197,26 +202,34 @@ function addElementHelpTexts() {
     addHelpText(decoderButton, 'Decoder');
     addHelpText(muxButton, 'Multiplexer');
     addHelpText(demuxButton, 'Demultiplexer');
+    addHelpText(wrapperButton, 'Bus Wrapper: Creates a bus from multiple inputs');
+    addHelpText(unwrapperButton, 'Bus Unwrapper: Creates multiple inputs from a bus');
     addHelpText(halfaddButton, 'Half Adder');
     addHelpText(fulladdButton, 'Full Adder');
     addHelpText(counterButton, 'Counter');
     addHelpText(labelButton, 'Text Label');
 
-    addHelpText(gateInputSelect, 'Define the number of Gate Inputs');
+    addHelpText(gateInputSelect, 'Define the number of gate inputs');
     addHelpText(directionSelect, 'Define the direction of the element');
-    addHelpText(displaySelect, 'Define the number of Input Bits');
-    addHelpText(counterBitSelect, 'Define the number of Output Bits');
-    addHelpText(decoderBitSelect, 'Define the number of Input Bits');
-    addHelpText(multiplexerBitSelect, 'Define the Address Width of the element');
+    addHelpText(displaySelect, 'Define the number of input bits');
+    addHelpText(counterBitSelect, 'Define the number of output bits');
+    addHelpText(decoderBitSelect, 'Define the number of input bits');
+    addHelpText(multiplexerBitSelect, 'Define the address width of the element');
+    addHelpText(wrapperWidthSelect, 'Define the bus width for the wrappers and dewrappers');
+    addHelpText(busCheckbox, 'Use the bus version of this module');
+    addHelpText(busCheckboxLabel, 'Use the bus version of this module');
 
-    addHelpText(syncFPSCheckbox, 'Sync the Simulation Speed with the Frame Rate');
-    addHelpText(syncFPSLabel, 'Sync the Simulation Speed with the Frame Rate');
-    addHelpText(bypassCheckbox, 'Simulate with full Frame Rate Speed');
-    addHelpText(bypassLabel, 'Simulate with full Frame Rate Speed');
-    addHelpText(tickTimeSlider, 'Set the minimum time per Simulation Tick');
-    addHelpText(multiplierSlider, 'Speed up the Simulation at higher CPU cost');
+    addHelpText(syncFPSCheckbox, 'Sync the simulation speed with the frame rate');
+    addHelpText(syncFPSLabel, 'Sync the simulation speed with the frame rate');
+    addHelpText(bypassCheckbox, 'Simulate with full frame rate speed');
+    addHelpText(bypassLabel, 'Simulate with full frame rate speed');
+    addHelpText(tickTimeSlider, 'Set the minimum time per simulation tick');
+    addHelpText(multiplierSlider, 'Speed up the simulation at higher CPU cost');
 
-    addHelpText(customButton, 'Import your own Sketches as Custom Modules');
+    addHelpText(customButton, 'Import your own sketches as custom modules');
+
+    addHelpText(document.getElementById('wire-label'), 'Add single wires <span style="color: #c83232">[B]</span>');
+    addHelpText(document.getElementById('bus-label'), 'Add busses for multiple bit transfer <span style="color: #c83232">[B]</span>');
 }
 
 function addHelpText(element, text) {
@@ -498,6 +511,68 @@ function demuxClicked() {
     custFile = muxBitWidth + '-demux.json';
 }
 
+function busUnwrapperClicked() {
+    setUnactive();
+    hideAllOptions();
+    unwrapperButton.classList.add('active');
+    let ipLabels = [];
+    ipLabels.push('BUS' + busWrapperWidth);
+    let opLabels = [];
+    for (let i = 1; i <= busWrapperWidth; i++) {
+        if (busWrapperWidth - i < 10) {
+            opLabels.push('2' + superscripts[busWrapperWidth - i]);
+        } else {
+            opLabels.push('2' + superscripts[Math.floor((busWrapperWidth - i) / 10)] + superscripts[busWrapperWidth - i - Math.floor((busWrapperWidth - i) / 10) * 10]);
+        }
+    }
+    setPreviewElement(true, {
+        tops: [],
+        inputLabels: ipLabels,
+        outputLabels: opLabels,
+        caption: 'UNWRAP',
+        inputs: 1,
+        outputs: busWrapperWidth
+    });
+    setControlMode('addObject');
+    addType = 12;
+    labelDirection.style.display = 'inline-block';
+    directionSelect.style.display = 'inline-block';
+    labelOutputWidth.style.display = 'inline-block';
+    wrapperWidthSelect.style.display = 'inline-block';
+    labelOptions.style.display = 'block';
+}
+
+function busWrapperClicked() {
+    setUnactive();
+    hideAllOptions();
+    wrapperButton.classList.add('active');
+    let opLabels = [];
+    opLabels.push('BUS' + busWrapperWidth);
+    let ipLabels = [];
+    for (let i = 1; i <= busWrapperWidth; i++) {
+        if (busWrapperWidth - i < 10) {
+            ipLabels.push('2' + superscripts[busWrapperWidth - i]);
+        } else {
+            ipLabels.push('2' + superscripts[Math.floor((busWrapperWidth - i) / 10)] + superscripts[busWrapperWidth - i - Math.floor((busWrapperWidth - i) / 10) * 10]);
+        }
+    }
+    setPreviewElement(true, {
+        tops: [],
+        inputLabels: ipLabels,
+        outputLabels: opLabels,
+        caption: 'WRAP',
+        inputs: busWrapperWidth,
+        outputs: 1
+    });
+    setControlMode('addObject');
+    addType = 13;
+    labelDirection.style.display = 'inline-block';
+    directionSelect.style.display = 'inline-block';
+    labelInputWidth.style.display = 'inline-block';
+    wrapperWidthSelect.style.display = 'inline-block';
+    labelOptions.style.display = 'block';
+}
+
 function halfaddClicked() {
     setUnactive();
     hideAllOptions();
@@ -673,4 +748,9 @@ function darkmodeClicked() {
     }
     localStorage.setItem('theme', currentTheme); // Save the current theme to sync it with the rest of the site
     setTimeout(function () { dropdownClicked = false; }, 100); // Allow elements to be placed again after 100ms
+}
+
+function closeUpdateDialog() {
+    localStorage.setItem('showupdate', 'update' + updateNo);
+    document.getElementById('update-dialog').style.display = 'none';
 }

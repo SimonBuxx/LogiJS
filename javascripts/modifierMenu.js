@@ -72,6 +72,15 @@ function unmarkAll() {
     for (const elem of wires) {
         elem.marked = false;
     }
+    for (const elem of busses) {
+        elem.marked = false;
+    }
+    for (const elem of busWrappers) {
+        elem.marked = false;
+    }
+    for (const elem of busUnwrappers) {
+        elem.marked = false;
+    }
     for (const elem of segDisplays) {
         elem.marked = false;
     }

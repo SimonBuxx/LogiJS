@@ -294,6 +294,11 @@ input {
     color: #fff;
 }
 
+#bus-checkbox-label {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
 .disabledLabel, .dark-theme .disabledLabel {
     color: #969696;
     cursor: default;
@@ -434,6 +439,86 @@ input {
 
 .dark-theme .previewButton:disabled >  .preview {
     filter: brightness(50%);
+}
+
+.switch-field {
+    display: flex;
+    margin: 7px 15px 0 10px;
+}
+  
+.switch-field input {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    border: 0;
+    overflow: hidden;
+}
+  
+.switch-field label {
+    background: none;
+    color: #323232;
+    font-size: 18px;
+    line-height: 1;
+    text-align: center;
+    padding: 8px 16px;
+    width: calc(50% - 10px);
+}
+
+#bus-label {
+    border: 1px solid #969696;
+    border-left: 1px solid rgba(0, 0, 0, 0);
+    color: #323232;
+}
+
+.dark-theme #bus-label {
+    border: 1px solid #5f5f5f;
+    border-left: 1px solid rgba(0, 0, 0, 0);;
+    color: #fff;
+}
+
+#wire-label {
+    border: 1px solid #969696;
+    border-right: 1px solid rgba(0, 0, 0, 0);;
+    color: #323232;
+}
+
+.dark-theme #wire-label {
+    border: 1px solid #5f5f5f;
+    border-right: 1px solid rgba(0, 0, 0, 0);;
+    color: #fff;
+}
+
+.switch-field input:hover+label {
+    background: #ddd;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.dark-theme .switch-field input:hover+label {
+    background: #202020;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+  
+.switch-field label:hover {
+    cursor: pointer;
+}
+  
+.switch-field sup {
+    color: #5f5f5f;
+}
+
+.dark-theme .switch-field sup {
+    color: #ddd;
+}
+
+.switch-field input:checked + #wire-label, .switch-field input:checked + #bus-label {
+    background: #c83232;
+    border: 1px solid #c83232; 
+    color: #fff;
+}
+
+.switch-field input:checked + label sup {
+    color: #fff;
 }
 
 .preview {
@@ -1098,10 +1183,6 @@ input[type=range]::-ms-tooltip {
     display: none;
 }
 
-.dark-theme #message-dialog {
-    background: #323232;
-}
-
 #message-text {
     text-align: center;
     color: #323232;
@@ -1110,6 +1191,39 @@ input[type=range]::-ms-tooltip {
 
 .dark-theme #message-text {
     color: #fff;
+}
+
+#update-dialog {
+    position: absolute;
+    padding: 20px;
+    left: calc(50vw - 230px);
+    top: calc(50vh - 300px);
+    background: white;
+    width: 600px;
+    height: 400px;
+    margin: 0;
+    display: none;
+}
+
+.dark-theme #update-dialog, .dark-theme #message-dialog {
+    background: #323232;
+}
+
+#update-dialog li {
+    color: #323232;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.dark-theme #update-dialog li {
+    color: #fff;
+}
+
+#close-update {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 20px;
 }
 
 #module-previewer {

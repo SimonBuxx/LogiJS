@@ -2,7 +2,7 @@
 
 function undo() {
     let act = actionUndo.pop();
-    console.log(act);
+    //console.log(act);
     if (act !== null) {
         switch (act.actionType) {
             case 'addGate':
@@ -40,8 +40,20 @@ function undo() {
                 diodes.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
                 break;
+            case 'addCp':
+                conpoints.splice(act.actionIndizes[0], 1);
+                actionRedo.push(act);
+                break;
             case 'addLabel':
                 labels.splice(act.actionIndizes[0], 1);
+                actionRedo.push(act);
+                break;
+            case 'addBusWrapper':
+                busWrappers.splice(act.actionIndizes[0], 1);
+                actionRedo.push(act);
+                break;
+            case 'addBusUnwrapper':
+                busUnwrappers.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
                 break;
             case 'invGIP':
@@ -62,6 +74,14 @@ function undo() {
                 break;
             case 'invDIP':
                 segDisplays[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
+                actionRedo.push(act);
+                break;
+            case 'invBWIP':
+                busWrappers[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
+                actionRedo.push(act);
+                break;
+            case 'invBUOP':
+                busUnwrappers[act.actionIndizes[0]].invertOutput(act.actionIndizes[1]);
                 actionRedo.push(act);
                 break;
             case 'delGate':
@@ -97,6 +117,14 @@ function undo() {
                 break;
             case 'delLabel':
                 labels.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
+                actionRedo.push(act);
+                break;
+            case 'delBusWrapper':
+                busWrappers.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
+                actionRedo.push(act);
+                break;
+            case 'delBusUnwrapper':
+                busUnwrappers.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
                 actionRedo.push(act);
                 break;
             case 'swiDi':
@@ -142,6 +170,40 @@ function undo() {
                     }
                 }
 
+                let retrievedBusses = [];
+                retrievedIndizes = [];
+
+                for (let i = act.actionObject[5].length - 1; i >= 0; i--) { // Iterate backwards over all busLog entries
+                    if (act.actionObject[5][i][0] === 'aBus') {
+                        busses.splice(act.actionObject[5][i][1], 1);
+                        if (!retrievedIndizes.includes(act.actionObject[5][i][3])) {
+                            retrievedBusses.push([act.actionObject[5][i][3], act.actionObject[5][i][2]]);
+                            retrievedIndizes.push(act.actionObject[5][i][3]);
+                        }
+                    } else if (act.actionObject[5][i][0] === 'dBus') {
+                        busses.splice(act.actionObject[5][i][1], 0, _.cloneDeep(act.actionObject[5][i][2]));
+                    } else if (act.actionObject[5][i][0] === 'rBus') {
+                        busses.splice(act.actionObject[5][i][1], 1, _.cloneDeep(act.actionObject[5][i][2]));
+                        if (!retrievedIndizes.includes(act.actionObject[5][i][5])) {
+                            retrievedBusses.push([act.actionObject[5][i][5], act.actionObject[5][i][4]]);
+                            retrievedIndizes.push(act.actionObject[5][i][5]);
+                        }
+                    }
+                }
+
+                retrievedIndizes = _.cloneDeep(retrievedIndizes);
+                retrievedBusses = _.cloneDeep(retrievedBusses);
+
+                for (let i = 0; i < retrievedBusses.length; i++) {
+                    busses.splice(retrievedBusses[i][0], 0, retrievedBusses[i][1]);
+                }
+
+                for (let i = act.actionObject[5].length - 1; i >= 0; i--) { // Iterate backwards over all selectionLog entries
+                    if (act.actionObject[5][i][0] === 'mBus') { // All busses are retrieved at this point
+                        busses[act.actionObject[5][i][1]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
+                    }
+                }
+
                 for (let i = 0; i < act.actionIndizes[2].length; i++) {
                     gates[act.actionIndizes[2][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
                 }
@@ -163,10 +225,18 @@ function undo() {
                 }
 
                 for (let i = 0; i < act.actionIndizes[7].length; i++) {
-                    customs[act.actionIndizes[7][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
+                    busWrappers[act.actionIndizes[7][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
+                }
+
+                for (let i = 0; i < act.actionIndizes[8].length; i++) {
+                    busUnwrappers[act.actionIndizes[8][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
+                }
+
+                for (let i = 0; i < act.actionIndizes[9].length; i++) {
+                    customs[act.actionIndizes[9][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
                 }
                 actionRedo.push(act);
-                if (act.actionIndizes[9]) { // Undo pasting if the move action was done after pasting
+                if (act.actionIndizes[11]) { // Undo pasting if the move action was done after pasting
                     undo();
                 }
                 break;
@@ -177,6 +247,9 @@ function undo() {
                 for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
                     if (act.actionObject[0][i][0] === 'wire') {
                         wires.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'bus') {
+                        busses.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
                     }
                     if (act.actionObject[0][i][0] === 'gate') {
                         gates.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
@@ -192,6 +265,12 @@ function undo() {
                     }
                     if (act.actionObject[0][i][0] === 'segDisplay') {
                         segDisplays.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'busWrapper') {
+                        busWrappers.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'busUnwrapper') {
+                        busUnwrappers.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
                     }
                     if (act.actionObject[0][i][0] === 'custom') {
                         customs[act.actionObject[0][i][1]].visible = true;
@@ -212,6 +291,9 @@ function undo() {
                         case 'w':
                             wires.pop();
                             break;
+                        case 'b':
+                            busses.pop();
+                            break;
                         case 'd':
                             diodes.pop();
                             break;
@@ -229,6 +311,12 @@ function undo() {
                             break;
                         case 's':
                             segDisplays.pop();
+                            break;
+                        case 'r':
+                            busWrappers.pop();
+                            break;
+                        case 'u':
+                            busUnwrappers.pop();
                             break;
                         case 'c':
                             customs.pop();
@@ -267,6 +355,30 @@ function undo() {
                 }
                 for (let i = 0; i < act.actionIndizes[0].length; i++) {
                     diodes.splice(act.actionIndizes[0][i], 0, _.cloneDeep(act.actionObject[3][i][0]));
+                }
+                actionRedo.push(act);
+                break;
+            case 'addBus':
+                conpoints = _.cloneDeep(act.actionObject[1]);
+                for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
+                    if (act.actionObject[0][i][0] === 'a') {
+                        busses.splice(act.actionObject[0][i][1], 1);
+                    } else if (act.actionObject[0][i][0] === 'd') {
+                        busses.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    } else if (act.actionObject[0][i][0] === 'r') {
+                        busses.splice(act.actionObject[0][i][1], 1, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                }
+                actionRedo.push(act);
+                break;
+            case 'delBus':
+                conpoints = _.cloneDeep(act.actionObject[1]);
+                for (let i = act.actionObject[0].length - 1; i >= 0; i--) {
+                    if (act.actionObject[0][i][0] === 'a') {
+                        busses.splice(act.actionObject[0][i][1], 1);
+                    } else if (act.actionObject[0][i][0] === 'd') {
+                        busses.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
                 }
                 actionRedo.push(act);
                 break;
@@ -309,8 +421,20 @@ function redo() {
                 diodes.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
                 actionUndo.push(act);
                 break;
+            case 'addCp':
+                conpoints.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
+                actionUndo.push(act);
+                break;
             case 'addLabel':
                 labels.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
+                actionUndo.push(act);
+                break;
+            case 'addBusWrapper':
+                busWrappers.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
+                actionUndo.push(act);
+                break;
+            case 'addBusUnwrapper':
+                busUnwrappers.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
                 actionUndo.push(act);
                 break;
             case 'delGate':
@@ -356,6 +480,14 @@ function redo() {
                 labels.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
                 break;
+            case 'delBusWrapper':
+                busWrappers.splice(act.actionIndizes[0], 1);
+                actionUndo.push(act);
+                break;
+            case 'delBusUnwrapper':
+                busUnwrappers.splice(act.actionIndizes[0], 1);
+                actionUndo.push(act);
+                break;
             case 'swiDi':
                 diodes.splice(act.actionIndizes[0], 1);
                 conpoints.splice(act.actionIndizes[1], 0, _.cloneDeep(act.actionObject[1]));
@@ -379,6 +511,14 @@ function redo() {
                 break;
             case 'invDIP':
                 segDisplays[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
+                actionUndo.push(act);
+                break;
+            case 'invBWIP':
+                busWrappers[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
+                actionUndo.push(act);
+                break;
+            case 'invBUOP':
+                busUnwrappers[act.actionIndizes[0]].invertOutput(act.actionIndizes[1]);
                 actionUndo.push(act);
                 break;
             case 'moveSel':
@@ -417,6 +557,38 @@ function redo() {
                     }
                 }
 
+                retrievedIndizes = [];
+
+                for (let i = 0; i < act.actionObject[5].length; i++) {
+                    if (act.actionObject[5][i][0] === 'mBus') {
+                        busses[act.actionObject[5][i][1]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
+                    } else if (act.actionObject[5][i][0] === 'aBus') {
+                        if (!retrievedIndizes.includes(act.actionObject[5][i][3])) {
+                            retrievedIndizes.push(act.actionObject[5][i][3]);
+                        }
+                    } else if (act.actionObject[5][i][0] === 'rBus') {
+                        if (!retrievedIndizes.includes(act.actionObject[5][i][5])) {
+                            retrievedIndizes.push(act.actionObject[5][i][5]);
+                        }
+                    }
+                }
+
+                retrievedIndizes = _.cloneDeep(retrievedIndizes);
+
+                for (let i = 0; i < retrievedIndizes.length; i++) {
+                    busses.splice(retrievedIndizes[i], 1);
+                }
+
+                for (let i = 0; i < act.actionObject[5].length; i++) {
+                    if (act.actionObject[5][i][0] === 'aBus') {
+                        busses.splice(act.actionObject[5][i][1], 0, _.cloneDeep(act.actionObject[5][i][2]));
+                    } else if (act.actionObject[5][i][0] === 'dBus') {
+                        busses.splice(act.actionObject[5][i][1], 1);
+                    } else if (act.actionObject[5][i][0] === 'rBus') {
+                        busses.splice(act.actionObject[5][i][1], 1, _.cloneDeep(act.actionObject[5][i][3]));
+                    }
+                }
+
                 for (let i = 0; i < act.actionIndizes[2].length; i++) {
                     gates[act.actionIndizes[2][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
                 }
@@ -438,7 +610,15 @@ function redo() {
                 }
 
                 for (let i = 0; i < act.actionIndizes[7].length; i++) {
-                    customs[act.actionIndizes[7][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
+                    busWrappers[act.actionIndizes[7][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
+                }
+
+                for (let i = 0; i < act.actionIndizes[8].length; i++) {
+                    busUnwrappers[act.actionIndizes[8][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
+                }
+
+                for (let i = 0; i < act.actionIndizes[9].length; i++) {
+                    customs[act.actionIndizes[9][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
                 }
 
                 actionUndo.push(act);
@@ -450,6 +630,9 @@ function redo() {
                 for (let i = 0; i < act.actionObject[0].length; i++) {
                     if (act.actionObject[0][i][0] === 'wire') {
                         wires.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'bus') {
+                        busses.splice(act.actionObject[0][i][1], 1);
                     }
                     if (act.actionObject[0][i][0] === 'gate') {
                         gates.splice(act.actionObject[0][i][1], 1);
@@ -466,6 +649,12 @@ function redo() {
                     if (act.actionObject[0][i][0] === 'segDisplay') {
                         segDisplays.splice(act.actionObject[0][i][1], 1);
                     }
+                    if (act.actionObject[0][i][0] === 'busWrapper') {
+                        busWrappers.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'busUnwrapper') {
+                        busUnwrappers.splice(act.actionObject[0][i][1], 1);
+                    }
                     if (act.actionObject[0][i][0] === 'custom') {
                         customs[act.actionObject[0][i][1]].visible = false;
                     }
@@ -480,6 +669,9 @@ function redo() {
                     switch (act.actionObject[0][i].id.charAt(0)) {
                         case 'w':
                             wires.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'b':
+                            busses.push(_.cloneDeep(act.actionObject[0][i]));
                             break;
                         case 'd':
                             diodes.push(_.cloneDeep(act.actionObject[0][i]));
@@ -498,6 +690,12 @@ function redo() {
                             break;
                         case 's':
                             segDisplays.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'r':
+                            busWrappers.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'u':
+                            busUnwrappers.push(_.cloneDeep(act.actionObject[0][i]));
                             break;
                         case 'c':
                             customs.push(_.cloneDeep(act.actionObject[0][i]));
@@ -547,6 +745,30 @@ function redo() {
                 }
                 for (let i = act.actionIndizes[0].length - 1; i >= 0; i--) {
                     diodes.splice(act.actionIndizes[0][i], 1);
+                }
+                actionUndo.push(act);
+                break;
+            case 'addBus':
+                conpoints = _.cloneDeep(act.actionObject[2]);
+                for (let i = 0; i < act.actionObject[0].length; i++) {
+                    if (act.actionObject[0][i][0] === 'a') {
+                        busses.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    } else if (act.actionObject[0][i][0] === 'd') {
+                        busses.splice(act.actionObject[0][i][1], 1);
+                    } else if (act.actionObject[0][i][0] === 'r') {
+                        busses.splice(act.actionObject[0][i][1], 1, _.cloneDeep(act.actionObject[0][i][3]));
+                    }
+                }
+                actionUndo.push(act);
+                break;
+            case 'delBus':
+                conpoints = _.cloneDeep(act.actionObject[2]);
+                for (let i = 0; i < act.actionObject[0].length; i++) {
+                    if (act.actionObject[0][i][0] === 'a') {
+                        busses.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    } else if (act.actionObject[0][i][0] === 'd') {
+                        busses.splice(act.actionObject[0][i][1], 1);
+                    }
                 }
                 actionUndo.push(act);
                 break;

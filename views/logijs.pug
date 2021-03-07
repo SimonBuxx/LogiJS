@@ -26,15 +26,20 @@ head
     include ../javascripts/classes/transformation.js
     include ../javascripts/classes/clickBox.js
     include ../javascripts/classes/logicGate.js
+    include ../javascripts/classes/busWrapper.js
+    include ../javascripts/classes/busUnwrapper.js
     include ../javascripts/classes/segmentDisplay.js
+    include ../javascripts/classes/busSegmentDisplay.js
     include ../javascripts/classes/customSketch.js
     include ../javascripts/classes/output.js
     include ../javascripts/classes/input.js
     include ../javascripts/classes/wire.js
+    include ../javascripts/classes/bus.js
     include ../javascripts/classes/label.js
     include ../javascripts/classes/diode.js
     include ../javascripts/classes/conpoint.js
     include ../javascripts/classes/group.js
+    include ../javascripts/classes/busGroup.js
     include ../javascripts/customDialog.js
     include ../javascripts/selectionHandling.js
     include ../javascripts/modifierMenu.js
@@ -90,6 +95,22 @@ body
     #message-dialog
       h1#message-caption
       p#message-text
+      .grey-rect-medium
+      .red-rect-medium
+
+  .update-container(style="position: relative; z-index: 1")
+    #update-dialog 
+      h1#message-caption New in this Version<span style="color: #c83232">.</span>
+      p#message-text Busses<span style="color: #c83232">.</span>
+        ul
+          li Bus system to transfer multiple bits on one line
+          li Can be used with Bus Wrapper and Unwrapper modules and the bus version of the 7-Segment Display
+          li Loading and saving implemented, selecting soon
+          li Custom modules cannot be used with busses yet
+      p#message-text Miscellaneous<span style="color: #c83232">.</span>
+        ul 
+          li Minor bug fixes and design work
+      button#close-update.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="closeUpdateDialog();") Close
       .grey-rect-medium
       .red-rect-medium
 
@@ -244,6 +265,10 @@ body
         img.preview(src="images/mux.png")
       button#demux-button.previewButton(rel="nofollow" onclick="demuxClicked();") 
         img.preview(src="images/demux.png")
+      button#wrapper-button.previewButton(rel="nofollow" onclick="busWrapperClicked();") 
+        img.preview(src="images/wrapper.png")
+      button#unwrapper-button.previewButton(rel="nofollow" onclick="busUnwrapperClicked();") 
+        img.preview(src="images/unwrapper.png")
       p.label Adder<span style="color: #c83232">.</span>
       button#halfadd-button.previewButton(rel="nofollow" onclick="halfaddClicked();") 
         img.preview(src="images/halfadd.png") 
@@ -255,6 +280,11 @@ body
       button#label-button.previewButton(rel="nofollow" onclick="labelButtonClicked();") 
         img.preview(src="images/label.png")
     button#custom-button.buttonLeft(rel="nofollow" onclick="customClicked();" disabled) <i class="fa fa-paste icon"></i> Custom Modules
+    .switch-field
+        input(type="radio" id="radio-one" name="switch-one" value="wire" onchange="busInsert=false;" checked)
+        label(for="radio-one" id="wire-label") Wire
+        input(type="radio" id="radio-two" name="switch-one" value="bus" onchange="busInsert=true;")
+        label(for="radio-two" id="bus-label") Bus<sup style="font-size: 10px; letter-spacing: 1px;">BETA</sup>
     p#sim-label.label Simulation<span style="color: #c83232">.</span>
     p#options-label.label Options<span style="color: #c83232">.</span>
     p#gate-inputs-label.optionLabel Gate Inputs
@@ -303,6 +333,19 @@ body
       option(value="1" selected) 1
       option(value="2") 2
       option(value="3") 3
+    select#wrapper-width-select.selectLeft(onchange="newBusWrapperWidth();")
+      option(value="2") 2
+      option(value="3") 3
+      option(value="4" selected) 4
+      option(value="5") 5
+      option(value="6") 6
+      option(value="7") 7
+      option(value="8") 8
+      option(value="16") 16
+      option(value="32") 32
+    input#bus-checkbox.checkbox(type="checkbox" onchange="useBusVersionsChanged();") 
+    label#bus-checkbox-label.checkbox-label(for="bus-checkbox") Bus Connectors
+
     input#syncFPSCheckbox.checkbox(type="checkbox" onchange="syncFramerateCheckBoxChanged();" checked) 
     label#syncFPSLabel.checkbox-label(for="syncFPSCheckbox") Sync Ticks to Frames
 

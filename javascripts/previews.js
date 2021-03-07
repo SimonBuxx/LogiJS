@@ -125,7 +125,13 @@ function showElementPreview() {
                         console.log('Gate direction doesn\'t exist!');
                 }
             }
-            line(x1, y1, x2, y2);
+            if (item.inputLabels[i - 1].length >= i) {
+                if (!item.inputLabels[i - 1].startsWith('BUS')) {
+                    line(x1, y1, x2, y2);
+                }
+            } else {
+                line(x1, y1, x2, y2);
+            }
 
             fill(0);
 
@@ -169,6 +175,39 @@ function showElementPreview() {
                             line(x1 + 14, y1, x1, y1 - 6);
                             line(x1 + 14, y1, x1, y1 + 6);
                             break;
+                    }
+                }
+            } else if (item.inputLabels[i - 1].length >= i && item.inputLabels[i - 1].startsWith('BUS')) {
+                let busWidth = parseInt(item.inputLabels[i - 1].slice(3));
+                noStroke();
+                textSize(12);
+                if (!item.tops.includes(i - 1)) {
+                    /* Preview for normal bus inputs */
+                    switch (gateDirection) {
+                        case 0:
+                            triangle(x2 - 9, y1 - 8, x2 - 1, y1, x2 - 9, y1 + 8);
+                            text(busWidth, x2 - 10, y1 + 15);
+                            break;
+                        case 1:
+                            triangle(x1 - 8, y2 - 9, x1, y2 - 1, x1 + 8, y2 - 9);
+                            text(busWidth, x2 + 15, y1 - 4);
+                            break;
+                        case 2:
+                            triangle(x1 + 10, y1 - 8, x1 + 2, y1, x1 + 10, y1 + 8);
+                            text(busWidth, x1 + 10, y1 + 15);
+                            break;
+                        case 3:
+                            triangle(x1 - 8, y1 + 10, x1, y1 + 2, x1 + 8, y1 + 10);
+                            text(busWidth, x2 + 15, y2 + 4);
+                            break;
+                    }
+                } else {
+                    /* Preview for top bus inputs */
+                    switch (gateDirection) {
+                        case 0: break;
+                        case 1: break;
+                        case 2: break;
+                        case 3: break;
                     }
                 }
             } else if (item.inputLabels[i - 1] !== '') {
@@ -224,12 +263,51 @@ function showElementPreview() {
                 default:
                     console.log('Gate direction doesn\'t exist!');
             }
-            line(x1, y1, x2, y2);
+            if (item.outputLabels[i - 1].length >= i) {
+                if (!item.outputLabels[i - 1].startsWith('BUS')) {
+                    line(x1, y1, x2, y2);
+                }
+            } else {
+                line(x1, y1, x2, y2);
+            }
 
             fill(0);
             noStroke();
             textSize(14);
-            if (item.outputLabels[i - 1] !== "") {
+            if (item.outputLabels[i - 1].length >= i && item.outputLabels[i - 1].startsWith('BUS')) {
+                let busWidth = parseInt(item.outputLabels[i - 1].slice(3));
+                noStroke();
+                textSize(12);
+                if (!item.tops.includes(i - 1)) {
+                    /* Preview for normal bus inputs */
+                    switch (gateDirection) {
+                        case 0:
+                            triangle(x1 + 10, y1 - 8, x1 + 2, y1, x1 + 10, y1 + 8);
+                            text(busWidth, x1 + 10, y1 + 15);
+                            break;
+                        case 1:
+                            triangle(x1 - 8, y1 + 10, x1, y1 + 2, x1 + 8, y1 + 10);
+                            text(busWidth, x2 + 15, y2 + 4);
+                            break;
+                        case 2:
+                            triangle(x2 - 9, y1 - 8, x2 - 1, y1, x2 - 9, y1 + 8);
+                            text(busWidth, x2 - 10, y1 + 15);
+                            break;
+                        case 3:
+                            triangle(x1 - 8, y1 - 9, x1, y1 - 1, x1 + 8, y1 - 9);
+                            text(busWidth, x2 + 15, y2 - 4);
+                            break;
+                    }
+                } else {
+                    /* Preview for top bus inputs */
+                    switch (gateDirection) {
+                        case 0: break;
+                        case 1: break;
+                        case 2: break;
+                        case 3: break;
+                    }
+                }
+            } else if (item.outputLabels[i - 1] !== "") {
                 switch (gateDirection) {
                     case 0: text(item.outputLabels[i - 1], x1 - 10, y1); break;
                     case 1: text(item.outputLabels[i - 1], x1, y1 - 10); break;
@@ -382,6 +460,7 @@ function showElementPreview() {
                 arc(mx, my, GRIDSIZE, GRIDSIZE, HALF_PI + QUARTER_PI, PI + HALF_PI + QUARTER_PI, OPEN);
                 break;
             case '7-segment':
+            case '7-segment-bus':
                 textFont('PT Mono');
                 mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
                 my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
@@ -389,8 +468,11 @@ function showElementPreview() {
                 fill(255);
                 strokeWeight(3);
 
-                rect(mx + GRIDSIZE / 2, my, GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
-
+                if (previewData.type !== '7-segment-bus') {
+                    rect(mx + GRIDSIZE / 2, my, GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
+                } else {
+                    rect(mx + GRIDSIZE / 2, my, GRIDSIZE * Math.max(Math.pow(2, sevenSegmentBits).toString().length * 2 + 1, 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
+                }
                 noStroke();
                 textSize(80);
                 textAlign(CENTER, CENTER);
@@ -399,29 +481,47 @@ function showElementPreview() {
                 for (let i = 0; i < Math.pow(2, sevenSegmentBits).toString().length; i++) {
                     txt += '0';
                 }
-                text(txt, mx + GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) / 2, my + (GRIDSIZE * 3) / 2 - 3);
+                if (previewData.type === '7-segment-bus') {
+                    text(txt, mx + GRIDSIZE * Math.max(Math.pow(2, sevenSegmentBits).toString().length * 2 + 1, 3) / 2, my + (GRIDSIZE * 3) / 2 - 3);
+                } else {
+                    text(txt, mx + GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) / 2, my + (GRIDSIZE * 3) / 2 - 3);
 
-                // Draw inputs
-                for (let i = 1; i <= sevenSegmentBits; i++) {
+                }
+                if (previewData.type !== '7-segment-bus') {
                     // Draw inputs
-                    stroke(0);
-                    strokeWeight(3);
+                    for (let i = 1; i <= sevenSegmentBits; i++) {
+                        // Draw inputs
+                        stroke(0);
+                        strokeWeight(3);
 
-                    x1 = mx + (GRIDSIZE * i);
-                    y1 = my + GRIDSIZE * 3;
-                    x2 = mx + (GRIDSIZE * i);
-                    y2 = my + GRIDSIZE * 3 + 6;
-                    line(x1, y1, x2, y2);
+                        x1 = mx + (GRIDSIZE * i);
+                        y1 = my + GRIDSIZE * 3;
+                        x2 = mx + (GRIDSIZE * i);
+                        y2 = my + GRIDSIZE * 3 + 6;
+                        line(x1, y1, x2, y2);
 
+                        noStroke();
+                        textSize(14);
+                        textFont('Arial');
+
+                        if (sevenSegmentBits - i < 10) {
+                            text('2' + superscripts[sevenSegmentBits - i], x1, y1 - 10);
+                        } else {
+                            text('2' + superscripts[Math.floor((sevenSegmentBits - i) / 10)] + superscripts[sevenSegmentBits - i - Math.floor((sevenSegmentBits - i) / 10) * 10], x1, y1 - 10);
+                        }
+                    }
+                } else {
+                    fill(0);
                     noStroke();
-                    textSize(14);
+
+                    triangle(mx + GRIDSIZE - 8, my + GRIDSIZE * 3 + 10, mx + GRIDSIZE, my + GRIDSIZE * 3 + 2, mx + GRIDSIZE + 8, my + GRIDSIZE * 3 + 10);
+                    textSize(12);
+                    text(sevenSegmentBits, mx + GRIDSIZE + 15, my + GRIDSIZE * 3 + 10);
+
+                    textSize(10);
                     textFont('Arial');
 
-                    if (sevenSegmentBits - i < 10) {
-                        text('2' + superscripts[sevenSegmentBits - i], x1, y1 - 10);
-                    } else {
-                        text('2' + superscripts[Math.floor((sevenSegmentBits - i) / 10)] + superscripts[sevenSegmentBits - i - Math.floor((sevenSegmentBits - i) / 10) * 10], x1, y1 - 10);
-                    }
+                    text('[' + (sevenSegmentBits-1) + ':0]', mx + GRIDSIZE, my + GRIDSIZE * 3 - 10);
                 }
                 break;
             case 'label':

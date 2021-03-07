@@ -22,8 +22,6 @@ function SegmentDisplay(x, y, bits) {
 
     this.id = 's' + Date.now() + Math.random();
 
-    this.superscripts = ['º', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
-
     // Initialize the inputs
     for (let i = 0; i < this.inputCount; i++) {
         this.inputs.push(false); // Set all inputs to low
@@ -206,9 +204,9 @@ SegmentDisplay.prototype.show = function () {
         textFont('Arial');
 
         if (this.inputCount - i < 10) {
-            text('2' + this.superscripts[this.inputCount - i], this.x1, this.y1 - 10);
+            text('2' + superscripts[this.inputCount - i], this.x1, this.y1 - 10);
         } else {
-            text('2' + this.superscripts[Math.floor((this.inputCount - i) / 10)] + this.superscripts[this.inputCount - i - Math.floor((this.inputCount - i) / 10) * 10], this.x1, this.y1 - 10);
+            text('2' + superscripts[Math.floor((this.inputCount - i) / 10)] + superscripts[this.inputCount - i - Math.floor((this.inputCount - i) / 10) * 10], this.x1, this.y1 - 10);
         }
     }
 

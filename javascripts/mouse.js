@@ -55,6 +55,7 @@ function updateCursors() {
     let hand = false;
     let showDPreview = false;
     let showCPPreview = false;
+    let showBusCPPreview = false;
     if ((simRunning || controlMode === 'modify') && !customDialog.isVisible) {
         if (!simRunning) {
             for (const elem of outputs) {
@@ -97,14 +98,46 @@ function updateCursors() {
                     }
                 }
                 for (const elem of segDisplays) {
+                    if (!elem.id.endsWith('b')) {
+                        for (const e of elem.inputClickBoxes) {
+                            if (e.mouseOver()) {
+                                hand = true;
+                                cursor(HAND);
+                                negDir = 3;
+                                negPort = e;
+                                isOutput = false;
+                            }
+                        }
+                    }
+                }
+                for (const elem of busWrappers) {
                     for (const e of elem.inputClickBoxes) {
                         if (e.mouseOver()) {
                             hand = true;
                             cursor(HAND);
-                            negDir = 3;
+                            negDir = elem.direction;
                             negPort = e;
                             isOutput = false;
                         }
+                    }
+                    if (elem.invertClickBox.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
+                for (const elem of busUnwrappers) {
+                    for (const e of elem.outputClickBoxes) {
+                        if (e.mouseOver()) {
+                            hand = true;
+                            cursor(HAND);
+                            negDir = elem.direction;
+                            negPort = e;
+                            isOutput = true;
+                        }
+                    }
+                    if (elem.invertClickBox.mouseOver()) {
+                        hand = true;
+                        cursor(HAND);
                     }
                 }
                 for (const elem of customs) {
@@ -141,6 +174,11 @@ function updateCursors() {
                 } else {
                     showCPPreview = true;
                 }
+            }
+            if (!moduleOptions && busFullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                hand = true;
+                cursor(HAND);
+                showBusCPPreview = true;
             }
         } else {
             for (const elem of inputs) {
@@ -179,6 +217,10 @@ function updateCursors() {
     }
     if (showCPPreview) {
         showPreview('conpoint', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+        redrawNextFrame = true;
+    }
+    if (showBusCPPreview) {
+        showPreview('busConpoint', Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
         redrawNextFrame = true;
     }
     if (negPort !== null) {
@@ -294,36 +336,50 @@ function mouseClicked() {
                     switch (addType) { // Handle object adding
                         case 1:
                         case 2:
-                        case 3:
+                        case 3: // add logic gate
                             if (mouseButton === LEFT) {
                                 addGate(addType, gateInputCount, gateDirection);
                             }
                             break;
                         case 10:
-                        case 11:
+                        case 11: // add custom module
                             if (mouseButton === LEFT) {
                                 addCustom(custFile, gateDirection);
                             }
                             break;
-                        case 7:
+                        case 12: // add bus unwrapper
+                            if (mouseButton === LEFT) {
+                                addBusUnwrapper(busWrapperWidth, gateDirection);
+                            }
+                            break;
+                        case 13: // add bus wrapper
+                            if (mouseButton === LEFT) {
+                                addBusWrapper(busWrapperWidth, gateDirection);
+                            }
+                            break;
+                        case 7: // add output
                             if (mouseButton === LEFT) {
                                 addOutput();
                             }
                             break;
-                        case 8:
+                        case 8: // add 7-segment display
                             if (mouseButton === LEFT) {
-                                addSegDisplay(sevenSegmentBits);
+                                if (busVersions) {
+                                    addBusSegDisplay(sevenSegmentBits);
+                                } else {
+                                    addSegDisplay(sevenSegmentBits);
+                                }
                                 setTimeout(reDraw, 50);
                             }
                             break;
                         case 4:
                         case 5:
-                        case 6:
+                        case 6: // add input
                             if (mouseButton === LEFT) {
                                 addInput();
                             }
                             break;
-                        case 9:
+                        case 9: // add label
                             addLabel();
                             break;
                         case 'none':
@@ -406,7 +462,7 @@ function mouseReleased() {
     }
 
     dropdownClicked = false;
-    if (loading || customDialog.isVisible || saveDialog || screenshotDialog ||linkDialog || moduleOptions || mouseOverGUI()) { return; }
+    if (loading || customDialog.isVisible || saveDialog || screenshotDialog || linkDialog || moduleOptions || mouseOverGUI()) { return; }
     if (elementMenuShown()) {
         if (!mouseOverGUI() && clickedOutOfGUI) {
             closeModifierMenu();
@@ -419,13 +475,21 @@ function mouseReleased() {
             switch (controlMode) {
                 case 'addObject':
                     if (wireMode === 'preview') { // If the preview wire mode is active
-                        addWires();
+                        if (busInsert) {
+                            addBusses();
+                        } else {
+                            addWires();
+                        }
                     }
                     break;
                 case 'modify':
                     if (!justClosedMenu) {
                         if (wireMode === 'preview') { // If the preview wire mode is active
-                            addWires();
+                            if (busInsert) {
+                                addBusses();
+                            } else {
+                                addWires();
+                            }
                         }
                         if (wireMode === 'none') {
                             // Invert In-/Outputs
@@ -464,16 +528,45 @@ function mouseReleased() {
                                 }
                             }
                             for (let i = 0; i < segDisplays.length; i++) {
-                                for (let j = 0; j < segDisplays[i].inputCount; j++) {
-                                    if (segDisplays[i].mouseOverInput(j)) {
-                                        segDisplays[i].invertInput(j);
-                                        let act = new Action('invDIP', [i, j], null);
+                                if (!segDisplays[i].id.endsWith('b')) {
+                                    for (let j = 0; j < segDisplays[i].inputCount; j++) {
+                                        if (segDisplays[i].mouseOverInput(j)) {
+                                            segDisplays[i].invertInput(j);
+                                            let act = new Action('invDIP', [i, j], null);
+                                            actionUndo.push(act);
+                                        }
+                                    }
+                                }
+                            }
+                            for (let i = 0; i < busWrappers.length; i++) {
+                                for (let j = 0; j < busWrappers[i].inputCount; j++) {
+                                    if (busWrappers[i].mouseOverInput(j)) {
+                                        busWrappers[i].invertInput(j);
+                                        let act = new Action('invBWIP', [i, j], null);
                                         actionUndo.push(act);
                                     }
+                                }
+                                if (busWrappers[i].mouseOverInvert()) {
+                                    busWrappers[i].invertOutputBus();
+                                }
+                            }
+                            for (let i = 0; i < busUnwrappers.length; i++) {
+                                for (let j = 0; j < busUnwrappers[i].outputCount; j++) {
+                                    if (busUnwrappers[i].mouseOverOutput(j)) {
+                                        busUnwrappers[i].invertOutput(j);
+                                        let act = new Action('invBUOP', [i, j], null);
+                                        actionUndo.push(act);
+                                    }
+                                }
+                                if (busUnwrappers[i].mouseOverInvert()) {
+                                    busUnwrappers[i].invertInputBus();
                                 }
                             }
                             if (fullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
                                 toggleDiodeAndConpoint();
+                            }
+                            if (busFullCrossing(Math.round((mouseX / transform.zoom - transform.dx) / (GRIDSIZE / 2)) * (GRIDSIZE / 2), Math.round((mouseY / transform.zoom - transform.dy) / (GRIDSIZE / 2)) * (GRIDSIZE / 2))) {
+                                toggleBusConpoint();
                             }
                             for (let i = 0; i < inputs.length; i++) {
                                 if (inputs[i].mouseOver() && controlMode === 'modify') {
@@ -557,6 +650,14 @@ function mouseReleased() {
                         if (labelNumber >= 0) {
                             deleteLabel(labelNumber);
                         }
+                        let wrapperNumber = mouseOverBusWrapper();
+                        if (wrapperNumber >= 0) {
+                            deleteBusWrapper(wrapperNumber);
+                        }
+                        let unwrapperNumber = mouseOverBusUnwrapper();
+                        if (unwrapperNumber >= 0) {
+                            deleteBusUnwrapper(unwrapperNumber);
+                        }
                         let segDisNumber = mouseOverSegDisplay();
                         if (segDisNumber >= 0) {
                             deleteSegDisplay(segDisNumber);
@@ -564,6 +665,11 @@ function mouseReleased() {
                     }
                     if (wireMode === 'delete') { // A wire should be deleted
                         deleteWires();
+                        deleteBusses();
+                        pwWireX = null; // reset the preview wires
+                        pwWireY = null;
+                        wireMode = 'none';
+                        lockElements = false;
                     }
                     break;
                 case 'select':
@@ -663,6 +769,24 @@ function mouseOverDiode() {
 function mouseOverLabel() {
     for (var i = labels.length - 1; i >= 0; i--) {
         if (labels[i].mouseOver()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function mouseOverBusWrapper() {
+    for (var i = busWrappers.length - 1; i >= 0; i--) {
+        if (busWrappers[i].mouseOver()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function mouseOverBusUnwrapper() {
+    for (var i = busUnwrappers.length - 1; i >= 0; i--) {
+        if (busUnwrappers[i].mouseOver()) {
             return i;
         }
     }

@@ -1,10 +1,11 @@
 // File: conpoint.js
 
-function ConPoint(x, y, state, g) {
+function ConPoint(x, y, state, g, isBusConpoint = false) {
     this.x = x;
     this.y = y;
     this.state = state;
     this.group = g;
+    this.isBusConpoint = isBusConpoint;
 
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high
     this.lowColor = color(LRED, LGREEN, LBLUE);  // Color for low
@@ -40,5 +41,9 @@ ConPoint.prototype.show = function () {
     } else {
         fill(this.lowColor);
     }
-    rect(this.x - 3, this.y - 3, 7, 7);
+    if (!this.isBusConpoint) {
+        rect(this.x - 3, this.y - 3, 7, 7);
+    } else {
+        rect(this.x - 5, this.y - 5, 10, 10);
+    }
 };

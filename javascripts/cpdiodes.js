@@ -13,10 +13,15 @@ function deleteInvalidDiodes() {
 
 /*
     Deletes all conpoints that are not connected to three or more segments
+    Also marks bus conpoints as such
 */
 function deleteInvalidConpoints() {
     for (let j = conpoints.length - 1; j >= 0; j--) {
-        if (!tCrossing(conpoints[j].x, conpoints[j].y) && !fullCrossing(conpoints[j].x, conpoints[j].y)) {
+        if (tCrossing(conpoints[j].x, conpoints[j].y) || fullCrossing(conpoints[j].x, conpoints[j].y)) {
+            conpoints[j].isBusConpoint = false;
+        } else if (busTCrossing(conpoints[j].x, conpoints[j].y) || busFullCrossing(conpoints[j].x, conpoints[j].y)) {
+            conpoints[j].isBusConpoint = true;
+        } else {
             conpoints.splice(j, 1);
         }
     }
@@ -26,9 +31,9 @@ function deleteInvalidConpoints() {
     Creates a new connection point for group g at position x, y
     Only creates if not existing and no diode at the point
 */
-function createConpoint(x, y, state, g) {
+function createConpoint(x, y, state, g, isBusConpoint = false) {
     if (isConPoint(x, y) < 0) {
-        conpoints.push(new ConPoint(x, y, state, g));
+        conpoints.push(new ConPoint(x, y, state, g, isBusConpoint));
         return conpoints.length - 1;
     }
     return -1;
@@ -41,6 +46,19 @@ function fullCrossing(x, y) {
         if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && Math.min(wires[i].startY, wires[i].endY) == y) { // jshint ignore:line
             horFound = true;
         } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) < y && Math.max(wires[i].startY, wires[i].endY) > y && Math.min(wires[i].startX, wires[i].endX) == x) { // jshint ignore:line
+            verFound = true;
+        }
+    }
+    return (horFound && verFound);
+}
+
+function busFullCrossing(x, y) {
+    let horFound = false;
+    let verFound = false;
+    for (let i = 0; i < busses.length; i++) {
+        if (busses[i].direction === 0 && Math.min(busses[i].startX, busses[i].endX) < x && Math.max(busses[i].startX, busses[i].endX) > x && Math.min(busses[i].startY, busses[i].endY) == y) { // jshint ignore:line
+            horFound = true;
+        } else if (busses[i].direction === 1 && Math.min(busses[i].startY, busses[i].endY) < y && Math.max(busses[i].startY, busses[i].endY) > y && Math.min(busses[i].startX, busses[i].endX) == x) { // jshint ignore:line
             verFound = true;
         }
     }
@@ -62,6 +80,27 @@ function tCrossing(x, y) {
         if (wires[i].direction === 0 && Math.min(wires[i].startX, wires[i].endX) < x && Math.max(wires[i].startX, wires[i].endX) > x && Math.min(wires[i].startY, wires[i].endY) == y) { // jshint ignore:line
             horTightFound = true;
         } else if (wires[i].direction === 1 && Math.min(wires[i].startY, wires[i].endY) <= y && Math.max(wires[i].startY, wires[i].endY) >= y && Math.min(wires[i].startX, wires[i].endX) == x) { // jshint ignore:line
+            verLooseFound = true;
+        }
+    }
+    return ((horLooseFound && verTightFound) || (horTightFound && verLooseFound)) && !(horTightFound && verTightFound);
+}
+
+function busTCrossing(x, y) {
+    let horLooseFound = false;
+    let verLooseFound = false;
+    let horTightFound = false;
+    let verTightFound = false;
+    for (let i = 0; i < busses.length; i++) {
+        if (busses[i].direction === 0 && Math.min(busses[i].startX, busses[i].endX) <= x && Math.max(busses[i].startX, busses[i].endX) >= x && Math.min(busses[i].startY, busses[i].endY) == y) { // jshint ignore:line
+            horLooseFound = true;
+        } else if (busses[i].direction === 1 && Math.min(busses[i].startY, busses[i].endY) < y && Math.max(busses[i].startY, busses[i].endY) > y && Math.min(busses[i].startX, busses[i].endX) == x) { // jshint ignore:line
+            verTightFound = true;
+        }
+
+        if (busses[i].direction === 0 && Math.min(busses[i].startX, busses[i].endX) < x && Math.max(busses[i].startX, busses[i].endX) > x && Math.min(busses[i].startY, busses[i].endY) == y) { // jshint ignore:line
+            horTightFound = true;
+        } else if (busses[i].direction === 1 && Math.min(busses[i].startY, busses[i].endY) <= y && Math.max(busses[i].startY, busses[i].endY) >= y && Math.min(busses[i].startX, busses[i].endX) == x) { // jshint ignore:line
             verLooseFound = true;
         }
     }
@@ -155,6 +194,14 @@ function doConpoints() {
             createConpoint(wires[i].endX, wires[i].endY, false, -1);
         }
     }
+    for (let i = 0; i < busses.length; i++) {
+        if (busTCrossing(busses[i].startX, busses[i].startY)) {
+            createConpoint(busses[i].startX, busses[i].startY, false, -1, true);
+        }
+        if (busTCrossing(busses[i].endX, busses[i].endY)) {
+            createConpoint(busses[i].endX, busses[i].endY, false, -1, true);
+        }
+    }
     deleteInvalidDiodes();
     deleteInvalidConpoints();
 }
@@ -171,6 +218,8 @@ function showPreview(type, x, y) {
         case 'conpoint':
             rect(x - 3, y - 3, 7, 7);
             break;
+        case 'busConpoint':
+            rect(x - 5, y - 5, 10, 10);
         default:
     }
     scale(1 / transform.zoom);
@@ -197,4 +246,16 @@ function toggleDiodeAndConpoint() {
         }
     }
     reDraw();
+}
+
+function toggleBusConpoint() {
+    let cpIndex = isConPoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE);
+    if (cpIndex >= 0) {
+        deleteConpoint(cpIndex);
+    } else {
+        let newCp = createConpoint(Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE, Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE, false, -1, true);
+        if (newCp >= 0) {
+            pushUndoAction('addCp', [newCp], [conpoints[newCp]]);
+        }
+    }
 }

@@ -8,11 +8,14 @@ function buildJSON() {
     json.outputs = [];
     json.inputs = [];
     json.wires = [];
+    json.busses = [];
     json.conpoints = [];
     json.diodes = [];
     json.customs = [];
     json.labels = [];
     json.segDisplays = [];
+    json.busWrappers = [];
+    json.busUnwrappers = [];
     for (let i = 0; i < gates.length; i++) {
         json.gates.push(gates[i].getData());
     }
@@ -25,6 +28,9 @@ function buildJSON() {
     for (let i = 0; i < wires.length; i++) {
         json.wires.push(wires[i].getData());
     }
+    for (let i = 0; i < busses.length; i++) {
+        json.busses.push(busses[i].getData());
+    }
     for (let i = 0; i < conpoints.length; i++) {
         json.conpoints.push(conpoints[i].getData());
     }
@@ -36,6 +42,12 @@ function buildJSON() {
     }
     for (let i = 0; i < segDisplays.length; i++) {
         json.segDisplays.push(segDisplays[i].getData());
+    }
+    for (let i = 0; i < busWrappers.length; i++) {
+        json.busWrappers.push(busWrappers[i].getData());
+    }
+    for (let i = 0; i < busUnwrappers.length; i++) {
+        json.busUnwrappers.push(busUnwrappers[i].getData());
     }
     for (let i = 0; i < customs.length; i++) {
         if (customs[i].visible) {
@@ -118,11 +130,14 @@ function load(loadData) {
     outputs = [];
     inputs = [];
     wires = [];
+    busses = [];
     conpoints = [];
     customs = [];
     diodes = [];
     labels = [];
     segDisplays = [];
+    busWrappers = [];
+    busUnwrappers = [];
     transform = new Transformation(0, 0, 1);
     currentGridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
@@ -133,8 +148,8 @@ function load(loadData) {
         gates[i] = new LogicGate(JSON.parse(loadData.gates[i].x), JSON.parse(loadData.gates[i].y), JSON.parse(loadData.gates[i].direction),
             JSON.parse(loadData.gates[i].inputCount), JSON.parse(loadData.gates[i].outputCount), JSON.parse(loadData.gates[i].logicFunction));
         gates[i].setInvertions(JSON.parse(loadData.gates[i].inputsInv), JSON.parse(loadData.gates[i].outputsInv));
-        gates[i].setCoordinates(JSON.parse(loadData.gates[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.gates[i].y) / transform.zoom - transform.dy);
-        gates[i].updateClickBoxes();
+        gates[i].setCoordinates(JSON.parse(loadData.gates[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.gates[i].y) / transform.zoom - transform.dy); // Unnötig?
+        gates[i].updateClickBoxes(); // Unnötig?
     }
     for (let i = 0; i < loadData.outputs.length; i++) {
         outputs[i] = new Output(JSON.parse(loadData.outputs[i].x), JSON.parse(loadData.outputs[i].y), JSON.parse(loadData.outputs[i].colr));
@@ -163,22 +178,39 @@ function load(loadData) {
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
             if (loadData.wires[i].hasOwnProperty("y2")) {
-                let w = new Wire(1, parseInt(loadData.wires[i].x1), parseInt(loadData.wires[i].y1), false);
+                let w = new Wire(1, parseInt(loadData.wires[i].x1), parseInt(loadData.wires[i].y1));
                 w.endX = parseInt(loadData.wires[i].x1);
                 w.endY = parseInt(loadData.wires[i].y2);
                 wires.push(w);
             }
             if (loadData.wires[i].hasOwnProperty("x2")) {
-                let w = new Wire(0, parseInt(loadData.wires[i].x1), parseInt(loadData.wires[i].y1), false);
+                let w = new Wire(0, parseInt(loadData.wires[i].x1), parseInt(loadData.wires[i].y1));
                 w.endX = parseInt(loadData.wires[i].x2);
                 w.endY = parseInt(loadData.wires[i].y1);
                 wires.push(w);
             }
         }
     }
+    if (loadData.hasOwnProperty("busses")) {
+        for (let i = 0; i < loadData.busses.length; i++) {
+            if (loadData.busses[i].hasOwnProperty("y2")) {
+                let w = new Bus(1, parseInt(loadData.busses[i].x1), parseInt(loadData.busses[i].y1));
+                w.endX = parseInt(loadData.busses[i].x1);
+                w.endY = parseInt(loadData.busses[i].y2);
+                busses.push(w);
+            }
+            if (loadData.busses[i].hasOwnProperty("x2")) {
+                let w = new Bus(0, parseInt(loadData.busses[i].x1), parseInt(loadData.busses[i].y1));
+                w.endX = parseInt(loadData.busses[i].x2);
+                w.endY = parseInt(loadData.busses[i].y1);
+                busses.push(w);
+            }
+        }
+    }
     for (let i = 0; i < loadData.conpoints.length; i++) {
         conpoints[i] = new ConPoint(JSON.parse(loadData.conpoints[i].x), JSON.parse(loadData.conpoints[i].y), false, -1);
     }
+    deleteInvalidConpoints();
     for (let i = 0; i < loadData.diodes.length; i++) {
         diodes[i] = new Diode(JSON.parse(loadData.diodes[i].x), JSON.parse(loadData.diodes[i].y), false);
     }
@@ -189,7 +221,28 @@ function load(loadData) {
     }
     if (loadData.hasOwnProperty("segDisplays")) {
         for (let i = 0; i < loadData.segDisplays.length; i++) {
-            segDisplays[i] = new SegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), JSON.parse(loadData.segDisplays[i].inputCount));
+            if (loadData.segDisplays[i].hasOwnProperty("busversion")) {
+                segDisplays[i] = new BusSegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), JSON.parse(loadData.segDisplays[i].inputCount));
+            } else {
+                segDisplays[i] = new SegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), JSON.parse(loadData.segDisplays[i].inputCount));
+                segDisplays[i].setInvertions(JSON.parse(loadData.segDisplays[i].inputsInv)); // Set input invertions
+            }
+        }
+    }
+    if (loadData.hasOwnProperty("busWrappers")) {
+        for (let i = 0; i < loadData.busWrappers.length; i++) {
+            busWrappers[i] = new BusWrapper(JSON.parse(loadData.busWrappers[i].x), JSON.parse(loadData.busWrappers[i].y),
+                JSON.parse(loadData.busWrappers[i].direction), JSON.parse(loadData.busWrappers[i].inputCount));
+            busWrappers[i].setInvertions(JSON.parse(loadData.busWrappers[i].inputsInv));
+            busWrappers[i].busInverted = JSON.parse(loadData.busWrappers[i].busInverted);
+        }
+    }
+    if (loadData.hasOwnProperty("busUnwrappers")) {
+        for (let i = 0; i < loadData.busUnwrappers.length; i++) {
+            busUnwrappers[i] = new BusUnwrapper(JSON.parse(loadData.busUnwrappers[i].x), JSON.parse(loadData.busUnwrappers[i].y),
+                JSON.parse(loadData.busUnwrappers[i].direction), JSON.parse(loadData.busUnwrappers[i].outputCount));
+            busUnwrappers[i].setInvertions(JSON.parse(loadData.busUnwrappers[i].outputsInv));
+            busUnwrappers[i].busInverted = JSON.parse(loadData.busUnwrappers[i].busInverted);
         }
     }
     for (let i = 0; i < loadData.customs.length; i++) {
@@ -271,11 +324,11 @@ function loadCustom(loadData, num, hlparent) {
     if (loadData.hasOwnProperty("wires")) {
         for (let i = 0; i < loadData.wires.length; i++) {
             if (loadData.wires[i].hasOwnProperty("y2") && JSON.parse(loadData.wires[i].y1) !== JSON.parse(loadData.wires[i].y2)) {
-                params[WIRENUM][i] = new Wire(1, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1), false);
+                params[WIRENUM][i] = new Wire(1, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1));
                 params[WIRENUM][i].endX = JSON.parse(loadData.wires[i].x1);
                 params[WIRENUM][i].endY = JSON.parse(loadData.wires[i].y2);
             } else if (loadData.wires[i].hasOwnProperty("x2") && JSON.parse(loadData.wires[i].x1) !== JSON.parse(loadData.wires[i].x2)) {
-                params[WIRENUM][i] = new Wire(0, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1), false);
+                params[WIRENUM][i] = new Wire(0, JSON.parse(loadData.wires[i].x1), JSON.parse(loadData.wires[i].y1));
                 params[WIRENUM][i].endX = JSON.parse(loadData.wires[i].x2);
                 params[WIRENUM][i].endY = JSON.parse(loadData.wires[i].y1);
             }

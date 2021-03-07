@@ -5,7 +5,6 @@ function Group() {
     this.outputGates = [];
     this.inputPorts = [];
     this.outputPorts = [];
-    this.outputStates = [];
 
     this.wires = [];
 

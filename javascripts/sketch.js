@@ -11,6 +11,9 @@ let customs = []; // List of custom objects
 let wires = []; // List of wires
 let labels = []; // List of text labels
 let segDisplays = []; // List of 7-segment displays
+let busses = [];
+let busWrappers = [];
+let busUnwrappers = [];
 
 let sevenSegmentBits = 4; // Number of bits for new 7-segment displays
 let counterBitWidth = 2; // Output width of counter objects
@@ -31,6 +34,8 @@ let selLabelIndizes = [];
 let selSegDisplayIndizes = [];
 let selCustomIndizes = [];
 let selConpointIndizes = [];
+let selBusWrappersIndizes = [];
+let selBusUnwrappersIndizes = [];
 
 let copiedElements = [];
 let selectionIsCopied = false;
@@ -51,6 +56,13 @@ let wirePreviewStartY = 0;
 */
 let groups = [];
 
+let busGroups = [];
+
+let busInsert = false;
+
+let busWrapperWidth = 4;
+
+let busVersions = false;
 /*
     Current size of the grid in pixels, scaled to the current zoom level
 */
@@ -113,6 +125,7 @@ let selectionStartPosY = 0;
 
 let selectionLog = [];
 let deleteLog = [];
+let busLog = [];
 
 let sDragX1 = 0;
 let sDragX2 = 0;
@@ -273,11 +286,11 @@ let topSketchInput, importButton, saveButton, downloadButton, dashboardButton, s
 
 let andButton, orButton, xorButton, bufferButton, notButton, switchButton, buttonButton, clockButton, outputButton, labelButton, displayButton; // Standard element buttons
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, rsClockedButton, tFlipFlopButton,
-    registerButton, muxButton, demuxButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
+    registerButton, muxButton, demuxButton, unwrapperButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
 let labelOptions, labelSimulation, labelGateInputs, labelDirection, labelDisplay, labelOutputWidth,
-    labelInputWidth, tickTimeLabel, tickTimeMsLabel, multiplierValueLabel; // Left side labels
+    labelInputWidth, tickTimeLabel, tickTimeMsLabel, multiplierValueLabel, busCheckboxLabel; // Left side labels
 
-let gateInputSelect, directionSelect, displaySelect, counterBitSelect, decoderBitSelect, multiplexerBitSelect; // Options elements
+let gateInputSelect, directionSelect, displaySelect, counterBitSelect, decoderBitSelect, multiplexerBitSelect, wrapperWidthSelect, busCheckbox; // Options elements
 
 let tickTimeSlider, bypassCheckbox, bypassLabel, syncFPSCheckbox, syncFPSLabel, multiplierSlider, multiplierLabel; // Simulation options elements
 
@@ -300,6 +313,8 @@ let tickTime = 10;
 let tourStep = 0;
 
 let idMatchRef = null;
+
+let updateNo = 1;
 
 /*
     Disable some error messages from p5
@@ -327,6 +342,10 @@ function setup() { // jshint ignore:line
     initModuleCanvas();
 
     document.title = 'LogiJS: Untitled Sketch';
+
+    if (localStorage.getItem('showupdate') !== 'update' + updateNo) {
+        document.getElementById('update-dialog').style.display = 'inline-block';
+    }
 
     linkElementsFromDOM();
     addElementHelpTexts();
@@ -483,6 +502,9 @@ function hideAllOptions() {
     labelOutputWidth.style.display = 'none';
     decoderBitSelect.style.display = 'none';
     multiplexerBitSelect.style.display = 'none';
+    wrapperWidthSelect.style.display = 'none';
+    busCheckbox.style.display = 'none';
+    busCheckboxLabel.style.display = 'none';
     labelInputWidth.style.display = 'none';
     labelOptions.style.display = 'none';
     labelSimulation.style.display = 'none';
@@ -525,6 +547,8 @@ function setUnactive() {
     displayButton.classList.remove('active');
     counterButton.classList.remove('active');
     decoderButton.classList.remove('active');
+    wrapperButton.classList.remove('active');
+    unwrapperButton.classList.remove('active');
     dFlipFlopButton.classList.remove('active');
     rsFlipFlopButton.classList.remove('active');
     jkFlipFlopButton.classList.remove('active');
@@ -611,6 +635,28 @@ function newDecoderBitLength() {
             inputs: decoderBitWidth,
             outputs: Math.pow(2, decoderBitWidth)
         });
+    }
+}
+
+function newBusWrapperWidth() {
+    busWrapperWidth = parseInt(wrapperWidthSelect.value);
+    if (addType === 12) {
+        busUnwrapperClicked();
+    } else if (addType === 13) {
+        busWrapperClicked();
+    }
+}
+
+function useBusVersionsChanged() {
+    busVersions = busCheckbox.checked;
+    if (!busVersions) {
+        if (addType === 8) { // 7-segment display
+            setPreviewElement(false, {}, '7-segment');
+        }
+    } else {
+        if (addType === 8) { // 7-segment display
+            setPreviewElement(false, {}, '7-segment-bus');
+        }
     }
 }
 
@@ -865,10 +911,16 @@ function displayClicked(dontToggle = false) {
         displayButton.classList.add('active');
         setControlMode('addObject');
         addType = 8; // segDisplay
-        setPreviewElement(false, {}, '7-segment');
+        if (!busVersions) {
+            setPreviewElement(false, {}, '7-segment');
+        } else {
+            setPreviewElement(false, {}, '7-segment-bus');
+        }
         displaySelect.style.display = 'inline-block';
         labelDisplay.style.display = 'inline-block';
         labelOptions.style.display = 'block';
+        busCheckbox.style.display = 'inline-block';
+        busCheckboxLabel.style.display = 'inline-block';
     }
 }
 
@@ -955,7 +1007,7 @@ function addWires() {
             if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 0 && pwWireX.startY === wires[i].startY &&
                 (pwWireX.startX == wires[i].endX || pwWireX.startX == wires[i].startX || pwWireX.endX == wires[i].startX || pwWireX.endX == wires[i].endX))) { //jshint ignore:line
                 if (xIndex >= 0) {
-                    let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY, false);
+                    let newWire = new Wire(0, Math.min(wires[xIndex].startX, wires[i].startX), wires[xIndex].startY);
                     newWire.endX = Math.max(wires[xIndex].endX, wires[i].endX);
                     newWire.endY = wires[xIndex].startY;
                     if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
@@ -967,7 +1019,7 @@ function addWires() {
                         overlapOverAllX = true;
                     }
                 } else {
-                    let newWire = new Wire(0, Math.min(pwWireX.startX, wires[i].startX), pwWireX.startY, false);
+                    let newWire = new Wire(0, Math.min(pwWireX.startX, wires[i].startX), pwWireX.startY);
                     newWire.endX = Math.max(pwWireX.endX, wires[i].endX);
                     newWire.endY = pwWireX.startY;
                     if (newWire.startX !== wires[i].startX || newWire.endX !== wires[i].endX) {
@@ -983,7 +1035,7 @@ function addWires() {
         }
 
         if (xIndex < 0 && !overlapOverAllX) {
-            let newWire = new Wire(0, pwWireX.startX, pwWireX.startY, false);
+            let newWire = new Wire(0, pwWireX.startX, pwWireX.startY);
             newWire.endX = pwWireX.endX;
             newWire.endY = pwWireX.startY;
             editLog.push(['a', wires.length, newWire]);
@@ -999,7 +1051,7 @@ function addWires() {
             if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (wires[i].direction === 1 && pwWireY.startX === wires[i].startX &&
                 (pwWireY.startY == wires[i].endY || pwWireY.startY == wires[i].startY || pwWireY.endY == wires[i].startY || pwWireY.endY == wires[i].endY))) { //jshint ignore:line
                 if (yIndex >= 0) {
-                    let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY), false);
+                    let newWire = new Wire(1, wires[yIndex].startX, Math.min(wires[yIndex].startY, wires[i].startY));
                     newWire.endX = wires[yIndex].startX;
                     newWire.endY = Math.max(wires[yIndex].endY, wires[i].endY);
                     if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
@@ -1011,7 +1063,7 @@ function addWires() {
                         overlapOverAllY = true;
                     }
                 } else {
-                    let newWire = new Wire(1, pwWireY.startX, Math.min(pwWireY.startY, wires[i].startY), false);
+                    let newWire = new Wire(1, pwWireY.startX, Math.min(pwWireY.startY, wires[i].startY));
                     newWire.endX = pwWireY.startX;
                     newWire.endY = Math.max(pwWireY.endY, wires[i].endY);
                     if (newWire.startY !== wires[i].startY || newWire.endY !== wires[i].endY) {
@@ -1027,7 +1079,7 @@ function addWires() {
         }
 
         if (yIndex < 0 && !overlapOverAllY) {
-            let newWire = new Wire(1, pwWireY.startX, pwWireY.startY, false);
+            let newWire = new Wire(1, pwWireY.startX, pwWireY.startY);
             newWire.endX = pwWireY.startX;
             newWire.endY = pwWireY.endY;
             editLog.push(['a', wires.length, newWire]);
@@ -1045,6 +1097,126 @@ function addWires() {
         doConpoints();
         let conpointsAfter = _.cloneDeep(conpoints);
         pushUndoAction('addWire', [], [_.cloneDeep(editLog), conpointsBefore, conpointsAfter]); // push the action for undoing
+        wireMode = 'hold';
+    } else {
+        wireMode = 'none';
+    }
+
+    lockElements = false;
+    pwWireX = null;
+    pwWireY = null;
+}
+
+function addBusses() {
+    let pushed = false; // True, when wires have been changed in any way
+
+    // These are set true when a preview wire in that direction is 100% part of the existing wire
+    let overlapOverAllX = false;
+    let overlapOverAllY = false;
+
+    let xIndex = -1;
+    let yIndex = -1;
+
+    let deletedIndices = [];
+
+    let editLog = [];
+
+    if (pwWireX !== null) {
+        for (let i = 0; i < busses.length; i++) {
+            let overlap = wireOverlap(pwWireX, busses[i]);
+            if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (busses[i].direction === 0 && pwWireX.startY === busses[i].startY &&
+                (pwWireX.startX == busses[i].endX || pwWireX.startX == busses[i].startX || pwWireX.endX == busses[i].startX || pwWireX.endX == busses[i].endX))) { //jshint ignore:line
+                if (xIndex >= 0) {
+                    let newWire = new Bus(0, Math.min(busses[xIndex].startX, busses[i].startX), busses[xIndex].startY);
+                    newWire.endX = Math.max(busses[xIndex].endX, busses[i].endX);
+                    newWire.endY = busses[xIndex].startY;
+                    if (newWire.startX !== busses[i].startX || newWire.endX !== busses[i].endX) {
+                        editLog.push(['r', xIndex, busses[xIndex], newWire]);
+                        busses.splice(xIndex, 1, newWire);
+                        pushed = true;
+                        deletedIndices.push(i);
+                    } else {
+                        overlapOverAllX = true;
+                    }
+                } else {
+                    let newWire = new Bus(0, Math.min(pwWireX.startX, busses[i].startX), pwWireX.startY);
+                    newWire.endX = Math.max(pwWireX.endX, busses[i].endX);
+                    newWire.endY = pwWireX.startY;
+                    if (newWire.startX !== busses[i].startX || newWire.endX !== busses[i].endX) {
+                        editLog.push(['r', i, busses[i], newWire]);
+                        busses.splice(i, 1, newWire);
+                        pushed = true;
+                        xIndex = i;
+                    } else {
+                        overlapOverAllX = true;
+                    }
+                }
+            }
+        }
+
+        if (xIndex < 0 && !overlapOverAllX) {
+            let newWire = new Bus(0, pwWireX.startX, pwWireX.startY);
+            newWire.endX = pwWireX.endX;
+            newWire.endY = pwWireX.startY;
+            editLog.push(['a', busses.length, newWire]);
+            busses.push(newWire);
+            pushed = true;
+        }
+    }
+
+    if (pwWireY !== null) {
+        for (let i = 0; i < busses.length; i++) {
+            let overlap = wireOverlap(pwWireY, busses[i]);
+            // If there's an overlap or the busses are adjacent
+            if ((overlap[0] !== overlap[2] || overlap[1] !== overlap[3]) || (busses[i].direction === 1 && pwWireY.startX === busses[i].startX &&
+                (pwWireY.startY == busses[i].endY || pwWireY.startY == busses[i].startY || pwWireY.endY == busses[i].startY || pwWireY.endY == busses[i].endY))) { //jshint ignore:line
+                if (yIndex >= 0) {
+                    let newWire = new Bus(1, busses[yIndex].startX, Math.min(busses[yIndex].startY, busses[i].startY));
+                    newWire.endX = busses[yIndex].startX;
+                    newWire.endY = Math.max(busses[yIndex].endY, busses[i].endY);
+                    if (newWire.startY !== busses[i].startY || newWire.endY !== busses[i].endY) {
+                        editLog.push(['r', yIndex, busses[yIndex], newWire]);
+                        busses.splice(yIndex, 1, newWire);
+                        pushed = true;
+                        deletedIndices.push(i);
+                    } else {
+                        overlapOverAllY = true;
+                    }
+                } else {
+                    let newWire = new Bus(1, pwWireY.startX, Math.min(pwWireY.startY, busses[i].startY));
+                    newWire.endX = pwWireY.startX;
+                    newWire.endY = Math.max(pwWireY.endY, busses[i].endY);
+                    if (newWire.startY !== busses[i].startY || newWire.endY !== busses[i].endY) {
+                        editLog.push(['r', i, busses[i], newWire]);
+                        busses.splice(i, 1, newWire);
+                        pushed = true;
+                        yIndex = i;
+                    } else {
+                        overlapOverAllY = true;
+                    }
+                }
+            }
+        }
+
+        if (yIndex < 0 && !overlapOverAllY) {
+            let newWire = new Bus(1, pwWireY.startX, pwWireY.startY);
+            newWire.endX = pwWireY.startX;
+            newWire.endY = pwWireY.endY;
+            editLog.push(['a', busses.length, newWire]);
+            busses.push(newWire);
+            pushed = true;
+        }
+    }
+
+    for (let i = deletedIndices.length - 1; i >= 0; i--) {
+        editLog.push(['d', deletedIndices[i], busses.splice(deletedIndices[i], 1)[0]]);
+    }
+
+    if (pushed) {
+        let conpointsBefore = _.cloneDeep(conpoints);
+        doConpoints();
+        let conpointsAfter = _.cloneDeep(conpoints);
+        pushUndoAction('addBus', [], [_.cloneDeep(editLog), conpointsBefore, conpointsAfter]); // push the action for undoing
         wireMode = 'hold';
     } else {
         wireMode = 'none';
@@ -1151,6 +1323,21 @@ function addSegDisplay(bits) {
     reDraw();
 }
 
+function addBusSegDisplay(bits) {
+    for (var i = 0; i < segDisplays.length; i++) {
+        if ((segDisplays[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (segDisplays[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            return;
+        }
+    }
+    var newDisplay = new BusSegmentDisplay(mouseX, mouseY, bits);
+    newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    newDisplay.updateClickBoxes();
+    segDisplays.push(newDisplay);
+    pushUndoAction('addSegDis', [segDisplays.length - 1], [newDisplay]);
+    reDraw();
+}
+
 /*
     Adds a new input (switch, button or clock)
 */
@@ -1192,6 +1379,42 @@ function addLabel() {
     newLabel.updateClickBox();
     labels.push(newLabel);
     pushUndoAction('addLabel', [labels.length - 1], [newLabel]);
+    reDraw();
+}
+
+/*
+    Adds a bus wrapper
+*/
+function addBusWrapper(bits, direction) {
+    for (var i = 0; i < busWrappers.length; i++) {
+        if ((busWrappers[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (busWrappers[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            return;
+        }
+    }
+    var newElement = new BusWrapper(mouseX, mouseY, direction, bits);
+    newElement.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    newElement.updateClickBoxes();
+    busWrappers.push(newElement);
+    pushUndoAction('addBusWrapper', [busWrappers.length - 1], [newElement]);
+    reDraw();
+}
+
+/*
+    Adds a bus unwrapper
+*/
+function addBusUnwrapper(bits, direction) {
+    for (var i = 0; i < busUnwrappers.length; i++) {
+        if ((busUnwrappers[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (busUnwrappers[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            return;
+        }
+    }
+    var newElement = new BusUnwrapper(mouseX, mouseY, direction, bits);
+    newElement.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    newElement.updateClickBoxes();
+    busUnwrappers.push(newElement);
+    pushUndoAction('addBusUnwrapper', [busUnwrappers.length - 1], [newElement]);
     reDraw();
 }
 
@@ -1291,11 +1514,81 @@ function deleteWires() {
         let conpointsAfter = _.cloneDeep(conpoints);
         pushUndoAction('delWire', [deletedDiodesIndices], [editLog, conpointsBefore, conpointsAfter, deletedDiodes]);
     }
+}
 
-    pwWireX = null; // reset the preview wires
-    pwWireY = null;
-    wireMode = 'none';
-    lockElements = false;
+function deleteBusses() {
+    let changes = false;
+
+    let newBussesList = [];
+    let replaceIndices = [];
+    let deletedIndices = [];
+
+    let editLog = [];
+
+    if (pwWireX !== null) {
+        for (let i = 0; i < busses.length; i++) {
+            let overlap = wireOverlap(pwWireX, busses[i]);
+            let newBusses = removeFromBus(busses[i], overlap, i);
+            if (newBusses !== false) {
+                deletedIndices.push(i);
+                changes = true;
+                if (newBusses.length >= 1) {
+                    newBussesList.push(newBusses);
+                    replaceIndices.push(i);
+                }
+            }
+        }
+    }
+
+    if (pwWireY !== null) {
+        for (let i = 0; i < busses.length; i++) {
+            let overlap = wireOverlap(pwWireY, busses[i]);
+            let newBusses = removeFromBus(busses[i], overlap, i);
+            if (newBusses !== false) {
+                deletedIndices.push(i);
+                changes = true;
+                if (newBusses.length >= 1) {
+                    newBussesList.push(newBusses);
+                    replaceIndices.push(i);
+                }
+            }
+        }
+    }
+
+    let lengthBeforeDelete = busses.length;
+
+    /*
+        delete all busses that should be removed
+    */
+    for (let i = busses.length - 1; i >= 0; i--) {
+        if (deletedIndices.indexOf(i) >= 0) {
+            editLog.push(['d', i, busses.splice(i, 1)[0]]);
+        }
+    }
+
+    /*
+        Add all newly created busses
+    */
+    for (let i = 0; i < lengthBeforeDelete; i++) {
+        if (deletedIndices.indexOf(i) >= 0) {
+            if (replaceIndices.indexOf(i) >= 0) {
+                let newBusses = newBussesList.pop();
+                for (let j = 0; j < newBusses.length; j++) {
+                    if (newBusses[j].startX !== newBusses[j].endX || newBusses[j].startY !== newBusses[j].endY) {
+                        editLog.push(['a', i + j, newBusses[j]]);
+                        busses.splice(i + j, 0, newBusses[j]);
+                    }
+                }
+            }
+        }
+    }
+
+    if (changes) { // only push an undo action when changes have been made to the busses
+        let conpointsBefore = _.cloneDeep(conpoints);
+        doConpoints();
+        let conpointsAfter = _.cloneDeep(conpoints);
+        pushUndoAction('delBus', [], [editLog, conpointsBefore, conpointsAfter]);
+    }
 }
 
 /*
@@ -1351,6 +1644,16 @@ function deleteLabel(labelNumber) {
     reDraw();
 }
 
+function deleteBusWrapper(wrapperNumber) {
+    pushUndoAction('delBusWrapper', [wrapperNumber], busWrappers.splice(wrapperNumber, 1));
+    reDraw();
+}
+
+function deleteBusUnwrapper(unwrapperNumber) {
+    pushUndoAction('delBusUnwrapper', [unwrapperNumber], busUnwrappers.splice(unwrapperNumber, 1));
+    reDraw();
+}
+
 /*
     Deletes the given 7-segment display
 */
@@ -1377,10 +1680,13 @@ function startSimulation() {
     hideAllOptions();
     toolbox.style.display = 'none';
     customButton.style.display = 'none';
+    document.getElementsByClassName('switch-field')[0].style.display = 'none';
 
     // Parse all wire groups and attach the components
     parseGroups();
     integrateElements();
+    parseBusGroups();
+    integrateBusElements();
 
     // Reset all clocks
     for (const elem of inputs) {
@@ -1441,13 +1747,21 @@ function endSimulation() {
 
         toolbox.style.display = 'inline-block';
         customButton.style.display = 'block';
+        document.getElementsByClassName('switch-field')[0].style.display = 'flex';
 
         groups = []; // Reset the groups, as they are regenerated when starting again
+        busGroups = [];
         for (const elem of gates) {
             elem.shutdown(); // Tell all the gates to leave the simulation mode
         }
         for (const elem of customs) {
             elem.setSimRunning(false); // Shutdown all custom elements
+        }
+        for (const elem of busWrappers) {
+            elem.shutdown(); // Shutdown all bus unwrappers
+        }
+        for (const elem of busUnwrappers) {
+            elem.shutdown(); // Shutdown all bus unwrappers
         }
         for (const elem of segDisplays) {
             elem.shutdown();
@@ -1467,6 +1781,10 @@ function endSimulation() {
         }
         for (const elem of wires) {
             elem.setState(false);
+        }
+        for (const elem of busses) {
+            elem.busWidthSet = false;
+            elem.showBusMarker = false;
         }
 
         simRunning = false;
@@ -1624,6 +1942,8 @@ function configureButtons(mode) {
     demuxButton.disabled = tools;
     dFlipFlopButton.disabled = tools;
     jkFlipFlopButton.disabled = tools;
+    wrapperButton.disabled = tools;
+    unwrapperButton.disabled = tools;
     rsClockedButton.disabled = tools;
     tFlipFlopButton.disabled = tools;
     rsFlipFlopButton.disabled = tools;
@@ -1686,12 +2006,24 @@ function updateTick(rec = true) {
         }
     }
 
+    for (const value of busWrappers) {
+        value.update();
+    }
+
+    for (const value of busUnwrappers) {
+        value.update();
+    }
+
     // Update all wire groups
     updateGroups();
 
+    updateBusGroups();
+
     // Update all connection points to adopt the state of their wire group
     for (const value of conpoints) {
-        value.state = groups[value.group].state;
+        if (!value.isBusConpoint) {
+            value.state = groups[value.group].state;
+        }
     }
 
     // Update all self-toggling input elements (buttons and clocks)
@@ -1792,9 +2124,15 @@ function showElements() {
         for (const elem of groups) {
             elem.show();
         }
+        for (const elem of busGroups) {
+            elem.show();
+        }
     } else {
         for (let i = 0; i < wires.length; i++) {
             wires[i].show(false, i);
+        }
+        for (let i = 0; i < busses.length; i++) {
+            busses[i].show(false, i);
         }
     }
 
@@ -1811,6 +2149,20 @@ function showElements() {
             if (elem.visible) {
                 elem.show();
             }
+        }
+    }
+
+    if (busWrappers.length > 0) {
+        textFont('Arial');
+        for (const elem of busWrappers) {
+            elem.show();
+        }
+    }
+
+    if (busUnwrappers.length > 0) {
+        textFont('Arial');
+        for (const elem of busUnwrappers) {
+            elem.show();
         }
     }
 
@@ -1872,6 +2224,12 @@ function updateGroups() {
     }
 }
 
+function updateBusGroups() {
+    for (var i = 0; i < busGroups.length; i++) {
+        busGroups[i].updateAll();
+    }
+}
+
 /*
     Check if a key was pressed and act accordingly
 */
@@ -1885,7 +2243,7 @@ function keyPressed() {
         closeScreenshotClicked();
         return;
     }
-    
+
     if ((saveDialog || moduleOptions) && keyCode === ESCAPE) {
         enterModifierMode();
     }
@@ -1920,7 +2278,10 @@ function keyPressed() {
                 //let img  = canvas.toDataURL("image/png");
                 //document.write('<img src="'+img+'"/>');
                 //console.log(customs);
-                idMatchRef = _.cloneDeep(wires);
+                //idMatchRef = _.cloneDeep(wires);
+                //busGroups[0].states = [false, true, false, true];
+                //busGroups[0].states = [true, true, false, false, true, false, true, false];
+                console.log(busses);
                 break;
             case 32: // Space
                 if (simRunning) {
@@ -1930,6 +2291,17 @@ function keyPressed() {
                     deleteClicked();
                 } else {
                     enterModifierMode();
+                }
+                break;
+            case 66: // B / Switch between bus and wire
+                if (busInsert) {
+                    busInsert = false;
+                    document.getElementById('radio-one').checked = true;
+                    document.getElementById('radio-two').checked = false;
+                } else {
+                    busInsert = true;
+                    document.getElementById('radio-one').checked = false;
+                    document.getElementById('radio-two').checked = true;
                 }
                 break;
             case 86: // V
