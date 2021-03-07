@@ -60,7 +60,7 @@ let busGroups = [];
 
 let busInsert = false;
 
-let busWrapperWidth = 4;
+let busWrapperWidth = 2;
 
 let busVersions = false;
 /*
