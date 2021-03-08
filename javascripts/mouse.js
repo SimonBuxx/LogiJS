@@ -98,7 +98,7 @@ function updateCursors() {
                     }
                 }
                 for (const elem of segDisplays) {
-                    if (!elem.id.useBusInput) {
+                    if (!elem.useBusInput) {
                         for (const e of elem.inputClickBoxes) {
                             if (e.mouseOver()) {
                                 hand = true;
@@ -107,6 +107,11 @@ function updateCursors() {
                                 negPort = e;
                                 isOutput = false;
                             }
+                        }
+                    } else {
+                        if (elem.invertClickBox.mouseOver()) {
+                            hand = true;
+                            cursor(HAND);
                         }
                     }
                 }
@@ -536,6 +541,10 @@ function mouseReleased() {
                                             let act = new Action('invDIP', [i, j], null);
                                             actionUndo.push(act);
                                         }
+                                    }
+                                } else {
+                                    if (segDisplays[i].mouseOverInvert()) {
+                                        segDisplays[i].invertInputBus();
                                     }
                                 }
                             }

@@ -22,6 +22,7 @@ function SegmentDisplay(x, y, bits, useBusInput = false) {
     this.gClickBox = new ClickBox(this.x + GRIDSIZE / 2, this.y, this.w - GRIDSIZE, this.h, transform);
     this.inputClickBoxes = [];
     this.busInputClickBox = new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, transform);
+    this.invertClickBox = new ClickBox(0, 0, IOCBSIZE, IOCBSIZE, transform);
 
     this.inputs = Array(bits).fill(false);     // Vector of the input states
     this.ipset = Array(bits).fill(false);      // set to true if the input was set
@@ -29,6 +30,8 @@ function SegmentDisplay(x, y, bits, useBusInput = false) {
     this.inputsInv = Array(bits).fill(false);  // true, if input is inverted
 
     this.value = 0; // Decimal input value
+
+    this.busInverted = false;
 
     this.id = 's' + Date.now() + Math.random();
 
@@ -126,9 +129,15 @@ SegmentDisplay.prototype.updateClickBoxes = function () {
     this.busInputClickBox.updatePosition(this.x + GRIDSIZE, this.y + this.h);
     this.busInputClickBox.setTransform(transform);
 
+    this.invertClickBox.updatePosition(this.x + this.w - GRIDSIZE / 2 - 10, this.y + this.h - 10);
+
     this.gClickBox.updatePosition(this.x + this.w / 2, this.y + this.h / 2);
     this.gClickBox.updateSize(this.w - GRIDSIZE, this.h);
     this.gClickBox.setTransform(transform);
+};
+
+SegmentDisplay.prototype.invertInputBus = function () {
+    this.busInverted = !this.busInverted;
 };
 
 /*
@@ -149,6 +158,10 @@ SegmentDisplay.prototype.mouseOverInput = function (n = 0) {
     }
 };
 
+SegmentDisplay.prototype.mouseOverInvert = function () {
+    return this.invertClickBox.mouseOver();
+};
+
 SegmentDisplay.prototype.pointInInput = function (n = 0, px, py) {
     if (!this.useBusInput) {
         return this.inputClickBoxes[n].checkPoint(px, py);
@@ -166,6 +179,10 @@ SegmentDisplay.prototype.update = function () {
             if (!this.ipset[i]) {
                 this.inputs[i] = this.inputsInv[i];
             }
+        }
+    } else {
+        if (this.busInverted) {
+            this.inputs = (this.busInverted) ? this.inputs.slice(this.inputs.length - this.inputCount, this.inputs.length).reverse() : this.inputs.slice(this.inputs.length - this.inputCount, this.inputs.length);
         }
     }
 
@@ -221,6 +238,8 @@ SegmentDisplay.prototype.show = function () {
     txt += this.value.toString();
     text(txt, this.x + this.w / 2, this.y + this.h / 2 - 3);
 
+    textFont('Arial');
+
     if (!this.useBusInput) {
         // Draw inputs
         for (let i = 1; i <= this.inputCount; i++) {
@@ -256,7 +275,6 @@ SegmentDisplay.prototype.show = function () {
             }
             noStroke();
             textSize(14);
-            textFont('Arial');
 
             if (this.inputCount - i < 10) {
                 text('2' + superscripts[this.inputCount - i], this.x1, this.y1 - 10);
@@ -271,12 +289,17 @@ SegmentDisplay.prototype.show = function () {
         text(this.inputCount, this.x1 + 15, this.y1 + 10);
 
         textSize(10);
-        textFont('Arial');
+        if (this.busInverted) {
+            text('[0:' + (this.inputCount - 1) + ']', this.x1, this.y1 - 10);
+        } else {
+            text('[' + (this.inputCount - 1) + ':0]', this.x1, this.y1 - 10);
+        }
 
-        text('[' + (this.inputCount - 1) + ':0]', this.x1, this.y1 - 10);
+        textSize(14);
+        textAlign(LEFT, BOTTOM);
+    
+        text('↺', this.x + this.w - GRIDSIZE / 2 - 16, this.y + this.h - 3);
     }
-
-
 
     // TEMP: Show clickboxes of inputs
     /*for (let i = 0; i < this.inputClickBoxes.length; i++) {

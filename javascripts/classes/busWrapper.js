@@ -121,7 +121,7 @@ BusWrapper.prototype.setInput = function (port = 0, s) {
 
 BusWrapper.prototype.invertOutputBus = function () {
     this.busInverted = !this.busInverted;
-}
+};
 
 /*
     Gives the output vector of the logic function
@@ -232,7 +232,7 @@ BusWrapper.prototype.pointInInput = function (n, px, py) {
 
 BusWrapper.prototype.mouseOverInvert = function () {
     return this.invertClickBox.mouseOver();
-}
+};
 
 /*
     Draws the wrapper on the screen
