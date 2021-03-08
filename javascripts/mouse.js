@@ -98,7 +98,7 @@ function updateCursors() {
                     }
                 }
                 for (const elem of segDisplays) {
-                    if (!elem.id.endsWith('b')) {
+                    if (!elem.id.useBusInput) {
                         for (const e of elem.inputClickBoxes) {
                             if (e.mouseOver()) {
                                 hand = true;
@@ -364,11 +364,12 @@ function mouseClicked() {
                             break;
                         case 8: // add 7-segment display
                             if (mouseButton === LEFT) {
-                                if (busVersions) {
+                                addSegDisplay(sevenSegmentBits);
+                                /*if (busVersions) {
                                     addBusSegDisplay(sevenSegmentBits);
                                 } else {
                                     addSegDisplay(sevenSegmentBits);
-                                }
+                                }*/
                                 setTimeout(reDraw, 50);
                             }
                             break;
@@ -528,7 +529,7 @@ function mouseReleased() {
                                 }
                             }
                             for (let i = 0; i < segDisplays.length; i++) {
-                                if (!segDisplays[i].id.endsWith('b')) {
+                                if (!segDisplays[i].useBusInput) {
                                     for (let j = 0; j < segDisplays[i].inputCount; j++) {
                                         if (segDisplays[i].mouseOverInput(j)) {
                                             segDisplays[i].invertInput(j);

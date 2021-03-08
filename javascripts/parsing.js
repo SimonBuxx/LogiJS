@@ -349,7 +349,7 @@ function integrateElements() {
     }
 
     for (let j = 0; j < segDisplays.length; j++) {
-        if (!segDisplays[j].id.endsWith('b')) {
+        if (!segDisplays[j].useBusInput) {
             for (let k = 0; k < segDisplays[j].inputCount; k++) {
                 let inputWires = wirePoints(segDisplays[j].inputClickBoxes[k].x, segDisplays[j].inputClickBoxes[k].y, -1);
                 if (inputWires.length > 0) {
@@ -438,8 +438,8 @@ function integrateBusElements() {
     }*/
 
     for (let j = 0; j < segDisplays.length; j++) {
-        if (segDisplays[j].id.endsWith('b')) {
-            let inputBusses = busPoints(segDisplays[j].inputClickBox.x, segDisplays[j].inputClickBox.y, -1);
+        if (segDisplays[j].useBusInput) {
+            let inputBusses = busPoints(segDisplays[j].busInputClickBox.x, segDisplays[j].busInputClickBox.y, -1);
             if (inputBusses.length > 0) {
                 busGroups[busses[inputBusses[0]].group].addInput(segDisplays[j], 0);
                 if (segDisplays[j].inputCount > busGroups[busses[inputBusses[0]].group].busWidth) {

@@ -222,9 +222,12 @@ function load(loadData) {
     if (loadData.hasOwnProperty("segDisplays")) {
         for (let i = 0; i < loadData.segDisplays.length; i++) {
             if (loadData.segDisplays[i].hasOwnProperty("busversion")) {
-                segDisplays[i] = new BusSegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), JSON.parse(loadData.segDisplays[i].inputCount));
+                segDisplays[i] = new SegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), JSON.parse(loadData.segDisplays[i].inputCount), JSON.parse(loadData.segDisplays[i].busversion));
+                if (loadData.segDisplays[i].hasOwnProperty("inputsInv")) {
+                    segDisplays[i].setInvertions(JSON.parse(loadData.segDisplays[i].inputsInv)); // Set input invertions
+                }
             } else {
-                segDisplays[i] = new SegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), JSON.parse(loadData.segDisplays[i].inputCount));
+                segDisplays[i] = new SegmentDisplay(JSON.parse(loadData.segDisplays[i].x), JSON.parse(loadData.segDisplays[i].y), JSON.parse(loadData.segDisplays[i].inputCount), false);
                 segDisplays[i].setInvertions(JSON.parse(loadData.segDisplays[i].inputsInv)); // Set input invertions
             }
         }

@@ -1315,22 +1315,7 @@ function addSegDisplay(bits) {
             return;
         }
     }
-    var newDisplay = new SegmentDisplay(mouseX, mouseY, bits);
-    newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    newDisplay.updateClickBoxes();
-    segDisplays.push(newDisplay);
-    pushUndoAction('addSegDis', [segDisplays.length - 1], [newDisplay]);
-    reDraw();
-}
-
-function addBusSegDisplay(bits) {
-    for (var i = 0; i < segDisplays.length; i++) {
-        if ((segDisplays[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (segDisplays[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-            return;
-        }
-    }
-    var newDisplay = new BusSegmentDisplay(mouseX, mouseY, bits);
+    var newDisplay = new SegmentDisplay(mouseX, mouseY, bits, busVersions);
     newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     newDisplay.updateClickBoxes();
     segDisplays.push(newDisplay);
