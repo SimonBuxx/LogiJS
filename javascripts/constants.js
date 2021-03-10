@@ -25,6 +25,7 @@ const WIRENUM  = 3; // Index of the wires
 const CPNUM   = 4; // Index of the conPoints
 const CUSTNUM = 5; // Index of the customs
 const DINUM   = 6; // Index of the diodes
+const DECNUM = 7;
 
 const BUTCOUNT = 10; // Number of frames the button should be high
 

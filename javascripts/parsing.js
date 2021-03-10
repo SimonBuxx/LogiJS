@@ -359,6 +359,25 @@ function integrateElements() {
         }
     }
 
+    for (let j = 0; j < decoders.length; j++) {
+        if (!decoders[j].useInBus) {
+            for (let k = 0; k < decoders[j].inputCount; k++) {
+                let inputWires = wirePoints(decoders[j].inputClickBoxes[k].x, decoders[j].inputClickBoxes[k].y, -1);
+                if (inputWires.length > 0) {
+                    groups[wires[inputWires[0]].group].addInput(decoders[j], k);
+                }
+            }
+        }
+        if (!decoders[j].useOutBus) {
+            for (let k = 0; k < decoders[j].outputCount; k++) {
+                let outputWires = wirePoints(decoders[j].outputClickBoxes[k].x, decoders[j].outputClickBoxes[k].y, -1);
+                if (outputWires.length > 0) {
+                    groups[wires[outputWires[0]].group].addOutput(decoders[j], k);
+                }
+            }
+        }
+    }
+
     for (let j = 0; j < busWrappers.length; j++) {
         for (let k = 0; k < busWrappers[j].inputCount; k++) {
             let inputWires = wirePoints(busWrappers[j].inputClickBoxes[k].x, busWrappers[j].inputClickBoxes[k].y, -1);
@@ -469,20 +488,41 @@ function integrateBusElements() {
         }
     }
 
+    for (let j = 0; j < decoders.length; j++) {
+        if (decoders[j].useInBus) {
+            let inputBusses = busPoints(decoders[j].inputClickBox.x, decoders[j].inputClickBox.y, -1);
+            if (inputBusses.length > 0) {
+                busGroups[busses[inputBusses[0]].group].addInput(decoders[j], 0);
+                if (decoders[j].inputCount > busGroups[busses[inputBusses[0]].group].busWidth) {
+                    busGroups[busses[inputBusses[0]].group].updateBusWidth(decoders[j].inputCount);
+                }
+            }
+        }
+        if (decoders[j].useOutBus) {
+            let outputBusses = busPoints(decoders[j].outputClickBox.x, decoders[j].outputClickBox.y, -1);
+            if (outputBusses.length > 0) {
+                busGroups[busses[outputBusses[0]].group].addOutput(decoders[j], 0);
+                if (decoders[j].outputCount > busGroups[busses[outputBusses[0]].group].busWidth) {
+                    busGroups[busses[outputBusses[0]].group].updateBusWidth(decoders[j].outputCount);
+                }
+            }
+        }
+    }
+
     /*for (let j = 0; j < inputs.length; j++) {
         let outputWires = wirePoints(inputs[j].clickBox.x, inputs[j].clickBox.y, -1);
         if (outputWires.length > 0) {
             groups[wires[outputWires[0]].group].addOutput(inputs[j], 0);
         }
     }
-
+    
     for (let j = 0; j < outputs.length; j++) {
         let inputWires = wirePoints(outputs[j].clickBox.x, outputs[j].clickBox.y, -1);
         if (inputWires.length > 0) {
             groups[wires[inputWires[0]].group].addInput(outputs[j], 0);
         }
     }
-
+    
     for (let j = 0; j < diodes.length; j++) {
         let diodeWires = wiresTrough(diodes[j].clickBox.x, diodes[j].clickBox.y, -1);
         if (diodeWires.length > 1) {

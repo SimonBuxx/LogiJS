@@ -374,6 +374,32 @@ CustomSketch.prototype.integrateElements = function () {
             }
         }
     }
+
+    for (let j = 0; j < this.objects[DECNUM].length; j++) {
+        if (!this.objects[DECNUM][j].useOutBus) {
+            // Connect the output wires as usual
+            for (let k = 0; k < Math.pow(2, this.objects[DECNUM][j].inputCount); k++) {
+                let outputWires = this.wirePoints(this.objects[DECNUM][j].outputClickBoxes[k].x, this.objects[DECNUM][j].outputClickBoxes[k].y, -1);
+                if (outputWires.length > 0) {
+                    this.groups[this.objects[WIRENUM][outputWires[0]].group].addOutput(this.objects[DECNUM][j], k);
+                }
+            }
+        } else {
+            // This is a bus output component, find a connected bus group
+        }
+        
+        if (!this.objects[DECNUM][j].useInBus) {
+            // Connect the input wires as usual
+            for (let k = 0; k < this.objects[DECNUM][j].inputCount; k++) {
+                let inputWires = this.wirePoints(this.objects[DECNUM][j].inputClickBoxes[k].x, this.objects[DECNUM][j].inputClickBoxes[k].y, -1);
+                if (inputWires.length > 0) {
+                    this.groups[this.objects[WIRENUM][inputWires[0]].group].addInput(this.objects[DECNUM][j], k);
+                }
+            }
+        } else {
+            // This is a bus input component, find a connected bus group
+        }
+    }
 };
 
 /*
@@ -406,6 +432,9 @@ CustomSketch.prototype.setSimRunning = function (simRunning) {
             this.objects[INPNUM][i].state = false;
             this.objects[INPNUM][i].outputs = false;
         }
+        for (let i = 0; i < this.objects[DECNUM].length; i++) {
+            this.objects[DECNUM][i].shutdown();
+        }
         for (let i = 0; i < this.outputCount; i++) {
             this.outputs[i] = false;
         }
@@ -430,6 +459,10 @@ CustomSketch.prototype.update = function () {
 
     for (let i = 0; i < this.objects[GATENUM].length; i++) {
         this.objects[GATENUM][i].update(); // Update all gates
+    }
+
+    for (let i = 0; i < this.objects[DECNUM].length; i++) {
+        this.objects[DECNUM][i].update(); // Update all gates
     }
 
     for (let i = 0; i < this.objects[CUSTNUM].length; i++) {

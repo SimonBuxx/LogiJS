@@ -27,6 +27,7 @@ function handleSelection(x1, y1, x2, y2) {
     selConpointIndizes = [];
     selBusWrappersIndizes = [];
     selBusUnwrappersIndizes = [];
+    selDecodersIndizes = [];
     selBusIndizes = [];
 
     for (let i = 0; i < wires.length; i++) {
@@ -105,6 +106,13 @@ function handleSelection(x1, y1, x2, y2) {
         }
     }
 
+    for (let i = 0; i < decoders.length; i++) {
+        if (decoders[i].x >= x1 && decoders[i].x <= x2 && decoders[i].y >= y1 && decoders[i].y <= y2) {
+            decoders[i].marked = true;
+            selDecodersIndizes.push(i);
+        }
+    }
+
     for (let i = 0; i < customs.length; i++) {
         if (customs[i].visible && (customs[i].x >= x1 && customs[i].x <= x2 && customs[i].y >= y1 && customs[i].y <= y2)) {
             customs[i].marked = true;
@@ -175,6 +183,11 @@ function deleteSelection() {
     for (let i = selBusUnwrappersIndizes.length - 1; i >= 0; i--) {
         busUnwrappers[selBusUnwrappersIndizes[i]].marked = false;
         deleteLog.push(['busUnwrapper', selBusUnwrappersIndizes[i], busUnwrappers.splice(selBusUnwrappersIndizes[i], 1)[0]]);
+    }
+
+    for (let i = selDecodersIndizes.length - 1; i >= 0; i--) {
+        decoders[selDecodersIndizes[i]].marked = false;
+        deleteLog.push(['decoder', selDecodersIndizes[i], decoders.splice(selDecodersIndizes[i], 1)[0]]);
     }
 
     for (let i = selCustomIndizes.length - 1; i >= 0; i--) {
@@ -249,6 +262,9 @@ function copySelection() {
     for (let i = 0; i < selBusUnwrappersIndizes.length; i++) {
         copiedElements.push(_.cloneDeep(busUnwrappers[selBusUnwrappersIndizes[i]]));
     }
+    for (let i = 0; i < selDecodersIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(decoders[selDecodersIndizes[i]]));
+    }
     for (let i = 0; i < selCustomIndizes.length; i++) {
         copiedElements.push(_.cloneDeep(customs[selCustomIndizes[i]]));
     }
@@ -298,6 +314,7 @@ function pasteSelection() {
     selConpointIndizes = [];
     selBusWrappersIndizes = [];
     selBusUnwrappersIndizes = [];
+    selDecodersIndizes = [];
     selBusIndizes = [];
     unmarkAll();
 
@@ -355,6 +372,10 @@ function pasteSelection() {
             case 'u':
                 busUnwrappers.push(_.cloneDeep(elem));
                 selBusUnwrappersIndizes.push(busUnwrappers.length - 1);
+                break;
+            case 'e':
+                decoders.push(_.cloneDeep(elem));
+                selDecodersIndizes.push(decoders.length - 1);
                 break;
             case 'c':
                 customs.push(_.cloneDeep(elem));
@@ -459,6 +480,10 @@ function moveSelection(dx, dy) {
         busUnwrappers[selBusUnwrappersIndizes[i]].alterPosition(dx, dy);
     }
 
+    for (let i = 0; i < selDecodersIndizes.length; i++) {
+        decoders[selDecodersIndizes[i]].alterPosition(dx, dy);
+    }
+
     for (let i = 0; i < selCustomIndizes.length; i++) {
         customs[selCustomIndizes[i]].alterPosition(dx, dy);
     }
@@ -508,10 +533,10 @@ function finishSelection() {
 
         let conpointsAfter = _.cloneDeep(conpoints);
         let diodesAfter = _.cloneDeep(diodes);
-        if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length + selBusWrappersIndizes.length + selBusUnwrappersIndizes.length +
+        if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length + selBusWrappersIndizes.length + selBusUnwrappersIndizes.length + selDecodersIndizes.length +
             selCustomIndizes.length + selConpointIndizes.length > 0 || selectionLog.length > 0 || busLog.length > 0) /*&& (selectionOffsetX !== 0 || selectionOffsetY !== 0)*/) {
             console.log('moveSel, offset: ' + selectionOffsetX + ' ' + selectionOffsetY);
-            pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selBusWrappersIndizes, selBusUnwrappersIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
+            pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selBusWrappersIndizes, selBusUnwrappersIndizes, selDecodersIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
                 [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter, _.cloneDeep(busLog)]);
         }
     }

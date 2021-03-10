@@ -21,8 +21,8 @@ BusGroup.prototype.addBus = function (s) {
     module: the module containing the input
     port: the module's input bus port
 */
-BusGroup.prototype.addInput = function (module, port) {
-    this.inputGates.push(module);
+BusGroup.prototype.addInput = function (gate, port) {
+    this.inputGates.push(gate);
     this.inputPorts.push(port);
 };
 

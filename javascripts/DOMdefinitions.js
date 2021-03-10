@@ -128,6 +128,10 @@ function linkElementsFromDOM() {
     wrapperWidthSelect = document.getElementById('wrapper-width-select');
     busCheckbox = document.getElementById('bus-checkbox');
     busCheckboxLabel = document.getElementById('bus-checkbox-label');
+    inBusCheckbox = document.getElementById('in-bus-checkbox');
+    inBusCheckboxLabel = document.getElementById('in-bus-checkbox-label');
+    outBusCheckbox = document.getElementById('out-bus-checkbox');
+    outBusCheckboxLabel = document.getElementById('out-bus-checkbox-label');
 
     syncFPSCheckbox = document.getElementById('syncFPSCheckbox');
     syncFPSLabel = document.getElementById('syncFPSLabel');
@@ -218,6 +222,10 @@ function addElementHelpTexts() {
     addHelpText(wrapperWidthSelect, 'Define the bus width for the wrappers and dewrappers');
     addHelpText(busCheckbox, 'Use the bus version of this module');
     addHelpText(busCheckboxLabel, 'Use the bus version of this module');
+    addHelpText(inBusCheckbox, 'Provide a bus input instead of discrete inputs');
+    addHelpText(inBusCheckboxLabel, 'Provide a bus input instead of discrete inputs');
+    addHelpText(outBusCheckbox, 'Provide a bus output instead of discrete outputs');
+    addHelpText(outBusCheckboxLabel, 'Provide a bus output instead of discrete outputs');
 
     addHelpText(syncFPSCheckbox, 'Sync the simulation speed with the frame rate');
     addHelpText(syncFPSLabel, 'Sync the simulation speed with the frame rate');
@@ -398,27 +406,28 @@ function decoderClicked() {
     setUnactive();
     hideAllOptions();
     decoderButton.classList.add('active');
-    let opLabels = [];
-    for (let i = 0; i < Math.pow(2, decoderBitWidth); i++) {
-        opLabels.push(i);
+
+    if (!useInputBus && !useOutputBus) {
+        setPreviewElement(false, {}, 'decoder');
+    } else if (useInputBus && !useOutputBus) {
+        setPreviewElement(false, {}, 'decoder-in');
+    } else if (!useInputBus && useOutputBus) {
+        setPreviewElement(false, {}, 'decoder-out');
+    } else {
+        setPreviewElement(false, {}, 'decoder-in-out');
     }
-    let ipLabels = ['2⁴', '2³', '2²', '2¹', '2º'].slice(5 - decoderBitWidth, 5);
-    setPreviewElement(true, {
-        tops: [],
-        inputLabels: ipLabels,
-        outputLabels: opLabels,
-        caption: 'Decoder',
-        inputs: decoderBitWidth,
-        outputs: Math.pow(2, decoderBitWidth)
-    });
+
     setControlMode('addObject');
-    addType = 10;
+    addType = 14;
     labelDirection.style.display = 'inline-block';
     directionSelect.style.display = 'inline-block';
     labelInputWidth.style.display = 'inline-block';
     decoderBitSelect.style.display = 'inline-block';
     labelOptions.style.display = 'block';
-    custFile = decoderBitWidth + '-decoder.json';
+    inBusCheckbox.style.display = 'inline-block';
+    inBusCheckboxLabel.style.display = 'inline-block';
+    outBusCheckbox.style.display = 'inline-block';
+    outBusCheckboxLabel.style.display = 'inline-block';
 }
 
 function muxClicked() {

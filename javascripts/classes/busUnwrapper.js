@@ -301,7 +301,11 @@ BusUnwrapper.prototype.show = function () {
     } else {
         fill(0);
     }
-    text("UNWRAP", this.x + this.w / 2, this.y + this.h / 2);
+    if (this.outputCount % 2 !== 0 && this.direction % 2 === 0) {
+        text("UNWRAP", this.x + this.w / 2, this.y + this.h / 2 - 15);
+    } else {
+        text("UNWRAP", this.x + this.w / 2, this.y + this.h / 2);
+    }
 
     // Draw input
     textSize(12);

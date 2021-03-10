@@ -81,6 +81,9 @@ function unmarkAll() {
     for (const elem of busUnwrappers) {
         elem.marked = false;
     }
+    for (const elem of decoders) {
+        elem.marked = false;
+    }
     for (const elem of segDisplays) {
         elem.marked = false;
     }

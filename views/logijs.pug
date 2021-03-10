@@ -28,6 +28,7 @@ head
     include ../javascripts/classes/logicGate.js
     include ../javascripts/classes/busWrapper.js
     include ../javascripts/classes/busUnwrapper.js
+    include ../javascripts/classes/decoder.js
     include ../javascripts/classes/segmentDisplay.js
     include ../javascripts/classes/customSketch.js
     include ../javascripts/classes/output.js
@@ -342,8 +343,15 @@ body
       option(value="8") 8
       option(value="16") 16
       option(value="32") 32
-    input#bus-checkbox.checkbox(type="checkbox" onchange="useBusVersionsChanged();") 
-    label#bus-checkbox-label.checkbox-label(for="bus-checkbox") Bus Connectors
+    input#bus-checkbox.checkbox(type="checkbox" onchange="useBusChanged();") 
+    label#bus-checkbox-label.checkbox-label.option-checkbox-label(for="bus-checkbox") Bus Connectors
+
+    input#in-bus-checkbox.checkbox(type="checkbox" onchange="useBusChanged();" style="margin-bottom: 0;") 
+    label#in-bus-checkbox-label.checkbox-label.option-checkbox-label(for="in-bus-checkbox" style="margin-bottom: 0;") Use Input Bus
+    div(style="line-height: 0;")
+      br
+    input#out-bus-checkbox.checkbox(type="checkbox" onchange="useBusChanged();" style="margin-top: 0;") 
+    label#out-bus-checkbox-label.checkbox-label.option-checkbox-label(for="out-bus-checkbox" style="margin-top: 0;") Use Output Bus
 
     input#syncFPSCheckbox.checkbox(type="checkbox" onchange="syncFramerateCheckBoxChanged();" checked) 
     label#syncFPSLabel.checkbox-label(for="syncFPSCheckbox") Sync Ticks to Frames

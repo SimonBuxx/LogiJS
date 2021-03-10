@@ -16,6 +16,7 @@ function buildJSON() {
     json.segDisplays = [];
     json.busWrappers = [];
     json.busUnwrappers = [];
+    json.decoders = [];
     for (let i = 0; i < gates.length; i++) {
         json.gates.push(gates[i].getData());
     }
@@ -48,6 +49,9 @@ function buildJSON() {
     }
     for (let i = 0; i < busUnwrappers.length; i++) {
         json.busUnwrappers.push(busUnwrappers[i].getData());
+    }
+    for (let i = 0; i < decoders.length; i++) {
+        json.decoders.push(decoders[i].getData());
     }
     for (let i = 0; i < customs.length; i++) {
         if (customs[i].visible) {
@@ -138,6 +142,7 @@ function load(loadData) {
     segDisplays = [];
     busWrappers = [];
     busUnwrappers = [];
+    decoders = [];
     transform = new Transformation(0, 0, 1);
     currentGridSize = GRIDSIZE;
     actionUndo = []; // Clear Undo / Redo stacks
@@ -248,6 +253,16 @@ function load(loadData) {
             busUnwrappers[i].busInverted = JSON.parse(loadData.busUnwrappers[i].busInverted);
         }
     }
+    if (loadData.hasOwnProperty("decoders")) {
+        for (let i = 0; i < loadData.decoders.length; i++) {
+            decoders[i] = new Decoder(JSON.parse(loadData.decoders[i].x), JSON.parse(loadData.decoders[i].y),
+                JSON.parse(loadData.decoders[i].direction), JSON.parse(loadData.decoders[i].inputCount), 
+                JSON.parse(loadData.decoders[i].useInputBus), JSON.parse(loadData.decoders[i].useOutputBus)),
+                decoders[i].setInvertions(JSON.parse(loadData.decoders[i].inputsInv), JSON.parse(loadData.decoders[i].outputsInv));
+                decoders[i].inBusInverted = JSON.parse(loadData.decoders[i].inBusInverted);
+                decoders[i].outBusInverted = JSON.parse(loadData.decoders[i].inBusInverted);
+        }
+    }
     for (let i = 0; i < loadData.customs.length; i++) {
         customs[i] = new CustomSketch(JSON.parse(loadData.customs[i].x), JSON.parse(loadData.customs[i].y), JSON.parse(loadData.customs[i].direction), JSON.parse(loadData.customs[i].filename));
         customs[i].setInvertions(JSON.parse(loadData.customs[i].inputsInv), JSON.parse(loadData.customs[i].outputsInv));
@@ -297,7 +312,7 @@ function loadCustomFile(file, num, hlparent, afterLoadingCallback = function () 
     Invoked by loadCustomFile when the json is fully loaded
 */
 function loadCustom(loadData, num, hlparent) {
-    let params = [[], [], [], [], [], [], []]; // [] x Number of different objects
+    let params = [[], [], [], [], [], [], [], []]; // [] x Number of different objects
     for (let i = 0; i < loadData.gates.length; i++) {
         params[GATENUM][i] = new LogicGate(JSON.parse(loadData.gates[i].x), JSON.parse(loadData.gates[i].y), JSON.parse(loadData.gates[i].direction),
             JSON.parse(loadData.gates[i].inputCount), JSON.parse(loadData.gates[i].outputCount), JSON.parse(loadData.gates[i].logicFunction));
@@ -355,8 +370,20 @@ function loadCustom(loadData, num, hlparent) {
         customsToLoadQueue.push([customs[customs.length - 1].filename, (customs.length - 1), num]);
         params[CUSTNUM][i] = customs[customs.length - 1];
     }
+
+    if (loadData.hasOwnProperty("decoders")) {
+        for (let i = 0; i < loadData.decoders.length; i++) {
+            params[DECNUM][i] = new Decoder(JSON.parse(loadData.decoders[i].x), JSON.parse(loadData.decoders[i].y), JSON.parse(loadData.decoders[i].direction),
+                JSON.parse(loadData.decoders[i].inputCount), JSON.parse(loadData.decoders[i].useInputBus), JSON.parse(loadData.decoders[i].useOutputBus));
+            params[DECNUM][i].setInvertions(JSON.parse(loadData.decoders[i].inputsInv), JSON.parse(loadData.decoders[i].outputsInv));
+            params[DECNUM][i].inBusInverted = JSON.parse(loadData.decoders[i].inBusInverted);
+            params[DECNUM][i].outBusInverted = JSON.parse(loadData.decoders[i].inBusInverted);
+        }
+    }
+
     customs[num].setSketchParams(params);
     customs[num].setCaption(loadData.caption);
+
     reDraw();
 }
 

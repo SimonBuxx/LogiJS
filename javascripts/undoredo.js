@@ -56,6 +56,10 @@ function undo() {
                 busUnwrappers.splice(act.actionIndizes[0], 1);
                 actionRedo.push(act);
                 break;
+            case 'addDecoder':
+                decoders.splice(act.actionIndizes[0], 1);
+                actionRedo.push(act);
+                break;
             case 'invGIP':
                 gates[act.actionIndizes[0]].invertInput(act.actionIndizes[1]);
                 actionRedo.push(act);
@@ -125,6 +129,10 @@ function undo() {
                 break;
             case 'delBusUnwrapper':
                 busUnwrappers.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
+                actionRedo.push(act);
+                break;
+            case 'delDecoder':
+                decoders.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
                 actionRedo.push(act);
                 break;
             case 'swiDi':
@@ -233,10 +241,14 @@ function undo() {
                 }
 
                 for (let i = 0; i < act.actionIndizes[9].length; i++) {
-                    customs[act.actionIndizes[9][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
+                    decoders[act.actionIndizes[9][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
+                }
+
+                for (let i = 0; i < act.actionIndizes[10].length; i++) {
+                    customs[act.actionIndizes[10][i]].alterPosition(-act.actionIndizes[0], -act.actionIndizes[1]);
                 }
                 actionRedo.push(act);
-                if (act.actionIndizes[11]) { // Undo pasting if the move action was done after pasting
+                if (act.actionIndizes[12]) { // Undo pasting if the move action was done after pasting
                     undo();
                 }
                 break;
@@ -271,6 +283,9 @@ function undo() {
                     }
                     if (act.actionObject[0][i][0] === 'busUnwrapper') {
                         busUnwrappers.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
+                    }
+                    if (act.actionObject[0][i][0] === 'decoder') {
+                        decoders.splice(act.actionObject[0][i][1], 0, _.cloneDeep(act.actionObject[0][i][2]));
                     }
                     if (act.actionObject[0][i][0] === 'custom') {
                         customs[act.actionObject[0][i][1]].visible = true;
@@ -317,6 +332,9 @@ function undo() {
                             break;
                         case 'u':
                             busUnwrappers.pop();
+                            break;
+                        case 'e':
+                            decoders.pop();
                             break;
                         case 'c':
                             customs.pop();
@@ -437,6 +455,10 @@ function redo() {
                 busUnwrappers.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
                 actionUndo.push(act);
                 break;
+            case 'addDecoder':
+                decoders.splice(act.actionIndizes[0], 0, _.cloneDeep(act.actionObject[0]));
+                actionUndo.push(act);
+                break;
             case 'delGate':
                 gates.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
@@ -486,6 +508,10 @@ function redo() {
                 break;
             case 'delBusUnwrapper':
                 busUnwrappers.splice(act.actionIndizes[0], 1);
+                actionUndo.push(act);
+                break;
+            case 'delDecoder':
+                decoders.splice(act.actionIndizes[0], 1);
                 actionUndo.push(act);
                 break;
             case 'swiDi':
@@ -618,7 +644,11 @@ function redo() {
                 }
 
                 for (let i = 0; i < act.actionIndizes[9].length; i++) {
-                    customs[act.actionIndizes[9][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
+                    decoders[act.actionIndizes[9][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
+                }
+
+                for (let i = 0; i < act.actionIndizes[10].length; i++) {
+                    customs[act.actionIndizes[10][i]].alterPosition(act.actionIndizes[0], act.actionIndizes[1]);
                 }
 
                 actionUndo.push(act);
@@ -654,6 +684,9 @@ function redo() {
                     }
                     if (act.actionObject[0][i][0] === 'busUnwrapper') {
                         busUnwrappers.splice(act.actionObject[0][i][1], 1);
+                    }
+                    if (act.actionObject[0][i][0] === 'decoder') {
+                        decoders.splice(act.actionObject[0][i][1], 1);
                     }
                     if (act.actionObject[0][i][0] === 'custom') {
                         customs[act.actionObject[0][i][1]].visible = false;
@@ -696,6 +729,9 @@ function redo() {
                             break;
                         case 'u':
                             busUnwrappers.push(_.cloneDeep(act.actionObject[0][i]));
+                            break;
+                        case 'e':
+                            decoders.push(_.cloneDeep(act.actionObject[0][i]));
                             break;
                         case 'c':
                             customs.push(_.cloneDeep(act.actionObject[0][i]));

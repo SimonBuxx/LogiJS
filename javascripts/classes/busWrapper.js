@@ -312,7 +312,11 @@ BusWrapper.prototype.show = function () {
     } else {
         fill(0);
     }
-    text("WRAP", this.x + this.w / 2, this.y + this.h / 2);
+    if (this.inputCount % 2 !== 0 && this.direction % 2 === 0) {
+        text("WRAP", this.x + this.w / 2, this.y + this.h / 2 - 15);
+    } else {
+        text("WRAP", this.x + this.w / 2, this.y + this.h / 2);
+    }
 
     // Draw inputs
     for (let i = 1; i <= this.inputCount; i++) {

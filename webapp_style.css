@@ -294,7 +294,7 @@ input {
     color: #fff;
 }
 
-#bus-checkbox-label {
+.option-checkbox-label {
     margin-top: 10px;
     font-size: 16px;
 }
@@ -1707,6 +1707,7 @@ h1 {
     padding-right: 2px;
     scrollbar-width: thin;
     scrollbar-color: #ccc #fff;
+    transition: height 0.2s ease-in-out;
 }
 
 .dark-theme #toolbox {

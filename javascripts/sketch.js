@@ -14,6 +14,7 @@ let segDisplays = []; // List of 7-segment displays
 let busses = [];
 let busWrappers = [];
 let busUnwrappers = [];
+let decoders = [];
 
 let sevenSegmentBits = 4; // Number of bits for new 7-segment displays
 let counterBitWidth = 2; // Output width of counter objects
@@ -36,6 +37,7 @@ let selCustomIndizes = [];
 let selConpointIndizes = [];
 let selBusWrappersIndizes = [];
 let selBusUnwrappersIndizes = [];
+let selDecodersIndizes = [];
 
 let copiedElements = [];
 let selectionIsCopied = false;
@@ -63,6 +65,9 @@ let busInsert = false;
 let busWrapperWidth = 2;
 
 let busVersions = false;
+let useInputBus = false;
+let useOutputBus = false;
+
 /*
     Current size of the grid in pixels, scaled to the current zoom level
 */
@@ -288,9 +293,10 @@ let andButton, orButton, xorButton, bufferButton, notButton, switchButton, butto
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, rsClockedButton, tFlipFlopButton,
     registerButton, muxButton, demuxButton, unwrapperButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
 let labelOptions, labelSimulation, labelGateInputs, labelDirection, labelDisplay, labelOutputWidth,
-    labelInputWidth, tickTimeLabel, tickTimeMsLabel, multiplierValueLabel, busCheckboxLabel; // Left side labels
+    labelInputWidth, tickTimeLabel, tickTimeMsLabel, multiplierValueLabel, busCheckboxLabel, inBusCheckboxLabel, outBusCheckboxLabel; // Left side labels
 
-let gateInputSelect, directionSelect, displaySelect, counterBitSelect, decoderBitSelect, multiplexerBitSelect, wrapperWidthSelect, busCheckbox; // Options elements
+let gateInputSelect, directionSelect, displaySelect, counterBitSelect, decoderBitSelect, multiplexerBitSelect,
+    wrapperWidthSelect, busCheckbox, inBusCheckbox, outBusCheckbox; // Options elements
 
 let tickTimeSlider, bypassCheckbox, bypassLabel, syncFPSCheckbox, syncFPSLabel, multiplierSlider, multiplierLabel; // Simulation options elements
 
@@ -505,6 +511,10 @@ function hideAllOptions() {
     wrapperWidthSelect.style.display = 'none';
     busCheckbox.style.display = 'none';
     busCheckboxLabel.style.display = 'none';
+    inBusCheckbox.style.display = 'none';
+    inBusCheckboxLabel.style.display = 'none';
+    outBusCheckbox.style.display = 'none';
+    outBusCheckboxLabel.style.display = 'none';
     labelInputWidth.style.display = 'none';
     labelOptions.style.display = 'none';
     labelSimulation.style.display = 'none';
@@ -622,19 +632,15 @@ function newDecoderBitLength() {
     decoderBitWidth = parseInt(decoderBitSelect.value);
     custFile = decoderBitWidth + '-decoder.json';
     if (decoderButton.className.includes('active')) {
-        let opLabels = [];
-        for (let i = 0; i < Math.pow(2, decoderBitWidth); i++) {
-            opLabels.push(i);
+        if (!useInputBus && !useOutputBus) {
+            setPreviewElement(false, {}, 'decoder');
+        } else if (useInputBus && !useOutputBus) {
+            setPreviewElement(false, {}, 'decoder-in');
+        } else if (!useInputBus && useOutputBus) {
+            setPreviewElement(false, {}, 'decoder-out');
+        } else {
+            setPreviewElement(false, {}, 'decoder-in-out');
         }
-        let ipLabels = ['2⁴', '2³', '2²', '2¹', '2º'].slice(5 - decoderBitWidth, 5);
-        setPreviewElement(true, {
-            tops: [],
-            inputLabels: ipLabels,
-            outputLabels: opLabels,
-            caption: 'Decoder',
-            inputs: decoderBitWidth,
-            outputs: Math.pow(2, decoderBitWidth)
-        });
     }
 }
 
@@ -647,14 +653,24 @@ function newBusWrapperWidth() {
     }
 }
 
-function useBusVersionsChanged() {
+function useBusChanged() {
     busVersions = busCheckbox.checked;
-    if (!busVersions) {
-        if (addType === 8) { // 7-segment display
-            setPreviewElement(false, {}, '7-segment');
+    useInputBus = inBusCheckbox.checked;
+    useOutputBus = outBusCheckbox.checked;
+    if (addType === 14) { // Decoder
+        if (!useInputBus && !useOutputBus) {
+            setPreviewElement(false, {}, 'decoder');
+        } else if (useInputBus && !useOutputBus) {
+            setPreviewElement(false, {}, 'decoder-in');
+        } else if (!useInputBus && useOutputBus) {
+            setPreviewElement(false, {}, 'decoder-out');
+        } else {
+            setPreviewElement(false, {}, 'decoder-in-out');
         }
-    } else {
-        if (addType === 8) { // 7-segment display
+    } else if (addType === 8) { // 7-segment display
+        if (!busVersions) {
+            setPreviewElement(false, {}, '7-segment');
+        } else {
             setPreviewElement(false, {}, '7-segment-bus');
         }
     }
@@ -955,14 +971,23 @@ function labelButtonClicked(dontToggle = false) {
 function setControlMode(mode) {
     if (controlMode === 'select') { // If the select mode is leaved, clean up
         setSelectMode('none');
+        document.getElementsByClassName('switch-field')[0].style.display = 'none';
     }
     if (mode === 'addObject' || mode === 'select' || mode === 'delete') {
         closeModifierMenu();
         controlMode = mode;
+        document.getElementsByClassName('switch-field')[0].style.display = 'none';
     } else if (mode === 'modify') {
         controlMode = 'modify';
+        document.getElementsByClassName('switch-field')[0].style.display = 'flex';
     } else {
         console.log('Control mode not supported!');
+    }
+    if (mode === 'addObject') {
+        document.getElementsByClassName('switch-field')[0].style.display = 'none';
+        toolbox.style.height = '380px';
+    } else {
+        toolbox.style.height = 'min(495px, 100vh - 300px)';
     }
 }
 
@@ -1403,6 +1428,22 @@ function addBusUnwrapper(bits, direction) {
     reDraw();
 }
 
+function addDecoder(bits, direction) {
+    for (var i = 0; i < decoders.length; i++) {
+        if ((decoders[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
+            (decoders[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+            return;
+        }
+    }
+    var newElement = new Decoder(mouseX, mouseY, direction, bits, useInputBus, useOutputBus);
+    newElement.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    newElement.updateClickBoxes();
+    decoders.push(newElement);
+    pushUndoAction('addDecoder', [decoders.length - 1], [newElement]);
+    reDraw();
+}
+
+
 function deleteWires() {
     let deletedDiodesIndices = [];
     let deletedDiodes = [];
@@ -1639,6 +1680,11 @@ function deleteBusUnwrapper(unwrapperNumber) {
     reDraw();
 }
 
+function deleteDecoder(decoderNumber) {
+    pushUndoAction('delDecoder', [decoderNumber], decoders.splice(decoderNumber, 1));
+    reDraw();
+}
+
 /*
     Deletes the given 7-segment display
 */
@@ -1749,6 +1795,9 @@ function endSimulation() {
             elem.shutdown(); // Shutdown all bus unwrappers
         }
         for (const elem of segDisplays) {
+            elem.shutdown();
+        }
+        for (const elem of decoders) {
             elem.shutdown();
         }
         // Set all item states to zero
@@ -1999,6 +2048,10 @@ function updateTick(rec = true) {
         value.update();
     }
 
+    for (const value of decoders) {
+        value.update();
+    }
+
     // Update all wire groups
     updateGroups();
 
@@ -2151,6 +2204,13 @@ function showElements() {
         }
     }
 
+    if (decoders.length > 0) {
+        textFont('Arial');
+        for (const elem of decoders) {
+            elem.show();
+        }
+    }
+
     for (const elem of conpoints) {
         elem.show();
     }
@@ -2266,7 +2326,6 @@ function keyPressed() {
                 //idMatchRef = _.cloneDeep(wires);
                 //busGroups[0].states = [false, true, false, true];
                 //busGroups[0].states = [true, true, false, false, true, false, true, false];
-                console.log(busses);
                 break;
             case 32: // Space
                 if (simRunning) {

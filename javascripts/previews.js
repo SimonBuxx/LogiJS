@@ -16,6 +16,9 @@ function showElementPreview() {
     let mx = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
     let my = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
     let x1, x2, y1, y2;
+
+    let elemHeight, x, y;
+
     if (previewData.isCustom) {
         mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
         my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
@@ -521,7 +524,7 @@ function showElementPreview() {
                     textSize(10);
                     textFont('Arial');
 
-                    text('[' + (sevenSegmentBits-1) + ':0]', mx + GRIDSIZE, my + GRIDSIZE * 3 - 10);
+                    text('[' + (sevenSegmentBits - 1) + ':0]', mx + GRIDSIZE, my + GRIDSIZE * 3 - 10);
                 }
                 break;
             case 'label':
@@ -538,6 +541,469 @@ function showElementPreview() {
                 fill(0);
                 text('New Label', mx + 15, my - 9, GRIDSIZE * 5, GRIDSIZE);
                 break;
+            case 'decoder':
+                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+                elemHeight = Math.pow(2, decoderBitWidth) + 1;
+                if (gateDirection % 2 === 0) {
+                    h = 2 * GRIDSIZE + GRIDSIZE * (Math.pow(2, decoderBitWidth) - 1);
+                    w = 2 * GRIDSIZE;
+                } else {
+                    h = 2 * GRIDSIZE;
+                    w = 2 * GRIDSIZE + GRIDSIZE * (Math.pow(2, decoderBitWidth) - 1);
+                }
+
+                fill(255);
+                stroke(0);
+                strokeWeight(3);
+
+                if (gateDirection % 2 === 0) {
+                    rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
+                } else {
+                    rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
+                }
+
+                noStroke();
+                textFont('Arial');
+                textSize(10);
+                textAlign(CENTER, CENTER);
+                fill(0);
+                if (Math.pow(2, decoderBitWidth) % 2 !== 0 && gateDirection % 2 === 0) {
+                    text("Decoder", mx + w / 2, my + h / 2 - 15);
+                } else {
+                    text("Decoder", mx + w / 2, my + h / 2);
+                }
+
+                // Draw inputs
+                for (let i = 1; i <= decoderBitWidth; i++) {
+
+                    strokeWeight(3);
+                    stroke(0);
+
+                    // Draw input connector lines
+                    switch (gateDirection) {
+                        case 0: line(mx - 6, my + (h * i) / elemHeight, mx, my + (h * i) / elemHeight); break;
+                        case 1: line(mx + (w * i) / elemHeight, my - 6, mx + (w * i) / elemHeight, my); break;
+                        case 2: line(mx + w, my + (h * i) / elemHeight, mx + w + 6, my + (h * i) / elemHeight); break;
+                        case 3: line(mx + (w * i) / elemHeight, my + h, mx + (w * i) / elemHeight, my + h + 6); break;
+                    }
+
+                    textSize(14);
+                    noStroke();
+
+                    // Draw input labels
+                    switch (gateDirection) {
+                        case 0: text('2' + superscripts[decoderBitWidth - i], mx + 10, my + (h * i) / elemHeight); break;
+                        case 1: text('2' + superscripts[decoderBitWidth - i], mx + (w * i) / elemHeight, my + 10); break;
+                        case 2: text('2' + superscripts[decoderBitWidth - i], mx + w - 10, my + (h * i) / elemHeight); break;
+                        case 3: text('2' + superscripts[decoderBitWidth - i], mx + (w * i) / elemHeight, my + h - 10); break;
+                    }
+                }
+
+                for (let i = 1; i <= Math.pow(2, decoderBitWidth); i++) {
+
+                    strokeWeight(3);
+                    stroke(0);
+
+                    switch (gateDirection) {
+                        case 0: line(mx + w, my + (h * i) / elemHeight, mx + w + 6, my + (h * i) / elemHeight); break;
+                        case 1: line(mx + (w * i) / elemHeight, my + h, mx + (w * i) / elemHeight, my + h + 6); break;
+                        case 2: line(mx - 6, my + (h * i) / elemHeight, mx, my + (h * i) / elemHeight); break;
+                        case 3: line(mx + (w * i) / elemHeight, my - 6, mx + (w * i) / elemHeight, my); break;
+                    }
+
+                    textSize(14);
+                    noStroke();
+                    fill(0);
+
+                    // Draw output labels
+                    switch (gateDirection) {
+                        case 0: text(i - 1, mx + w - 10, my + (h * i) / elemHeight); break;
+                        case 1: text(i - 1, mx + (w * i) / elemHeight, my + h - 10); break;
+                        case 2: text(i - 1, mx + 10, my + (h * i) / elemHeight); break;
+                        case 3: text(i - 1, mx + (w * i) / elemHeight, my + 10); break;
+                    }
+                }
+                break;
+            case 'decoder-in':
+                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+                elemHeight = Math.pow(2, decoderBitWidth) + 1;
+                if (gateDirection % 2 === 0) {
+                    h = 2 * GRIDSIZE + GRIDSIZE * (Math.pow(2, decoderBitWidth) - 1);
+                    w = 2 * GRIDSIZE;
+                } else {
+                    h = 2 * GRIDSIZE;
+                    w = 2 * GRIDSIZE + GRIDSIZE * (Math.pow(2, decoderBitWidth) - 1);
+                }
+
+                fill(255);
+                stroke(0);
+                strokeWeight(3);
+
+                if (gateDirection % 2 === 0) {
+                    rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
+                } else {
+                    rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
+                }
+
+                noStroke();
+                textFont('Arial');
+                textSize(10);
+                textAlign(CENTER, CENTER);
+                fill(0);
+                if (Math.pow(2, decoderBitWidth) % 2 !== 0 && gateDirection % 2 === 0) {
+                    text("Decoder", mx + w / 2, my + h / 2 - 15);
+                } else {
+                    text("Decoder", mx + w / 2, my + h / 2);
+                }
+
+                textSize(12);
+                switch (gateDirection) {
+                    case 0:
+                        triangle(mx - 9, my + GRIDSIZE - 8, mx - 1, my + GRIDSIZE, mx - 9, my + GRIDSIZE + 8);
+                        text(decoderBitWidth, mx - 10, my + GRIDSIZE + 15);
+                        break;
+                    case 1:
+                        triangle(mx + GRIDSIZE - 8, my - 9, mx + GRIDSIZE, my - 1, mx + GRIDSIZE + 8, my - 9);
+                        text(decoderBitWidth, mx + GRIDSIZE + 15, my - 10);
+                        break;
+                    case 2:
+                        triangle(mx + w + 10, my + GRIDSIZE - 8, mx + w + 2, my + GRIDSIZE, mx + w + 10, my + GRIDSIZE + 8);
+                        text(decoderBitWidth, mx + w + 10, my + GRIDSIZE + 15);
+                        break;
+                    case 3:
+                        triangle(mx + GRIDSIZE - 8, my + h + 10, mx + GRIDSIZE, my + h + 2, mx + GRIDSIZE + 8, my + h + 10);
+                        text(decoderBitWidth, mx + GRIDSIZE + 15, my + h + 10);
+                        break;
+                    default:
+                }
+
+                textSize(10);
+
+                switch (gateDirection) {
+                    case 0:
+                        text('[' + (decoderBitWidth - 1) + ':0]', mx + 15, my + GRIDSIZE);
+                        break;
+                    case 1:
+                        text('[' + (decoderBitWidth - 1) + ':0]', mx + GRIDSIZE, my + 10);
+                        break;
+                    case 2:
+                        text('[' + (decoderBitWidth - 1) + ':0]', mx + w - 15, my + GRIDSIZE);
+                        break;
+                    case 3:
+                        text('[' + (decoderBitWidth - 1) + ':0]', mx + GRIDSIZE, my + h - 10);
+                        break;
+                    default:
+                }
+
+                for (let i = 1; i <= Math.pow(2, decoderBitWidth); i++) {
+
+                    strokeWeight(3);
+                    stroke(0);
+
+                    switch (gateDirection) {
+                        case 0: line(mx + w, my + (h * i) / elemHeight, mx + w + 6, my + (h * i) / elemHeight); break;
+                        case 1: line(mx + (w * i) / elemHeight, my + h, mx + (w * i) / elemHeight, my + h + 6); break;
+                        case 2: line(mx - 6, my + (h * i) / elemHeight, mx, my + (h * i) / elemHeight); break;
+                        case 3: line(mx + (w * i) / elemHeight, my - 6, mx + (w * i) / elemHeight, my); break;
+                    }
+
+                    textSize(14);
+                    noStroke();
+                    fill(0);
+
+                    // Draw output labels
+                    switch (gateDirection) {
+                        case 0: text(i - 1, mx + w - 10, my + (h * i) / elemHeight); break;
+                        case 1: text(i - 1, mx + (w * i) / elemHeight, my + h - 10); break;
+                        case 2: text(i - 1, mx + 10, my + (h * i) / elemHeight); break;
+                        case 3: text(i - 1, mx + (w * i) / elemHeight, my + 10); break;
+                    }
+                }
+
+                textSize(14);
+                textAlign(LEFT, BOTTOM);
+
+                switch (gateDirection) {
+                    case 0:
+                        text('↺', mx + 5, my + h - GRIDSIZE / 2 - 3);
+                        break;
+                    case 1:
+                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + 18);
+                        break;
+                    case 2:
+                        text('↺', mx + w - 16, my + h - GRIDSIZE / 2 - 3);
+                        break;
+                    case 3:
+                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + h - 3);
+                        break;
+                    default:
+                }
+
+                break;
+            case 'decoder-out':
+                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+                elemHeight = decoderBitWidth + 1;
+                if (gateDirection % 2 === 0) {
+                    h = 2 * GRIDSIZE + GRIDSIZE * (decoderBitWidth - 1);
+                    w = 2 * GRIDSIZE;
+                } else {
+                    h = 2 * GRIDSIZE;
+                    w = 2 * GRIDSIZE + GRIDSIZE * (decoderBitWidth - 1);
+                }
+
+                fill(255);
+                stroke(0);
+                strokeWeight(3);
+
+                if (gateDirection % 2 === 0) {
+                    rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
+                } else {
+                    rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
+                }
+
+                noStroke();
+                textFont('Arial');
+                textSize(10);
+                textAlign(CENTER, CENTER);
+                fill(0);
+                if (decoderBitWidth % 2 !== 0 && gateDirection % 2 === 0) {
+                    text("Decoder", mx + w / 2, my + h / 2 - 15);
+                } else {
+                    text("Decoder", mx + w / 2, my + h / 2);
+                }
+
+                // Draw inputs
+                for (let i = 1; i <= decoderBitWidth; i++) {
+
+                    strokeWeight(3);
+                    stroke(0);
+
+                    // Draw input connector lines
+                    switch (gateDirection) {
+                        case 0: line(mx - 6, my + (h * i) / elemHeight, mx, my + (h * i) / elemHeight); break;
+                        case 1: line(mx + (w * i) / elemHeight, my - 6, mx + (w * i) / elemHeight, my); break;
+                        case 2: line(mx + w, my + (h * i) / elemHeight, mx + w + 6, my + (h * i) / elemHeight); break;
+                        case 3: line(mx + (w * i) / elemHeight, my + h, mx + (w * i) / elemHeight, my + h + 6); break;
+                    }
+
+                    textSize(14);
+                    noStroke();
+
+                    // Draw input labels
+                    switch (gateDirection) {
+                        case 0: text('2' + superscripts[decoderBitWidth - i], mx + 10, my + (h * i) / elemHeight); break;
+                        case 1: text('2' + superscripts[decoderBitWidth - i], mx + (w * i) / elemHeight, my + 10); break;
+                        case 2: text('2' + superscripts[decoderBitWidth - i], mx + w - 10, my + (h * i) / elemHeight); break;
+                        case 3: text('2' + superscripts[decoderBitWidth - i], mx + (w * i) / elemHeight, my + h - 10); break;
+                    }
+                }
+
+                textSize(12);
+                switch (gateDirection) {
+                    case 0:
+                        triangle(mx + w + 10, my + GRIDSIZE - 8, mx + w + 2, my + GRIDSIZE, mx + w + 10, my + GRIDSIZE + 8);
+                        text(Math.pow(2, decoderBitWidth), mx + w + 10, my + GRIDSIZE + 15);
+                        break;
+                    case 1:
+                        triangle(mx + GRIDSIZE - 8, my + h + 10, mx + GRIDSIZE, my + h + 2, mx + GRIDSIZE + 8, my + h + 10);
+                        text(Math.pow(2, decoderBitWidth), mx + GRIDSIZE + 15, my + h + 10);
+                        break;
+                    case 2:
+                        triangle(mx - 9, my + GRIDSIZE - 8, mx - 1, my + GRIDSIZE, mx - 9, my + GRIDSIZE + 8);
+                        text(Math.pow(2, decoderBitWidth), mx - 10, my + GRIDSIZE + 15);
+                        break;
+                    case 3:
+                        triangle(mx + GRIDSIZE - 8, my - 9, mx + GRIDSIZE, my - 1, mx + GRIDSIZE + 8, my - 9);
+                        text(Math.pow(2, decoderBitWidth), mx + GRIDSIZE + 15, my - 10);
+                        break;
+                    default:
+                }
+
+                textSize(10);
+
+                switch (gateDirection) {
+                    case 0:
+                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + w - 15, my + GRIDSIZE);
+                        break;
+                    case 1:
+                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + GRIDSIZE, my + h - 10);
+                        break;
+                    case 2:
+                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + 15, my + GRIDSIZE);
+                        break;
+                    case 3:
+                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + GRIDSIZE, my + 10);
+                        break;
+                    default:
+                }
+
+                textSize(14);
+                textAlign(LEFT, BOTTOM);
+
+                switch (gateDirection) {
+                    case 0:
+                        text('↺', mx + w - 16, my + h - GRIDSIZE / 2 - 3);
+                        break;
+                    case 1:
+                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + h - 3);
+                        break;
+                    case 2:
+                        text('↺', mx + 5, my + h - GRIDSIZE / 2 - 3);
+                        break;
+                    case 3:
+                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + 18);
+                        break;
+                    default:
+                }
+
+                break;
+            case 'decoder-in-out':
+                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+                elemHeight = 3;
+                if (gateDirection % 2 === 0) {
+                    h = 3 * GRIDSIZE;
+                    w = 2 * GRIDSIZE;
+                } else {
+                    h = 2 * GRIDSIZE;
+                    w = 3 * GRIDSIZE;
+                }
+
+                fill(255);
+                stroke(0);
+                strokeWeight(3);
+
+                if (gateDirection % 2 === 0) {
+                    rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
+                } else {
+                    rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
+                }
+
+                noStroke();
+                textFont('Arial');
+                textSize(10);
+                textAlign(CENTER, CENTER);
+                fill(0);
+                text("Decoder", mx + w / 2, my + h / 2);
+
+                textSize(12);
+                switch (gateDirection) {
+                    case 0:
+                        triangle(mx - 9, my + GRIDSIZE - 8, mx - 1, my + GRIDSIZE, mx - 9, my + GRIDSIZE + 8);
+                        text(decoderBitWidth, mx - 10, my + GRIDSIZE + 15);
+                        break;
+                    case 1:
+                        triangle(mx + GRIDSIZE - 8, my - 9, mx + GRIDSIZE, my - 1, mx + GRIDSIZE + 8, my - 9);
+                        text(decoderBitWidth, mx + GRIDSIZE + 15, my - 10);
+                        break;
+                    case 2:
+                        triangle(mx + w + 10, my + GRIDSIZE - 8, mx + w + 2, my + GRIDSIZE, mx + w + 10, my + GRIDSIZE + 8);
+                        text(decoderBitWidth, mx + w + 10, my + GRIDSIZE + 15);
+                        break;
+                    case 3:
+                        triangle(mx + GRIDSIZE - 8, my + h + 10, mx + GRIDSIZE, my + h + 2, mx + GRIDSIZE + 8, my + h + 10);
+                        text(decoderBitWidth, mx + GRIDSIZE + 15, my + h + 10);
+                        break;
+                    default:
+                }
+
+                textSize(10);
+
+                switch (gateDirection) {
+                    case 0:
+                        text('[' + (decoderBitWidth - 1) + ':0]', mx + 15, my + GRIDSIZE);
+                        break;
+                    case 1:
+                        text('[' + (decoderBitWidth - 1) + ':0]', mx + GRIDSIZE, my + 10);
+                        break;
+                    case 2:
+                        text('[' + (decoderBitWidth - 1) + ':0]', mx + w - 15, my + GRIDSIZE);
+                        break;
+                    case 3:
+                        text('[' + (decoderBitWidth - 1) + ':0]', mx + GRIDSIZE, my + h - 10);
+                        break;
+                    default:
+                }
+
+                textSize(12);
+                switch (gateDirection) {
+                    case 0:
+                        triangle(mx + w + 10, my + GRIDSIZE - 8, mx + w + 2, my + GRIDSIZE, mx + w + 10, my + GRIDSIZE + 8);
+                        text(Math.pow(2, decoderBitWidth), mx + w + 10, my + GRIDSIZE + 15);
+                        break;
+                    case 1:
+                        triangle(mx + GRIDSIZE - 8, my + h + 10, mx + GRIDSIZE, my + h + 2, mx + GRIDSIZE + 8, my + h + 10);
+                        text(Math.pow(2, decoderBitWidth), mx + GRIDSIZE + 15, my + h + 10);
+                        break;
+                    case 2:
+                        triangle(mx - 9, my + GRIDSIZE - 8, mx - 1, my + GRIDSIZE, mx - 9, my + GRIDSIZE + 8);
+                        text(Math.pow(2, decoderBitWidth), mx - 10, my + GRIDSIZE + 15);
+                        break;
+                    case 3:
+                        triangle(mx + GRIDSIZE - 8, my - 9, mx + GRIDSIZE, my - 1, mx + GRIDSIZE + 8, my - 9);
+                        text(Math.pow(2, decoderBitWidth), mx + GRIDSIZE + 15, my - 10);
+                        break;
+                    default:
+                }
+
+                textSize(10);
+
+                switch (gateDirection) {
+                    case 0:
+                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + w - 15, my + GRIDSIZE);
+                        break;
+                    case 1:
+                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + GRIDSIZE, my + h - 10);
+                        break;
+                    case 2:
+                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + 15, my + GRIDSIZE);
+                        break;
+                    case 3:
+                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + GRIDSIZE, my + 10);
+                        break;
+                    default:
+                }
+
+                textSize(14);
+                textAlign(LEFT, BOTTOM);
+
+                switch (gateDirection) {
+                    case 0:
+                        text('↺', mx + w - 16, my + h - GRIDSIZE / 2 - 3);
+                        break;
+                    case 1:
+                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + h - 3);
+                        break;
+                    case 2:
+                        text('↺', mx + 5, my + h - GRIDSIZE / 2 - 3);
+                        break;
+                    case 3:
+                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + 18);
+                        break;
+                    default:
+                }
+
+                switch (gateDirection) {
+                    case 0:
+                        text('↺', mx + 5, my + h - GRIDSIZE / 2 - 3);
+                        break;
+                    case 1:
+                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + 18);
+                        break;
+                    case 2:
+                        text('↺', mx + w - 16, my + h - GRIDSIZE / 2 - 3);
+                        break;
+                    case 3:
+                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + h - 3);
+                        break;
+                    default:
+                }
+
+                break;
+            default:
         }
     }
 }

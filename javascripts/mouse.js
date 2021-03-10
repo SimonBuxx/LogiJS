@@ -145,6 +145,36 @@ function updateCursors() {
                         cursor(HAND);
                     }
                 }
+                for (const elem of decoders) {
+                    if (!elem.useInBus) {
+                        for (const e of elem.inputClickBoxes) {
+                            if (e.mouseOver()) {
+                                hand = true;
+                                cursor(HAND);
+                                negDir = elem.direction;
+                                negPort = e;
+                                isOutput = false;
+                            }
+                        }
+                    }
+
+                    if (!elem.useOutBus) {
+                        for (const e of elem.outputClickBoxes) {
+                            if (e.mouseOver()) {
+                                hand = true;
+                                cursor(HAND);
+                                negDir = elem.direction;
+                                negPort = e;
+                                isOutput = true;
+                            }
+                        }
+                    }
+                    
+                    if ((elem.useInBus && elem.invertInputClickBox.mouseOver()) || (elem.useOutBus && elem.invertOutputClickBox.mouseOver())) {
+                        hand = true;
+                        cursor(HAND);
+                    }
+                }
                 for (const elem of customs) {
                     if (!elem.visible) {
                         continue;
@@ -362,6 +392,11 @@ function mouseClicked() {
                                 addBusWrapper(busWrapperWidth, gateDirection);
                             }
                             break;
+                        case 14: // add decoder
+                            if (mouseButton === LEFT) {
+                                addDecoder(decoderBitWidth, gateDirection);
+                            }
+                            break;
                         case 7: // add output
                             if (mouseButton === LEFT) {
                                 addOutput();
@@ -548,6 +583,34 @@ function mouseReleased() {
                                     }
                                 }
                             }
+                            for (let i = 0; i < decoders.length; i++) {
+                                if (!decoders[i].useInBus) {
+                                    for (let j = 0; j < decoders[i].inputCount; j++) {
+                                        if (decoders[i].mouseOverInput(j)) {
+                                            decoders[i].invertInput(j);
+                                            let act = new Action('invDECIP', [i, j], null);
+                                            actionUndo.push(act);
+                                        }
+                                    }
+                                } else {
+                                    if (decoders[i].mouseOverInputInvert()) {
+                                        decoders[i].invertInputBus();
+                                    }
+                                }
+                                if (!decoders[i].useOutBus) {
+                                    for (let j = 0; j < decoders[i].outputCount; j++) {
+                                        if (decoders[i].mouseOverOutput(j)) {
+                                            decoders[i].invertOutput(j);
+                                            let act = new Action('invDECOP', [i, j], null);
+                                            actionUndo.push(act);
+                                        }
+                                    }
+                                } else {
+                                    if (decoders[i].mouseOverOutputInvert()) {
+                                        decoders[i].invertOutputBus();
+                                    }
+                                }
+                            }
                             for (let i = 0; i < busWrappers.length; i++) {
                                 for (let j = 0; j < busWrappers[i].inputCount; j++) {
                                     if (busWrappers[i].mouseOverInput(j)) {
@@ -667,6 +730,10 @@ function mouseReleased() {
                         let unwrapperNumber = mouseOverBusUnwrapper();
                         if (unwrapperNumber >= 0) {
                             deleteBusUnwrapper(unwrapperNumber);
+                        }
+                        let decoderNumber = mouseOverDecoder();
+                        if (decoderNumber >= 0) {
+                            deleteDecoder(decoderNumber);
                         }
                         let segDisNumber = mouseOverSegDisplay();
                         if (segDisNumber >= 0) {
@@ -797,6 +864,15 @@ function mouseOverBusWrapper() {
 function mouseOverBusUnwrapper() {
     for (var i = busUnwrappers.length - 1; i >= 0; i--) {
         if (busUnwrappers[i].mouseOver()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function mouseOverDecoder() {
+    for (var i = decoders.length - 1; i >= 0; i--) {
+        if (decoders[i].mouseOver()) {
             return i;
         }
     }
