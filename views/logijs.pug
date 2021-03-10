@@ -101,15 +101,15 @@ body
   .update-container(style="position: relative; z-index: 1")
     #update-dialog 
       h1#message-caption New in this Version<span style="color: #c83232">.</span>
-      p#message-text Busses<span style="color: #c83232">.</span>
+      p#message-text Bus System<span style="color: #c83232">.</span>
         ul
-          li Bus system to transfer multiple bits on one line
-          li Can be used with Bus Wrapper and Unwrapper modules and the bus version of the 7-Segment Display
-          li Loading, saving and selection features implemented
-          li Custom modules cannot be used with busses yet
+          li The built-in decoder is now a native component (not loaded from a custom sketch)
+          li The new decoder provides options for bus in- and output
+          li Old decoder components can still be loaded in sketches but no longer placed, 
+            | please replace them with the new version to ensure compatibility
       p#message-text Miscellaneous<span style="color: #c83232">.</span>
         ul 
-          li Minor bug fixes and design work
+          li Minor bug fixes for the bus wrapper and unwrapper
       button#close-update.btn.btn-lg.btn-red.hover-btn(rel="nofollow" onclick="closeUpdateDialog();") Close
       .grey-rect-medium
       .red-rect-medium

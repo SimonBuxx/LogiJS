@@ -320,7 +320,7 @@ let tourStep = 0;
 
 let idMatchRef = null;
 
-let updateNo = 1;
+let updateNo = 2;
 
 /*
     Disable some error messages from p5
