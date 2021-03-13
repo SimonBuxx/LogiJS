@@ -286,14 +286,18 @@ function notClicked() {
     setUnactive();
     hideAllOptions();
     notButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0],
+        outputBusWidth: [0],
+        inputIsTop: [false],
         inputLabels: [''],
         outputLabels: ['1'],
         caption: 'NOT',
-        inputs: 1,
-        outputs: 1
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 1
+    }
     return importCustom('not-gate.json');
 }
 
@@ -301,14 +305,18 @@ function bufferClicked() {
     setUnactive();
     hideAllOptions();
     bufferButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0],
+        outputBusWidth: [0],
+        inputIsTop: [false],
         inputLabels: [''],
         outputLabels: ['1'],
         caption: '',
-        inputs: 1,
-        outputs: 1
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 1
+    }
     return importCustom('1-buffer.json');
 }
 
@@ -316,14 +324,18 @@ function rsFlipFlopClicked() {
     setUnactive();
     hideAllOptions();
     rsFlipFlopButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0, 0],
+        outputBusWidth: [0, 0],
+        inputIsTop: [false, false],
         inputLabels: ['S', 'R'],
         outputLabels: ['Q', 'Q̅'],
         caption: 'RS-FF',
-        inputs: 2,
-        outputs: 2
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
     return importCustom('rs-flipflop.json');
 }
 
@@ -331,14 +343,18 @@ function dFlipFlopClicked() {
     setUnactive();
     hideAllOptions();
     dFlipFlopButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0, 0],
+        outputBusWidth: [0, 0],
+        inputIsTop: [false, false],
         inputLabels: ['D', '>'],
         outputLabels: ['Q', 'Q̅'],
         caption: 'D-FF',
-        inputs: 2,
-        outputs: 2
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
     return importCustom('d-flipflop.json');
 }
 
@@ -346,14 +362,18 @@ function jkFlipFlopClicked() {
     setUnactive();
     hideAllOptions();
     jkFlipFlopButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0, 0, 0],
+        outputBusWidth: [0, 0],
+        inputIsTop: [false, false],
         inputLabels: ['J', '>', 'K'],
         outputLabels: ['Q', 'Q̅'],
         caption: 'JK-FF',
-        inputs: 3,
-        outputs: 2
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 3
+    }
     return importCustom('jk-flipflop.json');
 }
 
@@ -361,14 +381,18 @@ function rsClockedClicked() {
     setUnactive();
     hideAllOptions();
     rsClockedButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0, 0, 0],
+        outputBusWidth: [0, 0],
+        inputIsTop: [false, false],
         inputLabels: ['S', '>', 'R'],
         outputLabels: ['Q', 'Q̅'],
         caption: 'RS-FF',
-        inputs: 3,
-        outputs: 2
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 3
+    }
     return importCustom('rs-clocked.json');
 }
 
@@ -376,14 +400,18 @@ function tFlipFlopClicked() {
     setUnactive();
     hideAllOptions();
     tFlipFlopButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0, 0],
+        outputBusWidth: [0, 0],
+        inputIsTop: [false, false],
         inputLabels: ['T', '>'],
         outputLabels: ['Q', 'Q̅'],
         caption: 'T-FF',
-        inputs: 2,
-        outputs: 2
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
     return importCustom('t-flipflop.json');
 }
 
@@ -391,14 +419,18 @@ function registerClicked() {
     setUnactive();
     hideAllOptions();
     registerButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [0, 1],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0, 0, 0, 0, 0, 0],
+        outputBusWidth: [0, 0, 0, 0],
+        inputIsTop: [true, true, false, false, false, false],
         inputLabels: ['L', '>', '2³', '2²', '2¹', '2º'],
         outputLabels: ['2³', '2²', '2¹', '2º'],
         caption: 'Register',
-        inputs: 6,
-        outputs: 4
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
     return importCustom('4-register.json');
 }
 
@@ -407,15 +439,7 @@ function decoderClicked() {
     hideAllOptions();
     decoderButton.classList.add('active');
 
-    if (!useInputBus && !useOutputBus) {
-        setPreviewElement(false, {}, 'decoder');
-    } else if (useInputBus && !useOutputBus) {
-        setPreviewElement(false, {}, 'decoder-in');
-    } else if (!useInputBus && useOutputBus) {
-        setPreviewElement(false, {}, 'decoder-out');
-    } else {
-        setPreviewElement(false, {}, 'decoder-in-out');
-    }
+    setDecoderPreview();
 
     setControlMode('addObject');
     addType = 14;
@@ -452,18 +476,20 @@ function muxClicked() {
     for (let i = 0; i < Math.pow(2, muxBitWidth); i++) {
         ipLabels.push(i);
     }
-    let tops = [];
-    for (let i = 0; i < muxBitWidth; i++) {
-        tops.push(i);
-    }
-    setPreviewElement(true, {
-        tops: tops,
+
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: Array(Math.pow(2, muxBitWidth) + muxBitWidth).fill(0),
+        outputBusWidth: [0],
+        inputIsTop: Array(muxBitWidth).fill(true).concat(Array(Math.pow(2, muxBitWidth)).fill(false)),
         inputLabels: ipLabels,
         outputLabels: [''],
         caption: 'MUX',
-        inputs: Math.pow(2, muxBitWidth) + muxBitWidth,
-        outputs: 1
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
+
     setControlMode('addObject');
     addType = 10;
     labelDirection.style.display = 'inline-block';
@@ -494,22 +520,24 @@ function demuxClicked() {
             break;
     }
     ipLabels.push('');
-    let tops = [];
-    for (let i = 0; i < muxBitWidth; i++) {
-        tops.push(i);
-    }
     let opLabels = [];
     for (let i = 0; i < Math.pow(2, muxBitWidth); i++) {
         opLabels.push(i);
     }
-    setPreviewElement(true, {
-        tops: tops,
+
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: Array(muxBitWidth + 1).fill(0),
+        outputBusWidth: Array(Math.pow(2, muxBitWidth)).fill(0),
+        inputIsTop: Array(muxBitWidth).fill(true).concat([false]),
         inputLabels: ipLabels,
         outputLabels: opLabels,
         caption: 'DEMUX',
-        inputs: 1 + muxBitWidth,
-        outputs: Math.pow(2, muxBitWidth)
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
+
     setControlMode('addObject');
     addType = 10;
     labelDirection.style.display = 'inline-block';
@@ -524,24 +552,7 @@ function busUnwrapperClicked() {
     setUnactive();
     hideAllOptions();
     unwrapperButton.classList.add('active');
-    let ipLabels = [];
-    ipLabels.push('BUS' + busWrapperWidth);
-    let opLabels = [];
-    for (let i = 1; i <= busWrapperWidth; i++) {
-        if (busWrapperWidth - i < 10) {
-            opLabels.push('2' + superscripts[busWrapperWidth - i]);
-        } else {
-            opLabels.push('2' + superscripts[Math.floor((busWrapperWidth - i) / 10)] + superscripts[busWrapperWidth - i - Math.floor((busWrapperWidth - i) / 10) * 10]);
-        }
-    }
-    setPreviewElement(true, {
-        tops: [],
-        inputLabels: ipLabels,
-        outputLabels: opLabels,
-        caption: 'UNWRAP',
-        inputs: 1,
-        outputs: busWrapperWidth
-    });
+    setBusUnwrapperPreview();
     setControlMode('addObject');
     addType = 12;
     labelDirection.style.display = 'inline-block';
@@ -555,24 +566,7 @@ function busWrapperClicked() {
     setUnactive();
     hideAllOptions();
     wrapperButton.classList.add('active');
-    let opLabels = [];
-    opLabels.push('BUS' + busWrapperWidth);
-    let ipLabels = [];
-    for (let i = 1; i <= busWrapperWidth; i++) {
-        if (busWrapperWidth - i < 10) {
-            ipLabels.push('2' + superscripts[busWrapperWidth - i]);
-        } else {
-            ipLabels.push('2' + superscripts[Math.floor((busWrapperWidth - i) / 10)] + superscripts[busWrapperWidth - i - Math.floor((busWrapperWidth - i) / 10) * 10]);
-        }
-    }
-    setPreviewElement(true, {
-        tops: [],
-        inputLabels: ipLabels,
-        outputLabels: opLabels,
-        caption: 'WRAP',
-        inputs: busWrapperWidth,
-        outputs: 1
-    });
+    setBusWrapperPreview();
     setControlMode('addObject');
     addType = 13;
     labelDirection.style.display = 'inline-block';
@@ -586,14 +580,18 @@ function halfaddClicked() {
     setUnactive();
     hideAllOptions();
     halfaddButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0, 0],
+        outputBusWidth: [0, 0],
+        inputIsTop: [false, false],
         inputLabels: ['A', 'B'],
         outputLabels: ['C', 'S'],
         caption: 'HA',
-        inputs: 2,
-        outputs: 2
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
     return importCustom('half_add.json');
 }
 
@@ -601,14 +599,18 @@ function fulladdClicked() {
     setUnactive();
     hideAllOptions();
     fulladdButton.classList.add('active');
-    setPreviewElement(true, {
-        tops: [],
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0, 0, 0],
+        outputBusWidth: [0, 0],
+        inputIsTop: [false, false, false],
         inputLabels: ['A', 'B', 'C'],
         outputLabels: ['C', 'S'],
         caption: 'FA',
-        inputs: 3,
-        outputs: 2
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
     return importCustom('full_add.json');
 }
 
@@ -620,14 +622,20 @@ function counterClicked() {
     for (let i = 0; i < counterBitWidth; i++) {
         opLabels.push('2' + superscripts[counterBitWidth - i - 1]);
     }
-    setPreviewElement(true, {
-        tops: [],
+
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [0],
+        outputBusWidth: Array(counterBitWidth).fill(0),
+        inputIsTop: [false],
         inputLabels: ['>'],
         outputLabels: opLabels,
         caption: 'Counter',
-        inputs: 1,
-        outputs: counterBitWidth
-    });
+        inputInverter: false,
+        outputInverter: false,
+        minHeight: 2
+    }
+
     setControlMode('addObject');
     addType = 10;
     labelDirection.style.display = 'inline-block';
@@ -689,7 +697,6 @@ function screenshotClicked() {
     screenshotDialog = true;
     setHelpText('');
     setControlMode('modify');
-    setPreviewElement(false, {}, 'none');
     setUnactive();
     hideAllOptions();
     configureButtons('screenshot');

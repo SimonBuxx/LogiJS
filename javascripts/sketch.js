@@ -191,6 +191,7 @@ let messageHider;
 */
 
 let previewData = {};
+let previewFeatures = {};
 
 let importSketchData = {}; // Contains look and caption of all user sketches that can be imported
 
@@ -411,6 +412,8 @@ function importCustom(filename) {
         if (customDialog.isVisible) {
             addType = 11; // external custom
             customDialog.hide();
+            configureButtons('edit');
+            mainCanvas.elt.classList.remove('dark-canvas');
         } else {
             addType = 10; // internal custom
         }
@@ -428,7 +431,6 @@ function customClicked() {
         mainCanvas.elt.classList.remove('dark-canvas');
     } else {
         setControlMode('modify');
-        setPreviewElement(false, {}, 'none');
         setUnactive();
         hideAllOptions();
         customButton.classList.add('active');
@@ -603,28 +605,27 @@ function labelChanged() {
 
 function newGateInputNumber() {
     gateInputCount = parseInt(gateInputSelect.value);
+    previewFeatures.inputBusWidth = Array(gateInputCount).fill(0);
+    previewFeatures.inputIsTop = Array(gateInputCount).fill(false);
+    previewFeatures.inputLabels = Array(gateInputCount).fill('');
 }
 
 function newDisplayBitLength() {
-    sevenSegmentBits = parseInt(displaySelect.value);
+    sevenSegmentBits = parseInt(displaySelect.value); 
 }
 
 function newCounterBitLength() {
     counterBitWidth = parseInt(counterBitSelect.value);
     custFile = counterBitWidth + '-counter.json';
     if (counterButton.className.includes('active')) {
+
         let opLabels = [];
         for (let i = 0; i < counterBitWidth; i++) {
             opLabels.push('2' + superscripts[counterBitWidth - i - 1]);
         }
-        setPreviewElement(true, {
-            tops: [],
-            inputLabels: ['>'],
-            outputLabels: opLabels,
-            caption: 'Counter',
-            inputs: 1,
-            outputs: counterBitWidth
-        });
+
+        previewFeatures.outputBusWidth = Array(counterBitWidth).fill(0);
+        previewFeatures.outputLabels = opLabels;
     }
 }
 
@@ -632,15 +633,7 @@ function newDecoderBitLength() {
     decoderBitWidth = parseInt(decoderBitSelect.value);
     custFile = decoderBitWidth + '-decoder.json';
     if (decoderButton.className.includes('active')) {
-        if (!useInputBus && !useOutputBus) {
-            setPreviewElement(false, {}, 'decoder');
-        } else if (useInputBus && !useOutputBus) {
-            setPreviewElement(false, {}, 'decoder-in');
-        } else if (!useInputBus && useOutputBus) {
-            setPreviewElement(false, {}, 'decoder-out');
-        } else {
-            setPreviewElement(false, {}, 'decoder-in-out');
-        }
+        setDecoderPreview();
     }
 }
 
@@ -648,8 +641,10 @@ function newBusWrapperWidth() {
     busWrapperWidth = parseInt(wrapperWidthSelect.value);
     if (addType === 12) {
         busUnwrapperClicked();
+        setBusUnwrapperPreview();
     } else if (addType === 13) {
         busWrapperClicked();
+        setBusWrapperPreview();
     }
 }
 
@@ -658,21 +653,9 @@ function useBusChanged() {
     useInputBus = inBusCheckbox.checked;
     useOutputBus = outBusCheckbox.checked;
     if (addType === 14) { // Decoder
-        if (!useInputBus && !useOutputBus) {
-            setPreviewElement(false, {}, 'decoder');
-        } else if (useInputBus && !useOutputBus) {
-            setPreviewElement(false, {}, 'decoder-in');
-        } else if (!useInputBus && useOutputBus) {
-            setPreviewElement(false, {}, 'decoder-out');
-        } else {
-            setPreviewElement(false, {}, 'decoder-in-out');
-        }
+        setDecoderPreview();
     } else if (addType === 8) { // 7-segment display
-        if (!busVersions) {
-            setPreviewElement(false, {}, '7-segment');
-        } else {
-            setPreviewElement(false, {}, '7-segment-bus');
-        }
+        previewFeatures.inputBusWidth = busVersions ? [sevenSegmentBits] : Array(sevenSegmentBits).fill(0);
     }
 }
 
@@ -697,18 +680,11 @@ function newMuxBitLength() {
         for (let i = 0; i < Math.pow(2, muxBitWidth); i++) {
             ipLabels.push(i);
         }
-        let tops = [];
-        for (let i = 0; i < muxBitWidth; i++) {
-            tops.push(i);
-        }
-        setPreviewElement(true, {
-            tops: tops,
-            inputLabels: ipLabels,
-            outputLabels: [''],
-            caption: 'MUX',
-            inputs: Math.pow(2, muxBitWidth) + muxBitWidth,
-            outputs: 1
-        });
+
+        previewFeatures.inputBusWidth = Array(Math.pow(2, muxBitWidth) + muxBitWidth).fill(0);
+        previewFeatures.inputIsTop = Array(muxBitWidth).fill(true).concat(Array(Math.pow(2, muxBitWidth)).fill(false));
+        previewFeatures.inputLabels = ipLabels;
+
         custFile = muxBitWidth + '-mux.json';
     } else if (demuxButton.className.includes('active')) {
         let ipLabels = [];
@@ -727,22 +703,17 @@ function newMuxBitLength() {
                 break;
         }
         ipLabels.push('');
-        let tops = [];
-        for (let i = 0; i < muxBitWidth; i++) {
-            tops.push(i);
-        }
         let opLabels = [];
         for (let i = 0; i < Math.pow(2, muxBitWidth); i++) {
             opLabels.push(i);
         }
-        setPreviewElement(true, {
-            tops: tops,
-            inputLabels: ipLabels,
-            outputLabels: opLabels,
-            caption: 'DEMUX',
-            inputs: 1 + muxBitWidth,
-            outputs: Math.pow(2, muxBitWidth)
-        });
+        
+        previewFeatures.inputBusWidth = Array(muxBitWidth + 1).fill(0);
+        previewFeatures.outputBusWidth = Array(Math.pow(2, muxBitWidth)).fill(0);
+        previewFeatures.inputIsTop = Array(muxBitWidth).fill(true).concat([false]);
+        previewFeatures.inputLabels = ipLabels;
+        previewFeatures.outputLabels = opLabels;
+
         custFile = muxBitWidth + '-demux.json';
     }
 }
@@ -818,7 +789,18 @@ function andClicked(dontToggle = false) {
         andButton.classList.add('active');
         setControlMode('addObject');
         addType = 1; // and
-        setPreviewElement(false, {}, 'and');
+        previewFeatures = {
+            type: 'and',
+            inputBusWidth: [0, 0],
+            outputBusWidth: [0],
+            inputIsTop: [false, false],
+            inputLabels: ['', ''],
+            outputLabels: [''],
+            caption: '',
+            inputInverter: false,
+            outputInverter: false,
+            minHeight: 2
+        }
         gateInputSelect.style.display = 'inline-block';
         labelGateInputs.style.display = 'inline-block';
         directionSelect.style.display = 'inline-block';
@@ -836,7 +818,18 @@ function orClicked(dontToggle = false) {
         orButton.classList.add('active');
         setControlMode('addObject');
         addType = 2; // or
-        setPreviewElement(false, {}, 'or');
+        previewFeatures = {
+            type: 'or',
+            inputBusWidth: [0, 0],
+            outputBusWidth: [0],
+            inputIsTop: [false, false],
+            inputLabels: ['', ''],
+            outputLabels: [''],
+            caption: '',
+            inputInverter: false,
+            outputInverter: false,
+            minHeight: 2
+        }
         gateInputSelect.style.display = 'inline-block';
         labelGateInputs.style.display = 'inline-block';
         directionSelect.style.display = 'inline-block';
@@ -854,7 +847,18 @@ function xorClicked(dontToggle = false) {
         xorButton.classList.add('active');
         setControlMode('addObject');
         addType = 3; // xor
-        setPreviewElement(false, {}, 'xor');
+        previewFeatures = {
+            type: 'xor',
+            inputBusWidth: [0, 0],
+            outputBusWidth: [0],
+            inputIsTop: [false, false],
+            inputLabels: ['', ''],
+            outputLabels: [''],
+            caption: '',
+            inputInverter: false,
+            outputInverter: false,
+            minHeight: 2
+        }
         gateInputSelect.style.display = 'inline-block';
         labelGateInputs.style.display = 'inline-block';
         directionSelect.style.display = 'inline-block';
@@ -871,7 +875,7 @@ function switchClicked(dontToggle = false) {
         setUnactive();
         switchButton.classList.add('active');
         inputType = 'switch';
-        setPreviewElement(false, {}, 'switch');
+        previewFeatures.type = 'switch';
         setControlMode('addObject');
         addType = 4; // switch
     }
@@ -885,7 +889,7 @@ function buttonClicked(dontToggle = false) {
         setUnactive();
         buttonButton.classList.add('active');
         inputType = 'button';
-        setPreviewElement(false, {}, 'button');
+        previewFeatures.type = 'button';
         setControlMode('addObject');
         addType = 5; // button
     }
@@ -899,7 +903,7 @@ function clockClicked(dontToggle = false) {
         setUnactive();
         clockButton.classList.add('active');
         inputType = 'clock';
-        setPreviewElement(false, {}, 'clock');
+        previewFeatures.type = 'clock';
         setControlMode('addObject');
         addType = 6; // clock
     }
@@ -914,7 +918,7 @@ function outputClicked(dontToggle = false) {
         outputButton.classList.add('active');
         setControlMode('addObject');
         addType = 7; // output
-        setPreviewElement(false, {}, 'output');
+        previewFeatures.type = 'output';
     }
 }
 
@@ -927,11 +931,8 @@ function displayClicked(dontToggle = false) {
         displayButton.classList.add('active');
         setControlMode('addObject');
         addType = 8; // segDisplay
-        if (!busVersions) {
-            setPreviewElement(false, {}, '7-segment');
-        } else {
-            setPreviewElement(false, {}, '7-segment-bus');
-        }
+        previewFeatures.inputBusWidth = busVersions ? [sevenSegmentBits] : Array(sevenSegmentBits).fill(0);
+        previewFeatures.type = 'display';
         displaySelect.style.display = 'inline-block';
         labelDisplay.style.display = 'inline-block';
         labelOptions.style.display = 'block';
@@ -964,7 +965,7 @@ function labelButtonClicked(dontToggle = false) {
         labelButton.classList.add('active');
         setControlMode('addObject');
         addType = 9; // label
-        setPreviewElement(false, {}, 'label');
+        previewFeatures.type = 'label';
     }
 }
 
@@ -1429,9 +1430,9 @@ function addBusUnwrapper(bits, direction) {
 }
 
 function addDecoder(bits, direction) {
-    for (var i = 0; i < decoders.length; i++) {
-        if ((decoders[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (decoders[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
+    for (let i = 0; i < decoders.length; i++) {
+        if ((decoders[i].x === Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE) &&
+            (decoders[i].y === Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE)) {
             return;
         }
     }
@@ -2246,9 +2247,8 @@ function showElements() {
         elem.show();
     }
 
-    if (controlMode === 'addObject' && !dropdownClicked) {
-        textFont('Consolas');
-        showElementPreview();
+    if (controlMode === 'addObject' && !dropdownClicked && !customDialog.isVisible && !screenshotDialog) {
+        showModulePreview();
     }
 
     if (showSelectionBox) {
@@ -2319,13 +2319,6 @@ function keyPressed() {
                 }
                 return false;
             case CONTROL:
-                // Uncomment to make screenshots
-                //let img  = canvas.toDataURL("image/png");
-                //document.write('<img src="'+img+'"/>');
-                //console.log(customs);
-                //idMatchRef = _.cloneDeep(wires);
-                //busGroups[0].states = [false, true, false, true];
-                //busGroups[0].states = [true, true, false, false, true, false, true, false];
                 break;
             case 32: // Space
                 if (simRunning) {

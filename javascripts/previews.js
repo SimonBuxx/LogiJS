@@ -1,1010 +1,554 @@
 // File: previews.js
 // Contains functions to display the preview objects
 
-function setPreviewElement(isCustom, customData, type = 'custom') {
-    previewData = {
-        isCustom: isCustom,
-        customData: customData,
-        type: type
-    };
+function setDecoderPreview() {
+    let inputBusWidth, outputBusWidth;
+    let inputLabels = [];
+    let outputLabels = [];
+
+    if (!useInputBus) {
+        inputBusWidth = Array(decoderBitWidth).fill(0);
+
+        // Define the input labels (bit width is < 10, so there's no problem with the superscripts)
+        for (let i = 0; i < decoderBitWidth; i++) {
+            inputLabels.push('2' + superscripts[decoderBitWidth - i - 1]);
+        }
+    } else {
+        inputLabels = Array(decoderBitWidth).fill('');
+        inputBusWidth = [decoderBitWidth];
+    }
+
+    if (!useOutputBus) {
+        outputBusWidth = Array(Math.pow(2, decoderBitWidth)).fill(0);
+
+        // Define the output labels
+        for (let i = 0; i < Math.pow(2, decoderBitWidth); i++) {
+            outputLabels.push(i);
+        }
+    } else {
+        outputLabels = Array(Math.pow(2, decoderBitWidth)).fill('');
+        outputBusWidth = [Math.pow(2, decoderBitWidth)];
+    }
+
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: inputBusWidth, // > 0 if the input is a bus
+        outputBusWidth: outputBusWidth,
+        inputIsTop: Array(decoderBitWidth).fill(false),
+        inputLabels: inputLabels,
+        outputLabels: outputLabels,
+        caption: 'Decoder',
+        inputInverter: useInputBus,
+        outputInverter: useOutputBus,
+        minHeight: 2
+    }
 }
 
-function showElementPreview() {
-    if (wireMode === 'preview' || loading) {
-        return;
+function setBusWrapperPreview() {
+    let inputLabels = [];
+
+    for (let i = 0; i < busWrapperWidth; i++) {
+        if (busWrapperWidth - i - 1 < 10) {
+            inputLabels.push('2' + superscripts[busWrapperWidth - i - 1]);
+        } else {
+            inputLabels.push('2' + superscripts[Math.floor((busWrapperWidth - i - 1) / 10)] + superscripts[busWrapperWidth - i - 1 - Math.floor((busWrapperWidth - i - 1) / 10) * 10]);
+        }
     }
-    let mx = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
-    let my = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
-    let x1, x2, y1, y2;
 
-    let elemHeight, x, y;
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: Array(busWrapperWidth).fill(0),
+        outputBusWidth: [busWrapperWidth],
+        inputIsTop: Array(busWrapperWidth).fill(false),
+        inputLabels: inputLabels,
+        outputLabels: [' '],
+        caption: 'WRAP',
+        inputInverter: false,
+        outputInverter: true,
+        minHeight: 2
+    }
+}
 
-    if (previewData.isCustom) {
-        mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-        my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-        let item = previewData.customData;
-        let w, h;
+function setBusUnwrapperPreview() {
+    let outputLabels = [];
 
-        if (gateDirection % 2 === 0) {
-            w = Math.max((item.tops.length - 1), 0) * 30 + 60;
-            h = (Math.max(item.inputs - item.tops.length, item.outputs) + 1) * 30;
+    for (let i = 0; i < busWrapperWidth; i++) {
+        if (busWrapperWidth - i - 1 < 10) {
+            outputLabels.push('2' + superscripts[busWrapperWidth - i - 1]);
         } else {
-            h = Math.max((item.tops.length - 1), 0) * 30 + 60;
-            w = (Math.max(item.inputs - item.tops.length, item.outputs) + 1) * 30;
+            outputLabels.push('2' + superscripts[Math.floor((busWrapperWidth - i - 1) / 10)] + superscripts[busWrapperWidth - i - 1 - Math.floor((busWrapperWidth - i - 1) / 10) * 10]);
         }
+    }
 
-        let gridHeight = (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
+    previewFeatures = {
+        type: 'module',
+        inputBusWidth: [busWrapperWidth],
+        outputBusWidth: Array(busWrapperWidth).fill(0),
+        inputIsTop: [false],
+        inputLabels: [' '],
+        outputLabels: outputLabels,
+        caption: 'UNWRAP',
+        inputInverter: true,
+        outputInverter: false,
+        minHeight: 2
+    }
+}
 
-        stroke(0);
-        strokeWeight(3);
-        fill(255);
-        textFont('Arial');
+function showModulePreview() {
+    // Calculate the position of the top left module corner
+    let mX = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+    let mY = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
 
-        // Draw the body
-        if (item.tops.length === 0) {
+    switch (previewFeatures.type) {
+        case 'module':
+        case 'and':
+        case 'or':
+        case 'xor':
+            let tops = previewFeatures.inputIsTop.filter(Boolean).length;
+
+            // Calculate module width and height
+            let mW, mH;
             if (gateDirection % 2 === 0) {
-                rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
+                mW = Math.max((tops + 1), 2) * GRIDSIZE;
+                mH = (Math.max(previewFeatures.inputBusWidth.length - tops, previewFeatures.outputBusWidth.length, previewFeatures.minHeight) + 1) * GRIDSIZE;
             } else {
-                rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
+                mW = (Math.max(previewFeatures.inputBusWidth.length - tops, previewFeatures.outputBusWidth.length, previewFeatures.minHeight) + 1) * GRIDSIZE;
+                mH = Math.max((tops + 1), 2) * GRIDSIZE;
             }
-        } else {
-            rect(mx, my, w, h);
-        }
 
-        noStroke();
-        textAlign(CENTER, CENTER);
-        fill(0);
-        textSize(10);
-        if (Math.max(item.inputs - item.tops.length, item.outputs) % 2 !== 0 && textWidth(item.caption) >= w - 30 && Math.max(item.inputs - item.tops.length, item.outputs) >= 2 && gateDirection % 2 === 0) {
-            text(item.caption, mx + w / 2, my + h / 2 - 15);
-        } else {
-            text(item.caption, mx + w / 2, my + h / 2);
-        }
-        textSize(14);
+            let heightOnGrid = Math.max(previewFeatures.inputBusWidth.length - tops, previewFeatures.outputBusWidth.length, previewFeatures.minHeight) + 1;
 
-        let tops = 0;
-        // Draw inputs
-        for (let i = 1; i <= item.inputs; i++) {
-            stroke(LRED, LGREEN, LBLUE);
+            let drawnTops = 0;
+
+            fill(255);
+            stroke(0);
             strokeWeight(3);
+            textFont('Arial');
+            textAlign(CENTER, CENTER);
 
-            if (!item.tops.includes(i - 1)) {
-                switch (gateDirection) {
-                    case 0:
-                        x1 = mx - 6;
-                        y1 = my + (h * (i - tops)) / gridHeight;
-                        x2 = mx;
-                        y2 = my + (h * (i - tops)) / gridHeight;
-                        break;
-                    case 1:
-                        x1 = mx + (w * (i - tops)) / gridHeight;
-                        y1 = my - 6;
-                        x2 = mx + (w * (i - tops)) / gridHeight;
-                        y2 = my;
-                        break;
-                    case 2:
-                        x1 = mx + w;
-                        y1 = my + (h * (i - tops)) / gridHeight;
-                        x2 = mx + w + 6;
-                        y2 = my + (h * (i - tops)) / gridHeight;
-                        break;
-                    case 3:
-                        x1 = mx + (w * (i - tops)) / gridHeight;
-                        y1 = my + h;
-                        x2 = mx + (w * (i - tops)) / gridHeight;
-                        y2 = my + h + 6;
-                        break;
-                    default:
-                        console.log('Gate direction doesn\'t exist!');
-                }
-            } else {
-                tops++;
-                switch (gateDirection) {
-                    case 0:
-                        x1 = mx + (h * tops) / gridHeight;
-                        y1 = my - 6;
-                        x2 = mx + (h * tops) / gridHeight;
-                        y2 = my;
-                        break;
-                    case 1:
-                        x1 = mx + w + 6;
-                        y1 = my + (w * tops) / gridHeight;
-                        x2 = mx + w;
-                        y2 = my + (w * tops) / gridHeight;
-                        break;
-                    case 2:
-                        x1 = mx + (h * tops) / gridHeight;
-                        y1 = my + h;
-                        x2 = mx + (h * tops) / gridHeight;
-                        y2 = my + h + 6;
-                        break;
-                    case 3:
-                        x1 = mx;
-                        y1 = my + (w * tops) / gridHeight;
-                        x2 = mx - 6;
-                        y2 = my + (w * tops) / gridHeight;
-                        break;
-                    default:
-                        console.log('Gate direction doesn\'t exist!');
-                }
-            }
-            if (item.inputLabels[i - 1].length >= i) {
-                if (!item.inputLabels[i - 1].startsWith('BUS')) {
-                    line(x1, y1, x2, y2);
-                }
-            } else {
-                line(x1, y1, x2, y2);
-            }
-
-            fill(0);
-
-            if (item.inputLabels[i - 1] === ">") {
-                stroke(0);
-                strokeWeight(2);
-                if (!item.tops.includes(i - 1)) {
-                    switch (gateDirection) {
-                        case 0:
-                            line(x2 + 14, y1, x2, y1 - 6);
-                            line(x2 + 14, y1, x2, y1 + 6);
-                            break;
-                        case 1:
-                            line(x1, y2 + 14, x1 - 6, y2);
-                            line(x1, y2 + 14, x1 + 6, y2);
-                            break;
-                        case 2:
-                            line(x1 - 14, y1, x1, y1 - 6);
-                            line(x1 - 14, y1, x1, y1 + 6);
-                            break;
-                        case 3:
-                            line(x1, y1 - 14, x1 - 6, y1);
-                            line(x1, y1 - 14, x1 + 6, y1);
-                            break;
-                    }
-                } else {
-                    switch (gateDirection) {
-                        case 0:
-                            line(x1, y2 + 14, x1 - 6, y2);
-                            line(x1, y2 + 14, x1 + 6, y2);
-                            break;
-                        case 1:
-                            line(x2 - 14, y1, x2, y1 - 6);
-                            line(x2 - 14, y1, x2, y1 + 6);
-                            break;
-                        case 2:
-                            line(x1, y1 - 14, x1 - 6, y1);
-                            line(x1, y1 - 14, x1 + 6, y1);
-                            break;
-                        case 3:
-                            line(x1 + 14, y1, x1, y1 - 6);
-                            line(x1 + 14, y1, x1, y1 + 6);
-                            break;
-                    }
-                }
-            } else if (item.inputLabels[i - 1].length >= i && item.inputLabels[i - 1].startsWith('BUS')) {
-                let busWidth = parseInt(item.inputLabels[i - 1].slice(3));
-                noStroke();
-                textSize(12);
-                if (!item.tops.includes(i - 1)) {
-                    /* Preview for normal bus inputs */
-                    switch (gateDirection) {
-                        case 0:
-                            triangle(x2 - 9, y1 - 8, x2 - 1, y1, x2 - 9, y1 + 8);
-                            text(busWidth, x2 - 10, y1 + 15);
-                            break;
-                        case 1:
-                            triangle(x1 - 8, y2 - 9, x1, y2 - 1, x1 + 8, y2 - 9);
-                            text(busWidth, x2 + 15, y1 - 4);
-                            break;
-                        case 2:
-                            triangle(x1 + 10, y1 - 8, x1 + 2, y1, x1 + 10, y1 + 8);
-                            text(busWidth, x1 + 10, y1 + 15);
-                            break;
-                        case 3:
-                            triangle(x1 - 8, y1 + 10, x1, y1 + 2, x1 + 8, y1 + 10);
-                            text(busWidth, x2 + 15, y2 + 4);
-                            break;
-                    }
-                } else {
-                    /* Preview for top bus inputs */
-                    switch (gateDirection) {
-                        case 0: break;
-                        case 1: break;
-                        case 2: break;
-                        case 3: break;
-                    }
-                }
-            } else if (item.inputLabels[i - 1] !== '') {
-                noStroke();
-                textSize(14);
-                if (!item.tops.includes(i - 1)) {
-                    switch (gateDirection) {
-                        case 0: text(item.inputLabels[i - 1], x2 + 10, y1); break;
-                        case 1: text(item.inputLabels[i - 1], x1, y2 + 10); break;
-                        case 2: text(item.inputLabels[i - 1], x1 - 10, y1); break;
-                        case 3: text(item.inputLabels[i - 1], x1, y1 - 10); break;
-                    }
-                } else {
-                    switch (gateDirection) {
-                        case 0: text(item.inputLabels[i - 1], x1, y2 + 10); break;
-                        case 1: text(item.inputLabels[i - 1], x2 - 10, y1); break;
-                        case 2: text(item.inputLabels[i - 1], x1, y1 - 10); break;
-                        case 3: text(item.inputLabels[i - 1], x1 + 10, y1); break;
-                    }
-                }
-            }
-        }
-
-        for (let i = 1; i <= item.outputs; i++) {
-            stroke(LRED, LGREEN, LBLUE);
-            strokeWeight(3);
-
-            switch (gateDirection) {
-                case 0:
-                    x1 = mx + w;
-                    y1 = my + (h * i) / (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
-                    x2 = mx + w + 6;
-                    y2 = my + (h * i) / (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
-                    break;
-                case 1:
-                    x1 = mx + (w * i) / (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
-                    y1 = my + h;
-                    x2 = mx + (w * i) / (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
-                    y2 = my + h + 6;
-                    break;
-                case 2:
-                    x1 = mx - 6;
-                    y1 = my + (h * i) / (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
-                    x2 = mx;
-                    y2 = my + (h * i) / (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
-                    break;
-                case 3:
-                    x1 = mx + (w * i) / (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
-                    y1 = my;
-                    x2 = mx + (w * i) / (Math.max(item.inputs - item.tops.length, item.outputs) + 1);
-                    y2 = my - 6;
-                    break;
-                default:
-                    console.log('Gate direction doesn\'t exist!');
-            }
-            if (item.outputLabels[i - 1].length >= i) {
-                if (!item.outputLabels[i - 1].startsWith('BUS')) {
-                    line(x1, y1, x2, y2);
-                }
-            } else {
-                line(x1, y1, x2, y2);
-            }
-
-            fill(0);
-            noStroke();
-            textSize(14);
-            if (item.outputLabels[i - 1].length >= i && item.outputLabels[i - 1].startsWith('BUS')) {
-                let busWidth = parseInt(item.outputLabels[i - 1].slice(3));
-                noStroke();
-                textSize(12);
-                if (!item.tops.includes(i - 1)) {
-                    /* Preview for normal bus inputs */
-                    switch (gateDirection) {
-                        case 0:
-                            triangle(x1 + 10, y1 - 8, x1 + 2, y1, x1 + 10, y1 + 8);
-                            text(busWidth, x1 + 10, y1 + 15);
-                            break;
-                        case 1:
-                            triangle(x1 - 8, y1 + 10, x1, y1 + 2, x1 + 8, y1 + 10);
-                            text(busWidth, x2 + 15, y2 + 4);
-                            break;
-                        case 2:
-                            triangle(x2 - 9, y1 - 8, x2 - 1, y1, x2 - 9, y1 + 8);
-                            text(busWidth, x2 - 10, y1 + 15);
-                            break;
-                        case 3:
-                            triangle(x1 - 8, y1 - 9, x1, y1 - 1, x1 + 8, y1 - 9);
-                            text(busWidth, x2 + 15, y2 - 4);
-                            break;
-                    }
-                } else {
-                    /* Preview for top bus inputs */
-                    switch (gateDirection) {
-                        case 0: break;
-                        case 1: break;
-                        case 2: break;
-                        case 3: break;
-                    }
-                }
-            } else if (item.outputLabels[i - 1] !== "") {
-                switch (gateDirection) {
-                    case 0: text(item.outputLabels[i - 1], x1 - 10, y1); break;
-                    case 1: text(item.outputLabels[i - 1], x1, y1 - 10); break;
-                    case 2: text(item.outputLabels[i - 1], x1 + 16, y1); break;
-                    case 3: text(item.outputLabels[i - 1], x1, y1 + 10); break;
-                }
-            }
-        }
-        textAlign(LEFT, TOP);
-    } else {
-        switch (previewData.type) {
-            case 'and':
-            case 'or':
-            case 'xor':
-                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                let gateWidth = 0;
-                let gateHeight = 0;
-
-                stroke(0);
-                fill(255);
-                strokeWeight(3);
-
+            if (tops === 0) {
                 if (gateDirection % 2 === 0) {
-                    gateWidth = 2 * GRIDSIZE;
-                    gateHeight = (gateInputCount + 1) * GRIDSIZE;
-                    rect(mx, my + GRIDSIZE / 2, gateWidth, gateHeight - GRIDSIZE); // Draw body
+                    rect(mX, mY + GRIDSIZE / 2, mW, mH - GRIDSIZE);
                 } else {
-                    gateWidth = (gateInputCount + 1) * GRIDSIZE;
-                    gateHeight = 2 * GRIDSIZE;
-                    rect(mx + GRIDSIZE / 2, my, gateWidth - GRIDSIZE, gateHeight);
+                    rect(mX + GRIDSIZE / 2, mY, mW - GRIDSIZE, mH);
                 }
+            } else {
+                rect(mX, mY, mW, mH);
+            }
 
-                noStroke();
-                textSize(40);
-                textAlign(CENTER, CENTER);
-                fill(0);
-                if (previewData.type === 'and') {
-                    text('&', mx + gateWidth / 2, my + gateHeight / 2 + 2);
-                } else if (previewData.type === 'or') {
-                    text('≥1', mx + gateWidth / 2, my + gateHeight / 2 + 2);
-                } else if (previewData.type === 'xor') {
-                    text('=1', mx + gateWidth / 2, my + gateHeight / 2 + 2);
-                }
+            fill(0);
 
-                // Draw inputs
-                for (let i = 1; i <= gateInputCount; i++) {
-                    // Draw inputs
-                    stroke(0);
-                    strokeWeight(3);
-
-                    switch (gateDirection) {
-                        case 0:
-                            x1 = mx - gateWidth / 10;
-                            y1 = my + (gateHeight * i) / (gateInputCount + 1);
-                            x2 = mx;
-                            y2 = my + (gateHeight * i) / (gateInputCount + 1);
-                            break;
-                        case 1:
-                            x1 = mx + (gateWidth * i) / (gateInputCount + 1);
-                            y1 = my - gateHeight / 10;
-                            x2 = mx + (gateWidth * i) / (gateInputCount + 1);
-                            y2 = my;
-                            break;
-                        case 2:
-                            x1 = mx + gateWidth;
-                            y1 = my + (gateHeight * i) / (gateInputCount + 1);
-                            x2 = mx + gateWidth + gateWidth / 10;
-                            y2 = my + (gateHeight * i) / (gateInputCount + 1);
-                            break;
-                        case 3:
-                            x1 = mx + (gateWidth * i) / (gateInputCount + 1);
-                            y1 = my + gateHeight;
-                            x2 = mx + (gateWidth * i) / (gateInputCount + 1);
-                            y2 = my + gateHeight + gateHeight / 10;
-                            break;
-                        default:
-                            console.log('Gate direction doesn\'t exist!');
-                    }
-                    line(x1, y1, x2, y2);
-                }
-                stroke(0);
-                strokeWeight(3);
-
-                switch (gateDirection) {
-                    case 0:
-                        x1 = mx + gateWidth;
-                        y1 = my + gateHeight / (gateInputCount + 1);
-                        x2 = mx + gateWidth + gateWidth / 10;
-                        y2 = my + gateHeight / (gateInputCount + 1);
-                        break;
-                    case 1:
-                        x1 = mx + gateWidth / (gateInputCount + 1);
-                        y1 = my + gateHeight;
-                        x2 = mx + gateWidth / (gateInputCount + 1);
-                        y2 = my + gateHeight + gateHeight / 10;
-                        break;
-                    case 2:
-                        x1 = mx - gateWidth / 10;
-                        y1 = my + gateHeight / (gateInputCount + 1);
-                        x2 = mx;
-                        y2 = my + gateHeight / (gateInputCount + 1);
-                        break;
-                    case 3:
-                        x1 = mx + gateWidth / (gateInputCount + 1);
-                        y1 = my;
-                        x2 = mx + gateWidth / (gateInputCount + 1);
-                        y2 = my - gateHeight / 10;
-                        break;
-                    default:
-                        console.log('Gate direction doesn\'t exist!');
-                }
-                line(x1, y1, x2, y2);
-                break;
-            case 'switch':
-            case 'button':
-            case 'clock':
-                mx = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
-                my = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
-                stroke(0);
-                strokeWeight(3);
-                fill(50);
-                // Draw the rectangle that represents the input
-                rect(mx, my, GRIDSIZE, GRIDSIZE);
-                noStroke();
-                fill(LARED, LAGREEN, LABLUE);
-                triangle(mx + 2, my + 2, mx + GRIDSIZE - 2, my + 2, mx + 2, my + GRIDSIZE - 2);
-                noFill();
-                stroke(0);
-                rect(mx, my, GRIDSIZE, GRIDSIZE);
-
-                if (previewData.type === 'button') {
-                    fill(0);
-                    rect(mx + 10, my + 10, GRIDSIZE / 3, GRIDSIZE / 3);
-                }
-
-                if (previewData.type === 'clock') {
-                    stroke(0);
-                    strokeWeight(3);
-                    line(mx + 15, my + 6, mx + 15, my + 15);
-                    line(mx + 15, my + 15, mx + 22, my + 20);
-                }
-                break;
-            case 'output':
-                stroke(0);
-                strokeWeight(3);
-                fill(50);
-                ellipse(mx, my, GRIDSIZE, GRIDSIZE);
-                fill(LARED, LAGREEN, LABLUE);
-                arc(mx, my, GRIDSIZE, GRIDSIZE, HALF_PI + QUARTER_PI, PI + HALF_PI + QUARTER_PI, OPEN);
-                break;
-            case '7-segment':
-            case '7-segment-bus':
-                textFont('PT Mono');
-                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                stroke(0);
-                fill(255);
-                strokeWeight(3);
-
-                if (previewData.type !== '7-segment-bus') {
-                    rect(mx + GRIDSIZE / 2, my, GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
-                } else {
-                    rect(mx + GRIDSIZE / 2, my, GRIDSIZE * Math.max(Math.pow(2, sevenSegmentBits).toString().length * 2 + 1, 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
-                }
-                noStroke();
-                textSize(80);
-                textAlign(CENTER, CENTER);
-                fill(0);
-                let txt = '';
-                for (let i = 0; i < Math.pow(2, sevenSegmentBits).toString().length; i++) {
-                    txt += '0';
-                }
-                if (previewData.type === '7-segment-bus') {
-                    text(txt, mx + GRIDSIZE * Math.max(Math.pow(2, sevenSegmentBits).toString().length * 2 + 1, 3) / 2, my + (GRIDSIZE * 3) / 2 - 3);
-                } else {
-                    text(txt, mx + GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) / 2, my + (GRIDSIZE * 3) / 2 - 3);
-
-                }
-                if (previewData.type !== '7-segment-bus') {
-                    // Draw inputs
-                    for (let i = 1; i <= sevenSegmentBits; i++) {
-                        // Draw inputs
-                        stroke(0);
-                        strokeWeight(3);
-
-                        x1 = mx + (GRIDSIZE * i);
-                        y1 = my + GRIDSIZE * 3;
-                        x2 = mx + (GRIDSIZE * i);
-                        y2 = my + GRIDSIZE * 3 + 6;
-                        line(x1, y1, x2, y2);
-
-                        noStroke();
-                        textSize(14);
-                        textFont('Arial');
-
-                        if (sevenSegmentBits - i < 10) {
-                            text('2' + superscripts[sevenSegmentBits - i], x1, y1 - 10);
-                        } else {
-                            text('2' + superscripts[Math.floor((sevenSegmentBits - i) / 10)] + superscripts[sevenSegmentBits - i - Math.floor((sevenSegmentBits - i) / 10) * 10], x1, y1 - 10);
+            // Draw all discrete inputs
+            for (let i = 1; i <= previewFeatures.inputBusWidth.length; i++) {
+                if (previewFeatures.inputBusWidth[i - 1] === 0) { // If this is a normal input
+                    if (!previewFeatures.inputIsTop[i - 1]) {
+                        switch (gateDirection) {
+                            case 0: line(mX - 6, mY + (mH * (i - drawnTops)) / heightOnGrid, mX, mY + (mH * (i - drawnTops)) / heightOnGrid); break;
+                            case 1: line(mX + (mW * (i - drawnTops)) / heightOnGrid, mY - 6, mX + (mW * (i - drawnTops)) / heightOnGrid, mY); break;
+                            case 2: line(mX + mW, mY + (mH * (i - drawnTops)) / heightOnGrid, mX + mW + 6, mY + (mH * (i - drawnTops)) / heightOnGrid); break;
+                            case 3: line(mX + (mW * (i - drawnTops)) / heightOnGrid, mY + mH, mX + (mW * (i - drawnTops)) / heightOnGrid, mY + mH + 6); break;
+                        }
+                    } else {
+                        drawnTops++;
+                        switch (gateDirection) {
+                            case 0: line(mX + (mH * drawnTops) / heightOnGrid, mY - 6, mX + (mH * drawnTops) / heightOnGrid, mY); break;
+                            case 1: line(mX + mW + 6, mY + (mW * drawnTops) / heightOnGrid, mX + mW, mY + (mW * drawnTops) / heightOnGrid); break;
+                            case 2: line(mX + (mH * drawnTops) / heightOnGrid, mY + mH, mX + (mH * drawnTops) / heightOnGrid, mY + mH + 6); break;
+                            case 3: line(mX, mY + (mW * drawnTops) / heightOnGrid, mX - 6, mY + (mW * drawnTops) / heightOnGrid); break;
                         }
                     }
-                } else {
-                    fill(0);
+                }
+            }
+
+            // Draw all discrete outputs
+            for (let i = 1; i <= previewFeatures.outputBusWidth.length; i++) {
+                if (previewFeatures.outputBusWidth[i - 1] === 0) {
+                    switch (gateDirection) {
+                        case 0: line(mX + mW, mY + (mH * i) / heightOnGrid, mX + mW + 6, mY + (mH * i) / heightOnGrid); break;
+                        case 1: line(mX + (mW * i) / heightOnGrid, mY + mH, mX + (mW * i) / heightOnGrid, mY + mH + 6); break;
+                        case 2: line(mX - 6, mY + (mH * i) / heightOnGrid, mX, mY + (mH * i) / heightOnGrid); break;
+                        case 3: line(mX + (mW * i) / heightOnGrid, mY - 6, mX + (mW * i) / heightOnGrid, mY); break;
+                    }
+                }
+            }
+
+            noStroke();
+            textSize(12);
+
+            drawnTops = 0;
+            // Draw all bus inputs
+            for (let i = 1; i <= previewFeatures.inputBusWidth.length; i++) {
+                if (previewFeatures.inputIsTop[i - 1]) {
+                    drawnTops++;
+                }
+                if (previewFeatures.inputBusWidth[i - 1] > 0) { // If this is a bus input
+                    switch (gateDirection) {
+                        case 0:
+                            triangle(mX - 9, mY + GRIDSIZE * (i - drawnTops) - 8, mX - 1, mY + GRIDSIZE * (i - drawnTops), mX - 9, mY + GRIDSIZE * (i - drawnTops) + 8);
+                            text(previewFeatures.inputBusWidth[i - 1], mX - 10, mY + GRIDSIZE * (i - drawnTops) + 15);
+                            break;
+                        case 1:
+                            triangle(mX + GRIDSIZE * (i - drawnTops) - 8, mY - 9, mX + GRIDSIZE * (i - drawnTops), mY - 1, mX + GRIDSIZE * (i - drawnTops) + 8, mY - 9);
+                            text(previewFeatures.inputBusWidth[i - 1], mX + GRIDSIZE * (i - drawnTops) + 15, mY - 10);
+                            break;
+                        case 2:
+                            triangle(mX + mW + 10, mY + GRIDSIZE * (i - drawnTops) - 8, mX + mW + 2, mY + GRIDSIZE * (i - drawnTops), mX + mW + 10, mY + GRIDSIZE * (i - drawnTops) + 8);
+                            text(previewFeatures.inputBusWidth[i - 1], mX + mW + 10, mY + GRIDSIZE * (i - drawnTops) + 15);
+                            break;
+                        case 3:
+                            triangle(mX + GRIDSIZE * (i - drawnTops) - 8, mY + mH + 10, mX + GRIDSIZE * (i - drawnTops), mY + mH + 2, mX + GRIDSIZE * (i - drawnTops) + 8, mY + mH + 10);
+                            text(previewFeatures.inputBusWidth[i - 1], mX + GRIDSIZE * (i - drawnTops) + 15, mY + mH + 10);
+                            break;
+                    }
+                }
+            }
+
+            // Draw all bus outputs
+            for (let i = 1; i <= previewFeatures.outputBusWidth.length; i++) {
+                if (previewFeatures.outputBusWidth[i - 1] > 0) { // If this is a bus input
+                    switch (gateDirection) {
+                        case 0:
+                            triangle(mX + mW + 10, mY + GRIDSIZE * i - 8, mX + mW + 2, mY + GRIDSIZE * i, mX + mW + 10, mY + GRIDSIZE * i + 8);
+                            text(previewFeatures.outputBusWidth[i - 1], mX + mW + 10, mY + GRIDSIZE * i + 15);
+                            break;
+                        case 1:
+                            triangle(mX + GRIDSIZE * i - 8, mY + mH + 10, mX + GRIDSIZE * i, mY + mH + 2, mX + GRIDSIZE * i + 8, mY + mH + 10);
+                            text(previewFeatures.outputBusWidth[i - 1], mX + GRIDSIZE * i + 15, mY + mH + 10);
+                            break;
+                        case 2:
+                            triangle(mX - 9, mY + GRIDSIZE * i - 8, mX - 1, mY + GRIDSIZE * i, mX - 9, mY + GRIDSIZE * i + 8);
+                            text(previewFeatures.outputBusWidth[i - 1], mX - 10, mY + GRIDSIZE * i + 15);
+                            break;
+                        case 3:
+                            triangle(mX + GRIDSIZE * i - 8, mY - 9, mX + GRIDSIZE * i, mY - 1, mX + GRIDSIZE * i + 8, mY - 9);
+                            text(previewFeatures.outputBusWidth[i - 1], mX + GRIDSIZE * i + 15, mY - 10);
+                            break;
+                    }
+                }
+            }
+
+            stroke(0);
+            strokeWeight(2);
+
+            drawnTops = 0;
+
+            for (let i = 1; i <= previewFeatures.inputBusWidth.length; i++) {
+                if (previewFeatures.inputIsTop[i - 1]) {
+                    drawnTops++;
+                }
+                if (previewFeatures.inputLabels[i - 1] === '>') {
+                    if (!previewFeatures.inputIsTop[i - 1]) {
+                        switch (gateDirection) {
+                            case 0:
+                                line(mX + 14, mY + (i - drawnTops) * GRIDSIZE, mX, mY + (i - drawnTops) * GRIDSIZE - 6);
+                                line(mX + 14, mY + (i - drawnTops) * GRIDSIZE, mX, mY + (i - drawnTops) * GRIDSIZE + 6);
+                                break;
+                            case 1:
+                                line(mX + (i - drawnTops) * GRIDSIZE, mY + 14, mX + (i - drawnTops) * GRIDSIZE - 6, mY);
+                                line(mX + (i - drawnTops) * GRIDSIZE, mY + 14, mX + (i - drawnTops) * GRIDSIZE + 6, mY);
+                                break;
+                            case 2:
+                                line(mX + mW - 14, mY + (i - drawnTops) * GRIDSIZE, mX + mW, mY + (i - drawnTops) * GRIDSIZE - 6);
+                                line(mX + mW - 14, mY + (i - drawnTops) * GRIDSIZE, mX + mW, mY + (i - drawnTops) * GRIDSIZE + 6);
+                                break;
+                            case 3:
+                                line(mX + (i - drawnTops) * GRIDSIZE, mY + mH - 14, mX + (i - drawnTops) * GRIDSIZE - 6, mY + mH);
+                                line(mX + (i - drawnTops) * GRIDSIZE, mY + mH - 14, mX + (i - drawnTops) * GRIDSIZE + 6, mY + mH);
+                                break;
+                        }
+                    } else {
+                        let topPlace = previewFeatures.inputIsTop.slice(0, i - 1).filter(Boolean).length + 1;
+                        switch (gateDirection) {
+                            case 0:
+                                line(mX + topPlace * GRIDSIZE, mY + 14, mX + topPlace * GRIDSIZE - 6, mY);
+                                line(mX + topPlace * GRIDSIZE, mY + 14, mX + topPlace * GRIDSIZE + 6, mY);
+                                break;
+                            case 1:
+                                line(mX + mW - 14, mY + topPlace * GRIDSIZE, mX + mW, mY + topPlace * GRIDSIZE - 6);
+                                line(mX + mW - 14, mY + topPlace * GRIDSIZE, mX + mW, mY + topPlace * GRIDSIZE + 6);
+                                break;
+                            case 2:
+                                line(mX + topPlace * GRIDSIZE, mY + mH - 14, mX + topPlace * GRIDSIZE - 6, mY + mH);
+                                line(mX + topPlace * GRIDSIZE, mY + mH - 14, mX + topPlace * GRIDSIZE + 6, mY + mH);
+                                break;
+                            case 3:
+                                line(mX + 14, mY + topPlace * GRIDSIZE, mX, mY + topPlace * GRIDSIZE - 6);
+                                line(mX + 14, mY + topPlace * GRIDSIZE, mX, mY + topPlace * GRIDSIZE + 6);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            noStroke();
+            textSize(10);
+
+            if (Math.max(previewFeatures.inputBusWidth.length - tops, previewFeatures.outputBusWidth.length) % 2 !== 0
+                && textWidth(previewFeatures.caption) >= mW - 30
+                && Math.max(previewFeatures.inputBusWidth.length - tops, previewFeatures.outputBusWidth.length) >= 2
+                && gateDirection % 2 === 0) {
+                text(previewFeatures.caption, mX + mW / 2, mY + mH / 2 - 15);
+            } else {
+                text(previewFeatures.caption, mX + mW / 2, mY + mH / 2);
+            }
+
+            drawnTops = 0;
+
+            for (let i = 1; i <= previewFeatures.inputBusWidth.length; i++) {
+                if (previewFeatures.inputIsTop[i - 1]) {
+                    drawnTops++;
+                }
+                if (previewFeatures.inputBusWidth[i - 1] > 0 && previewFeatures.inputLabels[i - 1] === '') { // If this is a bus input
+                    switch (gateDirection) {
+                        case 0:
+                            text('[' + (previewFeatures.inputBusWidth[i - 1] - 1) + ':0]', mX + 15, mY + (i - drawnTops) * GRIDSIZE);
+                            break;
+                        case 1:
+                            text('[' + (previewFeatures.inputBusWidth[i - 1] - 1) + ':0]', mX + (i - drawnTops) * GRIDSIZE, mY + 10);
+                            break;
+                        case 2:
+                            text('[' + (previewFeatures.inputBusWidth[i - 1] - 1) + ':0]', mX + mW - 15, mY + (i - drawnTops) * GRIDSIZE);
+                            break;
+                        case 3:
+                            text('[' + (previewFeatures.inputBusWidth[i - 1] - 1) + ':0]', mX + (i - drawnTops) * GRIDSIZE, mY + mH - 10);
+                            break;
+                        default:
+                    }
+                }
+            }
+
+            for (let i = 1; i <= previewFeatures.outputBusWidth.length; i++) {
+                if (previewFeatures.outputBusWidth[i - 1] > 0 && previewFeatures.outputLabels[i - 1] === '') { // If this is a bus output
+                    switch (gateDirection) {
+                        case 0:
+                            text('[' + (previewFeatures.outputBusWidth[i - 1] - 1) + ':0]', mX + mW - 15, mY + i * GRIDSIZE);
+                            break;
+                        case 1:
+                            text('[' + (previewFeatures.outputBusWidth[i - 1] - 1) + ':0]', mX + i * GRIDSIZE, mY + mH - 10);
+                            break;
+                        case 2:
+                            text('[' + (previewFeatures.outputBusWidth[i - 1] - 1) + ':0]', mX + 15, mY + i * GRIDSIZE);
+                            break;
+                        case 3:
+                            text('[' + (previewFeatures.outputBusWidth[i - 1] - 1) + ':0]', mX + i * GRIDSIZE, mY + 10);
+                            break;
+                        default:
+                    }
+                }
+            }
+
+            textSize(14);
+
+            drawnTops = 0;
+
+            for (let i = 1; i <= previewFeatures.inputBusWidth.length; i++) {
+                if (previewFeatures.inputIsTop[i - 1]) {
+                    drawnTops++;
+                }
+                if (previewFeatures.inputLabels[i - 1] !== '' && previewFeatures.inputLabels[i - 1] !== '>') {
+                    if (!previewFeatures.inputIsTop[i - 1]) {
+                        switch (gateDirection) {
+                            case 0: text(previewFeatures.inputLabels[i - 1], mX + 10, mY + (GRIDSIZE * (i - drawnTops))); break;
+                            case 1: text(previewFeatures.inputLabels[i - 1], mX + (GRIDSIZE * (i - drawnTops)), mY + 10); break;
+                            case 2: text(previewFeatures.inputLabels[i - 1], mX + mW - 10, mY + (GRIDSIZE * (i - drawnTops))); break;
+                            case 3: text(previewFeatures.inputLabels[i - 1], mX + (GRIDSIZE * (i - drawnTops)), mY + mH - 10); break;
+                        }
+                    } else {
+                        switch (gateDirection) {
+                            case 0: text(previewFeatures.inputLabels[i - 1], mX + (GRIDSIZE * drawnTops), mY + 10); break;
+                            case 1: text(previewFeatures.inputLabels[i - 1], mX + mW - 10, mY + (GRIDSIZE * drawnTops)); break;
+                            case 2: text(previewFeatures.inputLabels[i - 1], mX + (GRIDSIZE * drawnTops), mY + mH - 10); break;
+                            case 3: text(previewFeatures.inputLabels[i - 1], mX + 10, mY + (GRIDSIZE * drawnTops)); break;
+                        }
+                    }
+                }
+            }
+
+            for (let i = 1; i <= previewFeatures.outputBusWidth.length; i++) {
+                if (previewFeatures.outputLabels[i - 1] !== '') {
+                    switch (gateDirection) {
+                        case 0: text(previewFeatures.outputLabels[i - 1], mX + mW - 10, mY + (GRIDSIZE * i)); break;
+                        case 1: text(previewFeatures.outputLabels[i - 1], mX + (GRIDSIZE * i), mY + mH - 10); break;
+                        case 2: text(previewFeatures.outputLabels[i - 1], mX + 10, mY + (GRIDSIZE * i)); break;
+                        case 3: text(previewFeatures.outputLabels[i - 1], mX + (GRIDSIZE * i), mY + 10); break;
+                    }
+                }
+            }
+
+            let gateWidth = 2 * GRIDSIZE;
+            let gateHeight = (previewFeatures.inputBusWidth.length + 1) * GRIDSIZE;
+            if (gateDirection % 2 !== 0) {
+                gateWidth = (previewFeatures.inputBusWidth.length + 1) * GRIDSIZE;
+                gateHeight = 2 * GRIDSIZE;
+            }
+
+            textFont('Consolas');
+
+            if (previewFeatures.type === 'and') {
+                textSize(40);
+                text('&', mX + gateWidth / 2, mY + gateHeight / 2 + 2);
+            } else if (previewFeatures.type === 'or') {
+                textSize(40);
+                text('≥1', mX + gateWidth / 2, mY + gateHeight / 2 + 2);
+            } else if (previewFeatures.type === 'xor') {
+                textSize(40);
+                text('=1', mX + gateWidth / 2, mY + gateHeight / 2 + 2);
+            }
+
+            let vertical_offset = 0;
+            if (tops === 0) {
+                vertical_offset = GRIDSIZE / 2;
+            }
+
+            textAlign(LEFT, BOTTOM);
+
+            if (previewFeatures.inputInverter) {
+                switch (gateDirection) {
+                    case 0: text('↺', mX + 5, mY + mH - vertical_offset - 3); break;
+                    case 1: text('↺', mX + mW - vertical_offset - 16, mY + 18); break;
+                    case 2: text('↺', mX + mW - 16, mY + mH - vertical_offset - 3); break;
+                    case 3: text('↺', mX + mW - vertical_offset - 16, mY + mH - 3); break;
+                    default:
+                }
+            }
+
+            if (previewFeatures.outputInverter) {
+                switch (gateDirection) {
+                    case 0: text('↺', mX + mW - 16, mY + mH - vertical_offset - 3); break;
+                    case 1: text('↺', mX + mW - vertical_offset - 16, mY + mH - 3); break;
+                    case 2: text('↺', mX + 5, mY + mH - vertical_offset - 3); break;
+                    case 3: text('↺', mX + mW - vertical_offset - 16, mY + 18); break;
+                    default:
+                }
+            }
+
+            break;
+        case 'switch':
+        case 'button':
+        case 'clock':
+            mX = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
+            mY = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
+            stroke(0);
+            strokeWeight(3);
+            fill(50);
+            // Draw the rectangle that represents the input
+            rect(mX, mY, GRIDSIZE, GRIDSIZE);
+            noStroke();
+            fill(LARED, LAGREEN, LABLUE);
+            triangle(mX + 2, mY + 2, mX + GRIDSIZE - 2, mY + 2, mX + 2, mY + GRIDSIZE - 2);
+            noFill();
+            stroke(0);
+            rect(mX, mY, GRIDSIZE, GRIDSIZE);
+
+            if (previewFeatures.type === 'button') {
+                fill(0);
+                rect(mX + 10, mY + 10, GRIDSIZE / 3, GRIDSIZE / 3);
+            }
+
+            if (previewFeatures.type === 'clock') {
+                stroke(0);
+                strokeWeight(3);
+                line(mX + 15, mY + 6, mX + 15, mY + 15);
+                line(mX + 15, mY + 15, mX + 22, mY + 20);
+            }
+            break;
+        case 'output':
+            mX = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
+            mY = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+            stroke(0);
+            strokeWeight(3);
+            fill(50);
+            ellipse(mX, mY, GRIDSIZE, GRIDSIZE);
+            fill(LARED, LAGREEN, LABLUE);
+            arc(mX, mY, GRIDSIZE, GRIDSIZE, HALF_PI + QUARTER_PI, PI + HALF_PI + QUARTER_PI, OPEN);
+            break;
+        case 'output':
+            break;
+        case 'label':
+            mX = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
+            mY = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
+            textFont('Gudea');
+            textSize(20);
+            textAlign(LEFT, TOP);
+            strokeWeight(3);
+            noStroke();
+            fill(150, 200);
+            rect(mX - 15, mY - 15, GRIDSIZE * 4 + GRIDSIZE / 2, GRIDSIZE);
+            noStroke();
+            fill(50);
+            rect(mX, mY - 15, 3, 30);
+            fill(0);
+            text('New Label', mX + 15, mY - 9, GRIDSIZE * 5, GRIDSIZE);
+            break;
+        case 'display':
+            textFont('PT Mono');
+            mX = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+            mY = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
+            stroke(0);
+            fill(255);
+            strokeWeight(3);
+
+            if (previewFeatures.inputBusWidth[0] === 0) {
+                rect(mX + GRIDSIZE / 2, mY, GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
+            } else {
+                rect(mX + GRIDSIZE / 2, mY, GRIDSIZE * Math.max(Math.pow(2, sevenSegmentBits).toString().length * 2 + 1, 3) - GRIDSIZE, GRIDSIZE * 3); // Draw body
+            }
+            noStroke();
+            textSize(80);
+            textAlign(CENTER, CENTER);
+            fill(0);
+            let txt = '';
+            for (let i = 0; i < Math.pow(2, sevenSegmentBits).toString().length; i++) {
+                txt += '0';
+            }
+            if (previewFeatures.inputBusWidth[0] > 0) {
+                text(txt, mX + GRIDSIZE * Math.max(Math.pow(2, sevenSegmentBits).toString().length * 2 + 1, 3) / 2, mY + (GRIDSIZE * 3) / 2 - 3);
+            } else {
+                text(txt, mX + GRIDSIZE * Math.max(Math.max((sevenSegmentBits + 1), Math.pow(2, sevenSegmentBits).toString().length * 2), 3) / 2, mY + (GRIDSIZE * 3) / 2 - 3);
+            }
+
+            if (previewFeatures.inputBusWidth[0] === 0) {
+                // Draw inputs
+                for (let i = 1; i <= sevenSegmentBits; i++) {
+                    // Draw inputs
+                    stroke(0);
+                    strokeWeight(3);
+
+                    x1 = mX + (GRIDSIZE * i);
+                    y1 = mY + GRIDSIZE * 3;
+                    x2 = mX + (GRIDSIZE * i);
+                    y2 = mY + GRIDSIZE * 3 + 6;
+                    line(x1, y1, x2, y2);
+
                     noStroke();
-
-                    triangle(mx + GRIDSIZE - 8, my + GRIDSIZE * 3 + 10, mx + GRIDSIZE, my + GRIDSIZE * 3 + 2, mx + GRIDSIZE + 8, my + GRIDSIZE * 3 + 10);
-                    textSize(12);
-                    text(sevenSegmentBits, mx + GRIDSIZE + 15, my + GRIDSIZE * 3 + 10);
-
-                    textSize(10);
+                    textSize(14);
                     textFont('Arial');
 
-                    text('[' + (sevenSegmentBits - 1) + ':0]', mx + GRIDSIZE, my + GRIDSIZE * 3 - 10);
+                    if (sevenSegmentBits - i < 10) {
+                        text('2' + superscripts[sevenSegmentBits - i], x1, y1 - 10);
+                    } else {
+                        text('2' + superscripts[Math.floor((sevenSegmentBits - i) / 10)] + superscripts[sevenSegmentBits - i - Math.floor((sevenSegmentBits - i) / 10) * 10], x1, y1 - 10);
+                    }
                 }
-                break;
-            case 'label':
-                textFont('Gudea');
-                textSize(20);
-                textAlign(LEFT, TOP);
-                strokeWeight(3);
-                noStroke();
-                fill(150, 200);
-                rect(mx - 15, my - 15, GRIDSIZE * 5, GRIDSIZE);
-                noStroke();
-                fill(50);
-                rect(mx, my - 15, 3, 30);
+            } else {
                 fill(0);
-                text('New Label', mx + 15, my - 9, GRIDSIZE * 5, GRIDSIZE);
-                break;
-            case 'decoder':
-                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                elemHeight = Math.pow(2, decoderBitWidth) + 1;
-                if (gateDirection % 2 === 0) {
-                    h = 2 * GRIDSIZE + GRIDSIZE * (Math.pow(2, decoderBitWidth) - 1);
-                    w = 2 * GRIDSIZE;
-                } else {
-                    h = 2 * GRIDSIZE;
-                    w = 2 * GRIDSIZE + GRIDSIZE * (Math.pow(2, decoderBitWidth) - 1);
-                }
-
-                fill(255);
-                stroke(0);
-                strokeWeight(3);
-
-                if (gateDirection % 2 === 0) {
-                    rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
-                } else {
-                    rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
-                }
-
                 noStroke();
                 textFont('Arial');
-                textSize(10);
-                textAlign(CENTER, CENTER);
-                fill(0);
-                if (Math.pow(2, decoderBitWidth) % 2 !== 0 && gateDirection % 2 === 0) {
-                    text("Decoder", mx + w / 2, my + h / 2 - 15);
-                } else {
-                    text("Decoder", mx + w / 2, my + h / 2);
-                }
 
-                // Draw inputs
-                for (let i = 1; i <= decoderBitWidth; i++) {
-
-                    strokeWeight(3);
-                    stroke(0);
-
-                    // Draw input connector lines
-                    switch (gateDirection) {
-                        case 0: line(mx - 6, my + (h * i) / elemHeight, mx, my + (h * i) / elemHeight); break;
-                        case 1: line(mx + (w * i) / elemHeight, my - 6, mx + (w * i) / elemHeight, my); break;
-                        case 2: line(mx + w, my + (h * i) / elemHeight, mx + w + 6, my + (h * i) / elemHeight); break;
-                        case 3: line(mx + (w * i) / elemHeight, my + h, mx + (w * i) / elemHeight, my + h + 6); break;
-                    }
-
-                    textSize(14);
-                    noStroke();
-
-                    // Draw input labels
-                    switch (gateDirection) {
-                        case 0: text('2' + superscripts[decoderBitWidth - i], mx + 10, my + (h * i) / elemHeight); break;
-                        case 1: text('2' + superscripts[decoderBitWidth - i], mx + (w * i) / elemHeight, my + 10); break;
-                        case 2: text('2' + superscripts[decoderBitWidth - i], mx + w - 10, my + (h * i) / elemHeight); break;
-                        case 3: text('2' + superscripts[decoderBitWidth - i], mx + (w * i) / elemHeight, my + h - 10); break;
-                    }
-                }
-
-                for (let i = 1; i <= Math.pow(2, decoderBitWidth); i++) {
-
-                    strokeWeight(3);
-                    stroke(0);
-
-                    switch (gateDirection) {
-                        case 0: line(mx + w, my + (h * i) / elemHeight, mx + w + 6, my + (h * i) / elemHeight); break;
-                        case 1: line(mx + (w * i) / elemHeight, my + h, mx + (w * i) / elemHeight, my + h + 6); break;
-                        case 2: line(mx - 6, my + (h * i) / elemHeight, mx, my + (h * i) / elemHeight); break;
-                        case 3: line(mx + (w * i) / elemHeight, my - 6, mx + (w * i) / elemHeight, my); break;
-                    }
-
-                    textSize(14);
-                    noStroke();
-                    fill(0);
-
-                    // Draw output labels
-                    switch (gateDirection) {
-                        case 0: text(i - 1, mx + w - 10, my + (h * i) / elemHeight); break;
-                        case 1: text(i - 1, mx + (w * i) / elemHeight, my + h - 10); break;
-                        case 2: text(i - 1, mx + 10, my + (h * i) / elemHeight); break;
-                        case 3: text(i - 1, mx + (w * i) / elemHeight, my + 10); break;
-                    }
-                }
-                break;
-            case 'decoder-in':
-                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                elemHeight = Math.pow(2, decoderBitWidth) + 1;
-                if (gateDirection % 2 === 0) {
-                    h = 2 * GRIDSIZE + GRIDSIZE * (Math.pow(2, decoderBitWidth) - 1);
-                    w = 2 * GRIDSIZE;
-                } else {
-                    h = 2 * GRIDSIZE;
-                    w = 2 * GRIDSIZE + GRIDSIZE * (Math.pow(2, decoderBitWidth) - 1);
-                }
-
-                fill(255);
-                stroke(0);
-                strokeWeight(3);
-
-                if (gateDirection % 2 === 0) {
-                    rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
-                } else {
-                    rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
-                }
-
-                noStroke();
-                textFont('Arial');
-                textSize(10);
-                textAlign(CENTER, CENTER);
-                fill(0);
-                if (Math.pow(2, decoderBitWidth) % 2 !== 0 && gateDirection % 2 === 0) {
-                    text("Decoder", mx + w / 2, my + h / 2 - 15);
-                } else {
-                    text("Decoder", mx + w / 2, my + h / 2);
-                }
-
+                triangle(mX + GRIDSIZE - 8, mY + GRIDSIZE * 3 + 10, mX + GRIDSIZE, mY + GRIDSIZE * 3 + 2, mX + GRIDSIZE + 8, mY + GRIDSIZE * 3 + 10);
                 textSize(12);
-                switch (gateDirection) {
-                    case 0:
-                        triangle(mx - 9, my + GRIDSIZE - 8, mx - 1, my + GRIDSIZE, mx - 9, my + GRIDSIZE + 8);
-                        text(decoderBitWidth, mx - 10, my + GRIDSIZE + 15);
-                        break;
-                    case 1:
-                        triangle(mx + GRIDSIZE - 8, my - 9, mx + GRIDSIZE, my - 1, mx + GRIDSIZE + 8, my - 9);
-                        text(decoderBitWidth, mx + GRIDSIZE + 15, my - 10);
-                        break;
-                    case 2:
-                        triangle(mx + w + 10, my + GRIDSIZE - 8, mx + w + 2, my + GRIDSIZE, mx + w + 10, my + GRIDSIZE + 8);
-                        text(decoderBitWidth, mx + w + 10, my + GRIDSIZE + 15);
-                        break;
-                    case 3:
-                        triangle(mx + GRIDSIZE - 8, my + h + 10, mx + GRIDSIZE, my + h + 2, mx + GRIDSIZE + 8, my + h + 10);
-                        text(decoderBitWidth, mx + GRIDSIZE + 15, my + h + 10);
-                        break;
-                    default:
-                }
+                text(sevenSegmentBits, mX + GRIDSIZE + 15, mY + GRIDSIZE * 3 + 10);
 
                 textSize(10);
 
-                switch (gateDirection) {
-                    case 0:
-                        text('[' + (decoderBitWidth - 1) + ':0]', mx + 15, my + GRIDSIZE);
-                        break;
-                    case 1:
-                        text('[' + (decoderBitWidth - 1) + ':0]', mx + GRIDSIZE, my + 10);
-                        break;
-                    case 2:
-                        text('[' + (decoderBitWidth - 1) + ':0]', mx + w - 15, my + GRIDSIZE);
-                        break;
-                    case 3:
-                        text('[' + (decoderBitWidth - 1) + ':0]', mx + GRIDSIZE, my + h - 10);
-                        break;
-                    default:
-                }
-
-                for (let i = 1; i <= Math.pow(2, decoderBitWidth); i++) {
-
-                    strokeWeight(3);
-                    stroke(0);
-
-                    switch (gateDirection) {
-                        case 0: line(mx + w, my + (h * i) / elemHeight, mx + w + 6, my + (h * i) / elemHeight); break;
-                        case 1: line(mx + (w * i) / elemHeight, my + h, mx + (w * i) / elemHeight, my + h + 6); break;
-                        case 2: line(mx - 6, my + (h * i) / elemHeight, mx, my + (h * i) / elemHeight); break;
-                        case 3: line(mx + (w * i) / elemHeight, my - 6, mx + (w * i) / elemHeight, my); break;
-                    }
-
-                    textSize(14);
-                    noStroke();
-                    fill(0);
-
-                    // Draw output labels
-                    switch (gateDirection) {
-                        case 0: text(i - 1, mx + w - 10, my + (h * i) / elemHeight); break;
-                        case 1: text(i - 1, mx + (w * i) / elemHeight, my + h - 10); break;
-                        case 2: text(i - 1, mx + 10, my + (h * i) / elemHeight); break;
-                        case 3: text(i - 1, mx + (w * i) / elemHeight, my + 10); break;
-                    }
-                }
+                text('[' + (sevenSegmentBits - 1) + ':0]', mX + GRIDSIZE, mY + GRIDSIZE * 3 - 10);
 
                 textSize(14);
                 textAlign(LEFT, BOTTOM);
-
-                switch (gateDirection) {
-                    case 0:
-                        text('↺', mx + 5, my + h - GRIDSIZE / 2 - 3);
-                        break;
-                    case 1:
-                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + 18);
-                        break;
-                    case 2:
-                        text('↺', mx + w - 16, my + h - GRIDSIZE / 2 - 3);
-                        break;
-                    case 3:
-                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + h - 3);
-                        break;
-                    default:
-                }
-
-                break;
-            case 'decoder-out':
-                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                elemHeight = decoderBitWidth + 1;
-                if (gateDirection % 2 === 0) {
-                    h = 2 * GRIDSIZE + GRIDSIZE * (decoderBitWidth - 1);
-                    w = 2 * GRIDSIZE;
-                } else {
-                    h = 2 * GRIDSIZE;
-                    w = 2 * GRIDSIZE + GRIDSIZE * (decoderBitWidth - 1);
-                }
-
-                fill(255);
-                stroke(0);
-                strokeWeight(3);
-
-                if (gateDirection % 2 === 0) {
-                    rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
-                } else {
-                    rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
-                }
-
-                noStroke();
-                textFont('Arial');
-                textSize(10);
-                textAlign(CENTER, CENTER);
-                fill(0);
-                if (decoderBitWidth % 2 !== 0 && gateDirection % 2 === 0) {
-                    text("Decoder", mx + w / 2, my + h / 2 - 15);
-                } else {
-                    text("Decoder", mx + w / 2, my + h / 2);
-                }
-
-                // Draw inputs
-                for (let i = 1; i <= decoderBitWidth; i++) {
-
-                    strokeWeight(3);
-                    stroke(0);
-
-                    // Draw input connector lines
-                    switch (gateDirection) {
-                        case 0: line(mx - 6, my + (h * i) / elemHeight, mx, my + (h * i) / elemHeight); break;
-                        case 1: line(mx + (w * i) / elemHeight, my - 6, mx + (w * i) / elemHeight, my); break;
-                        case 2: line(mx + w, my + (h * i) / elemHeight, mx + w + 6, my + (h * i) / elemHeight); break;
-                        case 3: line(mx + (w * i) / elemHeight, my + h, mx + (w * i) / elemHeight, my + h + 6); break;
-                    }
-
-                    textSize(14);
-                    noStroke();
-
-                    // Draw input labels
-                    switch (gateDirection) {
-                        case 0: text('2' + superscripts[decoderBitWidth - i], mx + 10, my + (h * i) / elemHeight); break;
-                        case 1: text('2' + superscripts[decoderBitWidth - i], mx + (w * i) / elemHeight, my + 10); break;
-                        case 2: text('2' + superscripts[decoderBitWidth - i], mx + w - 10, my + (h * i) / elemHeight); break;
-                        case 3: text('2' + superscripts[decoderBitWidth - i], mx + (w * i) / elemHeight, my + h - 10); break;
-                    }
-                }
-
-                textSize(12);
-                switch (gateDirection) {
-                    case 0:
-                        triangle(mx + w + 10, my + GRIDSIZE - 8, mx + w + 2, my + GRIDSIZE, mx + w + 10, my + GRIDSIZE + 8);
-                        text(Math.pow(2, decoderBitWidth), mx + w + 10, my + GRIDSIZE + 15);
-                        break;
-                    case 1:
-                        triangle(mx + GRIDSIZE - 8, my + h + 10, mx + GRIDSIZE, my + h + 2, mx + GRIDSIZE + 8, my + h + 10);
-                        text(Math.pow(2, decoderBitWidth), mx + GRIDSIZE + 15, my + h + 10);
-                        break;
-                    case 2:
-                        triangle(mx - 9, my + GRIDSIZE - 8, mx - 1, my + GRIDSIZE, mx - 9, my + GRIDSIZE + 8);
-                        text(Math.pow(2, decoderBitWidth), mx - 10, my + GRIDSIZE + 15);
-                        break;
-                    case 3:
-                        triangle(mx + GRIDSIZE - 8, my - 9, mx + GRIDSIZE, my - 1, mx + GRIDSIZE + 8, my - 9);
-                        text(Math.pow(2, decoderBitWidth), mx + GRIDSIZE + 15, my - 10);
-                        break;
-                    default:
-                }
-
-                textSize(10);
-
-                switch (gateDirection) {
-                    case 0:
-                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + w - 15, my + GRIDSIZE);
-                        break;
-                    case 1:
-                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + GRIDSIZE, my + h - 10);
-                        break;
-                    case 2:
-                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + 15, my + GRIDSIZE);
-                        break;
-                    case 3:
-                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + GRIDSIZE, my + 10);
-                        break;
-                    default:
-                }
-
-                textSize(14);
-                textAlign(LEFT, BOTTOM);
-
-                switch (gateDirection) {
-                    case 0:
-                        text('↺', mx + w - 16, my + h - GRIDSIZE / 2 - 3);
-                        break;
-                    case 1:
-                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + h - 3);
-                        break;
-                    case 2:
-                        text('↺', mx + 5, my + h - GRIDSIZE / 2 - 3);
-                        break;
-                    case 3:
-                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + 18);
-                        break;
-                    default:
-                }
-
-                break;
-            case 'decoder-in-out':
-                mx = Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                my = Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE;
-                elemHeight = 3;
-                if (gateDirection % 2 === 0) {
-                    h = 3 * GRIDSIZE;
-                    w = 2 * GRIDSIZE;
-                } else {
-                    h = 2 * GRIDSIZE;
-                    w = 3 * GRIDSIZE;
-                }
-
-                fill(255);
-                stroke(0);
-                strokeWeight(3);
-
-                if (gateDirection % 2 === 0) {
-                    rect(mx, my + GRIDSIZE / 2, w, h - GRIDSIZE);
-                } else {
-                    rect(mx + GRIDSIZE / 2, my, w - GRIDSIZE, h);
-                }
-
-                noStroke();
-                textFont('Arial');
-                textSize(10);
-                textAlign(CENTER, CENTER);
-                fill(0);
-                text("Decoder", mx + w / 2, my + h / 2);
-
-                textSize(12);
-                switch (gateDirection) {
-                    case 0:
-                        triangle(mx - 9, my + GRIDSIZE - 8, mx - 1, my + GRIDSIZE, mx - 9, my + GRIDSIZE + 8);
-                        text(decoderBitWidth, mx - 10, my + GRIDSIZE + 15);
-                        break;
-                    case 1:
-                        triangle(mx + GRIDSIZE - 8, my - 9, mx + GRIDSIZE, my - 1, mx + GRIDSIZE + 8, my - 9);
-                        text(decoderBitWidth, mx + GRIDSIZE + 15, my - 10);
-                        break;
-                    case 2:
-                        triangle(mx + w + 10, my + GRIDSIZE - 8, mx + w + 2, my + GRIDSIZE, mx + w + 10, my + GRIDSIZE + 8);
-                        text(decoderBitWidth, mx + w + 10, my + GRIDSIZE + 15);
-                        break;
-                    case 3:
-                        triangle(mx + GRIDSIZE - 8, my + h + 10, mx + GRIDSIZE, my + h + 2, mx + GRIDSIZE + 8, my + h + 10);
-                        text(decoderBitWidth, mx + GRIDSIZE + 15, my + h + 10);
-                        break;
-                    default:
-                }
-
-                textSize(10);
-
-                switch (gateDirection) {
-                    case 0:
-                        text('[' + (decoderBitWidth - 1) + ':0]', mx + 15, my + GRIDSIZE);
-                        break;
-                    case 1:
-                        text('[' + (decoderBitWidth - 1) + ':0]', mx + GRIDSIZE, my + 10);
-                        break;
-                    case 2:
-                        text('[' + (decoderBitWidth - 1) + ':0]', mx + w - 15, my + GRIDSIZE);
-                        break;
-                    case 3:
-                        text('[' + (decoderBitWidth - 1) + ':0]', mx + GRIDSIZE, my + h - 10);
-                        break;
-                    default:
-                }
-
-                textSize(12);
-                switch (gateDirection) {
-                    case 0:
-                        triangle(mx + w + 10, my + GRIDSIZE - 8, mx + w + 2, my + GRIDSIZE, mx + w + 10, my + GRIDSIZE + 8);
-                        text(Math.pow(2, decoderBitWidth), mx + w + 10, my + GRIDSIZE + 15);
-                        break;
-                    case 1:
-                        triangle(mx + GRIDSIZE - 8, my + h + 10, mx + GRIDSIZE, my + h + 2, mx + GRIDSIZE + 8, my + h + 10);
-                        text(Math.pow(2, decoderBitWidth), mx + GRIDSIZE + 15, my + h + 10);
-                        break;
-                    case 2:
-                        triangle(mx - 9, my + GRIDSIZE - 8, mx - 1, my + GRIDSIZE, mx - 9, my + GRIDSIZE + 8);
-                        text(Math.pow(2, decoderBitWidth), mx - 10, my + GRIDSIZE + 15);
-                        break;
-                    case 3:
-                        triangle(mx + GRIDSIZE - 8, my - 9, mx + GRIDSIZE, my - 1, mx + GRIDSIZE + 8, my - 9);
-                        text(Math.pow(2, decoderBitWidth), mx + GRIDSIZE + 15, my - 10);
-                        break;
-                    default:
-                }
-
-                textSize(10);
-
-                switch (gateDirection) {
-                    case 0:
-                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + w - 15, my + GRIDSIZE);
-                        break;
-                    case 1:
-                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + GRIDSIZE, my + h - 10);
-                        break;
-                    case 2:
-                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + 15, my + GRIDSIZE);
-                        break;
-                    case 3:
-                        text('[0:' + (Math.pow(2, decoderBitWidth) - 1) + ']', mx + GRIDSIZE, my + 10);
-                        break;
-                    default:
-                }
-
-                textSize(14);
-                textAlign(LEFT, BOTTOM);
-
-                switch (gateDirection) {
-                    case 0:
-                        text('↺', mx + w - 16, my + h - GRIDSIZE / 2 - 3);
-                        break;
-                    case 1:
-                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + h - 3);
-                        break;
-                    case 2:
-                        text('↺', mx + 5, my + h - GRIDSIZE / 2 - 3);
-                        break;
-                    case 3:
-                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + 18);
-                        break;
-                    default:
-                }
-
-                switch (gateDirection) {
-                    case 0:
-                        text('↺', mx + 5, my + h - GRIDSIZE / 2 - 3);
-                        break;
-                    case 1:
-                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + 18);
-                        break;
-                    case 2:
-                        text('↺', mx + w - 16, my + h - GRIDSIZE / 2 - 3);
-                        break;
-                    case 3:
-                        text('↺', mx + w - GRIDSIZE / 2 - 16, my + h - 3);
-                        break;
-                    default:
-                }
-
-                break;
-            default:
-        }
+                text('↺', mX + GRIDSIZE * Math.max(Math.pow(2, sevenSegmentBits).toString().length * 2 + 1, 3) - GRIDSIZE / 2 - 16, mY + GRIDSIZE * 3 - 3);
+            }
+            break;
+        default:
     }
 }
 
@@ -1035,6 +579,9 @@ function showNegationPreview(clickBox, isOutput, direction, isTop) {
     }
 }
 
+/*
+    Initializes the canvas that displays the module peview in the module workspace
+*/
 function initModuleCanvas() {
     let moduleSketch = function (p) {
         p.setup = function () {

@@ -36,7 +36,27 @@ function CustomDialog() {
         setUnactive();
         hideAllOptions();
         customButton.classList.add('active');
-        setPreviewElement(true, importSketchData.looks[pos]); // Show a preview of the module at the users mouse position
+
+        let inputIsTop = Array(importSketchData.looks[pos].inputs).fill(false);
+        for (let i = 0; i < inputIsTop.length; i++) {
+            if (importSketchData.looks[pos].tops.includes(i)) {
+                inputIsTop[i] = true;
+            }
+        }
+
+        previewFeatures = {
+            type: 'module',
+            inputBusWidth: Array(importSketchData.looks[pos].inputs).fill(0), // > 0 if the input is a bus
+            outputBusWidth: Array(importSketchData.looks[pos].outputs).fill(0),
+            inputIsTop: inputIsTop,
+            inputLabels: importSketchData.looks[pos].inputLabels,
+            outputLabels: importSketchData.looks[pos].outputLabels,
+            caption: importSketchData.looks[pos].caption,
+            inputInverter: false,
+            outputInverter: false,
+            minHeight: 1
+        }
+
         importCustom(importSketchData.sketches[pos] + '.json'); // Import the module on mouse click
     };
 
