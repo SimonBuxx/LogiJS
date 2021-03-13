@@ -2303,9 +2303,12 @@ function keyPressed() {
     }
 
     if (sketchNameInput !== document.activeElement) {
-        if (keyCode >= 49 && keyCode <= 57) {
+        if (keyCode >= 50 && keyCode <= 57) {
             gateInputCount = keyCode - 48;
             gateInputSelect.value = gateInputCount;
+            previewFeatures.inputBusWidth = Array(gateInputCount).fill(0);
+            previewFeatures.inputIsTop = Array(gateInputCount).fill(false);
+            previewFeatures.inputLabels = Array(gateInputCount).fill('');
             return false;
         }
         switch (keyCode) {
@@ -2386,6 +2389,9 @@ function keyPressed() {
             case 48: // 0
                 gateInputCount = 10;
                 gateInputSelect.value = 10;
+                previewFeatures.inputBusWidth = Array(gateInputCount).fill(0);
+                previewFeatures.inputIsTop = Array(gateInputCount).fill(false);
+                previewFeatures.inputLabels = Array(gateInputCount).fill('');
                 break;
             case RIGHT_ARROW:
                 gateDirection = 0;
