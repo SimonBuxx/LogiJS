@@ -69,12 +69,13 @@ function getBirthtime(filename) {
     const stats = fs.statSync(filename);
     let millis = stats.birthtimeMs;
     let newDate = new Date(millis);
-    return newDate.toLocaleDateString("de-DE") + ' ' + newDate.toLocaleTimeString("de-DE");
+    return newDate.toLocaleDateString("en-US") + ' ' + newDate.toLocaleTimeString("en-US");
 }
 
 function getModifiedDate(filename) {
     const stats = fs.statSync(filename);
     let millis = stats.mtime;
     let newDate = new Date(millis);
-    return newDate.toLocaleDateString("de-DE") /*+ ' ' + newDate.toLocaleTimeString("de-DE")*/;
+    console.log(newDate.toLocaleDateString("en-US"));
+    return newDate.toLocaleDateString("en-US") /*+ ' ' + newDate.toLocaleTimeString("de-DE")*/;
 }
