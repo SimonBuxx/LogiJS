@@ -1830,144 +1830,36 @@ function updateUndoButtons() {
 }
 
 function configureButtons(mode) {
-    let tools, modifiers, simulation, customimport, savedialog, jsonimport, moduleimport, select, shareLink, screenshot;
-    if (mode === 'edit') {
-        tools = false;
-        modifiers = false;
-        savedialog = false;
-        simulation = false;
-        customimport = false;
-        jsonimport = false;
-        moduleimport = false;
-        select = false;
-        shareLink = false;
-        screenshot = false;
-    } else if (mode === 'simulation') {
-        tools = true;
-        modifiers = true;
-        savedialog = false;
-        simulation = false;
-        customimport = true;
-        jsonimport = false;
-        moduleimport = true;
-        select = true;
-        shareLink = false;
-        screenshot = false;
-    } else if (mode === 'savedialog') {
-        tools = true;
-        modifiers = true;
-        savedialog = false;
-        simulation = true;
-        customimport = true;
-        jsonimport = true;
-        moduleimport = true;
-        select = true;
-        shareLink = true;
-        screenshot = true;
-    } else if (mode === 'customdialog') {
-        tools = true;
-        modifiers = true;
-        savedialog = true;
-        simulation = true;
-        customimport = false;
-        jsonimport = true;
-        moduleimport = true;
-        select = true;
-        shareLink = true;
-        screenshot = true;
-    } else if (mode === 'loading') {
-        tools = true;
-        modifiers = true;
-        savedialog = true;
-        simulation = true;
-        customimport = true;
-        jsonimport = true;
-        moduleimport = true;
-        select = true;
-        shareLink = true;
-        screenshot = true;
-    } else if (mode === 'moduleOptions') {
-        tools = true;
-        modifiers = true;
-        savedialog = true;
-        simulation = true;
-        customimport = true;
-        jsonimport = true;
-        moduleimport = false;
-        select = true;
-        shareLink = true;
-        screenshot = true;
-    } else if (mode === 'select') {
-        tools = true;
-        modifiers = true;
-        savedialog = true;
-        simulation = true;
-        customimport = true;
-        jsonimport = true;
-        moduleimport = true;
-        select = false;
-        shareLink = true;
-        screenshot = true;
-    } else if (mode === 'screenshot') {
-        tools = true;
-        modifiers = true;
-        savedialog = true;
-        simulation = true;
-        customimport = true;
-        jsonimport = true;
-        moduleimport = true;
-        select = true;
-        shareLink = true;
-        screenshot = true;
-    } else if (mode === 'shareLink') {
-        tools = true;
-        modifiers = true;
-        savedialog = true;
-        simulation = true;
-        customimport = true;
-        jsonimport = true;
-        moduleimport = true;
-        select = true;
-        shareLink = true;
-        screenshot = true;
-    } else {
-        tools = false;
-        modifiers = false;
-        savedialog = false;
-        simulation = false;
-        customimport = false;
-        jsonimport = false;
-        moduleimport = false;
-        select = false;
-        shareLink = false;
-        screenshot = false;
-    }
-    andButton.disabled = tools;
-    orButton.disabled = tools;
-    xorButton.disabled = tools;
-    bufferButton.disabled = tools;
-    notButton.disabled = tools;
-    switchButton.disabled = tools;
-    outputButton.disabled = tools;
-    displayButton.disabled = tools;
-    labelButton.disabled = tools;
-    buttonButton.disabled = tools;
-    clockButton.disabled = tools;
+    let disabled_matrix = [];
 
-    registerButton.disabled = tools;
-    decoderButton.disabled = tools;
-    counterButton.disabled = tools;
-    muxButton.disabled = tools;
-    demuxButton.disabled = tools;
-    dFlipFlopButton.disabled = tools;
-    jkFlipFlopButton.disabled = tools;
-    wrapperButton.disabled = tools;
-    unwrapperButton.disabled = tools;
-    rsClockedButton.disabled = tools;
-    tFlipFlopButton.disabled = tools;
-    rsFlipFlopButton.disabled = tools;
-    halfaddButton.disabled = tools;
-    fulladdButton.disabled = tools;
+    switch (mode) {
+        case 'edit': disabled_matrix = [false, false, false, false, false, false, false, false, false, false]; break;
+        case 'simulation': disabled_matrix = [true, true, false, false, true, false, true, true, false, false]; break;
+        case 'savedialog': disabled_matrix = [true, true, false, true, true, true, true, true, true, true]; break;
+        case 'customdialog': disabled_matrix = [true, true, true, true, false, true, true, true, true, true]; break;
+        case 'loading': disabled_matrix = [true, true, true, true, true, true, true, true, true, true]; break;
+        case 'moduleOptions': disabled_matrix = [true, true, true, true, true, true, false, true, true, true]; break;
+        case 'select': disabled_matrix = [true, true, true, true, true, true, true, false, true, true]; break;
+        case 'screenshot': disabled_matrix = [true, true, true, true, true, true, true, true, true, true]; break;
+        case 'shareLink': disabled_matrix = [true, true, true, true, true, true, true, true, true, true]; break;
+        default: disabled_matrix = [false, false, false, false, false, false, false, false, false, false];
+
+    }
+
+    let tools = disabled_matrix[0];
+    let modifiers = disabled_matrix[1];
+    let savedialog = disabled_matrix[2];
+    let simulation = disabled_matrix[3];
+    let customimport = disabled_matrix[4];
+    let jsonimport = disabled_matrix[5];
+    let moduleimport = disabled_matrix[6];
+    let select = disabled_matrix[7];
+    let shareLink = disabled_matrix[8];
+    let screenshot = disabled_matrix[9];
+
+    for (let i = 0; i < document.getElementsByClassName('previewButton').length; i++) {
+        document.getElementsByClassName('previewButton')[i].disabled = tools;
+    }
 
     customButton.disabled = (customimport || (getCookieValue('access_token') === ''));
 
