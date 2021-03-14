@@ -8,6 +8,8 @@ My goal is to make LogiJS as user-friendly and performant as possible while prov
 For the near future, please excuse minor bugs, performance issues or rapid changes in design and functionality.
 The software is still under development and I'm trying to improve it every day.
 
+![xor_animation](https://user-images.githubusercontent.com/6598913/111069437-5be79d80-84cd-11eb-90d4-ade8780d9feb.gif)
+
 If you're interested in trying it out, do so on **https://logijs.com/**.
 
 #### If you find any bugs or have ideas for improvement, please let me know.
