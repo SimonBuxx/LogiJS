@@ -82,6 +82,7 @@ Input.prototype.setSpeed = function (s) {
 
 Input.prototype.resetFramecount = function () {
     this.framecount = this.speed;
+    this.clock = true;
 };
 
 /*

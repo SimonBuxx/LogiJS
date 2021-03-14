@@ -611,7 +611,7 @@ function newGateInputNumber() {
 }
 
 function newDisplayBitLength() {
-    sevenSegmentBits = parseInt(displaySelect.value); 
+    sevenSegmentBits = parseInt(displaySelect.value);
 }
 
 function newCounterBitLength() {
@@ -707,7 +707,7 @@ function newMuxBitLength() {
         for (let i = 0; i < Math.pow(2, muxBitWidth); i++) {
             opLabels.push(i);
         }
-        
+
         previewFeatures.inputBusWidth = Array(muxBitWidth + 1).fill(0);
         previewFeatures.outputBusWidth = Array(Math.pow(2, muxBitWidth)).fill(0);
         previewFeatures.inputIsTop = Array(muxBitWidth).fill(true).concat([false]);
@@ -1257,193 +1257,177 @@ function addBusses() {
     Adds a new gate with given type, input count and direction
 */
 function addGate(type, inputs, direction) {
-    for (let i = 0; i < gates.length; i++) {
-        if ((gates[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (gates[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-            return;
-        }
-    }
-    let newGate = null;
+    if (!is_free_modules(gates)) return; // Return, if there is a gate at that position
+
+    let logic_function = '';
+
     switch (type) {
-        case 1:
-            newGate = new LogicGate(mouseX, mouseY, direction, inputs, 1, 'and');
-            newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-            newGate.updateClickBoxes();
-            gates.push(newGate);
-            pushUndoAction('addGate', [gates.length - 1], [newGate]);
-            break;
-        case 2:
-            newGate = new LogicGate(mouseX, mouseY, direction, inputs, 1, 'or');
-            newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-            newGate.updateClickBoxes();
-            gates.push(newGate);
-            pushUndoAction('addGate', [gates.length - 1], [newGate]);
-            break;
-        case 3:
-            newGate = new LogicGate(mouseX, mouseY, direction, inputs, 1, 'xor');
-            newGate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-            newGate.updateClickBoxes();
-            gates.push(newGate);
-            pushUndoAction('addGate', [gates.length - 1], [newGate]);
-            break;
+        case 1: logic_function = 'and'; break;
+        case 2: logic_function = 'or'; break;
+        case 3: logic_function = 'xor'; break;
         default:
-            console.log('Gate type \'' + type + '\' not found!');
+            console.log('Gate type ' + type + ' does not exist!');
     }
-    reDraw();
+
+    let new_gate = new LogicGate(mouseX, mouseY, direction, inputs, 1, logic_function);
+    new_gate.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_gate.updateClickBoxes();
+
+    gates.push(new_gate); // Add the new gate to the gates array
+
+    pushUndoAction('addGate', [gates.length - 1], [new_gate]); // Log an undo action
 }
 
 /*
     Adds a custom element and loads it file and sub-customs
 */
 function addCustom(file, direction) {
-    for (let i = 0; i < customs.length; i++) {
-        if (customs[i].visible) {
-            if ((customs[i].x === Math.round(((mouseX - GRIDSIZE / 2) / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-                (customs[i].y === Math.round(((mouseY - GRIDSIZE / 2) / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-                return;
-            }
-        }
-    }
-    setLoading(true);
-    let newCustom = new CustomSketch(mouseX, mouseY, direction, file);
-    newCustom.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    customs.push(newCustom);
-    loadCustomFile(newCustom.filename, customs.length - 1, customs.length - 1);
-    pushUndoAction('addCust', [customs.length - 1], [newCustom]);
+    if (!is_free_modules(customs.filter(e => e.visible))) return; // Return, if there is a visible module at that position
+
+    setLoading(true); // Configure the GUI for loading
+
+    let new_module = new CustomSketch(mouseX, mouseY, direction, file); // Create a new custom module
+    new_module.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+
+    customs.push(new_module); // Add the new module to the array
+
+    loadCustomFile(new_module.filename, customs.length - 1, customs.length - 1); // Load the file data into the new module (recursive)
+    pushUndoAction('addCust', [customs.length - 1], [new_module]); // Log an undo action
 }
 
 /*
     Adds a new output (lamp)
 */
 function addOutput() {
-    for (var i = 0; i < outputs.length; i++) {
-        if ((outputs[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (outputs[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-            return;
-        }
+    if (outputs.filter(e => (e.x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)
+        && e.y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE))).length > 0) {
+        return; // Return if there is already an input at that position
     }
-    var newOutput = new Output(mouseX, mouseY, 0);
-    newOutput.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    newOutput.updateClickBox();
-    outputs.push(newOutput);
-    moduleButton.disabled = false;
-    pushUndoAction('addOut', [outputs.length - 1], [newOutput]);
-    reDraw();
+
+    var new_output = new Output(mouseX, mouseY, 0);
+    new_output.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_output.updateClickBox();
+
+    outputs.push(new_output); // Add the new output to the array
+
+    moduleButton.disabled = false; // If an output is placed, module creation is allowed
+
+    pushUndoAction('addOut', [outputs.length - 1], [new_output]); // Log an undo action
 }
 
 /*
     Adds a new 7-segment display
 */
 function addSegDisplay(bits) {
-    for (var i = 0; i < segDisplays.length; i++) {
-        if ((segDisplays[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (segDisplays[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-            return;
-        }
-    }
-    var newDisplay = new SegmentDisplay(mouseX, mouseY, bits, busVersions);
-    newDisplay.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    newDisplay.updateClickBoxes();
-    segDisplays.push(newDisplay);
-    pushUndoAction('addSegDis', [segDisplays.length - 1], [newDisplay]);
-    reDraw();
+    if (!is_free_modules(segDisplays)) return; // If there is already a display in the location, return
+
+    let new_display = new SegmentDisplay(mouseX, mouseY, bits, busVersions);
+    new_display.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_display.updateClickBoxes();
+
+    segDisplays.push(new_display); // Add the new display to the array
+
+    pushUndoAction('addSegDis', [segDisplays.length - 1], [new_display]); // Log an undo action
 }
 
 /*
     Adds a new input (switch, button or clock)
 */
 function addInput() {
-    for (var i = 0; i < inputs.length; i++) {
-        if ((inputs[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2) &&
-            (inputs[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)) {
-            return;
-        }
+    if (inputs.filter(e => (e.x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2
+        && e.y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)).length > 0) {
+        return; // Return if there is already an input at that position
     }
-    var newInput = new Input(mouseX, mouseY);
-    newInput.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    newInput.updateClickBox();
-    if (inputType === 'button') {
-        newInput.framecount = BUTCOUNT;
-    } else if (inputType === 'clock') {
-        newInput.resetFramecount();
-    } else {
-        newInput.framecount = -1;
+
+    let new_input = new Input(mouseX, mouseY);
+    new_input.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_input.updateClickBox();
+
+    switch (inputType) {
+        case 'button':
+            new_input.framecount = BUTCOUNT;
+            break;
+        case 'clock':
+            new_input.resetFramecount();
+            break;
+        default:
+            new_input.framecount = -1;
     }
-    newInput.clock = (inputType === 'clock');
-    inputs.push(newInput);
-    pushUndoAction('addIn', [inputs.length - 1], [newInput]);
-    reDraw();
+
+    inputs.push(new_input); // Add the input to the inputs array
+
+    pushUndoAction('addIn', [inputs.length - 1], [new_input]); // Log an undo action
 }
 
 /*
     Adds a new label
 */
 function addLabel() {
-    for (var i = 0; i < labels.length; i++) {
-        if ((labels[i].x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE)) &&
-            (labels[i].y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE))) {
-            return;
-        }
+    if (labels.filter(e => (e.x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE
+        && e.y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)).length > 0) {
+        return; // Return if there is already a label at that position
     }
-    var newLabel = new Label(mouseX, mouseY, '');
-    newLabel.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    newLabel.updateClickBox();
-    labels.push(newLabel);
-    pushUndoAction('addLabel', [labels.length - 1], [newLabel]);
-    reDraw();
+
+    let new_label = new Label(mouseX, mouseY, ''); // Create a new empty label
+    new_label.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_label.updateClickBox();
+
+    labels.push(new_label); // Add the new label to the label array
+
+    pushUndoAction('addLabel', [labels.length - 1], [new_label]); // Log an undo action
 }
 
 /*
     Adds a bus wrapper
 */
 function addBusWrapper(bits, direction) {
-    for (var i = 0; i < busWrappers.length; i++) {
-        if ((busWrappers[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (busWrappers[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-            return;
-        }
-    }
-    var newElement = new BusWrapper(mouseX, mouseY, direction, bits);
-    newElement.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    newElement.updateClickBoxes();
-    busWrappers.push(newElement);
-    pushUndoAction('addBusWrapper', [busWrappers.length - 1], [newElement]);
-    reDraw();
+    if (!is_free_modules(busWrappers)) return;
+
+    let new_wrapper = new BusWrapper(mouseX, mouseY, direction, bits);
+    new_wrapper.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_wrapper.updateClickBoxes();
+
+    busWrappers.push(new_wrapper); // Add the new wrapper to the bus wrapper array
+
+    pushUndoAction('addBusWrapper', [busWrappers.length - 1], [new_wrapper]); // Log an undo action
 }
 
 /*
     Adds a bus unwrapper
 */
 function addBusUnwrapper(bits, direction) {
-    for (var i = 0; i < busUnwrappers.length; i++) {
-        if ((busUnwrappers[i].x === Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) &&
-            (busUnwrappers[i].y === Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE)) {
-            return;
-        }
-    }
-    var newElement = new BusUnwrapper(mouseX, mouseY, direction, bits);
-    newElement.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    newElement.updateClickBoxes();
-    busUnwrappers.push(newElement);
-    pushUndoAction('addBusUnwrapper', [busUnwrappers.length - 1], [newElement]);
-    reDraw();
+    if (!is_free_modules(busUnwrappers)) return;
+
+    let new_unwrapper = new BusUnwrapper(mouseX, mouseY, direction, bits);
+    new_unwrapper.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_unwrapper.updateClickBoxes();
+
+    busUnwrappers.push(new_unwrapper); // Add the new unwrapper to the array
+
+    pushUndoAction('addBusUnwrapper', [busUnwrappers.length - 1], [new_unwrapper]); // Log an undo action
 }
 
 function addDecoder(bits, direction) {
-    for (let i = 0; i < decoders.length; i++) {
-        if ((decoders[i].x === Math.round((mouseX / transform.zoom - transform.dx - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE) &&
-            (decoders[i].y === Math.round((mouseY / transform.zoom - transform.dy - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE)) {
-            return;
-        }
-    }
-    var newElement = new Decoder(mouseX, mouseY, direction, bits, useInputBus, useOutputBus);
-    newElement.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
-    newElement.updateClickBoxes();
-    decoders.push(newElement);
-    pushUndoAction('addDecoder', [decoders.length - 1], [newElement]);
-    reDraw();
+    if (!is_free_modules(decoders)) return;
+
+    let new_decoder = new Decoder(mouseX, mouseY, direction, bits, useInputBus, useOutputBus);
+    new_decoder.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_decoder.updateClickBoxes();
+
+    decoders.push(new_decoder); // Add the new decoder to the decoder array
+
+    pushUndoAction('addDecoder', [decoders.length - 1], [new_decoder]); // Log an undo action
 }
 
+function is_free_modules(modules) {
+    for (let i = 0; i < modules.length; i++) {
+        if ((modules[i].x === Math.round(((mouseX / transform.zoom - transform.dx) - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE) &&
+            (modules[i].y === Math.round(((mouseY / transform.zoom - transform.dy) - GRIDSIZE / 2) / GRIDSIZE) * GRIDSIZE)) {
+            return false;
+        }
+    }
+    return true;
+}
 
 function deleteWires() {
     let deletedDiodesIndices = [];
