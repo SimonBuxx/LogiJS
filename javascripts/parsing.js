@@ -339,7 +339,7 @@ function integrateElements() {
                     groups[wires[outputWires[0]].group].addOutput(customs[j], k);
                 }
             }
-            for (let k = 0; k < customs[j].inputCount; k++) {
+            for (let k = 0; k < customs[j].inputCount + customs[j].objects[BUSINNUM].length; k++) {
                 let inputWires = wirePoints(customs[j].inputClickBoxes[k].x, customs[j].inputClickBoxes[k].y, -1);
                 if (inputWires.length > 0) {
                     groups[wires[inputWires[0]].group].addInput(customs[j], k);
@@ -383,7 +383,6 @@ function integrateElements() {
             let inputWires = wirePoints(busWrappers[j].inputClickBoxes[k].x, busWrappers[j].inputClickBoxes[k].y, -1);
             if (inputWires.length > 0) {
                 groups[wires[inputWires[0]].group].addInput(busWrappers[j], k);
-                console.log("Wire integration");
             }
         }
     }
@@ -424,37 +423,27 @@ function integrateElements() {
 }
 
 function integrateBusElements() {
-    /*for (let j = 0; j < gates.length; j++) {
-        for (let k = 0; k < gates[j].outputCount; k++) {
-            let outputWires = wirePoints(gates[j].outputClickBoxes[k].x, gates[j].outputClickBoxes[k].y, -1);
-            if (outputWires.length > 0) {
-                groups[wires[outputWires[0]].group].addOutput(gates[j], k);
-            }
-        }
-        for (let k = 0; k < gates[j].inputCount; k++) {
-            let inputWires = wirePoints(gates[j].inputClickBoxes[k].x, gates[j].inputClickBoxes[k].y, -1);
-            if (inputWires.length > 0) {
-                groups[wires[inputWires[0]].group].addInput(gates[j], k);
-            }
-        }
-    }
-
     for (let j = 0; j < customs.length; j++) {
         if (customs[j].visible) {
-            for (let k = 0; k < customs[j].outputCount; k++) {
+            /*for (let k = 0; k < customs[j].outputCount; k++) {
                 let outputWires = wirePoints(customs[j].outputClickBoxes[k].x, customs[j].outputClickBoxes[k].y, -1);
                 if (outputWires.length > 0) {
                     groups[wires[outputWires[0]].group].addOutput(customs[j], k);
                 }
-            }
-            for (let k = 0; k < customs[j].inputCount; k++) {
-                let inputWires = wirePoints(customs[j].inputClickBoxes[k].x, customs[j].inputClickBoxes[k].y, -1);
-                if (inputWires.length > 0) {
-                    groups[wires[inputWires[0]].group].addInput(customs[j], k);
+            }*/
+            for (let k = 0; k < customs[j].inputCount + customs[j].objects[BUSINNUM].length; k++) {
+                if (customs[j].ipBusWidths[k] > 0) {
+                    let inputBusses = busPoints(customs[j].inputClickBoxes[k].x, customs[j].inputClickBoxes[k].y, -1);
+                    if (inputBusses.length > 0) {
+                        busGroups[busses[inputBusses[0]].group].addInput(customs[j], k);
+                        if (customs[j].ipBusWidths[k] > busGroups[busses[inputBusses[0]].group].busWidth) {
+                            busGroups[busses[inputBusses[0]].group].updateBusWidth(customs[j].ipBusWidths[k]);
+                        }
+                    }
                 }
             }
         }
-    }*/
+    }
 
     for (let j = 0; j < segDisplays.length; j++) {
         if (segDisplays[j].useBusInput) {
@@ -509,30 +498,15 @@ function integrateBusElements() {
         }
     }
 
-    /*for (let j = 0; j < inputs.length; j++) {
-        let outputWires = wirePoints(inputs[j].clickBox.x, inputs[j].clickBox.y, -1);
-        if (outputWires.length > 0) {
-            groups[wires[outputWires[0]].group].addOutput(inputs[j], 0);
-        }
-    }
-    
-    for (let j = 0; j < outputs.length; j++) {
-        let inputWires = wirePoints(outputs[j].clickBox.x, outputs[j].clickBox.y, -1);
-        if (inputWires.length > 0) {
-            groups[wires[inputWires[0]].group].addInput(outputs[j], 0);
-        }
-    }
-    
-    for (let j = 0; j < diodes.length; j++) {
-        let diodeWires = wiresTrough(diodes[j].clickBox.x, diodes[j].clickBox.y, -1);
-        if (diodeWires.length > 1) {
-            if (wires[diodeWires[0]].direction === 0 && wires[diodeWires[1]].direction === 1) {
-                diodes[j].setGroups(wires[diodeWires[0]].group, wires[diodeWires[1]].group);
-            } else if (wires[diodeWires[0]].direction === 1 && wires[diodeWires[1]].direction === 0) {
-                diodes[j].setGroups(wires[diodeWires[1]].group, wires[diodeWires[0]].group);
+    for (let j = 0; j < busInputs.length; j++) {
+        let outputBusses = busPoints(busInputs[j].clickBox.x, busInputs[j].clickBox.y, -1);
+        if (outputBusses.length > 0) {
+            busGroups[busses[outputBusses[0]].group].addOutput(busInputs[j], 0);
+            if (busInputs[j].busWidth > busGroups[busses[outputBusses[0]].group].busWidth) {
+                busGroups[busses[outputBusses[0]].group].updateBusWidth(busInputs[j].busWidth);
             }
         }
-    }*/
+    }
 
     for (let i = 0; i < busGroups.length; i++) {
         busGroups[i].updateBusWidth();

@@ -37,16 +37,21 @@ function CustomDialog() {
         hideAllOptions();
         customButton.classList.add('active');
 
-        let inputIsTop = Array(importSketchData.looks[pos].inputs).fill(false);
-        for (let i = 0; i < inputIsTop.length; i++) {
-            if (importSketchData.looks[pos].tops.includes(i)) {
-                inputIsTop[i] = true;
+        let inputIsTop = Array(importSketchData.looks[pos].inputLabels.length).fill(false);
+        if (importSketchData.looks[pos].tops.length > 0) {
+            if (String(importSketchData.looks[pos].tops[0]) !== "true" && String(importSketchData.looks[pos].tops[0]) !== "false") {
+                // Refactor the tops declaration ( [0, 2, 4] => [true, false, true, false, true] )
+                for (let i = 0; i < importSketchData.looks[pos].tops.length; i++) {
+                    inputIsTop[importSketchData.looks[pos].tops[i]] = true;
+                }
+            } else {
+                inputIsTop = importSketchData.looks[pos].tops;
             }
         }
 
         previewFeatures = {
             type: 'module',
-            inputBusWidth: Array(importSketchData.looks[pos].inputs).fill(0), // > 0 if the input is a bus
+            inputBusWidth: (importSketchData.looks[pos].hasOwnProperty('inBusWidths')) ? importSketchData.looks[pos].inBusWidths : Array(importSketchData.looks[pos].inputs).fill(0), // > 0 if the input is a bus
             outputBusWidth: Array(importSketchData.looks[pos].outputs).fill(0),
             inputIsTop: inputIsTop,
             inputLabels: importSketchData.looks[pos].inputLabels,

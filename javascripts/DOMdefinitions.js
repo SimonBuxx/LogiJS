@@ -99,6 +99,7 @@ function linkElementsFromDOM() {
     demuxButton = document.getElementById('demux-button');
     wrapperButton = document.getElementById('wrapper-button');
     unwrapperButton = document.getElementById('unwrapper-button');
+    busInputButton = document.getElementById('bus-input-button');
     halfaddButton = document.getElementById('halfadd-button');
     fulladdButton = document.getElementById('fulladd-button');
     counterButton = document.getElementById('counter-button');
@@ -208,6 +209,7 @@ function addElementHelpTexts() {
     addHelpText(demuxButton, 'Demultiplexer');
     addHelpText(wrapperButton, 'Bus Wrapper: Creates a bus from multiple inputs');
     addHelpText(unwrapperButton, 'Bus Unwrapper: Creates multiple inputs from a bus');
+    addHelpText(busInputButton, 'Bus Input: Provide a bus input for higher level modules');
     addHelpText(halfaddButton, 'Half Adder');
     addHelpText(fulladdButton, 'Full Adder');
     addHelpText(counterButton, 'Counter');

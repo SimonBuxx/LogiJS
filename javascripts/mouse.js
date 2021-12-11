@@ -70,6 +70,12 @@ function updateCursors() {
                     cursor(HAND);
                 }
             }
+            for (const elem of busInputs) {
+                if (elem.mouseOver() && moduleOptions) {
+                    hand = true;
+                    cursor(HAND);
+                }
+            }
             if (!moduleOptions) {
                 for (const elem of labels) {
                     if (elem.mouseOver()) {
@@ -169,7 +175,7 @@ function updateCursors() {
                             }
                         }
                     }
-                    
+
                     if ((elem.useInBus && elem.invertInputClickBox.mouseOver()) || (elem.useOutBus && elem.invertOutputClickBox.mouseOver())) {
                         hand = true;
                         cursor(HAND);
@@ -180,13 +186,13 @@ function updateCursors() {
                         continue;
                     }
                     for (let i = 0; i < elem.inputClickBoxes.length; i++) {
-                        if (elem.inputClickBoxes[i].mouseOver()) {
+                        if (elem.inputClickBoxes[i].mouseOver() && elem.ipBusWidths[i] === 0) {
                             hand = true;
                             cursor(HAND);
                             negDir = elem.direction;
                             negPort = elem.inputClickBoxes[i];
                             isOutput = false;
-                            isTop = elem.objects[INPNUM][i].isTop; // Seems to work
+                            isTop = elem.istop[i];
                         }
                     }
                     for (const e of elem.outputClickBoxes) {
@@ -397,6 +403,11 @@ function mouseClicked() {
                                 addDecoder(decoderBitWidth, gateDirection);
                             }
                             break;
+                        case 15: // add bus input
+                            if (mouseButton === LEFT) {
+                                addBusInput(busWrapperWidth);
+                            }
+                            break;
                         case 7: // add output
                             if (mouseButton === LEFT) {
                                 addOutput();
@@ -457,20 +468,70 @@ function mouseReleased() {
         let swapped = false;
         for (let i = 0; i < inputs.length; i++) {
             if (inputs[i].mouseOver() && !swapped) {
-                if (swapInput !== i) {
+                if (swapInput !== i || swapInputIsBus) {
                     if (swapInput >= 0) {
-                        inputs[swapInput].mark(false);
-                        swapInputs(swapInput, i);
+                        if (!swapInputIsBus) {
+                            inputs[swapInput].mark(false);
+                            let temp = inputs[swapInput].custPosition;
+                            inputs[swapInput].custPosition = inputs[i].custPosition;
+                            inputs[i].custPosition = temp;
+                        } else {
+                            busInputs[swapInput].mark(false);
+                            let temp = busInputs[swapInput].custPosition;
+                            busInputs[swapInput].custPosition = inputs[i].custPosition;
+                            inputs[i].custPosition = temp;
+                        }
                         swapInput = -1;
                         swapped = true;
                         initPinConfigurator();
                         showModulePreviewer();
                     } else {
+                        swapInputIsBus = false;
                         inputs[i].mark(true);
                         swapInput = i;
                     }
                 } else {
-                    inputs[swapInput].mark(false);
+                    if (!swapInputIsBus) {
+                        inputs[swapInput].mark(false);
+                    } else {
+                        busInputs[swapInput].mark(false);
+                    }
+                    swapInput = -1;
+                    swapped = true;
+                }
+                reDraw();
+            }
+        }
+        for (let i = 0; i < busInputs.length; i++) {
+            if (busInputs[i].mouseOver() && !swapped) {
+                if (swapInput !== i || !swapInputIsBus) {
+                    if (swapInput >= 0) {
+                        if (swapInputIsBus) {
+                            busInputs[swapInput].mark(false);
+                            let temp = busInputs[swapInput].custPosition;
+                            busInputs[swapInput].custPosition = busInputs[i].custPosition;
+                            busInputs[i].custPosition = temp;
+                        } else {
+                            inputs[swapInput].mark(false);
+                            let temp = inputs[swapInput].custPosition;
+                            inputs[swapInput].custPosition = busInputs[i].custPosition;
+                            busInputs[i].custPosition = temp;
+                        }
+                        swapInput = -1;
+                        swapped = true;
+                        initPinConfigurator();
+                        showModulePreviewer();
+                    } else {
+                        swapInputIsBus = true;
+                        busInputs[i].mark(true);
+                        swapInput = i;
+                    }
+                } else {
+                    if (swapInputIsBus) {
+                        busInputs[swapInput].mark(false);
+                    } else {
+                        inputs[swapInput].mark(false);
+                    }
                     swapInput = -1;
                     swapped = true;
                 }
@@ -500,6 +561,29 @@ function mouseReleased() {
                 reDraw();
             }
         }
+        /*swapped = false;
+        for (let i = 0; i < busInputs.length; i++) {
+            if (busInputs[i].mouseOver() && !swapped) {
+                if (swapBusInput !== i) {
+                    if (swapBusInput >= 0) {
+                        busInputs[swapBusInput].mark(false);
+                        swapBusInputs(swapBusInput, i);
+                        swapBusInput = -1;
+                        swapped = true;
+                        initPinConfigurator();
+                        showModulePreviewer();
+                    } else {
+                        busInputs[i].mark(true);
+                        swapBusInput = i;
+                    }
+                } else {
+                    busInputs[swapBusInput].mark(false);
+                    swapBusInput = -1;
+                    swapped = true;
+                }
+                reDraw();
+            }
+        }*/
     }
 
     dropdownClicked = false;
@@ -552,8 +636,8 @@ function mouseReleased() {
                             }
                             for (let i = 0; i < customs.length; i++) {
                                 if (customs[i].visible) {
-                                    for (let j = 0; j < customs[i].inputCount; j++) {
-                                        if (customs[i].mouseOverInput(j)) {
+                                    for (let j = 0; j < customs[i].inputClickBoxes.length; j++) {
+                                        if (customs[i].mouseOverInput(j) && customs[i].ipBusWidths[j] === 0) {
                                             customs[i].invertInput(j);
                                             let act = new Action('invCIP', [i, j], null);
                                             actionUndo.push(act);
@@ -731,6 +815,10 @@ function mouseReleased() {
                         if (unwrapperNumber >= 0) {
                             deleteBusUnwrapper(unwrapperNumber);
                         }
+                        let busInputNumber = mouseOverBusInput();
+                        if (busInputNumber >= 0) {
+                            deleteBusInput(busInputNumber);
+                        }
                         let decoderNumber = mouseOverDecoder();
                         if (decoderNumber >= 0) {
                             deleteDecoder(decoderNumber);
@@ -864,6 +952,15 @@ function mouseOverBusWrapper() {
 function mouseOverBusUnwrapper() {
     for (var i = busUnwrappers.length - 1; i >= 0; i--) {
         if (busUnwrappers[i].mouseOver()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function mouseOverBusInput() {
+    for (var i = busInputs.length - 1; i >= 0; i--) {
+        if (busInputs[i].mouseOver()) {
             return i;
         }
     }

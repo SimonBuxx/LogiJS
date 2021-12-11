@@ -114,6 +114,7 @@ SegmentDisplay.prototype.shutdown = function () {
         this.ipset[i] = false;
     }
     this.value = 0;
+    this.busInputSet = false;
 };
 
 /*
@@ -198,13 +199,12 @@ SegmentDisplay.prototype.update = function () {
     Draws the gate on the screen
 */
 SegmentDisplay.prototype.show = function () {
+    this.x1 = this.x + GRIDSIZE;
+    this.y1 = this.y + this.h;
+    this.x2 = this.x + GRIDSIZE;
+    this.y2 = this.y + this.h + 6;
 
-    if (this.useBusInput) {
-        this.x1 = this.x + GRIDSIZE;
-        this.y1 = this.y + this.h;
-        this.x2 = this.x + GRIDSIZE;
-        this.y2 = this.y + this.h + 6;
-
+    if (this.useBusInput && this.busInputSet) {
         stroke(150);
         strokeWeight(9);
         line(this.x1, this.y1, this.x2, this.y2 - 3); // Draw the bus input background
@@ -283,8 +283,19 @@ SegmentDisplay.prototype.show = function () {
             }
         }
     } else {
-        triangle(this.x1 - 8, this.y2 + 4, this.x1, this.y1 + 2, this.x1 + 8, this.y2 + 4);
+        if (!this.busInputSet) {
+            if (this.marked) {
+                stroke(MRED, MGREEN, MBLUE);
+            } else {
+                stroke(0);
+            }
+            strokeWeight(6);
+            line(this.x1, this.y1 + 3, this.x1, this.y1 + 6);
+        } else {
+            triangle(this.x1 - 8, this.y2 + 4, this.x1, this.y1 + 2, this.x1 + 8, this.y2 + 4);
+        }
 
+        noStroke();
         textSize(12);
         text(this.inputCount, this.x1 + 15, this.y1 + 10);
 
@@ -297,7 +308,7 @@ SegmentDisplay.prototype.show = function () {
 
         textSize(14);
         textAlign(LEFT, BOTTOM);
-    
+
         text('↺', this.x + this.w - GRIDSIZE / 2 - 16, this.y + this.h - 3);
     }
 

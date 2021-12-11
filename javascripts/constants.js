@@ -26,6 +26,10 @@ const CPNUM   = 4; // Index of the conPoints
 const CUSTNUM = 5; // Index of the customs
 const DINUM   = 6; // Index of the diodes
 const DECNUM = 7;
+const BUSNUM = 8;
+const BUSINNUM = 9;
+const UNWRAPNUM = 10;
+const WRAPNUM = 11;
 
 const BUTCOUNT = 10; // Number of frames the button should be high
 

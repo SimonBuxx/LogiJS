@@ -1,6 +1,6 @@
 // File: input.js
 
-function Input(x, y) {
+function Input(x, y, custPos = 0) {
     this.x = x; // X-Position
     this.y = y; // Y-Position
 
@@ -13,6 +13,8 @@ function Input(x, y) {
     this.framecount = -1;
     this.clock = false;
     this.speed = 30;
+
+    this.custPosition = custPos; // Designated position on a custom element
 
     this.highColor = color(HRED, HGREEN, HBLUE); // Color for high inputs
     this.lowColor = color(50, 50, 50);   // Color for low inputs (dark grey)
@@ -53,6 +55,7 @@ Input.prototype.getData = function () {
     if (this.clock) {
         data.speed = JSON.stringify(this.speed);
     }
+    data.pos = this.custPosition;
     return data;
 };
 

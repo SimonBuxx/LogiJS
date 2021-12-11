@@ -36,6 +36,9 @@ function unmarkPropTargets() {
     for (const elem of outputs) {
         elem.mark(false);
     }
+    for (const elem of busInputs) {
+        elem.mark(false);
+    }
     for (const elem of labels) {
         elem.mark(false);
     }
@@ -79,6 +82,9 @@ function unmarkAll() {
         elem.marked = false;
     }
     for (const elem of busUnwrappers) {
+        elem.marked = false;
+    }
+    for (const elem of busInputs) {
         elem.marked = false;
     }
     for (const elem of decoders) {
@@ -147,10 +153,6 @@ function positionModifierElements() {
 
     document.getElementById('label-modifier').style.left = modifierMenuX + 240 + 'px';
     document.getElementById('label-modifier').style.top = modifierMenuY + 'px';
-}
-
-function swapInputs(a, b) {
-    inputs[a] = inputs.splice(b, 1, inputs[a])[0];
 }
 
 function swapOutputs(a, b) {

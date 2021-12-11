@@ -140,6 +140,9 @@ function showModulePreview() {
 
             // Draw all discrete inputs
             for (let i = 1; i <= previewFeatures.inputBusWidth.length; i++) {
+                if (previewFeatures.inputIsTop[i - 1]) {
+                    drawnTops++;
+                }
                 if (previewFeatures.inputBusWidth[i - 1] === 0) { // If this is a normal input
                     if (!previewFeatures.inputIsTop[i - 1]) {
                         switch (gateDirection) {
@@ -149,7 +152,6 @@ function showModulePreview() {
                             case 3: line(mX + (mW * (i - drawnTops)) / heightOnGrid, mY + mH, mX + (mW * (i - drawnTops)) / heightOnGrid, mY + mH + 6); break;
                         }
                     } else {
-                        drawnTops++;
                         switch (gateDirection) {
                             case 0: line(mX + (mH * drawnTops) / heightOnGrid, mY - 6, mX + (mH * drawnTops) / heightOnGrid, mY); break;
                             case 1: line(mX + mW + 6, mY + (mW * drawnTops) / heightOnGrid, mX + mW, mY + (mW * drawnTops) / heightOnGrid); break;
@@ -172,7 +174,6 @@ function showModulePreview() {
                 }
             }
 
-            noStroke();
             textSize(12);
 
             drawnTops = 0;
@@ -180,25 +181,76 @@ function showModulePreview() {
             for (let i = 1; i <= previewFeatures.inputBusWidth.length; i++) {
                 if (previewFeatures.inputIsTop[i - 1]) {
                     drawnTops++;
-                }
-                if (previewFeatures.inputBusWidth[i - 1] > 0) { // If this is a bus input
-                    switch (gateDirection) {
-                        case 0:
-                            triangle(mX - 9, mY + GRIDSIZE * (i - drawnTops) - 8, mX - 1, mY + GRIDSIZE * (i - drawnTops), mX - 9, mY + GRIDSIZE * (i - drawnTops) + 8);
-                            text(previewFeatures.inputBusWidth[i - 1], mX - 10, mY + GRIDSIZE * (i - drawnTops) + 15);
-                            break;
-                        case 1:
-                            triangle(mX + GRIDSIZE * (i - drawnTops) - 8, mY - 9, mX + GRIDSIZE * (i - drawnTops), mY - 1, mX + GRIDSIZE * (i - drawnTops) + 8, mY - 9);
-                            text(previewFeatures.inputBusWidth[i - 1], mX + GRIDSIZE * (i - drawnTops) + 15, mY - 10);
-                            break;
-                        case 2:
-                            triangle(mX + mW + 10, mY + GRIDSIZE * (i - drawnTops) - 8, mX + mW + 2, mY + GRIDSIZE * (i - drawnTops), mX + mW + 10, mY + GRIDSIZE * (i - drawnTops) + 8);
-                            text(previewFeatures.inputBusWidth[i - 1], mX + mW + 10, mY + GRIDSIZE * (i - drawnTops) + 15);
-                            break;
-                        case 3:
-                            triangle(mX + GRIDSIZE * (i - drawnTops) - 8, mY + mH + 10, mX + GRIDSIZE * (i - drawnTops), mY + mH + 2, mX + GRIDSIZE * (i - drawnTops) + 8, mY + mH + 10);
-                            text(previewFeatures.inputBusWidth[i - 1], mX + GRIDSIZE * (i - drawnTops) + 15, mY + mH + 10);
-                            break;
+                    stroke(0);
+                    strokeWeight(6);
+                    if (previewFeatures.inputBusWidth[i - 1] > 0) { // If this is a bus input
+                        switch (gateDirection) {
+                            case 0:
+                                line(mX + (mH * drawnTops) / heightOnGrid, mY - 5, mX + (mH * drawnTops) / heightOnGrid, mY - 2);
+                                break;
+                            case 1:
+                                line(mX + mW + 3, mY + (mW * drawnTops) / heightOnGrid, mX + mW + 6, mY + (mW * drawnTops) / heightOnGrid);
+                                break;
+                            case 2:
+                                line(mX + (mH * drawnTops) / heightOnGrid, mY + mH + 3, mX + (mH * drawnTops) / heightOnGrid, mY + mH + 6);
+                                break;
+                            case 3:
+                                line(mX - 5, mY + (mW * drawnTops) / heightOnGrid, mX - 2, mY + (mW * drawnTops) / heightOnGrid);
+                                break;
+                        }
+                    }
+                    noStroke();
+                    if (previewFeatures.inputBusWidth[i - 1] > 0) { // If this is a bus input
+                        switch (gateDirection) {
+                            case 0:
+                                text(previewFeatures.inputBusWidth[i - 1], mX + GRIDSIZE * drawnTops + 15, mY - 10);
+                                break;
+                            case 1:
+                                text(previewFeatures.inputBusWidth[i - 1], mX + mW + 10, mY + GRIDSIZE * drawnTops + 15);
+                                break;
+                            case 2:
+                                text(previewFeatures.inputBusWidth[i - 1], mX + GRIDSIZE * drawnTops + 15, mY + mH + 10);
+                                break;
+                            case 3:
+                                text(previewFeatures.inputBusWidth[i - 1], mX - 10, mY + GRIDSIZE * drawnTops + 15);
+                                break;
+                        }
+                    }
+                } else {
+                    stroke(0);
+                    strokeWeight(6);
+                    if (previewFeatures.inputBusWidth[i - 1] > 0) { // If this is a bus input
+                        switch (gateDirection) {
+                            case 0:
+                                line(mX - 5, mY + (mH * (i - drawnTops)) / heightOnGrid, mX - 2, mY + (mH * (i - drawnTops)) / heightOnGrid);
+                                break;
+                            case 1:
+                                line(mX + (mW * (i - drawnTops)) / heightOnGrid, mY - 5, mX + (mW * (i - drawnTops)) / heightOnGrid, mY - 2);
+                                break;
+                            case 2:
+                                line(mX + mW + 3, mY + (mH * (i - drawnTops)) / heightOnGrid, mX + mW + 6, mY + (mH * (i - drawnTops)) / heightOnGrid);
+                                break;
+                            case 3:
+                                line(mX + (mW * (i - drawnTops)) / heightOnGrid, mY + mH + 3, mX + (mW * (i - drawnTops)) / heightOnGrid, mY + mH + 6);
+                                break;
+                        }
+                    }
+                    noStroke();
+                    if (previewFeatures.inputBusWidth[i - 1] > 0) { // If this is a bus input
+                        switch (gateDirection) {
+                            case 0:
+                                text(previewFeatures.inputBusWidth[i - 1], mX - 10, mY + GRIDSIZE * (i - drawnTops) + 15);
+                                break;
+                            case 1:
+                                text(previewFeatures.inputBusWidth[i - 1], mX + GRIDSIZE * (i - drawnTops) + 15, mY - 10);
+                                break;
+                            case 2:
+                                text(previewFeatures.inputBusWidth[i - 1], mX + mW + 10, mY + GRIDSIZE * (i - drawnTops) + 15);
+                                break;
+                            case 3:
+                                text(previewFeatures.inputBusWidth[i - 1], mX + GRIDSIZE * (i - drawnTops) + 15, mY + mH + 10);
+                                break;
+                        }
                     }
                 }
             }
@@ -206,23 +258,20 @@ function showModulePreview() {
             // Draw all bus outputs
             for (let i = 1; i <= previewFeatures.outputBusWidth.length; i++) {
                 if (previewFeatures.outputBusWidth[i - 1] > 0) { // If this is a bus input
+                    noStroke();
                     switch (gateDirection) {
-                        case 0:
-                            triangle(mX + mW + 10, mY + GRIDSIZE * i - 8, mX + mW + 2, mY + GRIDSIZE * i, mX + mW + 10, mY + GRIDSIZE * i + 8);
-                            text(previewFeatures.outputBusWidth[i - 1], mX + mW + 10, mY + GRIDSIZE * i + 15);
-                            break;
-                        case 1:
-                            triangle(mX + GRIDSIZE * i - 8, mY + mH + 10, mX + GRIDSIZE * i, mY + mH + 2, mX + GRIDSIZE * i + 8, mY + mH + 10);
-                            text(previewFeatures.outputBusWidth[i - 1], mX + GRIDSIZE * i + 15, mY + mH + 10);
-                            break;
-                        case 2:
-                            triangle(mX - 9, mY + GRIDSIZE * i - 8, mX - 1, mY + GRIDSIZE * i, mX - 9, mY + GRIDSIZE * i + 8);
-                            text(previewFeatures.outputBusWidth[i - 1], mX - 10, mY + GRIDSIZE * i + 15);
-                            break;
-                        case 3:
-                            triangle(mX + GRIDSIZE * i - 8, mY - 9, mX + GRIDSIZE * i, mY - 1, mX + GRIDSIZE * i + 8, mY - 9);
-                            text(previewFeatures.outputBusWidth[i - 1], mX + GRIDSIZE * i + 15, mY - 10);
-                            break;
+                        case 0: text(previewFeatures.outputBusWidth[i - 1], mX + mW + 10, mY + GRIDSIZE * i + 15); break;
+                        case 1: text(previewFeatures.outputBusWidth[i - 1], mX + GRIDSIZE * i + 15, mY + mH + 10); break;
+                        case 2: text(previewFeatures.outputBusWidth[i - 1], mX - 10, mY + GRIDSIZE * i + 15); break;
+                        case 3: text(previewFeatures.outputBusWidth[i - 1], mX + GRIDSIZE * i + 15, mY - 10); break;
+                    }
+                    stroke(0);
+                    strokeWeight(6);
+                    switch (gateDirection) {
+                        case 0: line(mX + mW + 3, mY + (mH * i) / heightOnGrid, mX + mW + 6, mY + (mH * i) / heightOnGrid); break;
+                        case 1: line(mX + (mW * i) / heightOnGrid, mY + mH + 3, mX + (mW * i) / heightOnGrid, mY + mH + 6); break;
+                        case 2: line(mX - 5, mY + (mH * i) / heightOnGrid, mX - 2, mY + (mH * i) / heightOnGrid); break;
+                        case 3: line(mX + (mW * i) / heightOnGrid, mY - 5, mX + (mW * i) / heightOnGrid, mY - 2); break;
                     }
                 }
             }
@@ -284,7 +333,7 @@ function showModulePreview() {
             textSize(10);
 
             if (Math.max(previewFeatures.inputBusWidth.length - tops, previewFeatures.outputBusWidth.length) % 2 !== 0
-                && textWidth(previewFeatures.caption) >= mW - 30
+                /*&& textWidth(previewFeatures.caption) >= mW - 30*/
                 && Math.max(previewFeatures.inputBusWidth.length - tops, previewFeatures.outputBusWidth.length) >= 2
                 && gateDirection % 2 === 0) {
                 text(previewFeatures.caption, mX + mW / 2, mY + mH / 2 - 15);
@@ -452,6 +501,34 @@ function showModulePreview() {
                 line(mX + 15, mY + 15, mX + 22, mY + 20);
             }
             break;
+        case 'busInput':
+            mX = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
+            mY = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE - GRIDSIZE / 2;
+            stroke(0);
+            strokeWeight(3);
+            fill(50);
+            // Draw the rectangle that represents the input
+            rect(mX, mY, GRIDSIZE, GRIDSIZE);
+
+            noStroke();
+            fill(LARED, LAGREEN, LABLUE);
+            triangle(mX + 2, mY + 2, mX + GRIDSIZE - 2, mY + 2, mX + 2, mY + GRIDSIZE - 2);
+
+            noFill();
+            stroke(0);
+            rect(mX, mY, GRIDSIZE, GRIDSIZE);
+
+            noStroke();
+            fill(0);
+            textFont('Arial');
+            textSize(10);
+            textAlign(LEFT, TOP);
+            text(busWrapperWidth, mX + 4, mY + 4);
+
+            stroke(0);
+            strokeWeight(3);
+            line(mX + 8, mY + 22, mX + 22, mY + 8);
+            break;
         case 'output':
             mX = Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE;
             mY = Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE;
@@ -532,10 +609,11 @@ function showModulePreview() {
                 }
             } else {
                 fill(0);
-                noStroke();
                 textFont('Arial');
-
-                triangle(mX + GRIDSIZE - 8, mY + GRIDSIZE * 3 + 10, mX + GRIDSIZE, mY + GRIDSIZE * 3 + 2, mX + GRIDSIZE + 8, mY + GRIDSIZE * 3 + 10);
+                stroke(0);
+                strokeWeight(6);
+                line(mX + GRIDSIZE, mY + 3 * GRIDSIZE + 3, mX + GRIDSIZE, mY + 3 * GRIDSIZE + 6);
+                noStroke();
                 textSize(12);
                 text(sevenSegmentBits, mX + GRIDSIZE + 15, mY + GRIDSIZE * 3 + 10);
 

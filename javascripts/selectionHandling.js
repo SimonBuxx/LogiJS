@@ -27,6 +27,7 @@ function handleSelection(x1, y1, x2, y2) {
     selConpointIndizes = [];
     selBusWrappersIndizes = [];
     selBusUnwrappersIndizes = [];
+    selBusInputIndizes = [];
     selDecodersIndizes = [];
     selBusIndizes = [];
 
@@ -103,6 +104,13 @@ function handleSelection(x1, y1, x2, y2) {
         if (busUnwrappers[i].x >= x1 && busUnwrappers[i].x <= x2 && busUnwrappers[i].y >= y1 && busUnwrappers[i].y <= y2) {
             busUnwrappers[i].marked = true;
             selBusUnwrappersIndizes.push(i);
+        }
+    }
+
+    for (let i = 0; i < busInputs.length; i++) {
+        if (busInputs[i].x >= x1 && busInputs[i].x <= x2 && busInputs[i].y >= y1 && busInputs[i].y <= y2) {
+            busInputs[i].marked = true;
+            selBusInputIndizes.push(i);
         }
     }
 
@@ -185,6 +193,11 @@ function deleteSelection() {
         deleteLog.push(['busUnwrapper', selBusUnwrappersIndizes[i], busUnwrappers.splice(selBusUnwrappersIndizes[i], 1)[0]]);
     }
 
+    for (let i = selBusInputIndizes.length - 1; i >= 0; i--) {
+        busInputs[selBusInputIndizes[i]].marked = false;
+        deleteLog.push(['busInput', selBusInputIndizes[i], busInputs.splice(selBusInputIndizes[i], 1)[0]]);
+    }
+
     for (let i = selDecodersIndizes.length - 1; i >= 0; i--) {
         decoders[selDecodersIndizes[i]].marked = false;
         deleteLog.push(['decoder', selDecodersIndizes[i], decoders.splice(selDecodersIndizes[i], 1)[0]]);
@@ -262,6 +275,9 @@ function copySelection() {
     for (let i = 0; i < selBusUnwrappersIndizes.length; i++) {
         copiedElements.push(_.cloneDeep(busUnwrappers[selBusUnwrappersIndizes[i]]));
     }
+    for (let i = 0; i < selBusInputIndizes.length; i++) {
+        copiedElements.push(_.cloneDeep(busInputs[selBusInputIndizes[i]]));
+    }
     for (let i = 0; i < selDecodersIndizes.length; i++) {
         copiedElements.push(_.cloneDeep(decoders[selDecodersIndizes[i]]));
     }
@@ -314,6 +330,7 @@ function pasteSelection() {
     selConpointIndizes = [];
     selBusWrappersIndizes = [];
     selBusUnwrappersIndizes = [];
+    selBusInputIndizes = [];
     selDecodersIndizes = [];
     selBusIndizes = [];
     unmarkAll();
@@ -325,7 +342,11 @@ function pasteSelection() {
         let elem = _.cloneDeep(copiedElements[i]); // Clone the current element
         elem.alterPosition(GRIDSIZE, GRIDSIZE); // Move the element down right
         let busFlag = elem.id.charAt(elem.id.length - 1);
-        elem.id = elem.id.charAt(0) + Date.now() + Math.random(); // Give the cloned element a new ID
+        if (elem.id.charAt(0) === 'b') {
+            elem.id = elem.id.charAt(0) + elem.id.charAt(1) + Date.now() + Math.random(); // Give the cloned element a new ID
+        } else {
+            elem.id = elem.id.charAt(0) + Date.now() + Math.random(); // Give the cloned element a new ID
+        }
         if (busFlag === 'b') {
             elem.id += 'b';
         }
@@ -338,8 +359,17 @@ function pasteSelection() {
                 selWireIndizes.push(wires.length - 1);
                 break;
             case 'b':
-                busses.push(_.cloneDeep(elem));
-                selBusIndizes.push(busses.length - 1);
+                switch (elem.id.charAt(1)) {
+                    case 'b':
+                        busses.push(_.cloneDeep(elem));
+                        selBusIndizes.push(busses.length - 1);
+                        break;
+                    case 'i':
+                        busInputs.push(_.cloneDeep(elem));
+                        selBusInputIndizes.push(busInputs.length - 1);
+                        break;
+                    default:
+                }
                 break;
             case 'd':
                 diodes.push(_.cloneDeep(elem));
@@ -480,6 +510,10 @@ function moveSelection(dx, dy) {
         busUnwrappers[selBusUnwrappersIndizes[i]].alterPosition(dx, dy);
     }
 
+    for (let i = 0; i < selBusInputIndizes.length; i++) {
+        busInputs[selBusInputIndizes[i]].alterPosition(dx, dy);
+    }
+
     for (let i = 0; i < selDecodersIndizes.length; i++) {
         decoders[selDecodersIndizes[i]].alterPosition(dx, dy);
     }
@@ -533,10 +567,10 @@ function finishSelection() {
 
         let conpointsAfter = _.cloneDeep(conpoints);
         let diodesAfter = _.cloneDeep(diodes);
-        if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length + selBusWrappersIndizes.length + selBusUnwrappersIndizes.length + selDecodersIndizes.length +
+        if ((selGatesIndizes.length + selInputsIndizes.length + selOutputsIndizes.length + selLabelIndizes.length + selSegDisplayIndizes.length + selBusWrappersIndizes.length + selBusUnwrappersIndizes.length + selBusInputIndizes.length + selDecodersIndizes.length +
             selCustomIndizes.length + selConpointIndizes.length > 0 || selectionLog.length > 0 || busLog.length > 0) /*&& (selectionOffsetX !== 0 || selectionOffsetY !== 0)*/) {
             console.log('moveSel, offset: ' + selectionOffsetX + ' ' + selectionOffsetY);
-            pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selBusWrappersIndizes, selBusUnwrappersIndizes, selDecodersIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
+            pushUndoAction('moveSel', [selectionOffsetX, selectionOffsetY, selGatesIndizes, selInputsIndizes, selOutputsIndizes, selLabelIndizes, selSegDisplayIndizes, selBusWrappersIndizes, selBusUnwrappersIndizes, selBusInputIndizes, selDecodersIndizes, selCustomIndizes, selConpointIndizes, selectionIsCopied],
                 [_.cloneDeep(selectionLog), conpointsBefore, conpointsAfter, diodesBefore, diodesAfter, _.cloneDeep(busLog)]);
         }
     }

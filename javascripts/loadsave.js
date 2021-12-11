@@ -16,7 +16,13 @@ function buildJSON() {
     json.segDisplays = [];
     json.busWrappers = [];
     json.busUnwrappers = [];
+    json.busInputs = [];
     json.decoders = [];
+
+    // Trim gaps in the input order
+    let trimmedInputs, trimmedBusInputs;
+    [trimmedInputs, trimmedBusInputs] = trimInputOrder();
+
     for (let i = 0; i < gates.length; i++) {
         json.gates.push(gates[i].getData());
     }
@@ -24,7 +30,7 @@ function buildJSON() {
         json.outputs.push(outputs[i].getData());
     }
     for (let i = 0; i < inputs.length; i++) {
-        json.inputs.push(inputs[i].getData());
+        json.inputs.push(trimmedInputs[i].getData());
     }
     for (let i = 0; i < wires.length; i++) {
         json.wires.push(wires[i].getData());
@@ -49,6 +55,9 @@ function buildJSON() {
     }
     for (let i = 0; i < busUnwrappers.length; i++) {
         json.busUnwrappers.push(busUnwrappers[i].getData());
+    }
+    for (let i = 0; i < busInputs.length; i++) {
+        json.busInputs.push(trimmedBusInputs[i].getData());
     }
     for (let i = 0; i < decoders.length; i++) {
         json.decoders.push(decoders[i].getData());
@@ -142,6 +151,7 @@ function load(loadData) {
     segDisplays = [];
     busWrappers = [];
     busUnwrappers = [];
+    busInputs = [];
     decoders = [];
     transform = new Transformation(0, 0, 1);
     currentGridSize = GRIDSIZE;
@@ -165,7 +175,11 @@ function load(loadData) {
         outputs[i].updateClickBox();
     }
     for (let i = 0; i < loadData.inputs.length; i++) {
-        inputs[i] = new Input(JSON.parse(loadData.inputs[i].x), JSON.parse(loadData.inputs[i].y));
+        if (loadData.inputs[i].hasOwnProperty("pos")) {
+            inputs[i] = new Input(JSON.parse(loadData.inputs[i].x), JSON.parse(loadData.inputs[i].y), JSON.parse(loadData.inputs[i].pos));
+        } else {
+            inputs[i] = new Input(JSON.parse(loadData.inputs[i].x), JSON.parse(loadData.inputs[i].y), ++inCustPosBound);
+        }
         inputs[i].setClock(loadData.inputs[i].clock === "true");
         inputs[i].framecount = parseInt(loadData.inputs[i].framecount);
         if (loadData.inputs[i].hasOwnProperty("istop")) {
@@ -253,14 +267,33 @@ function load(loadData) {
             busUnwrappers[i].busInverted = JSON.parse(loadData.busUnwrappers[i].busInverted);
         }
     }
+    if (loadData.hasOwnProperty("busInputs")) {
+        for (let i = 0; i < loadData.busInputs.length; i++) {
+            if (loadData.busInputs[i].hasOwnProperty("pos")) {
+                busInputs[i] = new BusInput(JSON.parse(loadData.busInputs[i].x), JSON.parse(loadData.busInputs[i].y),
+                    JSON.parse(loadData.busInputs[i].busWidth), JSON.parse(loadData.busInputs[i].pos));
+            } else {
+                busInputs[i] = new BusInput(JSON.parse(loadData.busInputs[i].x), JSON.parse(loadData.busInputs[i].y),
+                    JSON.parse(loadData.busInputs[i].busWidth), ++inCustPosBound);
+            }
+            if (loadData.busInputs[i].hasOwnProperty("istop")) {
+                busInputs[i].isTop = true;
+            }
+            if (loadData.busInputs[i].hasOwnProperty("lbl")) {
+                busInputs[i].lbl = loadData.busInputs[i].lbl;
+            }
+            busInputs[i].setCoordinates(JSON.parse(loadData.busInputs[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.busInputs[i].y) / transform.zoom - transform.dy);
+            busInputs[i].updateClickBox();
+        }
+    }
     if (loadData.hasOwnProperty("decoders")) {
         for (let i = 0; i < loadData.decoders.length; i++) {
             decoders[i] = new Decoder(JSON.parse(loadData.decoders[i].x), JSON.parse(loadData.decoders[i].y),
-                JSON.parse(loadData.decoders[i].direction), JSON.parse(loadData.decoders[i].inputCount), 
+                JSON.parse(loadData.decoders[i].direction), JSON.parse(loadData.decoders[i].inputCount),
                 JSON.parse(loadData.decoders[i].useInputBus), JSON.parse(loadData.decoders[i].useOutputBus)),
                 decoders[i].setInvertions(JSON.parse(loadData.decoders[i].inputsInv), JSON.parse(loadData.decoders[i].outputsInv));
-                decoders[i].inBusInverted = JSON.parse(loadData.decoders[i].inBusInverted);
-                decoders[i].outBusInverted = JSON.parse(loadData.decoders[i].inBusInverted);
+            decoders[i].inBusInverted = JSON.parse(loadData.decoders[i].inBusInverted);
+            decoders[i].outBusInverted = JSON.parse(loadData.decoders[i].inBusInverted);
         }
     }
     for (let i = 0; i < loadData.customs.length; i++) {
@@ -268,6 +301,9 @@ function load(loadData) {
         customs[i].setInvertions(JSON.parse(loadData.customs[i].inputsInv), JSON.parse(loadData.customs[i].outputsInv));
         customs[i].setCoordinates(JSON.parse(loadData.customs[i].x) / transform.zoom - transform.dx, JSON.parse(loadData.customs[i].y) / transform.zoom - transform.dy);
     }
+
+    inCustPosBound = inputs.length + busInputs.length - 1;
+
     loadCustomSketches(); // Load all custom sketches from file
     reDraw();
 }
@@ -312,7 +348,7 @@ function loadCustomFile(file, num, hlparent, afterLoadingCallback = function () 
     Invoked by loadCustomFile when the json is fully loaded
 */
 function loadCustom(loadData, num, hlparent) {
-    let params = [[], [], [], [], [], [], [], []]; // [] x Number of different objects
+    let params = [[], [], [], [], [], [], [], [], [], [], [], []]; // [] x Number of different objects
     for (let i = 0; i < loadData.gates.length; i++) {
         params[GATENUM][i] = new LogicGate(JSON.parse(loadData.gates[i].x), JSON.parse(loadData.gates[i].y), JSON.parse(loadData.gates[i].direction),
             JSON.parse(loadData.gates[i].inputCount), JSON.parse(loadData.gates[i].outputCount), JSON.parse(loadData.gates[i].logicFunction));
@@ -325,7 +361,13 @@ function loadCustom(loadData, num, hlparent) {
         }
     }
     for (let i = 0; i < loadData.inputs.length; i++) {
-        params[INPNUM][i] = new Input(JSON.parse(loadData.inputs[i].x), JSON.parse(loadData.inputs[i].y));
+        if (loadData.inputs[i].hasOwnProperty("pos")) {
+            params[INPNUM][i] = new Input(JSON.parse(loadData.inputs[i].x), JSON.parse(loadData.inputs[i].y), JSON.parse(loadData.inputs[i].pos));
+        } else {
+            // If there is no custPos defined, use the array position
+            // customSketch will then keep the array order when sorting for custPos
+            params[INPNUM][i] = new Input(JSON.parse(loadData.inputs[i].x), JSON.parse(loadData.inputs[i].y), i);
+        }
         if (loadData.inputs[i].hasOwnProperty("lbl")) {
             params[INPNUM][i].lbl = loadData.inputs[i].lbl;
         }
@@ -353,6 +395,61 @@ function loadCustom(loadData, num, hlparent) {
         }
     } else {
         console.log('The file you are trying to load was built with an old version of LogiJS (pre-01/2018)!');
+    }
+
+    if (loadData.hasOwnProperty("busses")) {
+        for (let i = 0; i < loadData.busses.length; i++) {
+            if (loadData.busses[i].hasOwnProperty("y2") && JSON.parse(loadData.busses[i].y1) !== JSON.parse(loadData.busses[i].y2)) {
+                params[BUSNUM][i] = new Bus(1, JSON.parse(loadData.busses[i].x1), JSON.parse(loadData.busses[i].y1));
+                params[BUSNUM][i].endX = JSON.parse(loadData.busses[i].x1);
+                params[BUSNUM][i].endY = JSON.parse(loadData.busses[i].y2);
+            } else if (loadData.busses[i].hasOwnProperty("x2") && JSON.parse(loadData.busses[i].x1) !== JSON.parse(loadData.busses[i].x2)) {
+                params[BUSNUM][i] = new Bus(0, JSON.parse(loadData.busses[i].x1), JSON.parse(loadData.busses[i].y1));
+                params[BUSNUM][i].endX = JSON.parse(loadData.busses[i].x2);
+                params[BUSNUM][i].endY = JSON.parse(loadData.busses[i].y1);
+            }
+        }
+    } else {
+        params[BUSNUM] = [];
+    }
+
+    if (loadData.hasOwnProperty("busInputs")) {
+        for (let i = 0; i < loadData.busInputs.length; i++) {
+            if (loadData.busInputs[i].hasOwnProperty("pos")) {
+                params[BUSINNUM][i] = new BusInput(JSON.parse(loadData.busInputs[i].x), JSON.parse(loadData.busInputs[i].y),
+                    JSON.parse(loadData.busInputs[i].busWidth), JSON.parse(loadData.busInputs[i].pos));
+            } else {
+                params[BUSINNUM][i] = new BusInput(JSON.parse(loadData.busInputs[i].x), JSON.parse(loadData.busInputs[i].y),
+                    JSON.parse(loadData.busInputs[i].busWidth), i);
+            }
+            if (loadData.busInputs[i].hasOwnProperty("lbl")) {
+                params[BUSINNUM][i].lbl = loadData.busInputs[i].lbl;
+            }
+            /*if (loadData.busInputs[i].hasOwnProperty("pos")) {
+                params[BUSINNUM][i].custPosition = loadData.busInputs[i].pos;
+            }*/
+            if (loadData.busInputs[i].hasOwnProperty("istop")) {
+                params[BUSINNUM][i].isTop = true;
+            }
+        }
+    }
+
+    if (loadData.hasOwnProperty("busUnwrappers")) {
+        for (let i = 0; i < loadData.busUnwrappers.length; i++) {
+            params[UNWRAPNUM][i] = new BusUnwrapper(JSON.parse(loadData.busUnwrappers[i].x), JSON.parse(loadData.busUnwrappers[i].y),
+                JSON.parse(loadData.busUnwrappers[i].direction), JSON.parse(loadData.busUnwrappers[i].outputCount));
+            params[UNWRAPNUM][i].setInvertions(JSON.parse(loadData.busUnwrappers[i].outputsInv));
+            params[UNWRAPNUM][i].busInverted = JSON.parse(loadData.busUnwrappers[i].busInverted);
+        }
+    }
+
+    if (loadData.hasOwnProperty("busWrappers")) {
+        for (let i = 0; i < loadData.busWrappers.length; i++) {
+            params[WRAPNUM][i] = new BusWrapper(JSON.parse(loadData.busWrappers[i].x), JSON.parse(loadData.busWrappers[i].y),
+                JSON.parse(loadData.busWrappers[i].direction), JSON.parse(loadData.busWrappers[i].inputCount));
+            params[WRAPNUM][i].setInvertions(JSON.parse(loadData.busWrappers[i].inputsInv));
+            params[WRAPNUM][i].busInverted = JSON.parse(loadData.busWrappers[i].busInverted);
+        }
     }
 
     for (let i = 0; i < loadData.conpoints.length; i++) {
@@ -421,21 +518,57 @@ function loadCallback(loadData, num, hlparent, afterLoadingCallback) {
 function getLookData(json) {
     let look = {};
     look.tops = [];
+    look.inBusWidths = [];
     look.inputLabels = [];
     look.outputLabels = [];
     look.caption = json.caption;
-    look.inputs = json.inputs.length;
+    look.inputs = json.inputs.length + json.busInputs.length;
     look.outputs = json.outputs.length;
-    for (let i = 0; i < json.inputs.length; i++) {
-        if (json.inputs[i].istop) {
-            look.tops.push(i);
+
+    for (let i = 0; i < look.inputs; i++) {
+        for (let j = 0; j < json.inputs.length; j++) {
+            if (json.inputs[j].pos === i) {
+                look.tops.push(json.inputs[j].istop === 'true');
+                if (json.inputs[j].hasOwnProperty('lbl')) {
+                    look.inputLabels.push(json.inputs[j].lbl);
+                } else {
+                    look.inputLabels.push('');
+                }
+                look.inBusWidths.push(0);
+            }
         }
+        for (let j = 0; j < json.busInputs.length; j++) {
+            if (json.busInputs[j].pos === i) {
+                look.tops.push(json.busInputs[j].istop === 'true');
+                if (json.busInputs[j].hasOwnProperty('lbl')) {
+                    look.inputLabels.push(json.busInputs[j].lbl);
+                } else {
+                    look.inputLabels.push('');
+                }
+                look.inBusWidths.push(json.busInputs[j].busWidth);
+            }
+        }
+    }
+
+
+    /*for (let i = 0; i < json.inputs.length; i++) {                  // Nächste Baustelle: anstatt splice kombinieren ähnlich in customsketch/resetinputs!
+        look.tops.push(json.inputs[i].hasOwnProperty('istop'));
         if (json.inputs[i].hasOwnProperty('lbl')) {
             look.inputLabels.push(json.inputs[i].lbl);
         } else {
             look.inputLabels.push('');
         }
+        look.inBusWidths.push(0);
     }
+    for (let i = json.busInputs.length - 1; i >= 0; i--) {
+        look.tops.splice(json.busInputs[i].pos, 0, json.busInputs[i].hasOwnProperty('istop'));
+        if (json.busInputs[i].hasOwnProperty('lbl')) {
+            look.inputLabels.splice(json.busInputs[i].pos, 0, json.busInputs[i].lbl);
+        } else {
+            look.inputLabels.splice(json.busInputs[i].pos, 0, '');
+        }
+        look.inBusWidths.splice(json.busInputs[i].pos, 0, json.busInputs[i].busWidth);
+    }*/
     for (let i = 0; i < json.outputs.length; i++) {
         if (json.outputs[i].hasOwnProperty('lbl')) {
             look.outputLabels.push(json.outputs[i].lbl);
@@ -449,17 +582,40 @@ function getLookData(json) {
 function getThisLook() {
     let look = {};
     look.tops = [];
+    look.inBusWidths = [];
     look.inputLabels = [];
     look.outputLabels = [];
     look.caption = moduleNameInput.value;
-    look.inputs = inputs.length;
+    look.inputs = inputs.length + busInputs.length;
     look.outputs = outputs.length;
-    for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].isTop) {
-            look.tops.push(i);
+
+    for (let i = 0; i <= inCustPosBound; i++) {
+        for (let j = 0; j < inputs.length; j++) {
+            if (inputs[j].custPosition === i) {
+                look.tops.push(inputs[j].istop === 'true');
+                look.inputLabels.push(inputs[j].lbl);
+                look.inBusWidths.push(0);
+            }
         }
-        look.inputLabels.push(inputs[i].lbl);
+        for (let j = 0; j < busInputs.length; j++) {
+            if (busInputs[j].custPosition === i) {
+                look.tops.push(busInputs[j].istop === 'true');
+                look.inputLabels.push(busInputs[j].lbl);
+                look.inBusWidths.push(busInputs[j].busWidth);
+            }
+        }
     }
+
+    /*for (let i = 0; i < inputs.length; i++) {
+        look.tops.push(inputs[i].isTop);
+        look.inputLabels.push(inputs[i].lbl);
+        look.inBusWidths.push(0);
+    }
+    for (let i = busInputs.length - 1; i >= 0; i--) {
+        look.tops.splice(busInputs[i].custPosition, 0, busInputs[i].isTop);    // <---------- REDO
+        look.inputLabels.splice(busInputs[i].custPosition, 0, busInputs[i].lbl);
+        look.inBusWidths.splice(busInputs[i].custPosition, 0, busInputs[i].busWidth);
+    }*/
     for (let i = 0; i < outputs.length; i++) {
         look.outputLabels.push(outputs[i].lbl);
     }

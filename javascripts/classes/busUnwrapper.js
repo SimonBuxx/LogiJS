@@ -234,25 +234,6 @@ BusUnwrapper.prototype.show = function () {
         return;
     }
 
-    // Background lines to hide the bus behind the arrow
-    stroke(150);
-    strokeWeight(9);
-    switch (this.direction) {
-        case 0:
-            line(this.x - 4, this.y + GRIDSIZE, this.x, this.y + GRIDSIZE);
-            break;
-        case 1:
-            line(this.x + GRIDSIZE, this.y, this.x + GRIDSIZE, this.y - 4);
-            break;
-        case 2:
-            line(this.x + this.w, this.y + GRIDSIZE, this.x + this.w + 4, this.y + GRIDSIZE);
-            break;
-        case 3:
-            line(this.x + GRIDSIZE, this.y + this.h, this.x + GRIDSIZE, this.y + this.h + 4);
-            break;
-        default:
-    }
-
     fill(255);
     if (this.marked) {
         stroke(MRED, MGREEN, MBLUE);
@@ -309,24 +290,51 @@ BusUnwrapper.prototype.show = function () {
 
     // Draw input
     textSize(12);
+
     switch (this.direction) {
-        case 0:
-            triangle(this.x - 9, this.y + GRIDSIZE - 8, this.x - 1, this.y + GRIDSIZE, this.x - 9, this.y + GRIDSIZE + 8);
-            text(this.outputCount, this.x - 10, this.y + GRIDSIZE + 15);
-            break;
-        case 1:
-            triangle(this.x + GRIDSIZE - 8, this.y - 9, this.x + GRIDSIZE, this.y - 1, this.x + GRIDSIZE + 8, this.y - 9);
-            text(this.outputCount, this.x + GRIDSIZE + 15, this.y - 10);
-            break;
-        case 2:
-            triangle(this.x + this.w + 10, this.y + GRIDSIZE - 8, this.x + this.w + 2, this.y + GRIDSIZE, this.x + this.w + 10, this.y + GRIDSIZE + 8);
-            text(this.outputCount, this.x + this.w + 10, this.y + GRIDSIZE + 15);
-            break;
-        case 3:
-            triangle(this.x + GRIDSIZE - 8, this.y + this.h + 10, this.x + GRIDSIZE, this.y + this.h + 2, this.x + GRIDSIZE + 8, this.y + this.h + 10);
-            text(this.outputCount, this.x + GRIDSIZE + 15, this.y + this.h + 10);
-            break;
+        case 0: text(this.outputCount, this.x - 10, this.y + GRIDSIZE + 15); break;
+        case 1: text(this.outputCount, this.x + GRIDSIZE + 15, this.y - 10); break;
+        case 2: text(this.outputCount, this.x + this.w + 10, this.y + GRIDSIZE + 15); break;
+        case 3: text(this.outputCount, this.x + GRIDSIZE + 15, this.y + this.h + 10); break;
         default:
+    }
+
+    if (this.ipset) {
+        // Background lines to hide the bus behind the arrow
+        //stroke(150);
+        //strokeWeight(8);
+        noStroke();
+        fill(150);
+        switch (this.direction) { 
+            case 0: rect(this.x - 6, this.y + GRIDSIZE - 4, 5, 8); break;
+            case 1: rect(this.x + GRIDSIZE - 4, this.y - 6, 8, 5); break;
+            case 2: rect(this.x + this.w + 2, this.y + GRIDSIZE - 4, 5, 8); break;
+            case 3: rect(this.x + GRIDSIZE - 4, this.y + this.h + 2, 8, 5); break;
+            default:
+        }
+        noStroke();
+        fill(0);
+        switch (this.direction) {
+            case 0: triangle(this.x - 9, this.y + GRIDSIZE - 8, this.x - 1, this.y + GRIDSIZE, this.x - 9, this.y + GRIDSIZE + 8); break;
+            case 1: triangle(this.x + GRIDSIZE - 8, this.y - 9, this.x + GRIDSIZE, this.y - 1, this.x + GRIDSIZE + 8, this.y - 9); break;
+            case 2: triangle(this.x + this.w + 10, this.y + GRIDSIZE - 8, this.x + this.w + 2, this.y + GRIDSIZE, this.x + this.w + 10, this.y + GRIDSIZE + 8); break;
+            case 3: triangle(this.x + GRIDSIZE - 8, this.y + this.h + 10, this.x + GRIDSIZE, this.y + this.h + 2, this.x + GRIDSIZE + 8, this.y + this.h + 10); break;
+            default:
+        }
+    } else {
+        strokeWeight(6);
+        if (this.marked) {
+            stroke(MRED, MGREEN, MBLUE);
+        } else {
+            stroke(0);
+        }
+        switch (this.direction) {
+            case 0: line(this.x - 5, this.y + GRIDSIZE, this.x - 2, this.y + GRIDSIZE); break;
+            case 1: line(this.x + GRIDSIZE, this.y - 2, this.x + GRIDSIZE, this.y - 5); break;
+            case 2: line(this.x + this.w + 3, this.y + GRIDSIZE, this.x + this.w + 6, this.y + GRIDSIZE); break;
+            case 3: line(this.x + GRIDSIZE, this.y + this.h + 3, this.x + GRIDSIZE, this.y + this.h + 6); break;
+            default:
+        }
     }
 
     // Draw outputs

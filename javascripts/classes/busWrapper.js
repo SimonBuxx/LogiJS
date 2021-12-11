@@ -244,25 +244,6 @@ BusWrapper.prototype.show = function () {
         return;
     }
 
-    // Background lines to hide the bus behind the arrow
-    stroke(150);
-    strokeWeight(9);
-    switch (this.direction) {
-        case 0:
-            line(this.x + this.w, this.y + GRIDSIZE, this.x + this.w + 4, this.y + GRIDSIZE);
-            break;
-        case 1:
-            line(this.x + GRIDSIZE, this.y + this.h, this.x + GRIDSIZE, this.y + this.h + 4);
-            break;
-        case 2:
-            line(this.x - 4, this.y + GRIDSIZE, this.x, this.y + GRIDSIZE);
-            break;
-        case 3:
-            line(this.x + GRIDSIZE, this.y, this.x + GRIDSIZE, this.y - 4);
-            break;
-        default:
-    }
-
     // Draw the element body
     fill(255);
     if (this.marked) {
@@ -382,7 +363,20 @@ BusWrapper.prototype.show = function () {
         }
     }
 
-    // Draw output triangle
+    // Draw the output bus
+    if (this.marked) {
+        stroke(MRED, MGREEN, MBLUE);
+    } else {
+        stroke(0);
+    }
+    strokeWeight(6);
+    switch (this.direction) {
+        case 0: line(this.x + this.w + 3, this.y + GRIDSIZE, this.x + this.w + 6, this.y + GRIDSIZE); break;
+        case 1: line(this.x + GRIDSIZE, this.y + this.h + 3, this.x + GRIDSIZE, this.y + this.h + 6); break;
+        case 2: line(this.x - 5, this.y + GRIDSIZE, this.x - 2, this.y + GRIDSIZE); break;
+        case 3: line(this.x + GRIDSIZE, this.y - 2, this.x + GRIDSIZE, this.y - 5); break;
+        default:
+    }
 
     noStroke();
     if (this.marked) {
@@ -393,38 +387,10 @@ BusWrapper.prototype.show = function () {
     textSize(12);
 
     switch (this.direction) {
-        case 0:
-            triangle(this.x + this.w + 10, this.y + GRIDSIZE - 8, this.x + this.w + 2, this.y + GRIDSIZE, this.x + this.w + 10, this.y + GRIDSIZE + 8);
-            text(this.inputCount, this.x + this.w + 10, this.y + GRIDSIZE + 15);
-            break;
-        case 1:
-            triangle(this.x + GRIDSIZE - 8, this.y + this.h + 10, this.x + GRIDSIZE, this.y + this.h + 2, this.x + GRIDSIZE + 8, this.y + this.h + 10);
-            text(this.inputCount, this.x + GRIDSIZE + 15, this.y + this.h + 10);
-            break;
-        case 2:
-            triangle(this.x - 9, this.y + GRIDSIZE - 8, this.x - 1, this.y + GRIDSIZE, this.x - 9, this.y + GRIDSIZE + 8);
-            text(this.inputCount, this.x - 10, this.y + GRIDSIZE + 15);
-            break;
-        case 3:
-            triangle(this.x + GRIDSIZE - 8, this.y - 9, this.x + GRIDSIZE, this.y - 1, this.x + GRIDSIZE + 8, this.y - 9);
-            text(this.inputCount, this.x + GRIDSIZE + 15, this.y - 10);
-            break;
-        default:
-    }
-
-    /*textSize(8);
-
-    switch (this.direction) {
-        case 0:
-            text('M', this.x + this.w + 14, this.y + GRIDSIZE - 7);
-            text('L', this.x + this.w + 14, this.y + GRIDSIZE + 8);
-            break;
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
+        case 0: text(this.inputCount, this.x + this.w + 10, this.y + GRIDSIZE + 15); break;
+        case 1: text(this.inputCount, this.x + GRIDSIZE + 15, this.y + this.h + 10); break;
+        case 2: text(this.inputCount, this.x - 10, this.y + GRIDSIZE + 15); break;
+        case 3: text(this.inputCount, this.x + GRIDSIZE + 15, this.y - 10); break;
         default:
     }
 

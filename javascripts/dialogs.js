@@ -164,61 +164,186 @@ function hidePinConfigurator() {
     document.getElementById('pin-configurator').style.display = 'none';
 }
 
+/*function integrateBusInputs() {
+    console.log('integrating bus inputs');
+    let overhead = 0;
+    for (let i = 0; i < busInputs.length; i++) {
+        if (busInputs[i].custPosition > inputs.length + busInputs.length) {
+            console.log('integrity violation');
+            for (let j = 0; j < busInputs.length; j++) {
+                if (busInputs[j].custPosition < busInputs[i].custPosition) {
+                    overhead = Math.max(overhead, busInputs[j].custPosition);
+                }
+                console.log('moving input from ' + busInputs[i].custPosition + ' to ' + Math.max(inputs.length, overhead + 1));
+                console.log('(There are ' + inputs.length + ' inputs)');
+                busInputs[i].custPosition = Math.max(inputs.length, overhead + 1);
+            }
+
+        }
+    }
+}
+
+/*
+    Removes gaps in the input order (custPos)
+*/
+function trimInputOrder() {
+    let trimmedInputs = _.cloneDeep(inputs);
+    let trimmedBusInputs = _.cloneDeep(busInputs);
+
+    let trimError = false;
+
+    for (let i = 0; i <= trimmedInputs.length + trimmedBusInputs.length - 1; i++) {
+        let posTaken = false;
+        let nextCustPos = inCustPosBound + 1; // The smallest custPos > i
+        let nextElement = -1; // Position of the element with custPos = nextCustPos
+        let isBusInput = false; // True, if nextELement is in the busInputs array
+
+        // Check for both inputs and bus inputs, whether there is an element at position i 
+        // and if not, find the location of the element with the smallest custPos > i
+        for (let j = 0; j < trimmedInputs.length; j++) {
+            console.log(j, i, trimmedInputs[j].custPosition, nextCustPos);
+            if (trimmedInputs[j].custPosition === i) {
+                posTaken = true;
+                break;
+            } else if ((trimmedInputs[j].custPosition > i) && (trimmedInputs[j].custPosition < nextCustPos)) {
+                nextCustPos = trimmedInputs[j].custPosition;
+                nextElement = j;
+                isBusInput = false;
+                console.log(nextElement);
+                console.log('isBusInput = false');
+            }
+        }
+        if (!posTaken) {
+            for (let j = 0; j < trimmedBusInputs.length; j++) {
+                if (trimmedBusInputs[j].custPosition === i) {
+                    posTaken = true;
+                    break;
+                } else if ((trimmedBusInputs[j].custPosition > i) && (trimmedBusInputs[j].custPosition < nextCustPos)) {
+                    nextCustPos = trimmedBusInputs[j].custPosition;
+                    nextElement = j;
+                    isBusInput = true;
+                    console.log('isBusInput = true');
+                }
+            }
+        }
+
+        if (nextElement === -1 && !posTaken) {
+            trimError = true;
+        }
+
+        console.log('Scan for ' + i + ': ');
+        if (posTaken) {
+            console.log('   There is an input at this position.');
+        } else {
+            console.log('   There is no input at this position.');
+            console.log('   Next position found: ' + nextCustPos);
+            (isBusInput) ? console.log('    This is a bus input, no. ' + nextElement) : console.log('   This is a regular input, no. ' + nextElement);
+        }
+
+
+        // If there is no element at position i, reassign the custPos of the next biggest element to i
+        if (!posTaken && !trimError) {
+            if (isBusInput) {
+                console.log('   Reassigning bus input from ' + trimmedBusInputs[nextElement].custPosition + '...');
+                trimmedBusInputs[nextElement].custPosition = i;
+            } else {
+                console.log('   Reassigning regular input from ' + trimmedInputs[nextElement].custPosition + '...');
+                trimmedInputs[nextElement].custPosition = i;
+            }
+        }
+    }
+
+    if (trimError) {
+        for (let i = 0; i < trimmedInputs.length; i++) {
+            trimmedInputs[i].custPosition = i;
+        }
+        for (let i = 0; i < trimmedBusInputs.length; i++) {
+            trimmedBusInputs[i].custPosition = trimmedInputs.length + i;
+        }
+        console.log('There was an error during order trimming, using insertion order');
+    }
+
+    return [trimmedInputs, trimmedBusInputs];
+
+    //inCustPosBound = inputs.length + busInputs.length - 1;
+}
+
 function initPinConfigurator() {
     let configurator = document.getElementById('pin-inner');
     configurator.innerHTML = '';
-    for (let i = 0; i < Math.max(inputs.length, outputs.length); i++) {
-        let lbl = document.createElement('p');
-        lbl.innerHTML = i + 1;
-        lbl.classList.add('configuratorLabel');
-        lbl.style.gridColumn = 1;
-        configurator.appendChild(lbl);
-        if (i < inputs.length) {
-            let checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.classList.add('topCheckbox');
-            checkbox.id = 'topCheckbox' + i;
-            checkbox.value = '';
-            checkbox.name = 'topCheckbox';
-            checkbox.checked = inputs[i].isTop;
-            checkbox.addEventListener('click', function () { // jshint ignore:line
-                inputs[i].setIsTop(checkbox.checked);
-                showModulePreviewer();
-            });
-            checkbox.addEventListener('mouseenter', function () { // jshint ignore:line
-                setHelpText('Sets this input on top of the module');
-            });
-            checkbox.addEventListener('mouseleave', function () { // jshint ignore:line
-                setHelpText('Click on the in- and outputs to swap them!');
-            });
-            let newInput = document.createElement('input');
-            newInput.classList.add('inputLabel');
-            newInput.id = 'ipLabel' + i;
-            newInput.style.gridColumn = 3;
-            newInput.placeholder = 'None';
-            newInput.value = inputs[i].lbl;
-            newInput.onkeyup = function () { // jshint ignore:line
-                inputs[i].lbl = newInput.value;
-                showModulePreviewer();
-            };
-            newInput.addEventListener('mouseenter', function () { // jshint ignore:line
-                setHelpText('The name of this input on the module');
-            });
-            newInput.addEventListener('mouseleave', function () { // jshint ignore:line
-                setHelpText('Click on the in- and outputs to swap them!');
-            });
-            configurator.appendChild(checkbox);
-            configurator.appendChild(newInput);
+
+    let numberOfInputs = -1;
+    let numberOfOutputs = 0;
+    let addedInput = false;
+    for (let i = 0; i < Math.max(inCustPosBound + 1, outputs.length); i++) {
+        let input = null;
+        addedInput = false;
+
+        if (i <= inCustPosBound) {
+            let checkbox, newInput; // DOM elements
+
+            let potentialInputs = inputs.filter(e => e.custPosition === i);
+            if (potentialInputs.length > 0) {
+                input = potentialInputs[0];
+                numberOfInputs++;
+            } else {
+                potentialInputs = busInputs.filter(e => e.custPosition === i);
+                if (potentialInputs.length > 0) {
+                    input = potentialInputs[0];
+                    numberOfInputs++;
+                }
+            }
+            if (input !== null) {
+                checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.classList.add('topCheckbox');
+                checkbox.id = 'topCheckbox' + numberOfInputs;
+                checkbox.value = '';
+                checkbox.name = 'topCheckbox';
+                checkbox.checked = input.isTop;
+                checkbox.style.gridColumn = 2;
+                checkbox.addEventListener('click', function () { // jshint ignore:line
+                    input.setIsTop(checkbox.checked);
+                    showModulePreviewer();
+                });
+                checkbox.addEventListener('mouseenter', function () { // jshint ignore:line
+                    setHelpText('Sets this input on top of the module');
+                });
+                checkbox.addEventListener('mouseleave', function () { // jshint ignore:line
+                    setHelpText('Click on the in- and outputs to swap them!');
+                });
+
+                newInput = document.createElement('input');
+                newInput.classList.add('inputLabel');
+                newInput.id = 'ipLabel' + numberOfInputs;
+                newInput.style.gridColumn = 3;
+                newInput.placeholder = 'None' + numberOfInputs;
+                newInput.value = input.lbl;
+                newInput.onkeyup = function () { // jshint ignore:line
+                    input.lbl = newInput.value;
+                    showModulePreviewer();
+                };
+                newInput.addEventListener('mouseenter', function () { // jshint ignore:line
+                    setHelpText('The name of this input on the module');
+                });
+                newInput.addEventListener('mouseleave', function () { // jshint ignore:line
+                    setHelpText('Click on the in- and outputs to swap them!');
+                });
+
+                configurator.appendChild(checkbox);
+                configurator.appendChild(newInput);
+                addedInput = true;
+            }
         }
-        if (i < outputs.length) {
+        if (numberOfOutputs < outputs.length && (addedInput || (numberOfOutputs >= inputs.length + busInputs.length))) {
             let newInput = document.createElement('input');
             newInput.classList.add('inputLabel');
-            newInput.id = 'opLabel' + i;
+            newInput.id = 'opLabel' + numberOfOutputs;
             newInput.style.gridColumn = 4;
-            newInput.placeholder = 'None';
-            newInput.value = outputs[i].lbl;
+            newInput.placeholder = 'None' + numberOfOutputs;
+            newInput.value = outputs[numberOfOutputs].lbl;
             newInput.onkeyup = function () { // jshint ignore:line
-                outputs[i].lbl = newInput.value;
+                outputs[numberOfOutputs].lbl = newInput.value;
                 showModulePreviewer();
 
             };
@@ -229,8 +354,23 @@ function initPinConfigurator() {
                 setHelpText('Click on the in- and outputs to swap them!');
             });
             configurator.appendChild(newInput);
+            numberOfOutputs++;
         }
     }
+
+    let counterLabel;
+    for (let i = 0; i < Math.max(inputs.length + busInputs.length, outputs.length); i++) {
+        counterLabel = document.createElement('p');
+        counterLabel.innerHTML = i + 1;
+        counterLabel.classList.add('configuratorLabel');
+        counterLabel.style.gridColumn = 1;
+        if (i < inputs.length + busInputs.length) {
+            configurator.insertBefore(counterLabel, document.getElementById('topCheckbox' + i));
+        } else {
+            configurator.insertBefore(counterLabel, document.getElementById('opLabel' + i));
+        }
+    }
+
 }
 
 function showModulePreviewer() {

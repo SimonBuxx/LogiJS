@@ -12,6 +12,7 @@ let wires = []; // List of wires
 let labels = []; // List of text labels
 let segDisplays = []; // List of 7-segment displays
 let busses = [];
+let busInputs = [];
 let busWrappers = [];
 let busUnwrappers = [];
 let decoders = [];
@@ -264,6 +265,9 @@ let labelToModify = -1;
 
 let swapInput = -1;
 let swapOutput = -1;
+let swapInputIsBus = false;
+
+let inCustPosBound = -1; // The upper bound for the input's custom positions
 
 let modifierMenuX, modifierMenuY;
 
@@ -292,7 +296,7 @@ let topSketchInput, importButton, saveButton, downloadButton, dashboardButton, s
 
 let andButton, orButton, xorButton, bufferButton, notButton, switchButton, buttonButton, clockButton, outputButton, labelButton, displayButton; // Standard element buttons
 let counterButton, decoderButton, dFlipFlopButton, rsFlipFlopButton, jkFlipFlopButton, rsClockedButton, tFlipFlopButton,
-    registerButton, muxButton, demuxButton, unwrapperButton, halfaddButton, fulladdButton, customButton; // Advanced element buttons
+    registerButton, muxButton, demuxButton, unwrapperButton, halfaddButton, fulladdButton, customButton, busInputButton; // Advanced element buttons
 let labelOptions, labelSimulation, labelGateInputs, labelDirection, labelDisplay, labelOutputWidth,
     labelInputWidth, tickTimeLabel, tickTimeMsLabel, multiplierValueLabel, busCheckboxLabel, inBusCheckboxLabel, outBusCheckboxLabel; // Left side labels
 
@@ -529,6 +533,11 @@ function clearItems() {
     gates = [];
     outputs = [];
     inputs = [];
+    busInputs = [];
+    busses = [];
+    busUnwrappers = [];
+    busWrappers = [];
+    decoders = [];
     conpoints = [];
     customs = [];
     diodes = [];
@@ -561,6 +570,7 @@ function setUnactive() {
     decoderButton.classList.remove('active');
     wrapperButton.classList.remove('active');
     unwrapperButton.classList.remove('active');
+    busInputButton.classList.remove('active');
     dFlipFlopButton.classList.remove('active');
     rsFlipFlopButton.classList.remove('active');
     jkFlipFlopButton.classList.remove('active');
@@ -801,6 +811,9 @@ function andClicked(dontToggle = false) {
             outputInverter: false,
             minHeight: 2
         }
+        previewFeatures.inputBusWidth = Array(gateInputCount).fill(0);
+        previewFeatures.inputIsTop = Array(gateInputCount).fill(false);
+        previewFeatures.inputLabels = Array(gateInputCount).fill('');
         gateInputSelect.style.display = 'inline-block';
         labelGateInputs.style.display = 'inline-block';
         directionSelect.style.display = 'inline-block';
@@ -830,6 +843,9 @@ function orClicked(dontToggle = false) {
             outputInverter: false,
             minHeight: 2
         }
+        previewFeatures.inputBusWidth = Array(gateInputCount).fill(0);
+        previewFeatures.inputIsTop = Array(gateInputCount).fill(false);
+        previewFeatures.inputLabels = Array(gateInputCount).fill('');
         gateInputSelect.style.display = 'inline-block';
         labelGateInputs.style.display = 'inline-block';
         directionSelect.style.display = 'inline-block';
@@ -859,6 +875,9 @@ function xorClicked(dontToggle = false) {
             outputInverter: false,
             minHeight: 2
         }
+        previewFeatures.inputBusWidth = Array(gateInputCount).fill(0);
+        previewFeatures.inputIsTop = Array(gateInputCount).fill(false);
+        previewFeatures.inputLabels = Array(gateInputCount).fill('');
         gateInputSelect.style.display = 'inline-block';
         labelGateInputs.style.display = 'inline-block';
         directionSelect.style.display = 'inline-block';
@@ -938,6 +957,23 @@ function displayClicked(dontToggle = false) {
         labelOptions.style.display = 'block';
         busCheckbox.style.display = 'inline-block';
         busCheckboxLabel.style.display = 'inline-block';
+    }
+}
+
+function busInputClicked(dontToggle = false) {
+    hideAllOptions();
+    if (controlMode === 'addObject' && addType === 15 && !dontToggle) {
+        enterModifierMode();
+    } else {
+        setUnactive();
+        busInputButton.classList.add('active');
+        inputType = 'busInput';
+        previewFeatures.type = 'busInput';
+        setControlMode('addObject');
+        addType = 15; // bus input
+        labelOutputWidth.style.display = 'inline-block';
+        wrapperWidthSelect.style.display = 'inline-block';
+        labelOptions.style.display = 'block';
     }
 }
 
@@ -1339,7 +1375,7 @@ function addInput() {
         return; // Return if there is already an input at that position
     }
 
-    let new_input = new Input(mouseX, mouseY);
+    let new_input = new Input(mouseX, mouseY, ++inCustPosBound);
     new_input.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
     new_input.updateClickBox();
 
@@ -1406,6 +1442,26 @@ function addBusUnwrapper(bits, direction) {
 
     pushUndoAction('addBusUnwrapper', [busUnwrappers.length - 1], [new_unwrapper]); // Log an undo action
 }
+
+/*
+    Adds a bus input
+*/
+function addBusInput(busWidth) {
+    if (busInputs.filter(e => (e.x === (Math.round((mouseX / transform.zoom - transform.dx) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2
+        && e.y === (Math.round((mouseY / transform.zoom - transform.dy) / GRIDSIZE) * GRIDSIZE) - GRIDSIZE / 2)).length > 0) {
+        return; // Return if there is already a bus input at that position
+    }
+
+    //console.log(inCustPosBound);
+    let new_input = new BusInput(mouseX, mouseY, busWidth, ++inCustPosBound);
+    new_input.setCoordinates(mouseX / transform.zoom - transform.dx, mouseY / transform.zoom - transform.dy);
+    new_input.updateClickBox();
+
+    busInputs.push(new_input); // Add the bus input to the bus inputs array
+
+    pushUndoAction('addBusIn', [busInputs.length - 1], [new_input]); // Log an undo action
+}
+
 
 function addDecoder(bits, direction) {
     if (!is_free_modules(decoders)) return;
@@ -1648,6 +1704,14 @@ function deleteInput(inputNumber) {
 }
 
 /*
+    Deletes the given bus input
+*/
+function deleteBusInput(inputNumber) {
+    pushUndoAction('delBusIn', [inputNumber], busInputs.splice(inputNumber, 1));
+    reDraw();
+}
+
+/*
     Deletes the given label
 */
 function deleteLabel(labelNumber) {
@@ -1795,6 +1859,9 @@ function endSimulation() {
         for (const elem of inputs) {
             elem.setState(false);
         }
+        for (const elem of busInputs) {
+            elem.setFalse();
+        }
         for (const elem of diodes) {
             elem.setState(false);
         }
@@ -1843,7 +1910,6 @@ function configureButtons(mode) {
         case 'screenshot': disabled_matrix = [true, true, true, true, true, true, true, true, true, true]; break;
         case 'shareLink': disabled_matrix = [true, true, true, true, true, true, true, true, true, true]; break;
         default: disabled_matrix = [false, false, false, false, false, false, false, false, false, false];
-
     }
 
     let tools = disabled_matrix[0];
@@ -2036,6 +2102,7 @@ function fetchImportData() {
 */
 function showElements() {
     if (simRunning) {
+        textFont('Arial');
         for (const elem of groups) {
             elem.show();
         }
@@ -2096,7 +2163,10 @@ function showElements() {
             outputs[i].show(i + 1);
         }
         for (let i = 0; i < inputs.length; i++) {
-            inputs[i].show(i + 1);
+            inputs[i].show(inputs[i].custPosition + 1);
+        }
+        for (let i = 0; i < busInputs.length; i++) {
+            busInputs[i].show(busInputs[i].custPosition + 1);
         }
     } else {
         for (let i = 0; i < outputs.length; i++) {
@@ -2104,6 +2174,9 @@ function showElements() {
         }
         for (let i = 0; i < inputs.length; i++) {
             inputs[i].show();
+        }
+        for (let i = 0; i < busInputs.length; i++) {
+            busInputs[i].show();
         }
     }
     for (const elem of diodes) {
@@ -2198,6 +2271,25 @@ function keyPressed() {
                 }
                 return false;
             case CONTROL:
+                console.log('Inputs custPos before: ');
+                for (let i = 0; i < inputs.length; i++) {
+                    console.log(inputs[i].custPosition);
+                }
+                console.log('Bus inputs custPos before: ');
+                for (let i = 0; i < busInputs.length; i++) {
+                    console.log(busInputs[i].custPosition);
+                }
+                
+                trimInputOrder();
+
+                console.log('Inputs custPos after: ');
+                for (let i = 0; i < inputs.length; i++) {
+                    console.log(inputs[i].custPosition);
+                }
+                console.log('Bus inputs custPos after: ');
+                for (let i = 0; i < busInputs.length; i++) {
+                    console.log(busInputs[i].custPosition);
+                }
                 break;
             case 32: // Space
                 if (simRunning) {

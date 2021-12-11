@@ -76,6 +76,5 @@ function getModifiedDate(filename) {
     const stats = fs.statSync(filename);
     let millis = stats.mtime;
     let newDate = new Date(millis);
-    console.log(newDate.toLocaleDateString("en-US"));
     return newDate.toLocaleDateString("en-US") /*+ ' ' + newDate.toLocaleTimeString("de-DE")*/;
 }

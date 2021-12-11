@@ -24,7 +24,7 @@ function Bus(dir, startX, startY) {
 
     this.group = -1;
 
-    this.id = 'b' + Date.now() + Math.random();
+    this.id = 'bb' + Date.now() + Math.random();
 
     this.changePosition(startX, startY); // Initialize the start point
 
