@@ -28,7 +28,7 @@
     "nodemon": "^2.0.5",
     "password-validator": "^5.0.2",
     "pug": "^3.0.1",
-    "sharp": "^0.23.0",
+    "sharp": "^0.30.5",
     "socket.io": "^2.4.0"
   }
 }
