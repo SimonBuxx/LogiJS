@@ -1,3 +1,7 @@
+### Please note: LogiJS development is currently in an indefinite hold in favor of another upcoming project. 
+I am thankful for this huge learning opportunity and all the feedback I got over the years. I will be back - with news on this project or another.
+-- Simon
+
 ## LogiJS - Logic Circuit Simulation
 **https://logijs.com/**
 
