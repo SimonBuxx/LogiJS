@@ -1,6 +1,10 @@
-### Please note: LogiJS development is currently in an indefinite hold in favor of another upcoming project. 
-I am thankful for this huge learning opportunity and all the feedback I got over the years. I will be back - with news on this project or another.
--- Simon
+## Please note:
+
+LogiJS development is currently in an indefinite hold in favor of its spiritual successor [Linkuit Studio](https://github.com/SimonBuxx/Linkuit-Studio). Linkuit Studio is a logic circuit simulator comparable to LogiJS but running as a native Windows application. 
+
+While it still misses some features present in LogiJS, Linkuit Studio is much more stable and maintainable than LogiJS. If you like LogiJS, give [Linkuit Studio](https://github.com/SimonBuxx/Linkuit-Studio) a try.
+
+Issues in this project won't be fixed by me at the moment. But thank you to everyone who is sharing their ideas and creating bug reports.
 
 ## LogiJS - Logic Circuit Simulation
 **https://logijs.com/**
