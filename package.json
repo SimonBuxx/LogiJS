@@ -25,7 +25,7 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.19.5",
     "mysql": "^2.17.1",
-    "nodemon": "^2.0.5",
+    "nodemon": "^2.0.20",
     "password-validator": "^5.0.2",
     "pug": "^3.0.1",
     "sharp": "^0.23.0",
